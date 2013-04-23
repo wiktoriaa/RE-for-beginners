@@ -1,0 +1,65 @@
+\IFRU{Виртуальные методы в С++}{C++ virtual methods}
+
+\IFRU{И снова простой пример:}{Yet another simple example:}
+
+\lstinputlisting{classes/classes4_virtual.cpp}
+
+\IFRU{У класса \IT{object} есть виртуальный метод \TT{dump()}, 
+впоследствии заменяемый в классах-наследниках \IT{box} и \IT{sphere}.}
+{Class \IT{object} has virtual method \TT{dump()}, being replaced in \IT{box} and \IT{sphere} class-inheritors.}
+
+\IFRU{Если в какой-то среде, где неизвестно, какого типа является экземпляр класса, как в функции \main в примере, 
+вызывается виртуальный метод \TT{dump()}, где-то должна сохраняться информация о том, какой же метод в итоге 
+вызвать.}
+{If in some environment, where it's not known what type has object, as in \main function in example,
+a virtual method \TT{dump()} is called, somewhere, the information about its type should be stored, so to
+call relevant virtual method.}
+
+\IFRU{Скомпилируем в MSVC 2008 с опциями \Ox и \Obzero и посмотрим код функции \main:}
+{Let's compile it in MSVC 2008 with \Ox and \Obzero options and let's see \main function code:}
+
+\lstinputlisting{classes/classes4_1.asm}
+
+\IFRU{Указатель на функцию \TT{dump()} берется откуда-то из экземпляра класса (объекта). 
+Где мог записаться туда адрес нового метода-функции?
+Только в конструкторах, больше негде: ведь в функции \main ничего более не вызывается.}
+{Pointer to \TT{dump()} function is taken somewhere from object.
+Where the address of new method would be written there?
+Only somewhere in constructors: there are no other place, because, nothing more is called in \main function.}
+
+\IFRU{Посмотрим код конструктора класса \IT{box}:}
+{Let's see \IT{box} class constructor's code:}
+
+\lstinputlisting{classes/classes4_2.asm}
+
+\IFRU{Здесь мы видим что разметка класса немного другая: в качестве первого поля имеется указатель 
+на некую таблицу \TT{box::`vftable'} (название оставлено компилятором MSVC).}
+{Here we see slightly different memory layout: the first field is a pointer to some table
+\TT{box::`vftable'} (name was set by MSVC compiler).}
+
+\IFRU{В этой таблице есть ссылка на таблицу с названием \TT{box::`RTTI Complete Object Locator'} и еще ссылка на 
+метод \TT{box::dump()}.}
+{In this table we see a link to the table named \TT{box::`RTTI Complete Object Locator'} and also a link
+to \TT{box::dump()} method.}
+\IFRU{Итак, это называется таблица виртуальных методов и RTTI. 
+Таблица виртуальных методов хранит в себе адреса методов, а RTTI хранит информацию о типах вообще.}
+{So this is named virtual methods table and RTTI.
+Table of virtual methods contain addresses of methods and RTTI table contain information about types.}
+\IFRU{Кстати, RTTI-таблицы это именно те таблицы, информация из которых используются при вызове \IT{dynamic\_cast} и \IT{typeid} в С++. 
+Вы можете увидеть что здесь хранится даже имя класса в виде обычной строки.}
+{By the way, RTTI-tables are the tables enumerated while calling to \IT{dynamic\_cast} and \IT{typeid} in C++.
+You can also see here class name as plain text string.}
+\IFRU{Так, какой-нибудь метод базового класса \IT{object} может вызвать виртуальный метод \TT{object::dump()} что 
+в итоге вызовет нужный метод унаследованного класса, потому что информация о нем присутствует прямо в этой 
+структуре класса.}
+{Thus, some method of base \IT{object} class may call virtual method \IT{object::dump()}, which in turn, will call
+a method of inherited class, because that information is present right in the object's structure.}
+
+\IFRU{Работа с этими таблицами и поиск адреса нужного метода, занимает какое-то время процессора, возможно, 
+поэтому считается что работа с виртуальными методами медленна.}
+{Some CPU time needed for enumerating these tables and finding right virtual method address, 
+thus virtual methods are widely considered as slightly slower than usual methods.}
+
+\IFRU{В сгенерированном коде от GCC RTTI-таблицы устроены чуть-чуть иначе.}
+{In GCC-generated code RTTI-tables constructed slightly differently.}
+
