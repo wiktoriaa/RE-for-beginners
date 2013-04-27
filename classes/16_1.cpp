@@ -6,7 +6,7 @@ private:
     int v1;
     int v2;
 public:
-    c() // ctor
+    c() // default ctor
     {
         v1=667;
         v2=999;
