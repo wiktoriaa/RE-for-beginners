@@ -1,6 +1,4 @@
-﻿% done
-
-\chapter{\IFRU{Поиск в коде того что нужно}{Finding important/interesting stuff in the code}}
+﻿\chapter{\IFRU{Поиск в коде того что нужно}{Finding important/interesting stuff in the code}}
 
 \IFRU{Современный софт, в общем-то, минимализмом не отличается.}{Minimalism it's not a significant feature
 of modern software.}
@@ -277,10 +275,10 @@ cat EXCEL.lst | grep fdiv | grep -v dbl_ > EXCEL.fdiv
 \IFRU{Мы можем вводить в Excel строку вроде \TT{=(1/3)} и проверить все эти инструкции.}
 {We can enter string like \TT{=(1/3)} in Excel and check each instruction.}
 
-\IFRU{Проверяя каждую инструкцию в отладчике или tracer~\ref{tracer} 
+\IFRU{Проверяя каждую инструкцию в отладчике или \tracer 
 (проверять эти инструкции можно по 4 за раз), 
 окажется, что нам везет и срабатывает всего-лишь 14-я по счету:}
-{Checking each instruction in debugger or tracer~\ref{tracer}
+{Checking each instruction in debugger or \tracer
 (one may check 4 instruction at a time),
 it seems, we are lucky here and sought-for instruction is just 14th:}
 
@@ -370,8 +368,16 @@ like \TT{DIVSD} (\TT{DIVSD} present here 268 in total).}
 
 \IFRU{Современные компиляторы не генерируют инструкции \TT{LOOP} и \TT{RCL}. 
 С другой стороны, эти инструкции хорошо знакомы кодерам предпочитающим писать прямо на ассемблере. 
-Если такие инструкции встретились, можно сказать с какой-то вероятностью, что этот кусок кода написан вручную.}
+Если такие инструкции встретились, можно сказать с какой-то вероятностью, что этот кусок кода написан вручную.
+Также, пролог/эпилог функции обычно не встречается в ассемблерном коде написанном вручную.}
 {Modern compilers do not emit \TT{LOOP} and \TT{RCL} instructions.
 On the other hand, these instructions are well-known to coders who like to code in straight assembler.
-If you spot these, it can be said, with a big probability, this piece of code is hand-written.}
-% TODO: also, function prologue/epilogue isn't present
+If you spot these, it can be said, with a big probability, this piece of code is hand-written.
+Also, function prologue/epilogue is not usually present in hand-written assembler copy.}
+
+\input{digging_into_code/magic_numbers_tracing}
+
+\section{\IFRU{Старые методы, тем не менее, интересные}{Old-school methods, nevertheless, interesting to know}}
+
+\input{digging_into_code/snapshots_comparing}
+
