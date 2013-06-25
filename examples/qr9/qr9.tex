@@ -13,7 +13,7 @@ source code of which was lost\footnote{I also got permit from customer to publis
 \IFRU{Вот листинг этой утилиты для шифрования, полученный при помощи \IDA}
 {Here is also \IDA exported listing from original crypting utility}:
 
-\lstinputlisting{qr9/qr9_original.lst}
+\lstinputlisting{examples/qr9/qr9_original.lst}
 
 \IFRU{Все имена функций и меток даны мною в процессе анализа.}
 {All function and label names are given by me while analysis.}
@@ -55,7 +55,7 @@ source code of which was lost\footnote{I also got permit from customer to publis
 
 \IFRU{Узнать размер файла используя}{Get file size via} \TT{fseek()}/\TT{ftell()}:
 
-\lstinputlisting{\IFRU{qr9/1ru.asm}{qr9/1en.asm}}
+\lstinputlisting{\IFRU{examples/qr9/1ru.asm}{examples/qr9/1en.asm}}
 
 \IFRU{Этот кусок кода вычисляет длину файла выровненную по 64-байтной границе.
 Это потому что этот алгоритм шифрования работает только с блоками размерами 64 байта.
@@ -70,7 +70,7 @@ then multiple by 64.
 The following code removes remainder as if value was already divided by 64 and adds 64. 
 It is almost the same.}
 
-\lstinputlisting{\IFRU{qr9/2ru.asm}{qr9/2en.asm}}
+\lstinputlisting{\IFRU{examples/qr9/2ru.asm}{examples/qr9/2en.asm}}
 
 \IFRU{Выделить буфер с выровненным размером:}{Allocate buffer with aligned size:}
 
@@ -83,7 +83,7 @@ It is almost the same.}
 заменить на calloc()}.}{Call memset(), e,g, clear allocated buffer\footnote{malloc() + memset() could 
 be replaced by calloc()}.}
 
-\lstinputlisting{\IFRU{qr9/3ru.asm}{qr9/3en.asm}}
+\lstinputlisting{\IFRU{examples/qr9/3ru.asm}{examples/qr9/3en.asm}}
 
 \IFRU{Чтение файла используя стандартную функцию Си}{Read file via standard C function} \TT{fread()}.
 
@@ -573,7 +573,7 @@ Read more about it in ``\DivisionByNineSectionName'' section~\ref{sec:divisionby
 
 \IFRU{\EDX ~--- остаток от деления.}{\EDX is the remainder of division.}
 
-\lstinputlisting{\IFRU{qr9/4ru.asm}{qr9/4en.asm}}
+\lstinputlisting{\IFRU{examples/qr9/4ru.asm}{examples/qr9/4en.asm}}
 
 \IFRU{Если остаток 2, вызываем \TT{rotate3()}. 
 \EDX это второй аргумент функции \TT{rotate\_all\_with\_password()}. 
@@ -863,7 +863,7 @@ int get_bit (int x, int y, int shift)
 
 \IFRU{Здесь два вложенных цикла:}{Two nested loops are here:}
 
-\lstinputlisting{\IFRU{qr9/5ru.asm}{qr9/5en.asm}}
+\lstinputlisting{\IFRU{examples/qr9/5ru.asm}{examples/qr9/5en.asm}}
 
 \IFRU{Мы видим что оба счетчика циклов в интервале 0..7. 
 Также, они используются как первый и второй аргумент \TT{get\_bit()}.
@@ -876,7 +876,7 @@ What \TT{get\_bit()} returns, is being placed into internal array.}
 
 \IFRU{Снова приготовить указатель на внутренний массив:}{Prepare pointer to internal array again:}
 
-\lstinputlisting{\IFRU{qr9/6ru.asm}{qr9/6en.asm}}
+\lstinputlisting{\IFRU{examples/qr9/6ru.asm}{examples/qr9/6en.asm}}
 
 \IFRU{... этот код кладет содержимое из внутреннего массива в глобальный массив cube используя функцию 
 \TT{set\_bit()}, \IT{но}, в обратном порядке!
@@ -906,7 +906,7 @@ void rotate1 (int v)
 \IFRU{Не очень понятно, но если мы посмотрим в функцию \TT{rotate2()}:}
 {Not very understandable, but if we will take a look at \TT{rotate2()} function:}
 
-\lstinputlisting{\IFRU{qr9/7ru.asm}{qr9/7en.asm}}
+\lstinputlisting{\IFRU{examples/qr9/7ru.asm}{examples/qr9/7en.asm}}
 
 \IFRU{\IT{Почти} то же самое, за исключением иного порядка аргументов в \TT{get\_bit()} и \TT{set\_bit()}.
 Перепишем это на Си-подобный код:}
@@ -1043,6 +1043,6 @@ some original bytes of original file in binary files editor.}
 
 \IFRU{Весь исходный код в реконструированном виде:}{Here is reconstructed whole source code:}
 
-\lstinputlisting{qr9/qr9.cpp}
+\lstinputlisting{examples/qr9/qr9.cpp}
 
 
