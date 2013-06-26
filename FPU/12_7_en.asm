@@ -1,4 +1,4 @@
-﻿                public d_max
+                public d_max
 d_max           proc near
 
 arg_0           = qword ptr  8

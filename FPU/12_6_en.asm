@@ -1,4 +1,4 @@
-﻿d_max proc near
+d_max proc near
 
 b               = qword ptr -10h
 a               = qword ptr -8

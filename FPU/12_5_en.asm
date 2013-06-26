@@ -1,4 +1,4 @@
-﻿_a$ = 8                ; size = 8
+_a$ = 8                ; size = 8
 _b$ = 16               ; size = 8
 _d_max    PROC
     fld    QWORD PTR _b$[esp-4]

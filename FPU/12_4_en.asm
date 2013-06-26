@@ -1,4 +1,4 @@
-﻿PUBLIC    _d_max
+PUBLIC    _d_max
 _TEXT    SEGMENT
 _a$ = 8                ; size = 8
 _b$ = 16               ; size = 8
