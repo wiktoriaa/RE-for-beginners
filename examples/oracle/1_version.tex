@@ -1,0 +1,294 @@
+\section{\IFRU{Таблица \TT{V\$VERSION} в \oracle}{\TT{V\$VERSION} table in \oracle}}
+
+\IFRU{\oracle 11.2 это очень большая программа, основной модуль \TT{oracle.exe} содержит около 124 тысячи функций.}{\oracle 11.2 is a huge program, main module \TT{oracle.exe} contain approx. 124,000 functions.} \IFRU{Для сравнения, ядро Windows 7 x64 (ntoskrnl.exe) --- около 11 тысяч функций, а ядро Linux 3.9.8 (с драйверами по умолчанию) --- 31 тысяч функций.}{For comparison, Windows 7 x86 kernel (ntoskrnl.exe) --- approx. 11,000 functions and Linux 3.9.8 kernel (with default drivers compiled) --- 31,000 functions.}
+
+\IFRU{Начнем с одного простого вопроса. Откуда \oracle берет информацию, когда мы в SQL*Plus пишем вот такой вот простой запрос:}{Let's start with an easy question. Where \oracle get all this information, when we execute such simple statement in SQL*Plus:}
+
+\begin{lstlisting}
+SQL> select * from V$VERSION;
+\end{lstlisting}
+
+\IFRU{И получаем}{And we've got}:
+
+\begin{lstlisting}
+BANNER
+--------------------------------------------------------------------------------
+
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+PL/SQL Release 11.2.0.1.0 - Production
+CORE    11.2.0.1.0      Production
+TNS for 32-bit Windows: Version 11.2.0.1.0 - Production
+NLSRTL Version 11.2.0.1.0 - Production
+\end{lstlisting}
+
+\IFRU{Начнем. Где в самом \oracle мы можем найти строку}{Let's start. Where in \oracle we may find a string} \TT{V\$VERSION}?
+
+\IFRU{Для win32-версии, эта строка имеется в файле \TT{oracle.exe}, это легко увидеть.}{As of win32-version, \TT{oracle.exe} file contain that string, that can be investigated easily.}
+\IFRU{Но мы так же можем использовать объектные (.o) файлы от версии \oracle для Linux, потому что в них сохраняются имена функций и глобальных переменных, а в \TT{oracle.exe} для win32 этого нет.}{But we can also use object (.o) files from Linux version of \oracle, because, unlike win32 version \TT{oracle.exe}, function names (and global variables as well) are preserved there.}
+
+\IFRU{Итак, строка \TT{V\$VERSION} имеется в файле \TT{kqf.o}, в самой главной Oracle-библиотеке \TT{libserver11.a}.}{So, \TT{kqf.o} file contain \TT{V\$VERSION} string. That object file is in main Oracle-library \TT{libserver11.a}.}
+
+\IFRU{Ссылка на эту текстовую строку имеется в таблице \TT{kqfviw}, размещенной в этом же файле \TT{kqf.o}}{A reference to this text string we may find in \TT{kqfviw} table stored in the same file, \TT{kqf.o}}:
+
+\begin{lstlisting}
+.rodata:0800C4A0 kqfviw          dd 0Bh                  ; DATA XREF: kqfchk:loc_8003A6D
+.rodata:0800C4A0                                         ; kqfgbn+34
+.rodata:0800C4A4                 dd offset _2__STRING_10102_0 ; "GV$WAITSTAT"
+.rodata:0800C4A8                 dd 4
+.rodata:0800C4AC                 dd offset _2__STRING_10103_0 ; "NULL"
+.rodata:0800C4B0                 dd 3
+.rodata:0800C4B4                 dd 0
+.rodata:0800C4B8                 dd 195h
+.rodata:0800C4BC                 dd 4
+.rodata:0800C4C0                 dd 0
+.rodata:0800C4C4                 dd 0FFFFC1CBh
+.rodata:0800C4C8                 dd 3
+.rodata:0800C4CC                 dd 0
+.rodata:0800C4D0                 dd 0Ah
+.rodata:0800C4D4                 dd offset _2__STRING_10104_0 ; "V$WAITSTAT"
+.rodata:0800C4D8                 dd 4
+.rodata:0800C4DC                 dd offset _2__STRING_10103_0 ; "NULL"
+.rodata:0800C4E0                 dd 3
+.rodata:0800C4E4                 dd 0
+.rodata:0800C4E8                 dd 4Eh
+.rodata:0800C4EC                 dd 3
+.rodata:0800C4F0                 dd 0
+.rodata:0800C4F4                 dd 0FFFFC003h
+.rodata:0800C4F8                 dd 4
+.rodata:0800C4FC                 dd 0
+.rodata:0800C500                 dd 5
+.rodata:0800C504                 dd offset _2__STRING_10105_0 ; "GV$BH"
+.rodata:0800C508                 dd 4
+.rodata:0800C50C                 dd offset _2__STRING_10103_0 ; "NULL"
+.rodata:0800C510                 dd 3
+.rodata:0800C514                 dd 0
+.rodata:0800C518                 dd 269h
+.rodata:0800C51C                 dd 15h
+.rodata:0800C520                 dd 0
+.rodata:0800C524                 dd 0FFFFC1EDh
+.rodata:0800C528                 dd 8
+.rodata:0800C52C                 dd 0
+.rodata:0800C530                 dd 4
+.rodata:0800C534                 dd offset _2__STRING_10106_0 ; "V$BH"
+.rodata:0800C538                 dd 4
+.rodata:0800C53C                 dd offset _2__STRING_10103_0 ; "NULL"
+.rodata:0800C540                 dd 3
+.rodata:0800C544                 dd 0
+.rodata:0800C548                 dd 0F5h
+.rodata:0800C54C                 dd 14h
+.rodata:0800C550                 dd 0
+.rodata:0800C554                 dd 0FFFFC1EEh
+.rodata:0800C558                 dd 5
+.rodata:0800C55C                 dd 0
+\end{lstlisting}
+
+\IFRU{Вероятно, это таблица содержащая в себе многие (а может даже и все) view с префиксом V\$, это служебные view (fixed views), присутствующие всегда.}{Probably, this table contain most (maybe even all) views prefixed with V\$, these are \IT{fixed views}, present all the time.}
+\IFRU{Бегло оценив цикличность данных, мы легко видим что в каждом элементе таблицы \TT{kqfviw} 12 полей 32-битных полей.}{Superficially, by noticing cyclic recurrence of data, we can easily see that each \TT{kqfviw} table element has 12 32-bit fields.}
+\IFRU{В \IDA легко создать структуру из 12-и элементов и применить её ко всем элементам таблицы.}{It's very simple to create a 12-elements structure in \IDA and apply it to all table elements.}
+\IFRU{Для версии \oracle 11.2, здесь 1023 элемента в таблице, то есть, здесь описываются 1023 всех возможных \IT{fixed view}.}{As of \oracle version 11.2, there are 1023 table elements, i.e., there are described 1023 of all possible \IT{fixed views}.}
+\IFRU{Позже, мы еще вернемся к этому числу.}{We will return to this number later.}
+
+\IFRU{Как видно, мы не очень много можем узнать чисел в этих полях. Самое первое число всегда равно длине строки-названия view (без терминирующего ноля).}{As we can see, there are not much information in these numbers in fields. The very first number is always equals to name of view (without terminating zero.}
+\IFRU{Это справедливо для всех элементов. Но эта информация не очень полезна.}{This is correct for each element. But this information is not very useful.}
+
+\IFRU{Мы также знаем, что информацию обо всех fixed views можно получить из \IT{fixed view} под названием}{We also know that information about all fixed views can be retrieved from \IT{fixed view} named} \TT{V\$FIXED\_VIEW\_DEFINITION}
+\IFRU{(кстати, информация для этого view также берется из таблиц \TT{kqfviw} и \TT{kqfvip}).}{(by the way, the information for this view is also taken from \TT{kqfviw} and \TT{kqfvip} tables.)}
+\IFRU{Кстати, там тоже 1023 элемента.}{By the way, there are 1023 elemens too.}
+
+\begin{lstlisting}
+SQL> select * from V$FIXED_VIEW_DEFINITION where view_name='V$VERSION';
+
+VIEW_NAME
+------------------------------
+VIEW_DEFINITION
+--------------------------------------------------------------------------------
+
+V$VERSION
+select  BANNER from GV$VERSION where inst_id = USERENV('Instance')
+\end{lstlisting}
+
+\IFRU{Итак, \TT{V\$VERSION} это как бы \IT{thunk view} для другого, с названием \TT{GV\$VERSION}, который, в свою очередь:}{So, \TT{V\$VERSION} is some kind of \IT{thunk view} for another view, named \TT{GV\$VERSION}, which is, in turn:}
+
+\begin{lstlisting}
+SQL> select * from V$FIXED_VIEW_DEFINITION where view_name='GV$VERSION';
+
+VIEW_NAME
+------------------------------
+VIEW_DEFINITION
+--------------------------------------------------------------------------------
+
+GV$VERSION
+select inst_id, banner from x$version
+\end{lstlisting}
+
+\IFRU{Таблицы с префиксом X\$ в \oracle --- это также служебные таблицы, они не документированы, не могут изменятся пользователем, и обновляются динамически.}{Tables prefixed as X\$ in \oracle -- is service tables too, undocumented, cannot be changed by user and refreshed dynamically.}
+
+\IFRU{Попробуем поискать текст}{Let's also try to search the text} \TT{select  BANNER from GV\$VERSION where inst\_id = USERENV('Instance')} \IFRU{в файле \TT{kqf.o} и находим ссылку на него в таблице \TT{kqfvip}}{in \TT{kqf.o} file and we find it in \TT{kqfvip} table}:
+
+.\begin{lstlisting}
+rodata:080185A0 kqfvip          dd offset _2__STRING_11126_0 ; DATA XREF: kqfgvcn+18
+.rodata:080185A0                                         ; kqfgvt+F
+.rodata:080185A0                                         ; "select inst_id,decode(indx,1,'data bloc"...
+.rodata:080185A4                 dd offset kqfv459_c_0
+.rodata:080185A8                 dd 0
+.rodata:080185AC                 dd 0
+
+...
+
+.rodata:08019570                 dd offset _2__STRING_11378_0 ; "select  BANNER from GV$VERSION where in"...
+.rodata:08019574                 dd offset kqfv133_c_0
+.rodata:08019578                 dd 0
+.rodata:0801957C                 dd 0
+.rodata:08019580                 dd offset _2__STRING_11379_0 ; "select inst_id,decode(bitand(cfflg,1),0"...
+.rodata:08019584                 dd offset kqfv403_c_0
+.rodata:08019588                 dd 0
+.rodata:0801958C                 dd 0
+.rodata:08019590                 dd offset _2__STRING_11380_0 ; "select  STATUS , NAME, IS_RECOVERY_DEST"...
+.rodata:08019594                 dd offset kqfv199_c_0
+\end{lstlisting}
+
+\IFRU{Таблица, по всей видимости, имеет 4 поля в каждом элементе. Кстати, здесь также 1023 элемента.}{The table appear to have 4 fields in each element. By the way, there are 1023 elements too.}
+\IFRU{Второе поле указывает на другую таблицу, содержащую поля этого \IT{fixed view}.}{The second field pointing to another table, containing table fields for this \IT{fixed view}.}
+\IFRU{Для \TT{V\$VERSION}, эта таблица только из двух элементов, первый это 6 и второй это строка \TT{BANNER} (число это длина строки) и далее \IT{терминирующий} элемент содержащий 0 и \IT{нулевую} Си-строку:}{As of \TT{V\$VERSION}, this table contain only two elements, first is 6 and second is \TT{BANNER} string (the number (6) is this string length) and after, \IT{terminating} element contain 0 and \IT{null} C-string:}
+
+\begin{lstlisting}
+.rodata:080BBAC4 kqfv133_c_0     dd 6                    ; DATA XREF: .rodata:08019574
+.rodata:080BBAC8                 dd offset _2__STRING_5017_0 ; "BANNER"
+.rodata:080BBACC                 dd 0
+.rodata:080BBAD0                 dd offset _2__STRING_0_0
+\end{lstlisting}
+
+\IFRU{Объеденив данные из таблиц \TT{kqfviw} и \TT{kqfvip}, мы получим SQL-запросы, которые исполняются, когда пользователь хочет получить информацию из какого-либо \IT{fixed view}.}{By joining data from both \TT{kqfviw} and \TT{kqfvip} tables, we may get SQL-statements which are executed when user wants to query information from specific \IT{fixed view}.}
+
+\IFRU{Я написал программу \oracletables, которая собирает всю эту информацию из объектных файлов от \oracle под Linux.}{So I wrote an \oracletables program, so to gather all this information from \oracle for Linux object files.}
+\IFRU{Для \TT{V\$VERSION}, мы можем найти следующее:}{For \TT{V\$VERSION}, we may find this:}
+
+\begin{lstlisting}
+kqfviw_element.viewname: [V$VERSION] ?: 0x3 0x43 0x1 0xffffc085 0x4
+kqfvip_element.statement: [select  BANNER from GV$VERSION where inst_id = USERENV('Instance')]
+kqfvip_element.params:
+[BANNER] 
+\end{lstlisting}
+
+\IFRU{И}{And}:
+
+\begin{lstlisting}
+kqfviw_element.viewname: [GV$VERSION] ?: 0x3 0x26 0x2 0xffffc192 0x1
+kqfvip_element.statement: [select inst_id, banner from x$version]
+kqfvip_element.params:
+[INST_ID] [BANNER] 
+\end{lstlisting}
+
+\IFRU{\IT{Fixed view} \TT{GV\$VERSION} отличается от \TT{V\$VERSION} тем, что содержит еще и поле отражающее идентификатор \IT{instance}.}{\TT{GV\$VERSION} \IT{fixed view} is different from \TT{V\$VERSION} in only that way that it contains one more field with \IT{instance} identifier.}
+\IFRU{Но так или иначе, мы теперь упираемся в таблицу \TT{X\$VERSION}. Как и прочие X\$-таблицы, она недокументирована, однако, мы можем оттуда что-то прочитать}{Anyway, we stuck at the table \TT{X\$VERSION}. Just like any other X\$-tables, it's undocumented, however, we can query it}:
+
+\begin{lstlisting}
+SQL> select * from x$version;
+
+ADDR           INDX    INST_ID
+-------- ---------- ----------
+BANNER
+--------------------------------------------------------------------------------
+
+0DBAF574          0          1
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+
+...
+\end{lstlisting}
+
+\IFRU{Эта таблица содержит дополнительные поля вроде \TT{ADDR} и \TT{INDX}.}{This table has additional fields like \TT{ADDR} and \TT{INDX}.}
+
+\IFRU{Бегло листая содержимое файла \TT{kqf.o} в \IDA мы можем увидеть еще одну таблицу где есть ссылка на строку \TT{X\$VERSION}, это \TT{kqftab}:}{While scrolling \TT{kqf.o} in \IDA we may spot another table containing pointer to \TT{X\$VERSION} string, this is \TT{kqftab}:}
+
+\begin{lstlisting}
+.rodata:0803CAC0                 dd 9                    ; element number 0x1f6
+.rodata:0803CAC4                 dd offset _2__STRING_13113_0 ; "X$VERSION"
+.rodata:0803CAC8                 dd 4
+.rodata:0803CACC                 dd offset _2__STRING_13114_0 ; "kqvt"
+.rodata:0803CAD0                 dd 4
+.rodata:0803CAD4                 dd 4
+.rodata:0803CAD8                 dd 0
+.rodata:0803CADC                 dd 4
+.rodata:0803CAE0                 dd 0Ch
+.rodata:0803CAE4                 dd 0FFFFC075h
+.rodata:0803CAE8                 dd 3
+.rodata:0803CAEC                 dd 0
+.rodata:0803CAF0                 dd 7
+.rodata:0803CAF4                 dd offset _2__STRING_13115_0 ; "X$KQFSZ"
+.rodata:0803CAF8                 dd 5
+.rodata:0803CAFC                 dd offset _2__STRING_13116_0 ; "kqfsz"
+.rodata:0803CB00                 dd 1
+.rodata:0803CB04                 dd 38h
+.rodata:0803CB08                 dd 0
+.rodata:0803CB0C                 dd 7
+.rodata:0803CB10                 dd 0
+.rodata:0803CB14                 dd 0FFFFC09Dh
+.rodata:0803CB18                 dd 2
+.rodata:0803CB1C                 dd 0
+\end{lstlisting}
+
+\IFRU{Здесь очень много ссылок на названия X\$-таблиц, вероятно, на все те что имеются в \oracle этой версии.}{There are a lot of references to X\$-table names, probably, to all \oracle 11.2 has.}
+\IFRU{Но мы снова упираемся в то что не имеем достаточно информации.}{But again, we have not enough information.}
+\IFRU{У меня нет никакой идеи, что означает строка \TT{kqvt}.}{I have no idea, what \TT{kqvt} string mean.} \IFRU{Вообще, префикс \TT{kq} может означать \IT{kernel} и \IT{query}.}{\TT{kq} prefix may mean \IT{kernal} and \IT{query}.} \IFRU{\TT{v}, может быть, \IT{version}, а \TT{t} --- \IT{type}?}{\TT{v}, probably, mean \IT{version} and \TT{t} --- \IT{type}?} \IFRU{Я не знаю, честно говоря.}{Frankly speaking, I don't know.}
+
+\IFRU{Таблицу с очень похожим названием мы можем найти в}{The table named similarly can be found in} \TT{kqf.o}:
+
+\begin{lstlisting}
+.rodata:0808C360 kqvt_c_0        kqftap_param <4, offset _2__STRING_19_0, 917h, 0, 0, 0, 4, 0, 0>
+.rodata:0808C360                                         ; DATA XREF: .rodata:08042680
+.rodata:0808C360                                         ; "ADDR"
+.rodata:0808C384                 kqftap_param <4, offset _2__STRING_20_0, 0B02h, 0, 0, 0, 4, 0, 0> ; "INDX"
+.rodata:0808C3A8                 kqftap_param <7, offset _2__STRING_21_0, 0B02h, 0, 0, 0, 4, 0, 0> ; "INST_ID"
+.rodata:0808C3CC                 kqftap_param <6, offset _2__STRING_5017_0, 601h, 0, 0, 0, 50h, 0, 0> ; "BANNER"
+.rodata:0808C3F0                 kqftap_param <0, offset _2__STRING_0_0, 0, 0, 0, 0, 0, 0, 0>
+\end{lstlisting}
+
+\IFRU{Она содержит информацию об именах полей в таблице \TT{X\$VERSION}.}{It contain information about all fields in the \TT{X\$VERSION} table.}
+\IFRU{Единственная ссылка на эту таблицу имеется в таблице \TT{kqftap}:}{The only reference to this table present in \TT{kqftap} table:}
+
+\begin{lstlisting}
+.rodata:08042680                 kqftap_element <0, offset kqvt_c_0, offset kqvrow, 0> ; element 0x1f6
+\end{lstlisting}
+
+\IFRU{Интересно что здесь этот элемент проходит также под номером 0x1f6 (502), как и ссылка на строку \TT{X\$VERSION} в таблице \TT{kqftab}.}{It's interesting that this element here is 0x1f6th (502nd), just as a pointer to \TT{X\$VERSION} string in \TT{kqftab} table.}
+\IFRU{Вероятно, таблицы \TT{kqftap} и \TT{kqftab} дополняют друг друга, как и \TT{kqfvip} и \TT{kqfviw}.}{Probably, \TT{kqftap} and \TT{kqftab} tables are complement each other, just like \TT{kqfvip} and \TT{kqfviw}.}
+\IFRU{Мы также видим здесь ссылку на функцию с названием \TT{kqvrow()}. А вот это уже кое-что!}{We also see a pointer to \TT{kqvrow()} function. Something useful at last!}
+
+\IFRU{Я сделал так чтобы моя программа \oracletables могла дампить и эти таблицы. Для \TT{X\$VERSION} получается:}{So I added these tables to my \oracletables utility too. For \TT{X\$VERSION} I've got:}
+
+\begin{lstlisting}
+kqftab_element.name: [X$VERSION] ?: [kqvt] 0x4 0x4 0x4 0xc 0xffffc075 0x3
+kqftap_param.name=[ADDR] ?: 0x917 0x0 0x0 0x0 0x4 0x0 0x0
+kqftap_param.name=[INDX] ?: 0xb02 0x0 0x0 0x0 0x4 0x0 0x0
+kqftap_param.name=[INST_ID] ?: 0xb02 0x0 0x0 0x0 0x4 0x0 0x0
+kqftap_param.name=[BANNER] ?: 0x601 0x0 0x0 0x0 0x50 0x0 0x0
+kqftap_element.fn1=kqvrow
+kqftap_element.fn2=NULL
+\end{lstlisting}
+
+\IFRU{При помощи \tracer, можно легко проверить, что эта ф-ция вызывается 6 раз кряду (из ф-ции \TT{qerfxFetch()}) при получении строк из \TT{X\$VERSION}.}{Using \tracer, it's easy to check that this function called 6 times in row (from the \TT{qerfxFetch()} function) while querying \TT{X\$VERSION} table.}
+
+\IFRU{Запустим \tracer в режиме \TT{cc} (он добавит комментарий к каждой исполненной инструкции):}{Let's run \tracer in \TT{cc} mode (it will comment each executed instruction):}
+
+\begin{lstlisting}
+tracer -a:oracle.exe bpf=oracle.exe!_kqvrow,trace:cc
+\end{lstlisting}
+
+\lstinputlisting{examples/oracle/VERSION_kqvrow.asm}
+
+\IFRU{Так можно легко увидеть, что номер строки таблицы задается извне. Сама ф-ция возвращает строку, формируя её так:}{Now it's easy to see that row number is passed from outside of function. The function returning the string constructing it as follows:}
+
+\begin{center}
+\begin{tabular}{ | l | l | }
+\hline                        
+\IFRU{Строка}{String} 1	& \IFRU{Использует глобальные переменные \TT{vsnstr}, \TT{vsnnum}, \TT{vsnban}. Вызывает \TT{sprintf()}.}{Using \TT{vsnstr}, \TT{vsnnum}, \TT{vsnban} global variables. Calling \TT{sprintf()}.} \\
+\IFRU{Строка}{String} 2	& \IFRU{Вызывает}{Calling} \TT{kkxvsn()}. \\
+\IFRU{Строка}{String} 3	& \IFRU{Вызывает}{Calling} \TT{lmxver()}. \\
+\IFRU{Строка}{String} 4	& \IFRU{Вызывает}{Calling} \TT{npinli()}, \TT{nrtnsvrs()}. \\
+\IFRU{Строка}{String} 5	& \IFRU{Вызывает}{Calling} \TT{lxvers()}. \\
+\hline  
+\end{tabular}
+\end{center}
+
+\IFRU{Так вызываются соответствующие ф-ции для определения номеров версий отдельных модулей.}{That's how corresponding functions are called for determining each module's version.}
+
