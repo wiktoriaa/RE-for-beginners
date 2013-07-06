@@ -1,6 +1,4 @@
-﻿% done
-
-\section{\IFRU{Битовые поля}{Bit fields}}
+﻿\section{\IFRU{Битовые поля}{Bit fields}}
 \label{sec:bitfields}
 
 \IFRU{Немало функций задают различные флаги в аргументах при помощи битовых 
@@ -271,9 +269,16 @@ However, such short functions are better to be \IT{inlined functions}\footnote{\
 Т.е., в некотором смысле, выражение $1 \ll i$ последовательно выдаст все возможные позиции бит в 32-битном числе. 
 Кстати, освободившийся бит справа всегда обнуляется. Макрос \TT{IS\_SET} проверяет наличие этого бита в \TT{a}.}
 {In this loop, iteration count value \IT{i} counting from 0 to 31, $1 \ll i$ statement will be counting from 1 to 0x80000000. 
-Describing this operation in naturaul language, we would say \IT{shift 1 by n bits left}.
+Describing this operation in natural language, we would say \IT{shift 1 by n bits left}.
 In other words, $1 \ll i$ statement will consequentially produce all possible bit positions in 32-bit number.
 By the way, freed bit at right is always cleared. \TT{IS\_SET} macro is checking bit presence in \TT{a}.}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[scale=0.66]{bitfields/200px-Rotate_left_logically.png}
+\caption{\IFRU{Как работает инструкция \SHL (иллюстрация взята из wikipedia)}
+{How \SHL instruction works (illustration taken from wikipedia)}}
+\end{figure}
 
 \IFRU{Макрос \TT{IS\_SET} на самом деле это операция логического И (\IT{AND}) 
 и она возвращает ноль если бита там нет, 
@@ -321,14 +326,23 @@ _f	ENDP
 \end{lstlisting}
 
 \label{SHR}
-\IFRU{Инструкция SHR (\IT{SHift Right}) сдвигает число на 2 бита вправо. 
+\IFRU{Инструкция \SHR (\IT{SHift Right}) в данном примере сдвигает число на 2 бита вправо. 
 При этом, освободившиеся два бита слева (т.е., самые 
 старшие разряды), выставляются в нули. А самые младшие 2 бита выкидываются. 
 Фактически, эти два выкинутых бита ~--- остаток от деления.}
-{SHR (\IT{SHift Right}) instruction is shifting a number by 2 bits right.
+{\SHR (\IT{SHift Right}) instruction in this example is shifting a number by 2 bits right.
 Two freed bits at left (e.g., two most significant bits) are set to zero.
 Two least significant bits are dropped.
 In fact, these two dropped bits ~--- division operation remainder.}
+
+\IFRU{Инструкция \SHR работает так же как и \SHL, только в другую сторону.}{\SHR instruction works just like as \SHL but in other direction.}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[scale=0.66]{bitfields/200px-Rotate_right_logically.png}
+\caption{\IFRU{Как работает инструкция \SHR (иллюстрация взята из wikipedia)}
+{How \SHR instruction works (illustration taken from wikipedia)}}
+\end{figure}
 
 \IFRU{Для того, чтобы это проще понять, представьте себе десятичную систему счисления и число 23. 
 23 можно разделить на 10 просто выкинув последний разряд (3 ~--- это остаток от деления). 
@@ -340,9 +354,11 @@ In fact, these two dropped bits ~--- division operation remainder.}
 \footnote{division result}.}
 
 \IFRU{Так и с умножением. Умножить на 4 это просто сдвинуть число на 2 бита влево, 
-вставив 2 нулевых бита справа (как два самых младших бита).}
+вставив 2 нулевых бита справа (как два самых младших бита). 
+Это как умножить 3 на 100 ~--- нужно просто дописать два нуля справа.}
 {The same story about multiplication. Multiplication by 4 is just shifting the number to the left by 2 bits,
-inserting 2 zero bits at right (as the last two bits).}
+inserting 2 zero bits at right (as the last two bits).
+It's just like to multiply 3 by 100 ~--- we need just to add two zeroes at the right.}
 
 \subsection{\IFRU{Пример вычисления CRC32}{CRC32 calculation example}}
 
