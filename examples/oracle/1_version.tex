@@ -1,6 +1,6 @@
 \subsection{\IFRU{Таблица \TT{V\$VERSION} в \oracle}{\TT{V\$VERSION} table in \oracle}}
 
-\IFRU{\oracle 11.2 это очень большая программа, основной модуль \TT{oracle.exe} содержит около 124 тысячи функций.}{\oracle 11.2 is a huge program, main module \TT{oracle.exe} contain approx. 124,000 functions.} \IFRU{Для сравнения, ядро Windows 7 x64 (ntoskrnl.exe) --- около 11 тысяч функций, а ядро Linux 3.9.8 (с драйверами по умолчанию) --- 31 тысяч функций.}{For comparison, Windows 7 x86 kernel (ntoskrnl.exe) --- approx. 11,000 functions and Linux 3.9.8 kernel (with default drivers compiled) --- 31,000 functions.}
+\IFRU{\oracle 11.2 это очень большая программа, основной модуль \TT{oracle.exe} содержит около 124 тысячи функций.}{\oracle 11.2 is a huge program, main module \TT{oracle.exe} contain approx. 124,000 functions.} \IFRU{Для сравнения, ядро Windows 7 x64 (ntoskrnl.exe) ~--- около 11 тысяч функций, а ядро Linux 3.9.8 (с драйверами по умолчанию) ~--- 31 тысяч функций.}{For comparison, Windows 7 x86 kernel (ntoskrnl.exe) ~--- approx. 11,000 functions and Linux 3.9.8 kernel (with default drivers compiled) ~--- 31,000 functions.}
 
 \IFRU{Начнем с одного простого вопроса. Откуда \oracle берет информацию, когда мы в SQL*Plus пишем вот такой вот простой запрос:}{Let's start with an easy question. Where \oracle get all this information, when we execute such simple statement in SQL*Plus:}
 
@@ -121,7 +121,7 @@ GV$VERSION
 select inst_id, banner from x$version
 \end{lstlisting}
 
-\IFRU{Таблицы с префиксом X\$ в \oracle --- это также служебные таблицы, они не документированы, не могут изменятся пользователем, и обновляются динамически.}{Tables prefixed as X\$ in \oracle -- is service tables too, undocumented, cannot be changed by user and refreshed dynamically.}
+\IFRU{Таблицы с префиксом X\$ в \oracle ~--- это также служебные таблицы, они не документированы, не могут изменятся пользователем, и обновляются динамически.}{Tables prefixed as X\$ in \oracle -- is service tables too, undocumented, cannot be changed by user and refreshed dynamically.}
 
 \IFRU{Попробуем поискать текст}{Let's also try to search the text} \TT{select  BANNER from GV\$VERSION where inst\_id = USERENV('Instance')} \IFRU{в файле \TT{kqf.o} и находим ссылку на него в таблице \TT{kqfvip}}{in \TT{kqf.o} file and we find it in \TT{kqfvip} table}:
 
@@ -229,7 +229,7 @@ Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
 
 \IFRU{Здесь очень много ссылок на названия X\$-таблиц, вероятно, на все те что имеются в \oracle этой версии.}{There are a lot of references to X\$-table names, probably, to all \oracle 11.2 has.}
 \IFRU{Но мы снова упираемся в то что не имеем достаточно информации.}{But again, we have not enough information.}
-\IFRU{У меня нет никакой идеи, что означает строка \TT{kqvt}.}{I have no idea, what \TT{kqvt} string mean.} \IFRU{Вообще, префикс \TT{kq} может означать \IT{kernel} и \IT{query}.}{\TT{kq} prefix may mean \IT{kernal} and \IT{query}.} \IFRU{\TT{v}, может быть, \IT{version}, а \TT{t} --- \IT{type}?}{\TT{v}, probably, mean \IT{version} and \TT{t} --- \IT{type}?} \IFRU{Я не знаю, честно говоря.}{Frankly speaking, I don't know.}
+\IFRU{У меня нет никакой идеи, что означает строка \TT{kqvt}.}{I have no idea, what \TT{kqvt} string mean.} \IFRU{Вообще, префикс \TT{kq} может означать \IT{kernel} и \IT{query}.}{\TT{kq} prefix may mean \IT{kernal} and \IT{query}.} \IFRU{\TT{v}, может быть, \IT{version}, а \TT{t} ~--- \IT{type}?}{\TT{v}, probably, mean \IT{version} and \TT{t} ~--- \IT{type}?} \IFRU{Я не знаю, честно говоря.}{Frankly speaking, I don't know.}
 
 \IFRU{Таблицу с очень похожим названием мы можем найти в}{The table named similarly can be found in} \TT{kqf.o}:
 
