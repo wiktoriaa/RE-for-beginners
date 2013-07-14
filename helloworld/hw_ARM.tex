@@ -1,17 +1,27 @@
 ﻿\subsection{ARM}
 
-Для экспериментов с процессором ARM, я выбрал два компилятора: популярный в embedded-среде Keil Release 6/2013 и среду разработки Apple Xcode 4.6.3 (с компилятором LLVM-GCC 4.2), генерирующую код для ARM-совместимых процессоров в \idevices.
+\newcommand{\LRwithfootnote}{\TT{LR}\footnote{link register}\xspace}
+\newcommand{\PCwithfootnote}{\TT{PC}\footnote{program counter}\xspace}
+\newcommand{\SPwithfootnote}{\TT{SP}\footnote{stack pointer}\xspace}
+\newcommand{\LR}{\TT{LR}\xspace}
+\newcommand{\PC}{\TT{PC}\xspace}
+\newcommand{\SP}{\TT{SP}\xspace}
 
-\subsubsection{Non-optimizing Keil: режим ARM}
+\IFRU{Для экспериментов с процессором ARM, я выбрал два компилятора}{For my experiments with ARM CPU I choose two compilers}: \IFRU{популярный в embedded-среде}{popular in embedded area} Keil Release 6/2013 
+\IFRU{и среду разработки}{and} Apple Xcode 4.6.3 \IFRU{}{IDE} (\IFRU{с компилятором}{with} LLVM-GCC 4.2 \IFRU{}{compiler}), \IFRU{генерирующую код для ARM-совместимых процессоров и}{producing code for ARM-comptaible processors and} \IFRU{SoC}{SoCs}\footnote{system on chip} \IFRU{в}{in} \idevices.
 
-Для начала, скомпилируем наш пример в Keil:
+\subsubsection{\IFRU{Неоптимизирующий}{Non-optimizing} Keil: \IFRU{режим ARM}{ARM mode}}
+
+\IFRU{Для начала, скомпилируем наш пример в Keil}{Let's start by compiling our example in Keil}:
 
 \begin{lstlisting}
 armcc.exe --arm --c90 -O0 1.c 
 \end{lstlisting}
 
-Компилятор armcc генерирует листинг на ассемблере, но он содержит некоторые высокоуровневые макросы связанные с ARM\footnote{например, он показывает инструкции PUSH/POP отсутствующие в режиме ARM},
-а нам важнее увидеть инструкции ``как есть'', так что посмотрим результат в \IDA.
+\IFRU{Компилятор \IT{armcc} генерирует листинг на ассемблере}{\IT{armcc} compiler producing assembler listing}, 
+\IFRU{но он содержит некоторые высокоуровневые макросы связанные с ARM}{but it has some high-level ARM-processor related macros}\footnote{
+\IFRU{например, он показывает инструкции \PUSH/\POP отсутствующие в режиме ARM}{for example, it shows \PUSH/\POP instructions absent in ARM mode}}, 
+\IFRU{а нам важнее увидеть инструкции ``как есть'', так что посмотрим скомпилированный результат в \IDA}{but it's more important for us to see instructions ``as is'', so let's see compiled results in \IDA}.
 
 \begin{lstlisting}
 .text:00000000             main
@@ -24,53 +34,78 @@ armcc.exe --arm --c90 -O0 1.c
 .text:000001EC 68 65 6C 6C+aHelloWorld     DCB "hello, world",0    ; DATA XREF: main+4
 \end{lstlisting}
 
-\IFRU{Вот чуть-чуть фактов о процессоре ARM, которые желательно знать}{... couple facts should know in order to proceed}.
-ARM имеет по крайней мере два основных режима: режим ARM и thumb. 
-В первом режиме доступны все инструкции и каждая имеет размер 32 бита (или 4 байта). 
-Во втором режиме (thumb) каждая инструкция имеет размер 16 бит (или 2 байта). Режим thumb выгоднее тем что программа
-на нем может быть 1) компактнее; 2) эффективнее исполняться на микроконтроллере с 16-битной шиной данных. Но за всё
-нужно платить: в режиме thumb куда меньше возможностей процессора, например, возможен доступ только к 8-и регистрам
-процессора, и чтобы совершить некоторые действия, нужны несколько thumb-инструкций.
-Начиная с ARMv7, имеется также поддержка инструкций thumb-2, это thumb расширенный до поддержки куда большего числа инструкций.
-Программа для процессора ARM может представлять смесь процедур скомпилированных для обоих режимов.
-Основное количество приложений для \idevices скомпилировано для набора инструкций thumb-2, потому что Xcode
-компилирует так по умолчанию.
+\IFRU{Вот чуть-чуть фактов о процессоре ARM, которые желательно знать}{Here is couple of ARM-related facts we should know in order to proceed}.
+\IFRU{Процессор ARM имеет по крайней мере два основных режима: режим ARM и thumb}{ARM processor has at least two major modes: ARM mode and thumb}. 
+\IFRU{В первом (ARM) режиме доступны все инструкции и каждая имеет размер 32 бита (или 4 байта)}{In first (ARM) mode all instructions are enabled and each has 32-bit (4 bytes) size}. 
+\IFRU{Во втором режиме (thumb) каждая инструкция имеет размер 16 бит (или 2 байта)}{In second (thumb) mode each instruction has 16-bit (or 2 bytes) size}. 
+\IFRU{Режим thumb может выглядеть привлекательнее тем, что программа на нем может быть 1) компактнее; 2) эффективнее исполняться на микроконтроллере с 16-битной шиной данных}{Thumb mode may look attractive because program in it may be 1) compact; 2) executing faster on microcontroller having 16-bit memory datapath}. 
+\IFRU{Но за всё нужно платить: в режиме thumb куда меньше возможностей процессора, например, возможен доступ только к 8-и регистрам процессора, и чтобы совершить некоторые действия, выполнимые в режиме ARM одной инструкцией, нужны несколько thumb-инструкций}{Nothing come for free of charge, so, in thumb mode there are reduced instruction set, only 8 registers are accessible and one need several thumb instructions for doing some operations when in ARM mode you'll need just one}.
+\IFRU{Начиная с ARMv7, имеется также поддержка инструкций thumb-2, это thumb расширенный до поддержки куда большего числа инструкций}{Starting at ARMv7, there are also thumb-2 instructions set present, this is a thumb extended to support much bigger instructions set}.
+\IFRU{Программа для процессора ARM может представлять смесь процедур скомпилированных для обоих режимов}{A program for ARM processor may be mix of procedures compiled for both modes}.
+\IFRU{Основное количество приложений для \idevices скомпилировано для набора инструкций thumb-2, потому что Xcode
+делает так по умолчанию}{Majority of \idevices applications are compiled for thumb-2 instructions set, because Xcode do this by default}.
 
-В вышеприведененном примере можно легко увидеть что каждая инструкция имеет размер 4 байта. Действительно, ведь
-мы же компилировали для режима ARM а не thumb.
+\IFRU{В вышеприведененном примере можно легко увидеть что каждая инструкция имеет размер 4 байта}{In example we see here we can easily see that each instruction has size of 4 bytes}.
+\IFRU{Действительно, ведь мы же компилировали наш код для режима ARM а не thumb}{Indeed, we compiled our code for ARM mode, but for thumb}.
 
-Самая первая инструкция \TT{''STMFD SP!, \{R4,LR\}''}\footnote{Store Multiple Full Descending} работает как инструкция \PUSH, записывает значения двух регистров (R4 и LR) в стек. Действительно, в выдаваемом листинге на ассемблере, компилятор armcc, для упрощения, указывает здесь команду \TT{''PUSH \{r4,lr\}''}. Но это не совсем точно, инструкция \PUSH доступна только в режиме thumb, поэтому, во избежания путанницы, я предложил работать в \IDA.
+\IFRU{Самая первая инструкция}{The very first instruction} \TT{''STMFD SP!, \{R4,LR\}''}\footnote{Store Multiple Full Descending} \IFRU{работает как инструкция}{works here as} \PUSH, \IFRU{записывает значения двух регистров}{instruction, writing values of two} (\TT{R4} \IFRU{и}{and} \LR) \IFRU{в стек}{registers into stack}. 
+\IFRU{Действительно, в выдаваемом листинге на ассемблере, компилятор \IT{armcc}, для упрощения, указывает здесь инструкцию}{Indeed, in output listing, \IT{armcc} compiler, for the sake of simplification, showing here} \TT{''PUSH \{r4,lr\}''}\IFRU{}{instruction}.
+\IFRU{Но это не совсем точно, инструкция \PUSH доступна только в режиме thumb, поэтому, во избежания путанницы, я предложил работать в \IDA}{But it's not quite correct, \PUSH instruction available only in thumb mode, so, to make things less messy, I offered to work in \IDA}.
 
-Итак, эта инструкция записывает значения регистров \TT{R4} и \TT{LR} по адресу, на который указывает регистр \TT{SP} (stack pointer), затем уменьшает \TT{SP}, чтобы он указывал на место в стеке, доступное для новых записей.
+\IFRU{Итак, эта инструкция записывает значения регистров \TT{R4} и \LR по адресу в памяти, на который указывает регистр \SPwithfootnote, затем уменьшает \TT{SP}, чтобы он указывал на место в стеке, доступное для новых записей}{So this instruction writes values of \TT{R4} and \LR registers at the address in memory to which \SPwithfootnote pointing, then decrements \SP so it will points to a place in stack free for new entries}.
 
-Эта инструкция, как и инструкция \PUSH в режиме thumb, может сохранить в стеке одновременно несколько значений регистров, что может быть очень удобно. Кстати, такого в x86 нет. Так же следует заметить, что \TT{STMFD} ~--- генерализация инструкции \PUSH (то есть, расширяет её возможности), потому что может работать с любым регистром а не только с \TT{SP}, это тоже может быть очень удобно.
+\IFRU{Эта инструкция, как и инструкция \PUSH в режиме thumb, может сохранить в стеке одновременно несколько значений регистров, что может быть очень удобно}{This instruction, like \PUSH instruction in thumb mode, is able save several register values at once and this may be useful}. 
+\IFRU{Кстати, такого в x86 нет}{By the way, there is no such thing in x86}. 
+\IFRU{Так же следует заметить, что \TT{STMFD} ~--- генерализация инструкции \PUSH (то есть, расширяет её возможности), потому что может работать с любым регистром а не только с \SP, это тоже может быть очень удобно}{It's also can be noted that \TT{STMFD} ~--- generalization of \PUSH instruction (extending its features), because it can work with any register, not just with \SP and this can be very useful}.
 
-Инструкция \TT{''ADR R0, aHelloWorld''} прибавляет значение регистра \TT{PC} к смещению, где хранится строка \IT{``hello, world''}. Причем здесь \TT{PC}, можно спросить? Притом, что это так называемый ``адресно-независимый код''\footnote{Читайте больше об этом в соответствующем разделе~\ref{sec:PIC}}, он предназначен для исполнения будучи не привязанным к каким-либо адресам в памяти. В опкоде этой инструкции указывается разница
-между адресом этой инструкции и местом, где хранится строка. Эта разница всегда будет постоянной, вне зависимости
-от того, куда был загружен операционной системой наш код. Поэтому всё что нужно это прибавить адрес текущей инструкции (из PC) чтобы получить текущий абсолютный адрес начала нашей Си-строки.
+\IFRU{Инструкция}{} \TT{''ADR R0, aHelloWorld''} \IFRU{прибавляет значение регистра \PC к смещению, где хранится строка}{instruction adding \PC register value to the offset, where the} \IT{``hello, world''} \IFRU{}{string is located}. 
+\IFRU{Причем здесь \PC, можно спросить}{How \TT{PC} register used here, one might ask}?
+\IFRU{Притом, что это так называемый ``адресно-независимый код''}{This is so called ``position-independent code''}\footnote{\IFRU{Читайте больше об этом в соответствующем разделе}{Read more about it in relevant section}~\ref{sec:PIC}}, \IFRU{он предназначен для исполнения будучи не привязанным к каким-либо адресам в памяти}{it is intended to be executed not to be fixed to any addresses in memory}.
+\IFRU{В опкоде инструкции \TT{ADR} указывается разница между адресом этой инструкции и местом, где хранится строка}{In the opcode of \TT{ADR} instruction, here is encoded a difference between address of this instruction and the place where the string is located}.
+\IFRU{Эта разница всегда будет постоянной, вне зависимости от того, куда был загружен операционной системой наш код}{Difference will always be constant, without any dependence to the address where that code being loaded, by operation system, presumably}. 
+\IFRU{Поэтому всё что нужно это прибавить адрес текущей инструкции (из \PC) чтобы получить текущий абсолютный адрес нашей Си-строки}{That's why all we need is to add address of current instruction (from \PC) in order to get absolute address of our C-string in memory}.
 
-Инструкция \TT{''BL \_\_2printf''}\footnote{Branch with Link} вызывает функцию \TT{printf()}. Работа этой инструкции состоит из двух фаз: 1) записать адрес после инструкции \TT{BL} (0xC) в регистр \TT{LR}\footnote{link register}, затем собственно передать управление в \TT{printf()}, записав адрес этой функции в регистр \TT{PC}\footnote{program counter}. Ведь, когда функция \TT{printf()} закончит работу, нужно знать, куда вернуть управление, поэтому закончив работу, всякая функция передает управление по адресу записанному в регистре \TT{LR}. В этом разница между ''чистыми'' RISC-процессорами вроде ARM и x86, где адрес возврата записывается в стек\footnote{Подробнее об этом будет описано в следующей главе~\ref{sec:stack}}.
+\IFRU{Инструкция}{} \TT{''BL \_\_2printf''}\footnote{Branch with Link} \IFRU{вызывает функцию \printf}{instruction calling \printf function}. 
+\IFRU{Работа этой инструкции состоит из двух фаз}{That's how this instruction works}: 
+\begin{itemize}
+\item
+\IFRU{записать адрес после инструкции \TT{BL} (0xC) в регистр \LRwithfootnote}{write address after \TT{BL} instruction (0xC) into \LRwithfootnote register};
+\item
+\IFRU{затем собственно передать управление в \printf, записав адрес этой функции в регистр \PCwithfootnote}{then pass control flow into \printf by writing its address into \PCwithfootnote register}.
+\end{itemize}
 
-Кстати, 32-битный абсолютный адрес, либо же смещение, невозможно закодировать в 32-битной инструкции \TT{BL}, в ней есть место только для 24-х бит, которые можно использовать для этого. А из-за того что все инструкции в режиме ARM имеют длину 4 байта (32 бита), и инструкции могут находится только по адресам кратным 4, то последние 2 бита (всегда нулевых) можно не кодировать. Остаются 26 бит, при помощи которых можно закодировать смещение примерно $\pm{}\approx{}32M$.
+\IFRU{Ведь, когда функция \printf закончит работу, нужно знать, куда вернуть управление, поэтому закончив работу, всякая функция передает управление по адресу записанному в регистре \LR}{Because, when \printf finishes its work, it should have information, where it should return control, that's why each function passes control to the address stored in \LR register}.
 
-Следующая инструкция \TT{''MOV R0, \#0''}\footnote{MOVe} просто записывает 0 в регистр R0. Ведь наша Си-функция
-возвращает 0 а возвращаемое значение всякая функция оставляет в R0.
+\IFRU{В этом разница между ``чистыми'' RISC-процессорами вроде ARM и x86, где адрес возврата записывается в стек}{That is the difference between ``pure'' RISC-processors like ARM and x86, where address of return is stored in stack}\footnote{\IFRU{Подробнее об этом будет описано в следующей главе}{Read more about this in next section}~\ref{sec:stack}}.
 
-Последняя инструкция \TT{''LDMFD SP!, {R4,PC}''}\footnote{Load Multiple Full Descending} это инструкция обратная
-от \TT{STMFD}, она загружает из стека значения для сохранения их в \TT{R4} и \TT{PC}, увеличивая указатель стека \TT{SP}. Это, в каком-то смысле, аналог \POP. Обратите внимание: самая первая инструкция \TT{STMFD} сохранила в стеке \TT{R4} и \TT{LR}, а \IT{восстанавливаются} \TT{R4} и \TT{PC}. Как я уже описывал, в регистре \TT{LR}\footnote{link register} обычно сохраняется адрес места, куда нужно всякой функции вернуть управление. Самая первая инструкция сохраняет это значение в стеке, потому что наша функция позже будет сама пользоваться этим регистром, в момент вызова \TT{printf()}. А затем, это значение можно сразу записать в \TT{PC}, таким образом, передав управление туда, откуда была вызвана наша функция. Так как функция \TT{main()} обычно самая главная в \CCpp, вероятно, управление будет возвращено в загрузчик операционной системы, либо куда-то в runtime функции Си, или что-то в этом роде.
+\IFRU{Кстати, 32-битный абсолютный адрес, либо же смещение, невозможно закодировать в 32-битной инструкции \TT{BL}, в ней есть место только для 24-х бит}{By the way, absolute 32-bit address or offset cannot be encoded in 32-bit \TT{BL} instruction, because it has space only for 24 bits}.
+\IFRU{Так же следует отметить, что из-за того что все инструкции в режиме ARM имеют длину 4 байта (32 бита), и инструкции могут находится только по адресам кратным 4, то последние 2 бита (всегда нулевых) можно не кодировать.}{It's also worth to note that all ARM mode instructions has size 4 bytes (32 bits), hence they all can be located only on 4-byte boundary addresses. This mean, last 2 bits of instruction address (always zero bits) may be omitted.}
+\IFRU{В итоге имеем 26 бит, при помощи которых можно закодировать смещение}{In summary, we have 26 bit for offset encoding, this is enough to represent offset} $\pm{}\approx{}32M$.
 
-\TT{DCB} ~--- директива ассемблера, описывающая массивы байт или ASCII-строк, аналог директивы DB в 
-Intel-ассемблере.
+\IFRU{Следующая инструкция}{Next} \TT{''MOV R0, \#0''}\footnote{MOVe} \IFRU{просто записывает 0 в регистр \TT{R0}}{instruction just writes 0 into \TT{R0} register}.
+\IFRU{Ведь наша Си-функция возвращает 0 а возвращаемое значение всякая функция оставляет в \TT{R0}}{That's because our C-function returning 0 and returning value is to be placed in \TT{R0}}.
 
-\subsubsection{Non-optimizing Keil: режим thumb}
+\IFRU{Последняя инструкция}{The last instruction} \TT{''LDMFD SP!, {R4,PC}''}\footnote{Load Multiple Full Descending} \IFRU{это инструкция обратная от}{is an inversive instruction of} \TT{STMFD}, \IFRU{она загружает из стека значения для сохранения их в \TT{R4} и \PC, увеличивая указатель стека \SP}{it loads values from stack for saving them into \TT{R4} and \PC, incremeting stack pointer \SP}.
+\IFRU{Это, в каком-то смысле, аналог \POP}{It can be said, it is similar to \POP}. 
+\IFRU{Обратите внимание: самая первая инструкция \TT{STMFD} сохранила в стеке \TT{R4} и \LR, а \IT{восстанавливаются} \TT{R4} и \PC}{Note: the very first instruction \TT{STMFD} saved \TT{R4} and \LR into stack, but \TT{R4} and \PC are \IT{restored}}.
+\IFRU{Как я уже описывал, в регистре \LRwithfootnote обычно сохраняется адрес места, куда нужно всякой функции вернуть управление}{As I wrote before, in \LRwithfootnote register address of place saved, to where each function should return control}.
+\IFRU{Самая первая инструкция сохраняет это значение в стеке, потому что наша функция \main позже будет сама пользоваться этим регистром, в момент вызова \printf}{The very first function saving its value in stack because our \main function will use that register in order to call \printf}.
+\IFRU{А затем, в конце функции, это значение можно сразу записать в \PC, таким образом, передав управление туда, откуда была вызвана наша функция}{And then, in the function end this value can be written to \PC, thus, by passing control to where our function was called}.
+\IFRU{Так как функция \main обычно самая главная в \CCpp, вероятно, управление будет возвращено в загрузчик операционной системы, либо куда-то в runtime функции Си, или что-то в этом роде}{Since our \main function is usually primary function in \CCpp, probably, control will be returned to operation system loader or to some place in runtime C functions, or something like that}.
 
-Скомпилируем тот же пример в Keil для режима thumb:
+\TT{DCB} ~--- \IFRU{директива ассемблера, описывающая массивы байт или ASCII-строк, аналог директивы DB в 
+x86-ассемблере}{assembler directive, defining array of bytes or ASCII-strings, similar to DB directive 
+in x86-assembler}.
+
+\subsubsection{\IFRU{Неоптимизирующий}{Non-optimizing} Keil: \IFRU{режим thumb}{thumb mode}}
+
+\IFRU{Скомпилируем тот же пример в Keil для режима thumb}{Let's compile the same example in Keil in thumb mode}:
 
 \begin{lstlisting}
 armcc.exe --thumb --c90 -O0 1.c 
 \end{lstlisting}
 
-Получим (в \IDA):
+\IFRU{Получим (в \IDA)}{We will get (in \IDA)}:
 
 \begin{lstlisting}
 .text:00000000             main
@@ -83,21 +118,23 @@ armcc.exe --thumb --c90 -O0 1.c
 .text:00000304 68 65 6C 6C+aHelloWorld     DCB "hello, world",0    ; DATA XREF: main+2
 \end{lstlisting}
 
-Сразу бросаются в глаза двухбайтные (16-битные) опкоды, это, как я уже упоминал, thumb. Кроме инструкции BL.
-Но на самом деле, она состоит из двух 16-битных инструкций. 
-Это потому что загрузить в PC смещение, по которому
-находится функция \TT{printf()}, используя так мало места в одном 16-битном опкоде, очевидно, нельзя.
-Поэтому первая 16-битная инструкция загружает старшие 10 бит смещения, а вторая ~--- 11 бит смещения.
-Как я уже упоминал, все инструкции в thumb-режиме имеют длину 2 байта или 16 бит. Поэтому невозможна такая
-ситуация, когда thumb-инструкция начинается по нечетному адресу. 
-Следовательно, последний бит адреса можно не кодировать.
-Таким образом, в итоге, в thumb-инструкции BL кодируется смещение примерно $\pm{}\approx{}2M$ от текущего адреса.
+\IFRU{Сразу бросаются в глаза двухбайтные (16-битные) опкоды, это, как я уже упоминал, thumb}{We can easily spot 2-byte (16-bit) opcodes, this is, as I mentioned, thumb}.
+\IFRU{Кроме инструкции \TT{BL}}{Except \TT{BL} instruction}.
+\IFRU{Но на самом деле, она состоит из двух 16-битных инструкций}{In fact, it consisted in two 16-bit instructions}.
+\IFRU{Это потому что загрузить в \PC смещение, по которому находится функция \printf, используя так мало места в одном 16-битном опкоде, очевидно, нельзя}{That's because it's not possible to load offset to \printf function into \PC when using so small space in one 16-bit opcode, obviously}.
+\IFRU{Поэтому первая 16-битная инструкция загружает старшие 10 бит смещения, а вторая ~--- младшие 11 бит смещения}{That's why first 16-bit instruction loads higher 10 bits of offset and second ~--- loads 11 lower bits of offset}.
+\IFRU{Как я уже упоминал, все инструкции в thumb-режиме имеют длину 2 байта или 16 бит}{As I mentioned, all instructions in thumb mode has size of 2 bytes or 16 bits}.
+\IFRU{Поэтому невозможна такая ситуация, когда thumb-инструкция начинается по нечетному адресу}{This mean, it's not possible at all when address of thumb-instruction is odd}.
+\IFRU{Следовательно, последний бит адреса можно не кодировать}{Considering this, last address bit may be omitted while instruction encoding}.
+\IFRU{Таким образом, в итоге, в thumb-инструкции \TT{BL} кодируется смещение}{Summarizing, in \TT{BL} thumb-instruction,} $\pm{}\approx{}2M$ \IFRU{от текущего адреса}{can be encoded as offset from current address}.
 
-Остальные инструкции в функции: \PUSH и \POP работают почти так же как и описанные \TT{STMFD}/\TT{LDMFD}, только регистр \TT{SP} здесь не указывается явно. \TT{ADR} работает также как и в предыдущем примере. \TT{MOVS} записывает 0 в регистр R0 для возврата нуля.
+\IFRU{Остальные инструкции в функции: \PUSH и \POP работают почти так же как и описанные \TT{STMFD}/\TT{LDMFD}, только регистр \SP здесь не указывается явно}{Other instructions in functions are: \PUSH and \POP works just like described \TT{STMFD}/\TT{LDMFD}, but \SP register not mentioned explicitely here}.
+\TT{ADR} \IFRU{работает также как и в предыдущем примере}{works just like in previous example}.
+\TT{MOVS} \IFRU{записывает $0$ в регистр \TT{R0} для возврата нуля}{writes $0$ in \TT{R0} register to zero returning}.
 
-\subsubsection{Optimizing Xcode: режим ARM}
+\subsubsection{\IFRU{Оптимизирующий}{Optimizing} Xcode: \IFRU{режим ARM}{ARM mode}}
 
-Xcode 4.6.3 без включенной оптимизации выдает слишком много лишнего кода, поэтому остановимся на той версии, где как можно меньше инструкций.
+Xcode 4.6.3 \IFRU{без включенной оптимизации выдает слишком много лишнего кода, поэтому остановимся на той версии, где как можно меньше инструкций}{without optimization turned on, produces a lot of redundant code, so we'll study that version where instruction count as small as possible}: \TT{(-O3)}.
 
 \begin{lstlisting}
 __text:000028C4             _hello_world
@@ -113,47 +150,45 @@ __text:000028E0 80 80 BD E8                 LDMFD           SP!, {R7,PC}
 __cstring:00003F62 48 65 6C 6C+aHelloWorld_0   DCB "Hello world!",0
 \end{lstlisting}
 
-Инструкции \TT{STMFD} и \TT{LDMFD} нам уже знакомы.
+\IFRU{Инструкции}{Instructions} \TT{STMFD} \IFRU{и}{and} \TT{LDMFD} \IFRU{нам уже знакомы}{are familiar to us}.
 
-Инструкция \TT{MOV} просто записывает число 0x1686 в регистр R0, это смещение указывающее на строку ``Hello world!''.
+\IFRU{Инструкция \MOV просто записывает число $0x1686$ в регистр \TT{R0}, это смещение указывающее на строку ``Hello world!''}{\MOV instruction just writes $0x1686$ number into \TT{R0} register, this is offset pointing to the ``Hello world!'' string}.
 
-Регистр R7, по стандарту принятому в ''iOS ABI Function Call Guide''\footnote{\url{http://developer.apple.com/library/ios/documentation/Xcode/Conceptual/iPhoneOSABIReference/iPhoneOSABIReference.pdf}} это frame pointer, о нем
-будет рассказано позже.
+\IFRU{Регистр \TT{R7}, по стандарту принятому в}{\TT{R7} register, as it is standardized in} ''iOS ABI Function Call Guide''\footnote{\url{http://developer.apple.com/library/ios/documentation/Xcode/Conceptual/iPhoneOSABIReference/iPhoneOSABIReference.pdf}} \IFRU{это}{is} frame pointer, \IFRU{о нем будет рассказано позже}{more on it below}.
 
-Инструкция \TT{MOVT R0, \#0} записывает 0 в старшие 16 бит регистра. 
-Дело в том, что обычная инструкция MOV может записывать какое-либо значение только в младшие 16 бит регистра, ведь, больше нельзя закодировать в ней. 
-Помните, что в режиме ARM все инструкции ограничены длиной в 32 бита. Конечно, это не касается перемещений между регистрами.
-Поэтому для записи в старшие биты (от 16-го по 31-го включительно) существует дополнительная команда MOVT.
-Здесь её использование избыточно, потому что инструкция \TT{''MOV R0, \#0x1686''} итак обнулила старшую часть регистра. Возможно, это недочет компилятора.
+\IFRU{Инструкция}{} \TT{MOVT R0, \#0} \IFRU{записывает 0 в старшие 16 бит регистра}{instruction writes 0 into higher 16 bit of register}.
+\IFRU{Дело в том, что обычная инструкция \MOV в режиме ARM может записывать какое-либо значение только в младшие 16 бит регистра, ведь, больше нельзя закодировать в ней}{The issue is here in that generic \MOV instruction in ARM mode may writes only lower 16 bit of register}.
+\IFRU{Помните, что в режиме ARM опкоды всех инструкций ограничены длиной в 32 бита. Конечно, это ограничение не касается перемещений между регистрами.}{Remember, all instruction's opcodes in ARM mode are limited in size to 32 bits. Of course, this limitation is not related to moving between registers.}
+\IFRU{Поэтому для записи в старшие биты (от 16-го по 31-го включительно) существует дополнительная команда \TT{MOVT}}{So that's why additional instruction \TT{MOVT} exist for writing into higher bits (from 16 to 31 inclusive)}.
+\IFRU{Впрочем, здесь её использование избыточно, потому что инструкция \TT{''MOV R0, \#0x1686''} выше итак обнулила старшую часть регистра}{However, its usage here is redundant, because \TT{''MOV R0, \#0x1686''} instruction above cleared higher part of register}. \IFRU{Возможно, это недочет компилятора}{Probably, it's compiler's shortcoming}.
 
-Инструкция \TT{''ADD R0, PC, R0''} прибавляет PC к R0, для вычисления действительного адреса строки 
-``Hello world!'', как нам уже известно, это ``адресно-независимый код'', поэтому такая корректива необходима.
+\IFRU{Инструкция} \TT{''ADD R0, PC, R0''} \IFRU{прибавляет \PC к \TT{R0}, для вычисления действительного адреса строки ``Hello world!'', как нам уже известно, это ``адресно-независимый код'', поэтому такая корректива необходима}{instruction adding \PC to \TT{R0}, for calculating absolute address of ``Hello world!'' string, and as we already know that, it's ``position-independent code'', so this corrective is essential here}.
 
-Инструкция BL вызывает \TT{puts()} вместо \printf.
+\IFRU{Инструкция \TT{BL} вызывает \puts вместо \printf}{\TT{BL} instruction calling \puts instead of \printf}.
 
 \label{puts}
-\IFRU{Компилятор заменил вызов \printf на \TT{puts()}. 
-Действительно, \printf с одним агрументом это почти аналог \TT{puts()}.}
-{GCC replaced first \printf call to \TT{puts()}. 
-Indeed: \printf with only sole argument is almost analogous to \TT{puts()}.} 
+\IFRU{Компилятор заменил вызов \printf на \puts. 
+Действительно, \printf с одним агрументом это почти аналог \puts.}
+{GCC replaced first \printf call to \puts. 
+Indeed: \printf with only sole argument is almost analogous to \puts.} 
 
 \IFRU{\IT{Почти}, если принять условие что в строке не будет управляющих символов \printf 
 начинающихся со знака процента. Тогда эффект от работы этих двух функций будет разным.}
 {\IT{Almost}, because we need to be sure that this string will not contain printf-control 
 statements starting with \IT{\%}: then effect of these two functions will be different.}
 
-\IFRU{Зачем компилятор заменил один вызов на другой? Потому что \TT{puts()} работает быстрее}
-{Why compiler replaced \printf to \TT{puts}? Because \TT{puts()} work faster}
+\IFRU{Зачем компилятор заменил один вызов на другой? Потому что \puts() работает быстрее}
+{Why compiler replaced \printf to \puts? Because \puts() work faster}
 \footnote{\url{http://www.ciselant.de/projects/gcc_printf/gcc_printf.html}}. 
 
-\IFRU{Видимо потому, что puts() проталкивает символы в stdout не сравнивая каждый со знаком процента.}
-{puts() working faster because it just passes characters to stdout not comparing each with \IT{\%} symbol.}
+\IFRU{Видимо потому, что \puts проталкивает символы в stdout не сравнивая каждый со знаком процента.}
+{\puts working faster because it just passes characters to stdout not comparing each with \IT{\%} symbol.}
 
-Далее уже знакомая инструкция \TT{''MOV R0, \#0''}, служащая для установки в 0 возвращаемого значения функции.
+\IFRU{Далее уже знакомая инструкция}{Next, we see familiar to us} \TT{''MOV R0, \#0''}\IFRU{, служащая для установки в 0 возвращаемого значения функции}{instruction, intended to set 0 to \TT{R0} register}.
 
-\subsubsection{Optimizing Xcode: режим thumb-2}
+\subsubsection{\IFRU{Оптимизирующий}{Optimizing} Xcode: \IFRU{режим thumb-2}{thumb-2 mode}}
 
-По умолчанию, Xcode 4.6.3 генерирует код для режима thumb-2, примерно в таком духе:
+\IFRU{По умолчанию}{By default}, Xcode 4.6.3 \IFRU{генерирует код для режима thumb-2, примерно в такой манере}{generating code for thumb-2 in such manner}:
 
 \begin{lstlisting}
 __text:00002B6C                   _hello_world
@@ -171,20 +206,21 @@ __text:00002B80 80 BD                             POP             {R7,PC}
 __cstring:00003E70 48 65 6C 6C 6F 20+aHelloWorld     DCB "Hello world!",0xA,0
 \end{lstlisting}
 
-Разница от обычного thumb-кода в том что здесь добавлены новые инструкции, которые кодируются следующим образом:
-инструкции \TT{BL}, \TT{BLX}, как мы помним, обычно кодируются как пара 16-битных инструкций, 
-а в thumb-2 эти опкоды \IT{суррогатные} опкоды расширены так, что новые инструкции кодируются здесь как 
-32-битные инструкции.
+Инструкции \TT{BL} и \TT{BLX} в thumb, как мы помним, обычно кодируются как пара 16-битных инструкций, 
+а в thumb-2 эти \IT{суррогатные} опкоды расширены так, что новые инструкции кодируются здесь как 
+32-битные инструкции. 
+Это можно заметить по тому что опкоды thumb-2 инструкций всегда начинаются с 0xFx либо с 0xEx. 
+Но в листинге \IDA, первый байт опкода стоит вторым, это из-за того что в ARM инструкции кодируются в режиме big-endian: в начале последний байт, потом первый (для thumb и thumb-2 режима), либо, (для инструкций в режиме ARM) в начале четвертый байт, затем третий, второй и первый. 
+Так что мы видим здесь что инструкции MOVW, MOVT.W и BLX начинаются с 0xFx.
 
-Такая инструкция например \TT{''MOVW R0, \#0x13D8''} ~--- она записывает 16-битное число в 
+Thumb-2 инструкция, например, \TT{``MOVW R0, \#0x13D8''} ~--- она записывает 16-битное число в 
 младшую часть регистра \TT{R0}.
 
-Еще \TT{''MOVT.W R0, \#0''} ~--- эта инструкция работает так же как и \TT{MOVT} из предыдущего примера, 
+Еще \TT{``MOVT.W R0, \#0''} ~--- эта инструкция работает так же как и \TT{MOVT} из предыдущего примера, 
 но она работает в thumb-2.
 
-Помимо прочих отличий, здесь используется инструкция BLX вместо BL. Отличие в том, что помимо сохранения адреса
-возврата в регистре LR и передаче управления в функцию puts(), происходит смена режима процессора с thumb на ARM,
-либо наоборот.
+Помимо прочих отличий, здесь используется инструкция \TT{BLX} вместо \TT{BL}. 
+Отличие в том, что помимо сохранения адреса возврата в регистре \LR и передаче управления в функцию \puts, происходит смена режима процессора с thumb на ARM, либо наоборот.
 Здесь это нужно потому что инструкция, куда ведет переход, выглядит так:
 
 \begin{lstlisting}
