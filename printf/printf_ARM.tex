@@ -36,7 +36,7 @@ win64~\ref{sec:callingconventions_win64}.
 .text:00000024 CB 18 00 EA                 B       __2printf
 \end{lstlisting}
 
-Это соптимизированная версия для режима ARM, и здесь мы видим последнюю инструкцию: \TT{B} вместо привычной
+Это соптимизированная версия (-O3) для режима ARM, и здесь мы видим последнюю инструкцию: \TT{B} вместо привычной
 нам \TT{BL}. 
 Отличия между соптимзированной версией и предыдущей, скомпилированной без оптимизации, еще и в том, 
 что нет пролога и эпилога функции (инструкций, сохранающих состояние регистров \TT{R4} и \LR).
@@ -66,6 +66,8 @@ win64~\ref{sec:callingconventions_win64}.
 .text:00000016 06 F0 EB F8                 BL      __2printf
 .text:0000001A 10 BD                       POP     {R4,PC}
 \end{lstlisting}
+
+Здесь нет особых отличий от неоптимизированного варианта для режима ARM.
 
 \subsection{ARM: 8 аргументов в \printf}
 
@@ -107,7 +109,6 @@ void printf_main2()
 .text:00000068 04 F0 9D E4                 LDR     PC, [SP+4+var_4],#4
 \end{lstlisting}
 
-
 \subsubsection{Оптимизирующий Keil: режим thumb}
 
 \begin{lstlisting}
@@ -137,7 +138,6 @@ void printf_main2()
 .text:0000003E             loc_3E                                  ; CODE XREF: example13_f+16
 .text:0000003E 05 B0                       ADD     SP, SP, #0x14
 .text:00000040 00 BD                       POP     {PC}
-
 \end{lstlisting}
 
 
@@ -170,7 +170,6 @@ __text:00002950 A4 05 00 EB                 BL              _printf
 __text:00002954 07 D0 A0 E1                 MOV             SP, R7
 __text:00002958 80 80 BD E8                 LDMFD           SP!, {R7,PC}
 \end{lstlisting}
-
 
 \subsubsection{Оптимизирующий Xcode: режим thumb}
 
