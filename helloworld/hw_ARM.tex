@@ -1,12 +1,5 @@
 ﻿\subsection{ARM}
 
-\newcommand{\LRwithfootnote}{\TT{LR}\footnote{link register}\xspace}
-\newcommand{\PCwithfootnote}{\TT{PC}\footnote{program counter}\xspace}
-\newcommand{\SPwithfootnote}{\TT{SP}\footnote{stack pointer}\xspace}
-\newcommand{\LR}{\TT{LR}\xspace}
-\newcommand{\PC}{\TT{PC}\xspace}
-\newcommand{\SP}{\TT{SP}\xspace}
-
 \IFRU{Для экспериментов с процессором ARM, я выбрал два компилятора}{For my experiments with ARM CPU I choose two compilers}: \IFRU{популярный в embedded-среде}{popular in embedded area} Keil Release 6/2013 
 \IFRU{и среду разработки}{and} Apple Xcode 4.6.3 \IFRU{}{IDE} (\IFRU{с компилятором}{with} LLVM-GCC 4.2 \IFRU{}{compiler}), \IFRU{генерирующую код для ARM-совместимых процессоров и}{producing code for ARM-comptaible processors and} \IFRU{SoC}{SoCs}\footnote{system on chip} \IFRU{в}{in} \idevices.
 
@@ -206,46 +199,56 @@ __text:00002B80 80 BD                             POP             {R7,PC}
 __cstring:00003E70 48 65 6C 6C 6F 20+aHelloWorld     DCB "Hello world!",0xA,0
 \end{lstlisting}
 
-Инструкции \TT{BL} и \TT{BLX} в thumb, как мы помним, обычно кодируются как пара 16-битных инструкций, 
+\IFRU{Инструкции \TT{BL} и \TT{BLX} в thumb, как мы помним, кодируются как пара 16-битных инструкций, 
 а в thumb-2 эти \IT{суррогатные} опкоды расширены так, что новые инструкции кодируются здесь как 
-32-битные инструкции. 
-Это можно заметить по тому что опкоды thumb-2 инструкций всегда начинаются с 0xFx либо с 0xEx. 
-Но в листинге \IDA, первый байт опкода стоит вторым, это из-за того что в ARM инструкции кодируются в режиме big-endian: в начале последний байт, потом первый (для thumb и thumb-2 режима), либо, (для инструкций в режиме ARM) в начале четвертый байт, затем третий, второй и первый. 
-Так что мы видим здесь что инструкции MOVW, MOVT.W и BLX начинаются с 0xFx.
+32-битные инструкции}{\TT{BL} and \TT{BLX} instructions in thumb mode, as we remember, encoded as pair
+of 16-bit instructions and in thumb-2, these \IT{surrogate} opcodes extended in such way so that new instruction
+may be encoded here as 32-bit instructions}.
+\IFRU{Это можно заметить по тому что опкоды thumb-2 инструкций всегда начинаются с $0xFx$ либо с $0xEx$}{That's
+easily observable ~--- opcodes of thumb-2 instructions are also beginning with $0xFx$ or $0xEx$}.
+\IFRU{Но в листинге \IDA, первый байт опкода стоит вторым, это из-за того что в ARM инструкции кодируются так:
+в начале последний байт, потом первый (для thumb и thumb-2 режима), либо, 
+(для инструкций в режиме ARM) в начале четвертый байт, затем третий, второй и первый}{But in \IDA listings,
+first byte of opcode is at the place of second, that's because instructions here encoded as follows: last byte and then first one (for thumb and thumb-2 modes), or, (for instructions in ARM mode): fourth byte, then third, then second and first}.
+\IFRU{Так что мы видим здесь что инструкции \TT{MOVW}, \TT{MOVT.W} и \TT{BLX} начинаются с}{So as we see, \TT{MOVW}, \TT{MOVT.W} and \TT{BLX} instructions are beginning with} $0xFx$.
 
-Thumb-2 инструкция, например, \TT{``MOVW R0, \#0x13D8''} ~--- она записывает 16-битное число в 
-младшую часть регистра \TT{R0}.
+\IFRU{Одна из thumb-2 инструкций это}{One of thumb-2 instructions is} \TT{``MOVW R0, \#0x13D8''} ~--- \IFRU{она записывает 16-битное число в младшую часть регистра \TT{R0}}{it writes 16-bit value into lower part of \TT{R0} register}.
 
-Еще \TT{``MOVT.W R0, \#0''} ~--- эта инструкция работает так же как и \TT{MOVT} из предыдущего примера, 
-но она работает в thumb-2.
+\IFRU{Еще}{Also} \TT{``MOVT.W R0, \#0''} ~--- \IFRU{эта инструкция работает так же как и}{this instruction works just like} \TT{MOVT} \IFRU{из предыдущего примера, но она работает в}{from previous example, but it works in} thumb-2.
 
-Помимо прочих отличий, здесь используется инструкция \TT{BLX} вместо \TT{BL}. 
-Отличие в том, что помимо сохранения адреса возврата в регистре \LR и передаче управления в функцию \puts, происходит смена режима процессора с thumb на ARM, либо наоборот.
-Здесь это нужно потому что инструкция, куда ведет переход, выглядит так:
+\IFRU{Помимо прочих отличий, здесь используется инструкция}{Among other differences, here is} \TT{BLX} \IFRU{вместо}{instruction used instead of} \TT{BL}.
+\IFRU{Отличие в том, что помимо сохранения адреса возврата в регистре \LR и передаче управления в функцию \puts, происходит смена режима процессора с thumb на ARM, либо наоборот}{Difference in that way that beside saving of return address in \LR register and passing control to \puts function, processor is switching from thumb mode to ARM or back}.
+\IFRU{Здесь это нужно потому что инструкция, куда ведет переход, выглядит так (она закодирована в режиме ARM)}{This instruction in place here because the instruction to which control is passed looks like (it's encoded in ARM mode)}:
 
 \begin{lstlisting}
 __symbolstub1:00003FEC _puts           ; CODE XREF: _hello_world+E
 __symbolstub1:00003FEC 44 F0 9F E5     LDR  PC, =__imp__puts
 \end{lstlisting}
 
-Итак, внимательный читатель может задать справделивый вопрос: почему бы не вызывать \TT{puts()} сразу в том же коде,
-где он нужен? Это не очень выгодно (в плане экономия места) и вот почему. 
+\IFRU{Итак, внимательный читатель может задать справделивый вопрос: почему бы не вызывать \puts сразу в 
+том же коде, где он нужен?}{So, observant reader may ask: why not to call \puts right in the place of code where
+it needed?}
 
-Практически любая программа использует внешние динамические библиотеки, будь то DLL в Windows, .so в *NIX либо .dylib в Mac OS X. В динамических библиотеках
-находятся часто используемые библиотечные вызовы, в том числе стандартная функция Си \TT{puts()}. 
+\IFRU{Но это не очень выгодно (в плане экономия места) и вот почему}{But that's not very space-efficient, and that's why}.
 
-В бинарном файле (Windows PE .exe, ELF либо Mach-O) имеется секция импортов, список символов (функций либо глобальных переменных) импортируемых из внешних модулей, а также названия самих модулей. 
+\IFRU{Практически любая программа использует внешние динамические библиотеки, будь то DLL в Windows, .so в *NIX 
+либо .dylib в Mac OS X}{Almost any program uses external dynamic libraries, like DLL in Windows, .so in *NIX or .dylib in Mac OS X}. 
+\IFRU{В динамических библиотеках находятся часто используемые библиотечные функции, в том числе стандартная функция Си \puts}{Often used library functions are stored in dynamic libraries, including standard C-function \puts}.
 
-Загрузчик операционной системы загружает необходимые модули и, перебирая импортируемые символы в основном модуле, проставляет правильные адреса каждого символа.
+\IFRU{В исполняемом бинарном файле}{In executable binary file} (Windows PE .exe, ELF либо Mach-O) \IFRU{имеется секция импортов, список символов (функций либо глобальных переменных) импортируемых из внешних модулей, а также названия самих модулей}{a section of imports is present, that is list of symbols (functions or global variables) being imported from external modules and also names of these modules}.
 
-В нашем случае, \IT{\_\_imp\_\_puts} это 32-битная переменная, куда загрузчик ОС запишет правильный адрес этой же функции во внешней библиотеке. Так что инструкция \TT{LDR} просто берет 32-битное значение из этой переменной и, записывая его в регистр \TT{PC}, просто передает туда управление. 
+\IFRU{Загрузчик операционной системы загружает необходимые модули и, перебирая импортируемые символы в основном модуле, проставляет правильные адреса каждого символа}{Operation system loader loads all modules need and, while enumerating importing symbols in primary module, sets correct addresses of each symbol}.
 
-Чтобы уменьшить время работы загрузчика ОС, нужно чтобы ему пришлось записать адрес каждого символа только один раз,в соответствующее для них место.
+\IFRU{В нашем случае}{In our case}, \IT{\_\_imp\_\_puts} \IFRU{это 32-битная переменная, куда загрузчик ОС запишет правильный адрес этой же функции во внешней библиотеке}{is 32-bit variable where OS loader will write correct address of that function in external library}. 
+\IFRU{Так что инструкция \TT{LDR} просто берет 32-битное значение из этой переменной и, записывая его в регистр \PC, просто передает туда управление}{So that \TT{LDR} instruction just takes 32-bit value from this variable and, writing it into \PC register, just passing control to it}.
 
-К тому же, как мы уже убедились, нельзя одной инструкцией загрузить в регистр 32-битное число.
-Так что, наиболее оптимально, выделить отдельную функцию, работающую в режиме ARM, чья цель ~--- передавать
-управление дальше, в динамическую библиотеку, и ссылаться на нее из thumb-кода.
+\IFRU{Чтобы уменьшить время работы загрузчика ОС, нужно чтобы ему пришлось записать адрес каждого символа только один раз, в соответствующее для них место}{So to readuce a time OS loader needs for doing this procedure, it's good idea for it to write address of each symbol only once, to special place for it}.
 
-Кстати, в предыдущем примере (скомпилированном для режима ARM), переход при помощи инструкции \TT{BL} ведет 
-на такую же thunk-функцию, однако режим процессора не переключается.
+\IFRU{К тому же, как мы уже убедились, нельзя одной инструкцией загрузить в регистр 32-битное число без обращений к памяти}{Besides, as we saw, it's not possible to load 32-bit value into register using only one instruction without memory access}.
+\IFRU{Так что, наиболее оптимально, выделить отдельную функцию, работающую в режиме ARM, чья цель ~--- передавать
+управление дальше, в динамическую библиотеку}{So, it is optimal to allocate separate function working in ARM mode and its goal ~--- to pass control to dynamic library}. 
+\IFRU{И затем ссылаться на эту короткую функцию из одной инструкции (так называемую thunk-функцию) из thumb-кода}{And then to jump to this short one-instruction function (so called thunk-function) from thumb-code}.
+
+\IFRU{Кстати, в предыдущем примере (скомпилированном для режима ARM), переход при помощи инструкции \TT{BL} ведет 
+на такую же thunk-функцию, однако режим процессора не переключается (отсюда, отсутствие ``X'' в мнемонике инструкции)}{By the way, in previous example (compiled for ARM mode) control passing by \TT{BL} instruction is going to the same thunk-function, however, processor mode is not switched (hence, absence of ``X'' in instruction mnemonic}.
 
