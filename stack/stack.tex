@@ -4,22 +4,21 @@
 \IFRU{Стек в компьютерных науках ~--- это одна из наиболее фундаментальных вещей}
 {Stack ~--- is one of the most fundamental things in computer science.}\footnote{\url{http://en.wikipedia.org/wiki/Call_stack}}.
 
-\IFRU{Технически, это просто блок памяти в памяти процесса + регистр \ESP который указывает где-то в пределах этого блока.}{Technically, this is just memory block in process memory + \ESP register as a pointer within this block.}
+\IFRU{Технически, это просто блок памяти в памяти процесса + регистр \ESP или \RSP в x86, либо \SP в ARM, который указывает где-то в пределах этого блока.}{Technically, this is just memory block in process memory + \ESP or \RSP register in x86, or \SP register in ARM, as a pointer within this block.}
 
-\IFRU
-{Часто используемые инструкции для работы со стеком это \PUSH и \POP. 
-\PUSH уменьшает \ESP на 4, затем записывает по адресу на который указывает \ESP содержимое своего единственного операнда.}
-{Most frequently used stack access instructions are \PUSH and \POP. 
-\PUSH subtracting \ESP by 4 and then writing contents of its sole operand to the memory address pointing by \ESP.} 
+\IFRU{Часто используемые инструкции для работы со стеком это \PUSH и \POP (в x86 и thumb-режиме ARM). 
+\PUSH уменьшает \ESP/\RSP/\SP на 4, затем записывает по адресу на который указывает \ESP/\RSP/\SP содержимое своего единственного операнда.}
+{Most frequently used stack access instructions are \PUSH and \POP (both in x86 and ARM thumb-mode). 
+\PUSH subtracting \ESP/\RSP/\SP by 4 and then writing contents of its sole operand to the memory address pointing by \ESP/\RSP/\SP.} 
 
-\IFRU{\POP это обратная операция ~--- сначала достает из \ESP значение и кладет его в операнд 
-(который очень часто является регистром) и затем увеличивает \ESP на 4. 
+\IFRU{\POP это обратная операция ~--- сначала достает из \ESP/\RSP/\SP значение и кладет его в операнд 
+(который очень часто является регистром) и затем увеличивает \ESP/\RSP/\SP на 4. 
 Конечно, это для 32-битной среды. В x64-среде это будет 8 а не 4.}
-{\POP is reverse operation: get a data from memory pointing by \ESP and then add 4 to \ESP. Of course, 
-this is for 32-bit environment. 8 will be here instead of 4 in x64 environment.}
+{\POP is reverse operation: get a data from memory pointing by \ESP/\RSP/\SP and then add 4 to \ESP/\RSP/\SP. 
+Of course, this is for 32-bit environment. 8 will be here instead of 4 in x64 environment.}
 
-\IFRU{В самом начале, \ESP указывает на конец стека.}{After stack allocation, \ESP pointing to the end of stack.}
-\IFRU{\PUSH уменьшает \ESP, а \POP ~--- увеличивает.}{\PUSH increasing \ESP, and \POP decreasing.}
+\IFRU{В самом начале, регистр-указатель указывает на конец стека.}{After stack allocation, stack pointer pointing to the end of stack.}
+\IFRU{\PUSH уменьшает регистр-указатель, а \POP ~--- увеличивает.}{\PUSH increasing stack pointer, and \POP decreasing.}
 \IFRU{Конец стека находится в начале блока памяти выделенного под стек. Это странно, но это так.}
 {The end of stack is actually at the beginning of allocated for stack memory block. 
 It seems strange, but it is so.}
@@ -29,8 +28,9 @@ It seems strange, but it is so.}
 \subsection{\IFRU{Сохранение адреса куда должно вернуться управление после вызова функции}
 {Save return address where function should return control after execution}}
 
-\IFRU
-{При вызове другой функции через \CALL, сначала в стек записывается адрес указывающий на место аккурат после 
+\subsubsection{x86}
+
+\IFRU{При вызове другой функции через \CALL, сначала в стек записывается адрес указывающий на место аккурат после 
 инструкции \CALL, затем делается безусловный переход (\TT{JMP}) на адрес указанный в операнде.} 
 {While calling another function by \CALL instruction, the address of point exactly after \CALL instruction is saved 
 to stack, and then unconditional jump to the address from CALL operand is executed.} 
@@ -98,6 +98,26 @@ $LL3@f:
 \IFRU{GCC 4.4.1 генерирует точно такой же код в обоих случаях, хотя и не предупреждает о проблеме.}
 {GCC 4.4.1 generating the same code in both cases, although not warning about problem.}
 
+\subsubsection{ARM}
+
+%NOTTRANSLATED
+Программы для ARM также используют стек для сохранения адреса, куда нужно вернуться, но несколько иначе.
+Как уже упоминалось в секции ``\HelloWorldSectionName''~\ref{sec:hw_ARM}, адрес возврата записывается в регистр \LR 
+(link register). Но есть есть необходимость вызывать какую-то другую функцию, и использовать регистр \LR еще
+раз, его значение желательно сохранить. Обычно, это происходит в прологе функции, часто мы видим там инструкцию
+вроде \TT{``PUSH {R4-R7,LR}''}, а в эпилоге \TT{``POP {R4-R7,PC}''} ~--- так сохраняются регистры, которые будут
+использоваться в текущей функции, в том числе \LR.
+%NOTTRANSLATED
+
+%NOTTRANSLATED
+Тем не менее, если некая функция не вызывает никаких более функций, в терминологии ARM она называется 
+\IT{leaf function}. Как следствие, она не использует регистр \LR. 
+А если эта функция небольшая, использует мало регистров, она может не использовать стек вообще. 
+Таким образом, в ARM возможен вызов небольших ``leaf'' функций не используя стек. 
+Это может быть быстрее чем в x86, ведь внешняя память для стека не используется. 
+Либо, это может быть полезным для тех ситуаций, когда память для стека еще не выделена либо недоступна.
+%NOTTRANSLATED
+
 \subsection{\IFRU{Передача параметров для функции}{Function arguments passing}}
 
 \begin{lstlisting}
@@ -108,8 +128,8 @@ call f
 add esp, 4*3
 \end{lstlisting}
 
-\IFRU{Вызываемая функция получает свои параметры также через указатель \ESP.}
-{Callee{\footnote{Function being called}} function get its arguments via \ESP ponter.}
+\IFRU{Вызываемая функция получает свои параметры также через указатель стека.}
+{Callee{\footnote{Function being called}} function get its arguments via stack ponter.}
 
 \IFRU{См.также в соответствующем разделе о способах передачи аргументов через стек}
 {See also section about calling conventions}~\ref{sec:callingconventions}.
@@ -126,28 +146,28 @@ add esp, 4*3
 {For example, it is possible to allocate a place for arguments in heap, fill it and pass to a function 
 via pointer to this pack in \EAX register. And this will work}
 \footnote{\IFRU{Например, в книге Дональда Кнута "Искусство программирования", в разделе 1.4.1 посвященном подпрограммам,
-мы можем прочитать о возможности располагать параметры для вызываемой подпрограммы после инструкции JMP
+мы можем прочитать о возможности располагать параметры для вызываемой подпрограммы после инструкции \JMP
 передающей управление подпрограмме. Кнут описывает что это было особенно удобно для компьютеров System/360.}
 {For example, in "The Art of Computer Programming" book by Donald Knuth, in section 1.4.1 dedicated to subroutines,
-we can read about one way to supply arguments to subroutine is simply to list them after the JMP instruction
+we can read about one way to supply arguments to subroutine is simply to list them after the \JMP instruction
 passing control to subroutine. Knuth writes that this method was particularly convenient on System/360.}}.
 
-\IFRU{Однако, так традиционно сложилось, что в x86 передача аргументов происходит именно через стек.}
-{However, it is convenient tradition in x86 to use stack for this.}
+\IFRU{Однако, так традиционно сложилось, что в x86 и ARM передача аргументов происходит именно через стек.}
+{However, it is convenient tradition in x86 and ARM to use stack for this.}
 
 \subsection{\IFRU{Хранение локальных переменных}{Local variable storage}}
 
 \IFRU{Функция может выделить для себя некоторое место в стеке для локальных переменных просто отодвинув 
-\ESP глубже к концу стека.}
+указатель стека глубже к концу стека.}
 {A function could allocate some space in stack for its local variables just shifting 
-\ESP pointer deeply enough to stack bottom.}
+stack pointer deeply enough to stack bottom.}
 
 \IFRU{Это снова не является необходимым требованием. Вы можете хранить локальные переменные где угодно. 
 Но по традиции всё сложилось так.}
 {It is also not prerequisite. You could store local variables wherever you like. 
 But traditionally it is so.}
 
-\subsubsection{\IFRU{Функция alloca()}{alloca() function}}
+\subsubsection{x86: \IFRU{Функция alloca()}{alloca() function}}
 
 \IFRU{Интересен случай с функцией \TT{alloca()}}
 {It is worth noting \TT{alloca()} function.}\footnote{
@@ -182,10 +202,10 @@ need and set \ESP as a pointer to that \IT{allocated} block.}
 
 \IFRU{(Функция \TT{\_snprintf()} работает так же как и \printf, только вместо выдачи результата в 
 stdout (т.е., на терминал или в консоль),
-записывает его в буфер \TT{buf}. \TT{puts()} выдает содержимое буфера \TT{buf} в stdout. Конечно, можно было бы
+записывает его в буфер \TT{buf}. \puts выдает содержимое буфера \TT{buf} в stdout. Конечно, можно было бы
 заменить оба этих вызова на один \printf, но мне нужно проиллюстрировать использование небольшого буфера.)}
 {(\TT{\_snprintf()} function works just like \printf, but instead dumping result into stdout (e.g., to terminal or 
-console), write it to \TT{buf} buffer. \TT{puts()} copies \TT{buf} contents to stdout. Of course, these two
+console), write it to \TT{buf} buffer. \puts copies \TT{buf} contents to stdout. Of course, these two
 function calls might be replaced by one \printf call, but I would like to illustrate small buffer usage.)}
 
 \IFRU{Компилируем}{Let's compile} (MSVC 2010):
