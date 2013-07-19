@@ -1,0 +1,94 @@
+﻿\subsection{x86}
+
+\IFRU{Что получаем на ассемблере компилируя MSVC 2010:}
+{What we got after compiling in MSVC 2010:}
+
+\lstinputlisting{scanf/4_1_msvc.asm}
+
+\IFRU{Переменная \TT{x} является локальной.}{Variable \TT{x} is local.} 
+
+\IFRU{По стандарту \CCpp она доступна только из этой же функции и ниоткуда более. 
+Так получилось, что локальные переменные располагаются в стеке. 
+Может быть, можно было бы использовать и другие варианты, но в x86 это традиционно так.}
+{\CCpp standard tell us it must be visible only in this function and not from any other place. 
+Traditionally, local variables are placed in the stack. 
+Probably, there could be other ways, but in x86 it is so.}
+
+\IFRU{Следующая после пролога инструкция \TT{PUSH ECX} не ставит своей целью сохранить 
+значение регистра \ECX. 
+(Заметьте отсутствие сооветствующей инструкции \TT{POP ECX} в конце функции)}
+{Next after function prologue instruction \TT{PUSH ECX} is not for saving \ECX state 
+(notice absence of corresponding \TT{POP ECX} at the function end).}
+
+\IFRU{Она на самом деле выделяет в стеке 4 байта для хранения \TT{x} в будущем.} 
+{In fact, this instruction just allocate 4 bytes in stack for \TT{x} variable storage.} 
+
+\IFRU{Доступ к \TT{x} будет осуществляться при помощи объявленного макроса \TT{\_x\$} 
+(он равен -4) и регистра \EBP указывающего на текущий фрейм.}
+{\TT{x} will be accessed with the assistance of \TT{\_x\$} macro 
+(it equals to -4) and \EBP register pointing to current frame.}
+
+\IFRU{Вообще, во все время исполнения функции, \EBP указывает на текущий фрейм и через \TT{EBP+смещение}
+можно иметь доступ как к локальным переменным функции, так и аргументам функции.} 
+{Over a span of function execution, \EBP is pointing to current stack frame and it is possible 
+to have an access to local variables and function arguments via \TT{EBP+offset}.}
+
+\IFRU
+{Можно было бы использовать \ESP, но он во время исполнения функции постоянно меняется. 
+Так что можно сказать что \EBP это замороженное состояние \ESP на момент начала исполнения функции.}
+{It is also possible to use \ESP, but it's often changing and not very handy.
+So it can be said, \EBP is frozen state of \ESP at the moment of function execution start.}
+
+\IFRU
+{У функции \scanf в нашем примере два аргумента.}{Function \scanf in our example has two arguments.}
+
+\IFRU
+{Первый ~--- указатель на строку содержащую \TT{``\%d''} и второй ~--- адрес переменной \TT{x}.} 
+{First is pointer to the string containing \TT{``\%d''} and second ~--- address of variable \TT{x}.} 
+
+\IFRU{Вначале адрес \TT{x} помещается в регистр \EAX при помощи инструкции \TT{lea eax, DWORD PTR \_x\$[ebp]}.}
+{First of all, address of \TT{x} is placed into \EAX register by \TT{lea eax, DWORD PTR \_x\$[ebp]} instruction}
+
+\IFRU{Инструкция \LEA означает \IT{load effective address}, но со временем она изменила свою функцию}
+{\LEA meaning \IT{load effective address}, but over a time it changed its primary application}
+~\ref{sec:LEA}.
+
+\IFRU{Можно сказать что в данном случае \LEA просто помещает в \EAX результат суммы значения в регистре 
+\EBP и макроса \TT{\_x\$}.}
+{It can be said, \LEA here just placing to \EAX sum of \EBP value and \TT{\_x\$} macro.}
+
+\IFRU{Это тоже что и}{It is the same as} \TT{lea eax, [ebp-4]}.
+
+\IFRU{Итак, от значения \EBP отнимается 4 и помещается в \EAX.
+Далее значение \EAX заталкивается в стек и вызывается \scanf.}
+{So, 4 subtracting from \EBP value and result is placed to \EAX. 
+And then value in \EAX is pushing into stack and \scanf is called.}
+
+\IFRU{После этого вызывается \printf. Первый аргумент вызова которого, строка:} 
+{After that, \printf is called. First argument is pointer to string:} \TT{``You entered \%d...\textbackslash{}n''}.
+
+\IFRU{Второй аргумент: \TT{mov ecx, [ebp-4]}, эта инструкция кладет в \ECX не адрес переменной \TT{x}, 
+а его значение, что там сейчас находится.}
+{Second argument is prepared as: \TT{mov ecx, [ebp-4]},
+this instruction placing to \ECX not address of \TT{x} variable but its contents.}
+
+\IFRU{Далее значение \ECX заталкивается в стек и вызывается последний \printf.}
+{After, \ECX value is placing into stack and last \printf called.}
+
+\IFRU{Попробуем тоже самое скомпилировать в Linux при помощи GCC 4.4.1:}
+{Let's try to compile this code in GCC 4.4.1 under Linux:}
+
+\lstinputlisting{scanf/4_1_gcc.asm}
+
+\IFRU{GCC заменил первый вызов \printf на \puts, почему это было сделано, 
+уже было описано раннее~\ref{puts}.}
+{GCC replaced first \printf call to \puts, it was already described~\ref{puts} 
+why it was done.}
+
+% TODO: rewrite
+%\IFRU
+%{Почему \scanf переименовали в \TT{\_\_\_isoc99\_scanf}, я честно говоря, пока не знаю.}
+%{Why \scanf is renamed to \TT{\_\_\_isoc99\_scanf}, I do not know yet.}
+
+\IFRU{Далее все как и прежде ~--- параметры заталкиваются через стек при помощи \MOV.}
+{As before ~--- arguments are placed into stack by \MOV instruction.}
