@@ -7,20 +7,7 @@
 {As I wrote before, it is not very clever to use \scanf today. 
 But if we have to, we need at least check if \scanf finished correctly without error.}
 
-\begin{lstlisting}
-int main() 
-{
-	int x;
-	printf ("Enter X:\n");
-
-	if (scanf ("%d", &x)==1)
-		printf ("You entered %d...\n", x);
-	else
-		printf ("What you entered? Huh?\n");
-
-	return 0;
-};
-\end{lstlisting}
+\lstinputlisting{scanf/retval_check.c}
 
 \IFRU{По стандарту}{By standard}, \scanf\footnote{\href{http://msdn.microsoft.com/en-us/library/9y6s16x1(VS.71).aspx}{MSDN: scanf, wscanf}} 
 \IFRU{возвращает количество успешно полученных значений.}{function returning number of fields it successfully read.}
@@ -35,32 +22,7 @@ int main()
 
 \IFRU{Вот, что выходит на ассемблере}{What we got in assembler} (MSVC 2010):
 
-\begin{lstlisting}
-; Line 8
-	lea	eax, DWORD PTR _x$[ebp]
-	push	eax
-	push	OFFSET $SG3833 ; '%d', 00H
-	call	_scanf
-	add	esp, 8
-	cmp	eax, 1
-	jne	SHORT $LN2@main
-; Line 9
-	mov	ecx, DWORD PTR _x$[ebp]
-	push	ecx
-	push	OFFSET $SG3834 ; 'You entered %d...', 0aH, 00H
-	call	_printf
-	add	esp, 8
-; Line 10
-	jmp	SHORT $LN1@main
-$LN2@main:
-; Line 11
-	push	OFFSET $SG3836 ; 'What you entered? Huh?', 0aH, 00H
-	call	_printf
-	add	esp, 4
-$LN1@main:
-; Line 13
-	xor	eax, eax
-\end{lstlisting}
+\lstinputlisting{scanf/retval_check_MSVC.asm}
 
 \IFRU{Для того чтобы вызывающая функция имела доступ к результату вызываемой функции, 
 вызываемая функция (в нашем случае \scanf) оставляет это значение в регистре \EAX.}
