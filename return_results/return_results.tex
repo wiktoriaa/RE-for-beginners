@@ -2,12 +2,15 @@
 
 \newcommand{\MSDNURL}{\href{http://msdn.microsoft.com/en-us/library/7572ztz4.aspx}{MSDN: Return Values (C++)}}
 
-\IFRU
-{Резльутат выполнения функции возвращается\footnote{См.также: \MSDNURL} через регистр \EAX, а если результат типа байт, 
+%TODO mention ARM
+\IFRU{Резльутат выполнения функции в x86 обычно возвращается\footnote{См.также: \MSDNURL} через регистр \EAX, 
+а если результат имеет тип байт или символ (\IT{char}), 
 то в самой младшей части \EAX ~--- \AL. Если функция возвращает число с плавающей запятой, 
 то регистр FPU \STZERO будет использован.}
-{Function execution result is often returned\footnote{See also: \MSDNURL} in \EAX register. 
-If it's byte type ~--- then in lowest register \EAX part ~--- \AL. If function returning \Tfloat number, FPU register 
+{As of x86, function execution result is usually returned\footnote{See also: \MSDNURL} in 
+\EAX register. 
+If it's byte type or character (\IT{char}) ~--- then in lowest register \EAX part ~--- \AL. 
+If function returning \Tfloat number, FPU register 
 \STZERO will be used instead.}
 
 \IFRU{Вот почему старые компиляторы Си не способны создавать функции возвращающие нечто большее нежели помещается 
