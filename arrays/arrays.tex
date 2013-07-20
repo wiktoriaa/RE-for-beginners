@@ -163,7 +163,7 @@ We trapped there somehow against our will. It's also interesting fact that \EBP 
 
 \IFRU{И еще немного изучим разметку стека.}{Let's study stack layout more.}
 
-\IFRU{После того как управление передалось в \TT{\_main}, в стек было сохранено значение \EBP. 
+\IFRU{После того как управление передалось в \main, в стек было сохранено значение \EBP. 
 Затем, для массива + переменной \IT{i} было выделено 84 байта. Это \TT{(20+1)*sizeof(int)}. 
 \ESP сейчас указывает на переменную \TT{\_i} в локальном стеке и при исполнении следующего \TT{PUSH что-либо}, 
 \IT{что-либо} появится рядом с \TT{\_i}.}
@@ -173,7 +173,7 @@ Then, 84 bytes was allocated for array and \IT{i} variable. That's \TT{(20+1)*si
 \IT{something} will be appeared next to \TT{\_i}.}
 
 \IFRU{Вот так выглядит разметка стека пока управление находится внутри}
-{That's stack layout while control is inside} \TT{\_main}:
+{That's stack layout while control is inside} \main:
 
 \begin{center}
 \begin{tabular}{ | l | l | }
@@ -204,11 +204,11 @@ By the function ending, function epilogue restore \EBP value.
 Then, \RET instruction was executed, which is equivalent to \TT{POP EIP} instruction.}
 
 \IFRU{Инструкция \RET вытащила из стека адрес возврата (это адрес в какой-то CRT\footnote{C Run-Time}-функции, 
-которая вызвала \TT{\_main}), 
+которая вызвала \main), 
 а там было записано 21 в десятичной системе, то есть 0x15 в шестнадцетиричной. 
 И вот процессор оказался по адресу 0x15, но исполняемого кода там нет, так что случилось исключение.}
 {\RET instruction taking returning adddress from stack (that's address in some CRT\footnote{C Run-Time}-function,
-which was called \TT{\_main}),
+which was called \main),
 and 21 was stored there (0x15 in hexadecimal).
 The CPU trapped at the address 0x15, but there are no executable code, so exception was raised.}
 
