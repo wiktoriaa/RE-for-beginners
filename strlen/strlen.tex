@@ -41,16 +41,16 @@ sign or to 0 if \IT{plus}.}
 \IFRU{По стандарту \CCpp, тип \Tchar ~--- знаковый. Если у нас есть две переменные, одна \Tchar, а другая \Tint 
 (\Tint тоже знаковый), и если в первой переменной лежит -2 (что кодируется как 0xFE) и мы просто 
 переложим это в \Tint, 
-то там будет 0x000000FE, а это, с точки зрения \Tint, даже знакового, будет 254, но никак не -2. 
--2 в переменной \Tint кодируется как 0xFFFFFFFE. И для того чтобы значение 0xFE из переменной типа 
+то там будет $0x000000FE$, а это, с точки зрения \Tint, даже знакового, будет $254$, но никак не $-2$. 
+$-2$ в переменной \Tint кодируется как $0xFFFFFFFE$. И для того чтобы значение $0xFE$ из переменной типа 
 \Tchar переложить 
 в знаковый \Tint с сохранением всего, нужно узнать его знак, и затем заполнить остальные биты. 
 Это делает \MOVSX.}
 {\CCpp standard defines \Tchar type as signed. If we have two values, one is \Tchar 
-and another is \Tint, (\Tint is signed too), and if first value contain -2 (it is coded as 0xFE) 
-and we just copying this byte into \Tint container, there will be 0x000000FE, and this, 
-from the point of signed \Tint view is 254, but not -2. In signed int, -2 is coded as 0xFFFFFFFE. 
-So if we need to transfer 0xFE value from variable of \Tchar type to \Tint, 
+and another is \Tint, (\Tint is signed too), and if first value contain $-2$ (it is coded as $0xFE$) 
+and we just copying this byte into \Tint container, there will be $0x000000FE$, and this, 
+from the point of signed \Tint view is $254$, but not $-2$. In signed int, $-2$ is coded as $0xFFFFFFFE$. 
+So if we need to transfer $0xFE$ value from variable of \Tchar type to \Tint, 
 we need to identify its sign and extend it. That is what \MOVSX does.}
 
 \IFRU{См.также об этом раздел}
@@ -71,7 +71,7 @@ assigning local variables to CPU registers} works like that.}
 About \TEST instruction, read more in section about bit fields~\ref{sec:bitfields}.
 But here, this instruction just checking \EDX value, if it is equals to 0.}
 
-\IFRU{Попробуем GCC 4.4.1:}{Let's try GCC 4.4.1:}
+\IFRU{Попробуем}{Let's try} GCC 4.4.1:
 
 \lstinputlisting{strlen/10_3_gcc.asm}
 

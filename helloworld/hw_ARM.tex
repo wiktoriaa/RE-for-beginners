@@ -4,7 +4,7 @@
 \IFRU{Для экспериментов с процессором ARM, я выбрал два компилятора}{For my experiments with ARM CPU I choose two compilers}: \IFRU{популярный в embedded-среде}{popular in embedded area} Keil Release 6/2013 
 \IFRU{и среду разработки}{and} Apple Xcode 4.6.3 \IFRU{}{IDE} (\IFRU{с компилятором}{with} LLVM-GCC 4.2 \IFRU{}{compiler}), \IFRU{генерирующую код для ARM-совместимых процессоров и}{producing code for ARM-comptaible processors and} \IFRU{SoC}{SoCs}\footnote{system on chip} \IFRU{в}{in} \idevices.
 
-\subsubsection{\IFRU{Неоптимизирующий}{Non-optimizing} Keil: \IFRU{режим ARM}{ARM mode}}
+\subsubsection{\NonOptimizingKeil: \IFRU{режим ARM}{ARM mode}}
 
 \IFRU{Для начала, скомпилируем наш пример в Keil}{Let's start by compiling our example in Keil}:
 
@@ -91,7 +91,7 @@ armcc.exe --arm --c90 -O0 1.c
 x86-ассемблере}{assembler directive, defining array of bytes or ASCII-strings, similar to DB directive 
 in x86-assembler}.
 
-\subsubsection{\IFRU{Неоптимизирующий}{Non-optimizing} Keil: \IFRU{режим thumb}{thumb mode}}
+\subsubsection{\NonOptimizingKeil: \IFRU{режим thumb}{thumb mode}}
 
 \IFRU{Скомпилируем тот же пример в Keil для режима thumb}{Let's compile the same example in Keil in thumb mode}:
 
@@ -126,7 +126,7 @@ armcc.exe --thumb --c90 -O0 1.c
 \TT{ADR} \IFRU{работает также как и в предыдущем примере}{works just like in previous example}.
 \TT{MOVS} \IFRU{записывает $0$ в регистр \TT{R0} для возврата нуля}{writes $0$ in \TT{R0} register to zero returning}.
 
-\subsubsection{\IFRU{Оптимизирующий}{Optimizing} Xcode: \IFRU{режим ARM}{ARM mode}}
+\subsubsection{\OptimizingXcode: \IFRU{режим ARM}{ARM mode}}
 
 Xcode 4.6.3 \IFRU{без включенной оптимизации выдает слишком много лишнего кода, поэтому остановимся на той версии, где как можно меньше инструкций}{without optimization turned on, produces a lot of redundant code, so we'll study that version where instruction count as small as possible}: \Othree.
 
@@ -180,7 +180,7 @@ statements starting with \IT{\%}: then effect of these two functions will be dif
 
 \IFRU{Далее уже знакомая инструкция}{Next, we see familiar to us} \TT{''MOV R0, \#0''}\IFRU{, служащая для установки в 0 возвращаемого значения функции}{instruction, intended to set 0 to \TT{R0} register}.
 
-\subsubsection{\IFRU{Оптимизирующий}{Optimizing} Xcode: \IFRU{режим thumb-2}{thumb-2 mode}}
+\subsubsection{\OptimizingXcode: \IFRU{режим thumb-2}{thumb-2 mode}}
 
 \IFRU{По умолчанию}{By default}, Xcode 4.6.3 \IFRU{генерирует код для режима thumb-2, примерно в такой манере}{generating code for thumb-2 in such manner}:
 
