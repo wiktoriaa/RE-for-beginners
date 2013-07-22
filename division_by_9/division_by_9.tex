@@ -57,7 +57,7 @@ to produce a code which is equivalent and faster.}
 
 \subsection{ARM}
 
-\IFRU{В процессоре ARM, как и во многих других ''чистых'' RISC-процессорах нет инструкции деления,
+\IFRU{В процессоре ARM, как и во многих других ``чистых'' (pure) RISC-процессорах нет инструкции деления,
 да и инструкции умножения на 32-битную константу также нет.}{In ARM processor, just like in any other ''pure'' 
 RISC-processors, there are no division instruction, instruction for multiplication by 32-bit constant 
 is absent too.}
@@ -65,7 +65,9 @@ is absent too.}
 битовыми сдвигами}{With some effort, it's possible to do division using only three instructions: addition,
 subtraction and bit shifts}~\ref{sec:bitfields}.
 
-\IFRU{Пример деления 32-битного числа на 10 из книги}{Here is an example of 32-bit number division by 10 from the} ARM Cookbook (1994)\footnote{\href{http://yurichev.com/ref/ARM\%20Cookbook\%20(1994)/cook3.txt}{ARM Cookbook (1994)}}. \IFRU{На выходе и частное и остаток.}{Quotient and remainder on output.}
+\IFRU{Пример деления 32-битного числа на 10 из книги}{Here is an example of 32-bit number division by 10 from the} 
+ARM Cookbook (1994)\footnote{\href{http://yurichev.com/ref/ARM\%20Cookbook\%20(1994)/cook3.txt}{ARM Cookbook (1994)}}. 
+\IFRU{На выходе и частное и остаток}{Quotient and remainder on output}.
 
 \begin{lstlisting}
 ; takes argument in a1
@@ -83,4 +85,56 @@ subtraction and bit shifts}~\ref{sec:bitfields}.
     ADDMI  a2, a2, #10             ; fix-up remainder
     MOV    pc, lr
 \end{lstlisting}
- 
+
+\subsubsection{\OptimizingXcode + режим ARM}
+
+\begin{lstlisting}
+__text:00002C58                         _f
+__text:00002C58 39 1E 08 E3 E3 18 43 E3                 MOV             R1, 0x38E38E39
+__text:00002C60 10 F1 50 E7                             SMMUL           R0, R0, R1
+__text:00002C64 C0 10 A0 E1                             MOV             R1, R0,ASR#1
+__text:00002C68 A0 0F 81 E0                             ADD             R0, R1, R0,LSR#31
+__text:00002C6C 1E FF 2F E1                             BX              LR
+\end{lstlisting}
+
+Этот код почти тот же, что сгенерирован MSVC и GCC в режиме оптимизации. Должно быть, LLVM использует тот же
+алгоритм для поиска констант.
+
+Наблюдательный читатель может спросить, как \MOV записала в регистр сразу 32-битное число, ведь это невозможно.
+Действительно невозможно, но как мы видим, здесь на инструкцию 8 байт вместо стандартных 4-х.
+Первая инструкция загружает в младшие 16 бит регистра значение $0x8E39$, а вторая инструкция, 
+на самом деле \TT{MOVT},
+загружающая в старшие 16 бит регистра значение $0x383E$. \IDA распознала эту последовательность и для удобства
+выдала только одну инструкцию.
+
+Инструкция \TT{SMMUL} (\IT{Signed Most Significant Word Multiply}) умножает числа считая их знаковыми (signed)
+и оставляет в R0 старшие 32 бита результата, не сохраняя младшие 32 бита.
+
+Инструкция \TT{``MOV R1, R0,ASR\#1''} это арифметический сдвиг право на один бит.
+
+\TT{``ADD R0, R1, R0,LSR\#31''} это $R0=R1 + R0>>31$
+
+Дело в том что в режиме ARM нет отдельных инструкций для битовых сдвигов. 
+Вместо этого, некоторые инструкции (\MOV, \ADD,
+\SUB, \TT{RSB}) могут быть
+дополнеты пометкой, сдвигать ли второй операнд и если да, то на сколько и как. 
+\TT{ASR} означает \IT{Arithmetic Shift Right}, \TT{LSR} ~--- \IT{Logican Shift Right}.
+
+\subsubsection{\OptimizingXcode + режим thumb}
+
+\begin{lstlisting}
+MOV             R1, 0x38E38E39
+SMMUL.W         R0, R0, R1
+ASRS            R1, R0, #1
+ADD.W           R0, R1, R0,LSR#31
+BX              LR
+\end{lstlisting}
+
+В режиме thumb отдельные инструкции для битовых сдвигов есть, и здесь применяется одна из них ~--- ASRS 
+(арифметический сдвиг вправо).
+
+\subsubsection{Неоптимизирующие Xcode (LLVM) и Keil}
+
+Неоптимизирующий LLVM не занимается генерацией подобного кода а вместо этого просто вставляет вызов
+библиотечной функции \IT{\_\_\_divsi3}. А Keil во всех случаях вставляет вызов функции \IT{\_\_aeabi\_idivmod}.
+
