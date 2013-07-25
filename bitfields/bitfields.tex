@@ -49,9 +49,9 @@
 \IFRU{Как \TT{CreateFile()} будет проверять флаги?}{How \TT{CreateFile()} will check flags?}
 
 \IFRU{Заглянем в KERNEL32.DLL от Windows XP SP3 x86 и найдем в функции \TT{CreateFileW()} в том числе и 
-такой кусок кода:}
+такой фрагмент кода:}
 {Let's take a look into KERNEL32.DLL in Windows XP SP3 x86 and we'll find
-this piece of code in the function \TT{CreateFileW}:}
+this fragment of code in the function \TT{CreateFileW}:}
 
 \begin{lstlisting}
 .text:7C83D429                 test    byte ptr [ebp+dwDesiredAccess+3], 40h
@@ -72,7 +72,7 @@ but only most significant byte (\TT{ebp+dwDesiredAccess+3}) and checks it for 0x
 {\TEST is merely the same instruction as \AND, but without result saving 
 (recall the fact \CMP instruction is merely the same as \SUB, but without result saving}~\ref{CMPandSUB}).
 
-\IFRU{Логика данного куска кода примерно такая:}{This piece of code logic is as follows:}
+\IFRU{Логика данного фрагмента кода примерно такая:}{This fragment of code logic is as follows:}
 
 \begin{lstlisting}
 if ((dwDesiredAccess&0x40000000) == 0) goto loc_7C83D417
@@ -163,7 +163,7 @@ find the \TT{do\_filp\_open()} function. At the beginning, we will see (comments
 {GCC saves first 3 arguments values in local stack. Otherwise, if compiler would not touch these registers, 
 it would be too tight environment for compiler's register allocator}.
 
-\IFRU{Далее находим примерно такой кусок:}{Let's find this piece of code:}
+\IFRU{Далее находим примерно такой фрагмент кода}{Let's find this fragment of code}:
 
 \lstinputlisting{bitfields/14_5.asm}
 
