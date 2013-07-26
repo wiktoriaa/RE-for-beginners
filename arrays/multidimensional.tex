@@ -1,0 +1,30 @@
+﻿\subsection{\IFRU{Многомерные массивы}{Multidimensional arrays}}
+
+\IFRU{Многомерный массив выглядит внутри так же как и линейный.}
+{Internally, multidimensional array is essentially the same thing as linear array.}
+
+\IFRU{Попробуем:}{Let's see:}
+
+\begin{lstlisting}
+#include <stdio.h>
+
+int a[10][20][30];
+
+void insert(int x, int y, int z, int value)
+{
+	a[x][y][z]=value;
+};
+\end{lstlisting}
+
+\IFRU{В итоге}{We got} (MSVC 2010):
+
+\lstinputlisting{arrays/13_5_msvc.asm}
+
+\IFRU{В принципе, ничего удивительного. В \TT{insert()} для индексирования нужного элемента массива, 
+три входных аргумента перемножаются так, чтобы представить массив трехмерным.}
+{Nothing special. For index calculation, three input arguments are multiplying 
+in such way to represent array as multidimensional.}
+
+GCC 4.4.1:
+
+\lstinputlisting{arrays/13_5_gcc.asm}

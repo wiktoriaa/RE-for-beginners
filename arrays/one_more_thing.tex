@@ -1,0 +1,27 @@
+﻿\subsection{\IFRU{Еще немного о массивах}{One more word about arrays}}
+
+\IFRU{Теперь понятно, почему нельзя написать в исходном коде на \CCpp что-то вроде:
+\footnote{GCC способен это сделать выделяя место под массив динамически в стеке (как alloca()), 
+но это расширение не является частью стандарта}}
+{Now we understand, why it's not possible to write something like that in \CCpp code
+\footnote{GCC can actually do this by allocating array dynammically in stack (like alloca()), 
+but it's not standard langauge extension}:}
+
+\begin{lstlisting}
+void f(int size)
+{
+    int a[size];
+...
+};
+\end{lstlisting}
+
+\IFRU{Все просто потому, чтобы выделять место под массив в локальном стеке или же сегменте данных 
+(если массив глобальный), компилятору нужно знать его размер, чего он, на стадии компиляции, 
+разумеется знать не может.}
+{That's just because compiler should know exact array size to allocate place for it in local stack layout or
+in data segment (in case of global variable) on compiling stage.}
+
+\IFRU{Если вам нужен массив произвольной длины, то выделите столько, сколько нужно, через \TT{malloc()}, 
+затем обращайтесь к выделенному блоку байт как к массиву того типа, который вам нужен.}
+{If you need array of arbitrary size, allocate it by \TT{malloc()}, then access allocated memory block
+as array of variables of type you need.}
