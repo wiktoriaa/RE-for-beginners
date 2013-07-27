@@ -11,13 +11,13 @@ _insert    PROC
     push   ebp
     mov    ebp, esp
     mov    eax, DWORD PTR _x$[ebp]
-    imul   eax, 2400                ; 00000960H
+    imul   eax, 2400                    ; eax=600*4*x
     mov    ecx, DWORD PTR _y$[ebp]
-    imul   ecx, 120                ; 00000078H
-    lea    edx, DWORD PTR _a[eax+ecx]
+    imul   ecx, 120                     ; ecx=30*4*y
+    lea    edx, DWORD PTR _a[eax+ecx]   ; edx=a + 600*4*x + 30*4*y
     mov    eax, DWORD PTR _z$[ebp]
     mov    ecx, DWORD PTR _value$[ebp]
-    mov    DWORD PTR [edx+eax*4], ecx
+    mov    DWORD PTR [edx+eax*4], ecx   ; *(edx+z*4)=value
     pop    ebp
     ret    0
 _insert    ENDP
