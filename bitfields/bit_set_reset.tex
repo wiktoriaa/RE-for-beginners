@@ -1,0 +1,80 @@
+﻿\subsection{\IFRU{Установка/сброс отдельного бита}{Specific bit setting/clearing}}
+
+\IFRU{Например:}{For example:}
+
+\lstinputlisting{bitfields/14_6.c}
+
+\IFRU{Имеем в итоге}{We got} (MSVC 2010):
+
+\lstinputlisting{bitfields/14_6_msvc.asm}
+
+\IFRU{Инструкция \OR здесь добавляет в переменную еще один бит, игнорируя остальные.}
+{\OR instruction adding one more bit to value, ignoring others.}
+
+\IFRU{А \AND сбрасывает некий бит. Можно также сказать, что \AND здесь копирует все биты, кроме одного. 
+Действительно, во втором операнде \AND выставлены в единицу те биты, которые нужно сохранить, 
+кроме одного, копировать который мы не хотим (и который 0 в битовой маске).
+Так проще понять и запомнить.}
+{\AND resetting one bit. It can be said, \AND just copies all bits except one.
+Indeed, in the second \AND operand only those bits are set, which are needed to be saved,
+except one bit we wouldn't like to copy (which is 0 in bitmask).
+It's easier way to memorize the logic.}
+
+\IFRU{Если скомпилировать в MSVC с оптимизацией (\Ox), то код будет еще короче:}
+{If we compile it in MSVC with optimization turned on (\Ox), the code will be even shorter:}
+
+\lstinputlisting{bitfields/14_6_msvc_Ox.asm}
+
+\IFRU{Попробуем GCC 4.4.1 без оптимизации:}{Let's try GCC 4.4.1 without optimization:}
+
+\lstinputlisting{bitfields/14_6_gcc.asm}
+
+\IFRU{Также избыточный код, хотя короче чем у MSVC без оптимизации.}
+{There are some redundant code present, however, it's shorter then MSVC version without optimization.}
+
+\IFRU{Попробуем теперь GCC с оптимизацией}{Now let's try GCC with optimization turned on} \Othree:
+
+\lstinputlisting{bitfields/14_6_gcc_O3.asm}
+
+\IFRU{Уже короче. Важно отметить что через регистр \AH, компилятор работает с частью регистра \EAX, 
+эта его часть от 8-го до 15-го бита включительно.}
+{That's shorter. It is important to note that compiler works with \EAX register part via \AH register ~--- 
+that's \EAX register part from 8th to 15th bits inclusive.}
+
+\IFRU{Важное отступление: в 16-битном процессоре 8086 аккумулятор имел название \AX и состоял из двух 8-битных половин ~--- \AL (младшая часть) и \AH (старшая). 
+В 80386 регистры были расширены до 32-бит, 
+аккумулятор стал называться \EAX, но в целях совместимости, к его \IT{более старым} частям все еще можно 
+обращаться как к \AX/\AH/\AL.}
+{Important note: 16-bit CPU 8086 accumulator was named \AX and consisted of two 8-bit halves ~--- \AL (lower byte) and \AH (higher byte).
+In 80386 almost all regsiters were extended to 32-bit, accumulator was named \EAX, 
+but for the sake of compatibility,
+its \IT{older parts} may be still accessed as \AX/\AH/\AL registers.}
+
+\IFRU{Из-за того что все x86 процессоры ~--- наследники 16-битного 8086, эти \IT{старые} 16-битные опкоды короче 
+нежели более новые 32-битные. 
+Поэтому, инструкция \TT{or ah, 40h} занимает только 3 байта. 
+Было бы логичнее сгенерировать здесь \TT{or eax, 04000h}, но это уже 5 байт, или даже 6 
+(если регистр в первом операнде не \EAX).}
+{Because all x86 CPUs are 16-bit 8086 CPU successors, these \IT{older} 16-bit opcodes are shorter than newer 32-bit opcodes.
+That's why \TT{or ah, 40h} instruction occupying only 3 bytes.
+It would be more logical way to emit here \TT{or eax, 04000h}, but that's 5 bytes, or even 6
+(if register in first operand is not \EAX).}
+
+\IFRU{Если мы скомпилируем этот же пример не только с включенной оптимизацией \Othree, 
+но еще и с опцией \TT{regparm=3}, о которой я писал немного выше, то получится еще короче:}
+{It would be even shorter if to turn on \Othree optimization flag and also set \TT{regparm=3}.}
+
+\lstinputlisting{bitfields/14_6_gcc_O3_regparm3.asm}
+
+\newcommand{\URLINL}{\url{http://en.wikipedia.org/wiki/Inline_function}}
+
+\IFRU{Действительно ~--- первый аргумент уже загружен в \EAX, и прямо здесь можно начинать с ним работать. 
+Интересно, что и пролог функции (\TT{push ebp / mov ebp,esp}) и эпилог (\TT{pop ebp}) функции можно смело выкинуть
+за ненадобностью, 
+но возможно GCC еще не так хорош для подобных оптимизаций по размеру кода. 
+Впрочем, в реальной жизни, подобные короткие функции лучше всего автоматически делать в виде 
+\IT{inline-функций}\footnote{\URLINL}.}
+{Indeed ~--- first argument is already loaded into \EAX, so it's possible to work with it in-place.
+It's worth noting that both function prologue (\TT{push ebp / mov ebp,esp}) and epilogue can easily be omitted
+here, but GCC probably isn't good enough for such code size optimizations.
+However, such short functions are better to be \IT{inlined functions}\footnote{\URLINL}.}
