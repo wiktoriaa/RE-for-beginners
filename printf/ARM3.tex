@@ -1,11 +1,12 @@
-﻿%NOTTRANSLATED
-\subsection{ARM: 3 аргумента в \printf}
+﻿\subsection{ARM: \IFRU{3 аргумента в \printf}{3 \printf arguments}}
 
-В ARM традиционно принята такая схема передачи аргументов в функцию: 4 первых аргумента через регистры R0-R3,
-а остальные ~--- через стек. Это немного похоже на то как аргументы передаются в fastcall~\ref{fastcall} или 
-win64~\ref{sec:callingconventions_win64}.
+\IFRU{В ARM традиционно принята такая схема передачи аргументов в функцию: 4 первых аргумента через регистры R0-R3,
+а остальные ~--- через стек}{Traditionally, ARM arguments passing scheme (calling convention) is as follows:
+the 4 first arguments are passed in R0-R3 registers and remaining arguments ~--- via stack}.
+\IFRU{Это немного похоже на то как аргументы передаются в}{This resembling arguments passing scheme in} 
+fastcall~\ref{fastcall} \IFRU{или}{or} win64~\ref{sec:callingconventions_win64}.
 
-\subsubsection{\NonOptimizingKeil: режим ARM}
+\subsubsection{\NonOptimizingKeil: \ARMMode}
 
 \begin{lstlisting}
 .text:00000014             printf_main1
@@ -18,12 +19,13 @@ win64~\ref{sec:callingconventions_win64}.
 .text:0000002C 10 80 BD E8                 LDMFD   SP!, {R4,PC}
 \end{lstlisting}
 
-Итак, первые 4 аргумента передаются через регистры R0-R3, по порядку: указатель на формат-строку для \printf
-в R0, затем 1 в R1, 2 в R2 и 3 в R3. 
+\IFRU{Итак, первые 4 аргумента передаются через регистры R0-R3, по порядку: указатель на формат-строку для \printf
+в R0, затем $1$ в R1, $2$ в R2 и $3$ в R3}{So, the first 4 arguments are passing via R0-R3 arguments in this order:
+pointer to \printf format string in R0, then $1$ in R1, $2$ in R2 and $3$ in R3}.
 
-Пока что, здесь нет ничего необычного
+\IFRU{Пока что, здесь нет ничего необычного}{Nothing unusual so far}.
 
-\subsubsection{\OptimizingKeil: режим ARM}
+\subsubsection{\OptimizingKeil: \ARMMode}
 \label{ARM_B_to_printf}
 
 \begin{lstlisting}
@@ -36,8 +38,8 @@ win64~\ref{sec:callingconventions_win64}.
 .text:00000024 CB 18 00 EA                 B       __2printf
 \end{lstlisting}
 
-Это соптимизированная версия (\Othree) для режима ARM, и здесь мы видим последнюю инструкцию: \TT{B} вместо привычной
-нам \TT{BL}. 
+Это соптимизированная версия (\Othree) для режима ARM, и здесь мы видим последнюю инструкцию: 
+\TT{B} вместо привычной нам \TT{BL}. 
 Отличия между соптимзированной версией и предыдущей, скомпилированной без оптимизации, еще и в том, 
 что нет пролога и эпилога функции (инструкций, сохранающих состояние регистров \TT{R4} и \LR).
 Инструкция \TT{B} просто переходит на другой адрес, без манипуляций с регистром \LR, то есть,
@@ -48,13 +50,12 @@ win64~\ref{sec:callingconventions_win64}.
 Функция \printf, отработав, просто вернет управление по адресу, записанному в \LR. Но в \LR находится адрес места,
 откуда была вызвана наша функция! А следовательно, управление из \printf вернется сразу туда.
 Следовательно, нет нужды сохранять \LR, потому что нет нужны модифицировать \LR. 
-А нет нужды модифицировать \LR,
-потому что нет иных вызовов функций, кроме \printf, к тому же, после этого вызова не нужно ничего здесь 
-больше делать! Поэтому такая оптимизация возможна.
+А нет нужды модифицировать \LR, потому что нет иных вызовов функций, кроме \printf, к тому же, после этого вызова не нужно ничего здесь больше делать! 
+Поэтому такая оптимизация возможна.
 
 Еще один похожий пример описан в секции ``\SwitchCaseDefaultSectionName'', здесь~\ref{jump_to_last_printf}.
 
-\subsubsection{\OptimizingKeil: режим thumb}
+\subsubsection{\OptimizingKeil: \ThumbMode}
 
 \begin{lstlisting}
 .text:0000000C             printf_main1
