@@ -23,18 +23,19 @@ Of course, this is for 32-bit environment. 8 will be here instead of 4 in x64 en
 {The end of stack is actually at the beginning of allocated for stack memory block. 
 It seems strange, but it is so.}
 
-%NOTTRANSLATED
-В процессоре ARM, тем не менее, есть поддержка стеков растущих как в сторону уменьшения, так и в
-сторону увеличения. 
-Например, инструкции 
+\IFRU{В процессоре ARM, тем не менее, есть поддержка стеков растущих как в сторону уменьшения, так и в
+сторону увеличения}{Nevertheless, ARM has instructions supporting ascending stacks, but also descending stacks}. 
+
+\IFRU{Например, инструкции}{For example,} 
 STMFD\footnote{Store Multiple Full Descending}/LDMFD\footnote{Load Multiple Full Descending}, 
 STMED\footnote{Store Multiple Empty Descending}/LDMED\footnote{Load Multiple Empty Descending} 
-предназначены для descending-стека, т.е., уменьшающегося.
-Инструкции 
+\IFRU{предназначены для descending-стека, т.е., уменьшающегося}{instructions are intended for work with 
+descending stack}.
+\IFRU{Инструкции}{}
 STMFA\footnote{Store Multiple Full Ascending}/LMDFAA\footnote{Load Multiple Full Ascending}, 
 STMEA\footnote{Store Multiple Empty Ascending}/LDMEA\footnote{Load Multiple Empty Ascending} 
-предназначены для ascending-стека, т.е., увеличивающегося.
-%NOTTRANSLATED
+\IFRU{предназначены для ascending-стека, т.е., увеличивающегося}{instructions are intended for work with 
+ascending stack}.
 
 \IFRU{Для чего используется стек?}{What stack is used for?}
 
@@ -113,14 +114,18 @@ $LL3@f:
 
 \subsubsection{ARM}
 
-%NOTTRANSLATED
-Программы для ARM также используют стек для сохранения адреса, куда нужно вернуться, но несколько иначе.
-Как уже упоминалось в секции ``\HelloWorldSectionName''~\ref{sec:hw_ARM}, адрес возврата записывается в регистр \LR 
-(link register). Но есть есть необходимость вызывать какую-то другую функцию, и использовать регистр \LR еще
-раз, его значение желательно сохранить. Обычно, это происходит в прологе функции, часто мы видим там инструкцию
-вроде \TT{``PUSH {R4-R7,LR}''}, а в эпилоге \TT{``POP {R4-R7,PC}''} ~--- так сохраняются регистры, которые будут
-использоваться в текущей функции, в том числе \LR.
-%NOTTRANSLATED
+\IFRU{Программы для ARM также используют стек для сохранения адреса, куда нужно вернуться, но несколько иначе}{ARM
+programs also use stack for return address savings, but differently}.
+\IFRU{Как уже упоминалось в секции}{As it was mentioned in} ``\HelloWorldSectionName''~\ref{sec:hw_ARM}, 
+\IFRU{адрес возврата записывается в регистр}{return address is saved to} \LR (\IT{link register}).
+\IFRU{Но если есть необходимость вызывать какую-то другую функцию, и использовать регистр \LR еще
+раз, его значение желательно сохранить}{However, if one need to call some another function and use \LR register
+one more time, its value should be saved}.
+\IFRU{Обычно, это происходит в прологе функции, часто мы видим там инструкцию вроде}{Usually, it is saved in
+function prologue, often, we see there instruction like}
+\TT{``PUSH {R4-R7,LR}''}, \IFRU{а в эпилоге}{and also this instruction in epilogue} \TT{``POP {R4-R7,PC}''} ~--- 
+\IFRU{так сохраняются регистры, которые будут использоваться в текущей функции, в том числе}{thus register values
+to be used in function are saved in stack, including} \LR.
 
 %NOTTRANSLATED
 Тем не менее, если некая функция не вызывает никаких более функций, в терминологии ARM она называется 
