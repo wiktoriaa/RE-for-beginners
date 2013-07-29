@@ -1,7 +1,9 @@
 ﻿\subsection{ARM: \IFRU{8 аргументов в \printf}{8 \printf arguments}}
 
-Для того, чтобы посмотреть, как остальные аргументы будут передаваться через стек, изменим пример еще раз, 
-увеличив количество передаваемых аргументов до 9 (строка формата \printf и еще 8 переменных типа \Tint):
+\IFRU{Для того, чтобы посмотреть, как остальные аргументы будут передаваться через стек, изменим пример еще раз, 
+увеличив количество передаваемых аргументов до 9 (строка формата \printf и 8 переменных типа \Tint)}{To see,
+how other arguments will be passed via stack, let's change our example again by increasing number of arguments
+to be passed to 9 (\printf format string + 8 \Tint variables)}:
 
 \begin{lstlisting}
 void printf_main2()
@@ -38,45 +40,68 @@ void printf_main2()
 .text:00000068 04 F0 9D E4                 LDR     PC, [SP+4+var_4],#4
 \end{lstlisting}
 
-Этот код можно условно разделить на несколько частей:
+\IFRU{Этот код можно условно разделить на несколько частей}{This code can be divided into several parts}:
 
 \begin{itemize}
-\item Пролог функции:
+\item \IFRU{Пролог функции}{Function prologue}:
 
-Самая первая инструкция \TT{``STR LR, [SP,\#var\_4]!''} сохраняет в стеке \LR, ведь, 
-нам придется использовать его для вызова \printf.
+\IFRU{Самая первая инструкция}{The very first} \TT{``STR LR, [SP,\#var\_4]!''} 
+\IFRU{сохраняет в стеке \LR, ведь, нам придется использовать этот регистр для вызова \printf}
+{instruction save \LR in stack, because we will use this register for \printf call}.
 
-Вторая инструкция \TT{``SUB SP, SP, \#0x14''} уменьшает указатель стека \SP, но на самом деле, эта процедура нужна для выделения в локальном стеке места размером 0x14 (20) байт. Действительно, нам нужно передать 5 32-битных значений через стек в \printf, каждое значение занимает 4 байта, а $5*4=20$ --- как раз. Остальные 4 32-битных значения будут переданы через регистры.
+\IFRU{Вторая инструкция}{The second} \TT{``SUB SP, SP, \#0x14''} \IFRU{уменьшает указатель стека \SP, но на самом деле, эта процедура нужна для выделения в локальном стеке места размером 0x14 (20) байт}{instruction decreasing
+\SP stack pointer, but in fact, 
+this procedure is needed for allocating a space of size 0x14 (20) bytes in the stack}.
+\IFRU{Действительно, нам нужно передать 5 32-битных значений через стек в \printf, каждое значение занимает 4 байта, а $5*4=20$ ~--- как раз}{Indeed, we need to pass 5 32-bit values via stack to \printf, and each one occupy 4 bytes, that is $5*4=20$ ~--- exactly}.
+\IFRU{Остальные 4 32-битных значения будут переданы через регистры}{Other 4 32-bit values will be passed in
+registers}.
 
-\item Передача 5, 6, 7 и 8 через стек:
+\item \IFRU{Передача 5, 6, 7 и 8 через стек}{Passing 5, 6, 7 and 8 via stack}:
 
-Затем значения 5, 6, 7 и 8 записываются в регистры R0, R1, R2 и R3 соответственно. Затем инструкция \TT{``ADD R12, SP, \#0x18+var\_14''} записывает в регистр R12 место в стеке, куда будут помещены эти 4 значения. 
-\IT{var\_14} это макрос ассемблера, равный $-0x14$, такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку. Переменные \IT{var\_?}, создаваемые в \IDA это локальные переменные в стеке. 
-Так что, в \TT{R12} будет записано $SP+4$. 
-Следующая инструкция \TT{``STMIA R12, {R0-R3}''} записывает содержимое регистров R0-R3 по адресу в памяти, на который указывает R12. 
-Инструкция \TT{STMIA} означает \IT{Store Multiple Increment After}. 
-\IT{Increment After} означает что R12 будет увеличиваться на 4 после записи каждого значения регистра.
+\IFRU{Затем значения 5, 6, 7 и 8 записываются в регистры R0, R1, R2 и R3 соответственно}{Then values 5, 6, 7 and 8
+are written to R0, R1, R2 and R3 registers respectively}.
+\IFRU{Затем инструкция}{Then} \TT{``ADD R12, SP, \#0x18+var\_14''} 
+\IFRU{записывает в регистр R12 адрес места в стеке, куда будут помещены эти 4 значения}{instruction write an address of place in stack, where these 4 variables will be written, into R12 register}.
+\IT{var\_14} \IFRU{это макрос ассемблера}{is an assembly macro}, \IFRU{равный}{equal to} $-0x14$, 
+\IFRU{такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку}{such macros are created by \IDA in order to show simply how code accessing stack}.
+\IFRU{Макросы \IT{var\_?}, создаваемые \IDA, отражают локальные переменные в стеке}{\IT{var\_?} macros created
+by \IDA reflecting local variables in stack}.
+\IFRU{Так что, в \TT{R12} будет записано $SP+4$}{So, $SP+4$ will be written into \TT{R12} register}.
+\IFRU{Следующая инструкция}{The next} \TT{``STMIA R12, {R0-R3}''} 
+\IFRU{записывает содержимое регистров R0-R3 по адресу в памяти, на который указывает R12}{instruction
+writes R0-R3 registers contents at the place in memory to which R12 pointing}.
+\IFRU{Инструкция }\TT{STMIA} \IFRU{означает}{instruction meaning} \IT{Store Multiple Increment After}. 
+\IT{Increment After} \IFRU{означает что R12 будет увеличиваться на 4 после записи каждого значения регистра}
+{meaning that R12 will be increasing by 4 after each register value write}.
 
-\item Передача 4 через стек:
-4 записывается в R0, затем, это значение, при помощи инструкции \TT{``STR R0, [SP,\#0x18+var\_18]''} попадает
-в стек. \IT{var\_18} равен $-0x18$, смещение будет 0, так что, значение из регистра R0 (4) запишется туда, куда
-указывает \SP.
+\item \IFRU{Передача 4 через стек}{Passing 4 via stack}:
+4 записывается в \TT{R0}, затем, это значение, при помощи инструкции \TT{``STR R0, [SP,\#0x18+var\_18]''} попадает
+в стек. 
+\IT{var\_18} \IFRU{равен}{is} $-0x18$, \IFRU{смещение будет 0}{offset will be 0}, 
+\IFRU{так что, значение из регистра \TT{R0} (4) запишется туда, куда указывает \SP}{so, value from \TT{R0} register
+(4) will be written to a place \SP pointing to}.
 
-\item Передача 1, 2 и 3 через регистры:
+\item \IFRU{Передача 1, 2 и 3 через регистры}{Passing 1, 2 and 3 via registers}:
 
-Значения для первых трех чисел (a, b, c) (1, 2, 3 соответственно) передаются в регистрах R1, R2 и R3 перед самим
-вызововм \printf, а остальные 5 значений передаются через стек, и вот как.
+\IFRU{Значения для первых трех чисел (a, b, c) (1, 2, 3 соответственно) передаются в регистрах R1, R2 и R3 перед самим вызововм \printf}{Values of first 3 numbers (a, b, c) (1, 2, 3 respectively) are passing in R1, R2 and R3
+registers right before \printf call}, \IFRU{а остальные 5 значений передаются через стек, и вот как}{and other
+5 values are passed via stack and this is how}:
 
-\item Вызов \printf:
+\item \IFRU{Вызов \printf}{\printf call}:
 
-\item Эпилог функции:
+\item \IFRU{Эпилог функции}{Function epilogue}:
 
-Инструкция \TT{``ADD SP, SP, \#0x14''} возвращает \SP на прежнее место, аннулируя таким образом, всё что было
-записано в стеке. Конечно, то что было записано туда, там пока и остается, но всё это будет многократно 
-перезаписано следующими функциями.
+\IFRU{Инструкция }{}\TT{``ADD SP, SP, \#0x14''} \IFRU{возвращает \SP на прежнее место, 
+аннулируя таким образом, всё что было записано в стеке}{instruction returning \SP to former place,
+thus annulling what was written to stack}.
+\IFRU{Конечно, то что было записано в стек, там пока и останется, но всё это будет многократно 
+перезаписано во время исполнения последующих функций}
+{Of course, what was written in stack will stay there, but it all will be
+rewritten while execution of following functions}.
 
-Инструкция \TT{``LDR PC, [SP+4+var\_4],\#4''} загружает в \PC сохраненное значение \LR из стека, таким образом,
-обеспечивая выход из функции.
+\IFRU{Инструкция }{}\TT{``LDR PC, [SP+4+var\_4],\#4''} \IFRU{загружает в \PC сохраненное значение \LR из стека, 
+таким образом, обеспечивая выход из функции}{instruction loading saved in stack \LR value into \PC, providing
+exit from the function}.
 
 \end{itemize}
 
@@ -111,8 +136,11 @@ void printf_main2()
 .text:00000040 00 BD                       POP     {PC}
 \end{lstlisting}
 
-Это почти то же самое что и в предыдущем примере, только код для thumb и значения укладываются в 
-стек немного иначе: в начале 8 за первый раз, затем 5, 6, 7 за второй раз и 4 за третий раз.
+\IFRU{Это почти то же самое что и в предыдущем примере, только код для thumb и значения укладываются в 
+стек немного иначе: в начале $8$ за первый раз, затем $5$, $6$, $7$ за второй раз и $4$ за третий раз}{Almost 
+same as
+in previous example, however, this is thumb code and values are packed into stack differently: 
+$8$ for the first time, then $5$, $6$, $7$ for the second and $4$ for the third}.
 
 \subsubsection{\OptimizingXcode: \ARMMode}
 
@@ -144,20 +172,34 @@ __text:00002954 07 D0 A0 E1                 MOV             SP, R7
 __text:00002958 80 80 BD E8                 LDMFD           SP!, {R7,PC}
 \end{lstlisting}
 
-Почти то же самое что мы уже видели, за исключением того что \TT{STMFA} (Store Multiple Full Ascending) это синоним
-инструкции \TT{STMIB} (Store Multiple Increment Before). 
-Эта инструкция увеличивает \SP и только затем записывает в память очередной регистр, но не наоборот.
+\IFRU{Почти то же самое что мы уже видели, за исключением того что}{Almost the same as we already saw, with the
+exception of} \TT{STMFA} (Store Multiple Full Ascending) 
+\IFRU{это синоним инструкции}{instruction, it is synonym to} 
+\TT{STMIB} (Store Multiple Increment Before) \IFRU{}{instruction}. 
+\IFRU{Эта инструкция увеличивает \SP и только затем записывает в память значение очередного регистра, 
+но не наоборот}{This
+instruction increasing \SP and only then writing next register value into memory, but not vice versa}.
 
-Второе что бросается в глаза, это то что инструкции как будто бы расположены случайно. Например, регистр R0
-подготавливается в трех местах, по адресам 0x2918, 0x2920, 0x2928, когда это можно было бы сделать в одном месте.
-Однако, у оптимизирующего компилятора могут быть свои доводы о том, как лучше составлять инструкции друг с другом
-для лучшей эффективности исполнения.
-Процессор обычно старается исполнять одновременно идущие друг за другом инструкции.
-К примеру, инструкции \TT{``MOVT R0, \#0''} и \TT{``ADD R0, PC, R0''} не могут быть исполнены одновременно,
-потому что обе инструкции модифицируют R0. 
-А вот инструкции \TT{``MOVT R0, \#0''} и \TT{``MOV R2, \#4''} легко можно исполнить одновременно, 
-потому что их действия никак не конфликтуют друг с другом. 
-Вероятно, компилятор старается генерировать код именно таким образом, конечно, там где это возможно.
+\IFRU{Второе что бросается в глаза, это то что инструкции как будто бы расположены случайно}{Another thing
+we easily spot is that instructions ostensibly located randomly}.
+\IFRU{Например, значение в регистре \TT{R0} подготавливается в трех местах, по адресам $0x2918$, $0x2920$ 
+и $0x2928$, 
+когда это можно было бы сделать в одном месте}{For instance, \TT{R0} register value is prepared in three
+places, at addresses $0x2918$, $0x2920$ and $0x2928$, when it would be possible to do it in one single place}.
+\IFRU{Однако, у оптимизирующего компилятора могут быть свои доводы о том, как лучше составлять инструкции 
+друг с другом для лучшей эффективности исполнения}{However, optimizing compiler has his own reasons about how
+to place instructions better}.
+\IFRU{Процессор обычно пытается исполнять одновременно идущие друг за другом инструкции}{Usually,
+processor attempts to execute instructions located side-by-side}.
+\IFRU{К примеру, инструкции}{For example, instructions like} \TT{``MOVT R0, \#0''} \IFRU{и}{and} 
+\TT{``ADD R0, PC, R0''} \IFRU{не могут быть исполнены одновременно, потому что обе инструкции модифицируют 
+регистр \TT{R0}}{cannot be executed simultaneously, because they both modifying \TT{R0} register}. 
+\IFRU{А вот инструкции}{On the other hand,} \TT{``MOVT R0, \#0''} \IFRU{и}{and} \TT{``MOV R2, \#4''} 
+\IFRU{легко можно исполнить одновременно, 
+потому что эффекты от их исполнения никак не конфликтуют друг с другом}{instructions can be executed
+simultaneously because effects of their execution are not conflicting with each other}.
+\IFRU{Вероятно, компилятор старается генерировать код именно таким образом, конечно, там где это возможно}
+{Presumably, compiler tries to generate code in such way, where it's possible, of course}.
  
 \subsubsection{\OptimizingXcode: \ThumbMode}
 
@@ -191,5 +233,6 @@ __text:00002BD6 05 B0                             ADD             SP, SP, #0x14
 __text:00002BD8 80 BD                             POP             {R7,PC}
 \end{lstlisting}
 
-Почти то же самое что и в  предыдущем примере, лишь за тем исключением что здесь используются thumb-инструкции.
+\IFRU{Почти то же самое что и впредыдущем примере, лишь за тем исключением что здесь используются thumb-инструкции}
+{Almost the same as in previous example, with the exception that thumb-instructions are used there instead}.
 
