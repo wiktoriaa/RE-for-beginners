@@ -1,0 +1,63 @@
+﻿\subsection{\IFRU{Защита от переполнения буфера}{Buffer overflow protection methods}}
+
+\newcommand{\URLWPB}{\href{http://en.wikipedia.org/wiki/Buffer_overflow_protection}
+{Wikipedia: \IFRU{описания защит, которые компилятор может вставлять в код}
+{compiler-side buffer overflow protection methods}}}
+
+\IFRU{В наше время пытаются бороться с этой напастью, не взирая на халатность программистов на \CCpp. 
+В MSVC есть опции вроде\footnote{\URLWPB}:}
+{There are several methods to protect against it, regardless of \CCpp programmers' negligence.
+MSVC has options like\footnote{\URLWPB}:}
+
+\begin{verbatim}
+ /RTCs Stack Frame runtime checking
+ /GZ Enable stack checks (/RTCs)
+\end{verbatim}
+
+\IFRU{Один из методов, это в прологе функции вставлять в область локальных переменных 
+некоторое случайное значение 
+и в эпилоге функции, перед выходом, это число проверять. 
+И если проверка не прошла, то не выполнять инструкцию \RET а остановиться (или зависнуть). 
+Процесс зависнет, но это лучше чем удаленная атака на ваш хост.}
+{One of the methods is to write random value among local variables to stack at function prologue 
+and to check it in function epilogue before function exiting.
+And if value is not the same, do not execute last instruction \RET, but halt (or hang).
+Process will hang, but that's much better then remote attack to your host.}
+    
+\newcommand{\CANARYURL}
+{
+    \IFRU
+    {
+        \href{http://miningwiki.ru/wiki/\%D0\%9A\%D0\%B0\%D0\%BD\%D0\%B0\%D1\%80\%D0\%B5\%D0\%B9\%D0\%BA\%D0\%B0_\%D0\%B2_\%D1\%88\%D0\%B0\%D1\%85\%D1\%82\%D0\%B5}{Шахтерская энциклопедия: Канарейка в шахте}
+    }
+    {
+        \href{http://en.wikipedia.org/wiki/Domestic\_Canary\#Miner.27s\_canary}{Wikipedia: Miner's canary}
+    }
+}
+
+Это случайное значение иногда называют ``канарейкой''\footnote{``canary'' в англоязычной литературе}, 
+по аналогии с шахтной канарейкой\footnote{\CANARYURL},
+их использовали шахтеры в свое время, чтобы определять, есть ли в шахте опасный газ.
+Канарейки очень к нему чувствительны и либо проявляли сильное беспокойство, либо гибли от газа.
+
+Если скомпилировать наш простейший пример работы с массивом~\ref{arrays_simple} в MSVC с опцией RTC1 или RTCs, 
+в конце функции будет вызов 
+функции \TT{@\_RTC\_CheckStackVars@8}, проверяющей корректность ``канарейки''.
+
+\subsubsection{\OptimizingXcode + режим thumb}
+
+Возвращаясь к нашему простому примеру~\ref{arrays_simple}, 
+можно посмотреть как LLVM добавит проверку ``канарейки'':
+
+\lstinputlisting{13_arrays/simple_Xcode_thumb_O3_en.asm}
+
+Во-первых, как видно, LLVM "развернул" цикл и все значения записываются в массив по одному, уже вычисленные, 
+потому что LLVM посчитал что так будет быстрее. Кстати, инструкции ARM позволяют сделать это еще быстрее и это
+может быть вашим домашним заданием.
+
+В конце функции мы видим сравнение ``канареек'' ~--- той что лежит в локальном стеке и корректной, на которую
+ссылается регистр \TT{R8}. Если они равны, срабатывает блок из четырех инструкций \TT{``ITTTT EQ''}, это запись
+$0$ в \TT{R0}, эпилог функции и выход из нее. Если блок ``канарейки'' не равны, блок не срабатывает и происходит
+переход на функцию \TT{\_\_\_stack\_chk\_fail}, которая, вероятно, остановит работу программы.
+% TODO illustrate this!
+

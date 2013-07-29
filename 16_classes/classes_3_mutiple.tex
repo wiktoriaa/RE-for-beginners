@@ -1,0 +1,94 @@
+\subsection{\IFRU{Множественное наследование в С++}{Multiple inheritance in C++}}
+
+\IFRU{Множественное наследование это создание класса наследующего поля и методы от двух или более классов.}
+{Multiple inheritance is a class creation which inherits fields and methods from two or more classes.}
+
+\IFRU{Снова напишем простой пример:}{Let's write simple example again:}
+
+\lstinputlisting{16_classes/classes3_multiple.cpp}
+
+\IFRU{Снова скомпилируем в MSVC 2008 с опциями \Ox и \Obzero и посмотрим код методов \TT{box::dump()}, 
+\TT{solid\_object::dump()}, \TT{solid\_box::dump()}:}
+{Let's compile it in MSVC 2008 with \Ox and \Obzero options and let's see \TT{box::dump()}, 
+\TT{solid\_object::dump()} and \TT{solid\_box::dump()} methods code:}
+
+\lstinputlisting{16_classes/classes3_1.asm}
+
+\lstinputlisting{16_classes/classes3_2.asm}
+
+\lstinputlisting{16_classes/classes3_3.asm}
+
+\IFRU{Выходит, имеем такую разметку в памяти для всех трех классов:}
+{So, the memory layout for all three classes is:}
+
+\IFRU{класс \IT{box}}{\IT{box} class}:
+
+\begin{center}
+\begin{tabular}{ | l | l | }
+\hline
+  \tableheader{} \\
+  +0x0 & width \\
+  +0x4 & height \\
+  +0x8 & depth \\
+\hline
+\end{tabular}
+\end{center}
+
+\IFRU{класс \IT{solid\_object}}{\IT{solid\_object} class}:
+
+\begin{center}
+\begin{tabular}{ | l | l | }
+\hline
+  \tableheader{} \\
+  +0x0 & density \\
+\hline
+\end{tabular}
+\end{center}
+
+\IFRU{Можно сказать, что разметка класса \IT{solid\_box} будет \IT{объедененной}:}
+{It can be said, \IT{solid\_box} class memory layout will be \IT{united}:}
+
+\IFRU{класс \IT{solid\_box}}{\IT{solid\_box} class}:
+
+\begin{center}
+\begin{tabular}{ | l | l | }
+\hline
+  \tableheader{} \\
+  +0x0 & width \\
+  +0x4 & height \\
+  +0x8 & depth \\
+  +0xC & density \\
+\hline
+\end{tabular}
+\end{center}
+
+\IFRU{Код методов \TT{box::get\_volume()} и \TT{solid\_object::get\_density()} тривиален:}
+{The code of \TT{box::get\_volume()} and \TT{solid\_object::get\_density()} methods is trivial:}
+
+\lstinputlisting{16_classes/classes3_4.asm}
+
+\lstinputlisting{16_classes/classes3_5.asm}
+
+\IFRU{А вот код метода \TT{solid\_box::get\_weight()} куда интереснее:}
+{But the code of \TT{solid\_box::get\_weight()} method is much more interesting:}
+
+\lstinputlisting{16_classes/classes3_6.asm}
+
+\IFRU{\TT{get\_weight()} просто вызывает два метода, но для \TT{get\_volume()} он передает просто указатель на \TT{this}, а для \TT{get\_density()}, он передает указатель на \TT{this} сдвинутый на \IT{12} байт (либо \IT{0xC} байт), а там, 
+в разметке класса \TT{solid\_box}, как раз начинаются поля класса \TT{solid\_object}.}
+{\TT{get\_weight()} just calling two methods, but for \TT{get\_volume()} it just passing pointer to \TT{this},
+and for \TT{get\_density()} it passing pointer to \TT{this} shifted by \IT{12} (or \IT{0xC}) bytes, and there, in \TT{solid\_box}
+class memory layout, fields of \TT{solid\_object} class are beginning.}
+
+\IFRU{Так, метод \TT{solid\_object::get\_density()} будет полагать что работает с обычным
+классом \TT{solid\_object}, а метод \TT{box::get\_volume()} будет работать только со своими тремя полями, полагая, 
+что работает с обычным экземпляром класса \TT{box}.}
+{Thus, \TT{solid\_object::get\_density()} method will believe it is working with usual \TT{solid\_object} class,
+and \TT{box::get\_volume()} method will work with its three fields, believing this is usual object of \TT{box} class.}
+
+\IFRU{Таким образом, можно сказать, что экземпляр класса-наследника нескольких классов представляет в памяти просто 
+\IT{объедененный} класс, содержащий все унаследованные поля. А каждый унаследованный метод вызывается с передачей
+ему указателя на соответствующую часть структуры.}
+{Thus, we can say, an object of some class, inheriting from several classes, representing in memory \IT{united} class, containing all inherited fields. And each inherited method called with a pointer to 
+corresponding structure's part passed.}
+
