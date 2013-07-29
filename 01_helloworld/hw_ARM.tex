@@ -6,7 +6,7 @@
 \IFRU{планшетных компьютеров для Windows 8 и Windows RT}{Windows 8 and Window RT tables}\footnote{\url{http://en.wikipedia.org/wiki/List_of_Windows_8_and_RT_tablet_devices}} 
 \IFRU{и таких устройствах как}{and also such devices as} Raspberry Pi.
 
-\subsubsection{\NonOptimizingKeil: \IFRU{режим ARM}{ARM mode}}
+\subsubsection{\NonOptimizingKeil: \ARMMode}
 
 \IFRU{Для начала, скомпилируем наш пример в Keil}{Let's start by compiling our example in Keil}:
 
@@ -14,7 +14,7 @@
 armcc.exe --arm --c90 -O0 1.c 
 \end{lstlisting}
 
-\IFRU{Компилятор \IT{armcc} генерирует листинг на ассемблере}{\IT{armcc} compiler producing assembler listing}, 
+\IFRU{Компилятор \IT{armcc} генерирует листинг на ассемблере}{\IT{armcc} compiler producing assembly listing}, 
 \IFRU{но он содержит некоторые высокоуровневые макросы связанные с ARM}{but it has some high-level ARM-processor related macros}\footnote{
 \IFRU{например, он показывает инструкции \PUSH/\POP отсутствующие в режиме ARM}{for example, it shows \PUSH/\POP instructions absent in ARM mode}}, 
 \IFRU{а нам важнее увидеть инструкции ``как есть'', так что посмотрим скомпилированный результат в \IDA}{but it's more important for us to see instructions ``as is'', so let's see compiled results in \IDA}.
@@ -90,8 +90,8 @@ armcc.exe --arm --c90 -O0 1.c
 \IFRU{Так как функция \main обычно самая главная в \CCpp, вероятно, управление будет возвращено в загрузчик операционной системы, либо куда-то в runtime функции Си, или что-то в этом роде}{Since our \main function is usually primary function in \CCpp, probably, control will be returned to operation system loader or to some place in runtime C functions, or something like that}.
 
 \TT{DCB} ~--- \IFRU{директива ассемблера, описывающая массивы байт или ASCII-строк, аналог директивы DB в 
-x86-ассемблере}{assembler directive, defining array of bytes or ASCII-strings, similar to DB directive 
-in x86-assembler}.
+x86-ассемблере}{assembly language directive, defining array of bytes or ASCII-strings, similar to DB directive 
+in x86-assembly language}.
 
 \subsubsection{\NonOptimizingKeil: \IFRU{режим thumb}{thumb mode}}
 
@@ -128,7 +128,7 @@ armcc.exe --thumb --c90 -O0 1.c
 \TT{ADR} \IFRU{работает также как и в предыдущем примере}{works just like in previous example}.
 \TT{MOVS} \IFRU{записывает $0$ в регистр \TT{R0} для возврата нуля}{writes $0$ in \TT{R0} register to zero returning}.
 
-\subsubsection{\OptimizingXcode: \IFRU{режим ARM}{ARM mode}}
+\subsubsection{\OptimizingXcode: \ARMMode}
 
 Xcode 4.6.3 \IFRU{без включенной оптимизации выдает слишком много лишнего кода, поэтому остановимся на той версии, где как можно меньше инструкций}{without optimization turned on, produces a lot of redundant code, so we'll study that version where instruction count as small as possible}: \Othree.
 
