@@ -75,11 +75,11 @@ writes R0-R3 registers contents at the place in memory to which R12 pointing}.
 {meaning that R12 will be increasing by 4 after each register value write}.
 
 \item \IFRU{Передача $4$ через стек}{Passing $4$ via stack}:
-\IFRU{$4$ записывается в \TT{R0}, затем, это значение, при помощи инструкции}{$4$ is stored in \TT{R0} and then,
+\IFRU{$4$ записывается в \Rzero, затем, это значение, при помощи инструкции}{$4$ is stored in \Rzero and then,
 this value, with the help of} \TT{``STR R0, [SP,\#0x18+var\_18]''} \IFRU{попадает в стек}{instruction, is saved
 in stack}.
 \IT{var\_18} \IFRU{равен}{is} $-0x18$, \IFRU{смещение будет $0$}{offset will be $0$}, 
-\IFRU{так что, значение из регистра \TT{R0} ($4$) запишется туда, куда указывает \SP}{so, value from \TT{R0} register ($4$) will be written to a place \SP pointing to}.
+\IFRU{так что, значение из регистра \Rzero ($4$) запишется туда, куда указывает \SP}{so, value from \Rzero register ($4$) will be written to a place \SP pointing to}.
 
 \item \IFRU{Передача 1, 2 и 3 через регистры}{Passing 1, 2 and 3 via registers}:
 
@@ -182,9 +182,9 @@ instruction increasing \SP and only then writing next register value into memory
 
 \IFRU{Второе что бросается в глаза, это то что инструкции как будто бы расположены случайно}{Another thing
 we easily spot is that instructions ostensibly located randomly}.
-\IFRU{Например, значение в регистре \TT{R0} подготавливается в трех местах, по адресам $0x2918$, $0x2920$ 
+\IFRU{Например, значение в регистре \Rzero подготавливается в трех местах, по адресам $0x2918$, $0x2920$ 
 и $0x2928$, 
-когда это можно было бы сделать в одном месте}{For instance, \TT{R0} register value is prepared in three
+когда это можно было бы сделать в одном месте}{For instance, \Rzero register value is prepared in three
 places, at addresses $0x2918$, $0x2920$ and $0x2928$, when it would be possible to do it in one single place}.
 \IFRU{Однако, у оптимизирующего компилятора могут быть свои доводы о том, как лучше составлять инструкции 
 друг с другом для лучшей эффективности исполнения}{However, optimizing compiler has his own reasons about how
@@ -193,7 +193,7 @@ to place instructions better}.
 processor attempts to execute instructions located side-by-side}.
 \IFRU{К примеру, инструкции}{For example, instructions like} \TT{``MOVT R0, \#0''} \IFRU{и}{and} 
 \TT{``ADD R0, PC, R0''} \IFRU{не могут быть исполнены одновременно, потому что обе инструкции модифицируют 
-регистр \TT{R0}}{cannot be executed simultaneously, because they both modifying \TT{R0} register}. 
+регистр \Rzero}{cannot be executed simultaneously, because they both modifying \Rzero register}. 
 \IFRU{А вот инструкции}{On the other hand,} \TT{``MOVT R0, \#0''} \IFRU{и}{and} \TT{``MOV R2, \#4''} 
 \IFRU{легко можно исполнить одновременно, 
 потому что эффекты от их исполнения никак не конфликтуют друг с другом}{instructions can be executed

@@ -78,8 +78,8 @@ armcc.exe --arm --c90 -O0 1.c
 \IFRU{Так же следует отметить, что из-за того что все инструкции в режиме ARM имеют длину 4 байта (32 бита), и инструкции могут находится только по адресам кратным 4, то последние 2 бита (всегда нулевых) можно не кодировать.}{It's also worth to note that all ARM mode instructions has size 4 bytes (32 bits), hence they all can be located only on 4-byte boundary addresses. This mean, last 2 bits of instruction address (always zero bits) may be omitted.}
 \IFRU{В итоге имеем 26 бит, при помощи которых можно закодировать смещение}{In summary, we have 26 bit for offset encoding, this is enough to represent offset} $\pm{}\approx{}32M$.
 
-\IFRU{Следующая инструкция}{Next} \TT{''MOV R0, \#0''}\footnote{MOVe} \IFRU{просто записывает 0 в регистр \TT{R0}}{instruction just writes 0 into \TT{R0} register}.
-\IFRU{Ведь наша Си-функция возвращает 0 а возвращаемое значение всякая функция оставляет в \TT{R0}}{That's because our C-function returning 0 and returning value is to be placed in \TT{R0}}.
+\IFRU{Следующая инструкция}{Next} \TT{''MOV R0, \#0''}\footnote{MOVe} \IFRU{просто записывает 0 в регистр \Rzero}{instruction just writes 0 into \Rzero register}.
+\IFRU{Ведь наша Си-функция возвращает 0 а возвращаемое значение всякая функция оставляет в \Rzero}{That's because our C-function returning 0 and returning value is to be placed in \Rzero}.
 
 \IFRU{Последняя инструкция}{The last instruction} \TT{''LDMFD SP!, {R4,PC}''}\footnote{Load Multiple Full Descending} \IFRU{это инструкция обратная от}{is an inversive instruction of} \TT{STMFD}, \IFRU{она загружает из стека значения для сохранения их в \TT{R4} и \PC, увеличивая указатель стека \SP}{it loads values from stack for saving them into \TT{R4} and \PC, incremeting stack pointer \SP}.
 \IFRU{Это, в каком-то смысле, аналог \POP}{It can be said, it is similar to \POP}. 
@@ -126,7 +126,7 @@ armcc.exe --thumb --c90 -O0 1.c
 
 \IFRU{Остальные инструкции в функции: \PUSH и \POP работают почти так же как и описанные \TT{STMFD}/\TT{LDMFD}, только регистр \SP здесь не указывается явно}{Other instructions in functions are: \PUSH and \POP works just like described \TT{STMFD}/\TT{LDMFD}, but \SP register not mentioned explicitely here}.
 \TT{ADR} \IFRU{работает также как и в предыдущем примере}{works just like in previous example}.
-\TT{MOVS} \IFRU{записывает $0$ в регистр \TT{R0} для возврата нуля}{writes $0$ in \TT{R0} register to zero returning}.
+\TT{MOVS} \IFRU{записывает $0$ в регистр \Rzero для возврата нуля}{writes $0$ in \Rzero register to zero returning}.
 
 \subsubsection{\OptimizingXcode: \ARMMode}
 
@@ -148,7 +148,7 @@ __cstring:00003F62 48 65 6C 6C+aHelloWorld_0   DCB "Hello world!",0
 
 \IFRU{Инструкции}{Instructions} \TT{STMFD} \IFRU{и}{and} \TT{LDMFD} \IFRU{нам уже знакомы}{are familiar to us}.
 
-\IFRU{Инструкция \MOV просто записывает число $0x1686$ в регистр \TT{R0}, это смещение указывающее на строку ``Hello world!''}{\MOV instruction just writes $0x1686$ number into \TT{R0} register, this is offset pointing to the ``Hello world!'' string}.
+\IFRU{Инструкция \MOV просто записывает число $0x1686$ в регистр \Rzero, это смещение указывающее на строку ``Hello world!''}{\MOV instruction just writes $0x1686$ number into \Rzero register, this is offset pointing to the ``Hello world!'' string}.
 
 \IFRU{Регистр \TT{R7}, по стандарту принятому в}{\TT{R7} register, as it is standardized in} ''iOS ABI Function Call Guide''\footnote{\url{http://developer.apple.com/library/ios/documentation/Xcode/Conceptual/iPhoneOSABIReference/iPhoneOSABIReference.pdf}} \IFRU{это}{is} frame pointer, \IFRU{о нем будет рассказано позже}{more on it below}.
 
@@ -158,7 +158,7 @@ __cstring:00003F62 48 65 6C 6C+aHelloWorld_0   DCB "Hello world!",0
 \IFRU{Поэтому для записи в старшие биты (от 16-го по 31-го включительно) существует дополнительная команда \TT{MOVT}}{So that's why additional instruction \TT{MOVT} exist for writing into higher bits (from 16 to 31 inclusive)}.
 \IFRU{Впрочем, здесь её использование избыточно, потому что инструкция \TT{''MOV R0, \#0x1686''} выше итак обнулила старшую часть регистра}{However, its usage here is redundant, because \TT{''MOV R0, \#0x1686''} instruction above cleared higher part of register}. \IFRU{Возможно, это недочет компилятора}{Probably, it's compiler's shortcoming}.
 
-\IFRU{Инструкция} \TT{''ADD R0, PC, R0''} \IFRU{прибавляет \PC к \TT{R0}, для вычисления действительного адреса строки ``Hello world!'', как нам уже известно, это ``адресно-независимый код'', поэтому такая корректива необходима}{instruction adding \PC to \TT{R0}, for calculating absolute address of ``Hello world!'' string, and as we already know that, it's ``position-independent code'', so this corrective is essential here}.
+\IFRU{Инструкция} \TT{''ADD R0, PC, R0''} \IFRU{прибавляет \PC к \Rzero, для вычисления действительного адреса строки ``Hello world!'', как нам уже известно, это ``адресно-независимый код'', поэтому такая корректива необходима}{instruction adding \PC to \Rzero, for calculating absolute address of ``Hello world!'' string, and as we already know that, it's ``position-independent code'', so this corrective is essential here}.
 
 \IFRU{Инструкция \TT{BL} вызывает \puts вместо \printf}{\TT{BL} instruction calling \puts instead of \printf}.
 
@@ -180,7 +180,7 @@ statements starting with \IT{\%}: then effect of these two functions will be dif
 \IFRU{Видимо потому, что \puts проталкивает символы в stdout не сравнивая каждый со знаком процента.}
 {\puts working faster because it just passes characters to stdout not comparing each with \IT{\%} symbol.}
 
-\IFRU{Далее уже знакомая инструкция}{Next, we see familiar to us} \TT{''MOV R0, \#0''}\IFRU{, служащая для установки в 0 возвращаемого значения функции}{instruction, intended to set 0 to \TT{R0} register}.
+\IFRU{Далее уже знакомая инструкция}{Next, we see familiar to us} \TT{''MOV R0, \#0''}\IFRU{, служащая для установки в 0 возвращаемого значения функции}{instruction, intended to set 0 to \Rzero register}.
 
 \subsubsection{\OptimizingXcode: \IFRU{режим thumb-2}{thumb-2 mode}}
 
@@ -215,7 +215,7 @@ easily observable ~--- opcodes of thumb-2 instructions are also beginning with $
 first byte of opcode is at the place of second, that's because instructions here encoded as follows: last byte and then first one (for thumb and thumb-2 modes), or, (for instructions in ARM mode): fourth byte, then third, then second and first}.
 \IFRU{Так что мы видим здесь что инструкции \TT{MOVW}, \TT{MOVT.W} и \TT{BLX} начинаются с}{So as we see, \TT{MOVW}, \TT{MOVT.W} and \TT{BLX} instructions are beginning with} $0xFx$.
 
-\IFRU{Одна из thumb-2 инструкций это}{One of thumb-2 instructions is} \TT{``MOVW R0, \#0x13D8''} ~--- \IFRU{она записывает 16-битное число в младшую часть регистра \TT{R0}}{it writes 16-bit value into lower part of \TT{R0} register}.
+\IFRU{Одна из thumb-2 инструкций это}{One of thumb-2 instructions is} \TT{``MOVW R0, \#0x13D8''} ~--- \IFRU{она записывает 16-битное число в младшую часть регистра \Rzero}{it writes 16-bit value into lower part of \Rzero register}.
 
 \IFRU{Еще}{Also} \TT{``MOVT.W R0, \#0''} ~--- \IFRU{эта инструкция работает так же как и}{this instruction works just like} \TT{MOVT} \IFRU{из предыдущего примера, но она работает в}{from previous example, but it works in} thumb-2.
 
