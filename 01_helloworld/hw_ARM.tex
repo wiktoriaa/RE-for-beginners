@@ -81,7 +81,7 @@ armcc.exe --arm --c90 -O0 1.c
 \IFRU{Следующая инструкция}{Next} \TT{''MOV R0, \#0''}\footnote{MOVe} \IFRU{просто записывает 0 в регистр \Rzero}{instruction just writes 0 into \Rzero register}.
 \IFRU{Ведь наша Си-функция возвращает 0 а возвращаемое значение всякая функция оставляет в \Rzero}{That's because our C-function returning 0 and returning value is to be placed in \Rzero}.
 
-\IFRU{Последняя инструкция}{The last instruction} \TT{''LDMFD SP!, {R4,PC}''}\footnote{Load Multiple Full Descending} \IFRU{это инструкция обратная от}{is an inversive instruction of} \TT{STMFD}, \IFRU{она загружает из стека значения для сохранения их в \TT{R4} и \PC, увеличивая указатель стека \SP}{it loads values from stack for saving them into \TT{R4} and \PC, incremeting stack pointer \SP}.
+\IFRU{Последняя инструкция}{The last instruction} \TT{''LDMFD SP!, {R4,PC}''}\footnote{\LDMFDDESC} \IFRU{это инструкция обратная от}{is an inversive instruction of} \TT{STMFD}, \IFRU{она загружает из стека значения для сохранения их в \TT{R4} и \PC, увеличивая указатель стека \SP}{it loads values from stack for saving them into \TT{R4} and \PC, incremeting stack pointer \SP}.
 \IFRU{Это, в каком-то смысле, аналог \POP}{It can be said, it is similar to \POP}. 
 \IFRU{Обратите внимание: самая первая инструкция \TT{STMFD} сохранила в стеке \TT{R4} и \LR, а \IT{восстанавливаются} \TT{R4} и \PC}{Note: the very first instruction \TT{STMFD} saved \TT{R4} and \LR into stack, but \TT{R4} and \PC are \IT{restored}}.
 \IFRU{Как я уже описывал, в регистре \LRwithfootnote обычно сохраняется адрес места, куда нужно всякой функции вернуть управление}{As I wrote before, in \LRwithfootnote register address of place saved, to where each function should return control}.
@@ -166,7 +166,7 @@ __cstring:00003F62 48 65 6C 6C+aHelloWorld_0   DCB "Hello world!",0
 \IFRU{Компилятор заменил вызов \printf на \puts. 
 Действительно, \printf с одним агрументом это почти аналог \puts.}
 {GCC replaced first \printf call to \puts. 
-Indeed: \printf with only sole argument is almost analogous to \puts.} 
+Indeed: \printf with sole argument is almost analogous to \puts.} 
 
 \IFRU{\IT{Почти}, если принять условие что в строке не будет управляющих символов \printf 
 начинающихся со знака процента. Тогда эффект от работы этих двух функций будет разным.}

@@ -3,7 +3,6 @@
 \subsubsection{\NonOptimizingKeil + \ARMMode}
 
 \begin{lstlisting}
-.text:000000A4             f                              ; CODE XREF: main+10
 .text:000000A4 00 30 A0 E1                 MOV     R3, R0
 .text:000000A8 93 21 20 E0                 MLA     R0, R3, R1, R2
 .text:000000AC 1E FF 2F E1                 BX      LR
@@ -22,28 +21,47 @@
 .text:000000D8 10 80 BD E8                 LDMFD   SP!, {R4,PC}
 \end{lstlisting}
 
-В функции \main просто вызываются две функции, в первую передается три значения.
+\IFRU{В функции \main просто вызываются две функции, в первую (\TT{f}) передается три значения.}
+{In \main function, two other functions are simply called, and three values are passed to the 
+first one (\TT{f}).}
 
-Как я уже упоминал, первые 4 значения, в ARM обычно передаются в первых 4-х регистрах (R0-R3).
+\IFRU{Как я уже упоминал, первые 4 значения, в ARM обычно передаются в первых 4-х регистрах}
+{As I mentioned before, in ARM, first 4 values are usually passed in first 4 registers} (\Rzero-\Rthree).
 
-Функция \TT{f}, как видно, использует три первых регистра (R0-R2).
+\IFRU{Функция }{}\TT{f}\IFRU{, как видно, использует три первых регистра (\Rzero-\Rtwo) как аргументы.}
+{function, as it seems, use first 3 registers (\Rzero-\Rtwo) as arguments.}
 
-Инструкция \TT{MLA} (\IT{Multiply Accumulate}) перемножает два первых операнда (R3 и R1), прибавляет к произведению
-третий операнд (R2) и помещает результат в нулевой операнд (R0), через который, по стандарту, возвращаются
-значения функций.
+\IFRU{Инструкция }{}\TT{MLA} (\IT{Multiply Accumulate}) \IFRU{перемножает два первых операнда (\Rthree и \Rone), 
+прибавляет к произведению
+третий операнд (\Rtwo) и помещает результат в нулевой операнд (\Rzero), через который, по стандарту, 
+возвращаются значения функций.}
+{instruction multiplicates two first operands (\Rthree and \Rone), adds third operand (\Rtwo) to product and places
+result into zeroth operand (\Rzero), via which, by standard, values are returned from functions.}
 
-Умножение и сложение одновременно\footnote{\href{https://ru.wikipedia.org/wiki/\%D0\%A3\%D0\%BC\%D0\%BD\%D0\%BE\%D0\%B6\%D0\%B5\%D0\%BD\%D0\%B8\%D0\%B5-\%D1\%81\%D0\%BB\%D0\%BE\%D0\%B6\%D0\%B5\%D0\%BD\%D0\%B8\%D0\%B5}{wikipedia: Умножение-сложение}} (\IT{Fused multiply–add}) это много где применяемая операция, кстати, аналогичной
-инструкции в x86 нет, если не считать новых 
-FMA-инструкций\footnote{\url{https://en.wikipedia.org/wiki/FMA_instruction_set}} в SIMD.
+\IFRU{Умножение и сложение одновременно}{Multiplication and addition at once}\footnote{\WPMAO} 
+(\IT{Fused multiply–add}) \IFRU{это много где применяемая операция, кстати, аналогичной
+инструкции в x86 нет}{is very useful operation, by the way, there are no such instruction in x86}, 
+\IFRU{если не считать новых FMA-инструкций}{if not to count new FMA-instruction}\footnote{\url{https://en.wikipedia.org/wiki/FMA_instruction_set}} \IFRU{в}{in} SIMD.
 
-Самая первая инструкция \TT{MOV R3, R0}, по видимому, избыточна (можно было бы обойтись только одной инструкцией 
-\TT{MLA}), компилятор не оптимизировал её, ведь, это компиляция без оптимизации.
+\IFRU{Самая первая инструкция}{The very first} \TT{MOV R3, R0}, \IFRU{по видимому, избыточна (можно было бы обойтись только одной инструкцией \TT{MLA})}
+{instruction, as it seems, redundant (single \TT{MLA} instruction could be used here instead)}, 
+\IFRU{компилятор не оптимизировал её, ведь, это компиляция без оптимизации}{compiler wasn't optimized it,
+because, this is non-optimizing compilation}.
 
-Инструкция \TT{BX} возвращает управление по адресу записанному в \LR и, если нужно, переключает режимы процессора
-с thumb на ARM или наоборот. Это для того нужно, что, как мы видим, функции \TT{f} неизвестно, из какого кода
-она будет вызываться, из ARM или thumb. Поэтому, если она будет вызываться из thumb, \TT{BX} не только вернет
-управление в вызывающую функцию, но также переключит процессор в режим thumb. Либо не переключит, если функция
-вызывалась из кода для режима ARM.
+\IFRU{Инструкция \TT{BX} возвращает управление по адресу записанному в \LR и, если нужно, 
+переключает режимы процессора с thumb на ARM или наоборот.}
+{\TT{BX} instruction returns control to the address stored in \LR and, if need, switches processor mode from
+thumb to ARM or vice versa.}
+\IFRU{Это может быть необходимым потому, что, как мы видим, 
+функции \TT{f} неизвестно, из какого кода она будет вызываться, из ARM или thumb.}
+{This can be necessary because, as we can see, \TT{f} function is not aware, from which code it may be
+called, from ARM or thumb.}
+\IFRU{Поэтому, если она будет вызываться из кода thumb, \TT{BX} не только вернет
+управление в вызывающую функцию, но также переключит процессор в режим thumb.}
+{This, if it will be called from thumb code, \TT{BX} will not only return control to the calling function,
+but also will switch processor mode to thmb mode.}
+\IFRU{Либо не переключит, если функция вызывалась из кода для режима ARM.}
+{Or not switch, if the function was called from ARM code.}
 
 \subsubsection{\OptimizingKeil + \ARMMode}
 
@@ -53,20 +71,27 @@ FMA-инструкций\footnote{\url{https://en.wikipedia.org/wiki/FMA_instruc
 .text:0000009C 1E FF 2F E1                 BX      LR
 \end{lstlisting}
 
-А вот и функция \TT{f} скомпилированная компилятором Keil в режиме полной оптимизации (\Othree). Инструкция \MOV была
-соптимизирована и теперь \TT{MLA} использует все входящие регистры и помещает результат в R0, как раз, где
-вызываемая функция будет его читать и использовать.
+\IFRU{А вот и функция \TT{f} скомпилированная компилятором Keil в режиме полной оптимизации}
+{And here is \TT{f} function compiled by Keil compiler in full optimization mode} (\Othree).
+\IFRU{Инструкция \MOV была соптимизирована и теперь \TT{MLA} использует все входящие регистры 
+и помещает результат в \Rzero, как раз, где вызываемая функция будет его читать и использовать.}
+{\MOV instruction was optimized and now \TT{MLA} uses all input registers and place result into \Rzero, 
+exactly where calling function will read it and use.}
 
 \subsubsection{\OptimizingKeil + \ThumbMode}
 
 \begin{lstlisting}
-.text:0000005E             f
 .text:0000005E 48 43                       MULS    R0, R1
 .text:00000060 80 18                       ADDS    R0, R0, R2
 .text:00000062 70 47                       BX      LR
 \end{lstlisting}
 
-В режиме thumb, инструкция \TT{MLA} недоступна, так что компилятору пришлось сгенерировать код, делающий
-обе операции по отдельности. Первая инструкция \TT{MULS} умножает R0 на R1 оставляя результат в R0. 
-Вторая (\TT{ADDS}) складывает результат и R2, оставляя результат в R0.
+\IFRU{В режиме thumb, инструкция \TT{MLA} недоступна, так что компилятору пришлось сгенерировать код, делающий
+обе операции по отдельности.}
+{\TT{MLA} instruction is not available in thumb mode, so, compiler generates the code doing these two operations
+separately.}
+\IFRU{Первая инструкция \TT{MULS} умножает \Rzero на \Rone оставляя результат в \Rone.}
+{First \TT{MULS} instruction multiply \Rzero by \Rone leaving result in \Rone.}
+\IFRU{Вторая (\TT{ADDS}) складывает результат и \Rtwo, оставляя результат в \Rzero.}
+{Second (\TT{ADDS}) instruction adds result and \Rtwo leaving result in \Rzero.}
 
