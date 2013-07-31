@@ -2,38 +2,66 @@
 
 \lstinputlisting{08_switch/few_ARM_ARM_O3.asm}
 
-Мы снова не сможем сказать, глядя на этот код, был ли в оригинальном исходном коде switch() либо же несколько
-if()-в.
+\IFRU{Мы снова не сможем сказать, глядя на этот код, был ли в оригинальном исходном коде switch() 
+либо же несколько if()-в.}
+{Again, by investigating this code, we cannot say, was it switch() in the original source code, 
+or pack of if() statements.}
 
-Так или иначе, мы снова видим здесь инструкции с предикатами, например \TT{ADREQ} (\IT{(Equal)}), 
+\IFRU{Так или иначе, мы снова видим здесь инструкции с предикатами, например \ADREQ (\IT{(Equal)}), 
 которая будет исполняться только
-если $R0=0$, в таком случае, в R0 будет загружен адрес строки \IT{<<zero\textbackslash{}n>>}. 
-Следующая инструкция \TT{BEQ} (\IT{(Branch Equal)}) перенаправит
-исполнение на \TT{loc\_170}, если $R0=0$. 
-Кстати, наблюдательный читатель может спросить, сработает ли \TT{BEQ} нормально,
-ведь \TT{ADREQ} перед ним уже заполнила регистр \Rzero чем-то другим. 
-Сработает, потому что \TT{BEQ} проверяет флаги установленные
-инструкцией \CMP, а \TT{ADREQ} флаги никак не модифицирует.
+если $R0=0$, и тогда, в \Rzero будет загружен адрес строки \IT{<<zero\textbackslash{}n>>}.}
+{Anyway, we see here predicated instructions again, like \ADREQ (\IT{Equal}),
+which will be triggered only in $R0=0$ case, and the, address of \IT{<<zero\textbackslash{}n>>}
+string will be loaded into \Rzero.}
+\IFRU{Следующая инструкция}{The next instruction} \BEQ (\IT{(Branch Equal)})
+\IFRU{перенаправит исполнение на}{will redirect control flow to} \TT{loc\_170}, \IFRU{если}{if} $R0=0$.
+\IFRU{Кстати, наблюдательный читатель может спросить, сработает ли \BEQ нормально,
+ведь \ADREQ перед ним уже заполнила регистр \Rzero чем-то другим.}
+{By the way, observant reader may ask, will \BEQ triggered right, because \ADREQ before it
+is already filled \Rzero register with some other value.}
+\IFRU{Сработает, потому что \BEQ проверяет флаги установленные инструкцией \CMP, 
+а \ADREQ флаги никак не модифицирует.}
+{Yes, it will, because \BEQ checking flags set by \CMP instruction, and \ADREQ not modifying flags
+at all.}
 
-Кстати, в ARM имеется также для некоторых инструкций суффикс \IT{-S}, указывающий, что флаги модифицировать не нужно.
-Например, инструкция \TT{ADDS} сложит два числа, но флаги не изменит. Такие инструкции удобно использовать
-между \CMP где выставляются флаги и, например, инструкциями перехода, где флаги используются.
+\IFRU{Кстати, в ARM имеется также для некоторых инструкций суффикс \IT{-S}, указывающий, 
+что эта инструкция не будет модифицировать флаги.}
+{By the way, there are \IT{-S} suffix for some instructions in ARM, indicative that instruction 
+will not modify flags.}
+\IFRU{Например, инструкция}{For example} \TT{ADDS} \IFRU{сложит два числа, но флаги не изменит}{Will add
+two number, but flags will not be touched}.
+\IFRU{Такие инструкции удобно использовать
+между \CMP где выставляются флаги и, например, инструкциями перехода, где флаги используются.}
+{Such instructions are handy to use between \CMP where flags are set and, for example, conditional jumps,
+where flags are used.}
 
-Далее всё просто и знакомо. Вызов \printf один и в конце, мы уже рассматривали подобный трюк 
-здесь~\ref{ARM_B_to_printf}. К \printf{}-у в конце ведут три пути. 
+\IFRU{Далее всё просто и знакомо.}{Other instructions are already familiar to us.} 
+\IFRU{Вызов}{There are only one call to} \printf \IFRU{один, и в самом конце, 
+мы уже рассматривали подобный трюк здесь}{, at the end, and we already examined this trick here}
+~\ref{ARM_B_to_printf}. 
+\IFRU{К}{There are three paths to} \printf{}\IFRU{-у в конце ведут три пути}{at the end}.
 
-Обратите внимание на то что происходит
-если $a=2$ и если $a$ не попадает под сравниваемые константы. Инструкция \TT{``CMP R0, \#2''} нужна чтобы узнать
-$a=2$ или нет. Если это не так, то при помощи \TT{ADRNE} (\IT{Not Equal}) в \Rzero будет загружен указатель на 
-строку \IT{<<something unknown \textbackslash{}n>>},
-ведь $a$ уже было проверено на $0$ и $1$ до этого, и здесь $a$ точно не попадает под эти константы. 
-Ну а если $R0=2$,
-в R0 будет загружен указатель на строку \IT{<<two\textbackslash{}n>>} при помощи инструкции \TT{ADREQ}.
+\IFRU{Обратите внимание на то что происходит если $a=2$ и если $a$ не попадает под сравниваемые константы.}
+{Also pay attention to what is going on if $a=2$ and if $a$ is not in range of constants it's comparing against.}
+\IFRU{Инструкция }{}\TT{``CMP R0, \#2''} \IFRU{нужна чтобы узнать $a=2$ или нет}{instruction is needed here
+to know, if $a=2$ or not}.
+\IFRU{Если это не так, то при помощи \ADRNE (\IT{Not Equal}) в \Rzero будет загружен указатель на 
+строку \IT{<<something unknown \textbackslash{}n>>}, ведь $a$ уже было проверено на $0$ и $1$ до этого, 
+и здесь $a$ точно не попадает под эти константы.}
+{If it's not true, then \ADRNE will load pointer to the string \IT{<<something unknown \textbackslash{}n>>} 
+into \Rzero, because, $a$ was already
+checked before to be equal to $0$ or $1$, so we can be assured that $a$ is not equal to these numbers
+at this point.}
+\IFRU{Ну а если}{And if} $R0=2$, \IFRU{в \Rzero будет загружен указатель на строку}{a pointer to string} 
+\IT{<<two\textbackslash{}n>>} 
+\IFRU{при помощи инструкции \ADREQ}{will be loaded by \ADREQ into \Rzero}.
 
 \subsubsection{ARM: \OptimizingKeil + \ThumbMode}
 
 \lstinputlisting{08_switch/few_ARM_thumb_O3.asm}
 
-Как я уже писал, в thumb-режиме нет возможности \IT{присоеденять} предикаты к большинству инструкций,
-так что код вышел похожим на код x86, вполне понятный.
+\IFRU{Как я уже писал, в thumb-режиме нет возможности \IT{присоеденять} предикаты к большинству инструкций,
+так что thumb-код вышел похожим на код x86, вполне понятный.}
+{As I already mentioned, there are no feature of \IT{connecting} predicates to majority of functions in thumb
+mode, so the thumb-code here is somewhat like the x86 code, easily understandable.}
 
