@@ -34,7 +34,7 @@ typedef struct _SYSTEMTIME {
 
 \IFRU{Что в итоге}{We got} (MSVC 2010):
 
-\lstinputlisting{15_structs/15_0.asm}
+\lstinputlisting[caption=MSVC 2010]{15_structs/15_0.asm}
 
 \IFRU{Под структуру в стеке выделено 16 байт ~--- именно столько будет \TT{sizeof(WORD)*8}
 (в структуре 8 переменных с типом WORD).}
@@ -65,7 +65,7 @@ ahead, then writting current month, etc, etc.}
 \IFRU{Скомпилируем на этот раз с оптимизацией (\Ox) чтобы было проще увидеть то, что нам нужно.}
 {Let's compile it now with optimization (\Ox) so to easily see what we need.}
 
-\lstinputlisting{15_structs/15_4.asm}
+\lstinputlisting[caption=\Optimizing MSVC]{15_structs/15_4.asm}
 
 \IFRU{Итак, \TT{sizeof(SYSTEMTIME) = 16}, именно столько байт выделяется при помощи \TT{malloc()}. 
 Она возвращает указатель на только что выделенный блок памяти в \EAX, который копируется в \ESI. 
@@ -98,7 +98,7 @@ because there will be random noise otherwise, leaved from previous operations on
 
 \IFRU{Компилируем при помощи}{Let's compile it in} GCC 4.4.1:
 
-\IFRU{\lstinputlisting{15_structs/15_1_ru.asm}}{\lstinputlisting{15_structs/15_1_en.asm}}
+\IFRU{\lstinputlisting[caption=GCC 4.4.1]{15_structs/15_1_ru.asm}}{\lstinputlisting{15_structs/15_1_en.asm}}
 
 \IFRU{К сожалению, по какой-то причине, \IDA не сформировала названия локальных переменных в стеке. 
 Но так как мы уже опытные реверсеры :-) то можем обойтись и без этого в таком простом примере.}
@@ -139,7 +139,7 @@ Thus it's easier for CPU to access memory at aligned addresses and to cache data
 \IFRU{Попробуем скомпилировать тот же исходник с опцией}{Let's try to compile it with option} (\TT{/Zp1}) 
 (\IT{/Zp[n] pack structs on n-byte boundary}).
 
-\lstinputlisting{15_structs/15_5_msvc_Zp1.asm}
+\lstinputlisting[caption=MSVC /Zp1]{15_structs/15_5_msvc_Zp1.asm}
 
 \IFRU{Теперь структура занимает 10 байт и все \Tchar занимают по байту. Что это дает? 
 Экономию места. Недостаток ~--- процессор будет обращаться к этим полям не так эффективно 
@@ -215,7 +215,7 @@ How our compiler know to pack them on 1-byte alignment method?}
 
 \IFRU{Компилируем}{Let's compile} (MSVC 2010):
 
-\lstinputlisting{15_structs/15_6_msvc.asm}
+\lstinputlisting[caption=MSVC 2010]{15_structs/15_6_msvc.asm}
 
 \IFRU{Очень любопытный момент в том, что глядя на этот код на ассемблере, мы даже не видим, 
 что была использована какая-то еще другая структура внутри этой!
@@ -290,7 +290,7 @@ Then, we have a pointer to \TT{CPUID\_1\_EAX} structure and we point it to \EAX 
 
 \IFRU{Компилируем в MSVC 2008 с опцией \Ox}{Let's compile it in MSVC 2008 with \Ox option}:
 
-\lstinputlisting{15_structs/15_7_msvc_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008]{15_structs/15_7_msvc_Ox.asm}
 
 \IFRU{Инструкция \TT{SHR} сдвигает значение из \EAX на то количество бит, 
 которое нужно \IT{пропустить}, то есть, мы игнорируем некоторые биты \IT{справа}.}
@@ -304,7 +304,7 @@ leave only those bits in \EAX we need now.}
 
 \IFRU{Попробуем GCC 4.4.1 с опцией \Othree.}{Let's try GCC 4.4.1 with \Othree option.}
 
-\lstinputlisting{15_structs/15_7_gcc_O3.asm}
+\lstinputlisting[caption=\Optimizing GCC]{15_structs/15_7_gcc_O3.asm}
 
 \IFRU{Практически, то же самое. Единственное что стоит отметить это то, что GCC решил зачем-то объеденить 
 вычисление \TT{extended\_model\_id} и \TT{extended\_family\_id} в один блок, 
@@ -346,7 +346,8 @@ the whole number by \TT{$2^2$}, e.g., by 4.}
 
 \IFRU{Компилируем в MSVC 2008 без оптимизации:}{Let's compile in MSVC 2008 without optimization:}
 
-\IFRU{\lstinputlisting{15_structs/15_2_msvc_ru.asm}}{\lstinputlisting{15_structs/15_2_msvc_en.asm}}
+\lstinputlisting[caption=\NonOptimizing MSVC 2008]
+{\IFRU{15_structs/15_2_msvc_ru.asm}{15_structs/15_2_msvc_en.asm}}
 
 \IFRU{Слекга избыточно. В версии скомпиленной с флагом \Ox нет вызовов \TT{memcpy()}, 
 там работа происходит сразу с переменной f. Но по неоптимизированной версии будет проще понять.}
@@ -355,7 +356,8 @@ f variable is used directly. But it's easier to understand it all considering un
 
 \IFRU{А что сделает GCC 4.4.1 с опцией \TT{-O3}?}{What GCC 4.4.1 with \TT{-O3} will do?}
 
-\lstinputlisting{\IFRU{15_structs/15_2_gcc_O3_ru.asm}{15_structs/15_2_gcc_O3_en.asm}}
+\lstinputlisting[caption=\Optimizing GCC 4.4.1]
+{\IFRU{15_structs/15_2_gcc_O3_ru.asm}{15_structs/15_2_gcc_O3_en.asm}}
 
 \IFRU{Да, функция \TT{f()} в целом понятна. Однако, что интересно, еще при компиляции, 
 не взирая на мешанину с полями структуры, GCC умудрился вычислить результат функции \TT{f(1.234)} и 

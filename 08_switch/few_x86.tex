@@ -2,7 +2,7 @@
 
 \IFRU{Это дает в итоге}{Result} (MSVC 2010):
 
-\lstinputlisting{08_switch/8_2_msvc.asm}
+\lstinputlisting[caption=MSVC 2010]{08_switch/8_2_msvc.asm}
 
 \IFRU{Наша функция со switch()-ем, с небольшим количеством вариантов, 
 это практически аналог подобной конструкции:}
@@ -33,7 +33,7 @@ turned on (\Othree option).}
 \IFRU{Попробуем, включить оптимизацию кодегенератора}
 {Now let's turn on optimization in} MSVC (\Ox): \TT{cl 1.c /Fa1.asm /Ox}
 
-\lstinputlisting{08_switch/8_3_msvc.asm}
+\lstinputlisting[caption=MSVC]{08_switch/8_3_msvc.asm}
 
 \IFRU{Вот здесь уже все немного по-другому, причем не без грязных хаков.}
 {Here we can see even dirty hacks.}
@@ -44,8 +44,8 @@ turned on (\Othree option).}
 стал нулем) и первый условный переход \JE (\IT{Jump if Equal} или его синоним \JZ ~--- \IT{Jump if Zero}) 
 сработает на метку \TT{\$LN4@f}, где выводится сообщение \TT{'zero'}.
 Если первый переход не сработал, от значения отнимается по единице, 
-и если на какой-то стадии образуется в результате 0, то сработает соответствующий переход.}
-{First: \TT{a} is placed into \EAX and 0 subtracted from it. Sounds absurdly, but it may need to check if 
+и если на какой-то стадии образуется в результате $0$, то сработает соответствующий переход.}
+{First: \TT{a} is placed into \EAX and $0$ subtracted from it. Sounds absurdly, but it may need to check if 
 0 was in \EAX before? If yes, flag \ZF will be set (this also mean that subtracting from zero is zero) 
 and first conditional jump \JE (\IT{Jump if Equal} or synonym \JZ ~--- \IT{Jump if Zero}) will be triggered 
 and control flow passed to \TT{\$LN4@f} label, where \TT{'zero'} message is begin printed. 

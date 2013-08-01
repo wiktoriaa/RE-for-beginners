@@ -2,15 +2,15 @@
 
 \IFRU{Имеем в итоге}{We got} (MSVC 2010):
 
-\lstinputlisting{08_switch/8_5_msvc.asm}
+\lstinputlisting[caption=MSVC 2010]{08_switch/8_5_msvc.asm}
 
 \IFRU{Здесь происходит следующее: в теле функции есть набор вызовов \printf с разными аргументами. 
-Все они имеют, конечно же, адреса, а также внутренние символические метки, которые придумал им компилятор.
-Все эти метки складываются во внутреннюю таблицу \TT{\$LN11@f}.}
+Все они имеют, конечно же, адреса, а также внутренние символические метки, которые присвоил им компилятор.
+Помимо всего прочего, все эти метки складываются во внутреннюю таблицу \TT{\$LN11@f}.}
 {OK, what we see here is: there are a set of \printf calls with various arguments. 
-All them has not only addresses in process memory, but also internal symbolic labels generated 
+All them has not only addresses in process memory, but also internal symbolic labels assigned 
 by compiler. 
-All these labels are also places into \TT{\$LN11@f} internal table.}
+Besides, all these labels are also places into \TT{\$LN11@f} internal table.}
 
 \IFRU{В начале функции, если \TT{a} больше 4, то сразу происходит переход на метку \TT{\$LN1@f}, 
 где вызывается \printf с аргументом \TT{'something unknown'}.}
@@ -46,7 +46,7 @@ cache memory, etc, in much effective way if it is aligned.}
 
 \IFRU{Посмотрим что сгенерирует GCC 4.4.1}{Let's see what GCC 4.4.1 generate}:
 
-\lstinputlisting{08_switch/8_6_gcc.asm}
+\lstinputlisting[caption=GCC 4.4.1]{08_switch/8_6_gcc.asm}
 
 \IFRU{Практически то же самое, за исключением мелкого нюанса: аргумент из \TT{arg\_0} умножается на 4 
 при помощи сдвига влево на 2 бита (это почти то же самое что и умножение на 4)~\ref{SHR}. 

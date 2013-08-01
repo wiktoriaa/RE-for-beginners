@@ -6,7 +6,7 @@
 	push	ecx
 
 ; 'this is sphere. color=%d, radius=%d', 0aH, 00H	
-    push	OFFSET ??_C@_0CF@EFEDJLDC@this?5is?5sphere?4?5color?$DN?$CFd?0?5radius@
+	push	OFFSET ??_C@_0CF@EFEDJLDC@this?5is?5sphere?4?5color?$DN?$CFd?0?5radius@
 	call	_printf
 	add	esp, 12					; 0000000cH
 	ret	0

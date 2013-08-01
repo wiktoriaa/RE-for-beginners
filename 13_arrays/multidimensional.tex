@@ -36,13 +36,13 @@
 
 \IFRU{Попробуем}{Let's see}:
 
-\lstinputlisting{13_arrays/multi.c}
+\lstinputlisting[caption=\IFRU{простой пример}{simple example}]{13_arrays/multi.c}
 
 \subsubsection{x86}
 
 \IFRU{В итоге}{We got} (MSVC 2010):
 
-\lstinputlisting{13_arrays/multi_msvc.asm}
+\lstinputlisting[caption=MSVC 2010]{13_arrays/multi_msvc.asm}
 
 \IFRU{В принципе, ничего удивительного. В \TT{insert()} для вычисления адреса нужного элемента массива, 
 три входных аргумента перемножаются по формуле $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$, 
@@ -52,9 +52,7 @@
 by formula $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$ to represent array as multidimensional.
 Do not forget that \Tint type is 32-bit (4 bytes), so all coefficients should be multiplied by 4.}
 
-GCC 4.4.1:
-
-\lstinputlisting{13_arrays/multi_gcc.asm}
+\lstinputlisting[caption=GCC 4.4.1]{13_arrays/multi_gcc.asm}
 
 Компилятор GCC решил всё сделать немного иначе. 
 Для вычисления одной из операций ($30y$), GCC создал код, где нет самой операции умножения. 
@@ -62,16 +60,16 @@ GCC 4.4.1:
 Таким образом, для вычисления $30y$
 используется только операция сложения, операция битового сдвига и операция вычитания. Это работает быстрее.
 
-\subsubsection{ARM + \NonOptimizingXcode + режим thumb}
+\subsubsection{ARM + \NonOptimizingXcode + \ThumbMode}
 
-\lstinputlisting{13_arrays/multi_Xcode_thumb_O0_en.asm}
+\lstinputlisting[caption=\NonOptimizingXcode + \ThumbMode]{13_arrays/multi_Xcode_thumb_O0_en.asm}
 
 Неоптимизирующий LLVM сохраняет все переменные в локальном стеке, хотя это и не обязательно. 
 Адрес элемента массива вычисляется по уже рассмотренной формуле.
 
-\subsubsection{ARM + \OptimizingXcode + режим thumb}
+\subsubsection{ARM + \OptimizingXcode + \ThumbMode}
 
-\lstinputlisting{13_arrays/multi_Xcode_thumb_O3_en.asm}
+\lstinputlisting[caption=\OptimizingXcode + \ThumbMode]{13_arrays/multi_Xcode_thumb_O3_en.asm}
 
 Тут исползуются уже описанные трюки для замены умножения на операции сдвига, сложения и вычитания.
 

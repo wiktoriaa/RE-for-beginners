@@ -12,11 +12,11 @@
 {Let's compile it in MSVC 2008 with \Ox and \Obzero options and let's see \TT{box::dump()}, 
 \TT{solid\_object::dump()} and \TT{solid\_box::dump()} methods code:}
 
-\lstinputlisting{16_classes/classes3_1.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{16_classes/classes3_1.asm}
 
-\lstinputlisting{16_classes/classes3_2.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{16_classes/classes3_2.asm}
 
-\lstinputlisting{16_classes/classes3_3.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{16_classes/classes3_3.asm}
 
 \IFRU{Выходит, имеем такую разметку в памяти для всех трех классов:}
 {So, the memory layout for all three classes is:}
@@ -65,14 +65,14 @@
 \IFRU{Код методов \TT{box::get\_volume()} и \TT{solid\_object::get\_density()} тривиален:}
 {The code of \TT{box::get\_volume()} and \TT{solid\_object::get\_density()} methods is trivial:}
 
-\lstinputlisting{16_classes/classes3_4.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{16_classes/classes3_4.asm}
 
-\lstinputlisting{16_classes/classes3_5.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{16_classes/classes3_5.asm}
 
 \IFRU{А вот код метода \TT{solid\_box::get\_weight()} куда интереснее:}
 {But the code of \TT{solid\_box::get\_weight()} method is much more interesting:}
 
-\lstinputlisting{16_classes/classes3_6.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{16_classes/classes3_6.asm}
 
 \IFRU{\TT{get\_weight()} просто вызывает два метода, но для \TT{get\_volume()} он передает просто указатель на \TT{this}, а для \TT{get\_density()}, он передает указатель на \TT{this} сдвинутый на \IT{12} байт (либо \IT{0xC} байт), а там, 
 в разметке класса \TT{solid\_box}, как раз начинаются поля класса \TT{solid\_object}.}

@@ -2,7 +2,7 @@
 
 \subsubsection{\NonOptimizingXcode + \ARMMode}
 
-\lstinputlisting{10_strlen/xcode_ARM_O0_en.asm}
+\lstinputlisting[caption=\NonOptimizingXcode + \ARMMode]{10_strlen/xcode_ARM_O0_en.asm}
 
 Неоптимизирующий LLVM генерирует слишком много кода, зато на этом примере можно посмотреть, как функции работают
 с локальными переменными в стеке. В нашей программе локальных переменных две, это два указателя, \IT{eos} и \IT{str}.
@@ -43,9 +43,9 @@
 %\subsubsection{\NonOptimizingXcode + режим thumb}
 %Практически, точно такой же код.
 
-\subsubsection{\OptimizingXcode + режим thumb}
+\subsubsection{\OptimizingXcode + \ThumbMode}
 
-\lstinputlisting{10_strlen/xcode_thumb_O3.asm}
+\lstinputlisting[caption=\OptimizingXcode + \ThumbMode]{10_strlen/xcode_thumb_O3.asm}
 
 Оптимизирующий LLVM решил что под переменные eos и str выделять место в стеке не обязательно, и эти переменные можно хранить
 прямо в регистрах. Перед началом тела цикла, str будет находиться в R0, а eos --- в R1.
@@ -96,7 +96,7 @@
 
 \subsubsection{\OptimizingKeil{} + \ARMMode}
 
-\lstinputlisting{10_strlen/Keil_ARM_O3.asm}
+\lstinputlisting[caption=\OptimizingKeil + \ARMMode]{10_strlen/Keil_ARM_O3.asm}
 
 Практически то же самое что мы уже видели, за тем исключением что выражение $str - eos - 1$ может быть вычислено
 не в самом конце функции, а прямо в теле цикла. Суффикс \TT{-EQ}, как мы помним, означает что инструкция будет выполнена только
