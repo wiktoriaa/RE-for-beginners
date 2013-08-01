@@ -1,20 +1,32 @@
 \subsection{\IFRU{Таблица \TT{X\$KSMLRU} в}{\TT{X\$KSMLRU} table in} \oracle}
 
-\IFRU{В заметке}{There is a mention of some special table in the} \IT{Diagnosing and Resolving Error ORA-04031 on the Shared Pool or Other Memory Pools [Video] [ID 146599.1]} \IFRU{упоминается некая служебная таблица}{note}:
+\IFRU{В заметке}{There is a mention of some special table in the} \IT{Diagnosing and Resolving Error ORA-04031 
+on the Shared Pool or Other Memory Pools [Video] [ID 146599.1]} \IFRU{упоминается некая служебная таблица}{note}:
 
 \begin{framed}
 \begin{quotation}
-There is a fixed table called X\$KSMLRU that tracks allocations in the shared pool that cause other objects in the shared pool to be aged out. This fixed table can be used to identify what is causing the large allocation.
+There is a fixed table called X\$KSMLRU that tracks allocations in the shared pool that cause other objects 
+in the shared pool to be aged out. This fixed table can be used to identify what is causing the large allocation.
 
-If many objects are being periodically flushed from the shared pool then this will cause response time problems and will likely cause library cache latch contention problems when the objects are reloaded into the shared pool.
+If many objects are being periodically flushed from the shared pool then this will cause response time problems 
+and will likely cause library cache latch contention problems when the objects are reloaded into the shared pool.
 
-One unusual thing about the X\$KSMLRU fixed table is that the contents of the fixed table are erased whenever someone selects from the fixed table. This is done since the fixed table stores only the largest allocations that have occurred. The values are reset after being selected so that subsequent large allocations can be noted even if they were not quite as large as others that occurred previously. Because of this resetting, the output of selecting from this table should be carefully kept since it cannot be retrieved back after the query is issued.
+One unusual thing about the X\$KSMLRU fixed table is that the contents of the fixed table are erased whenever 
+someone selects from the fixed table. This is done since the fixed table stores only the largest allocations 
+that have occurred. The values are reset after being selected so that subsequent large allocations can be noted 
+even if they were not quite as large as others that occurred previously. Because of this resetting, the output 
+of selecting from this table should be carefully kept since it cannot be retrieved back after the query is issued.
 \end{quotation}
 \end{framed}
 
-\IFRU{Однако, как можно легко убедиться, эта системная таблица очищается всякий раз, когда кто-то делает запрос к ней.}{However, as it can be easily checked, this table's contents is cleared each time table querying.}
+\IFRU{Однако, как можно легко убедиться, эта системная таблица очищается всякий раз, когда кто-то делает запрос 
+к ней.}{However, as it can be easily checked, this table's contents is cleared each time table querying.}
 \IFRU{Сможем ли мы найти причину, почему это происходит?}{Are we able to find why?}
-\IFRU{Если вернуться к уже рассмотренным таблицам \TT{kqftab} и \TT{kqftap} полученных при помощи \oracletables, содержащим информацию о X\$-таблицах, мы узнаем что для того чтобы подготовить строки этой таблицы, вызывается ф-ция \TT{ksmlrs()}:}{Let's back to tables we already know: \TT{kqftab} and \TT{kqftap} which were generated with \oracletables help, containing all information about X\$-tables, now we can see here, the \TT{ksmlrs()} function is called to prepare this table's elements:}
+\IFRU{Если вернуться к уже рассмотренным таблицам \TT{kqftab} и \TT{kqftap} полученных при помощи \oracletables, 
+содержащим информацию о X\$-таблицах, мы узнаем что для того чтобы подготовить строки этой таблицы, 
+вызывается ф-ция \TT{ksmlrs()}:}{Let's back to tables we already know: \TT{kqftab} and \TT{kqftap} 
+which were generated with \oracletables help, containing all information about X\$-tables, now we can see here, 
+the \TT{ksmlrs()} function is called to prepare this table's elements:}
 
 \begin{lstlisting}
 kqftab_element.name: [X$KSMLRU] ?: [ksmlr] 0x4 0x64 0x11 0xc 0xffffc0bb 0x5
@@ -39,10 +51,15 @@ kqftap_element.fn1=ksmlrs
 kqftap_element.fn2=NULL
 \end{lstlisting}
 
-\IFRU{Действительно, при помощи \tracer легко убедиться что эта ф-ция вызывается каждый раз, когда мы обращаемся к таблице \TT{X\$KSMLRU}.}{Indeed, with the \tracer help it's easy to see that this function is called each time we query the \TT{X\$KSMLRU} table.}
+\IFRU{Действительно, при помощи \tracer легко убедиться что эта ф-ция вызывается каждый раз, когда мы обращаемся 
+к таблице \TT{X\$KSMLRU}.}{Indeed, with the \tracer help it's easy to see that this function is called each 
+time we query the \TT{X\$KSMLRU} table.}
 
-\IFRU{Здесь есть ссылки на ф-ции \TT{ksmsplu\_sp()} и \TT{ksmsplu\_jp()}, каждая из которых в итоге вызывает \TT{ksmsplu()}.}{Here we see a references to \TT{ksmsplu\_sp()} and \TT{ksmsplu\_jp()} functions, each of them call \TT{ksmsplu()} finally.}
-\IFRU{В конце ф-ции \TT{ksmsplu()} мы видим вызов \TT{memset()}:}{At the end of \TT{ksmsplu()} function we see a call to \TT{memset()}:}
+\IFRU{Здесь есть ссылки на ф-ции \TT{ksmsplu\_sp()} и \TT{ksmsplu\_jp()}, каждая из которых в итоге вызывает 
+\TT{ksmsplu()}.}{Here we see a references to \TT{ksmsplu\_sp()} and \TT{ksmsplu\_jp()} functions, each of 
+them call \TT{ksmsplu()} finally.}
+\IFRU{В конце ф-ции \TT{ksmsplu()} мы видим вызов \TT{memset()}:}{At the end of \TT{ksmsplu()} function we see 
+a call to \TT{memset()}:}
 
 \begin{lstlisting}
 ...
