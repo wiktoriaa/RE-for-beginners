@@ -1,2 +1,51 @@
-\subsubsection{ARM}
+\subsubsection{ARM + \OptimizingKeil + \ARMMode}
+
+\begin{lstlisting}[caption=\OptimizingKeil + \ARMMode]
+02 0C C0 E3          BIC     R0, R0, #0x200
+01 09 80 E3          ORR     R0, R0, #0x4000
+1E FF 2F E1          BX      LR
+\end{lstlisting}
+
+\TT{BIC} это ``логическое и'', аналог \AND в x86. \TT{ORR} это ``логическое или'', аналог \OR в x86.
+
+Пока всё понятно.
+
+\subsubsection{ARM + \OptimizingKeil + \ThumbMode}
+
+\begin{lstlisting}[caption=\OptimizingKeil + \ThumbMode]
+01 21 89 03          MOVS    R1, 0x4000
+08 43                ORRS    R0, R1
+49 11                ASRS    R1, R1, #5   ; generate 0x200 and place to R1
+88 43                BICS    R0, R1
+70 47                BX      LR
+\end{lstlisting}
+
+Вероятно, Keil решил что код в режиме thumb, получающий $0x200$ из $0x4000$, будет компактнее нежели код, 
+записывающий $0x200$ в какой-нибудь регистр. 
+
+Поэтому, при помощи инструкции \TT{ASRS} (арифметический сдвиг вправо),
+это значение вычисляется как $0x4000 \gg 5$.
+
+\label{anomaly:LLVM}
+\subsubsection{ARM + \OptimizingXcode + \ARMMode}
+
+\begin{lstlisting}[caption=\OptimizingXcode + \ARMMode]
+42 0C C0 E3          BIC             R0, R0, #0x4200
+01 09 80 E3          ORR             R0, R0, #0x4000
+1E FF 2F E1          BX              LR
+\end{lstlisting}
+
+Код, который был сгенерирован LLVM, на самом деле выглядел бы так:
+
+\begin{lstlisting}
+    REMOVE_BIT (rt, 0x4200);
+    SET_BIT (rt, 0x4000);
+\end{lstlisting}
+
+И он делает то же самое что нам нужно. Но почему $0x4200$? Возможно, это артефакт оптимизатора LLVM. 
+Можно сказать, ошибка оптимизатора компилятора, но создаваемый код все же работает верно.
+
+Об аномалиях компиляторов, подробнее читайте здесь~\ref{anomaly:Intel}.
+
+Для режима Thumb, \OptimizingXcode генерирует точно такой же код.
 
