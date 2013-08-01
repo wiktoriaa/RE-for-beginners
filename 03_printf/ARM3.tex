@@ -6,9 +6,9 @@ the 4 first arguments are passed in R0-R3 registers and remaining arguments ~---
 \IFRU{Это немного похоже на то как аргументы передаются в}{This resembling arguments passing scheme in} 
 fastcall~\ref{fastcall} \IFRU{или}{or} win64~\ref{sec:callingconventions_win64}.
 
-\subsubsection{\NonOptimizingKeil: \ARMMode}
+\subsubsection{\NonOptimizingKeil + \ARMMode}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=\NonOptimizingKeil + \ARMMode]
 .text:00000014             printf_main1
 .text:00000014 10 40 2D E9                 STMFD   SP!, {R4,LR}
 .text:00000018 03 30 A0 E3                 MOV     R3, #3
@@ -25,10 +25,10 @@ pointer to \printf format string in R0, then $1$ in R1, $2$ in R2 and $3$ in R3}
 
 \IFRU{Пока что, здесь нет ничего необычного}{Nothing unusual so far}.
 
-\subsubsection{\OptimizingKeil: \ARMMode}
+\subsubsection{\OptimizingKeil + \ARMMode}
 \label{ARM_B_to_printf}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=\OptimizingKeil + \ARMMode]
 .text:00000014                             EXPORT printf_main1
 .text:00000014             printf_main1
 .text:00000014 03 30 A0 E3                 MOV     R3, #3
@@ -68,9 +68,9 @@ after this call we are not planning to do anything}!
 \IFRU{Еще один похожий пример описан в секции}{Another similar example was described in} ``\SwitchCaseDefaultSectionName'' 
 \IFRU{, здесь}{section, here}~\ref{jump_to_last_printf}.
 
-\subsubsection{\OptimizingKeil: \ThumbMode}
+\subsubsection{\OptimizingKeil + \ThumbMode}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=\OptimizingKeil + \ThumbMode]
 .text:0000000C             printf_main1
 .text:0000000C 10 B5                       PUSH    {R4,LR}
 .text:0000000E 03 23                       MOVS    R3, #3
@@ -81,7 +81,7 @@ after this call we are not planning to do anything}!
 .text:0000001A 10 BD                       POP     {R4,PC}
 \end{lstlisting}
 
-\IFRU{Здесь нет особых отличий от неоптимизированного варианта для режима ARM}{There are no significant difference from 
-non-optimized code for ARM mode}.
+\IFRU{Здесь нет особых отличий от неоптимизированного варианта для режима ARM}
+{There are no significant difference from non-optimized code for ARM mode}.
 
 

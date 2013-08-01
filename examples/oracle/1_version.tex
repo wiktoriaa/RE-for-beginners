@@ -30,7 +30,7 @@ NLSRTL Version 11.2.0.1.0 - Production
 
 \IFRU{Ссылка на эту текстовую строку имеется в таблице \TT{kqfviw}, размещенной в этом же файле \TT{kqf.o}}{A reference to this text string we may find in \TT{kqfviw} table stored in the same file, \TT{kqf.o}}:
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=kqf.o]
 .rodata:0800C4A0 kqfviw          dd 0Bh                  ; DATA XREF: kqfchk:loc_8003A6D
 .rodata:0800C4A0                                         ; kqfgbn+34
 .rodata:0800C4A4                 dd offset _2__STRING_10102_0 ; "GV$WAITSTAT"
@@ -127,7 +127,7 @@ select inst_id, banner from x$version
 
 \IFRU{Попробуем поискать текст}{Let's also try to search the text} \TT{select  BANNER from GV\$VERSION where inst\_id = USERENV('Instance')} \IFRU{в файле \TT{kqf.o} и находим ссылку на него в таблице \TT{kqfvip}}{in \TT{kqf.o} file and we find it in \TT{kqfvip} table}:
 
-.\begin{lstlisting}
+.\begin{lstlisting}[caption=kqf.o]
 rodata:080185A0 kqfvip          dd offset _2__STRING_11126_0 ; DATA XREF: kqfgvcn+18
 .rodata:080185A0                                         ; kqfgvt+F
 .rodata:080185A0                                         ; "select inst_id,decode(indx,1,'data bloc"...
@@ -149,11 +149,17 @@ rodata:080185A0 kqfvip          dd offset _2__STRING_11126_0 ; DATA XREF: kqfgvc
 .rodata:08019594                 dd offset kqfv199_c_0
 \end{lstlisting}
 
-\IFRU{Таблица, по всей видимости, имеет 4 поля в каждом элементе. Кстати, здесь также 1023 элемента.}{The table appear to have 4 fields in each element. By the way, there are 1023 elements too.}
-\IFRU{Второе поле указывает на другую таблицу, содержащую поля этого \IT{fixed view}.}{The second field pointing to another table, containing table fields for this \IT{fixed view}.}
-\IFRU{Для \TT{V\$VERSION}, эта таблица только из двух элементов, первый это 6 и второй это строка \TT{BANNER} (число это длина строки) и далее \IT{терминирующий} элемент содержащий 0 и \IT{нулевую} Си-строку:}{As of \TT{V\$VERSION}, this table contain only two elements, first is 6 and second is \TT{BANNER} string (the number (6) is this string length) and after, \IT{terminating} element contain 0 and \IT{null} C-string:}
+\IFRU{Таблица, по всей видимости, имеет 4 поля в каждом элементе. Кстати, здесь также 1023 элемента.}
+{The table appear to have 4 fields in each element. By the way, there are 1023 elements too.}
+\IFRU{Второе поле указывает на другую таблицу, содержащую поля этого \IT{fixed view}.}
+{The second field pointing to another table, containing table fields for this \IT{fixed view}.}
+\IFRU{Для \TT{V\$VERSION}, эта таблица только из двух элементов, первый это $6$ и второй это строка 
+\TT{BANNER} (число это длина строки) и далее \IT{терминирующий} элемент содержащий $0$ и \IT{нулевую} 
+Си-строку:}{As of \TT{V\$VERSION}, this table contain only two elements, first is $6$ and second is 
+\TT{BANNER} string (the number ($6$) is this string length) and after, \IT{terminating} element contain 
+$0$ and \IT{null} C-string:}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=kqf.o]
 .rodata:080BBAC4 kqfv133_c_0     dd 6                    ; DATA XREF: .rodata:08019574
 .rodata:080BBAC8                 dd offset _2__STRING_5017_0 ; "BANNER"
 .rodata:080BBACC                 dd 0
@@ -165,7 +171,7 @@ rodata:080185A0 kqfvip          dd offset _2__STRING_11126_0 ; DATA XREF: kqfgvc
 \IFRU{Я написал программу \oracletables, которая собирает всю эту информацию из объектных файлов от \oracle под Linux.}{So I wrote an \oracletables program, so to gather all this information from \oracle for Linux object files.}
 \IFRU{Для \TT{V\$VERSION}, мы можем найти следующее:}{For \TT{V\$VERSION}, we may find this:}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=\IFRU{Результат работы}{Result of} \OracleTablesName]
 kqfviw_element.viewname: [V$VERSION] ?: 0x3 0x43 0x1 0xffffc085 0x4
 kqfvip_element.statement: [select  BANNER from GV$VERSION where inst_id = USERENV('Instance')]
 kqfvip_element.params:
@@ -174,7 +180,7 @@ kqfvip_element.params:
 
 \IFRU{И}{And}:
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=\IFRU{Результат работы}{Result of} \OracleTablesName]
 kqfviw_element.viewname: [GV$VERSION] ?: 0x3 0x26 0x2 0xffffc192 0x1
 kqfvip_element.statement: [select inst_id, banner from x$version]
 kqfvip_element.params:
@@ -202,7 +208,7 @@ Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
 
 \IFRU{Бегло листая содержимое файла \TT{kqf.o} в \IDA мы можем увидеть еще одну таблицу где есть ссылка на строку \TT{X\$VERSION}, это \TT{kqftab}:}{While scrolling \TT{kqf.o} in \IDA we may spot another table containing pointer to \TT{X\$VERSION} string, this is \TT{kqftab}:}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=kqf.o]
 .rodata:0803CAC0                 dd 9                    ; element number 0x1f6
 .rodata:0803CAC4                 dd offset _2__STRING_13113_0 ; "X$VERSION"
 .rodata:0803CAC8                 dd 4
@@ -235,7 +241,7 @@ Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
 
 \IFRU{Таблицу с очень похожим названием мы можем найти в}{The table named similarly can be found in} \TT{kqf.o}:
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=kqf.o]
 .rodata:0808C360 kqvt_c_0        kqftap_param <4, offset _2__STRING_19_0, 917h, 0, 0, 0, 4, 0, 0>
 .rodata:0808C360                                         ; DATA XREF: .rodata:08042680
 .rodata:0808C360                                         ; "ADDR"
@@ -248,7 +254,7 @@ Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
 \IFRU{Она содержит информацию об именах полей в таблице \TT{X\$VERSION}.}{It contain information about all fields in the \TT{X\$VERSION} table.}
 \IFRU{Единственная ссылка на эту таблицу имеется в таблице \TT{kqftap}:}{The only reference to this table present in \TT{kqftap} table:}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=kqf.o]
 .rodata:08042680                 kqftap_element <0, offset kqvt_c_0, offset kqvrow, 0> ; element 0x1f6
 \end{lstlisting}
 
@@ -258,7 +264,7 @@ Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
 
 \IFRU{Я сделал так чтобы моя программа \oracletables могла дампить и эти таблицы. Для \TT{X\$VERSION} получается:}{So I added these tables to my \oracletables utility too. For \TT{X\$VERSION} I've got:}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=\IFRU{Результат работы}{Result of} \OracleTablesName]
 kqftab_element.name: [X$VERSION] ?: [kqvt] 0x4 0x4 0x4 0xc 0xffffc075 0x3
 kqftap_param.name=[ADDR] ?: 0x917 0x0 0x0 0x0 0x4 0x0 0x0
 kqftap_param.name=[INDX] ?: 0xb02 0x0 0x0 0x0 0x4 0x0 0x0
