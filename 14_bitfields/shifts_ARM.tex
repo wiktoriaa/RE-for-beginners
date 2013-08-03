@@ -1,0 +1,50 @@
+\subsubsection{ARM + \OptimizingXcode + \ARMMode}
+
+\begin{lstlisting}[caption=\OptimizingXcode + \ARMMode]
+                MOV             R1, R0
+                MOV             R0, #0
+                MOV             R2, #1
+                MOV             R3, R0
+loc_2E54
+                TST             R1, R2,LSL R3 ; set flags according to R1 & (R2<<R3)
+                ADD             R3, R3, #1    ; R3++
+                ADDNE           R0, R0, #1    ; if ZF flag is cleared by TST, R0++
+                CMP             R3, #32
+                BNE             loc_2E54
+                BX              LR
+\end{lstlisting}
+
+\TT{TST} это то же что и \TEST в x86.
+
+Как я уже указывал~\ref{shifts_in_ARM_mode}, в режиме ARM нет отдельной инструкции для сдвигов, 
+но модификаторами 
+LSL (\IT{Logical Shift Left}), 
+LSR (\IT{Logical Shift Right}), 
+ASR (\IT{Arithmetic Shift Right}), 
+ROR (\IT{Rotate Right}) и 
+RRX (\IT{Rotate Right with Extend}) можно дополнять некоторые инструкции, такие как \MOV, \TT{TST},
+\CMP, \ADD, \SUB, \TT{RSB}\footnote{Эти инструкции также называются ``data processing Instructions''}.
+
+Таким образом, инструкция \TT{``TST R1, R2,LSL R3''} здесь работает как $R1 \land (R2 \ll R3)$.
+
+\subsubsection{ARM + \OptimizingXcode + \ThumbTwoMode}
+
+Почти такое же, только там применяется пара инструкций \TT{LSL.W}/\TT{TST} вместо одной \TT{TST},
+ведь в режиме thumb нельзя добавлять указывать модификатор \TT{LSL} прямо в \TT{TST}.
+
+\begin{lstlisting}
+                MOV             R1, R0
+                MOVS            R0, #0
+                MOV.W           R9, #1
+                MOVS            R3, #0
+loc_2F7A
+                LSL.W           R2, R9, R3
+                TST             R2, R1
+                ADD.W           R3, R3, #1
+                IT NE
+                ADDNE           R0, #1
+                CMP             R3, #32
+                BNE             loc_2F7A
+                BX              LR
+\end{lstlisting}
+
