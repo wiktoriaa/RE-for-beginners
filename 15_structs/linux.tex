@@ -1,0 +1,64 @@
+\subsection{Linux}
+
+\IFRU{В Линуксе, для примера, возьем структуру \TT{tm} из \TT{time.h}:}
+{As of Linux, let's take \TT{tm} structure from \TT{time.h} for example:}
+
+\lstinputlisting{15_structs/GCC_tm.c}
+
+\IFRU{Компилируем при помощи}{Let's compile it in} GCC 4.4.1:
+
+\IFRU{\lstinputlisting[caption=GCC 4.4.1]{15_structs/GCC_tm_ru.asm}}{\lstinputlisting{15_structs/GCC_tm_en.asm}}
+
+\IFRU{К сожалению, по какой-то причине, \IDA не сформировала названия локальных переменных в стеке. 
+Но так как мы уже опытные реверсеры :-) то можем обойтись и без этого в таком простом примере.}
+{Somehow, \IDA didn't created local variables names in local stack.
+But since we already experienced reverse engineers :-) we may do it without this information in 
+this simple example.}
+
+\IFRU{Обратите внимание на \TT{lea edx, [eax+76Ch]} ~--- эта инструкция прибавляет $0x76C$ к \EAX, 
+но не модифицирует флаги. См. также соответствующий раздел об инструкции \LEA{}~\ref{sec:LEA}.}
+{Please also pay attention to \TT{lea edx, [eax+76Ch]} ~--- this instruction just adding $0x76C$ to \EAX,
+but not modify any flags. See also relevant section about \LEA{}~\ref{sec:LEA}.}
+
+Чтобы проиллюстрировать то что структура это просто набор переменных лежащих в одном месте, переделаем немного
+пример, заглянув предварительно в файл time.h:
+
+\begin{lstlisting}[caption=time.h]
+struct tm
+{
+  int	tm_sec;
+  int	tm_min;
+  int	tm_hour;
+  int	tm_mday;
+  int	tm_mon;
+  int	tm_year;
+  int	tm_wday;
+  int	tm_yday;
+  int	tm_isdst;
+};
+\end{lstlisting}
+
+\lstinputlisting{15_structs/GCC_tm2.c}
+
+Обратите внимание на то что в \TT{localtime\_r} передается указатель именно на \TT{tm\_sec}, 
+т.е., на первый элемент ``структуры''.
+
+В итоге:
+
+\lstinputlisting[caption=GCC 4.7.3]{15_structs/GCC_tm2.asm}
+
+Этот код почти идентичен уже рассмотренному, и нельзя сказать, была ли структура
+в оригинальном исходном коде либо набор переменных.
+
+И это работает. Однако, в реальности так лучше не делать. Обычно, компилятор располагает переменные в локальном
+стеке в том же порядке, в котором они объявляются в функции. Тем не менее, никакой гарантии нет.
+
+Я выбрал именно этот пример для иллюстрации, потому что члены структуры имеют тип \Tint, а члены структуры
+\TT{SYSTEMTIME} ~--- 16-битные \TT{WORD}, и если их объявлять так же, то они будут выровнены по 32-битной границе 
+и ничего не выйдет (потому что \TT{GetSystemTime()} заполнит их неверно). Читайте об этом в следующей секции
+``\StructurePackingSectionName''.
+
+Так что, структура это просто набор переменных лежащих в одном месте, рядом. Я мог бы сказать что структура
+это такой синтаксический сахар, заставляющий компилятор удерживать их в одном месте. Впрочем, я не специалист
+по языкам программирования, так что, скорее всего, ошибаюсь с этим термином.
+

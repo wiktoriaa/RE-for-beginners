@@ -1,0 +1,119 @@
+\subsection{\StructurePackingSectionName}
+
+\IFRU{Достаточно немаловажный момент, это упаковка полей в структурах\footnote{См.также: \URLWPDA}.}
+{One important thing is fields packing in structures\footnote{See also: \URLWPDA}.}
+
+\IFRU{Возьмем простой пример:}{Let's take a simple example:}
+
+\lstinputlisting{15_structs/15_5.c}
+
+\IFRU{Как видно, мы имеем два поля \Tchar (занимающий один байт) и еще два ~--- \Tint (по 4 байта).}
+{As we see, we have two \Tchar fields (each is exactly one byte) and two more ~--- \Tint (each - 4 bytes).}
+
+\IFRU{Компилируется это все в:}{That's all compiling into:}
+
+\lstinputlisting{15_structs/15_5.asm}
+
+\IFRU{Мы видим здесь что адрес каждого поля в структуре выравнивается по 4-байтной границе. 
+Так что каждый \Tchar здесь занимает те же 4 байта что и \Tint. Зачем? 
+Затем что процессору удобнее обращаться по таким адресам и кешировать данные из памяти.}
+{As we can see, each field's address is aligned by 4-bytes border.
+That's why each \Tchar using 4 bytes here, like \Tint. Why?
+Thus it's easier for CPU to access memory at aligned addresses and to cache data from it.}
+
+\IFRU{Но это не экономично по размеру данных.}{However, it's not very economical in size sense.}
+
+\IFRU{Попробуем скомпилировать тот же исходник с опцией}{Let's try to compile it with option} (\TT{/Zp1}) 
+(\IT{/Zp[n] pack structs on n-byte boundary}).
+
+\lstinputlisting[caption=MSVC /Zp1]{15_structs/15_5_msvc_Zp1.asm}
+
+\IFRU{Теперь структура занимает 10 байт и все \Tchar занимают по байту. Что это дает? 
+Экономию места. Недостаток ~--- процессор будет обращаться к этим полям не так эффективно 
+по скорости как мог бы.}
+{Now the structure takes only 10 bytes and each \Tchar value takes 1 byte. What it give to us?
+Size economy. And as drawback ~--- CPU will access these fields without maximal performance it can.}
+
+\IFRU{Как нетрудно догадаться, если структура используется много в каких исходниках и объектных файлах, 
+все они должны быть откомпилированы с одним и тем же соглашением об упаковке структур.}
+{As it can be easily guessed, if the structure is used in many source and object files,
+all these should be compiled with the same convention about structures packing.}
+
+\newcommand{\FNURLMSDNZP}{\footnote{\href{http://msdn.microsoft.com/en-us/library/ms253935.aspx}
+{MSDN: Working with Packing Structures}}}
+\newcommand{\FNURLGCCPC}{\footnote{\href{http://gcc.gnu.org/onlinedocs/gcc/Structure_002dPacking-Pragmas.html}
+{Structure-Packing Pragmas}}}
+
+\IFRU{Помимо ключа MSVC \TT{/Zp}, указывающего, по какой границе упаковывать поля структур, есть также 
+опция компилятора \TT{\#pragma pack}, её можно указывать прямо в исходнике. 
+Это справедливо и для MSVC\FNURLMSDNZP и GCC\FNURLGCCPC{}.}
+{Aside from MSVC \TT{/Zp} option which set how to align each structure field, here is also
+\TT{\#pragma pack} compiler option, it can be defined right in source code.
+It's available in both MSVC\FNURLMSDNZP and GCC\FNURLGCCPC{}.}
+
+\IFRU{Давайте теперь вернемся к \TT{SYSTEMTIME}, которая состоит из 16-битных полей. 
+Откуда наш компилятор знает что их надо паковать по однобайтной границе?}
+{Let's back to \TT{SYSTEMTIME} structure consisting in 16-bit fields.
+How our compiler know to pack them on 1-byte alignment method?}
+
+\IFRU{В файле \TT{WinNT.h} попадается такое:}{\TT{WinNT.h} file has this:}
+
+\begin{lstlisting}[caption=WinNT.h]
+#include "pshpack1.h"
+\end{lstlisting}
+
+\IFRU{И такое:}{And this:}
+
+\begin{lstlisting}[caption=WinNT.h]
+#include "pshpack4.h"                   // 4 byte packing is the default
+\end{lstlisting}
+
+\IFRU{Сам файл PshPack1.h выглядит так:}{The file PshPack1.h looks like:}
+
+\begin{lstlisting}[caption=PshPack1.h]
+#if ! (defined(lint) || defined(RC_INVOKED))
+#if ( _MSC_VER >= 800 && !defined(_M_I86)) || defined(_PUSHPOP_SUPPORTED)
+#pragma warning(disable:4103)
+#if !(defined( MIDL_PASS )) || defined( __midl )
+#pragma pack(push,1)
+#else
+#pragma pack(1)
+#endif
+#else
+#pragma pack(1)
+#endif
+#endif /* ! (defined(lint) || defined(RC_INVOKED)) */
+\end{lstlisting}
+
+\IFRU{Собственно, так и задается компилятору, как паковать объявленные после \TT{\#pragma pack} структуры.}
+{That's how compiler will pack structures defined after \TT{\#pragma pack}.}
+
+\subsection{\IFRU{Вложенные структуры}{Nested structures}}
+
+\IFRU{Теперь, как насчет ситуаций, когда одна структура определяет внутри себя еще одну структуру?}
+{Now what about situations when one structure define another structure inside?}
+
+\lstinputlisting{15_structs/15_6.c}
+
+\dots \IFRU{в этом случае, оба поля \TT{inner\_struct} просто будут располагаться между полями a,b и d,e в 
+\TT{outer\_struct}.}
+{in this case, both \TT{inner\_struct} fields will be placed between a,b and d,e fields of
+\TT{outer\_struct}.}
+
+\IFRU{Компилируем}{Let's compile} (MSVC 2010):
+
+\lstinputlisting[caption=MSVC 2010]{15_structs/15_6_msvc.asm}
+
+\IFRU{Очень любопытный момент в том, что глядя на этот код на ассемблере, мы даже не видим, 
+что была использована какая-то еще другая структура внутри этой!
+Так что, пожалуй, можно сказать, что все вложенные структуры в итоге разворачиваются в одну, \IT{линейную} 
+или \IT{одномерную} структуру.}
+{One curious point here is that by looking onto this assembly code, we do not even see that
+another structure was used inside of it!
+Thus, we would say, nested structures are finally unfolds into \IT{linear} or \IT{one-dimensional} structure.}
+
+\IFRU{Конечно, если заменить объявление \TT{struct inner\_struct c;} на \TT{struct inner\_struct *c;} 
+(объявляя таким образом указатель), ситауция будет совсем иная.}
+{Of course, if to replace \TT{struct inner\_struct c;} declaration to \TT{struct inner\_struct *c;} 
+(thus making a pointer here) situation will be significally different.}
+
