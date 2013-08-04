@@ -10,7 +10,8 @@ void main()
     GetSystemTime (t);
 
     printf ("%04d-%02d-%02d %02d:%02d:%02d\n",
-        t[0], t[1], t[3], t[4], t[5], t[6]);
+        t[0] /* wYear */, t[1] /* wMonth */, t[3] /* wDay */, 
+        t[4] /* wHour */, t[5] /* wMinute */, t[6] /* wSecond */);
 
     free (t);
 
