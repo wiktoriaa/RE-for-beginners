@@ -43,7 +43,7 @@ register:}
 {MSVC 2010 has \CPUID macro, but GCC 4.4.1 ~--- hasn't.
 So let's make this function by yourself for GCC, using its built-in assembler\FNGCCAS.}
 
-\lstinputlisting{15_structs/15_7.c}
+\lstinputlisting{15_structs/CPUID.c}
 
 \IFRU{После того как \CPUID заполнит \EAX/\EBX/\ECX/\EDX, у нас они отразятся в массиве \TT{b[]}. 
 Затем, мы имеем указатель на структуру \TT{CPUID\_1\_EAX}, и мы указываем его на значение 
@@ -58,7 +58,7 @@ Then, we have a pointer to \TT{CPUID\_1\_EAX} structure and we point it to \EAX 
 
 \IFRU{Компилируем в MSVC 2008 с опцией \Ox}{Let's compile it in MSVC 2008 with \Ox option}:
 
-\lstinputlisting[caption=\Optimizing MSVC 2008]{15_structs/15_7_msvc_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008]{15_structs/CPUID_msvc_Ox.asm}
 
 \IFRU{Инструкция \TT{SHR} сдвигает значение из \EAX на то количество бит, 
 которое нужно \IT{пропустить}, то есть, мы игнорируем некоторые биты \IT{справа}.}
@@ -72,7 +72,7 @@ leave only those bits in \EAX we need now.}
 
 \IFRU{Попробуем GCC 4.4.1 с опцией \Othree.}{Let's try GCC 4.4.1 with \Othree option.}
 
-\lstinputlisting[caption=\Optimizing GCC]{15_structs/15_7_gcc_O3.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.4.1]{15_structs/CPUID_gcc_O3.asm}
 
 \IFRU{Практически, то же самое. Единственное что стоит отметить это то, что GCC решил зачем-то объеденить 
 вычисление \TT{extended\_model\_id} и \TT{extended\_family\_id} в один блок, 
@@ -100,7 +100,7 @@ But will we able to work with these fields directly? Let's try with \Tfloat.}
 
 \footnotetext{\IFRU{иллюстрация взята из}{illustration taken from} wikipedia}
 
-\lstinputlisting{15_structs/15_2_en.c}
+\lstinputlisting{15_structs/float_en.c}
 
 \IFRU{Структура \TT{float\_as\_struct} занимает в памяти столько же места сколько и \Tfloat, 
 то есть 4 байта или 32 бита.}
@@ -115,7 +115,7 @@ the whole number by \TT{$2^2$}, e.g., by 4.}
 \IFRU{Компилируем в MSVC 2008 без оптимизации:}{Let's compile in MSVC 2008 without optimization:}
 
 \lstinputlisting[caption=\NonOptimizing MSVC 2008]
-{\IFRU{15_structs/15_2_msvc_ru.asm}{15_structs/15_2_msvc_en.asm}}
+{\IFRU{15_structs/float_msvc_ru.asm}{15_structs/float_msvc_en.asm}}
 
 \IFRU{Слекга избыточно. В версии скомпиленной с флагом \Ox нет вызовов \TT{memcpy()}, 
 там работа происходит сразу с переменной f. Но по неоптимизированной версии будет проще понять.}
@@ -125,7 +125,7 @@ f variable is used directly. But it's easier to understand it all considering un
 \IFRU{А что сделает GCC 4.4.1 с опцией \TT{-O3}?}{What GCC 4.4.1 with \TT{-O3} will do?}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.1]
-{\IFRU{15_structs/15_2_gcc_O3_ru.asm}{15_structs/15_2_gcc_O3_en.asm}}
+{\IFRU{15_structs/float_gcc_O3_ru.asm}{15_structs/float_gcc_O3_en.asm}}
 
 \IFRU{Да, функция \TT{f()} в целом понятна. Однако, что интересно, еще при компиляции, 
 не взирая на мешанину с полями структуры, GCC умудрился вычислить результат функции \TT{f(1.234)} и 

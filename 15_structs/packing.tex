@@ -5,14 +5,16 @@
 
 \IFRU{Возьмем простой пример:}{Let's take a simple example:}
 
-\lstinputlisting{15_structs/15_5.c}
+\lstinputlisting{15_structs/packing.c}
 
 \IFRU{Как видно, мы имеем два поля \Tchar (занимающий один байт) и еще два ~--- \Tint (по 4 байта).}
 {As we see, we have two \Tchar fields (each is exactly one byte) and two more ~--- \Tint (each - 4 bytes).}
 
+\subsubsection{x86}
+
 \IFRU{Компилируется это все в:}{That's all compiling into:}
 
-\lstinputlisting{15_structs/15_5.asm}
+\lstinputlisting{15_structs/packing.asm}
 
 \IFRU{Мы видим здесь что адрес каждого поля в структуре выравнивается по 4-байтной границе. 
 Так что каждый \Tchar здесь занимает те же 4 байта что и \Tint. Зачем? 
@@ -26,7 +28,7 @@ Thus it's easier for CPU to access memory at aligned addresses and to cache data
 \IFRU{Попробуем скомпилировать тот же исходник с опцией}{Let's try to compile it with option} (\TT{/Zp1}) 
 (\IT{/Zp[n] pack structs on n-byte boundary}).
 
-\lstinputlisting[caption=MSVC /Zp1]{15_structs/15_5_msvc_Zp1.asm}
+\lstinputlisting[caption=MSVC /Zp1]{15_structs/packing_msvc_Zp1.asm}
 
 \IFRU{Теперь структура занимает 10 байт и все \Tchar занимают по байту. Что это дает? 
 Экономию места. Недостаток ~--- процессор будет обращаться к этим полям не так эффективно 
@@ -88,32 +90,26 @@ How our compiler know to pack them on 1-byte alignment method?}
 \IFRU{Собственно, так и задается компилятору, как паковать объявленные после \TT{\#pragma pack} структуры.}
 {That's how compiler will pack structures defined after \TT{\#pragma pack}.}
 
-\subsection{\IFRU{Вложенные структуры}{Nested structures}}
+\subsubsection{ARM + \OptimizingKeil + \ThumbMode}
 
-\IFRU{Теперь, как насчет ситуаций, когда одна структура определяет внутри себя еще одну структуру?}
-{Now what about situations when one structure define another structure inside?}
+\lstinputlisting[caption=\OptimizingKeil + \ThumbMode]{15_structs/packing_Keil_thumb.asm}
 
-\lstinputlisting{15_structs/15_6.c}
+Как мы помним, передается не указатель на структуру, а сама структура, а так как в ARM первые 4 аргумента
+функции передаются через регистры, то поля структуры передаются через \TT{R0-R3}.
 
-\dots \IFRU{в этом случае, оба поля \TT{inner\_struct} просто будут располагаться между полями a,b и d,e в 
-\TT{outer\_struct}.}
-{in this case, both \TT{inner\_struct} fields will be placed between a,b and d,e fields of
-\TT{outer\_struct}.}
+Инструкция \TT{LDRB} загружает один байт из памяти и расширяет до 32-бит учитывая знак. Это похоже на 
+инструкцию \MOVSX в x86. Она применяется дла загрузки полей $a$ и $c$ из структуры.
 
-\IFRU{Компилируем}{Let's compile} (MSVC 2010):
+Еще что бросается в глаза, так это то что вместо эпилога функции, переход на эпилог другой функции!
+Действительно, то была совсем другая, не относящаяся к этой, функция, однако, она имела точно такой же
+эпилог (видимо, тоже хранила в стеке 5 локальных переменных ($5*4=0x14$)). К тому же, она находится рядом
+(обратите внимание на адреса). Действительно, нет никакой разницы, какой эпилог исполнять, если он тот же.
+Keil решил сделать так, вероятно, из-за экономии. Эпилог занимает 4 байта, а переход ~--- 2.
 
-\lstinputlisting[caption=MSVC 2010]{15_structs/15_6_msvc.asm}
+\subsubsection{ARM + \OptimizingXcode + \ThumbTwoMode}
 
-\IFRU{Очень любопытный момент в том, что глядя на этот код на ассемблере, мы даже не видим, 
-что была использована какая-то еще другая структура внутри этой!
-Так что, пожалуй, можно сказать, что все вложенные структуры в итоге разворачиваются в одну, \IT{линейную} 
-или \IT{одномерную} структуру.}
-{One curious point here is that by looking onto this assembly code, we do not even see that
-another structure was used inside of it!
-Thus, we would say, nested structures are finally unfolds into \IT{linear} or \IT{one-dimensional} structure.}
+\lstinputlisting[caption=\OptimizingXcode + \ThumbTwoMode]{15_structs/packing_Xcode_thumb.asm}
 
-\IFRU{Конечно, если заменить объявление \TT{struct inner\_struct c;} на \TT{struct inner\_struct *c;} 
-(объявляя таким образом указатель), ситауция будет совсем иная.}
-{Of course, if to replace \TT{struct inner\_struct c;} declaration to \TT{struct inner\_struct *c;} 
-(thus making a pointer here) situation will be significally different.}
+\TT{SXTB} (\IT{Signed Extend Byte}) это так же аналог \MOVSX в x86, только работает не с памятью,
+а с регистром. Всё остальное ~--- так же.
 

@@ -1,4 +1,6 @@
-\subsection{Linux}
+\subsection{struct tm}
+
+\subsubsection{Linux}
 
 \IFRU{В Линуксе, для примера, возьем структуру \TT{tm} из \TT{time.h}:}
 {As of Linux, let's take \TT{tm} structure from \TT{time.h} for example:}
@@ -76,4 +78,17 @@ In file included from GCC_tm2.c:2:0:
 Так что, структура это просто набор переменных лежащих в одном месте, рядом. Я мог бы сказать что структура
 это такой синтаксический сахар, заставляющий компилятор удерживать их в одном месте. Впрочем, я не специалист
 по языкам программирования, так что, скорее всего, ошибаюсь с этим термином.
+
+\subsubsection{ARM + \OptimizingKeil + \ThumbMode}
+
+Этот же пример:
+
+\lstinputlisting[caption=\OptimizingKeil + \ThumbMode]{15_structs/tm_ARM_keil_thumb.asm}
+
+\subsubsection{ARM + \OptimizingXcode + \ThumbTwoMode}
+
+\IDA ``узнала'' структуру tm (потому что \IDA ``знает'' типы аргументов библиотечных функций, 
+таких как \TT{localtime\_r()}), поэтому показала здесь обращения к элементам структуры.
+
+\lstinputlisting[caption=\OptimizingXcode + \ThumbTwoMode]{15_structs/tm_ARM_xcode_thumb.asm}
 
