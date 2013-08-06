@@ -156,13 +156,24 @@ post-indexed addressing &
 \IFRU{Таким образом, компиляторы с ЯП Си на тот процессор, где это есть, могут использовать это.}
 {Thus, C language compilers may use it, if it's present in targer processor.}
 
-Итак, далее в теле цикла \CMP и \TT{BNE} продолжают работу цикла, до тех пор, пока не будет встречен $0$.
+\IFRU{Далее в теле цикла можно увидеть \CMP и \TT{BNE}, они продолжают работу цикла до тех пор, 
+пока не будет встречен $0$.}
+{Then one may spot \CMP and \TT{BNE} in loop body, these instructions continue operation until
+$0$ will be met in string.}
 
-После конца цикла \TT{MVNS}\footnote{MoVe Not} (инвертирование всех бит в значении, аналог \NOT на x86) 
-и \ADD вычисляют $eos - str - 1$. 
-На самом деле, эти две инструкции вычисляют $R0 = ~str + eos$, что эквивалентно тому, что было в исходном коде, 
-а почему это так, я уже описывал чуть раньше, здесь~\ref{strlen_NOT_ADD}. 
-Вероятно, LLVM, как и GCC, посчитал что так будет короче, или быстрее.
+\IFRU{После конца цикла }{}\TT{MVNS}\footnote{MoVe Not} 
+\IFRU{(инвертирование всех бит, аналог \NOT на x86)}
+{(inverting all bits, \NOT in x86 analogue)}
+\IFRU{и \ADD вычисляют}{instructions and \ADD computes} $eos - str - 1$.
+\IFRU{На самом деле, эти две инструкции вычисляют}
+{In fact, these two instructions computes}
+$R0 = ~str + eos$, 
+\IFRU{что эквивалентно тому, что было в исходном коде, а почему это так, я уже описывал чуть раньше, здесь}
+{which is equivalent to what was in source code, and why it's so, I already described here}
+~\ref{strlen_NOT_ADD}.
+
+\IFRU{Вероятно, LLVM, как и GCC, посчитал что такой код будет короче, или быстрее.}
+{Apparently, LLVM, just like GCC, concludes this code will be shorter, or faster.}
 
 %\subsubsection{\OptimizingXcode + \ARMMode}
 %Практически, точно такой же код.
@@ -171,9 +182,16 @@ post-indexed addressing &
 
 \lstinputlisting[caption=\OptimizingKeil + \ARMMode]{10_strlen/Keil_ARM_O3.asm}
 
-Практически то же самое что мы уже видели, за тем исключением что выражение $str - eos - 1$ может быть вычислено
-не в самом конце функции, а прямо в теле цикла. 
-Суффикс \TT{-EQ}, как мы помним, означает что инструкция будет выполнена только
-если операнды в исполненной перед этим инструкции \CMP были равны. 
-Таким образом, если в \Rzero будет $0$, обе инструкции \TT{SUBEQ} исполнятся и результат останется в \Rzero.
+\IFRU{Практически то же самое что мы уже видели, за тем исключением что выражение}
+{Almost the same what we saw before, with the exception that}
+$str - eos - 1$ 
+\IFRU{может быть вычислено не в самом конце функции, а прямо в теле цикла.}
+{expression may be computed not at the function's end, but right in loop body.}
+\IFRU{Суффикс }{}\TT{-EQ}\IFRU{, как мы помним, означает что инструкция будет выполнена только
+если операнды в исполненной перед этим инструкции \CMP были равны.}
+{suffix, as we may recall, mean that instruction will be executed only if operands in executed before
+\CMP were equal to each other.}
+\IFRU{Таким образом}{Thus}, \IFRU{если в \Rzero будет $0$}{if $0$ will be in \Rzero}, 
+\IFRU{обе инструкции}{both} \TT{SUBEQ} \IFRU{исполнятся и результат останется в \Rzero.}
+{instructions are to be executed and result is leaving in \Rzero.}
 
