@@ -10,23 +10,39 @@ VMOV            R0, R1, D16
 BX              LR
 \end{lstlisting}
 
-Очень простой случай. Входные величины кладутся в \TT{D17} и \TT{D16} и сравниваются инструкцией 
-\TT{VCMPE}.
-Как и в процессорах x86, сопроцессор в ARM имеет свой собственный регистр статуса и флагов (\TT{FPSCR}),
-потому что есть необходимость хранить специфичные для его работы флаги.
+\IFRU{Очень простой случай.}{A very simple case.}
+\IFRU{Входные величины помещаются в}{Input values are placed into} \TT{D17} \IFRU{и}{and} \TT{D16} 
+\IFRU{и сравниваются при помощи инструкции}{and then compared with the help of} 
+\TT{VCMPE}\IFRU{}{ instruction}.
+\IFRU{Как и в сопроцессорах x86, сопроцессор в ARM имеет свой собственный регистр статуса и флагов}
+{Just like in x86 coprocessor, ARM coprocessor has its own status and flags register}, (\TT{FPSCR}),
+\IFRU{потому как есть необходимость хранить специфичные для его работы флаги.}
+{because there is a need to store coprocessor-specific flags.}
 
-И так же как и в x86, в ARM нет инструкций условного перехода, 
-проверяющих биты в регистре статуса сопроцессора, так что имеется инструкция \TT{VMRS}, копирующая 4 бита
-(N, Z, C, V) из статуса сопроцессора в биты \IT{общего} статуса (\TT{APSR}).
+\IFRU{И так же как и в x86}{And just like in x86}, 
+\IFRU{в ARM нет инструкций условного перехода}{there are no conditional jump instruction in ARM}, 
+\IFRU{проверяющих биты в регистре статуса сопроцессора}{checking bits in coprocessor status register}, 
+\IFRU{так что имеется инструкция}{so there is} \TT{VMRS}
+\IFRU{, копирующая 4 бита}{ instruction, copying 4 bits} (N, Z, C, V) 
+\IFRU{из статуса сопроцессора в биты \IT{общего} статуса (регистр \TT{APSR}).}
+{from the coprocessor status word into bits of \IT{general} status (\TT{APSR} register).}
 
-\TT{VMOVGT} это аналог \TT{MOVGT}, инструкция, сработающая если при сравнении один операнд 
-был больше чем второй
-(\IT{Greater Than}). Если она сработает, в \TT{D16} запишется значение $b$, лежащее в тот момент 
-в \TT{D17}.
-А если не сработает, то в \TT{D16} останется лежать значение $a$.
+\TT{VMOVGT} \IFRU{это аналог}{is analogue of} \TT{MOVGT}, 
+\IFRU{инструкция, сработающая если при сравнении один операнд был больше чем второй}
+{instruction, to be executed if one operand is greater than other while comparing} (\IT{GT ~--- Greater Than}). 
 
-Предпоследняя инструкция подготовит то что было в \TT{D16} для возврата через пару регистров \Rzero 
-и \Rone.
+\IFRU{Если она сработает}{If it will be executed}, 
+\IFRU{в \TT{D16} запишется значение $b$}{$b$ value will be written into \TT{D16}}, 
+\IFRU{лежащее в тот момент в}{stored at that moment in} \TT{D17}.
+
+\IFRU{А если не сработает}{And if it will not be triggered}, 
+\IFRU{то в \TT{D16} останется лежать значение $a$.}
+{then $a$ value will stay in \TT{D16}.}
+
+\IFRU{Предпоследняя инструкция \TT{VMOV} подготовит то что было в \TT{D16} для возврата через 
+пару регистров \Rzero и \Rone.}
+{Penultimate instruction \TT{VMOV} will prepare value in \TT{D16} for returning via \Rzero and \Rone
+registers pair.}
 
 \subsubsection{ARM + \OptimizingXcode + \ThumbTwoMode}
 
@@ -41,25 +57,42 @@ VMOV            R0, R1, D16
 BX              LR
 \end{lstlisting}
 
-Почти то же самое что и в предыдущем примере, за парой отличий. Дело в том, многие инструкции в режиме ARM
-можно дополнять условием, которое если справедливо, то инструкция выполнится.
+\IFRU{Почти то же самое что и в предыдущем примере, за парой отличий.}
+{Almost the same as in previous example, howeverm slightly different.}
+\IFRU{Дело в том, многие инструкции в режиме ARM
+можно дополнять условием, которое если справедливо, то инструкция выполнится.}
+{As a matter of fact, many instructions in ARM mode can be supplied by condition predicate,
+and the instruction is to be executed if condition is true.}
 
-Но в режиме thumb такого нет. В 16-битных инструкций просто нет места для лишних 4 битов, при помощи
-которых можно было бы закодировать условие выполнения.
+\IFRU{Но в режиме thumb такого нет}{But there are no such thing in thumb mode}. 
+\IFRU{В 16-битных инструкций просто нет места для лишних 4 битов, при помощи
+которых можно было бы закодировать условие выполнения.}
+{There are no place in 16-bit instructions for spare 4 bits where condition can be encoded.}
 
-Поэтому в thumb-2 добавили возможность дополнять thumb-инструкции условиями.
+\IFRU{Поэтому в thumb-2 добавили возможность дополнять thumb-инструкции условиями.}
+{However, thumb-2 was extended to make possible to specify predicates to old thumb instructions.}
 
-Здесь, в листинге сгенерированном при помощи \IDA, мы видим инструкцию \TT{VMOVGT}, 
-такую же как и в предыдущем
-примере. Но в реальности, там закодирована обычная инструкция \TT{VMOV}, просто \IDA добавила 
-суффикс \TT{-GT} к ней,
-потому что перед этой инструкцией стоит \TT{``IT GT''}.
+\IFRU{Здесь, в листинге сгенерированном при помощи \IDA, мы видим инструкцию \TT{VMOVGT}, 
+такую же как и в предыдущем примере.}
+{Here, is the \IDA-generated listing, we see \TT{VMOVGT} instruction, the same as in previous example.}
 
-Инструкция \TT{IT} определяет так называемый \IT{if-then block}. После этой инструкции, можно указывать 
-до четырех инструкций, к которым будет добавлен суффикс условия. В нашем примере, \TT{``IT GT''} означает,
-что следующая за ней инструкция будет исполнена, если условие \IT{GT} (\IT{Greater Than}) справедливо.
+\IFRU{Но в реальности}{But in fact}, 
+\IFRU{там закодирована обычная инструкция \TT{VMOV}}
+{usual \TT{VMOV} is encoded there}, 
+\IFRU{просто \IDA добавила суффикс \TT{-GT} к ней}
+{but \IDA added \TT{-GT} suffix to it}, 
+\IFRU{потому что перед этой инструкцией стоит \TT{``IT GT''}}
+{because there are \TT{``IT GT''} instruction placed right before}.
 
-Теперь более сложный пример, кстати, из Angry Birds (для iOS):
+\IFRU{Инструкция }\TT{IT} \IFRU{определяет так называемый}{instruction defines so-called} \IT{if-then block}. 
+\IFRU{После этой инструкции, можно указывать до четырех инструкций, к которым будет добавлен суффикс условия.}
+{After that instruction, it's possible to place up to 4 instructions, to which predicate suffix will be added.}
+\IFRU{В нашем примере}{In our example}, \TT{``IT GT''} \IFRU{означает}{meaning},
+\IFRU{что следующая за ней инструкция будет исполнена}{the next instruction will be executed}, 
+\IFRU{если условие}{if} \IT{GT} (\IT{Greater Than}) \IFRU{справедливо}{condition is true}.
+
+\IFRU{Теперь более сложный пример, кстати, из}{Now more complex code fragment, by the way, from} 
+``Angry Birds'' (\IFRU{для}{for} iOS):
 
 \begin{lstlisting}[caption=Angry Birds Classic]
 ITE NE
@@ -67,12 +100,16 @@ VMOVNE          R2, R3, D16
 VMOVEQ          R2, R3, D17
 \end{lstlisting}
 
-\TT{ITE} означает \IT{if-then-else} и кодирует суффиксы для двух следующих за ней инструкций. Первая из них
-исполнится, если сработает условие закодированное в \TT{ITE} (\IT{NE, not equal}), а вторая ~--- 
-если это условие не сработает. 
-Обратное условие от \TT{NE} это \TT{EQ} (\IT{equal}).
+\TT{ITE} \IFRU{означает}{meaning} \IT{if-then-else} 
+\IFRU{и кодирует суффиксы для двух следующих за ней инструкций.}
+{and it encode suffixes for two next instructions.}
+\IFRU{Первая из них исполнится, если условие закодированное в}
+{First instruction will execute if condition encoded in} \TT{ITE} (\IT{NE, not equal}) 
+\IFRU{будет в тот момент справедливо}{will be true at that moment},
+\IFRU{а вторая ~--- если это условие не сработает}{and the second ~--- if that condition will not be true}.
+(\IFRU{Обратное условие от}{Inverse condition of} \TT{NE} \IFRU{это}{is} \TT{EQ} (\IT{equal})).
 
-Еще чуть сложнее, и снова этот фрагмент из Angry Birds:
+Еще чуть сложнее, и снова этот фрагмент из ``Angry Birds'':
 
 \begin{lstlisting}[caption=Angry Birds Classic]
 ITTTT EQ
@@ -83,8 +120,7 @@ POPEQ           {R4-R7,PC}
 \end{lstlisting}
 
 4 символа ``T'' в инструкции означают что 4 следующие инструкции будут исполнены если условие соблюдается. 
-Поэтому
-\IDA добавила ко всем четырем инструкциям суффикс \TT{-EQ}. 
+Поэтому \IDA добавила ко всем четырем инструкциям суффикс \TT{-EQ}. 
 
 А если бы здесь было, например, \TT{ITEEE EQ} (\IT{if-then-else-else-else}), 
 тогда суффиксы для следующих четырех инструкций были бы расставлены так:
@@ -96,7 +132,7 @@ POPEQ           {R4-R7,PC}
 -NE
 \end{lstlisting}
 
-Еще фрагмент из Angry Birds:
+Еще фрагмент из ``Angry Birds'':
 
 \begin{lstlisting}[caption=Angry Birds Classic]
 CMP.W           R0, #0xFFFFFFFF
@@ -106,15 +142,16 @@ NEGLE           R0, R0
 MOVGT           R10, R0
 \end{lstlisting}
 
-\TT{ITTE} (\IT{if-then-then-else}) означает что первая и вторая инструкции исполнятся, если 
-условие \TT{LE} (\IT{Less or Equal}) справедливо,
+\TT{ITTE} (\IT{if-then-then-else}) означает что первая и вторая инструкции исполнятся, 
+если условие \TT{LE} (\IT{Less or Equal}) справедливо,
 а третья - если справедливо обратное условие (\TT{GT} ~--- \IT{Greater Than}).
 
-Компиляторы способны генерировать далеко не все варианты, например, в вышеупомянутой игре Angry Birds
+Компиляторы способны генерировать далеко не все варианты, например, в вышеупомянутой игре ``Angry Birds''
 (версия \IT{classic} для iOS) попадаются только такие инструкции: \TT{IT}, \TT{ITE}, \TT{ITT}, \TT{ITTE}, 
 \TT{ITTT}, \TT{ITTTT}.
 \index{\GrepUsage}
-Как я это узнал? В \IDA можно сгенерировать листинг, так я и сделал, только в опциях я установил так 
+\IFRU{Как я это узнал?}{How I learnt this?}
+В \IDA можно сгенерировать листинг, так я и сделал, только в опциях я установил так 
 чтобы показывались 4 байта для каждого опкода. Затем, зная что старшая часть 16-битного опкода \TT{IT} 
 это 0xBF, я сделал при помощи grep это:
 
@@ -163,8 +200,8 @@ loc_2E10
                 BX              LR
 \end{lstlisting}
 
-Почти то же самое что мы уже видели, но много избыточного кода из-за хранения $a$ и $b$, а также 
-выходного значения, в локальном стеке.
+Почти то же самое что мы уже видели, но много избыточного кода из-за хранения $a$ и $b$, 
+а также выходного значения, в локальном стеке.
 
 \subsubsection{ARM + \OptimizingKeil + \ThumbMode}
 
@@ -189,7 +226,10 @@ loc_1C0
 Keil не генерирует специальную инструкцию для сравнения чисел с плавающей запятой, потому что не 
 расчитывает на то что она будет поддерживаться, а простым сравнением побитово, кстати, здесь не обойтись,
 ведь равные числа с плавающей точкой могут быть по-разному закодированы в формате IEEE 754. 
-Для сравнения вызывается библиотечная функция \TT{\_\_aeabi\_cdrcmple}. Обратите внимание, результат
-сравнения эта функция оставляет в флагах, чтобы следующая за вызовом инструкция \TT{BCS} (\IT{Carry set - Greater than or equal}) могла сработать. Или не сработать.
+Для сравнения вызывается библиотечная функция \TT{\_\_aeabi\_cdrcmple}. 
+Обратите внимание, результат
+сравнения эта функция оставляет в флагах, чтобы следующая за вызовом инструкция 
+\TT{BCS} (\IT{Carry set - Greater than or equal}) могла сработать. 
+Или не сработать.
 
  

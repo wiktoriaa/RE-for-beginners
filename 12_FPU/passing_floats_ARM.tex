@@ -2,18 +2,25 @@
 
 \lstinputlisting{12_FPU/passing_floats_Xcode_thumb_O0.asm}
 
-Как я уже писал, 64-битные числа с плавающей точкой передаются в парах R-регистров.
-Здесь код слегка избыточен (наверное потому что не включена оптимизация), ведь, можно было бы 
-загружать значения напрямую в R-регистры минуя загрузку в D-регистры.
+\IFRU{Как я уже писал, 64-битные числа с плавающей точкой передаются в парах R-регистров.}
+{As I wrote before, 64-bit floating pointer numbers passing in R-registers pairs.}
+\IFRU{Этот код слегка избыточен (наверное потому что не включена оптимизация), ведь, можно было бы 
+загружать значения напрямую в R-регистры минуя загрузку в D-регистры.}
+{This is code is redundant for a little (certainty because optimization is turned off), because,
+it's actually possible to load values into R-registers straightforwardly without touching D-registers.}
 
-Итак, видно что функция \TT{\_pow} получает первый аргумент в \Rzero и \Rone, а второй в \Rtwo и \Rthree. 
-Оставляет результат в \Rzero и \Rone.
-Результат работы \TT{\_pow} перекладывается в \TT{D16}, затем в пару \Rone и \Rtwo, 
-откуда \printf будет читать это число.
+\IFRU{Итак, видно что функция}{So, as we see,} \TT{\_pow} \IFRU{получает первый аргумент в}
+{function receiving first argument in} \Rzero \IFRU{и}{and} \Rone, \IFRU{а второй в}{and the second one in} 
+\Rtwo \IFRU{и}{and} \Rthree. 
+\IFRU{Функция оставляет результат в}{Function leave result in} \Rzero \IFRU{и}{and} \Rone.
+\IFRU{Результат работы}{Result of} \TT{\_pow} \IFRU{перекладывается в}{is moved into} \TT{D16}, 
+\IFRU{затем в пару}{then in} \Rone \IFRU{и}{and} \Rtwo\IFRU{}{ pair}, \IFRU{откуда}{from where} 
+\printf \IFRU{будет читать это число}{will take this number}.
 
 \subsubsection{ARM + \NonOptimizingKeil + \ARMMode}
 
 \lstinputlisting{12_FPU/passing_floats_Keil_ARM_O0.asm}
 
-Здесь не используются D-регистры, используются только пары R-регистров.
+\IFRU{Здесь не используются D-регистры, используются только пары R-регистров.}
+{D-registers are not used here, only R-register pairs are used.}
 

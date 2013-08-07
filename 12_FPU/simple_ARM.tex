@@ -1,55 +1,104 @@
 ﻿\subsubsection{ARM: \OptimizingXcode + \ARMMode}
 
-Пока в ARM не было поддержки инструкций для работы с плавающей точкой, разные производители процессоров
-могли добавлять свои расширения. Позже, был принят стандарт VFP (\IT{Vector Floating Point}).
+\IFRU{Пока в ARM не было стандартного набора инструкций для работы с плавающей точкой}
+{Until ARM has floating standardized point support}, \IFRU{разные производители процессоров
+могли добавлять свои расширения для работы с ними}{several processor producers may add their own 
+instructions extensions}.
+\IFRU{Позже, был принят стандарт}{Then, } VFP (\IT{Vector Floating Point})\IFRU{}{ was standardized}.
 
-Важное отличие от x86 в том, что там вы работаете с FPU-стеком, а здесь стека нет, 
-здесь вы работаете просто с регистрами.
+\IFRU{Важное отличие от x86 в том, что там вы работаете с FPU-стеком, а здесь стека нет, 
+здесь вы работаете просто с регистрами.}
+{One important difference from x86, there you working with FPU-stack, but here, in ARM, there
+are no any stack, you work just with registers.}
 
 \lstinputlisting{12_FPU/simple_Xcode_ARM_O3.asm}
 
-Итак, здесь мы видим использование новых регистров, с префиксом D. 
-Это 64-битные регистры, их 32, и их можно
-использовать и для чисел с плавающей точкой двойной точности (double) и для SIMD (в ARM это называется NEON).
+\IFRU{Итак, здесь мы видим использование новых регистров, с префиксом D.}
+{So, we see here new registers used, with D prefix.}
+\IFRU{Это 64-битные регистры, их 32, и их можно
+использовать и для чисел с плавающей точкой двойной точности (double) и для 
+SIMD (в ARM это называется NEON).}
+{These are 64-bit registers, there are 32 of them, and these can be used both for floating-point numbers 
+(double), but also for SIMD (it's called NEON here in ARM).}
 
-Имеются также 32 32-битных S-регистра, они применяются для работы с числами с плавающей точкой одинарной точности
-(float).
+\IFRU{Имеются также 32 32-битных S-регистра, они применяются для работы с числами 
+с плавающей точкой одинарной точности (float).}
+{There are also 32 32-bit S-registers, they are intended to be used for single precision 
+floating pointer numbers (float).}
 
-Обе константы ($3.14$ и $4.1$) хранятся в памяти в формате IEEE 754.
+\IFRU{Обе константы}{Both} ($3.14$ \IFRU{и}{and} $4.1$) \IFRU{хранятся в памяти в формате IEEE 754.}
+{constants are stored in memory in IEEE 754 form.}
 
-Инструкции \TT{VLDR} и \TT{VMOV}, как можно догадаться, это аналоги обычных \TT{LDR} и \MOV, 
-но работают с новыми регистрами.
-Важно отметить, что они предназначены не только для работы с числами с плавающей точкой, но пригодны также и для
-работы с SIMD (NEON), это будет видно позже.
+\IFRU{Инструкции }{}\TT{VLDR} \IFRU{и}{and} \TT{VMOV}
+\IFRU{, как можно догадаться, это аналоги обычных \TT{LDR} и \MOV, но они работают с D-регистрами.}
+{instructions, as it can be easily deduced, are analogous to \TT{LDR} and \MOV, 
+but they works with D-registers.}
+\IFRU{Важно отметить, что эти инструкции, как и D-регистры, предназначены не только для работы 
+с числами с плавающей точкой, но пригодны также и для работы с SIMD (NEON), и позже это также будет видно.}
+{It should be noted that these instructions, just like D-registers, are intended not only for
+floating point numbers, but can be also used for SIMD (NEON) operations and this will also be revealed soon.}
 
-Аргументы передаются в функцию обычным путем, через R-регистры, однако, каждое число имеющее двойную точность
-занимает 64 бита, так что для передачи каждого нужны два регистра. 
-\TT{``VMOV D17, R0, R1''} в самом начале
-составляет два 32-битных значения из \Rzero и \Rone в одно 64-битное и сохраняет в \TT{D17}. 
-\TT{``VMOV R0, R1, D16''} в конце это обратная процедура, то что было в \TT{D16} 
-остается в двух регистрах \Rzero и \Rone,
-потому что, число с двойной точностью, занимающее 64 бита, возвращается в паре регистров \Rzero и \Rone.
+\IFRU{Аргументы передаются в функцию обычным путем, через R-регистры, однако, 
+каждое число имеющее двойную точность
+занимает 64 бита, так что для передачи каждого нужны два R-регистра.}
+{Arguments are passed to function by usual way, via R-registers, however,
+each number having double precision has size 64-bits, so, for passing each, two R-registers are needed.}
 
-\TT{VDIV}, \TT{VMUL} и \TT{VADD}, это, собственно, инструкции для работы с числами с плавающей точкой, 
-вычисляющие, соответственно, частное\footnote{результат деления}, 
-произведение\footnote{результат умножения} и сумму\footnote{результат сложения}.
+\TT{``VMOV D17, R0, R1''} \IFRU{в самом начале составляет два 32-битных значения из \Rzero и \Rone 
+в одно 64-битное и сохраняет в}
+{at the very beginning, composing two 32-bit values from \Rzero and \Rone into one 64-bit value
+and saves it to} \TT{D17}.
 
-Код для thumb-2 такой же.
+\TT{``VMOV R0, R1, D16''} \IFRU{в конце это обратная процедура}{is inverse operation}, 
+\IFRU{то что было в}{what was in} \TT{D16} 
+\IFRU{остается в двух регистрах}{leaving in two} \Rzero \IFRU{и}{and} \Rone\IFRU{}{ registers},
+\IFRU{потому что}{because}, \IFRU{число с двойной точностью}{double-precision number}, 
+\IFRU{занимающее 64 бита}{needing 64 bits for storage}, \IFRU{возвращается в паре регистров \Rzero и \Rone}
+{returning in \Rzero and \Rone registers pair}.
+
+\TT{VDIV}, \TT{VMUL} \IFRU{и}{and} \TT{VADD}, \IFRU{это, собственно, инструкции для работы с числами 
+с плавающей точкой, вычисляющие, соответственно, частное\FNQUOTIENT, произведение\FNPRODUCT и сумму\FNSUM.}
+{are instruction for floating point numbers processing, computing, quotient\FNQUOTIENT, 
+product\FNPRODUCT and sum\FNSUM, respectively.}
+
+\IFRU{Код для thumb-2 такой же.}{The code for thumb-2 is same.}
 
 \subsubsection{ARM: \OptimizingKeil + \ThumbMode}
 
 \lstinputlisting{12_FPU/simple_Keil_O3_thumb.asm}
 
-Keil компилировал для процессора, в котором может и не быть поддержки FPU или NEON. 
-Так что числа с двойной точностью передаются в парах обычных R-регистров, 
-а вместо FPU-инструкций вызываются сервисные
-библиотечные функции \TT{\_\_aeabi\_dmul}, \TT{\_\_aeabi\_ddiv}, \TT{\_\_aeabi\_dadd}, эмулирующие 
-умножение, деление и сложение чисел с плавающей точкой. 
-Конечно, это медленнее чем вычислять на FPU-сопроцессоре, но лучше чем ничего.
+\IFRU{Keil компилировал для процессора, в котором может и не быть поддержки FPU или NEON.}
+{Keil generates for processors not supporting FPU or NEON.}
+\IFRU{Так что числа с двойной точностью передаются в парах обычных R-регистров}
+{So, double-precision floating numbers are passed via usual R-registers},
+\IFRU{а вместо FPU-инструкций вызываются сервисные библиотечные функции}
+{and instead of FPU-instructions, service library functions are called, like}
+\TT{\_\_aeabi\_dmul}, \TT{\_\_aeabi\_ddiv}, \TT{\_\_aeabi\_dadd}, 
+\IFRU{эмулирующие умножение, деление и сложение чисел с плавающей точкой.}
+{which emulating multiplication, division and addition floating-point numbers.}
+\IFRU{Конечно, это медленнее чем FPU-сопроцессор, но лучше чем ничего.}
+{Of course, that's slower than FPU-coprocessor, but it's better than nothing.}
 
-Кстати, похожие библиотеки для эмуляции сопроцессорных инструкций были очень распространены в x86, 
-когда сопроцессор стоял далеко не на всех компьютерах.
+\IFRU{Кстати, похожие библиотеки для эмуляции сопроцессорных инструкций были очень распространены в x86, 
+когда сопроцессор был редким и дорогим, и стоял далеко не на всех компьютерах.}
+{By the way, similar FPU-emulating libraries were very popular in x86 world when coprocessors were rare
+and expensive, and were installed only on expensive computers.}
 
-Кстати, эмуляция сопроцессора в ARM называется soft float или armel, а использование инструкций процессора ~--- 
-hard float или armhf. Ядро Linux, например, для Raspberry Pi может поставляться в двух вариантах. В случае soft float,
-аргументы будут передаваться через R-регистры, а в случае hard float, через D-регистры.
+\IFRU{Эмуляция FPU-сопроцессора в ARM называется \IT{soft float} или \IT{armel}, 
+а использование FPU-инструкций сопроцессора ~--- \IT{hard float} или \IT{armhf}.}
+{FPU-coprocessor emulating calling \IT{soft float} or \IT{armel} in ARM world, 
+while coprocessor's FPU-instructions usage calling \IT{hard float} or \IT{armhf}.}
+
+\IFRU{Ядро Linux, например, для Raspberry Pi может поставляться в двух вариантах.}
+{For example, Linux kernel for Raspberry Pi is compiled in two variants.}
+\IFRU{В случае \IT{soft float}, аргументы будут передаваться через R-регистры, 
+а в случае \IT{hard float}, через D-регистры.}
+{In \IT{soft float} case, arguments will be passed via R-registers, and in \IT{hard float} case ~--- via
+D-registers.}
+
+\IFRU{И это то, что помешает использовать, например, armhf-библиотеки
+из armel-кода или наоборот, поэтому, весь код в дистрибутиве Linux должен быть скомпилирован
+в соответствии с выбранным соглашением о вызовах.}
+{And that's what don't let you use, for example, armhf-libraries from armel-code or vice versa, so that's
+why all code in Linux distribution should be compiled according to chosen calling convention.}
+

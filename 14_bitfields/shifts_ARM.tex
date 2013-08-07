@@ -14,23 +14,35 @@ loc_2E54
                 BX              LR
 \end{lstlisting}
 
-\TT{TST} это то же что и \TEST в x86.
+\TT{TST} \IFRU{это то же что и}{is the same things as} \TEST \IFRU{в}{in} x86.
 
-Как я уже указывал~\ref{shifts_in_ARM_mode}, в режиме ARM нет отдельной инструкции для сдвигов, 
-но модификаторами 
+\IFRU{Как я уже указывал}{As I mentioned before}~\ref{shifts_in_ARM_mode}, 
+\IFRU{в режиме ARM нет отдельной инструкции для сдвигов.}
+{there are no separate shifting instructions in ARM mode.}
+\IFRU{Однако, модификаторами}{However, there are modifiers} 
 LSL (\IT{Logical Shift Left}), 
 LSR (\IT{Logical Shift Right}), 
 ASR (\IT{Arithmetic Shift Right}), 
-ROR (\IT{Rotate Right}) и 
-RRX (\IT{Rotate Right with Extend}) можно дополнять некоторые инструкции, такие как \MOV, \TT{TST},
+ROR (\IT{Rotate Right}) \IFRU{и}{and} 
+RRX (\IT{Rotate Right with Extend}) \IFRU{можно дополнять некоторые инструкции, такие как}
+{, which may be added to such instructions as} \MOV, \TT{TST},
 \CMP, \ADD, \SUB, \TT{RSB}\footnote{\DataProcessingFunctionsFootNote}.
 
-Таким образом, инструкция \TT{``TST R1, R2,LSL R3''} здесь работает как $R1 \land (R2 \ll R3)$.
+\IFRU{Эти модифицкаторы указывают, как сдвигать второй операнд, и на сколько.}
+{These modificators are defines, how to shift second operand and by how many bits.}
+
+\IFRU{Таким образом, инструкция }{Thus} \TT{``TST R1, R2,LSL R3''} 
+\IFRU{здесь работает как}{instruction works here as} $R1 \land (R2 \ll R3)$.
 
 \subsubsection{ARM + \OptimizingXcode + \ThumbTwoMode}
 
-Почти такое же, только там применяется пара инструкций \TT{LSL.W}/\TT{TST} вместо одной \TT{TST},
-ведь в режиме thumb нельзя добавлять указывать модификатор \TT{LSL} прямо в \TT{TST}.
+\IFRU{Почти такое же}{Almost the same}, 
+\IFRU{только здесь применяется пара инструкций}{but here are two} 
+\TT{LSL.W}/\TT{TST} 
+\IFRU{вместо одной}{instructions are used instead of single} 
+\TT{TST},
+\IFRU{ведь в режиме thumb нельзя добавлять указывать модификатор}{becase, in thumb mode, it's not
+possible to define} \TT{LSL} \IFRU{прямо в}{modifier right in} \TT{TST}.
 
 \begin{lstlisting}
                 MOV             R1, R0
