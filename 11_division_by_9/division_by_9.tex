@@ -55,12 +55,13 @@ to produce a code which is equivalent and faster.}
 
 \subsection{ARM}
 
-\IFRU{В процессоре ARM, как и во многих других ``чистых'' (pure) RISC-процессорах нет инструкции деления,
-да и инструкции умножения на 32-битную константу также нет.}{In ARM processor, just like in any other ''pure'' 
-RISC-processors, there are no division instruction, instruction for multiplication by 32-bit constant 
-is absent too.}
-\IFRU{При некотором желании, можно обойтись только тремя действиями: сложением, вычитанием и 
-битовыми сдвигами}{With some effort, it's possible to do division using only three instructions: addition,
+\IFRU{В процессоре ARM, как и во многих других ``чистых'' (pure) RISC-процессорах нет инструкции деления.
+Нет также возможности умножения на 32-битную константу одной инструкцией.}
+{ARM processor, just like in any other ''pure'' RISC-processors, lacks division instructionю
+It lacks also a single instruction for multiplication by 32-bit constant.}
+\IFRU{Используя один любопытный трюк (или хак)\footnote{hack}, можно обойтись только тремя действиями: 
+сложением, вычитанием и битовыми сдвигами}
+{By using one clever trick, it's possible to do division using only three instructions: addition,
 subtraction and bit shifts}~\ref{sec:bitfields}.
 
 \IFRU{Пример деления 32-битного числа на 10 из}{Here is an example of 32-bit number division by 10 from}
@@ -87,7 +88,6 @@ subtraction and bit shifts}~\ref{sec:bitfields}.
 \subsubsection{\OptimizingXcode + \ARMMode}
 
 \begin{lstlisting}
-__text:00002C58                         _f
 __text:00002C58 39 1E 08 E3 E3 18 43 E3                 MOV             R1, 0x38E38E39
 __text:00002C60 10 F1 50 E7                             SMMUL           R0, R0, R1
 __text:00002C64 C0 10 A0 E1                             MOV             R1, R0,ASR#1

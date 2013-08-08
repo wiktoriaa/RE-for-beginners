@@ -109,7 +109,8 @@ VMOVEQ          R2, R3, D17
 \IFRU{а вторая ~--- если это условие не сработает}{and the second ~--- if that condition will not be true}.
 (\IFRU{Обратное условие от}{Inverse condition of} \TT{NE} \IFRU{это}{is} \TT{EQ} (\IT{equal})).
 
-Еще чуть сложнее, и снова этот фрагмент из ``Angry Birds'':
+\IFRU{Еще чуть сложнее{Slightly harder}, \IFRU{и снова этот фрагмент из}{and this fragment from} 
+``Angry Birds''\IFRU{}{ as well}:
 
 \begin{lstlisting}[caption=Angry Birds Classic]
 ITTTT EQ
@@ -119,11 +120,14 @@ POPEQ.W         {R8,R10}
 POPEQ           {R4-R7,PC}
 \end{lstlisting}
 
-4 символа ``T'' в инструкции означают что 4 следующие инструкции будут исполнены если условие соблюдается. 
-Поэтому \IDA добавила ко всем четырем инструкциям суффикс \TT{-EQ}. 
+\IFRU{4 символа ``T'' в инструкции означают что 4 следующие инструкции будут исполнены если условие соблюдается.}
+{4 ``T'' symbols in instruction mnemonic mean that 4 next instructions will be executed if condition is true.}
+\IFRU{Поэтому \IDA добавила ко всем четырем инструкциям суффикс}{That's why \IDA added} \TT{-EQ}\IFRU{}{ suffix
+to each 4 instructions}. 
 
-А если бы здесь было, например, \TT{ITEEE EQ} (\IT{if-then-else-else-else}), 
-тогда суффиксы для следующих четырех инструкций были бы расставлены так:
+\IFRU{А если бы здесь было, например}{And if there will be, for example}, \TT{ITEEE EQ} (\IT{if-then-else-else-else}), 
+\IFRU{тогда суффиксы для следующих четырех инструкций были бы расставлены так:}
+{then suffixes will be set as follows:}
 
 \begin{lstlisting}
 -EQ
@@ -132,7 +136,7 @@ POPEQ           {R4-R7,PC}
 -NE
 \end{lstlisting}
 
-Еще фрагмент из ``Angry Birds'':
+\IFRU{Еще фрагмент из}{Another fragment from} ``Angry Birds'':
 
 \begin{lstlisting}[caption=Angry Birds Classic]
 CMP.W           R0, #0xFFFFFFFF
@@ -142,9 +146,11 @@ NEGLE           R0, R0
 MOVGT           R10, R0
 \end{lstlisting}
 
-\TT{ITTE} (\IT{if-then-then-else}) означает что первая и вторая инструкции исполнятся, 
-если условие \TT{LE} (\IT{Less or Equal}) справедливо,
-а третья - если справедливо обратное условие (\TT{GT} ~--- \IT{Greater Than}).
+\TT{ITTE} (\IT{if-then-then-else}) \IFRU{означает что первая и вторая инструкции исполнятся}{mean that 1st and 2nd
+instructions will be executed}, 
+\IFRU{если условие}{if} \TT{LE} (\IT{Less or Equal}) \IFRU{справедливо}{condition is true},
+\IFRU{а третья}{and 3rd} ~--- \IFRU{если справедливо обратное условие}{if inverse condition} 
+(\TT{GT} ~--- \IT{Greater Than})\IFRU{}{ is true}.
 
 Компиляторы способны генерировать далеко не все варианты, например, в вышеупомянутой игре ``Angry Birds''
 (версия \IT{classic} для iOS) попадаются только такие инструкции: \TT{IT}, \TT{ITE}, \TT{ITT}, \TT{ITTE}, 

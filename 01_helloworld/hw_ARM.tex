@@ -16,7 +16,8 @@ armcc.exe --arm --c90 -O0 1.c
 
 \IFRU{Компилятор \IT{armcc} генерирует листинг на ассемблере}{\IT{armcc} compiler producing assembly listing}, 
 \IFRU{но он содержит некоторые высокоуровневые макросы связанные с ARM}{but it has some high-level ARM-processor related macros}\footnote{
-\IFRU{например, он показывает инструкции \PUSH/\POP отсутствующие в режиме ARM}{for example, it shows \PUSH/\POP instructions absent in ARM mode}}, 
+\IFRU{например, он показывает инструкции \PUSH/\POP отсутствующие в режиме ARM}{for example, ARM mode lacks 
+\PUSH/\POP instructions}}, 
 \IFRU{а нам важнее увидеть инструкции ``как есть'', так что посмотрим скомпилированный результат в \IDA}{but it's more important for us to see instructions ``as is'', so let's see compiled results in \IDA}.
 
 \begin{lstlisting}[caption=\NonOptimizingKeil + \ARMMode + \IDA]
@@ -37,6 +38,11 @@ armcc.exe --arm --c90 -O0 1.c
 \IFRU{Режим thumb может выглядеть привлекательнее тем, что программа на нем может быть 1) компактнее; 2) эффективнее исполняться на микроконтроллере с 16-битной шиной данных}{Thumb mode may look attractive because program in it may be 1) compact; 2) executing faster on microcontroller having 16-bit memory datapath}. 
 \IFRU{Но за всё нужно платить: в режиме thumb куда меньше возможностей процессора, например, возможен доступ только к 8-и регистрам процессора, и чтобы совершить некоторые действия, выполнимые в режиме ARM одной инструкцией, нужны несколько thumb-инструкций}{Nothing come for free of charge, so, in thumb mode there are reduced instruction set, only 8 registers are accessible and one need several thumb instructions for doing some operations when in ARM mode you'll need just one}.
 \IFRU{Начиная с ARMv7, имеется также поддержка инструкций thumb-2, это thumb расширенный до поддержки куда большего числа инструкций}{Starting at ARMv7, there are also thumb-2 instructions set present, this is a thumb extended to support much bigger instructions set}.
+\IFRU{Распространено заблуждение что thumb-2 это смесь ARM и thumb. Это не верно. Просто thumb-2 был дополен до
+более полной поддержки возможностей процессора, что теперь может легко конкурировать с режимом ARM.}
+{There is a common misconception that thumb-2 is a mix of ARM and thumb. It's not correct. 
+But rather thumb-2 was extended to support processor features so fully,
+so now it can compete with ARM mode.}
 \IFRU{Программа для процессора ARM может представлять смесь процедур скомпилированных для обоих режимов}{A program for ARM processor may be mix of procedures compiled for both modes}.
 \IFRU{Основное количество приложений для \idevices скомпилировано для набора инструкций thumb-2, потому что Xcode
 делает так по умолчанию}{Majority of \idevices applications are compiled for thumb-2 instructions set, because Xcode do this by default}.
