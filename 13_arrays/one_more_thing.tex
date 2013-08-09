@@ -1,11 +1,11 @@
 ﻿\subsection{\IFRU{Еще немного о массивах}{One more word about arrays}}
 
-\IFRU{Теперь понятно, почему нельзя написать в исходном коде на \CCpp что-то вроде:
-\footnote{GCC способен это сделать выделяя место под массив динамически в стеке (как alloca()~\ref{alloca}), 
-но это расширение не является частью стандарта}}
+\IFRU{Теперь понятно, почему нельзя написать в исходном коде на \CCpp что-то вроде
+\footnote{Впрочем, по стандарту C99 это возможно\cite[6.7.5.2]{C99TC3}: 
+GCC может это сделать выделяя место под массив динамически в стеке (как alloca()~\ref{alloca})}}
 {Now we understand, why it's not possible to write something like that in \CCpp code
-\footnote{GCC can actually do this by allocating array dynammically in stack (like alloca()~\ref{alloca}), 
-but it's not standard langauge extension}:}
+\footnote{However, it's possible in C99 standard\cite[6.7.5.2]{C99TC3}: 
+GCC is actually do this by allocating array dynammically in stack (like alloca()~\ref{alloca})}}:
 
 \begin{lstlisting}
 void f(int size)
@@ -21,7 +21,13 @@ void f(int size)
 {That's just because compiler should know exact array size to allocate place for it in local stack layout or
 in data segment (in case of global variable) on compiling stage.}
 
+\index{C99!variable length arrays}
 \IFRU{Если вам нужен массив произвольной длины, то выделите столько, сколько нужно, через \TT{malloc()}, 
-затем обращайтесь к выделенному блоку байт как к массиву того типа, который вам нужен.}
+затем обращайтесь к выделенному блоку байт как к массиву того типа, который вам нужен.
+Либо используйте возможность стандарта C99\cite[6.7.5.2]{C99TC3}, 
+но внутри это будет похоже на alloca()~\ref{alloca}}
 {If you need array of arbitrary size, allocate it by \TT{malloc()}, then access allocated memory block
-as array of variables of type you need.}
+as array of variables of type you need.
+Or use C99 standard feature\cite[6.7.5.2]{C99TC3}, 
+but it will be looks like alloca()~\ref{alloca} internally.}
+
