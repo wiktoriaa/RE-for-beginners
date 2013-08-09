@@ -152,22 +152,31 @@ instructions will be executed},
 \IFRU{а третья}{and 3rd} ~--- \IFRU{если справедливо обратное условие}{if inverse condition} 
 (\TT{GT} ~--- \IT{Greater Than})\IFRU{}{ is true}.
 
-Компиляторы способны генерировать далеко не все варианты, например, в вышеупомянутой игре ``Angry Birds''
-(версия \IT{classic} для iOS) попадаются только такие инструкции: \TT{IT}, \TT{ITE}, \TT{ITT}, \TT{ITTE}, 
-\TT{ITTT}, \TT{ITTTT}.
+\IFRU{Компиляторы способны генерировать далеко не все варианты.}{Compilers usually are not generating
+all possible combinations.}
+\IFRU{Например, в вышеупомянутой игре ``Angry Birds'' (версия \IT{classic} для iOS)}
+{For example, it mentioned ``Angry Birds'' game (\IT{classic} version for iOS)}
+\IFRU{попадаются только такие варианты инструкции \TT{IT}}{only these cases of \TT{IT} instruction are used}: 
+\TT{IT}, \TT{ITE}, \TT{ITT}, \TT{ITTE}, \TT{ITTT}, \TT{ITTTT}.
 \index{\GrepUsage}
 \IFRU{Как я это узнал?}{How I learnt this?}
-В \IDA можно сгенерировать листинг, так я и сделал, только в опциях я установил так 
-чтобы показывались 4 байта для каждого опкода. Затем, зная что старшая часть 16-битного опкода \TT{IT} 
-это 0xBF, я сделал при помощи grep это:
+\IFRU{В \IDA можно сгенерировать листинг, так я и сделал, только в опциях я установил так 
+чтобы показывались 4 байта для каждого опкода.}
+{In \IDA it's possible to produce listing files, so I did it, but I also set in options 
+to show 4 bytes of each opcodes .}
+\IFRU{Затем, зная что старшая часть 16-битного опкода \TT{IT} это $0xBF$, я сделал при помощи \TT{grep} это:}
+{Then, knowing that high part of 16-bit opcode \TT{IT} is $0xBF$, I did this with \TT{grep}:}
 
 \begin{lstlisting}
 cat AngryBirdsClassic.lst | grep " BF" | grep "IT" > results.lst
 \end{lstlisting}
 
-Тем не менее, если писать на ассемблере для режима thumb-2 вручную, и дополнять инструкции суффиксами
+\IFRU{Кстати, если писать на ассемблере для режима thumb-2 вручную, и дополнять инструкции суффиксами
 условия, то ассемблер автоматически будет добавлять инструкцию \TT{IT} с соответствующими флагами, там
-где надо.
+где надо.}
+{By the way, if to program in ARM assembly language manually for thumb-2 mode, 
+with adding conditional suffixes,
+assembler will add \TT{IT} instructions automatically, with respectable flags, where it's need.}
 
 \subsubsection{ARM + \NonOptimizingXcode + \ARMMode}
 
@@ -206,8 +215,11 @@ loc_2E10
                 BX              LR
 \end{lstlisting}
 
-Почти то же самое что мы уже видели, но много избыточного кода из-за хранения $a$ и $b$, 
-а также выходного значения, в локальном стеке.
+\IFRU{Почти то же самое что мы уже видели}{Almost the same we already saw}, 
+\IFRU{но много избыточного кода из-за хранения $a$ и $b$, 
+а также выходного значения, в локальном стеке.}
+{but too much redundant code because of $a$ and $b$ variables storage in local stack, as well
+as returning value.}
 
 \subsubsection{ARM + \OptimizingKeil + \ThumbMode}
 
@@ -229,13 +241,17 @@ loc_1C0
                 POP     {R3-R7,PC}
 \end{lstlisting}
 
-Keil не генерирует специальную инструкцию для сравнения чисел с плавающей запятой, потому что не 
-расчитывает на то что она будет поддерживаться, а простым сравнением побитово, кстати, здесь не обойтись,
-ведь равные числа с плавающей точкой могут быть по-разному закодированы в формате IEEE 754. 
-Для сравнения вызывается библиотечная функция \TT{\_\_aeabi\_cdrcmple}. 
-Обратите внимание, результат
-сравнения эта функция оставляет в флагах, чтобы следующая за вызовом инструкция 
-\TT{BCS} (\IT{Carry set - Greater than or equal}) могла сработать. 
-Или не сработать.
+\IFRU{Keil не генерирует специальную инструкцию для сравнения чисел с плавающей запятой, потому что не 
+расчитывает на то что она будет поддерживаться, а простым сравнением побитово здесь не обойтись.}
+{Keil not generate special instruction for float numbers comparing, because, it cannot rely it will 
+be supported on the target CPU, and it cannot be done by simple bitwise comparing.}
+%TODO: why?
+\IFRU{Для сравнения вызывается библиотечная функция}{So there is called external library
+function for comparing:} \TT{\_\_aeabi\_cdrcmple}. 
+\IFRU{Обратите внимание, результат
+сравнения эта функция оставляет в флагах, чтобы следующая за вызовом инструкция}
+{Please note, comparision result is to be leaved in flags, so the following}
+\TT{BCS} (\IT{Carry set - Greater than or equal})
+\IFRU{могла работать без дополнительного кода.}{instruction may work without any additional code.}
 
  

@@ -35,29 +35,49 @@ Process will hang, but that's much better then remote attack to your host.}
     }
 }
 
-Это случайное значение иногда называют ``канарейкой''\footnote{``canary'' в англоязычной литературе}, 
+\IFRU{Это случайное значение иногда называют ``канарейкой''\footnote{``canary'' в англоязычной литературе}, 
 по аналогии с шахтной канарейкой\footnote{\CANARYURL},
 их использовали шахтеры в свое время, чтобы определять, есть ли в шахте опасный газ.
-Канарейки очень к нему чувствительны и либо проявляли сильное беспокойство, либо гибли от газа.
+}
+{This random value is called ``canary'' sometimes, it's related to miner's canary\footnote{\CANARYURL},
+they were used by miners in these days, in order to detect poisonous gases quickly.}
+\IFRU{Канарейки очень к нему чувствительны и либо проявляли сильное беспокойство, либо гибли от газа.}
+{Canaries are very sensetive to mine gases, they become very agitated in case of danger, or even dead.}
 
-Если скомпилировать наш простейший пример работы с массивом~\ref{arrays_simple} в MSVC с опцией RTC1 или RTCs, 
-в конце функции будет вызов 
-функции \TT{@\_RTC\_CheckStackVars@8}, проверяющей корректность ``канарейки''.
+\IFRU{Если скомпилировать наш простейший пример работы с массивом}
+{If to compile our very simple array example}~\ref{arrays_simple} \IFRU{в}{in} MSVC 
+\IFRU{с опцией RTC1 или RTCs}{with RTC1 and RTCs option}, \IFRU{в конце функции будет вызов 
+функции}{you will see call to} \TT{@\_RTC\_CheckStackVars@8}\IFRU{, проверяющей корректность ``канарейки''.}
+{ function at the function end, checking ``canary'' correctness.}
 
 \subsubsection{\OptimizingXcode + \ThumbTwoMode}
 
-Возвращаясь к нашему простому примеру~\ref{arrays_simple}, 
-можно посмотреть как LLVM добавит проверку ``канарейки'':
+\IFRU{Возвращаясь к нашему простому примеру}{Let's back to our simple array example}~\ref{arrays_simple}, 
+\IFRU{можно посмотреть как LLVM добавит проверку ``канарейки''}
+{again, now we can see how LLVM will check ``canary'' correctness}:
 
 \lstinputlisting{13_arrays/simple_Xcode_thumb_O3_en.asm}
 
-Во-первых, как видно, LLVM "развернул" цикл и все значения записываются в массив по одному, уже вычисленные, 
-потому что LLVM посчитал что так будет быстрее. Кстати, инструкции ARM позволяют сделать это еще быстрее и это
-может быть вашим домашним заданием.
+\IFRU{Во-первых, как видно, LLVM ``развернул'' цикл и все значения записываются в массив по одному, 
+уже вычисленные, 
+потому что LLVM посчитал что так будет быстрее.}
+{First of all, as we see, LLVM made loop ``unrolled'' and all values are written into array one-by-one,
+already calculated, because LLVM conclued it will be faster.}
+\IFRU{Кстати, инструкции режима ARM позволяют сделать это еще быстрее и это может быть вашим 
+домашним заданием.}{By the way, ARM mode instructions may help to do this even faster, 
+and finding this way could be your homework.}
 
-В конце функции мы видим сравнение ``канареек'' ~--- той что лежит в локальном стеке и корректной, на которую
-ссылается регистр \TT{R8}. Если они равны, срабатывает блок из четырех инструкций \TT{``ITTTT EQ''}, это запись
-$0$ в \Rzero, эпилог функции и выход из нее. Если блок ``канарейки'' не равны, блок не срабатывает и происходит
-переход на функцию \TT{\_\_\_stack\_chk\_fail}, которая, вероятно, остановит работу программы.
+\IFRU{В конце функции мы видим сравнение ``канареек'' ~--- той что лежит в локальном стеке и корректной, 
+на которую ссылается регистр \TT{R8}.}
+{At the function end wee see ``canaries'' comparison ~--- that laying in local stack and correct one,
+to which \TT{R8} register pointing.}
+\IFRU{Если они равны, срабатывает блок из четырех инструкций при помощи \TT{``ITTTT EQ''}, это запись
+$0$ в \Rzero, эпилог функции и выход из нее.}
+{If they are equal to each other, 4-instruction block is triggered by \TT{``ITTTT EQ''}, it is
+writing $0$ into \Rzero, function epilogue and exit.}
+\IFRU{Если ``канарейки'' не равны, блок не срабатывает и происходит
+переход на функцию}{If ``canaries'' are not equial, block will not be triggered,
+and jump to} \TT{\_\_\_stack\_chk\_fail}\IFRU{, которая, вероятно, остановит работу программы.}
+{ function will be occured, which, as I suppose, will halt execution.}
 % TODO illustrate this!
 
