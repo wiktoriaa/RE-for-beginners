@@ -94,22 +94,35 @@ How our compiler know to pack them on 1-byte alignment method?}
 
 \lstinputlisting[caption=\OptimizingKeil + \ThumbMode]{15_structs/packing_Keil_thumb.asm}
 
-Как мы помним, передается не указатель на структуру, а сама структура, а так как в ARM первые 4 аргумента
-функции передаются через регистры, то поля структуры передаются через \TT{R0-R3}.
+\IFRU{Как мы помним, здесь передается не указатель на структуру, а сама структура, а так как в ARM первые 4 аргумента
+функции передаются через регистры, то поля структуры передаются через}
+{As we may recall, here a structure passed instead of pointer to structure, and because first 4 function arguments 
+in ARM are passed via registers, so then structure fields are passed via} \TT{R0-R3}.
 
-Инструкция \TT{LDRB} загружает один байт из памяти и расширяет до 32-бит учитывая знак. Это похоже на 
-инструкцию \MOVSX в x86. Она применяется дла загрузки полей $a$ и $c$ из структуры.
+\IFRU{Инструкция }\TT{LDRB} \IFRU{загружает один байт из памяти и расширяет до 32-бит учитывая знак.}
+{loads one byte from memory and extending it to 32-bit, taking into account its sign.}
+\IFRU{Это похоже на инструкцию}{This is similar to} \MOVSX \IFRU{в}{instruction in} x86.
+\IFRU{Она здесь применяется дла загрузки полей}{Here it's used for loading fields} $a$ \IFRU{и}{and} $c$ 
+\IFRU{из структуры}{from structure}.
 
-Еще что бросается в глаза, так это то что вместо эпилога функции, переход на эпилог другой функции!
-Действительно, то была совсем другая, не относящаяся к этой, функция, однако, она имела точно такой же
-эпилог (видимо, тоже хранила в стеке 5 локальных переменных ($5*4=0x14$)). К тому же, она находится рядом
-(обратите внимание на адреса). Действительно, нет никакой разницы, какой эпилог исполнять, если он тот же.
-Keil решил сделать так, вероятно, из-за экономии. Эпилог занимает 4 байта, а переход ~--- 2.
+\IFRU{Еще что бросается в глаза, так это то что вместо эпилога функции, переход на эпилог другой функции!}
+{One more thing we spot easily, instead of function epilogue, here is jump to another function's epilogue!}
+\IFRU{Действительно, то была совсем другая, не относящаяся к этой, функция, однако, она имела точно такой же
+эпилог}{Indeed, that was another function, not related in any way to our function, however, it has exactly
+the same epilogue} 
+(\IFRU{видимо, тоже хранила в стеке 5 локальных переменных}{probably because, it hold 5 local variables too} 
+($5*4=0x14$)).
+\IFRU{К тому же, она находится рядом (обратите внимание на адреса).}
+{Also, it's located nearly (take a look on addresses).}
+\IFRU{Действительно, нет никакой разницы, какой эпилог исполнять, если он работает так же как нам нужно.}
+{Indeed, there are no difference, which epilogue to execute, if it works just as we need.}
+\IFRU{Keil решил сделать так, вероятно, из-за экономии.}{Apparently, Keil decides to do this because of economy.}
+\IFRU{Эпилог занимает 4 байта, а переход ~--- только 2.}{Epilogue takes 4 bytes while jump ~--- only 2.}
 
 \subsubsection{ARM + \OptimizingXcode + \ThumbTwoMode}
 
 \lstinputlisting[caption=\OptimizingXcode + \ThumbTwoMode]{15_structs/packing_Xcode_thumb.asm}
 
-\TT{SXTB} (\IT{Signed Extend Byte}) это так же аналог \MOVSX в x86, только работает не с памятью,
-а с регистром. Всё остальное ~--- так же.
+\TT{SXTB} (\IT{Signed Extend Byte}) \IFRU{это так же аналог}{is analogous to} \MOVSX \IFRU{в}{in} x86\IFRU{, только работает не с памятью, а с регистром.}{ as well, but works not with memory, but with register.}
+\IFRU{Всё остальное ~--- так же.}{All the rest ~--- just the same.}
 
