@@ -27,8 +27,8 @@ f1:
 	mov	DWORD PTR [rax], r10d         ; store to product[]
 	mov	DWORD PTR [r12+r11*4], ebx    ; store to update_me[]
 	add	ebx, 123
-	mov	r10d, DWORD PTR [rsi]         ; load sum[i]
-	add	r10d, DWORD PTR [rax]         ; load product[i]
+	mov	r10d, DWORD PTR [rsi]         ; reload sum[i]
+	add	r10d, DWORD PTR [rax]         ; reload product[i]
 	lea	rax, 1[rdi]
 	cmp	rax, r13
 	mov	DWORD PTR 0[rbp+r11*4], r10d  ; store to sum_product[]
