@@ -2,7 +2,8 @@
 \index{C99!restrict}
 \index{\CLanguageConstructs!restrict}
 
-А вот причина из-за которой программы на FORTRAN, в некоторых случаях, работают быстрее чем на Си.
+\IFRU{А вот причина из-за которой программы на FORTRAN, в некоторых случаях, работают быстрее чем на Си.}
+{Here is a reason why FORTRAN programs, in some cases, works faster than \CCpp ones.}
 
 \begin{lstlisting}
 void f1 (int* x, int* y, int* sum, int* product, int* sum_product, int* update_me, size_t s)
@@ -17,37 +18,53 @@ void f1 (int* x, int* y, int* sum, int* product, int* sum_product, int* update_m
 };
 \end{lstlisting}
 
-Это очень простой пример, в котором есть одна особенность: указатель на массив \TT{update\_me} может быть указателем 
-на массив
-\TT{sum}, \TT{product}, или даже \TT{sum\_product} ~--- 
-ведь нет ничего криминального в том чтобы аргументам функции быть такими.
+\IFRU{Это очень простой пример, в котором есть одна особенность}{That's very simple example with one specific
+thing in it}: 
+\IFRU{указатель на массив}{pointer to} \TT{update\_me} \IFRU{может быть указателем на массив}{array could be
+a pointer to}
+\TT{sum}\IFRU{}{ array}, \TT{product}\IFRU{}{ array}, \IFRU{или даже}{or even} \TT{sum\_product}\IFRU{}{ array} 
+~--- \IFRU{ведь нет ничего криминального в том чтобы аргументам функции быть такими, верно?}
+{because, there are nothing criminal in it, right?}
 
-Компилятор знает об этом, поэтому генерирует код, где в теле цикла будет 4 основных стадии:
+\IFRU{Компилятор знает об этом, поэтому генерирует код, где в теле цикла будет 4 основных стадии:}
+{Compiler is fully aware about it, so it generates a code with four stages in loop body:}
 \begin{itemize}
-\item вычислить следующий \TT{sum[i]}
-\item вычислить следующий \TT{product[i]}
-\item вычислить следующий \TT{update\_me[i]}
-\item вычислить следующий \TT{sum\_product[i]} ~--- на этой стадии придется снова загружать из 
-      памяти подсчитанные \TT{sum[i]} и \TT{product[i]}
+\item \IFRU{вычислить следующий}{calculate next} \TT{sum[i]}
+\item \IFRU{вычислить следующий}{calculate next} \TT{product[i]}
+\item \IFRU{вычислить следующий}{calculate next} \TT{update\_me[i]}
+\item \IFRU{вычислить следующий}{calculate next} \TT{sum\_product[i]} ~--- 
+\IFRU{на этой стадии придется снова загружать из памяти подсчитанные}
+{on this stage, we need to load from memory already calculated} \TT{sum[i]} \IFRU{и}{and} \TT{product[i]}
 \end{itemize}
 
-Возможно ли соптимизировать последнюю стадию? Ведь подсчитанные \TT{sum[i]} и \TT{product[i]} не обязательно 
-снова загружать из памяти,
-ведь мы их только что подсчитали. Можно, но компилятор не уверен, что на третьей стадии ничего не затерлось! Это называется
-``pointer aliasing'', ситуация, когда компилятор не может быть уверен что память на которую указывает какой-то указатель, 
-не изменилась.
+\IFRU{Возможно ли соптимизировать последнюю стадию?}{Is it possible to optimize the last stage?}
+\IFRU{Ведь подсчитанные}{Because already calculated} \TT{sum[i]} \IFRU{и}{and} \TT{product[i]} 
+\IFRU{не обязательно снова загружать из памяти, ведь мы их только что подсчитали.}
+{are not necessary to load from memory again, becuse we already calculated them.}
+\IFRU{Можно, но компилятор не уверен, что на третьей стадии ничего не затерлось!}
+{Yes, but compiler isn't sure that nothing was overwritten on 3rd stage!}
+\IFRU{Это называется}{This is called}
+``pointer aliasing'', \IFRU{ситуация, когда компилятор не может быть уверен что память на которую указывает 
+какой-то указатель, не изменилась.}
+{a situation, when compiler can't be sure that a memory to which some pointer is pointing, wasn't changed.}
 
-\IT{restrict} в стандарте Си C99\cite[6.7.3.1]{C99TC3} это обещание, даваемое компилятору программистом, 
-что аргументы функции отмеченные этим 
-ключевым словом,
-всегда будут указывать на разные места в памяти и пересекаться не будут.
+\IT{restrict} \IFRU{в стандарте Си C99}{in C99 standard}\cite[6.7.3.1]{C99TC3} 
+\IFRU{это обещание, даваемое компилятору программистом, что аргументы функции отмеченные этим ключевым словом,
+всегда будут указывать на разные места в памяти и пересекаться не будут.}
+{is a promise, given by programmer to compiler that function arguments marked by this keyword will always
+be pointing to different memory locations and never be crossed.}
 
-Если быть более точным, и описывать это формально, \IT{restrict} показывает, что только данный указатель будет
+\IFRU{Если быть более точным, и описывать это формально, \IT{restrict} показывает, что только данный указатель будет
 использоваться для доступа к этому объекту, с которым мы работаем через этот указатель, больше никакой указатель для
-этого использоваться не будет. Можно даже сказать, что к всякому объекту, доступ будет осуществляться только через
-один единственный указатель, если он отмечен как \IT{restrict}.
+этого использоваться не будет.}
+{If to be more precise and describe this formally, \IT{restrict} shows that only this pointer will be used
+to access an object, with which we are working via this pointer, and no other pointer will be used for it.}
+\IFRU{Можно даже сказать, что к всякому объекту, доступ будет осуществляться только через
+один единственный указатель, если он отмечен как}
+{It can be even said that some object will be accessed
+only via one single pointer, if it's marked as} \IT{restrict}.
 
-Добавим это ключевое слово к каждому аргументу-указателю:
+\IFRU{Добавим это ключевое слово к каждому аргументу-указателю}{Let's add this keyword to each argument-pointer}:
 
 \begin{lstlisting}
 void f2 (int* restrict x, int* restrict y, int* restrict sum, int* restrict product, int* restrict sum_product, 
@@ -63,28 +80,46 @@ void f2 (int* restrict x, int* restrict y, int* restrict sum, int* restrict prod
 };
 \end{lstlisting}
 
-Посмотрим результат:
+\IFRU{Посмотрим результаты}{Let's see results}:
 
 \lstinputlisting[caption=GCC x64: f1()]{21_C99_restrict/f1.asm}
 
 \lstinputlisting[caption=GCC x64: f2()]{21_C99_restrict/f2.asm}
 
-Разница между скомпилированной функцией \TT{f1()} и \TT{f2()} такая: 
-в \TT{f1()} \TT{sum[i]} и \TT{product[i]} загружаются снова посреди тела цикла,
-а в \TT{f2()} этого нет, используются уже подсчитанные значения, ведь мы ``пообещали'' компилятору, 
-что никто и ничто не изменит
-значения в \TT{sum[i]} и \TT{product[i]} во время исполнения тела цикла, поэтому он ``уверен'', что так можно делать. 
-Очевидно, второй вариант будет работать быстрее.
+\IFRU{Разница между скомпилированной функцией \TT{f1()} и \TT{f2()} такая}{The difference between
+compiled \TT{f1()} and \TT{f2()} function as follows}:
+\IFRU{в}{in} \TT{f1()}, \TT{sum[i]} \IFRU{и}{and} \TT{product[i]} \IFRU{загружаются снова посреди тела цикла}
+{are reloaded in the middle of loop},
+\IFRU{а в}{and in} \TT{f2()} \IFRU{этого нет, используются уже подсчитанные значения}{there are no such thing,
+already calculated values are used}, 
+\IFRU{ведь мы ``пообещали'' компилятору}{because we ``promised'' to compiler}, 
+\IFRU{что никто и ничто не изменит значения в}{that no one and nothing will change values in} \TT{sum[i]} 
+\IFRU{и}{and} \TT{product[i]} \IFRU{во время исполнения тела цикла}{while execution of loop body}, 
+\IFRU{поэтому он ``уверен'', что значения из памяти можно не загружать снова}
+{so it is ``sure'' that value from memory may not be again}.
+\IFRU{Очевидно, второй вариант будет работать быстрее.}{Obviously, second example will work faster.}
 
-Но что будет если указатели в аргументах функций все же будут пересекаться? Это останется на совести программиста, 
-а результаты вычислений будут неверными.
+\IFRU{Но что будет если указатели в аргументах функций все же будут пересекаться?}
+{But what if pointers in function arguments will be crossed somehow?}
+\IFRU{Это останется на совести программиста, а результаты вычислений будут неверными.}
+{This will be on programmer's conscience, but results will be incorrect.}
 
-Вернемся к FORTRAN. Компиляторы с этого ЯП, по умолчанию, все указатели считают таковыми, поэтому, когда в Си не было
-возможности указать \IT{restrict}, FORTRAN в этих случаях мог генерировать более быстрый код.
+\IFRU{Вернемся к}{Let's back to} FORTRAN. 
+\IFRU{Компиляторы с этого ЯП, по умолчанию, все указатели считают таковыми}
+{Compilers from this programming language treats all pointers as such}, 
+\IFRU{поэтому, когда в Си не было возможности указать}{so when there are was not possible to set} \IT{restrict}, 
+FORTRAN \IFRU{в этих случаях мог генерировать более быстрый код}{in these cases may generate faster code}.
 
-Насколько это практично? Там где функция работает с несколькими большими блоками в памяти. 
-Такого очень много в линейной алгебре, например. Очень много линейной алгебры используется на суперкомпьютерах/HPC,
-возможно, поэтому, традиционно, там часто используется FORTRAN, до сих пор\cite{Loh:2010:IHP:1810226.1820518}.
+\IFRU{Насколько это практично}{How practical is it}? 
+\IFRU{Там где функция работает с несколькими большими блоками в памяти.}
+{In the cases when function works with several big blocks in memory.}
+\IFRU{Такого очень много в линейной алгебре, например.}
+{There are a lot of such in linear algebra, for example.}
+\IFRU{Очень много линейной алгебры используется на суперкомпьютерах/HPC,
+возможно, поэтому, традиционно, там часто используется FORTRAN, до сих пор}
+{A lot of linear algebra used on supercomputers/HPC, probably, that's why, traditionally, FORTRAN is still
+used there}\cite{Loh:2010:IHP:1810226.1820518}.
 
-Ну а когда итераций цикла не очень много, конечно, тогда прирост скорости не будет ощутимым.
+\IFRU{Ну а когда итераций цикла не очень много, конечно, тогда прирост скорости не будет ощутимым.}
+{But when there are not a big number of iterations, certainly, speed boost will not be significant.}
 
