@@ -31,6 +31,7 @@ first one (\TT{f}).}
 \IFRU{Функция }{}\TT{f}\IFRU{, как видно, использует три первых регистра (\Rzero-\Rtwo) как аргументы.}
 {function, as it seems, use first 3 registers (\Rzero-\Rtwo) as arguments.}
 
+\index{ARM!\Instructions!MLA}
 \IFRU{Инструкция }{}\TT{MLA} (\IT{Multiply Accumulate}) \IFRU{перемножает два первых операнда (\Rthree и \Rone), 
 прибавляет к произведению
 третий операнд (\Rtwo) и помещает результат в нулевой операнд (\Rzero), через который, по стандарту, 
@@ -38,6 +39,7 @@ first one (\TT{f}).}
 {instruction multiplicates two first operands (\Rthree and \Rone), adds third operand (\Rtwo) to product and places
 result into zeroth operand (\Rzero), via which, by standard, values are returned from functions.}
 
+\index{Fused multiply–add}
 \IFRU{Умножение и сложение одновременно}{Multiplication and addition at once}\footnote{\WPMAO} 
 (\IT{Fused multiply–add}) \IFRU{это много где применяемая операция, кстати, аналогичной
 инструкции в x86 нет}{is very useful operation, by the way, there are no such instruction in x86}, 
@@ -48,10 +50,12 @@ result into zeroth operand (\Rzero), via which, by standard, values are returned
 \IFRU{компилятор не оптимизировал её, ведь, это компиляция без оптимизации}{compiler wasn't optimized it,
 because, this is non-optimizing compilation}.
 
+\index{ARM!\IFRU{Переключение режимов}{Mode switching}}
+\index{ARM!\Instructions!BX}
 \IFRU{Инструкция \TT{BX} возвращает управление по адресу записанному в \LR и, если нужно, 
 переключает режимы процессора с thumb на ARM или наоборот.}
-{\TT{BX} instruction returns control to the address stored in \LR and, if need, switches processor mode from
-thumb to ARM or vice versa.}
+{\TT{BX} instruction returns control to the address stored in \LR and, if need, 
+switches processor mode from thumb to ARM or vice versa.}
 \IFRU{Это может быть необходимым потому, что, как мы видим, 
 функции \TT{f} неизвестно, из какого кода она будет вызываться, из ARM или thumb.}
 {This can be necessary because, as we can see, \TT{f} function is not aware, from which code it may be
@@ -86,10 +90,12 @@ exactly where calling function will read it and use.}
 .text:00000062 70 47                       BX      LR
 \end{lstlisting}
 
-\IFRU{В режиме thumb, инструкция \TT{MLA} недоступна, так что компилятору пришлось сгенерировать код, делающий
-обе операции по отдельности.}
-{\TT{MLA} instruction is not available in thumb mode, so, compiler generates the code doing these two operations
-separately.}
+\IFRU{В режиме thumb, инструкция \TT{MLA} недоступна, так что компилятору пришлось сгенерировать код, 
+делающий обе операции по отдельности.}
+{\TT{MLA} instruction is not available in thumb mode, so, compiler generates the code doing these two 
+operations separately.}
+\index{ARM!\Instructions!MULS}
+\index{ARM!\Instructions!ADDS}
 \IFRU{Первая инструкция \TT{MULS} умножает \Rzero на \Rone оставляя результат в \Rone.}
 {First \TT{MULS} instruction multiply \Rzero by \Rone leaving result in \Rone.}
 \IFRU{Вторая (\TT{ADDS}) складывает результат и \Rtwo, оставляя результат в \Rzero.}

@@ -4,6 +4,7 @@
 
 \lstinputlisting[caption=MSVC 2010]{08_switch/8_5_msvc.asm}
 
+\index{jumptable}
 \IFRU{Здесь происходит следующее: в теле функции есть набор вызовов \printf с разными аргументами. 
 Все они имеют, конечно же, адреса, а также внутренние символические метки, которые присвоил им компилятор.
 Помимо всего прочего, все эти метки складываются во внутреннюю таблицу \TT{\$LN11@f}.}
@@ -17,7 +18,8 @@ Besides, all these labels are also places into \TT{\$LN11@f} internal table.}
 {At the function beginning, if \TT{a} is greater than 4, control flow is passed to label 
 \TT{\$LN1@f}, where \printf with argument \TT{'something unknown'} is called.}
 
-\IFRU{А если \TT{a} меньше или равно 4, то это значение умножается на 4 и прибавляется адрес таблицы с переходами. 
+\IFRU{А если \TT{a} меньше или равно 4, то это значение умножается на 4 и прибавляется адрес таблицы 
+с переходами. 
 Таким образом, получается адрес внутри таблицы, где лежит нужный адрес внутри тела функции. 
 Например, возьмем \TT{a} равным 2. $2*4 = 8$ (ведь все элементы таблицы это адреса внутри 32-битного процесса, 
 таким образом, каждый элемент занимает 4 байта). 8 прибавить к \TT{\$LN11@f} ~--- это будет элемент таблицы,
@@ -29,6 +31,8 @@ are addresses within 32-bit process, that is why all elements contain 4 bytes).
 Address of \TT{\$LN11@f} table + 8 = it will be table element where \TT{\$LN4@f} label is stored. 
 \JMP fetch \TT{\$LN4@f} address from the table and jump to it.}
 
+\IFRU{Эта таблица иногда называется}{This table called sometimes} \IT{jumptable}.
+
 \IFRU{А там вызывается \printf с агрументом \TT{'two'}. 
 Дословно, инструкция \TT{jmp DWORD PTR \$LN11@f[ecx*4]} 
 означает \IT{перейти по DWORD, который лежит по адресу} \TT{\$LN11@f + ecx * 4}.}
@@ -37,10 +41,12 @@ Literally, \TT{jmp DWORD PTR \$LN11@f[ecx*4]} instruction mean
 \IT{jump to DWORD, which is stored at address} \TT{\$LN11@f + ecx * 4}.}
 
 \TT{npad}~\ref{sec:npad} 
-\IFRU{это команда ассемблеру немного выровнять начало таблицы, дабы она располагалась по 
+\IFRU{это макрос ассемблера, немного выровнять начало таблицы, 
+дабы она располагалась по 
 адресу кратному 4 (или 16). Это нужно для того чтобы процессор мог эффективнее загружать 32-битное 
 значения из памяти, через шину с памятью, кеш-память, итд.}
-{is assembly language macro, aligning next label so that it will be stored at address aligned by 4 bytes (or 16). 
+{is assembly language macro, aligning next label so that it will be stored at address aligned by 4 bytes 
+(or 16). 
 This is very suitable for processor, because it can fetch 32-bit values from memory through memory bus, 
 cache memory, etc, in much effective way if it is aligned.}
 
@@ -48,6 +54,7 @@ cache memory, etc, in much effective way if it is aligned.}
 
 \lstinputlisting[caption=GCC 4.4.1]{08_switch/8_6_gcc.asm}
 
+\index{x86!\Registers!JMP}
 \IFRU{Практически то же самое, за исключением мелкого нюанса: аргумент из \TT{arg\_0} умножается на 4 
 при помощи сдвига влево на 2 бита (это почти то же самое что и умножение на 4)~\ref{SHR}. 
 Затем адрес метки внутри функции берется из массива \TT{off\_804855C} и адресуется при помощи 

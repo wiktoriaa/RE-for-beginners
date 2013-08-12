@@ -1,7 +1,8 @@
 ﻿\section{\HelloWorldSectionName}
 \label{sec:helloworld}
 
-\IFRU{Начнем с знаменитого примера из книги}{Let's start with famous example from the book} ``The C programming Language''\cite{Kernighan:1988:CPL:576122}:
+\IFRU{Начнем с знаменитого примера из книги}{Let's start with famous example from the book}
+``The C programming Language''\cite{Kernighan:1988:CPL:576122}:
 
 \lstinputlisting{01_helloworld/1_1.c}
 
@@ -42,6 +43,7 @@ _TEXT	ENDS
 \IFRU{В нашем случае, этот файл состоит из двух сегментов: \TT{CONST} (для данных-констант) и \TT{\_TEXT} (для кода).}
 {In our case, the file contain two segments: \TT{CONST} (for data constants) and \TT{\_TEXT} (for code).} 
 
+\index{\CLanguageElements!const}
 \IFRU{Строка \TT{``hello, world''} в \CCpp имеет тип \TT{const char*}, однако не имеет имени.}
 {The string \TT{``hello, world''} in \CCpp has type \TT{const char*}, however hasn't its own name.}
 
@@ -61,9 +63,11 @@ _TEXT	ENDS
 {Read more about it in section about function prolog and epilog}
 ~\ref{sec:prologepilog}.
 
+\index{x86!\Instructions!CALL}
 \IFRU{Далее следует вызов функции \printf}
 {After function prologue we see a function \printf call}: \TT{CALL \_printf}. 
 
+\index{x86!\Instructions!PUSH}
 \IFRU
 {Перед этим вызовом, адрес строки (или указатель на нее) с нашим приветствием при помощи инструкции \PUSH помещается в стек.}
 {Before the call, string address (or pointer to it) containing our greeting is placed into stack with help of \PUSH instruction.}
@@ -74,6 +78,7 @@ _TEXT	ENDS
 \IFRU{Так как он больше не нужен, то указатель стека (регистр \ESP) корректируется.} 
 {Because we do not need it anymore, stack pointer (\ESP register) is to be corrected.}
 
+\index{x86!\Instructions!ADD}
 \TT{ADD ESP, 4} \IFRU{означает прибавить 4 к значению в регистре \ESP.}
 {mean add 4 to the value in \ESP register.}
 
@@ -86,8 +91,10 @@ It's 8 bytes in x64-code}
 процессора, впрочем, модифицируются}.}
 {is equivalent to \TT{``POP register''} but without any register usage\footnote{CPU flags, however, modified}.}
 
-\IFRU
-{Некоторые компиляторы, например Intel C++ Compiler, в этой же ситуации, могут вместо 
+\index{Intel C++}
+\index{Oracle RDBMS}
+\index{x86!\Instructions!POP}
+\IFRU{Некоторые компиляторы, например Intel C++ Compiler, в этой же ситуации, могут вместо 
 \ADD сгенерировать \TT{POP ECX} (подобное можно встретить например в коде \oracle{}, им скомпилированном), 
 что почти то же самое, только портится значение в регистре \ECX.}
 {Some compilers like Intel C++ Compiler, at the same point, could emit \TT{POP ECX} 
@@ -101,31 +108,34 @@ and this instruction has almost the same effect, but \ECX register contents will
 
 \IFRU{О стеке можно прочитать в соответствующем разделе}{Read more about stack in relevant section}~\ref{sec:stack}.
 
+\index{\CLanguageElements!return}
 \IFRU{После вызова \printf, в оригинальном коде на \CCpp указано \TT{return 0} ~--- вернуть 0 
 в качестве результата функции \main.} 
 {After \printf call, in original \CCpp code was \TT{return 0} ~--- return zero as a \main function result.} 
 
+\index{x86!\Instructions!XOR}
 \IFRU{В сгенерированном коде это обеспечивается инструкцией}
 {In the generated code this is implemented by instruction} \TT{XOR EAX, EAX} 
 
-\IFRU
-{\XOR, на самом деле, как легко догадаться, ``исключающее ИЛИ''}
+\index{x86!\Instructions!MOV}
+\IFRU{\XOR, на самом деле, как легко догадаться, ``исключающее ИЛИ''}
 {\XOR, in fact, just ``eXclusive OR''}
 \footnote{\url{http://en.wikipedia.org/wiki/Exclusive_or}}, 
-\IFRU
-{но компиляторы часто используют его вместо простого}
+\IFRU{но компиляторы часто используют его вместо простого}
 {but compilers using it often instead of}
 \TT{MOV EAX, 0} ~--- 
 \IFRU
 {потому что снова опкод короче (2 байта против 5).}
 {slightly shorter opcode again (2 bytes against 5).}
 
+\index{x86!\Instructions!SUB}
 \IFRU{Бывает так, что некоторые компиляторы генерируют}{Some compilers emitting} 
 \TT{SUB EAX, EAX}, 
 \IFRU
 {что значит, \IT{отнять значение \EAX от \EAX}, в любом случае это даст 0 в результате.}
 {which mean \IT{SUBtract \EAX value from \EAX}, which is in any case will result zero.}
 
+\index{x86!\Instructions!RET}
 \IFRU{Самая последняя инструкция \RET возвращает управление в вызывающую функцию.
 Обычно, это код \CCpp CRT\footnote{C Run-Time Code}, который, в свою очередь, 
 вернет управление операционной системе.}
@@ -162,6 +172,8 @@ var_10          = dword ptr -10h
 main            endp
 \end{lstlisting}
 
+\index{Function prologue}
+\index{x86!\Instructions!AND}
 \IFRU{Почти то же самое. 
 Адрес строки ``hello, world'' лежащей в сегменте данных, в начале сохраняется в \EAX, затем записывается в стек.
 А еще в прологе функции мы видим \TT{AND ESP, 0FFFFFFF0h} ~--- 
@@ -175,6 +187,7 @@ this instruction aligning \ESP value on 16-byte border, resulting all values in 
 (CPU performing better if values it working with are located in memory at addresses aligned by 
 4 or 16 byte border)\footnote{\URLWPDA}.}
 
+\index{x86!\Instructions!SUB}
 \TT{SUB ESP, 10h} \IFRU{выделяет в стеке 16 байт, хотя, как будет видно далее, здесь достаточно только 4.}
 {allocate 16 bytes in stack, although, as we could see below, only 4 need here.} 
 
@@ -182,6 +195,7 @@ this instruction aligning \ESP value on 16-byte border, resulting all values in 
 16-байтной границе.}{This is because the size of allocated stack is also aligned on 16-byte border.}
 
 % TODO: rewrite.
+\index{x86!\Instructions!PUSH}
 \IFRU{Адрес строки (или указатель на строку) затем записывается прямо в стек без помощи инструкции \PUSH.
 \IT{var\_10} по совместительству ~--- и локальная переменная и одновременно аргумент для \printf{}. Подробнее об этом будет ниже.}
 {String address (or pointer to string) is then writing directly into stack space without \PUSH instruction use.
@@ -193,6 +207,7 @@ this instruction aligning \ESP value on 16-byte border, resulting all values in 
 более короткого опкода.}{Unlike MSVC, GCC while compiling without optimization turned on, 
 emitting \TT{MOV EAX, 0} instead of shorter opcode.}
 
+\index{x86!\Instructions!LEAVE}
 \IFRU{Последняя инструкция \LEAVE ~--- это аналог команд \TT{MOV ESP, EBP} и \TT{POP EBP} ~--- 
 то есть возврат указателя стека и регистра \EBP в первоначальное состояние.} 
 {The last instruction \LEAVE ~--- is \TT{MOV ESP, EBP} and \TT{POP EBP} instructions pair equivalent ~--- 

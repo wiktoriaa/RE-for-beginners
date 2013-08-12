@@ -23,6 +23,7 @@ But this one-dimensional array can be easily represented as multidimensional for
 \end{tabular}
 \end{center}
 
+\index{row-major order}
 \IFRU{То есть, чтобы адресовать нужный элемент, в начале умножаем первый индекс на 4 (ширину матрицы), 
 затем прибавляем второй индекс.}{So, in order to address elements we need, first multiply first index by
 4 (matrix width) and then add second index.}
@@ -35,6 +36,8 @@ But this one-dimensional array can be easily represented as multidimensional for
 {term in plain English language mean: ``first, write elements of first row, then second row \dots 
 and finally elements of last row''.}
 
+\index{column-major order}
+\index{FORTRAN}
 \IFRU{Другой способ представления называется}{Another method of representation called} 
 \IT{column-major order} (\IFRU{индексы массива используются в обратном порядке}
 {array indices used in reverse order}) \IFRU{и это используется по крайней мере в}{and it's used at least in} 
@@ -93,11 +96,14 @@ used, one bitwise shift operation and one subtraction operation.}
 \IFRU{Тут используются уже описанные трюки для замены умножения на операции сдвига, сложения и вычитания.}
 {Here is used tricks for replacing multiplication by shift, addition and subtraction we already considered.}
 
+\index{ARM!\Instructions!RSB}
+\index{ARM!\Instructions!SUB}
 \IFRU{Также мы видим новую для себя инструкцию}{Here we also see new instruction for us:} 
 \TT{RSB} (\IT{Reverse Subtract}).
 \IFRU{Она работает так же как и \SUB, только меняет операнды местами.}
 {It works just as \SUB, but swapping operands with each other.}
 \IFRU{Зачем?}{Why?}
+\index{ARM!Optional operators!LSL}
 \SUB, \TT{RSB}, \IFRU{это те инструкции, ко второму операнду которых можно применить коэффициент сдвига, 
 как мы видим и здесь}
 {are those instructions, to the second operand of which shift coefficient may be applied}: (\TT{LSL\#4}). 
@@ -110,6 +116,7 @@ without result affecting.}
 \IFRU{Но вычитание ~--- операция некоммутативная, так что, для этих случаев существует инструкция \TT{RSB}.}
 {But subtraction is non-commutative operation, so, for these cases, \TT{RSB} exist.}
 
+\index{ARM!\Instructions!LDR.W}
 \IFRU{Инструкция }\TT{``LDR.W R9, [R9]''} \IFRU{работает как}{works like} \LEA~\ref{sec:LEA} 
 \IFRU{в x86, и здесь она ничего не делает, она избыточна.}{in x86, but here it does nothing, it's redundant.}
 \IFRU{Вероятно, компилятор несоптимизировал её.}{Apparently, compiler not optimized it.}

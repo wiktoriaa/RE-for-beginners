@@ -1,8 +1,9 @@
 ﻿\subsection{x86}
 
+\index{x86!\Instructions!LOOP}
 \IFRU{Для организации циклов, в архитектуре x86 есть старая инструкция \LOOP, 
-она проверяет значение регистра \ECX и если оно не ноль, делает декремент\footnote{уменьшение на 1} \ECX и переход 
-по метке указанной в операнде. 
+она проверяет значение регистра \ECX и если оно не ноль, делает декремент\footnote{уменьшение на 1} \ECX 
+и переход по метке указанной в операнде. 
 Возможно, эта инструкция не слишком удобная, поэтому я не видел современных компиляторов, 
 которые использовали бы её. Так что, если вы видите где-то \LOOP, то это, с большой вероятностью, 
 вручную написанный код на ассемблере.}
@@ -18,6 +19,7 @@ So, if you see the instruction somewhere in code, it is most likely this is manu
 {In \CCpp loops are constructed using \TT{for()}, \TT{while()}, \TT{do/while()} statements.}
 
 \IFRU{Начнем с}{Let's start with} \TT{for()}.
+\index{\CLanguageElements!for}
 
 \IFRU{Это выражение описывает инициализацию, условие, что делать после каждой итерации (инкремент/декремент) 
 и тело цикла.}
@@ -57,21 +59,23 @@ and of course loop body.}
 but even individual register: \ESI. This is possible in such small functions where not so 
 many local variables are present.}
 
-\IFRU{В принципе, все то же самое, только теперь одна важная особенность: \TT{f()} не должна менять значение \ESI. 
+\IFRU{В принципе, все то же самое, только теперь одна важная особенность: 
+\TT{f()} не должна менять значение \ESI. 
 Наш компилятор уверен в этом, а если бы и была необходимость использовать регистр \ESI в функции \TT{f()}, 
 то её значение сохранялось бы в стеке. Примерно также как и в нашем листинге: 
 обратите внимание на \TT{PUSH ESI/POP ESI} в начале и конце функции.}
-{One very important property is that \TT{f()} function should not change \ESI value. Our compiler is sure here. 
+{One very important property is that \TT{f()} function should not change \ESI value. 
+Our compiler is sure here. 
 And if compiler decided to use \ESI in \TT{f()} too, it would be saved then at \TT{f()} function 
 prologue and restored at \TT{f()} epilogue. Almost like in our listing: please note \TT{PUSH ESI/POP ESI}
 at the function begin and end.}
 
-\IFRU
-{Попробуем GCC 4.4.1 с максимальной оптимизацией (\Othree):}
+\IFRU{Попробуем GCC 4.4.1 с максимальной оптимизацией (\Othree):}
 {Let's try GCC 4.4.1 with maximal optimization turned on (\Othree option):}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.1]{09_loops/9_1_gcc_O3.asm}
 
+\index{Loop unwinding}
 \IFRU
 {Однако, GCC просто \IT{развернул} цикл\footnote{loop unwinding в англоязычной литературе}.}
 {Huh, GCC just unwind our loop.}

@@ -12,6 +12,8 @@
 \IFRU{.}
 {string printing.}
 
+\index{ARM!\Instructions!CMP}
+\index{ARM!\Instructions!ADDCC}
 \IFRU{Самая первая инструкция}{The very first} \TT{``CMP R0, \#5''} 
 \IFRU{сравнивает входное значение в $a$ c $5$.}
 {instruction compares $a$ input value with $5$.}
@@ -47,6 +49,7 @@ current \PC value},
 \IFRU{либо, говоря иным языком, на 2 инструкции больше.}
 {or, in other words, 2 instructions ahead.}
 
+\index{ARM!\IFRU{Конвеер}{Pipeline}}
 \IFRU{Это связано с работой конвеера процессора ARM:
 пока исполняется инструкция \TT{ADDCC}, процессор уже начинает обрабатывать инструкцию после следующей, 
 поэтому \PC указывает туда.}
@@ -85,11 +88,14 @@ what was programmed in}
 
 \lstinputlisting{08_switch/lot_ARM_thumb_O3.asm}
 
+\index{ARM!\ThumbMode}
+\index{ARM!\ThumbTwoMode}
 \IFRU{В режимах thumb и thumb-2, уже нельзя надеятся на то что все инструкции будут иметь одну длину.}
 {One cannot be sure all instructions in thumb and thumb-2 modes will have same size.}
 \IFRU{Можно даже сказать что в этих режимах инструкции переменной длины, как в x86.}
 {It's even can be said that in these modes instructions has variable length, just like in x86.}
 
+\index{jumptable}
 \IFRU{Так что здесь добавляется специальная таблица, содержащая информацию о том, как много вариантов здесь,
 не включая default-варианта, и смещения, для каждого варианта, каждое кодирует метку, куда нужно передать
 управление в соответствующем случае.}
@@ -97,6 +103,8 @@ what was programmed in}
 default-case, and offset, for each, each encoding a label, to which control should be passed in 
 corresponding case.}
 
+\index{ARM!\IFRU{Переключение режимов}{Mode switching}}
+\index{ARM!\Instructions!BX}
 \IFRU{Для того чтобы работать с таблицей и совершить переход, вызывается служебная функция}
 {A special function here present in order to work with the table and pass control, named} \\
 \IT{\_\_ARM\_common\_switch8\_thumb}. 
@@ -109,6 +117,7 @@ corresponding case.}
 {It's too complex for describing it here now, so I'll omit elaborations.}
 %TODO дописать когда-то?
 
+\index{ARM!\Registers!Link Register}
 \IFRU{Но можно отметить, что эта функция использует регистр \LR как указатель на таблицу.}
 {But it's interesting to note that the function uses \LR reigster as a pointer to the table.}
 \IFRU{Действительно, после вызова этой функции, в \LR был записан

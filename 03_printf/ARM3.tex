@@ -1,8 +1,10 @@
 ﻿\subsection{ARM: \IFRU{3 аргумента в \printf}{3 \printf arguments}}
 
-\IFRU{В ARM традиционно принята такая схема передачи аргументов в функцию: 4 первых аргумента через регистры R0-R3,
-а остальные ~--- через стек}{Traditionally, ARM arguments passing scheme (calling convention) is as follows:
-the 4 first arguments are passed in R0-R3 registers and remaining arguments ~--- via stack}.
+\IFRU{В ARM традиционно принята такая схема передачи аргументов в функцию: 
+4 первых аргумента через регистры \Rzero-\Rthree,
+а остальные ~--- через стек}
+{Traditionally, ARM arguments passing scheme (calling convention) is as follows:
+the 4 first arguments are passed in \Rzero-\Rthree registers and remaining arguments ~--- via stack}.
 \IFRU{Это немного похоже на то как аргументы передаются в}{This resembling arguments passing scheme in} 
 fastcall~\ref{fastcall} \IFRU{или}{or} win64~\ref{sec:callingconventions_win64}.
 
@@ -19,9 +21,11 @@ fastcall~\ref{fastcall} \IFRU{или}{or} win64~\ref{sec:callingconventions_win6
 .text:0000002C 10 80 BD E8                 LDMFD   SP!, {R4,PC}
 \end{lstlisting}
 
-\IFRU{Итак, первые 4 аргумента передаются через регистры R0-R3, по порядку: указатель на формат-строку для \printf
-в R0, затем $1$ в R1, $2$ в R2 и $3$ в R3}{So, the first 4 arguments are passing via R0-R3 arguments in this order:
-pointer to \printf format string in R0, then $1$ in R1, $2$ in R2 and $3$ in R3}.
+\IFRU{Итак, первые 4 аргумента передаются через регистры \Rzero-\Rthree, по порядку: 
+указатель на формат-строку для \printf
+в \Rzero, затем $1$ в R1, $2$ в R2 и $3$ в R3}
+{So, the first 4 arguments are passing via \Rzero-\Rzero arguments in this order:
+pointer to \printf format string in \Rzero, then $1$ in R1, $2$ in R2 and $3$ in R3}.
 
 \IFRU{Пока что, здесь нет ничего необычного}{Nothing unusual so far}.
 
@@ -38,18 +42,25 @@ pointer to \printf format string in R0, then $1$ in R1, $2$ in R2 and $3$ in R3}
 .text:00000024 CB 18 00 EA                 B       __2printf
 \end{lstlisting}
 
+\index{ARM!\Registers!Link Register}
+\index{ARM!\Instructions!B}
+\index{Function epilogue}
 \IFRU{Это соптимизированная версия (\Othree) для режима ARM, и здесь мы видим последнюю инструкцию: 
 \TT{B} вместо привычной нам \TT{BL}}{This is optimized (\Othree) version for ARM mode and here we see \TT{B} as
 the last instruction instead of familiar \TT{BL}}.
-\IFRU{Отличия между этой соптимзированной версией и предыдущей, скомпилированной без оптимизации, еще и в том, 
-что здесь нет пролога и эпилога функции (инструкций, сохранающих состояние регистров \TT{R4} и \LR)}
-{Another difference between this optimized version and previous one, compiled without optimization, is also in the
-fact that there are no function prologue and epilogue (instructions saving \TT{R4} and \LR registers values)}.
+\IFRU{Отличия между этой соптимзированной версией и предыдущей, скомпилированной без оптимизации, 
+еще и в том, 
+что здесь нет пролога и эпилога функции (инструкций, сохранающих состояние регистров \TT{\Rzero} и \LR)}
+{Another difference between this optimized version and previous one, compiled without optimization, 
+is also in the
+fact that there are no function prologue and epilogue (instructions saving \TT{\Rzero} and \LR registers values)}.
+\index{x86!\Instructions!JMP}
 \IFRU{Инструкция \TT{B} просто переходит на другой адрес, без манипуляций с регистром \LR, то есть,
-это аналог \JMP в x86}{\TT{B} instruction just jumping to another address, without any \LR register manipulation, 
+это аналог \JMP в x86}
+{\TT{B} instruction just jumping to another address, without any \LR register manipulation, 
 that is, it's \JMP analogue in x86}.
-\IFRU{Почему это работает нормально? Потому что этот код эквивалентен предыдущему.}{Why it works fine? Because
-this code is in fact equivalent to the previous.}
+\IFRU{Почему это работает нормально? Потому что этот код эквивалентен предыдущему.}
+{Why it works fine? Because this code is in fact equivalent to the previous.}
 \IFRU{Основных причин две: 1) стек не модифицируется, как и указатель стека \SP; 2) вызов функции \printf последний, 
 после него ничего не происходит}{There are two main reasons: 1) stack is not modified, as well as \SP stack pointer; 
 2) \printf call is the last one, there are nothing going on after it}.
@@ -57,15 +68,16 @@ this code is in fact equivalent to the previous.}
 function will just return control to the address stored in \LR}. 
 \IFRU{Но в \LR находится адрес места, откуда была вызвана наша функция}{But the address of the place from where our function
 was called is now in \LR}!
-\IFRU{А следовательно, управление из \printf вернется сразу туда}{And consequently, control from \printf will returned to that
-place}.
-\IFRU{Следовательно, нет нужды сохранять \LR, потому что нет нужны модифицировать \LR}{As a consequent, we don't need to save
-\LR, because we don't need to modify \LR}.
+\IFRU{А следовательно, управление из \printf вернется сразу туда}
+{And consequently, control from \printf will returned to that place}.
+\IFRU{Следовательно, нет нужды сохранять \LR, потому что нет нужны модифицировать \LR}
+{As a consequent, we don't need to save \LR, because we don't need to modify \LR}.
 \IFRU{А нет нужды модифицировать \LR, потому что нет иных вызовов функций, кроме \printf, к тому же, после этого вызова не нужно ничего здесь больше делать}{And we don't need to modify \LR because there are no other functions calls except \printf, furthermore,
 after this call we are not planning to do anything}!
 \IFRU{Поэтому такая оптимизация возможна}{That's why this optimization is possible}.
 
-\IFRU{Еще один похожий пример описан в секции}{Another similar example was described in} ``\SwitchCaseDefaultSectionName'' 
+\IFRU{Еще один похожий пример описан в секции}{Another similar example was described in} 
+``\SwitchCaseDefaultSectionName'' 
 \IFRU{, здесь}{section, here}~\ref{jump_to_last_printf}.
 
 \subsubsection{\OptimizingKeil + \ThumbMode}

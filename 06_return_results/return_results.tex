@@ -2,6 +2,8 @@
 
 \newcommand{\MSDNURL}{\href{http://msdn.microsoft.com/en-us/library/7572ztz4.aspx}{MSDN: Return Values (C++)}}
 
+\index{x86!\Registers!EAX}
+\index{ARM!\Registers!R0}
 \IFRU{Резльутат выполнения функции в x86 обычно возвращается\footnote{См.также: \MSDNURL} через регистр \EAX, 
 а если результат имеет тип байт или символ (\IT{char}), 
 то в самой младшей части \EAX ~--- \AL. Если функция возвращает число с плавающей запятой, 
@@ -14,13 +16,16 @@ If function returning \Tfloat number, FPU register
 \STZERO will be used instead.
 In ARM, result is usually returned in R0 register.}
 
-\IFRU{Вот почему старые компиляторы Си не способны создавать функции возвращающие нечто большее нежели помещается 
+\index{\CLanguageElements!return}
+\IFRU{Вот почему старые компиляторы Си не способны создавать функции возвращающие нечто большее нежели 
+помещается 
 в один регистр (обычно, тип \Tint), а когда нужно, приходится возвращать через указатели, указываемые 
 в аргументах.}
 {That is why old C compilers can't create functions capable of returning something not fitting in one 
 register (usually type \Tint), but if one need it, one should return information via pointers passed 
 in function arguments.}
-\IFRU{Хотя, позже и стало возможным, вернуть, скажем, целую структуру, но этот метод до сих пор не очень популярен. 
+\IFRU{Хотя, позже и стало возможным, вернуть, скажем, целую структуру, но этот метод до сих пор не 
+очень популярен. 
 Если функция должна вернуть структуру, вызывающая функция должна сама, скрыто и прозрачно для программиста, 
 выделить место и передать указатель на него в качестве первого аргумента. Это почти то же самое 
 что и сделать это вручную, но компилятор прячет это.

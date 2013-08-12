@@ -10,6 +10,8 @@ VMOV            R0, R1, D16
 BX              LR
 \end{lstlisting}
 
+\index{ARM!\Registers!APSR}
+\index{ARM!\Registers!FPSCR}
 \IFRU{Очень простой случай.}{A very simple case.}
 \IFRU{Входные величины помещаются в}{Input values are placed into} \TT{D17} \IFRU{и}{and} \TT{D16} 
 \IFRU{и сравниваются при помощи инструкции}{and then compared with the help of} 
@@ -19,6 +21,7 @@ BX              LR
 \IFRU{потому как есть необходимость хранить специфичные для его работы флаги.}
 {because there is a need to store coprocessor-specific flags.}
 
+\index{ARM!\Instructions!VMRS}
 \IFRU{И так же как и в x86}{And just like in x86}, 
 \IFRU{в ARM нет инструкций условного перехода}{there are no conditional jump instruction in ARM}, 
 \IFRU{проверяющих биты в регистре статуса сопроцессора}{checking bits in coprocessor status register}, 
@@ -27,6 +30,7 @@ BX              LR
 \IFRU{из статуса сопроцессора в биты \IT{общего} статуса (регистр \TT{APSR}).}
 {from the coprocessor status word into bits of \IT{general} status (\TT{APSR} register).}
 
+\index{ARM!\Instructions!VMOVGT}
 \TT{VMOVGT} \IFRU{это аналог}{is analogue of} \TT{MOVGT}, 
 \IFRU{инструкция, сработающая если при сравнении один операнд был больше чем второй}
 {instruction, to be executed if one operand is greater than other while comparing} (\IT{GT ~--- Greater Than}). 
@@ -39,6 +43,7 @@ BX              LR
 \IFRU{то в \TT{D16} останется лежать значение $a$.}
 {then $a$ value will stay in \TT{D16}.}
 
+\index{ARM!\Instructions!VMOV}
 \IFRU{Предпоследняя инструкция \TT{VMOV} подготовит то что было в \TT{D16} для возврата через 
 пару регистров \Rzero и \Rone.}
 {Penultimate instruction \TT{VMOV} will prepare value in \TT{D16} for returning via \Rzero and \Rone
@@ -69,6 +74,7 @@ and the instruction is to be executed if condition is true.}
 которых можно было бы закодировать условие выполнения.}
 {There are no place in 16-bit instructions for spare 4 bits where condition can be encoded.}
 
+\index{ARM!\ThumbTwoMode}
 \IFRU{Поэтому в thumb-2 добавили возможность дополнять thumb-инструкции условиями.}
 {However, thumb-2 was extended to make possible to specify predicates to old thumb instructions.}
 
@@ -84,6 +90,8 @@ and the instruction is to be executed if condition is true.}
 \IFRU{потому что перед этой инструкцией стоит \TT{``IT GT''}}
 {because there are \TT{``IT GT''} instruction placed right before}.
 
+\index{ARM!\Instructions!IT}
+\index{ARM!if-then block}
 \IFRU{Инструкция }\TT{IT} \IFRU{определяет так называемый}{instruction defines so-called} \IT{if-then block}. 
 \IFRU{После этой инструкции, можно указывать до четырех инструкций, к которым будет добавлен суффикс условия.}
 {After that instruction, it's possible to place up to 4 instructions, to which predicate suffix will be added.}
@@ -91,6 +99,7 @@ and the instruction is to be executed if condition is true.}
 \IFRU{что следующая за ней инструкция будет исполнена}{the next instruction will be executed}, 
 \IFRU{если условие}{if} \IT{GT} (\IT{Greater Than}) \IFRU{справедливо}{condition is true}.
 
+\index{Angry Birds}
 \IFRU{Теперь более сложный пример, кстати, из}{Now more complex code fragment, by the way, from} 
 ``Angry Birds'' (\IFRU{для}{for} iOS):
 
@@ -109,6 +118,7 @@ VMOVEQ          R2, R3, D17
 \IFRU{а вторая ~--- если это условие не сработает}{and the second ~--- if that condition will not be true}.
 (\IFRU{Обратное условие от}{Inverse condition of} \TT{NE} \IFRU{это}{is} \TT{EQ} (\IT{equal})).
 
+\index{Angry Birds}
 \IFRU{Еще чуть сложнее}{Slightly harder}, \IFRU{и снова этот фрагмент из}{and this fragment from} 
 ``Angry Birds''\IFRU{}{ as well}:
 
@@ -125,7 +135,8 @@ POPEQ           {R4-R7,PC}
 \IFRU{Поэтому \IDA добавила ко всем четырем инструкциям суффикс}{That's why \IDA added} \TT{-EQ}\IFRU{}{ suffix
 to each 4 instructions}. 
 
-\IFRU{А если бы здесь было, например}{And if there will be, for example}, \TT{ITEEE EQ} (\IT{if-then-else-else-else}), 
+\IFRU{А если бы здесь было, например}{And if there will be, for example}, 
+\TT{ITEEE EQ} (\IT{if-then-else-else-else}), 
 \IFRU{тогда суффиксы для следующих четырех инструкций были бы расставлены так:}
 {then suffixes will be set as follows:}
 
@@ -136,6 +147,7 @@ to each 4 instructions}.
 -NE
 \end{lstlisting}
 
+\index{Angry Birds}
 \IFRU{Еще фрагмент из}{Another fragment from} ``Angry Birds'':
 
 \begin{lstlisting}[caption=Angry Birds Classic]
@@ -154,6 +166,7 @@ instructions will be executed},
 
 \IFRU{Компиляторы способны генерировать далеко не все варианты.}{Compilers usually are not generating
 all possible combinations.}
+\index{Angry Birds}
 \IFRU{Например, в вышеупомянутой игре ``Angry Birds'' (версия \IT{classic} для iOS)}
 {For example, it mentioned ``Angry Birds'' game (\IT{classic} version for iOS)}
 \IFRU{попадаются только такие варианты инструкции \TT{IT}}{only these cases of \TT{IT} instruction are used}: 
@@ -171,6 +184,7 @@ to show 4 bytes of each opcodes .}
 cat AngryBirdsClassic.lst | grep " BF" | grep "IT" > results.lst
 \end{lstlisting}
 
+\index{ARM!\ThumbTwoMode}
 \IFRU{Кстати, если писать на ассемблере для режима thumb-2 вручную, и дополнять инструкции суффиксами
 условия, то ассемблер автоматически будет добавлять инструкцию \TT{IT} с соответствующими флагами, там
 где надо.}
@@ -248,6 +262,7 @@ be supported on the target CPU, and it cannot be done by simple bitwise comparin
 %TODO: why?
 \IFRU{Для сравнения вызывается библиотечная функция}{So there is called external library
 function for comparing:} \TT{\_\_aeabi\_cdrcmple}. 
+\index{ARM!\Instructions!BCS}
 \IFRU{Обратите внимание, результат
 сравнения эта функция оставляет в флагах, чтобы следующая за вызовом инструкция}
 {Please note, comparision result is to be leaved in flags, so the following}

@@ -1,5 +1,8 @@
 \subsection{\IFRU{Таблица \TT{V\$VERSION} в \oracle}{\TT{V\$VERSION} table in \oracle}}
 
+\index{Oracle RDBMS}
+\index{Linux}
+\index{Windows!ntoskrnl.exe}
 \IFRU{\oracle 11.2 это очень большая программа, основной модуль \TT{oracle.exe} содержит около 124 тысячи функций.}{\oracle 11.2 is a huge program, main module \TT{oracle.exe} contain approx. 124,000 functions.} \IFRU{Для сравнения, ядро Windows 7 x64 (ntoskrnl.exe) ~--- около 11 тысяч функций, а ядро Linux 3.9.8 (с драйверами по умолчанию) ~--- 31 тысяч функций.}{For comparison, Windows 7 x86 kernel (ntoskrnl.exe) ~--- approx. 11,000 functions and Linux 3.9.8 kernel (with default drivers compiled) ~--- 31,000 functions.}
 
 \IFRU{Начнем с одного простого вопроса. Откуда \oracle берет информацию, когда мы в SQL*Plus пишем вот такой вот простой запрос:}{Let's start with an easy question. Where \oracle get all this information, when we execute such simple statement in SQL*Plus:}
@@ -265,11 +268,17 @@ Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
 .rodata:08042680                 kqftap_element <0, offset kqvt_c_0, offset kqvrow, 0> ; element 0x1f6
 \end{lstlisting}
 
-\IFRU{Интересно что здесь этот элемент проходит также под номером 0x1f6 (502), как и ссылка на строку \TT{X\$VERSION} в таблице \TT{kqftab}.}{It's interesting that this element here is 0x1f6th (502nd), just as a pointer to \TT{X\$VERSION} string in \TT{kqftab} table.}
-\IFRU{Вероятно, таблицы \TT{kqftap} и \TT{kqftab} дополняют друг друга, как и \TT{kqfvip} и \TT{kqfviw}.}{Probably, \TT{kqftap} and \TT{kqftab} tables are complement each other, just like \TT{kqfvip} and \TT{kqfviw}.}
-\IFRU{Мы также видим здесь ссылку на функцию с названием \TT{kqvrow()}. А вот это уже кое-что!}{We also see a pointer to \TT{kqvrow()} function. Something useful at last!}
+\IFRU{Интересно что здесь этот элемент проходит также под номером $0x1f6$ (502-й), как и ссылка на строку 
+\TT{X\$VERSION} в таблице \TT{kqftab}.}
+{It's interesting that this element here is $0x1f6th$ (502nd), just as a pointer to \TT{X\$VERSION} string in 
+\TT{kqftab} table.}
+\IFRU{Вероятно, таблицы \TT{kqftap} и \TT{kqftab} дополняют друг друга, как и \TT{kqfvip} и \TT{kqfviw}.}
+{Probably, \TT{kqftap} and \TT{kqftab} tables are complement each other, just like \TT{kqfvip} and \TT{kqfviw}.}
+\IFRU{Мы также видим здесь ссылку на функцию с названием \TT{kqvrow()}. А вот это уже кое-что!}
+{We also see a pointer to \TT{kqvrow()} function. Something useful at last!}
 
-\IFRU{Я сделал так чтобы моя программа \oracletables могла дампить и эти таблицы. Для \TT{X\$VERSION} получается:}{So I added these tables to my \oracletables utility too. For \TT{X\$VERSION} I've got:}
+\IFRU{Я сделал так чтобы моя программа \oracletables могла дампить и эти таблицы. Для \TT{X\$VERSION} получается:}
+{So I added these tables to my \oracletables utility too. For \TT{X\$VERSION} I've got:}
 
 \begin{lstlisting}[caption=\IFRU{Результат работы}{Result of} \OracleTablesName]
 kqftab_element.name: [X$VERSION] ?: [kqvt] 0x4 0x4 0x4 0xc 0xffffc075 0x3

@@ -9,6 +9,7 @@
 {\FLD takes 8 bytes from stack and load the number into \STZERO register, automatically converting 
 it into internal 80-bit format \IT{extended precision}).}
 
+\index{x86!\Instructions!FDIV}
 \IFRU{\FDIV делит содержимое регистра \STZERO на число лежащее по адресу \TT{\_\_real@40091eb851eb851f} ~--- 
 там закодировано значение 3.14. Синтаксис ассемблера не поддерживает подобные числа, 
 так что то что мы там видим, это шестандцатиричное представление числа \IT{3.14} в формате IEEE 754.}
@@ -19,6 +20,7 @@ what we see here is hexadecimal representation of \IT{3.14} number in 64-bit IEE
 \IFRU{После выполнения \FDIV, в \STZERO остается частное\FNQUOTIENT.}
 {After \FDIV execution, \STZERO will hold quotient\FNQUOTIENT.}
 
+\index{x86!\Instructions!FDIVP}
 \IFRU{Кстати, есть еще инструкция \FDIVP, которая делит \STONE на \STZERO, 
 выталкивает эти числа из стека и заталкивает результат. 
 Если вы знаете язык Forth\FNURLFORTH, то это как раз оно и есть ~--- стековая машина\FNURLSTACK.}
@@ -32,11 +34,13 @@ If you know Forth language\FNURLFORTH, you will quickly understand that this is 
 \IFRU{После этого, в \STONE перемещается результат деления, а в \STZERO теперь будет \IT{b}.}
 {After that, quotient is placed to \STONE, and \STZERO will hold \IT{b} value.}
 
+\index{x86!\Instructions!FMUL}
 \IFRU{Следующий \FMUL умножает \IT{b} из \STZERO на значение \TT{\_\_real@4010666666666666} ~--- 
 там лежит число 4.1, и оставляет результат в \STZERO.}
 {Next \FMUL instruction do multiplication: \IT{b} from \STZERO register by value at 
 \TT{\_\_real@4010666666666666} (4.1 number is there) and leaves result in \STZERO.}
 
+\index{x86!\Instructions!FADDP}
 \IFRU{Самая последняя инструкция \FADDP складывает два значения из вершины стека, 
 в \STONE и затем выталкивает значение лежащее в \STZERO, 
 таким образом результат сложения остается на вершине стека в \STZERO.}
@@ -58,6 +62,7 @@ other code except of function epilogue.}
 {The difference is that, first of all, 3.14 is pushing to stack (into \STZERO), and then value 
 in \TT{arg\_0} is dividing by what is in \STZERO register.}
 
+\index{x86!\Instructions!FDIVR}
 \IFRU{\FDIVR означает \IT{Reverse Divide} ~--- делить поменяв делитель и делимое местами. 
 Точно такой же инструкции для умножения нет, потому что она была бы бессмыслена (ведь умножение ~--- 
 операция коммутативная), так что остается только \FMUL без соответсвующей ей \TT{-R} инструкции.}
@@ -65,6 +70,7 @@ in \TT{arg\_0} is dividing by what is in \STZERO register.}
 There are no such instruction for multiplication, because multiplication is 
 commutative operation, so we have just \FMUL without its \TT{-R} counterpart.}
 
+\index{x86!\Instructions!FADDP}
 \IFRU{\FADDP не только складывает два значения, но также и выталкивает из стека одно значение. 
 После этого, в \STZERO остается только результат сложения.}
 {\FADDP adding two values but also popping one value from stack. 
@@ -72,3 +78,4 @@ After that operation, \STZERO will contain sum.}
 
 \IFRU{Этот фрагмент кода получен при помощи \IDA, которая регистр \STZERO называет для краткости просто \TT{ST}.}
 {This fragment of disassembled code was produced using \IDA which named \STZERO register as \TT{ST} for short.}
+

@@ -1,5 +1,6 @@
-\section{\IFRU{Стек}{Stack}}
+\section{\Stack}
 \label{sec:stack}
+\index{\Stack}
 
 \IFRU{Стек в компьютерных науках ~--- это одна из наиболее фундаментальных вещей}
 {Stack ~--- is one of the most fundamental things in computer science.}\footnote{\url{http://en.wikipedia.org/wiki/Call_stack}}.
@@ -7,6 +8,10 @@
 \IFRU{Технически, это просто блок памяти в памяти процесса + регистр \ESP или \RSP в x86, либо \SP в ARM, который указывает где-то в пределах этого блока.}
 {Technically, it's just a memory block in process memory + \ESP or \RSP register in x86, or \SP register in ARM, as a pointer within this block.}
 
+\index{ARM!\Instructions!PUSH}
+\index{ARM!\Instructions!POP}
+\index{x86!\Instructions!PUSH}
+\index{x86!\Instructions!POP}
 \IFRU{Часто используемые инструкции для работы со стеком это \PUSH и \POP (в x86 и thumb-режиме ARM). 
 \PUSH уменьшает \ESP/\RSP/\SP на $4$, затем записывает по адресу на который указывает \ESP/\RSP/\SP содержимое своего единственного операнда.}
 {Most frequently used stack access instructions are \PUSH and \POP (both in x86 and ARM thumb-mode). 
@@ -27,7 +32,14 @@ It seems strange, but it is so.}
 
 \IFRU{В процессоре ARM, тем не менее, есть поддержка стеков растущих как в сторону уменьшения, так и в
 сторону увеличения}{Nevertheless, ARM has instructions supporting ascending stacks, but also descending stacks}. 
-
+\index{ARM!\Instructions!STMFD}
+\index{ARM!\Instructions!LDMFD}
+\index{ARM!\Instructions!STMED}
+\index{ARM!\Instructions!LDMED}
+\index{ARM!\Instructions!STMFA}
+\index{ARM!\Instructions!LDMFA}
+\index{ARM!\Instructions!STMEA}
+\index{ARM!\Instructions!LDMEA}
 \IFRU{Например, инструкции}{For example,} 
 STMFD\footnote{\STMFDdesc}/LDMFD\footnote{\LDMFDDESC}, 
 STMED\footnote{\STMEDdesc}/LDMED\footnote{\LDMEDdesc} 
@@ -46,18 +58,25 @@ ascending stack}.
 
 \subsubsection{x86}
 
+\index{x86!\Instructions!CALL}
 \IFRU{При вызове другой функции через \CALL, сначала в стек записывается адрес указывающий на место аккурат после 
-инструкции \CALL, затем делается безусловный переход (\TT{JMP}) на адрес указанный в операнде.} 
+инструкции \CALL, затем делается безусловный переход (почти как \TT{JMP}) на адрес указанный в операнде.} 
 {While calling another function by \CALL instruction, the address of point exactly after \CALL instruction is saved 
 to stack, and then unconditional jump to the address from CALL operand is executed.} 
 
+\index{x86!\Instructions!PUSH}
+\index{x86!\Instructions!JMP}
 \IFRU{\CALL это аналог пары инструкций \TT{PUSH address\_after\_call / JMP}.}
 {\CALL is \TT{PUSH address\_after\_call / JMP operand} instructions pair equivalent}.
 
+\index{x86!\Instructions!RET}
+\index{x86!\Instructions!POP}
 \IFRU{\RET вытаскивает из стека значение и передает управление по этому адресу ~--- 
 это аналог пары инструкций \TT{POP tmp / JMP tmp}.}
 {\RET is fetching value from stack and jump to it ~--- it is \TT{POP tmp / JMP tmp} instructions pair equivalent.}
 
+\index{\Stack!\IFRU{Переполнение стека}{Stack overflow}}
+\index{\Recursion}
 \IFRU{Крайне легко устроить переполнение стека запустив бесконечную рекурсию:}
 {Stack overflow is simple, just run eternal recursion:}
 
@@ -116,6 +135,7 @@ $LL3@f:
 
 \subsubsection{ARM}
 
+\index{ARM!\Registers!Link Register}
 \IFRU{Программы для ARM также используют стек для сохранения адреса, куда нужно вернуться, но несколько иначе}{ARM
 programs also use stack for return address savings, but differently}.
 \IFRU{Как уже упоминалось в секции}{As it was mentioned in} ``\HelloWorldSectionName''~\ref{sec:hw_ARM}, 
@@ -123,12 +143,16 @@ programs also use stack for return address savings, but differently}.
 \IFRU{Но если есть необходимость вызывать какую-то другую функцию, и использовать регистр \LR еще
 раз, его значение желательно сохранить}{However, if one need to call some another function and use \LR register
 one more time, its value should be saved}.
+\index{Function prologue}
 \IFRU{Обычно, это происходит в прологе функции, часто мы видим там инструкцию вроде}{Usually, it is saved in
 function prologue, often, we see there instruction like}
+\index{ARM!\Instructions!PUSH}
+\index{ARM!\Instructions!POP}
 \TT{``PUSH {R4-R7,LR}''}, \IFRU{а в эпилоге}{and also this instruction in epilogue} \TT{``POP {R4-R7,PC}''} ~--- 
 \IFRU{так сохраняются регистры, которые будут использоваться в текущей функции, в том числе}{thus register values
 to be used in function are saved in stack, including} \LR.
 
+\index{ARM!Leaf function}
 \IFRU{Тем не менее, если некая функция не вызывает никаких более функций, в терминологии ARM она называется}
 {Nevertheless, if some function never call any other function, in ARM terminology it's called}
 \IT{leaf function}\footnote{\url{http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.faqs/ka13785.html}}. 
@@ -136,18 +160,15 @@ to be used in function are saved in stack, including} \LR.
 don't use \LR register}.
 \IFRU{А если эта функция небольшая, использует мало регистров, она может не использовать стек вообще}
 {And if this function is small, if it use small number of registers, it may not use stack at all}.
-\IFRU{Таким образом, в ARM возможен вызов небольших ``leaf'' функций не используя стек}{Thus, it is possible
-to call ``leaf'' function without stack usage}.
-\IFRU{Это может быть быстрее чем в x86, ведь внешняя память для стека не используется}{This could be faster
-than in x86, because external RAM is not used for stack}
-\footnote{
-\IFRU{Когда-то очень давно, на PDP-11 и VAX, на инструкцию CALL (вызов других функций) могло тратиться
+\IFRU{Таким образом, в ARM возможен вызов небольших ``leaf'' функций не используя стек}
+{Thus, it is possible to call ``leaf'' function without stack usage}.
+\IFRU{Это может быть быстрее чем в x86, ведь внешняя память для стека не используется}
+{This could be faster than in x86, because external RAM is not used for stack}
+\footnote{\IFRU{Когда-то очень давно, на PDP-11 и VAX, на инструкцию CALL (вызов других функций) могло тратиться
 вплоть до 50\% времени, возможно из-за работы с памятью, 
 поэтому считалось что много небольших функций это анти-паттерн}
 {Some time ago, on PDP-11 and VAX, CALL instruction (calling other functions) was expensive, up to 50\%
-of execution time might be spent on it, so it was common sense that big number of small function is anti-pattern}
-\cite[Chapter 4, Part II]{Raymond:2003:AUP:829549}.
-}
+of execution time might be spent on it, so it was common sense that big number of small function is anti-pattern}\cite[Chapter 4, Part II]{Raymond:2003:AUP:829549}.}
 .
 \IFRU{Либо, это может быть полезным для тех ситуаций, когда память для стека еще не выделена либо недоступна}
 {Or, it can be useful for such situations, when memory for stack is not yet allocated or not available}.
@@ -205,6 +226,7 @@ But traditionally it is so.}
 
 \subsubsection{x86: \IFRU{Функция alloca()}{alloca() function}}
 \label{alloca}
+\index{\CLanguageElements!alloca()}
 \IFRU{Интересен случай с функцией \TT{alloca()}}
 {It is worth noting \TT{alloca()} function.}\footnote{
 \IFRU
@@ -248,9 +270,11 @@ function calls might be replaced by one \printf call, but I would like to illust
 
 \lstinputlisting[caption=MSVC 2010]{02_stack/2_2_msvc.asm}
 
-\IFRU {Единственный параметр в \TT{alloca()} передается через \EAX, а не как обычно через стек.}
-{The sole \TT{alloca()} argument passed via \EAX (instead of pushing into stack).}
-
+\index{Compiler intrinsic}
+\IFRU {Единственный параметр в \TT{alloca()} передается через \EAX, а не как обычно через стек}
+{The sole \TT{alloca()} argument passed via \EAX (instead of pushing into stack)}
+\footnote{\IFRU{Это потому что alloca() это не сколько функция, сколько т.е. compiler intrinsic}{It's because
+alloca() is rather compiler intrinsic than usual function}}.
 \IFRU{После вызова \TT{alloca()}, \ESP теперь указывает на блок в 600 байт который 
 мы можем использовать под \TT{buf}.}
 {After \TT{alloca()} call, \ESP is now pointing to the block of 600 bytes and we can 
@@ -262,6 +286,7 @@ use it as memory for \TT{buf} array.}
 \lstinputlisting[caption=GCC 4.4.1]{\IFRU{02_stack/2_2_gcc_ru.asm}{02_stack/2_2_gcc_en.asm}}
 
 \subsection{(Windows) SEH}
+\index{Windows!Structured Exception Handling}
 
 \IFRU{В стеке хранятся записи SEH (\IT{Structured Exception Handling}) для функции (если имеются)}
 {SEH (\IT{Structured Exception Handling}) records are also stored in stack (if needed).}

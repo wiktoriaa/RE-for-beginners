@@ -7,6 +7,7 @@
 
 \lstinputlisting[caption=MSVC 2010]{\IFRU{12_FPU/12_4_ru.asm}{12_FPU/12_4_en.asm}}
 
+\index{x86!\Instructions!FLD}
 \IFRU{Итак, \FLD загружает \TT{\_b} в регистр \STZERO.}
 {So, \FLD loading \TT{\_b} into \STZERO register.}
 
@@ -15,6 +16,7 @@
 \newcommand{\Cthree}{\TT{C3}\xspace}
 \newcommand{\CThreeBits}{\Cthree/\Ctwo/\Czero}
 
+\index{x86!\Instructions!FCOMP}
 \IFRU{\FCOMP сравнивает содержимое \STZERO с тем что лежит в \TT{\_a} и выставляет биты \CThreeBits в 
 регистре статуса FPU. Это 16-битный регистр отражающий текущее состояние FPU.} 
 {\FCOMP compares \STZERO register state with what is in \TT{\_a} value and set \CThreeBits bits in FPU 
@@ -23,7 +25,7 @@ status word register. This is 16-bit register reflecting current state of FPU.}
 \IFRU{Итак, биты \CThreeBits выставлены, но, к сожалению, у процессоров до Intel P6 
 \footnote{Intel P6 это Pentium Pro, Pentium II, и далее} нет инструкций условного перехода,
 проверяющих эти биты. 
-Возможно это исторически так сложилось (вспомните о том что FPU когда-то был вообще отдельным чипом). 
+Возможно, так сложилось исторически (вспомните о том что FPU когда-то был вообще отдельным чипом). 
 А у Intel P6 появились инструкции \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP ~--- делающие тоже самое, 
 только напрямую модифицирующие флаги \ZF/\PF/\CF.}
 {For now \CThreeBits bits are set, but unfortunately, CPU before Intel P6
@@ -38,6 +40,7 @@ which does that same, but modifies CPU flags \ZF/\PF/\CF.}
 {After bits are set, the \FCOMP instruction popping one variable from stack. 
 This is what distinguish it from \FCOM, which is just comparing values, leaving the stack at the same state.}
 
+\index{x86!\Instructions!FNSTSW}
 \IFRU{\FNSTSW копирует содержимое регистра статуса в \AX. Биты \CThreeBits занимают позиции, 
 соответственно, 14, 10, 8, в этих позициях они и остаются в регистре \AX, 
 и все они расположены в старшей части регистра ~--- \AH.}
@@ -62,6 +65,7 @@ they will be at the same positions in \AX registers and all them are placed in h
 but at positions 0 and 2 (in \AH registers) 
 \Czero and \Ctwo bits will be leaved.}
 
+\index{x86!\Registers!\IFRU{Флаг четности}{Parity flag}}
 \IFRU{Теперь немного о \IT{parity flag}\footnote{флаг четности}. Еще один замечательный рудимент}
 {Now let's talk about parity flag. Another notable epoch rudiment}:
 
@@ -75,10 +79,11 @@ with the FUCOM instructions.\footnote{\href{http://en.wikipedia.org/wiki/Parity_
 \end{quotation}
 \end{framed}
 
-\IFRU
-{Этот флаг выставляется в 1 если количество единиц в последнем результате ~--- четно. И в ноль если ~--- нечетно.}
+\IFRU{Этот флаг выставляется в 1 если количество единиц в последнем результате ~--- четно. 
+И в ноль если ~--- нечетно.}
 {This flag is to be set to 1 if ones number is even. And to zero if odd.}
 
+\index{x86!\Instructions!JP}
 \IFRU{Таким образом, что мы имеем, флаг \PF будет выставлен в единицу, если \Czero и \Ctwo 
 оба нули или оба единицы. 
 И тогда сработает последующий \JP (\IT{jump if PF==1}). 
@@ -104,6 +109,7 @@ to \STZERO, and if it's not triggered, \TT{\_a} will be loaded.}
 
 \lstinputlisting[caption=\Optimizing MSVC 2010]{\IFRU{12_FPU/12_5_ru.asm}{12_FPU/12_5_en.asm}}
 
+\index{x86!\Instructions!FCOM}
 \IFRU{\FCOM отличается от \FCOMP тем что просто сравнивает значения и оставляет стек в том же состоянии. 
 В отличие от предыдущего примера, операнды здесь в другом порядке. 
 Поэтому и результат сравнения в \CThreeBits будет другим чем раньше:}
@@ -159,11 +165,13 @@ not to store it anywhere.}
 
 \lstinputlisting[caption=GCC 4.4.1]{\IFRU{12_FPU/12_6_ru.asm}{12_FPU/12_6_en.asm}}
 
+\index{x86!\Instructions!FUCOMPP}
 \IFRU{\FUCOMPP ~--- это почти то же что и \FCOM, только выкидывает из стека оба значения после сравнения, 
 а также несколько иначе реагирует на ``не-числа''.}
 {\FUCOMPP ~--- is almost like \FCOM, but popping both values from stack and handling 
 ``not-a-numbers'' differently.}
 
+\index{\IFRU{Не-числа}{Non-a-numbers} (NaNs)}
 \IFRU{Немного о \IT{не-числах}}{More about \IT{not-a-numbers}}:
 
 \newcommand{\NANFN}{\IFRU{\footnote{\url{http://ru.wikipedia.org/wiki/NaN}}}
@@ -181,11 +189,14 @@ These are infinity, result of dividing by zero, etc.
 Not-a-numbers can be ``quiet'' and ``signalling''. It is possible to continue to work with ``quiet'' NaNs, 
 but if one try to do some operation with ``signalling'' NaNs ~--- an exception will be raised.}
 
+\index{x86!\Instructions!FCOM}
+\index{x86!\Instructions!FUCOM}
 \IFRU{Так вот, \FCOM вызовет исключение если любой из операндов ~--- какое-либо нечисло.
 \FUCOM же вызовет исключение только если один из операндов именно ``сигнализирующее нечисло''.}
 {\FCOM will raise exception if any operand ~--- NaN. 
 \FUCOM will raise exception only if any operand ~--- signalling NaN (SNaN).}
 
+\index{x86!\Instructions!SAHF}
 \IFRU{Далее мы видим \SAHF ~--- это довольно редкая инструкция в коде не использущим FPU. 
 8 бит из \AH перекладываются в младшие 8 бит регистра статуса процессора в таком порядке: 
 \TT{SF:ZF:-:AF:-:PF:-:CF <- AH}.}
@@ -193,6 +204,7 @@ but if one try to do some operation with ``signalling'' NaNs ~--- an exception w
 8 bits from AH is movinto into lower 8 bits of CPU flags in the following order: 
 \TT{SF:ZF:-:AF:-:PF:-:CF <- AH}.}
 
+\index{x86!\Instructions!FNSTSW}
 \IFRU{Вспомним, что \FNSTSW перегружает интересующие нас биты \CThreeBits в \AH, 
 и соответственно они будут в позициях 6, 2, 0 в регистре \AH.}
 {Let's remember that \FNSTSW is moving interesting for us bits \CThreeBits into \AH 
@@ -229,6 +241,9 @@ and they will be in positions 6, 2, 0 in \AH register.}
 \end{itemize}
 % TODO: table?
 
+\index{x86!\Instructions!SETNBE}
+\index{x86!\Instructions!SETcc}
+\index{x86!\Instructions!JNBE}
 \IFRU{Инструкция \SETNBE выставит в \AL единицу или ноль, в зависимости от флагов и условий. 
 Это почти аналог \JNBE, за тем лишь исключением, что \SETcc
 \footnote{\IT{cc} это \IT{condition code}}

@@ -28,6 +28,8 @@ For each object (instance of class \IT{c}) 8 bytes allocated, that's exactly siz
 {For \IT{c1} a default argumentless constructor \TT{??0c@@QAE@XZ} is called.
 For \IT{c2} another constructor \TT{??0c@@QAE@HH@Z} is called and two numbers are passed as arguments.}
 
+\index{this}
+\index{x86!\Registers!ECX}
 \IFRU{А указатель на объект (\IT{this} в терминологии Си++) передается в регистре \ECX. 
 Это называется thiscall~\ref{thiscall} ~--- метод передачи указателя на объект.}
 {A pointer to object (\IT{this} in C++ terminology) is passed in \ECX register.
@@ -41,6 +43,7 @@ differently, e.g., via first function argument (like GCC).}
 %\newcommand{\URLNM}{\href{http://en.wikipedia.org/wiki/Visual_C\%2B\%2B_name_mangling}{Wikipedia: Visual C++ name mangling}}
 \newcommand{\URLNM}{\href{http://en.wikipedia.org/wiki/Name_mangling}{Wikipedia: Name mangling}}
 
+\index{Name mangling}
 \IFRU{Почему у имен функций такие странные имена? Это \IT{name mangling}\footnote{\URLNM}.}
 {Why these functions has so odd names? That's \IT{name mangling}\footnote{\URLNM}.}
 
@@ -51,9 +54,10 @@ differently, e.g., via first function argument (like GCC).}
 that's polymorphism.
 And of course, different classes may own methods sharing the same name.}
 
+\index{\IFRU{Компоновщик}{Linker}}
 \IFRU{\IT{Name mangling} позволяет закодировать имя класса + имя метода + типы всех аргументов метода 
 в одной ASCII-строке, которая затем используется как внутреннее имя функции. 
-Это все потому что ни линкер, ни загрузчик DLL операционной системы 
+Это все потому что ни компоновщик\footnote{linker}, ни загрузчик DLL операционной системы 
 (мангленные имена могут быть среди экспортов/импортов в DLL), 
 ничего не знают о Си++ или ООП.}
 {\IT{Name mangling} allows to encode class name + method name + all method argument types 
@@ -86,6 +90,7 @@ takes two values from it and passing it into \printf.}
 
 \lstinputlisting{16_classes/16_4_msvc_Ox.asm}
 
+\index{x86!\Instructions!RET}
 \IFRU{Вот и все. Единственное о чем еще нужно сказать, это о том что в функции \main, 
 когда вызывался второй конструктор с двумя аргументами, за ним не корректировался стек при помощи 
 \TT{add esp, X}. В то же время, в конце конструктора вместо \RET имеется \TT{RET 8}.}
@@ -93,6 +98,7 @@ takes two values from it and passing it into \printf.}
 with \TT{add esp, X} after constructor called. 
 Withal, constructor has \TT{ret 8} instead of \RET at the end.}
 
+\index{thiscall}
 \IFRU{Это потому что здесь используется thiscall~\ref{thiscall}, который, вместе с stdcall~\ref{stdcall} 
 (все это ~--- методы передачи аргументов через стек), предлагает вызываемой функции корректировать стек. 
 Инструкция \TT{ret X} сначала прибавляет \TT{X} к \ESP, затем передает управление вызывающей функции.}

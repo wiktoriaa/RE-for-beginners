@@ -10,6 +10,8 @@
 
 \lstinputlisting{08_switch/8_1_analogue.c}
 
+\index{\CLanguageElements!switch}
+\index{\CLanguageElements!if}
 \IFRU{Когда вариантов немного и мы видим подобный код, невозможно сказать с уверенностью, был ли
 в оригинальном исходном коде switch(), либо просто набор if()-ов.}
 {When few cases in switch(), and we see such code, it's impossible to say with certainty, was it
@@ -39,6 +41,9 @@ turned on (\Othree option).}
 \IFRU{Вот здесь уже все немного по-другому, причем не без грязных хаков.}
 {Here we can see even dirty hacks.}
 
+\index{x86!\Instructions!JZ}
+\index{x86!\Instructions!JE}
+\index{x86!\Instructions!SUB}
 \IFRU
 {Первое: \TT{а} помещается в \EAX и от него отнимается 0. Звучит абсурдно, но нужно это для того, чтобы проверить, 
 0 ли в \EAX был до этого? Если да, то выставится флаг \ZF (что означает что результат отнимания нуля от числа 
@@ -58,6 +63,7 @@ corresponding jump will be triggered.}
 {And if no jump triggered at all, control flow passed to \printf with argument \TT{'something unknown'}.}
 
 \label{jump_to_last_printf}
+\index{\Stack}
 \IFRU
 {Второе: мы видим две, мягко говоря, необычные вещи: указатель на сообщение помещается в переменную \TT{a}, 
 и затем \printf вызывается не через \CALL, а через \JMP. Объяснение этому простое. 
@@ -94,6 +100,7 @@ jumping to \printf, as if not our function \TT{f()} was called firstly, but imme
 return address from stack and control flow is returned not to \TT{f()}, but to \TT{f()}'s callee, 
 escaping \TT{f()}.}
 
+\index{\CLanguageElements!longjmp()}
 \newcommand{\URLSJ}{\url{http://en.wikipedia.org/wiki/Setjmp.h}}
 \IFRU{Все это возможно потому что \printf вызывается в \TT{f()} в самом конце. 
 Все это чем-то даже похоже на \TT{longjmp()}\footnote{\URLSJ}.

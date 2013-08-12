@@ -8,6 +8,7 @@ SIMD \IFRU{это акроним:}{is just acronym:} \IT{Single Instruction, Mul
 \IFRU{Как и FPU, эта подсистема процессора выглядит также отдельным процессором внутри x86.}
 {Just as FPU, that CPU subsystem looks like separate processor inside x86.}
 
+\index{x86!MMX}
 \IFRU{SIMD в x86 начался с MMX. Появилось 8 64-битных регистров MM0-MM7.}
 {SIMD began as MMX in x86. 8 new 64-bit registers appeared: MM0-MM7.}
 
@@ -39,8 +40,11 @@ but in fact, the reason of such symbiosis is simpler ~--- older operation system
 of additional CPU registers wouldn't save them at the context switching, but will save FPU registers.
 Thus, MMX-enabled CPU + old operation system + process using MMX = that all will work together.}
 
+\index{x86!SSE}
+\index{x86!SSE2}
 SSE ~--- \IFRU{это расширение регистров до 128 бит, теперь уже отдельно от FPU.}{is extension of SIMD registers up to 128 bits, now separately from FPU.}
 
+\index{x86!AVX}
 AVX ~--- \IFRU{расширение регистров до 256 бит.}{another extension to 256 bits.}
 
 \IFRU{Немного о практическом применении.}{Now about practical usage.}
@@ -48,6 +52,7 @@ AVX ~--- \IFRU{расширение регистров до 256 бит.}{another
 \IFRU{Конечно же, копирование блоков в памяти (\TT{memcpy}), сравнение (\TT{memcmp}), и подобное.}
 {Of course, memory copying (\TT{memcpy}), memory comparing (\TT{memcmp}) and so on.}
 
+\index{DES}
 \IFRU{Еще пример: имеется алгоритм шифрования DES, который берет 64-битный блок, 56-битный ключ, 
 шифрует блок с ключем и образуется 64-битный результат.
 Алгоритм DES можно легко представить в виде очень большой электронной цифровой схемы, 
@@ -65,6 +70,7 @@ DES algorithm may be considered as a very large electronic circuit, with wires a
 Let's say, variable of type \IT{unsigned int} on x86 may hold up to 32 bits, so, it's possible to store there
 intermediate results for 32 blocks-keys pairs simultaneously, using 64+56 variables of \IT{unsigned int} type.}
 
+\index{Oracle RDBMS}
 \IFRU{Я написал утилиту для перебора паролей/хешей Oracle RDBMS (которые основаны на алгоритме DES), 
 переделав алгоритм bitslice DES для SSE2 и AVX ~--- и теперь возможно шифровать одновременно 
 128 или 256 блоков-ключей:}
@@ -100,6 +106,8 @@ for (i = 0; i < 1024; i++)
 \IFRU{Этот фрагмент кода берет элементы из A и B, перемножает и сохраняет результат в C.}
 {This fragment of code takes elements from A and B, multiplies them and save result into C.}
 
+\index{x86!\Instructions!PLMULLD}
+\index{x86!\Instructions!PLMULHW}
 \newcommand{\PMULLD}{\IT{PMULLD} (\IT{\IFRU{Перемножить запакованные знаковые DWORD и сохранить младшую часть результата}
 {Multiply Packed Signed Dword Integers and Store Low Result}})}
 \newcommand{\PMULHW}{\TT{PMULHW} (\IT{\IFRU{Перемножить запакованные знаковые DWORD и сохранить старшую часть результата}
@@ -113,8 +121,8 @@ for (i = 0; i < 1024; i++)
 XMM-register, from B to another XMM-registers, and by executing \PMULLD and \PMULHW, 
 it's possible to get 4 64-bit products\footnote{multiplication result} at once.}
 
-\IFRU{Таким образом, тело цикла исполняется 1024/4 раза вместо 1024, что в 4 раза меньше, и, конечно, быстрее.}
-{Thus, loop body count is 1024/4 instead of 1024, that's 4 times less and, of course, faster.}
+\IFRU{Таким образом, тело цикла исполняется $1024/4$ раза вместо 1024, что в 4 раза меньше, и, конечно, быстрее.}
+{Thus, loop body count is $1024/4$ instead of 1024, that's 4 times less and, of course, faster.}
 
 \newcommand{\URLINTELVEC}{\href{http://www.intel.com/intelpress/sum_vmmx.htm}{Excerpt: Effective Automatic Vectorization}}
 
@@ -149,7 +157,9 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 \lstinputlisting{19_SIMD/18_1_en.asm}
 
 \IFRU{Инструкции имеющие отношение к SSE2 это:}{SSE2-related instructions are:}
-
+\index{x86!\Instructions!MOVDQA}
+\index{x86!\Instructions!MOVDQU}
+\index{x86!\Instructions!PADDD}
 \begin{itemize}
 \item
 \MOVDQU (\IT{Move Unaligned Double Quadword}) ~--- \IFRU{она просто загружает 16 байт из памяти в XMM-регистр}
@@ -237,6 +247,7 @@ if to use \Othree option and to turn on SSE2 support: \TT{-msse2}.}
 special macros\footnote{\URLMSDNSSE}.
 As of MSVC, some of them are located in \TT{intrin.h} file.}
 
+\index{\CLanguageElements!strlen()}
 \IFRU{Имеется возможность реализовать функцию \strlen\footnote{strlen() ~--- стандартная функция Си 
 для подсчета длины строки} при помощи SIMD-инструкций, работающий в 2-2.5 раза быстрее обычной реализации. 
 Эта функция будет загружать в XMM-регистр сразу 16 байт и проверять каждый на ноль.}
@@ -276,6 +287,7 @@ if not ~--- use slower \MOVDQU.}
 \IFRU{Однако здесь кроется не сразу заметная проблема, которая проявляется вот в чем:}
 {But here we are may stick into hard to notice problem:}
 
+\index{Page (memory)}
 \newcommand{\URLPAGE}{\url{http://en.wikipedia.org/wiki/Page_(computer_memory)}}
 
 \IFRU{В ОС линии Windows NT\footnote{Windows NT, 2000, XP, Vista, 7, 8}, и не только, память выделяется страницами по 4 KiB (4096 байт). 
@@ -347,12 +359,14 @@ read from unallocated memory.}
 
 \IFRU{Вернемся к нашей функции}{Let's back to our function}.
 
+\index{x86!\Instructions!PXOR}
 \verb|_mm_setzero_si128()| ~--- \IFRU{это макрос, генерирующий \TT{pxor xmm0, xmm0} ~--- инструкция просто обнуляет регистр \XMMZERO.}
 {is a macro generating \TT{pxor xmm0, xmm0} ~--- instruction just clear /XMMZERO register}
 
 \verb|_mm_load_si128()| ~--- \IFRU{это макрос для \MOVDQA, он просто загружает 16 байт по адресу из указателя в \XMMONE.}
 {is a macro for \MOVDQA, it just loading 16 bytes from the address in \XMMONE.}
 
+\index{x86!\Instructions!PCMPEQB}
 \verb|_mm_cmpeq_epi8()| ~--- \IFRU{это макрос для \PCMPEQB, это инструкция которая 
 побайтово сравнивает значения из двух XMM регистров.} 
 {is a macro for \PCMPEQB, is an instruction comparing two XMM-registers bytewise.}
@@ -380,6 +394,7 @@ XMM1: ff0000ff0000ffff0000000000000000
 {In our case, this instruction comparing each 16-byte block with the block of 16 zero-bytes,
 was set in \XMMZERO by \TT{pxor xmm0, xmm0}.}
 
+\index{x86!\Instructions!PMOVMSKB}
 \IFRU{Следующий макрос \TT{\_mm\_movemask\_epi8()} ~--- это инструкция \TT{PMOVMSKB}.}
 {The next macro is \TT{\_mm\_movemask\_epi8()} ~--- that is \TT{PMOVMSKB} instruction.}
 
@@ -432,6 +447,7 @@ XMM1: 0000ff00000000000000ff0000000000
 и игнорировать все остальное.}
 {Obviously, our function should consider only first zero and ignore others.}
 
+\index{x86!\Instructions!BSF}
 \IFRU{Следующая инструкция}{The next instruction} ~--- \TT{BSF} (\IT{Bit Scan Forward}). 
 \IFRU{Это инструкция находит самый младший бит во втором операнде и записывает его позицию в первый операнд.}
 {This instruction find first bit set to 1 and stores its position into first operand.}
@@ -439,7 +455,6 @@ XMM1: 0000ff00000000000000ff0000000000
 \begin{verbatim}
 EAX=0010000000100000b
 \end{verbatim}
-
 
 \IFRU{После исполнения этой инструкции \TT{bsf eax, eax}, в \EAX будет 5, что означает, 
 что единица найдена в пятой позиции (считая с нуля).}

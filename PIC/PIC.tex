@@ -1,4 +1,5 @@
-﻿\section{\IFRU{Адресно-независимый код (PIC)}{Position-independent code}}
+﻿\section{\PICcode}
+\index{\PICcode}
 \label{sec:PIC}
 
 \IFRU{Во время анализа динамических библиотек (.so) в Linux, часто можно заметить такой шаблонный код}{While analyzing Linux shared (.so) libraries, one may frequently spot such code pattern}:
@@ -134,11 +135,15 @@ gcc -fPIC -shared -O3 -o 1.so 1.c
 GOT, 0xC should be subtracted}.
 \IFRU{А чтобы вычислить указатель на \retstring{}, нужно вычесть 0x1A30}{To calculate pointer to the \retstring{} string, 0x1A30 should be subtracted}.
 
+\index{x86-64}
+\index{x86!\Registers!RIP}
 \IFRU{Кстати, вот зачем в AMD64 появилась поддержка адресации относительно RIP\footnote{указатель инструкций в AMD64}, просто для упрощения PIC-кода}{By the way, that is the reason why AMD64 instruction set supports RIP\footnote{program counter in AMD64}-relative addressing, just to simplify PIC-code}.
 
 \IFRU{Скомпилируем тот же код на Си при помощи той же версии GCC, но для x64}{Let's compile the same C code in the same GCC version, but for x64}.
 
-\IDA \IFRU{упростит код на выходе убирая упоминания RIP, так что я буду использовать objdump вместо}{would simplify output code but suppressing RIP-relative addressing details, so I'll run objdump instead to see the details}:
+\index{objdump}
+\IDA \IFRU{упростит код на выходе убирая упоминания RIP, так что я буду использовать \IT{objdump} вместо}
+{would simplify output code but suppressing RIP-relative addressing details, so I'll run \IT{objdump} instead to see the details}:
 
 \begin{lstlisting}
 0000000000000720 <f1>:

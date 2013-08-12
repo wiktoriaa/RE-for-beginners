@@ -38,6 +38,7 @@
 
 \IFRU{Как \TT{CreateFile()} будет проверять флаги?}{How \TT{CreateFile()} will check flags?}
 
+\index{Windows!KERNEL32.DLL}
 \IFRU{Заглянем в KERNEL32.DLL от Windows XP SP3 x86 и найдем в функции \TT{CreateFileW()} в том числе и 
 такой фрагмент кода:}
 {Let's take a look into KERNEL32.DLL in Windows XP SP3 x86 and we'll find
@@ -50,6 +51,7 @@ this fragment of code in the function \TT{CreateFileW}:}
 .text:7C83D436                 jmp     loc_7C810817
 \end{lstlisting}
 
+\index{x86!\Instructions!TEST}
 \IFRU{Здесь мы видим инструкцию \TEST, впрочем, она берет не весь второй аргумент функции, 
 но только его самый старший байт (\TT{ebp+dwDesiredAccess+3}) и проверяет его на флаг 0x40 
 (имеется ввиду флаг \TT{GENERIC\_WRITE}).}
@@ -57,6 +59,7 @@ this fragment of code in the function \TT{CreateFileW}:}
 but only most significant byte (\TT{ebp+dwDesiredAccess+3}) and checks it for 0x40 flag
 (meaning \TT{GENERIC\_WRITE} flag here)}
 
+\index{x86!\Instructions!AND}
 \IFRU{\TEST это то же что и \AND, только без сохранения результата 
 (вспомните что \CMP это то же что и \SUB, только без сохранения результатов}
 {\TEST is merely the same instruction as \AND, but without result saving 
@@ -68,6 +71,8 @@ but only most significant byte (\TT{ebp+dwDesiredAccess+3}) and checks it for 0x
 if ((dwDesiredAccess&0x40000000) == 0) goto loc_7C83D417
 \end{lstlisting}
 
+\index{x86!\Instructions!AND}
+\index{x86!\Registers!ZF}
 \IFRU{Если после операции \AND останется этот бит, то флаг \ZF не будет поднят и условный переход 
 \JZ не сработает. 
 Переход возможен только если в переменной \TT{dwDesiredAccess} отсутствует бит $0x40000000$ ~--- 
@@ -95,6 +100,7 @@ void main()
 
 \lstinputlisting{14_bitfields/check.asm}[caption=GCC 4.4.1]
 
+\index{Linux!libc.so.6}
 \IFRU{Заглянем в реализацию функции \TT{open()} в библиотеке \TT{libc.so.6}, но обнаружим что там 
 только вызов сисколла:}
 {Let's take a look into \TT{open()} function in \TT{libc.so.6} library, but there is only syscall calling:}
@@ -122,6 +128,7 @@ From there ~--- to \TT{do\_filp\_open()} function (this function located in kern
 
 \newcommand{\URLREGPARM}{\url{http://ohse.de/uwe/articles/gcc-attributes.html\#func-regparm}}
 
+\index{fastcall}
 \IFRU{Важное отступление. Помимо передачи параметров функции через стек, существует также возможность передавать 
 некоторые из них через регистры. Это называется в том числе fastcall~\ref{fastcall}. 
 Это работает немного быстрее, так как процессору не нужно обращаться к стеку лежащему в памяти для чтения 

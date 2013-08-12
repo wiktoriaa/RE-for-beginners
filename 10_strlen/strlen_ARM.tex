@@ -6,8 +6,8 @@
 
 \IFRU{Неоптимизирующий LLVM генерирует слишком много кода, зато на этом примере можно посмотреть, 
 как функции работают с локальными переменными в стеке.}
-{Non-optimizing LLVM generates too much code, however, here we can see how function works with local variables
-in stack.}
+{Non-optimizing LLVM generates too much code, however, here we can see how function works with 
+local variables in stack.}
 \IFRU{В нашей функции только локальных переменных две, это два указателя}{There are only two
 local variables in our function}, \IT{eos} \IFRU{и}{and} \IT{str}.
 
@@ -25,20 +25,26 @@ first instructions are just saves input value in} \IT{str} \IFRU{и}{and} \IT{eo
 \IFRU{затем происходит инкремент значения и оно сохраняется назад в локальной переменной \IT{eos} расположенной 
 в стеке.}{then value is incremented and it's saving back into \IT{eos} local variable located in stack.}
 
+\index{ARM!\Instructions!LDRSB}
 \IFRU{Следующая инструкция}{The next} \TT{``LDRSB R0, [R0]''} (\IT{Load Register Signed Byte}) 
 \IFRU{загружает байт из памяти по адресу \Rzero, расширяет его до 32-бит считая его знаковым (signed) 
 и сохраняет в \Rzero}{instruction loading byte from memory at \Rzero address and sign-extends it to 32-bit}.
+\index{x86!\Instructions!MOVSX}
 \IFRU{Это немного похоже на инструкцию}{This is similar to} \MOVSX \IFRU{в}{instruction in} x86.
 \IFRU{Компилятор считает этот байт знаковым (signed), потому что тип \Tchar по стандарту Си ~--- знаковый.}
 {The compiler treating this byte as signed because \Tchar type in C standard is signed.}
 \IFRU{Об это я уже немного писал}{I already wrote about it}~\ref{MOVSX} \IFRU{в этой же секции, 
 но посвященной x86}{in this section, but related to x86}.
 
-\IFRU{Следует также заметить, что, в ARM нет возможности использовать 8-битную или 16-битную часть регистра, 
-как это возможно в x86.}
-{It's should be noted, there are to way to use 8-bit part or 16-bit part of 32-bit register in ARM, as it's
-possible in x86.}
-\IFRU{Вероятно, это связано с тем что за x86 тянется длинный шлейф совместимости со своими предками, такими как
+\index{x86!8086}
+\index{8080}
+\index{ARM}
+\IFRU{Следует также заметить, что, в ARM нет возможности использовать 8-битную или 16-битную часть 
+регистра, как это возможно в x86.}
+{It's should be noted, there are to way to use 8-bit part or 16-bit part of 32-bit register in ARM, 
+as it's possible in x86.}
+\IFRU{Вероятно, это связано с тем что за x86 тянется длинный шлейф совместимости со своими предками, 
+такими как
 16-битный 8086 и даже 8-битный 8080, а ARM разрабатывался с чистого листа как 32-битный RISC-процессор.}
 {Apparently, it's because x86 has a huge history of compatibility with its ancestors like 16-bit 8086 
 and even 8-bit 8080,
@@ -47,8 +53,8 @@ but ARM was developed from scratch as 32-bit RISC-processor.}
 32-битные регистры.}
 {Consequently, in order to process separate bytes in ARM, one have to use 32-bit registers anyway.}
 
-\IFRU{Итак}{So}, \TT{LDRSB} \IFRU{загружает символ из строки в \Rzero, по одному.}{loads symbol from string
-into \Rzero, one by one.}
+\IFRU{Итак}{So}, \TT{LDRSB} \IFRU{загружает символ из строки в \Rzero, по одному}
+{loads symbol from string into \Rzero, one by one}.
 \IFRU{Следующие инструкции}{Next} \CMP \IFRU{и}{and} \TT{BEQ} \IFRU{проверяют, является ли этот символ нулем.}
 {instructions checks, if loaded symbol is zero.}
 \IFRU{Если не ноль, то происходит переход на начало тела цикла.}{If not zero, control passing to loop body
@@ -62,6 +68,7 @@ via \Rzero.}
 
 \IFRU{Кстати, обратите внимание, в этой функции не сохранялись регистры.}{By the way, please note, registers
 wasn't saved in this function.}
+\index{ARM!\Registers!scratch registers}
 \IFRU{Это потому что, по стандарту, регистры \Rzero-\Rthree называются также ``scratch registers'',
 они предназначены для передачи аргументов, 
 их значения не нужно восстанавливать при выходе из функции, потому что они больше не нужны в вызывающей функции.
@@ -90,6 +97,8 @@ Consequently, they may be used for anything we want.}
 \IFRU{Перед началом тела цикла}{Before loop body beginning}, \IT{str} \IFRU{будет находиться в}{will always be in} 
 \Rzero, \IFRU{а}{and} \IT{eos} ~--- \IFRU{в}{in} \Rone.
 
+\index{ARM!\Instructions!LDRB.W}
+\index{ARM!\IFRU{Режимы адресации}{Adressing modes}}
 \IFRU{Инструкция }{}\TT{``LDRB.W R2, [R1],\#1''} \IFRU{загружает в \Rtwo байт из памяти по адресу \Rone, 
 расширяя его как знаковый (signed), до 32-битного
 значения, но не только это.}
@@ -100,6 +109,11 @@ only that.}
 to \Rone after byte load.}
 \IFRU{Это очень удобно для работы с массивами.}{That's handy when accessing arrays.}
 
+\index{PDP-11}
+\index{\CLanguageElements!\PostIncrement}
+\index{\CLanguageElements!\PostDecrement}
+\index{\CLanguageElements!\PreIncrement}
+\index{\CLanguageElements!\PreDecrement}
 \IFRU{Такого режима адресации в x86 нет, но он есть в некоторых других процессорах, даже на PDP-11.}
 {There are no such addressing mode in x86, but it's present in some other processors, even on PDP-11.}
 \IFRU{Существует байка, что режимы пре-инкремента, пост-инкремента, 
@@ -114,36 +128,36 @@ to \Rone after byte load.}
 
 \begin{center}
 \begin{tabular}{ | l | l | l | l | }
-\hline                        
+\hline
 \cellcolor{blue!25} \IFRU{термин в Си}{C term} & 
 \cellcolor{blue!25} \IFRU{термин в ARM}{ARM term} & 
 \cellcolor{blue!25} \IFRU{выражение Си}{C statement} & 
 \cellcolor{blue!25}\IFRU{как это работает}{how it works} \\
-\hline                        
-\IFRU{Пост-инкремент}{Post-increment} & 
+\hline
+\PostIncrement & 
 post-indexed addressing & 
 \TT{*ptr++} & 
 \IFRU{использовать значение \TT{*ptr}}{use \TT{*ptr} value}, \\
 & & & \IFRU{затем икремент указателя \TT{ptr}}{then increment \TT{ptr} pointer} \\
-\hline                        
-\IFRU{Пост-декремент}{Post-decrement} & 
+\hline
+\PostDecrement & 
 post-indexed addressing & 
 \TT{*ptr-{}-} & 
 \IFRU{использовать значение \TT{*ptr}}{use \TT{*ptr} value}, \\
 & & & \IFRU{затем декремент указателя \TT{ptr}}{then decrement \TT{ptr} pointer} \\
-\hline                        
-\IFRU{Пре-инкремент}{Pre-increment} & 
+\hline
+\PreIncrement & 
 pre-indexed addressing & 
 \TT{*++ptr} & 
 \IFRU{инкремент указателя \TT{ptr}}{increment \TT{ptr} pointer}, \\
 & & & \IFRU{затем использовать значение \TT{*ptr}}{then use \TT{*ptr} value} \\
-\hline                        
-\IFRU{Пре-декремент}{Pre-decrement} & 
+\hline
+\PreDecrement & 
 post-indexed addressing & 
 \TT{*-{}-ptr} & 
 \IFRU{декремент указателя \TT{ptr}}{decrement \TT{ptr} pointer}, \\
 & & & \IFRU{затем использовать значение \TT{*ptr}}{then use \TT{*ptr} value} \\
-\hline  
+\hline
 \end{tabular}
 \end{center}
 
@@ -161,6 +175,8 @@ post-indexed addressing &
 {Then one may spot \CMP and \TT{BNE} in loop body, these instructions continue operation until
 $0$ will be met in string.}
 
+\index{ARM!\Instructions!MVNS}
+\index{x86!\Instructions!NOT}
 \IFRU{После конца цикла }{}\TT{MVNS}\footnote{MoVe Not} 
 \IFRU{(инвертирование всех бит, аналог \NOT на x86)}
 {(inverting all bits, \NOT in x86 analogue)}
@@ -182,6 +198,7 @@ $R0 = ~str + eos$,
 
 \lstinputlisting[caption=\OptimizingKeil + \ARMMode]{10_strlen/Keil_ARM_O3.asm}
 
+\index{ARM!\Instructions!SUBEQ}
 \IFRU{Практически то же самое что мы уже видели, за тем исключением что выражение}
 {Almost the same what we saw before, with the exception that}
 $str - eos - 1$ 

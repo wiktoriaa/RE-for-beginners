@@ -4,23 +4,30 @@
 
 \lstinputlisting[caption=\OptimizingKeil + \ARMMode]{07_jcc/ARM_O3_signed.asm}
 
+\index{ARM!Condition codes}
 \IFRU{Многие инструкции в режиме ARM могут быть исполнены только при некоторых выставленных флагах.}
 {A lot of instructions in ARM mode can be executed only when specific flags are set.}
 \IFRU{Это нередко используется для сравнения чисел, например.}
 {This is often used while numbers comparing, for example.}
 
+\index{ARM!\Instructions!ADD}
+\index{ARM!\Instructions!ADDAL}
 \IFRU{К примеру, инструкция \ADD на самом деле может быть представлена как \TT{ADDAL}, \TT{AL} означает 
 \IT{Always}, то есть, исполнять всегда.}
 {For instance, \ADD instruction is \TT{ADDAL} internally in fact, where \TT{AL} meaning
 \IT{Always}, i.e., execute always.}
 \IFRU{Предикаты кодируются в 4-х старших битах инструкции 32-битных ARM-инструкций}
 {Predicates are encoded in 4 high bits of 32-bit ARM instructions} (\IT{condition field}).
+\index{ARM!\Instructions!B}
 \IFRU{Инструкция безусловного перехода \TT{B}, на самом деле условная и кодируется так же 
 как и прочие инструкции условных переходов, но имеет \TT{AL} в \IT{condition field}, 
 то есть, исполняется всегда, игнорируя флаги.}
 {\TT{B} instruction of unconditional jump is in fact conditional and encoded just like any other
 conditional jumps, but has \TT{AL} in \IT{condition field}, and what it means, executing always, ignoring flags.}
 
+\index{ARM!\Instructions!ADR}
+\index{ARM!\Instructions!ADRGT}
+\index{ARM!\Instructions!CMP}
 \IFRU{Инструкция \TT{ADRGT} работает так же как и \TT{ADR}, но исполнится только в случае 
 если предыдущая инструкция \CMP,
 сравнивая два числа, обнаружила что одно из них больше второго}
@@ -28,6 +35,8 @@ conditional jumps, but has \TT{AL} in \IT{condition field}, and what it means, e
 instruction, while comparing two numbers, found one number greater than another}
 (\IT{Greater Than}).
 
+\index{ARM!\Instructions!BL}
+\index{ARM!\Instructions!BLGT}
 \IFRU{Следующая инструкция \TT{BLGT} ведет себя так же как и \TT{BL} и сработает только если 
 результат сравнения был такой же}{The next \TT{BLGT} instruction behaves exactly as \TT{BL} and will be
 triggered only if result of comparison was the same} (\IT{Greater Than}). 
@@ -39,6 +48,8 @@ triggered only if result of comparison was the same} (\IT{Greater Than}).
 {Consequently, these instructions with \TT{-GT} suffix, will be executed only in the case when
 value in \Rzero ($a$ is there) was bigger than value in \TT{R4} ($b$ is there).}
 
+\index{ARM!\Instructions!ADREQ}
+\index{ARM!\Instructions!BLEQ}
 \IFRU{Далее мы увидим инструкции \TT{ADREQ} и \TT{BLEQ}.}
 {Then we see \TT{ADREQ} and \TT{BLEQ} instructions.}
 \IFRU{Они работают так же как и \TT{ADR} и \TT{BL}, но исполнятся только в случае если значения при сравнении были равны.}
@@ -47,6 +58,8 @@ other while comparison.}
 \IFRU{Перед ними еще один \CMP (ведь вызов \printf мог испортить состояние флагов).}
 {Another \CMP is before them (because \printf call may tamper state of flags).}
 
+\index{ARM!\Instructions!LDMGEFD}
+\index{ARM!\Instructions!LDMFD}
 \IFRU{Далее мы увидим \TT{LDMGEFD}, эта инструкция работает так же как и \TT{LDMFD}\footnote{\LDMFDDESC}, 
 но сработает только в случае если в результате сравнения одно из значений было больше 
 или равно второму}
@@ -59,6 +72,7 @@ but will be triggered only in the case when one value was greater or equal to an
 функции закончится.}
 {instruction is that is like function epilogue, but it will be triggered only if $a>=b$, only then function 
 execution will be finished.}
+\index{Function epilogue}
 \IFRU{Но если это не так, то есть $a<b$, то исполнение дойдет до следующей инструкции 
 \TT{``LDMFD SP!, \{R4-R6,LR\}''}, это еще один эпилог функции, эта инструкция восстанавливает состояние регистров
 \TT{R4-R6}, но и \LR вместо \PC, таким образом, пока что не делая возврата из функции.}
@@ -71,6 +85,9 @@ sole argument}.
 \IFRU{Безусловный переход на \printf вместо возврата из функции, это то что мы уже рассматривали в 
 секции}{Unconditional jump to \printf instead of function return, is what we already examined in} <<\PrintfSeveralArgumentsSectionName>>\IFRU{, здесь}{ section, here}~\ref{ARM_B_to_printf}.
 
+\index{ARM!\Instructions!ADRHI}
+\index{ARM!\Instructions!BLHI}
+\index{ARM!\Instructions!LDMCSFD}
 \IFRU{Функция }{}\TT{f\_unsigned} \IFRU{точно такая же, но там используются инструкции}{is similar,
 but } \TT{ADRHI}, \TT{BLHI}, \IFRU{и}{and} \TT{LDMCSFD} \IFRU{эти предикаты}{instructions are
 used there, these predicates}
@@ -85,6 +102,7 @@ used there, these predicates}
 \IFRU{Так, в режиме ARM можно обойтись без условных переходов.}
 {That's how to get rid of conditional jumps in ARM mode.}
 
+\index{\IFRU{Конвеер RISC}{RISC pipeline}}
 \IFRU{Почему это хорошо?}{Why it's so good?}
 \IFRU{Потому что ARM это RISC-процессор имеющий конвеер (pipeline) для исполнения инструкций.}
 {Because, ARM is RISC-processor with pipeline for instructions executing.}
@@ -93,12 +111,14 @@ used there, these predicates}
 предсказывания переходов.}
 {In short, pipelined processor is not very good on jumps at all, so that's why branch predictors are
 critical here.}
-\IFRU{Очень хорошо если программа имеют как можно меньшее переходов, как условных, так и безусловных, поэтому, 
+\IFRU{Очень хорошо если программа имеют как можно меньшее переходов, как условных, 
+так и безусловных, поэтому, 
 инструкции с добавленными предикатами, указывающими,
 исполнять инструкцию или нет, могут избавить от некоторого количества условных переходов.}
 {It's very good if the program has as few jumps as possible, conditional and unconditional, so that's why,
 predicated instructions can help in reducing conditional jumps count.}
 
+\index{x86!\Instructions!CMOVcc}
 \IFRU{В x86 нет аналогичной возможности, если не считать инструкцию \TT{CMOVcc}, это то же что и \MOV, 
 но она срабатывает
 только при определенных выставленных флагах, обычно, выставленных при помощи \CMP во время сравнения.}
@@ -109,6 +129,13 @@ but it's triggered only when specific flags are set, usually, set while comparin
 
 \lstinputlisting[caption=\OptimizingKeil + \ThumbMode]{07_jcc/ARM_thumb_signed.asm}
 
+\index{ARM!\Instructions!BLE}
+\index{ARM!\Instructions!BNE}
+\index{ARM!\Instructions!BGE}
+\index{ARM!\Instructions!BLS}
+\index{ARM!\Instructions!BCS}
+\index{ARM!\Instructions!B}
+\index{ARM!\ThumbMode}
 \IFRU{В режиме thumb, только инструкции \TT{B} могут быть дополнены условием исполнения (\IT{condition code}), 
 так что, код для режима thumb выглядит привычнее.}
 {Only \TT{B} instructions in thumb mode may be supplemented by \IT{condition codes}, so the thumb code 
@@ -118,7 +145,8 @@ looks more ordinary.}
 \TT{BNE} ~--- \IT{Not Equal}, 
 \TT{BGE} ~--- \IT{Greater than or Equal}.
 
-\IFRU{Функция }{}\TT{f\_unsigned} \IFRU{точно такая же, но для работы с беззнаковыми величинами, там используются 
+\IFRU{Функция }{}\TT{f\_unsigned} \IFRU{точно такая же, но для работы с беззнаковыми величинами, 
+там используются 
 инструкции}
 {function is just the same, but other instructions are used while working with unsigned values:}\TT{BLS} 
 (\IT{Unsigned lower or same}) \IFRU{и}{and} \TT{BCS} (\IT{Carry Set (Greater than ir equal)}).

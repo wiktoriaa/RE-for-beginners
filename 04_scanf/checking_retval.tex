@@ -2,8 +2,7 @@
 
 \subsubsection{x86}
 
-\IFRU
-{Как я уже упоминал, использовать \scanf в наше время это слегка старомодно. 
+\IFRU {Как я уже упоминал, использовать \scanf в наше время это слегка старомодно. 
 Но если уж жизнь заставила этим заниматься, нужно хотя бы проверять, сработал ли \scanf 
 правильно или пользователь ввел вместо числа что-то другое, что \scanf не смог трактовать как число.}
 {As I noticed before, it is slightly old-fashioned to use \scanf today. 
@@ -26,16 +25,19 @@ But if we have to, we need at least check if \scanf finished correctly without e
 
 \lstinputlisting{04_scanf/retval_check_MSVC.asm}
 
+\index{x86!\Registers!EAX}
 \IFRU{Для того чтобы вызывающая функция имела доступ к результату вызываемой функции, 
 вызываемая функция (в нашем случае \scanf) оставляет это значение в регистре \EAX.}
 {Caller function (\main) should have access to result of callee function (\scanf), 
 so callee leave this value in \EAX register.}
 
+\index{x86!\Instructions!CMP}
 \IFRU{Мы проверяем его инструкцией \TT{CMP EAX, 1} (\IT{CoMPare}), то есть, 
 сравниваем значение в \EAX с 1.}
 {After, we check it using instruction \TT{CMP EAX, 1} (\IT{CoMPare}), 
 in other words, we compare value in \EAX with 1.} 
 
+\index{x86!\Instructions!JNE}
 \IFRU{Следующий за инструкцией \CMP: условный переход \JNE. 
 Это означает \IT{Jump if Not Equal}, то есть, условный переход \IT{если не равно}.}
 {\JNE conditional jump follows \CMP instruction. \JNE mean \IT{Jump if Not Equal}.}
@@ -55,14 +57,16 @@ with argument \TT{``What you entered? Huh?''}.}
 {But if everything is fine, conditional jump will not be taken, and another \printf call 
 will be executed, with two arguments: \TT{'You entered \%d...'} and value of variable \TT{x}. }
 
-\IFRU
-{А для того чтобы после этого вызова не исполнился сразу второй вызов \printf, 
+\index{x86!\Instructions!XOR}
+\index{\CLanguageElements!return}
+\IFRU {А для того чтобы после этого вызова не исполнился сразу второй вызов \printf, 
 после него имеется инструкция \JMP, безусловный переход, он отправит процессор на место аккурат 
 после второго \printf и перед инструкцией \TT{XOR EAX, EAX}, которая собственно \TT{return 0}.}
 {Because second subsequent \printf not needed to be executed, there are \JMP after (unconditional jump) 
 it will pass control to the place after second \printf and before \TT{XOR EAX, EAX} instruction, 
 which implement \TT{return 0}.}
 
+\index{x86!\Registers!\Flags}
 \IFRU{Итак, можно сказать, что в подавляющем случае сравнение какой либо переменной с чем-то другим 
 происходит при помощи пары инструкций \CMP и \Jcc, где \IT{cc} это \IT{condition code}.}
 {So, it can be said that most often, comparing some value with another is implemented 
@@ -75,6 +79,8 @@ processor flags\footnote{About x86 flags, see also: \url{http://en.wikipedia.org
 {\Jcc проверяет нужные ему флаги и выполняет переход по указанному адресу (или не выполняет).}
 {\Jcc check flags needed to be checked and pass control to mentioned address (or not pass).}
 
+\index{x86!\Instructions!CMP}
+\index{x86!\Instructions!SUB}
 \label{CMPandSUB}
 \IFRU{Но на самом деле, как это не парадоксально поначалу звучит, \CMP это почти то же самое что и 
 инструкция \SUB, которая отнимает числа одно от другого.}
@@ -83,9 +89,11 @@ processor flags\footnote{About x86 flags, see also: \url{http://en.wikipedia.org
 {All arithmetic instructions set processor flags too, not only \CMP.}
 \IFRU{Если мы сравним 1 и 1, от единицы отнимется единица, получится ноль, и выставится флаг 
 \ZF (\IT{zero flag}), означающий что последний полученный результат является нулем.}
-{If we compare 1 and 1, 1-1 will result zero, \ZF flag will be set (meaning that last result was zero).}
+{If we compare 1 and 1, $1-1$ will be zero in result, \ZF flag will be set (meaning that last result was zero).}
 \IFRU{Ни при каких других значениях \EAX, флаг \ZF выставлен не будет, кроме тех, когда операнды равны друг другу.}
 {There are no any other circumstances when it's possible except when operands are equal.}
+\index{x86!\Instructions!JNE}
+\index{x86!\Registers!ZF}
 \IFRU{Инструкция \JNE проверяет только флаг \ZF, и совершает переход только если флаг не поднят. 
 Фактически, \JNE это синоним инструкции \JNZ (\IT{Jump if Not Zero}).}
 {\JNE checks only \ZF flag and jumping only if it is not set. 

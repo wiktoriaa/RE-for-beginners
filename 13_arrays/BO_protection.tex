@@ -14,6 +14,8 @@ MSVC has options like\footnote{\URLWPB}:}
  /GZ Enable stack checks (/RTCs)
 \end{lstlisting}
 
+\index{x86!\Instructions!RET}
+\index{Function prologue}
 \IFRU{Один из методов, это в прологе функции вставлять в область локальных переменных 
 некоторое случайное значение 
 и в эпилоге функции, перед выходом, это число проверять. 
@@ -35,6 +37,7 @@ Process will hang, but that's much better then remote attack to your host.}
     }
 }
 
+\index{Canary}
 \IFRU{Это случайное значение иногда называют ``канарейкой''\footnote{``canary'' в англоязычной литературе}, 
 по аналогии с шахтной канарейкой\footnote{\CANARYURL},
 их использовали шахтеры в свое время, чтобы определять, есть ли в шахте опасный газ.
@@ -58,6 +61,7 @@ they were used by miners in these days, in order to detect poisonous gases quick
 
 \lstinputlisting{13_arrays/simple_Xcode_thumb_O3_en.asm}
 
+\index{Unrolled loop}
 \IFRU{Во-первых, как видно, LLVM ``развернул'' цикл и все значения записываются в массив по одному, 
 уже вычисленные, 
 потому что LLVM посчитал что так будет быстрее.}
@@ -71,6 +75,7 @@ and finding this way could be your homework.}
 на которую ссылается регистр \TT{R8}.}
 {At the function end wee see ``canaries'' comparison ~--- that laying in local stack and correct one,
 to which \TT{R8} register pointing.}
+\index{ARM!\Instructions!IT}
 \IFRU{Если они равны, срабатывает блок из четырех инструкций при помощи \TT{``ITTTT EQ''}, это запись
 $0$ в \Rzero, эпилог функции и выход из нее.}
 {If they are equal to each other, 4-instruction block is triggered by \TT{``ITTTT EQ''}, it is

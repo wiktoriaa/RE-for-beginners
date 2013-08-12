@@ -12,6 +12,7 @@ But of course, it's not rational if speed is important.}
 
 \newcommand{\FNCPUID}{\footnote{\url{http://en.wikipedia.org/wiki/CPUID}}}
 
+\index{x86!\Instructions!CPUID}
 \IFRU{Рассмотрим пример с инструкцией \CPUID\FNCPUID. 
 Эта инструкция возвращает информацию о том, какой процессор имеется в наличии и какие фичи он имеет.}
 {Let's consider \CPUID\FNCPUID instruction example.
@@ -60,11 +61,13 @@ Then, we have a pointer to \TT{CPUID\_1\_EAX} structure and we point it to \EAX 
 
 \lstinputlisting[caption=\Optimizing MSVC 2008]{15_structs/CPUID_msvc_Ox.asm}
 
+\index{x86!\Instructions!SHR}
 \IFRU{Инструкция \TT{SHR} сдвигает значение из \EAX на то количество бит, 
 которое нужно \IT{пропустить}, то есть, мы игнорируем некоторые биты \IT{справа}.}
 {\TT{SHR} instruction shifting value in \EAX by number of bits should be
 \IT{skipped}, e.g., we ignore some bits \IT{at right}.}
 
+\index{x86!\Instructions!AND}
 \IFRU{А инструкция \AND очищает биты \IT{слева} которые нам не нужны, или же, говоря иначе, 
 она оставляет по маске только те биты в \EAX, которые нам сейчас нужны.}
 {\AND instruction clearing not needed bits \IT{at left}, or, in other words, 
@@ -91,6 +94,8 @@ instead of calculating them separately, before corresponding each \printf call.}
 significand (or fraction) and exponent.
 But will we able to work with these fields directly? Let's try with \Tfloat.}
 
+\index{IEEE 754}
+\index{float}
 \begin{figure}[ht!]
 \centering
 \includegraphics[scale=0.66]{15_structs/500px-Float_example.png}
@@ -117,7 +122,7 @@ the whole number by \TT{$2^2$}, e.g., by 4.}
 \lstinputlisting[caption=\NonOptimizing MSVC 2008]
 {\IFRU{15_structs/float_msvc_ru.asm}{15_structs/float_msvc_en.asm}}
 
-\IFRU{Слекга избыточно. В версии скомпиленной с флагом \Ox нет вызовов \TT{memcpy()}, 
+\IFRU{Слекга избыточно. В версии скомпилированной с флагом \Ox нет вызовов \TT{memcpy()}, 
 там работа происходит сразу с переменной f. Но по неоптимизированной версии будет проще понять.}
 {Redundant for a bit. If it compiled with \Ox flag there are no \TT{memcpy()} call,
 f variable is used directly. But it's easier to understand it all considering unoptimized version.}

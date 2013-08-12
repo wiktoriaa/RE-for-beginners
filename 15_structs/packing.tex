@@ -99,12 +99,15 @@ How our compiler know to pack them on 1-byte alignment method?}
 {As we may recall, here a structure passed instead of pointer to structure, and because first 4 function arguments 
 in ARM are passed via registers, so then structure fields are passed via} \TT{R0-R3}.
 
+\index{ARM!\Instructions!LDRB}
+\index{x86!\Instructions!MOVSX}
 \IFRU{Инструкция }\TT{LDRB} \IFRU{загружает один байт из памяти и расширяет до 32-бит учитывая знак.}
 {loads one byte from memory and extending it to 32-bit, taking into account its sign.}
 \IFRU{Это похоже на инструкцию}{This is similar to} \MOVSX \IFRU{в}{instruction in} x86.
 \IFRU{Она здесь применяется дла загрузки полей}{Here it's used for loading fields} $a$ \IFRU{и}{and} $c$ 
 \IFRU{из структуры}{from structure}.
 
+\index{Function epilogue}
 \IFRU{Еще что бросается в глаза, так это то что вместо эпилога функции, переход на эпилог другой функции!}
 {One more thing we spot easily, instead of function epilogue, here is jump to another function's epilogue!}
 \IFRU{Действительно, то была совсем другая, не относящаяся к этой, функция, однако, она имела точно такой же
@@ -123,6 +126,9 @@ the same epilogue}
 
 \lstinputlisting[caption=\OptimizingXcode + \ThumbTwoMode]{15_structs/packing_Xcode_thumb.asm}
 
-\TT{SXTB} (\IT{Signed Extend Byte}) \IFRU{это так же аналог}{is analogous to} \MOVSX \IFRU{в}{in} x86\IFRU{, только работает не с памятью, а с регистром.}{ as well, but works not with memory, but with register.}
+\index{ARM!\Instructions!SXTB}
+\index{x86!\Instructions!MOVSX}
+\TT{SXTB} (\IT{Signed Extend Byte}) \IFRU{это так же аналог}{is analogous to} \MOVSX \IFRU{в}{in} 
+x86\IFRU{, только работает не с памятью, а с регистром.}{ as well, but works not with memory, but with register.}
 \IFRU{Всё остальное ~--- так же.}{All the rest ~--- just the same.}
 

@@ -14,6 +14,7 @@
 Traditionally, local variables are placed in the stack. 
 Probably, there could be other ways, but in x86 it is so.}
 
+\index{x86!\Instructions!PUSH}
 \IFRU{Следующая после пролога инструкция \TT{PUSH ECX} не ставит своей целью сохранить 
 значение регистра \ECX. 
 (Заметьте отсутствие сооветствующей инструкции \TT{POP ECX} в конце функции)}
@@ -23,6 +24,8 @@ Probably, there could be other ways, but in x86 it is so.}
 \IFRU{Она на самом деле выделяет в стеке 4 байта для хранения \TT{x} в будущем.} 
 {In fact, this instruction just allocate 4 bytes in stack for \TT{x} variable storage.} 
 
+\index{\Stack!\IFRU{Стековый фрейм}{Stack frame}}
+\index{x86!\Registers!EBP}
 \IFRU{Доступ к \TT{x} будет осуществляться при помощи объявленного макроса \TT{\_x\$} 
 (он равен -4) и регистра \EBP указывающего на текущий фрейм.}
 {\TT{x} will be accessed with the assistance of \TT{\_x\$} macro 
@@ -33,11 +36,12 @@ Probably, there could be other ways, but in x86 it is so.}
 {Over a span of function execution, \EBP is pointing to current stack frame and it is possible 
 to have an access to local variables and function arguments via \TT{EBP+offset}.}
 
+\index{x86!\Registers!ESP}
 \IFRU
 {Можно было бы использовать \ESP, но он во время исполнения функции постоянно меняется. 
-Так что можно сказать что \EBP это замороженное состояние \ESP на момент начала исполнения функции.}
+Так что можно сказать что \EBP это \IT{замороженное состояние} \ESP на момент начала исполнения функции.}
 {It is also possible to use \ESP, but it's often changing and not very handy.
-So it can be said, \EBP is frozen state of \ESP at the moment of function execution start.}
+So it can be said, \EBP is \IT{frozen state} of \ESP at the moment of function execution start.}
 
 \IFRU
 {У функции \scanf в нашем примере два аргумента.}{Function \scanf in our example has two arguments.}
@@ -46,6 +50,7 @@ So it can be said, \EBP is frozen state of \ESP at the moment of function execut
 {Первый ~--- указатель на строку содержащую \TT{``\%d''} и второй ~--- адрес переменной \TT{x}.} 
 {First is pointer to the string containing \TT{``\%d''} and second ~--- address of variable \TT{x}.} 
 
+\index{x86!\Instructions!LEA}
 \IFRU{Вначале адрес \TT{x} помещается в регистр \EAX при помощи инструкции \TT{lea eax, DWORD PTR \_x\$[ebp]}.}
 {First of all, address of \TT{x} is placed into \EAX register by \TT{lea eax, DWORD PTR \_x\$[ebp]} instruction}
 
@@ -80,6 +85,7 @@ this instruction placing to \ECX not address of \TT{x} variable but its contents
 
 \lstinputlisting{04_scanf/4_1_gcc.asm}
 
+\index{puts() \IFRU{вместо}{instead of} printf()}
 \IFRU{GCC заменил первый вызов \printf на \puts, почему это было сделано, 
 уже было описано раннее~\ref{puts}.}
 {GCC replaced first \printf call to \puts, it was already described~\ref{puts} 

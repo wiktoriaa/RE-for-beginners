@@ -4,6 +4,8 @@
 
 \lstinputlisting{\IFRU{10_strlen/10_1_msvc_ru.asm}{10_strlen/10_1_msvc_en.asm}}
 
+\index{x86!\Instructions!MOVSX}
+\index{x86!\Instructions!TEST}
 \IFRU{Здесь две новых инструкции: \MOVSX и \TEST.}
 {Two new instructions here: \MOVSX and \TEST.}
 
@@ -46,6 +48,7 @@ register allocator\footnote{функция компилятора распред
 (let's say \DL). Apparently, compiler's register allocator\footnote{compiler's function 
 assigning local variables to CPU registers} works like that.}
 
+\index{ARM!\Instructions!TEST}
 \IFRU{Позже выполняется \TT{TEST EDX, EDX}. 
 Об инструкции \TEST читайте в разделе о битовых полях~\ref{sec:bitfields}.
 Но конкретно здесь, эта инструкция просто проверяет состояние регистра \EDX на $0$.}
@@ -57,6 +60,7 @@ But here, this instruction just checking \EDX value, if it is equals to $0$.}
 
 \lstinputlisting{10_strlen/10_3_gcc.asm}
 
+\index{x86!\Instructions!MOVZX}
 \IFRU{Результат очень похож на MSVC, вот только здесь используется \MOVZX а не \MOVSX. 
 \MOVZX означает \IT{MOV with Zero-Extent}. Эта инструкция перекладывает какое-либо значение 
 в регистр и остальное добивает нулями. 
@@ -70,7 +74,8 @@ In fact, this instruction is handy only because it is able to replace two instru
 
 \IFRU{С другой стороны, нам очевидно, что здесь можно было бы написать вот так: 
 \TT{mov al, byte ptr [eax] / test al, al} ~--- это тоже самое, хотя старшие биты \EAX будут ``замусорены''. 
-Но, будем считать, что это погрешность компилятора ~--- он не смог сделать код более экономным или более понятным. 
+Но, будем считать, что это погрешность компилятора ~--- 
+он не смог сделать код более экономным или более понятным. 
 Строго говоря, компилятор вообще не нацелен на то чтобы генерировать понятный (для человека) код.}
 {On other hand, it is obvious to us that compiler could produce that code: 
 \TT{mov al, byte ptr [eax] / test al, al} ~--- it is almost the same, however, 
@@ -78,6 +83,7 @@ highest \EAX register bits will contain random noise.
 But let's think it is compiler's drawback ~--- it can't produce more understandable code. 
 Strictly speaking, compiler is not obliged to emit understandable (to humans) code at all.}
 
+\index{x86!\Instructions!SETNZ}
 \IFRU{Следующая новая инструкция для нас ~--- \SETNZ. В данном случае, если в \AL был не ноль, 
 то \TT{test al, al} выставит флаг \ZF в 0, а \SETNZ, если \TT{ZF==0} 
 (\IT{NZ} значит \IT{not zero}) выставит единицу в \AL. 
@@ -99,6 +105,8 @@ Compiler emitted slightly redundant code, but let's not forget that optimization
 {Now it's all simpler. But it is needless to say that compiler could use registers such efficiently 
 only in small functions with small number of local variables.}
 
+\index{x86!\Instructions!INC}
+\index{x86!\Instructions!DEC}
 \INC/\DEC ~--- \IFRU{это инструкции инкремента-декремента, попросту говоря: 
 увеличить на единицу или уменьшить.}
 {are increment/decrement instruction, in other words: add 1 to variable or subtract.}
@@ -111,8 +119,7 @@ only in small functions with small number of local variables.}
 \IFRU{Здесь GCC не очень отстает от MSVC за исключением наличия \MOVZX.} 
 {Here GCC is almost the same as MSVC, except of \MOVZX presence.}
 
-\IFRU
-{Впрочем, только кроме того что почему-то используется \MOVZX, который явно можно заменить на}
+\IFRU {Впрочем, только кроме того что почему-то используется \MOVZX, который явно можно заменить на}
 {However, \MOVZX could be replaced here to} \TT{mov dl, byte ptr [eax]}.
 
 \IFRU{Но, возможно, компилятору GCC просто проще помнить что у него под переменную типа \Tchar отведен целый 
@@ -122,6 +129,8 @@ is allocated for \Tchar variable and it can be sure that highest bits will not c
 at any point.}
 
 \label{strlen_NOT_ADD}
+\index{x86!\Instructions!NOT}
+\index{x86!\Instructions!XOR}
 \IFRU{Далее мы видим новую для нас инструкцию \NOT. Эта инструкция инвертирует все биты в операнде. 
 Можно сказать что здесь это синонимично инструкции \TT{XOR ECX, 0ffffffffh}. 
 \NOT и следующая за ней инструкция \ADD вычисляют разницу указателей и отнимают от результата единицу. 
@@ -155,8 +164,7 @@ eax=eax-1;
 return eax
 \end{lstlisting}
 
-\IFRU
-{Но почему GCC решил что так будет лучше? Снова не берусь сказать. Но я не сомневаюсь, 
+\IFRU{Но почему GCC решил что так будет лучше? Снова не берусь сказать. Но я не сомневаюсь, 
 что эти оба варианта работают примерно равноценно в плане эффективности и скорости.}
 {Why GCC decided it would be better? I cannot be sure. 
 But I'm assure that both variants are equivalent in efficiency sense.}

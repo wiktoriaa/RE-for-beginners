@@ -14,6 +14,7 @@ int f(int a)
 
 \lstinputlisting[caption=MSVC]{\IFRU{11_division_by_9/11_1_msvc_ru.asm}{11_division_by_9/11_1_msvc_en.asm}}
 
+\index{ARM!\Instructions!IDIV}
 \IFRU{\IDIV делит 64-битное число хранящееся в паре регистров \TT{EDX:EAX} на значение в \ECX. 
 В результате, \EAX будет содержать частное\FNQUOTIENT, а \EDX ~--- остаток от деления. 
 Результат возвращается из функции через \EAX, так что после операции деления, 
@@ -100,6 +101,8 @@ __text:00002C6C 1E FF 2F E1                             BX              LR
 \IFRU{Должно быть, LLVM использует тот же алгоритм для поиска констант.}
 {Apparently, LLVM use the same algorithm for constants generating.}
 
+\index{ARM!\Instructions!MOV}
+\index{ARM!\Instructions!MOVT}
 \IFRU{Наблюдательный читатель может спросить, как \MOV записала в регистр сразу 32-битное число, 
 ведь это невозможно в режиме ARM.}
 {Observant reader may ask, how \MOV writes 32-bit value in register, while this isn't possible in ARM mode.}
@@ -114,22 +117,27 @@ in fact, there are two instructions.}
 \IDA \IFRU{распознала эту последовательность и для краткости, сократила всё это до одной ``псевдо-инструкции''.}
 {is aware of such sequences, and for the sake of compactness, reduced it to one single ``pseudo-instruction''.}
 
+\index{ARM!\Instructions!SMMUL}
 \IFRU{Инструкция }{}\TT{SMMUL} (\IT{Signed Most Significant Word Multiply}) 
 \IFRU{умножает числа считая их знаковыми (signed) и оставляет в \Rzero старшие 32 бита результата, 
 не сохраняя младшие 32 бита.}
 {instruction multilpy numbers treating them as signed numbers, and leaving high 32-bit part of result in \Rzero,
 dropping low 32-bit part of result.}
 
+\index{ARM!Optional operators!ASR}
 \IFRU{Инструкция }{}\TT{``MOV R1, R0,ASR\#1''} \IFRU{это арифметический сдвиг право на один бит.}
 {instruction is arithmetic shift right by one bit.}
 
+\index{ARM!\Instructions!ADD}
+\index{ARM!Data processing instructions}
+\index{ARM!Optional operators!LSR}
 \TT{``ADD R0, R1, R0,LSR\#31''} \IFRU{это}{is} $R0=R1 + R0>>31$
 
 \label{shifts_in_ARM_mode}
 \IFRU{Дело в том что в режиме ARM нет отдельных инструкций для битовых сдвигов.}
 {As a matter of fact, there are no separate shifting instruction in ARM mode.}
 \IFRU{Вместо этого, некоторые инструкции}{Instead, some instructions like} 
-(\MOV, \ADD, \SUB, \TT{RSB})\footnote{\DataProcessingFunctionsFootNote}
+(\MOV, \ADD, \SUB, \TT{RSB})\footnote{\DataProcessingInstructionsFootNote}
 \IFRU{могут быть дополнеты пометкой, сдвигать ли второй операнд и если да, то на сколько и как.}
 {May be supplied by option, is the second operand should be shifted, if yes, by what value and how.}
 \TT{ASR} \IFRU{означает}{meaning} \IT{Arithmetic Shift Right}, \TT{LSR} ~--- \IT{Logican Shift Right}.
@@ -144,6 +152,7 @@ ADD.W           R0, R1, R0,LSR#31
 BX              LR
 \end{lstlisting}
 
+\index{ARM!\Instructions!ASRS}
 \IFRU{В режиме thumb отдельные инструкции для битовых сдвигов есть}
 {There are separate instructions for shifting in thumb mode}, \IFRU{и здесь применяется одна из них}
 {and one of them is used here} ~--- \TT{ASRS} (\IFRU{арифметический сдвиг вправо}{arithmetic shift right}).

@@ -20,12 +20,15 @@
 .text:0000005C 08 BD                       POP     {R3,PC}
 \end{lstlisting}
 
-\IFRU{Чтобы \scanf мог вернуть значение, ему нужно передать указатель на переменную типа \Tint.}{A pointer
+\index{\CLanguageElements!\Pointers}
+\IFRU{Чтобы \scanf мог вернуть значение, ему нужно передать указатель на переменную типа \Tint.}
+{A pointer
 to \Tint-typed variable shoud be passed to \scanf so it can return value via it.}
 \Tint \IFRU{~--- 32-битное значение, для его хранения нужно только 4 байта и оно помещается в 
 32-битный регистр.}
 {is 32-bit value, so we need 4 bytes for storing it somewhere in memory, and it fits exactly 
 in 32-bit regsiter.}
+\index{IDA!var\_?}
 \IFRU{Место для локальной переменной \TT{x} выделяется в стеке, \IDA наименовала её \IT{var\_8}, 
 впрочем, место для нее выделять не обязательно, т.к., указатель стека \SP уже указывает на место, 
 свободное для использования.}{A place for local variable \TT{x} is allocated in stack and \IDA
@@ -35,6 +38,7 @@ is already pointing to the place which may be used.}
 передается в \scanf.}
 {So, \SP stack pointer value is copied to \Rone register and, together with format-string, passed
 into \scanf.}
+\index{ARM!\Instructions!LDR}
 \IFRU{Позже, при помощи инструкции \TT{LDR}, это значение перемещается из стека в регистр \Rone, 
 чтобы быть переданным в \printf.}{Later, with the help of \TT{LDR} instruction, this value is moved
 from stack into \Rone register in order to be passed into \printf.}

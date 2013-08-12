@@ -13,6 +13,8 @@ are no any stack, you work just with registers.}
 
 \lstinputlisting{12_FPU/simple_Xcode_ARM_O3.asm}
 
+\index{ARM!D-\IFRU{регистры}{registers}}
+\index{ARM!S-\IFRU{регистры}{registers}}
 \IFRU{Итак, здесь мы видим использование новых регистров, с префиксом D.}
 {So, we see here new registers used, with D prefix.}
 \IFRU{Это 64-битные регистры, их 32, и их можно
@@ -26,9 +28,16 @@ SIMD (в ARM это называется NEON).}
 {There are also 32 32-bit S-registers, they are intended to be used for single precision 
 floating pointer numbers (float).}
 
+\IFRU{Запомнить легко: D-регистры предназначены для чисел double-точности, 
+а S-регистры ~--- для чисел single-точности.}
+{It's easy to remember: D-registers are intended for double precision numbers, while S-registers ~---
+for single precision numbers.}
+
 \IFRU{Обе константы}{Both} ($3.14$ \IFRU{и}{and} $4.1$) \IFRU{хранятся в памяти в формате IEEE 754.}
 {constants are stored in memory in IEEE 754 form.}
 
+\index{ARM!\Instructions!VLDR}
+\index{ARM!\Instructions!VMOV}
 \IFRU{Инструкции }{}\TT{VLDR} \IFRU{и}{and} \TT{VMOV}
 \IFRU{, как можно догадаться, это аналоги обычных \TT{LDR} и \MOV, но они работают с D-регистрами.}
 {instructions, as it can be easily deduced, are analogous to \TT{LDR} and \MOV, 
@@ -56,6 +65,9 @@ and saves it to} \TT{D17}.
 \IFRU{занимающее 64 бита}{needing 64 bits for storage}, \IFRU{возвращается в паре регистров \Rzero и \Rone}
 {returning in \Rzero and \Rone registers pair}.
 
+\index{ARM!\Instructions!VDIV}
+\index{ARM!\Instructions!VMUL}
+\index{ARM!\Instructions!VADD}
 \TT{VDIV}, \TT{VMUL} \IFRU{и}{and} \TT{VADD}, \IFRU{это, собственно, инструкции для работы с числами 
 с плавающей точкой, вычисляющие, соответственно, частное\FNQUOTIENT, произведение\FNPRODUCT и сумму\FNSUM.}
 {are instruction for floating point numbers processing, computing, quotient\FNQUOTIENT, 
@@ -84,11 +96,16 @@ product\FNPRODUCT and sum\FNSUM, respectively.}
 {By the way, similar FPU-emulating libraries were very popular in x86 world when coprocessors were rare
 and expensive, and were installed only on expensive computers.}
 
+\index{ARM!soft float}
+\index{ARM!armel}
+\index{ARM!armhf}
+\index{ARM!hard float}
 \IFRU{Эмуляция FPU-сопроцессора в ARM называется \IT{soft float} или \IT{armel}, 
 а использование FPU-инструкций сопроцессора ~--- \IT{hard float} или \IT{armhf}.}
 {FPU-coprocessor emulating calling \IT{soft float} or \IT{armel} in ARM world, 
 while coprocessor's FPU-instructions usage calling \IT{hard float} or \IT{armhf}.}
 
+\index{Raspberry Pi}
 \IFRU{Ядро Linux, например, для Raspberry Pi может поставляться в двух вариантах.}
 {For example, Linux kernel for Raspberry Pi is compiled in two variants.}
 \IFRU{В случае \IT{soft float}, аргументы будут передаваться через R-регистры, 

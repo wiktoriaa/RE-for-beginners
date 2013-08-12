@@ -4,9 +4,11 @@
 
 \lstinputlisting[caption=MSVC 2010]{14_bitfields/set_reset_msvc.asm}
 
+\index{x86!\Instructions!OR}
 \IFRU{Инструкция \OR здесь добавляет в переменную еще один бит, игнорируя остальные.}
 {\OR instruction adding one more bit to value, ignoring others.}
 
+\index{x86!\Instructions!AND}
 \IFRU{А \AND сбрасывает некий бит. Можно также сказать, что \AND здесь копирует все биты, кроме одного. 
 Действительно, во втором операнде \AND выставлены в единицу те биты, которые нужно сохранить, 
 кроме одного, копировать который мы не хотим (и который $0$ в битовой маске).
@@ -37,6 +39,8 @@ It's easier way to memorize the logic.}
 {That's shorter. It is important to note that compiler works with \EAX register part via \AH register ~--- 
 that's \EAX register part from 8th to 15th bits inclusive.}
 
+\index{x86!8086}
+\index{x86!80386}
 \IFRU{Важное отступление: в 16-битном процессоре 8086 аккумулятор имел название \AX 
 и состоял из двух 8-битных половин ~--- \AL (младшая часть) и \AH (старшая). 
 В 80386 регистры были расширены до 32-бит, 
@@ -67,6 +71,7 @@ It would be more logical way to emit here \TT{``or eax, 04000h''}, but that's 5 
 
 \newcommand{\URLINL}{\url{http://en.wikipedia.org/wiki/Inline_function}}
 
+\index{Inline code}
 \IFRU{Действительно ~--- первый аргумент уже загружен в \EAX, и прямо здесь можно начинать с ним работать. 
 Интересно, что и пролог функции (\TT{``push ebp / mov ebp,esp''}) и эпилог (\TT{``pop ebp''}) 
 функции можно смело выкинуть
@@ -79,5 +84,4 @@ It's worth noting that both function prologue (\TT{``push ebp / mov ebp,esp''}) 
 can easily be omitted
 here, but GCC probably isn't good enough for such code size optimizations.
 However, such short functions are better to be \IT{inlined functions}\footnote{\URLINL}.}
-
 

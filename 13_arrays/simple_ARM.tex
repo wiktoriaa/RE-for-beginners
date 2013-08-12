@@ -17,8 +17,10 @@ or 4 bytes},
 \IFRU{Число, которое нужно записать в массив}{A number to be written into array},
 \IFRU{вычисляется так $i*2$, и это эквивалентно сдвигу на 1 бит влево}
 {is calculating as $i*2$ which is equivalent to shifting left by one bit},
+\index{ARM!Optional operators!LSL}
 \IFRU{инструкция}{so} \TT{``MOV R0, R4,LSL\#1''} \IFRU{делает это}{instruction do this}.
 
+\index{ARM!\Instructions!STR}
 \TT{``STR R0, [SP,R4,LSL\#2]''} \IFRU{записывает содержимое \Rzero в массив}{writes \Rzero contents into array}.
 \IFRU{Указатель на элемент массива вычисляется так: \SP указывает на начало массива, \Rfour это $i$.}
 {Here is how a pointer to array element is to be calculated: \SP pointing to array begin, \Rfour is $i$.}
@@ -27,6 +29,7 @@ or 4 bytes},
 {So shift $i$ left by 2 bits, that's equivalent to multiplication by $4$
 (because each array element has size of 4 bytes) and add it to address of array begin.}
 
+\index{ARM!\Instructions!LDR}
 \IFRU{Во втором цикле используется обратная инструкция}{The second loop has inverse} 
 \TT{``LDR R2, [SP,R4,LSL\#2]''}, 
 \IFRU{она загружает из массива нужное значение, и указатель на него вычисляется точно так же.}
@@ -37,6 +40,7 @@ or 4 bytes},
 \lstinputlisting{13_arrays/simple_Keil_thumb_O3_en.asm}
 
 \IFRU{Код для thumb очень похожий.}{Thumb code is very similar.}
+\index{ARM!\Instructions!LSLS}
 \IFRU{В thumb имеются отдельные инструкции для битовых сдвигов (как \TT{LSLS}), 
 вычисляющие и число для записи в массив и адрес каждого элемента массива.}
 {Thumb mode has special instructions for bit shifting (like \TT{LSLS}),
