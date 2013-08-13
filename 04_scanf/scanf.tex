@@ -23,6 +23,47 @@ int main()
 Но я хотел проиллюстрировать передачу указателя на \Tint.}
 {OK, I agree, it is not clever to use \scanf today. But I wanted to illustrate passing pointer to \Tint.}
 
+\subsection{\IFRU{Об указателях}{About pointers}}
+\index{\CLanguageElements!\Pointers}
+
+\IFRU{Это одна из фундаментальных вещей в компьютерных науках.}{It's one of the most fundamental things in computer
+science.}
+\IFRU{Часто, большой массив, структуру или объект, передавать в другую функцию никак не выгодно, 
+а указатель передать куда проще.}
+{Often, large array, structure or object, it's too costly to pass to another function, while passing pointer
+is much easier.}
+\IFRU{Указатель в}{In} \CCpp \IFRU{это просто адрес какого-либо места в памяти.}{it's just an address of some place
+in memory.}
+
+\index{x86-64}
+\IFRU{В x86 адрес представляется в виде 32-битного числа (т.е., занимает 4 байта), а в x86-64 как 64-битное число 
+(занимает 8 байт).}
+{In x86, address is represented as 32-bit number (i.e., occupying 4 bytes), while in x86-64 it's 64-bit number
+(occupying 8 bytes).}
+\IFRU{Кстати, отсюда негодование некоторых людей связанное с переходом на x86-64 ~--- на этой архитектуре все указатели
+будут занимать места в 2 раза больше.}
+{By the way, that's a reson of some people's indignation related to switching to x86-64 ~--- all pointers
+on that architecture will require twice as more space.}
+
+\index{\CLanguageElements!memcpy()}
+\IFRU{При некотором упорстве, можно работать только с бестиповыми указателями (\TT{void*})}{With some effort,
+it's possible to work only with untyped pointers}, \IFRU{например}{for example}, 
+\IFRU{стандартная функция}{standard function} \TT{memcpy()},
+\IFRU{копирующая блок из одного места памяти в другое}{copying a block from one place in memory to another}, 
+\IFRU{принимает на вход 2 указателя типа}{takes 2 pointers of} \TT{void*}\IFRU{}{ type on input}, 
+\IFRU{потому что, нельзя
+зараннее предугадать, какого типа блок вы собираетесь копировать, да в общем это и не важно, важно только знать размер
+блока.}
+{because it's not possible to predict block type you would like to copy, and it's not even important to know, 
+only block size is important.}
+
+\IFRU{Тип указателя в}{In} \CCpp \IFRU{нужен для проверки типов на стадии компиляции.}
+{pointer type is needed only for type checking on compiling stage.}
+\IFRU{Внутри, в скомпилированном коде, никакой информации о типах указателей нет.}
+{Internally, in compiled code, there are no information about pointers types.}
+
+(\IFRU{Еще об указателях будет сказано больше здесь}{We will talk even more about pointers here}~\ref{label_pointers}).
+
 \input{04_scanf/scanf_x86}
 
 \input{04_scanf/scanf_ARM}
