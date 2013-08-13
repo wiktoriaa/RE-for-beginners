@@ -1,5 +1,6 @@
 ﻿\section{scanf()}
 \index{\CLanguageElements!scanf}
+\label{label_scanf}
 
 \IFRU{Теперь попробуем использовать scanf().}{Now let's use scanf().}
 
@@ -29,9 +30,18 @@ int main()
 \IFRU{Это одна из фундаментальных вещей в компьютерных науках.}{It's one of the most fundamental things in computer
 science.}
 \IFRU{Часто, большой массив, структуру или объект, передавать в другую функцию никак не выгодно, 
-а указатель передать куда проще.}
-{Often, large array, structure or object, it's too costly to pass to another function, while passing pointer
-is much easier.}
+а передать её адрес куда проще.}
+{Often, large array, structure or object, it's too costly to pass to another function, 
+while passing its address is much easier.}
+\IFRU{К тому же, если вызываемая функция должна изменить что-то в этом большом массиве или структуре,
+то возвращать её полностью это так же абсурдно.}
+{More than that: if calling function should modify something in that large array or structure,
+to return it as a whole is absurdical as well.}
+\IFRU{Так что самое простое что можно сделать, это передать в функцию адрес массива или структуры,
+и пусть она что-то там изменит.}
+{So the most simple thing to do is to pass an address of array or structure to function,
+and let it change it what need.}
+
 \IFRU{Указатель в}{In} \CCpp \IFRU{это просто адрес какого-либо места в памяти.}{it's just an address of some place
 in memory.}
 
@@ -57,12 +67,19 @@ it's possible to work only with untyped pointers}, \IFRU{например}{for e
 {because it's not possible to predict block type you would like to copy, and it's not even important to know, 
 only block size is important.}
 
+\IFRU{Также, указатели широко используются когда функции нужно вернуть более одного значения}
+{Also, pointers are widely used when function need to return more than one value}
+(\IFRU{мы еще вернемся к этому в будущем}{we will back to this in future}~\ref{label_pointers}).
+\IT{scanf()} \IFRU{это как раз такой случай}{is just that case}. 
+\IFRU{Помимо того, что этой функции нужно показать, сколько значений
+было прочитано успешно, ей еще и нужно вернуть сами значения.}
+{In addition to the function's need to show, how many values were read successfully, it also should
+to return all these values.}
+
 \IFRU{Тип указателя в}{In} \CCpp \IFRU{нужен для проверки типов на стадии компиляции.}
 {pointer type is needed only for type checking on compiling stage.}
 \IFRU{Внутри, в скомпилированном коде, никакой информации о типах указателей нет.}
 {Internally, in compiled code, there are no information about pointers types.}
-
-(\IFRU{Еще об указателях будет сказано больше здесь}{We will talk even more about pointers here}~\ref{label_pointers}).
 
 \input{04_scanf/scanf_x86}
 
