@@ -1,6 +1,6 @@
 all: 
-	rm *.fls
-	rm *.log
+	rm -f *.fls
+	rm -f *.log
 	latexmk -c
 	latexmk -pdf RE_for_beginners-ru.tex
 	latexmk -c
