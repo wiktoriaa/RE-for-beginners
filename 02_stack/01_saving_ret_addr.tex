@@ -1,0 +1,119 @@
+﻿\subsection{\IFRU{Сохранение адреса куда должно вернуться управление после вызова функции}
+{Save return address where function should return control after execution}}
+
+\subsubsection{x86}
+
+\index{x86!\Instructions!CALL}
+\IFRU{При вызове другой функции через \CALL, сначала в стек записывается адрес указывающий на место аккурат после 
+инструкции \CALL, затем делается безусловный переход (почти как \TT{JMP}) на адрес указанный в операнде.} 
+{While calling another function by \CALL instruction, the address of point exactly after \CALL instruction is saved 
+to stack, and then unconditional jump to the address from CALL operand is executed.} 
+
+\index{x86!\Instructions!PUSH}
+\index{x86!\Instructions!JMP}
+\IFRU{\CALL это аналог пары инструкций \TT{PUSH address\_after\_call / JMP}.}
+{\CALL is \TT{PUSH address\_after\_call / JMP operand} instructions pair equivalent}.
+
+\index{x86!\Instructions!RET}
+\index{x86!\Instructions!POP}
+\IFRU{\RET вытаскивает из стека значение и передает управление по этому адресу ~--- 
+это аналог пары инструкций \TT{POP tmp / JMP tmp}.}
+{\RET is fetching value from stack and jump to it ~--- it is \TT{POP tmp / JMP tmp} instructions pair equivalent.}
+
+\index{\Stack!\IFRU{Переполнение стека}{Stack overflow}}
+\index{\Recursion}
+\IFRU{Крайне легко устроить переполнение стека запустив бесконечную рекурсию:}
+{Stack overflow is simple, just run eternal recursion:}
+
+\begin{lstlisting}
+void f()
+{
+	f();
+};
+\end{lstlisting}
+
+\IFRU{MSVC 2008 предупреждает о проблеме:}{MSVC 2008 reporting about problem:}
+
+\begin{lstlisting}
+c:\tmp6>cl ss.cpp /Fass.asm
+Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 15.00.21022.08 for 80x86
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+ss.cpp
+c:\tmp6\ss.cpp(4) : warning C4717: 'f' : recursive on all control paths, function will cause runtime stack overflow
+\end{lstlisting}
+
+\dots \IFRU{но тем не менее создает нужный код}{but generates right code anyway}:
+
+\begin{lstlisting}
+?f@@YAXXZ PROC						; f
+; File c:\tmp6\ss.cpp
+; Line 2
+	push	ebp
+	mov	ebp, esp
+; Line 3
+	call	?f@@YAXXZ				; f
+; Line 4
+	pop	ebp
+	ret	0
+?f@@YAXXZ ENDP						; f
+\end{lstlisting}
+
+\dots \IFRU
+{причем, если включить оптимизацию (\Ox), то будет даже интереснее, без переполнения стека, 
+но работать будет \IT{корректно}\footnote{здесь ирония}:}
+{Also, if we turn on optimization (\Ox option), the optimized code will not overflow stack, 
+but will work \IT{correctly}\footnote{irony here}:}
+
+\begin{lstlisting}
+?f@@YAXXZ PROC						; f
+; File c:\tmp6\ss.cpp
+; Line 2
+$LL3@f:
+; Line 3
+	jmp	SHORT $LL3@f
+?f@@YAXXZ ENDP						; f
+\end{lstlisting}
+
+\IFRU{GCC 4.4.1 генерирует точно такой же код в обоих случаях, хотя и не предупреждает о проблеме.}
+{GCC 4.4.1 generating the same code in both cases, although not warning about problem.}
+
+\subsubsection{ARM}
+
+\index{ARM!\Registers!Link Register}
+\IFRU{Программы для ARM также используют стек для сохранения адреса, куда нужно вернуться, но несколько иначе}{ARM
+programs also use stack for return address savings, but differently}.
+\IFRU{Как уже упоминалось в секции}{As it was mentioned in} ``\HelloWorldSectionName''~\ref{sec:hw_ARM}, 
+\IFRU{адрес возврата записывается в регистр}{return address is saved to} \LR (\IT{link register}).
+\IFRU{Но если есть необходимость вызывать какую-то другую функцию, и использовать регистр \LR еще
+раз, его значение желательно сохранить}{However, if one need to call some another function and use \LR register
+one more time, its value should be saved}.
+\index{Function prologue}
+\IFRU{Обычно, это происходит в прологе функции, часто мы видим там инструкцию вроде}{Usually, it is saved in
+function prologue, often, we see there instruction like}
+\index{ARM!\Instructions!PUSH}
+\index{ARM!\Instructions!POP}
+\TT{``PUSH {R4-R7,LR}''}, \IFRU{а в эпилоге}{and also this instruction in epilogue} \TT{``POP {R4-R7,PC}''} ~--- 
+\IFRU{так сохраняются регистры, которые будут использоваться в текущей функции, в том числе}{thus register values
+to be used in function are saved in stack, including} \LR.
+
+\index{ARM!Leaf function}
+\IFRU{Тем не менее, если некая функция не вызывает никаких более функций, в терминологии ARM она называется}
+{Nevertheless, if some function never call any other function, in ARM terminology it's called}
+\IT{leaf function}\footnote{\url{http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.faqs/ka13785.html}}. 
+\IFRU{Как следствие, ``leaf''-функция не использует регистр \LR}{As a consequence, ``leaf'' function 
+don't use \LR register}.
+\IFRU{А если эта функция небольшая, использует мало регистров, она может не использовать стек вообще}
+{And if this function is small, if it use small number of registers, it may not use stack at all}.
+\IFRU{Таким образом, в ARM возможен вызов небольших ``leaf'' функций не используя стек}
+{Thus, it is possible to call ``leaf'' function without stack usage}.
+\IFRU{Это может быть быстрее чем в x86, ведь внешняя память для стека не используется}
+{This could be faster than in x86, because external RAM is not used for stack}
+\footnote{\IFRU{Когда-то очень давно, на PDP-11 и VAX, на инструкцию CALL (вызов других функций) могло тратиться
+вплоть до 50\% времени, возможно из-за работы с памятью, 
+поэтому считалось что много небольших функций это анти-паттерн}
+{Some time ago, on PDP-11 and VAX, CALL instruction (calling other functions) was expensive, up to 50\%
+of execution time might be spent on it, so it was common sense that big number of small function is anti-pattern}\cite[Chapter 4, Part II]{Raymond:2003:AUP:829549}.}
+.
+\IFRU{Либо, это может быть полезным для тех ситуаций, когда память для стека еще не выделена либо недоступна}
+{Or, it can be useful for such situations, when memory for stack is not yet allocated or not available}.

@@ -18,7 +18,8 @@
 armcc.exe --arm --c90 -O0 1.c 
 \end{lstlisting}
 
-\IFRU{Компилятор \IT{armcc} генерирует листинг на ассемблере}{\IT{armcc} compiler producing assembly listing}, 
+\index{\IntelSyntax}
+\IFRU{Компилятор \IT{armcc} генерирует листинг на ассемблере в формате Intel}{\IT{armcc} compiler producing assembly listing in Intel-syntax}, 
 \IFRU{но он содержит некоторые высокоуровневые макросы связанные с ARM}{but it has some high-level ARM-processor related macros}\footnote{
 \IFRU{например, он показывает инструкции \PUSH/\POP отсутствующие в режиме ARM}{for example, ARM mode lacks 
 \PUSH/\POP instructions}}, 
@@ -41,7 +42,12 @@ armcc.exe --arm --c90 -O0 1.c
 \IFRU{Вот чуть-чуть фактов о процессоре ARM, которые желательно знать}{Here is couple of ARM-related facts we should know in order to proceed}.
 \IFRU{Процессор ARM имеет по крайней мере два основных режима: режим ARM и thumb}{ARM processor has at least two major modes: ARM mode and thumb}. 
 \IFRU{В первом (ARM) режиме доступны все инструкции и каждая имеет размер 32 бита (или 4 байта)}{In first (ARM) mode all instructions are enabled and each has 32-bit (4 bytes) size}. 
-\IFRU{Во втором режиме (thumb) каждая инструкция имеет размер 16 бит (или 2 байта)}{In second (thumb) mode each instruction has 16-bit (or 2 bytes) size}\footnote{\IFRU{Кстати, инструкции фиксированного размера удобны тем, что всегда можно легко узнать адрес предыдущей инструкции, или следующей}{NOTTRANSLATED}}. 
+\IFRU{Во втором режиме (thumb) каждая инструкция имеет размер 16 бит (или 2 байта)}{In second (thumb) mode each instruction has 16-bit (or 2 bytes) size}
+\footnote{\IFRU{Кстати, инструкции фиксированного размера удобны тем, что всегда можно легко узнать адрес 
+следующей (или предыдущей) инструкции. Эта особенность будет рассмотрена в секции о 
+switch()~\ref{sec:SwitchARMLot}.}
+{By the way, fixed-length instructions are handy in that way that one can calculate next (or previous) 
+instruction's address without effort. This feautre will be discussed in switch()~\ref{sec:SwitchARMLot} section.}}
 \IFRU{Режим thumb может выглядеть привлекательнее тем, что программа на нем может быть 1) компактнее; 2) эффективнее исполняться на микроконтроллере с 16-битной шиной данных}{Thumb mode may look attractive because program in it may be 1) compact; 2) executing faster on microcontroller having 16-bit memory datapath}. 
 \IFRU{Но за всё нужно платить: в режиме thumb куда меньше возможностей процессора, например, возможен доступ только к 8-и регистрам процессора, и чтобы совершить некоторые действия, выполнимые в режиме ARM одной инструкцией, нужны несколько thumb-инструкций}{Nothing come for free of charge, so, in thumb mode there are reduced instruction set, only 8 registers are accessible and one need several thumb instructions for doing some operations when in ARM mode you'll need just one}.
 \IFRU{Начиная с ARMv7, имеется также поддержка инструкций thumb-2, это thumb расширенный до поддержки куда большего числа инструкций}{Starting at ARMv7, there are also thumb-2 instructions set present, this is a thumb extended to support much bigger instructions set}.

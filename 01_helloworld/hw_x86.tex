@@ -1,0 +1,301 @@
+﻿\subsection{x86}
+
+\subsubsection{MSVC}
+
+\IFRU{Компилируем в}{Let's compile it in} MSVC 2010: \TT{cl 1.cpp /Fa1.asm}
+
+\IFRU
+{(Ключ /Fa означает сгенерировать листинг на ассемблере)}
+{(/Fa option mean generate assembly listing file)}
+
+\begin{lstlisting}[caption=MSVC 2010]
+CONST	SEGMENT
+$SG3830	DB	'hello, world', 00H
+CONST	ENDS
+PUBLIC	_main
+EXTRN	_printf:PROC
+; Function compile flags: /Odtp
+_TEXT	SEGMENT
+_main	PROC
+	push	ebp
+	mov	ebp, esp
+	push	OFFSET $SG3830
+	call	_printf
+	add	esp, 4
+	xor	eax, eax
+	pop	ebp
+	ret	0
+_main	ENDP
+_TEXT	ENDS
+\end{lstlisting}
+
+\IFRU{MSVC выдает листинки в Intel-овском синтаксисе.}{MSVC produces assembly listings in Intel-syntax.} 
+\IFRU{Разница между Intel-синтаксисом и AT\&T будет рассмотрена немного позже.}{The difference between 
+Intel-syntax and AT\&T-syntax will be discussed below.}
+
+\IFRU{Компилятор сгенерировал файл \TT{1.obj}, который впоследствии будет слинкован линкером в \TT{1.exe}.} 
+{Compiler generated \TT{1.obj} file which will be linked into \TT{1.exe}.}
+
+\IFRU{В нашем случае, этот файл состоит из двух сегментов: \TT{CONST} (для данных-констант) и \TT{\_TEXT} (для кода).}
+{In our case, the file contain two segments: \TT{CONST} (for data constants) and \TT{\_TEXT} (for code).} 
+
+\index{\CLanguageElements!const}
+\IFRU{Строка \TT{``hello, world''} в \CCpp имеет тип \TT{const char*}, однако не имеет имени.}
+{The string \TT{``hello, world''} in \CCpp has type \TT{const char*}, however hasn't its own name.}
+
+\IFRU{Но компилятору нужно как-то с ней работать, так что он дает ей внутреннее имя \TT{\$SG3830}.}
+{But compiler need to work with the string somehow, so it define internal name \TT{\$SG3830} for it.}
+
+\IFRU{Как видно, строка заканчивается нулевым байтом ~--- это требования стандарта \CCpp для строк.}
+{As we can see, the string is terminated by zero byte ~--- it's \CCpp standard for strings.}
+
+\IFRU{В сегменте кода \TT{\_TEXT} находится пока только одна функция ~--- \main.}
+{In the code segment \TT{\_TEXT} there are only one function so far ~--- \main.}
+
+\IFRU{Функция \main, как и практически все функции, начинается с пролога и заканчивается эпилогом.}
+{Function \main starting with prologue code and ending with epilogue code, like almost any function.}
+
+\IFRU{Об этом смотрите подробнее в разделе о прологе и эпилоге функции}
+{Read more about it in section about function prolog and epilog}
+~\ref{sec:prologepilog}.
+
+\index{x86!\Instructions!CALL}
+\IFRU{Далее следует вызов функции \printf}
+{After function prologue we see a function \printf call}: \TT{CALL \_printf}. 
+
+\index{x86!\Instructions!PUSH}
+\IFRU
+{Перед этим вызовом, адрес строки (или указатель на нее) с нашим приветствием при помощи инструкции \PUSH помещается в стек.}
+{Before the call, string address (or pointer to it) containing our greeting is placed into stack with help of \PUSH instruction.}
+
+\IFRU{После того как функция \printf возвращает управление в функцию \main, адрес строки (или указатель на нее) все еще лежит в стеке.}
+{When \printf function returning control flow to \main function, string address (or pointer to it) is still in stack.}
+
+\IFRU{Так как он больше не нужен, то указатель стека (регистр \ESP) корректируется.} 
+{Because we do not need it anymore, stack pointer (\ESP register) is to be corrected.}
+
+\index{x86!\Instructions!ADD}
+\TT{ADD ESP, 4} \IFRU{означает прибавить 4 к значению в регистре \ESP.}
+{mean add 4 to the value in \ESP register.}
+
+\IFRU
+{Почему 4? Так как, это 32-битный код, для передачи адреса нужно аккурат 4 байта. В x64-коде это 8 байт.}
+{Why 4? Since it is 32-bit code, we need exactly 4 bytes for address passing through the stack. 
+It's 8 bytes in x64-code}
+
+\TT{``ADD ESP, 4''} \IFRU{эквивалентно \TT{``POP регистр''}, но без использования какого-либо регистра\footnote{Флаги
+процессора, впрочем, модифицируются}.}
+{is equivalent to \TT{``POP register''} but without any register usage\footnote{CPU flags, however, modified}.}
+
+\index{Intel C++}
+\index{Oracle RDBMS}
+\index{x86!\Instructions!POP}
+\IFRU{Некоторые компиляторы, например Intel C++ Compiler, в этой же ситуации, могут вместо 
+\ADD сгенерировать \TT{POP ECX} (подобное можно встретить например в коде \oracle{}, им скомпилированном), 
+что почти то же самое, только портится значение в регистре \ECX.}
+{Some compilers like Intel C++ Compiler, at the same point, could emit \TT{POP ECX} 
+instead of \ADD (for example, such pattern can be observed in \oracle{} code, compiled by Intel C++ compiler), 
+and this instruction has almost the same effect, but \ECX register contents will be rewritten.}
+
+\IFRU
+{Возможно, компилятор применяет \TT{POP ECX} потому что эта инструкция короче (1 байт против 3).}
+{Probably, Intel C++ compiler using \TT{POP ECX} because this instruction's opcode is shorter then 
+\TT{ADD ESP, x} (1 byte against 3).}
+
+\IFRU{О стеке можно прочитать в соответствующем разделе}{Read more about stack in relevant section}~\ref{sec:stack}.
+
+\index{\CLanguageElements!return}
+\IFRU{После вызова \printf, в оригинальном коде на \CCpp указано \TT{return 0} ~--- вернуть 0 
+в качестве результата функции \main.} 
+{After \printf call, in original \CCpp code was \TT{return 0} ~--- return zero as a \main function result.} 
+
+\index{x86!\Instructions!XOR}
+\IFRU{В сгенерированном коде это обеспечивается инструкцией}
+{In the generated code this is implemented by instruction} \TT{XOR EAX, EAX} 
+
+\index{x86!\Instructions!MOV}
+\IFRU{\XOR, на самом деле, как легко догадаться, ``исключающее ИЛИ''}
+{\XOR, in fact, just ``eXclusive OR''}
+\footnote{\url{http://en.wikipedia.org/wiki/Exclusive_or}}, 
+\IFRU{но компиляторы часто используют его вместо простого}
+{but compilers using it often instead of}
+\TT{MOV EAX, 0} ~--- 
+\IFRU
+{потому что снова опкод короче (2 байта против 5).}
+{slightly shorter opcode again (2 bytes against 5).}
+
+\index{x86!\Instructions!SUB}
+\IFRU{Бывает так, что некоторые компиляторы генерируют}{Some compilers emitting} 
+\TT{SUB EAX, EAX}, 
+\IFRU
+{что значит, \IT{отнять значение \EAX от \EAX}, в любом случае это даст 0 в результате.}
+{which mean \IT{SUBtract \EAX value from \EAX}, which is in any case will result zero.}
+
+\index{x86!\Instructions!RET}
+\IFRU{Самая последняя инструкция \RET возвращает управление в вызывающую функцию.
+Обычно, это код \CCpp CRT\footnote{C Run-Time Code}, который, в свою очередь, 
+вернет управление операционной системе.}
+{Last instruction \RET returning control flow to calling function.
+Usually, it's \CCpp CRT\footnote{C Run-Time Code} code, which, in turn, 
+return control to operation system.}
+
+\subsubsection{GCC}
+
+\IFRU{Теперь скомпилируем то же самое компилятором GCC 4.4.1 в Linux}
+{Now let's try to compile the same \CCpp code in GCC 4.4.1 compiler in Linux}: \TT{gcc 1.c -o 1}
+
+\IFRU{Затем при помощи \IDA. посмотрим как создалась функция \main.}
+{After, with the \IDA disassembler assistance, let's see how \main function was created.} 
+
+(\IDA, \IFRU{как и MSVC, показывает код в Intel-синтаксисе}{as MSVC, showing code in Intel-syntax}).
+
+\IFRU{Замечание: мы также можем заставить GCC генерировать листинги в этом формате при помощи ключа}
+{Note: we could also switch GCC to produce assembly listings in Intel-syntact by applying option} 
+\TT{-S -masm=intel}
+
+\begin{lstlisting}[caption=GCC]
+main            proc near
+
+var_10          = dword ptr -10h
+
+                push    ebp
+                mov     ebp, esp
+                and     esp, 0FFFFFFF0h
+                sub     esp, 10h
+                mov     eax, offset aHelloWorld ; "hello, world"
+                mov     [esp+10h+var_10], eax
+                call    _printf
+                mov     eax, 0
+                leave
+                retn
+main            endp
+\end{lstlisting}
+
+\index{Function prologue}
+\index{x86!\Instructions!AND}
+\IFRU{Почти то же самое. 
+Адрес строки ``hello, world'' лежащей в сегменте данных, в начале сохраняется в \EAX, затем записывается в стек.
+А еще в прологе функции мы видим \TT{AND ESP, 0FFFFFFF0h} ~--- 
+эта инструкция выравнивает значение в \ESP по 16-байтной границе, делая все значения 
+в стеке также выровненными по этой границе (процессор более эффективно работает с переменными расположенными
+в памяти по адресам кратным 4 или 16)\footnote{\URLWPDA}.}
+{Almost the same.
+Address of ``hello world'' string (stored in data segment) is saved in \EAX register first, then it stored into stack.
+Also, in function prologue we see \TT{AND ESP, 0FFFFFFF0h} ~--- 
+this instruction aligning \ESP value on 16-byte border, resulting all values in stack aligned too
+(CPU performing better if values it working with are located in memory at addresses aligned by 
+4 or 16 byte border)\footnote{\URLWPDA}.}
+
+\index{x86!\Instructions!SUB}
+\TT{SUB ESP, 10h} \IFRU{выделяет в стеке 16 байт, хотя, как будет видно далее, здесь достаточно только 4.}
+{allocate 16 bytes in stack, although, as we could see below, only 4 need here.} 
+
+\IFRU{Это происходит потому что количество выделяемого места в локальном стеке тоже выровнено по 
+16-байтной границе.}{This is because the size of allocated stack is also aligned on 16-byte border.}
+
+% TODO: rewrite.
+\index{x86!\Instructions!PUSH}
+\IFRU{Адрес строки (или указатель на строку) затем записывается прямо в стек без помощи инструкции \PUSH.
+\IT{var\_10} по совместительству ~--- и локальная переменная и одновременно аргумент для \printf{}. Подробнее об этом будет ниже.}
+{String address (or pointer to string) is then writing directly into stack space without \PUSH instruction use.
+\IT{var\_10} ~--- is local variable, but also argument for \printf{}. Read below about it.}
+
+\IFRU{Затем вызывается \printf.}{Then \printf function is called.}
+
+\IFRU{В отличие от MSVC, GCC в компиляции без включенной оптимизации генерирует \TT{MOV EAX, 0} вместо 
+более короткого опкода.}{Unlike MSVC, GCC while compiling without optimization turned on, 
+emitting \TT{MOV EAX, 0} instead of shorter opcode.}
+
+\index{x86!\Instructions!LEAVE}
+\IFRU{Последняя инструкция \LEAVE ~--- это аналог команд \TT{MOV ESP, EBP} и \TT{POP EBP} ~--- 
+то есть возврат указателя стека и регистра \EBP в первоначальное состояние.} 
+{The last instruction \LEAVE ~--- is \TT{MOV ESP, EBP} and \TT{POP EBP} instructions pair equivalent ~--- 
+in other words, this instruction setting back stack pointer (\ESP) and \EBP register to its initial state.} 
+
+\IFRU{Это необходимо, т.к., в начале функции мы модифицировали регистры \ESP и \EBP (при помощи}
+{This is necessary because we modified these register values (\ESP and \EBP) at the function start (executing}
+\TT{\MOV EBP, ESP} / \TT{AND ESP, ...}).
+
+\subsubsection{GCC: \ATTSyntax}
+
+\IFRU{Попробуем посмотреть, как выглядит то же самое в AT\&T-синтаксисе языка ассемблера.}
+{Let's see how this can be represented in AT\&T syntax of assembly language.}
+\IFRU{Этот синтаксис больше распространен в UNIX-мире.}
+{This syntax is much more popular in UNIX-world.}
+
+\begin{lstlisting}[caption=\IFRU{компилируем в}{let's compile in} GCC 4.7.3]
+gcc -S 1_1.c
+\end{lstlisting}
+
+\IFRU{Получим такой файл:}{We got this:}
+
+\lstinputlisting[caption=GCC 4.7.3]{01_helloworld/1_1.s}
+
+\IFRU{Здесь много макросов (начинающихся с точки), которые пока нам не интересны.}
+{There are a lot of macros (started with dot), which are not very interesting to us so far.}
+\IFRU{Пока что, ради упрощения, мы можем
+их игнорировать и впредь (кроме макроса \IT{.string}, при помощи которого кодируется последовательность символов 
+оканчивающихся нулем, такие же строки как в Си) и тогда получится следующее}
+{For now, for the sake of simplification, we can ignore them (except \IT{.string} macro, which
+encode null-terminated characters sequence, just like C-strings) and then we'll see this}
+\footnote{\IFRU{Кстати, для уменьшения генерации ``лишних'' макросов, можно использовать такой ключ GCC}
+{By the way, for eliminating ``unnecessary'' macros, this GCC option can be used}: 
+\IT{-fno-asynchronous-unwind-tables}}:
+
+\lstinputlisting[caption=GCC 4.7.3]{01_helloworld/1_1_refined.s}
+
+\index{\ATTSyntax}
+\index{\IntelSyntax}
+\IFRU{Основные отличия синтаксиса Intel и AT\&T следующие:}{Major differences between Intel and AT\&T syntax are:}
+
+\begin{itemize}
+
+\item
+\IFRU{Операнды записываются наоборот.}{Operands are written backwards.}
+
+\IFRU{В Intel-синтаксисе: <инструкция> <операнд назначения> <операнд-источник>.}
+{In Intel-syntax: <instruction> <destination operand> <source operand>.}
+
+\IFRU{В AT\&T-синтаксисе: <инструкция> <операнд-источник> <операнд назначения>.}
+{In AT\&T syntax: <instruction> <source operand> <destination operand>.}
+
+\IFRU{Чтобы легче понимать разницу, можно запомнить следующее}
+{Here is a thing can be memorized for easier difference understanding}: \IFRU{когда вы работаете с Intel-синтаксисом, можете в уме ставить знак равенства ($=$) между операндами}
+{when you work with Intel-syntax, you can put equality sign ($=$) in your mind between operands}, 
+\IFRU{а когда с AT\&T-синтаксисом, мысленно ставьте стрелку направо}{and when with AT\&T-syntax, put right arrow} 
+($\rightarrow$)
+\footnote{
+\index{\CStandardLibrary!memcpy()}
+\index{\CStandardLibrary!strcpy()}
+\IFRU{Кстати, в некоторые стандартных функциях библиотеки Си (например, memcpy(), strcpy()) также применяется 
+расстановка аргументов как в Intel-синтаксисе: в начале указатель в памяти на блок назначения, 
+затем указатель на блок-источник.}{By the way, in some C standard functions (e.g., memcpy(), strcpy()), arguments
+are listed in the same way as in Intel-syntax: pointer to destination memory block at the beginning and then
+pointer to source memory block.}}.
+
+\item
+\IFRU{Перед именами регистров ставится знак процента (\%), а перед числами знак доллара (\$).}
+{Before registers names, percent sign should be written (\%), and dollar sign (\$) before numbers.}
+\IFRU{Вместо квадратных скобок применяются круглые.}{Parentheses are used instead of brackets.}
+
+\item
+\IFRU{К каждой инструкции добавляется специальный символ, определяющий тип данных:}
+{A special symbol is to be added to each instruction, defining type of data:}
+
+\begin{itemize}
+\item l --- long (32 \IFRU{бита}{bits})
+\item w --- word (16 \IFRU{бит}{bits})
+\item b --- byte (8 \IFRU{бит}{bits})
+\end{itemize}
+
+\end{itemize}
+
+\IFRU{Возвращаясь к результату компиляции: он идентичен тому, который мы посмотрели в \IDA.}
+{Let's return back to compilation result: it is identical to which we saw in \IDA.}
+\IFRU{Одна мелочь}{One small difference}: \TT{0FFFFFFF0h} \IFRU{записывается как}{is written as} \TT{\$-16}.
+\IFRU{Это тоже самое}{It is the same}: \TT{16} \IFRU{в десятичной системе это}{in decimal system is} \TT{0x10} 
+\IFRU{в шестнадцатеричной}{in hexadecimal}. 
+\TT{-0x10} \IFRU{будет как раз}{is exactly} \TT{0xFFFFFFF0} 
+(\IFRU{в рамках 32-битных чисел}{within 32-bit data type}).
+
+
