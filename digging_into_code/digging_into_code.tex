@@ -386,6 +386,8 @@ like \TT{DIVSD} (\TT{DIVSD} present here 268 in total).}
 
 \section{\IFRU{Подозрительные паттерны кода}{Suspicious code patterns}}
 
+\subsection{\IFRU{Вручную написанный код на ассемблере}{Hand-written assembly code}}
+
 \index{Function prologue}
 \index{Function epilogue}
 \index{x86!\Instructions!LOOP}
@@ -399,9 +401,51 @@ On the other hand, these instructions are well-known to coders who like to code 
 If you spot these, it can be said, with a high probability, this fragment of code is hand-written.
 Also, function prologue/epilogue is not usually present in hand-written assembly copy.}
 
+\IFRU{Как правило, в вручную написанном коде, нет никакого четкого метода передачи аргументов в 
+функцию}{Usually, there are no fixed system in passing arguments into functions in hand-written
+code}.
+
+\IFRU{Пример из ядра}{Example from} Windows 2003\IFRU{}{ kernel} 
+(\IFRU{файл }{}ntoskrnl.exe\IFRU{}{ file}):
+
+\begin{lstlisting}
+MultiplyTest    proc near               ; CODE XREF: Get386Stepping
+                xor     cx, cx
+loc_620555:                             ; CODE XREF: MultiplyTest+E
+                push    cx
+                call    Multiply
+                pop     cx
+                jb      short locret_620563
+                loop    loc_620555
+                clc
+locret_620563:                          ; CODE XREF: MultiplyTest+C
+                retn
+MultiplyTest    endp
+
+Multiply        proc near               ; CODE XREF: MultiplyTest+5
+                mov     ecx, 81h
+                mov     eax, 417A000h
+                mul     ecx
+                cmp     edx, 2
+                stc
+                jnz     short locret_62057F
+                cmp     eax, 0FE7A000h
+                stc
+                jnz     short locret_62057F
+                clc
+locret_62057F:                          ; CODE XREF: Multiply+10
+                                        ; Multiply+18
+                retn
+Multiply        endp
+\end{lstlisting}
+
+\IFRU{Действительно, если заглянуть в исходные коды}{Indeed, if we look into} 
+Windows Research Kernel v1.2\IFRU{, данный код можно найти в файле}{ source code, this code
+can be found easily in the file} 
+\IT{WRK-v1.2\textbackslash{}base\textbackslash{}ntos\textbackslash{}ke\textbackslash{}i386\textbackslash{}cpu.asm}.
+
 \input{digging_into_code/magic_numbers_tracing}
 
 \section{\IFRU{Старые методы, тем не менее, интересные}{Old-school methods, nevertheless, interesting to know}}
 
 \input{digging_into_code/snapshots_comparing}
-
