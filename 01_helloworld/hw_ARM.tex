@@ -92,8 +92,8 @@ so now it can compete with ARM mode.}
 \IFRU{Работа этой инструкции состоит из двух фаз}{That's how this instruction works}: 
 \begin{itemize}
 \item
-\IFRU{записать адрес после инструкции \TT{BL} ($0xC$) в регистр \LRwithfootnote}
-{write address after \TT{BL} instruction ($0xC$) into \LRwithfootnote register};
+\IFRU{записать адрес после инструкции \TT{BL} (\TT{0xC}) в регистр \LRwithfootnote}
+{write address after \TT{BL} instruction (\TT{0xC}) into \LRwithfootnote register};
 \item
 \IFRU{затем собственно передать управление в \printf, записав адрес этой функции в регистр \PCwithfootnote}
 {then pass control flow into \printf by writing its address into \PCwithfootnote register}.
@@ -190,7 +190,7 @@ __cstring:00003F62 48 65 6C 6C+aHelloWorld_0   DCB "Hello world!",0
 
 \IFRU{Инструкции}{Instructions} \TT{STMFD} \IFRU{и}{and} \TT{LDMFD} \IFRU{нам уже знакомы}{are familiar to us}.
 
-\IFRU{Инструкция \MOV просто записывает число $0x1686$ в регистр \Rzero, это смещение указывающее на строку ``Hello world!''}{\MOV instruction just writes $0x1686$ number into \Rzero register, this is offset pointing to the ``Hello world!'' string}.
+\IFRU{Инструкция \MOV просто записывает число \TT{0x1686} в регистр \Rzero, это смещение указывающее на строку ``Hello world!''}{\MOV instruction just writes \TT{0x1686} number into \Rzero register, this is offset pointing to the ``Hello world!'' string}.
 
 \IFRU{Регистр \TT{R7}, по стандарту принятому в}{\TT{R7} register, as it is standardized in}\cite{IOSABI}
 \IFRU{это}{is} frame pointer, \IFRU{о нем будет рассказано позже}{more on it below}.
@@ -260,8 +260,8 @@ __cstring:00003E70 48 65 6C 6C 6F 20+aHelloWorld     DCB "Hello world!",0xA,0
 32-битные инструкции}{\TT{BL} and \TT{BLX} instructions in thumb mode, as we remember, encoded as pair
 of 16-bit instructions and in thumb-2, these \IT{surrogate} opcodes extended in such way so that new instruction
 may be encoded here as 32-bit instructions}.
-\IFRU{Это можно заметить по тому что опкоды thumb-2 инструкций всегда начинаются с $0xFx$ либо с $0xEx$}{That's
-easily observable ~--- opcodes of thumb-2 instructions are also beginning with $0xFx$ or $0xEx$}.
+\IFRU{Это можно заметить по тому что опкоды thumb-2 инструкций всегда начинаются с \TT{0xFx} либо с \TT{0xEx}}{That's
+easily observable ~--- opcodes of thumb-2 instructions are also beginning with \TT{0xFx} or \TT{0xEx}}.
 \IFRU{Но в листинге \IDA, первый байт опкода стоит вторым, это из-за того что в ARM инструкции кодируются так:
 в начале последний байт, потом первый (для thumb и thumb-2 режима), либо, 
 (для инструкций в режиме ARM) в начале четвертый байт, затем третий, второй и первый}{But in \IDA listings,
@@ -269,7 +269,7 @@ first byte of opcode is at the place of second, that's because instructions here
 \index{ARM!\Instructions!MOVW}
 \index{ARM!\Instructions!MOVT.W}
 \index{ARM!\Instructions!BLX}
-\IFRU{Так что мы видим здесь что инструкции \TT{MOVW}, \TT{MOVT.W} и \TT{BLX} начинаются с}{So as we see, \TT{MOVW}, \TT{MOVT.W} and \TT{BLX} instructions are beginning with} $0xFx$.
+\IFRU{Так что мы видим здесь что инструкции \TT{MOVW}, \TT{MOVT.W} и \TT{BLX} начинаются с}{So as we see, \TT{MOVW}, \TT{MOVT.W} and \TT{BLX} instructions are beginning with} \TT{0xFx}.
 
 \IFRU{Одна из thumb-2 инструкций это}{One of thumb-2 instructions is} \TT{``MOVW R0, \#0x13D8''} ~--- \IFRU{она записывает 16-битное число в младшую часть регистра \Rzero}{it writes 16-bit value into lower part of \Rzero register}.
 

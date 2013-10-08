@@ -75,11 +75,11 @@ if ((dwDesiredAccess&0x40000000) == 0) goto loc_7C83D417
 \index{x86!\Registers!ZF}
 \IFRU{Если после операции \AND останется этот бит, то флаг \ZF не будет поднят и условный переход 
 \JZ не сработает. 
-Переход возможен только если в переменной \TT{dwDesiredAccess} отсутствует бит $0x40000000$ ~--- 
+Переход возможен только если в переменной \TT{dwDesiredAccess} отсутствует бит \TT{0x40000000} ~--- 
 тогда результат \AND будет $0$, флаг \ZF будет поднят и переход сработает.}
 {If \AND instruction leaving this bit, \ZF flag will be cleared and \JZ conditional jump will not 
 be triggered.
-Conditional jump will be triggered only if $0x40000000$ bit is absent in \TT{dwDesiredAccess} variable ~--- 
+Conditional jump will be triggered only if \TT{0x40000000} bit is absent in \TT{dwDesiredAccess} variable ~--- 
 then \AND result will be $0$, \ZF flag will be set and conditional jump is to be triggered.}
 
 \IFRU{Попробуем GCC 4.4.1 и Linux:}{Let's try GCC 4.4.1 and Linux:}
@@ -176,10 +176,10 @@ it would be too tight environment for compiler's register allocator}.
 
 \lstinputlisting{14_bitfields/check3.asm}[caption=do\_filp\_open() (linux kernel 2.6.31)]
 
-\IFRU{$0x40$ ~--- это то чему равен макрос \TT{O\_CREAT}. 
-\TT{open\_flag} проверяется на наличие бита $0x40$ и если бит равен $1$, то выполняется следующие 
+\IFRU{\TT{0x40} ~--- это то чему равен макрос \TT{O\_CREAT}. 
+\TT{open\_flag} проверяется на наличие бита \TT{0x40} и если бит равен $1$, то выполняется следующие 
 за \JNZ инструкции.}
-{$0x40$ ~--- is what \TT{O\_CREAT} macro equals to.
-\TT{open\_flag} checked for $0x40$ bit presence, and if this bit is $1$, 
+{\TT{0x40} ~--- is what \TT{O\_CREAT} macro equals to.
+\TT{open\_flag} checked for \TT{0x40} bit presence, and if this bit is $1$, 
 next \JNZ instruction is triggered.}
 
