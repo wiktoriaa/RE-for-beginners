@@ -14,9 +14,45 @@
 If it's byte type or character (\IT{char}) ~--- then in lowest register \EAX part ~--- \AL. 
 If function returning \Tfloat number, FPU register 
 \STZERO will be used instead.
-In ARM, result is usually returned in R0 register.}
+In ARM, result is usually returned in R0 register.} \\
+\\
+
+\IFRU{Кстати, что будет если возвращаемое значение в ф-ции \main объявлять не как \IT{int} а как \IT{void}?}
+{By the way, what if returning value of \main function will be declared not as \IT{int} but as \IT{void}?}
+
+\IFRU{Т.н. startup-код вызывает \main примерно так:}
+{So called startup-code is calling \main roughly as:}
+
+\begin{lstlisting}
+push envp
+push argv
+push argc
+call main
+push eax
+call exit
+\end{lstlisting}
+
+\IFRU{Т.е., иными словами:}{In other words:}
+
+\begin{lstlisting}
+exit(main(argc,argv,envp));
+\end{lstlisting}
+
+\IFRU{Если вы объявите \main как \IT{void}, и ничего не будете возвращать явно (при помощи выражения \IT{return}), 
+то в единственный аргумент exit() попадет
+то, что лежало в регистре \EAX на момент выхода из \main.}
+{If you declare \main as \IT{void} and nothing will be returned explicitely (by \IT{return} statement),
+then something random, that was stored in \EAX register at the moment of \main finish, will come into
+the sole exit() function argument.}
+\IFRU{Там, скорее всего, будет какие-то случайное число, оставшееся от работы вашей ф-ции.}
+{Most likely, there will be some random value, leaved from your function execution.}
+\IFRU{Так что, код завершения программы будет псевдослучайным.}
+{So, exit code of program will be pseudorandom.} \\
+\\
 
 \index{\CLanguageElements!return}
+\IFRU{Вернемся к тому факту, что возвращемое значение остается в регистре \EAX}
+{Let's back to the fact that returning value is leaved in \EAX register}.
 \IFRU{Вот почему старые компиляторы Си не способны создавать функции возвращающие нечто большее нежели 
 помещается 
 в один регистр (обычно, тип \Tint), а когда нужно, приходится возвращать через указатели, указываемые 

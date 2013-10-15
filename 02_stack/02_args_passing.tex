@@ -36,3 +36,45 @@ passing control to subroutine. Knuth writes that this method was particularly co
 
 \IFRU{Однако, так традиционно сложилось, что в x86 и ARM передача аргументов происходит именно через стек.}
 {However, it is convenient tradition in x86 and ARM to use stack for this.}
+\\
+\\
+\IFRU{Кстати, вызываемая ф-ция не имеет информации, сколько аргументов было ей было передано.}
+{By the way, callee function hasn't any information, how many arguments were passed.}
+\IFRU{Ф-ции Си с переменным количеством аргументов (как \printf) определяют их количество по 
+спецификатором строки формата (начинающиеся со знака \%).}
+{Functions with variable arguments count (like \printf) determines its count by specifiers
+in format string (which begun with \% sign).}
+\IFRU{Если написать что-то вроде}{If to write something like} 
+
+\begin{lstlisting}
+printf("%d %d %d", 1234);
+\end{lstlisting}
+
+\printf \IFRU{выведет 1234, затем еще два случайных числа, которые волею случая оказались в стеке рядом.}
+{will dump 1234, and then also two random numbers, which were laying near it in stack, by chance.}
+\\
+\IFRU{Вот почему не так уж и важно, как объявлять ф-цию \main}
+{That's why it's not very important how to declare \main function}: \IFRU{как}{as} \main, 
+\TT{main(int argc, char *argv[])} 
+\IFRU{либо}{or} \TT{main(int argc, char *argv[], char *envp[])}.
+
+\IFRU{В реальности, т.н. startup-код вызывает \main примерно так:}
+{In fact, so called startup-code is calling \main roughly as:}
+
+\begin{lstlisting}
+push envp
+push argv
+push argc
+call main
+...
+\end{lstlisting}
+
+\IFRU{Если вы объявляете \main как \main без аргументов, они, тем не менее, присутствуют в стеке, но не используются.}
+{If you'll declare \main as \main without arguments, they are, nevertheless, are still present in stack, but
+not used.}
+\IFRU{Если вы объявите \main как}{If you declare \main as} \TT{main(int argc, char *argv[])}, 
+\IFRU{вы будете использовать два аргумента, а третий останется для вашей ф-ции ``невидимым''.}
+{you will use two arguments, and third will remain ``invisible'' for your function.}
+\IFRU{Более того, можно даже объявить}{Even more than that, it's possible to declare} \TT{main(int argc)}, 
+\IFRU{и это будет работать}{and it will work}.
+
