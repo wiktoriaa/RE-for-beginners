@@ -48,7 +48,7 @@ they were used by miners in these days, in order to detect poisonous gases quick
 {Canaries are very sensetive to mine gases, they become very agitated in case of danger, or even dead.}
 
 \IFRU{Если скомпилировать наш простейший пример работы с массивом}
-{If to compile our very simple array example}~\ref{arrays_simple} \IFRU{в}{in} MSVC 
+{If to compile our very simple array example}~\ref{arrays_simple} \IFRU{в}{in} \ac{MSVC} 
 \IFRU{с опцией RTC1 или RTCs}{with RTC1 and RTCs option}, \IFRU{в конце функции будет вызов 
 функции}{you will see call to} \TT{@\_RTC\_CheckStackVars@8}\IFRU{, проверяющей корректность ``канарейки''.}
 { function at the function end, checking ``canary'' correctness.}
@@ -109,18 +109,11 @@ gs ~--- \IFRU{это так называемый сегментный регис
 и DOS-экстендеров.}{is so called segment register, these registers were used widely in MS-DOS and DOS-extenders
 times.}
 \IFRU{Сейчас их функция немного изменилась.}{Today, its function is different.}
-\IFRU{Если говорить коротко, в Linux gs всегда указывает на Thread Local Storage ~--- там находится различная 
+\index{TLS}
+\IFRU{Если говорить коротко, в Linux gs всегда указывает на \ac{TLS}\ref{TLS} ~--- там находится различная 
 информация, специфичная для выполняющегося треда}
-{If to say briefly, gs in Linux always pointing to Thread Local Storage ~--- various information specific
+{If to say briefly, gs in Linux always pointing to \ac{TLS}\ref{TLS} ~--- various information specific
 to thread is stored there}
-\footnote{\IFRU{Каждый тред может хранить там то, что ему нужно}{Every thread can store there what it need}.
-\IFRU{Один из известных примеров, это стандартная глобальная переменная в Си}{One famous example
-is C standard global variable} \IT{errno}. \IFRU{Несколько тредов одновременно могут вызывать функции
-возвращающие код ошибки в \IT{errno}, поэтому глобальная переменная здесь не будет работать корректно, 
-для мультитредовых программ \IT{errno} нужно хранить в в TLS.}
-{Multiple threads may simultaneously call some functions
-returning error code in \IT{errno}, so global variable will not work correctly here, for multi-thread programs,
-\IT{errno} should be stored in TLS.}} 
 (\IFRU{кстати, в win32 эту же роль играет сегментный регистр fs,
 он всегда указывает на}{by the way, in win32, fs register plays the same role, it pointing to} 
 Thread Information Block
