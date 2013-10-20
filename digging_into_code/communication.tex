@@ -16,6 +16,7 @@ these function's names may be helpful.}
 first what we can try to do: find this text in data segment, find references to it and find the points
 from which a control may be passed to \TT{MessageBox()} call we're interesting in.}
 
+\index{\CStandardLibrary!rand()}
 \IFRU{Если речь идет об игре, и нам интересно какие события в ней более-менее случайны, 
 мы можем найти функцию \rand или её заменитель (как алгоритм Mersenne twister), и посмотреть, 
 из каких мест эта функция вызывается и что самое главное: как используется результат этой функции.}
@@ -28,3 +29,46 @@ from which this function called and most important: how the results are used.}
 {But if it's not a game, but \rand is used, it's also interesing, why.
 There are cases of unexpected \rand usage in data compression algorithm (for encryption imitation):}
 \url{http://blog.yurichev.com/node/44}.
+
+\subsection{tracer: Перехват всех ф-ций в отдельном модуле}
+
+В \tracer есть INT3-брякпоинты, хотя и срабатывающие только один раз, но зато их можно установить на все
+сразу ф-ции в некоей DLL.
+
+\begin{lstlisting}
+--one-time-INT3-bp:somedll.dll!.*
+\end{lstlisting}
+
+\IFRU{Либо, поставим INT3-прерывание на все функции, имена которых начинаются с префикса \TT{xml}:}
+{Or, let's set INT3-breakpoints to all functions with \TT{xml} prefix in name:}
+
+\begin{lstlisting}
+--one-time-INT3-bp:somedll.dll!xml.*
+\end{lstlisting}
+
+\IFRU{В качестве обратной стороны медали, такие прерывания срабатывают только один раз.}
+{On the other side of coin, such breakpoints are triggered only once.}
+
+Tracer \IFRU{покажет вызов какой-либо функции, если он случится, но только один раз.}
+{will show calling of some function, if it happens, but only once.}
+\IFRU{Еще один недостаток --- увидеть аргументы функции также нельзя.}
+{Another drawback --- it's not possible to see function's arguments.}
+
+\IFRU{Тем не менее, эта возможность очень удобна для тех ситуаций, 
+когда вы знаете что некая программа использует некую DLL, но не знаете какие именно функции.}
+{Nevertheless, this feature is very useful when you know that some program use some DLL, but don't know which functions.}
+\IFRU{И функций много.}{And there are many functions.} \\
+\\
+\index{cygwin}
+\IFRU{Например, попробуем узнать, что использует cygwin-утилита uptime}
+{For example, let's see, what uptime cygwin-utility uses}:
+
+\begin{lstlisting}
+tracer -l:uptime.exe --one-time-INT3-bp:cygwin1.dll!.*
+\end{lstlisting}
+
+\IFRU{Так мы можем увидеть все ф-ции из библиотеки cygwin1.dll, которые были вызваны хотя бы один раз, и откуда}
+{Thus we may see all cygwin1.dll library functions which were called at least once, and where from}:
+
+\lstinputlisting{digging_into_code/uptime_cygwin.txt}
+
