@@ -60,9 +60,9 @@ but only most significant byte (\TT{ebp+dwDesiredAccess+3}) and checks it for 0x
 (meaning \TT{GENERIC\_WRITE} flag here)}
 
 \index{x86!\Instructions!AND}
-\IFRU{\TEST это то же что и \AND, только без сохранения результата 
+\IFRU{\TEST это то же что и \ANDIns, только без сохранения результата 
 (вспомните что \CMP это то же что и \SUB, только без сохранения результатов}
-{\TEST is merely the same instruction as \AND, but without result saving
+{\TEST is merely the same instruction as \ANDIns, but without result saving
 (recall the fact \CMP instruction is merely the same as \SUB, but without result saving}~\ref{CMPandSUB}).
 
 \IFRU{Логика данного фрагмента кода примерно такая:}{This fragment of code logic is as follows:}
@@ -73,14 +73,14 @@ if ((dwDesiredAccess&0x40000000) == 0) goto loc_7C83D417
 
 \index{x86!\Instructions!AND}
 \index{x86!\Registers!ZF}
-\IFRU{Если после операции \AND останется этот бит, то флаг \ZF не будет поднят и условный переход 
+\IFRU{Если после операции \ANDIns останется этот бит, то флаг \ZF не будет поднят и условный переход 
 \JZ не сработает. 
 Переход возможен только если в переменной \TT{dwDesiredAccess} отсутствует бит \TT{0x40000000} ~--- 
-тогда результат \AND будет $0$, флаг \ZF будет поднят и переход сработает.}
-{If \AND instruction leaving this bit, \ZF flag is to be cleared and \JZ conditional jump will not 
+тогда результат \ANDIns будет $0$, флаг \ZF будет поднят и переход сработает.}
+{If \ANDIns instruction leaving this bit, \ZF flag is to be cleared and \JZ conditional jump will not 
 be triggered.
 Conditional jump will be triggered only if \TT{0x40000000} bit is absent in the \TT{dwDesiredAccess} variable ~--- 
-then \AND result will be $0$, \ZF flag will be set and conditional jump is to be triggered.}
+then \ANDIns result will be $0$, \ZF flag will be set and conditional jump is to be triggered.}
 
 \IFRU{Попробуем GCC 4.4.1 и Linux:}{Let's try GCC 4.4.1 and Linux:}
 

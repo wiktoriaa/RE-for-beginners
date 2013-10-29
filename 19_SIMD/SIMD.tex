@@ -30,9 +30,9 @@ to change brightness of 8 pixels simultaneously.}
 \IFRU{Когда MMX только появилось, эти регистры на самом деле распологались в FPU-регистрах. 
 Можно было использовать 
 либо FPU либо MMX в одно и то же время. Можно подумать что Intel решило немного сэкономить на транзисторах, 
-но на самом деле причина такого симбиоза проще ~--- более старая \ac{ОС} не знающая о дополнительных 
+но на самом деле причина такого симбиоза проще ~--- более старая \ac{OS} не знающая о дополнительных 
 регистрах процессора не будет сохранять их во время переключения задач, а вот регистры FPU сохранять будет. 
-Таким образом, процессор с MMX + старая \ac{ОС} + задача использующая возможности MMX = все 
+Таким образом, процессор с MMX + старая \ac{OS} + задача использующая возможности MMX = все 
 это может работать вместе.}
 {When MMX appeared, these registers was actually located in FPU registers. 
 It was possible to use either FPU or MMX at the same time. One might think, Intel saved on transistors,
@@ -290,7 +290,7 @@ if not ~--- use slower \MOVDQU.}
 \index{Page (memory)}
 \newcommand{\URLPAGE}{\url{http://en.wikipedia.org/wiki/Page_(computer_memory)}}
 
-\IFRU{В \ac{ОС} линии Windows NT\footnote{Windows NT, 2000, XP, Vista, 7, 8}, и не только, память выделяется страницами по 4 KiB (4096 байт). 
+\IFRU{В \ac{OS} линии Windows NT\footnote{Windows NT, 2000, XP, Vista, 7, 8}, и не только, память выделяется страницами по 4 KiB (4096 байт). 
 Каждый win32-процесс якобы имеет в наличии 4 GiB, но на самом деле, 
 только некоторые части этого адресного пространства присоеденены к реальной физической памяти. 
 Если процесс обратится к блоку памяти, которого не существует, сработает исключение. 
@@ -303,13 +303,13 @@ That's how virtual memory works\footnote{\URLPAGE}.}
 
 \IFRU{Так вот, функция, читающая сразу по 16 байт, имеет возможность нечаянно вылезти за границу 
 выделенного блока памяти. 
-Предположим, \ac{ОС} выделила программе 8192 (0x2000) байт по адресу 0x008c0000. 
+Предположим, \ac{OS} выделила программе 8192 (0x2000) байт по адресу 0x008c0000. 
 Таким образом, блок занимает байты с адреса 0x008c0000 по 0x008c1fff включительно.}
 {So, some function loading 16 bytes at once, may step over a border of allocated memory block.
 Let's consider, \ac{OS} allocated 8192 (0x2000) bytes at the address 0x008c0000.
 Thus, the block is the bytes starting from address 0x008c0000 to 0x008c1fff inclusive.}
 
-\IFRU{За этим блоком, то есть начиная с адреса 0x008c2000 нет вообще ничего, т.е., \ac{ОС} не выделяла там память. 
+\IFRU{За этим блоком, то есть начиная с адреса 0x008c2000 нет вообще ничего, т.е., \ac{OS} не выделяла там память. 
 Обращение к памяти начиная с этого адреса вызовет исключение.}
 {After that block, that is, starting from address 0x008c2008 there are nothing at all, e.g., \ac{OS} not allocated
 any memory there. Attempt to access a memory starting from that address will raise exception.}
@@ -351,7 +351,7 @@ and then exception will be raised.
 That's the situation to be avoided, of course.}
 
 \IFRU{Поэтому мы будем работать только с адресами выровненными по 16 байт, что в сочетании со знанием 
-что размер страницы \ac{ОС} также как правило выровнен по 16 байт, 
+что размер страницы \ac{OS} также как правило выровнен по 16 байт, 
 даст некоторую гарантию что наша функция не будет пытаться читать из мест в невыделенной памяти.}
 {So then we'll work only with the addresses aligned on a 16 byte border, what in combination with a knowledge
 of \ac{OS} page size is usually aligned on a 16-byte border too, give us some warranty our function will not
