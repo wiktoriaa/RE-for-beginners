@@ -1,4 +1,4 @@
-﻿\subsection{x86: \IFRU{Функция alloca()}{alloca() function}}
+﻿\subsubsection{x86: \IFRU{Функция alloca()}{alloca() function}}
 \label{alloca}
 \index{\CStandardLibrary!alloca()}
 \IFRU{Интересен случай с функцией \TT{alloca()}}
@@ -7,13 +7,13 @@
 {В MSVC, реализацию функции можно посмотреть в файлах}
 {As of MSVC, function implementation can be found in} 
   \TT{alloca16.asm} 
-  \IFRU{и}{and} 
+  \And 
   \TT{chkstk.asm} 
-  \IFRU{в}{in} 
+  \In 
   \TT{C:\textbackslash{}Program Files (x86)\textbackslash{}Microsoft Visual Studio 10.0\textbackslash{}VC\textbackslash{}crt\textbackslash{}src\textbackslash{}intel}}. 
 
 \IFRU{Эта функция работает как \TT{malloc()}, но выделяет память прямо в стеке.} 
-{This function works like \TT{malloc()} but allocates memory just in stack.}
+{This function works like \TT{malloc()} but allocates memory just on the stack.}
 
 \IFRU{Память освобождать через \TT{free()} не нужно, так как эпилог функции~\ref{sec:prologepilog} 
 вернет \ESP назад в изначальное состояние и выделенная память просто аyнулируется.}
@@ -40,7 +40,7 @@ stdout (т.е., на терминал или в консоль),
 console), write it to the \TT{buf} buffer. \puts copies \TT{buf} contents to stdout. Of course, these two
 function calls might be replaced by one \printf call, but I would like to illustrate small buffer usage.)}
 
-\subsubsection{MSVC}
+\paragraph{MSVC}
 
 \IFRU{Компилируем}{Let's compile} (MSVC 2010):
 
@@ -56,14 +56,14 @@ alloca() is rather compiler intrinsic than usual function}}.
 {After \TT{alloca()} call, \ESP is now pointing to the block of 600 bytes and we can 
 use it as memory for \TT{buf} array.}
 
-\subsubsection{GCC + \IntelSyntax}
+\paragraph{GCC + \IntelSyntax}
 
 \IFRU{А GCC 4.4.1 обходится без вызова других функций:}
 {GCC 4.4.1 can do the same without calling external functions:}
 
 \lstinputlisting[caption=GCC 4.7.3]{\IFRU{02_stack/2_1_gcc_intel_O3_ru.asm}{02_stack/2_1_gcc_intel_O3_en.asm}}
 
-\subsubsection{GCC + \ATTSyntax}
+\paragraph{GCC + \ATTSyntax}
 
 \IFRU{Посмотрим на тот же код, только в синтаксисе AT\&T}{Let's see the same code, but in AT\&T syntax}:
 

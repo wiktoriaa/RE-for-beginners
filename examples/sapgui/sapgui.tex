@@ -6,16 +6,17 @@
 \IFRU{(Трассировка связи между переменной окружения \TDWNC{} SAPGUI\footnote{GUI-клиент от SAP}
 до ``надоедливого всплывающего окна'' и самой функции сжатия данных.)}
 {(Tracing connection between \TDWNC{} SAPGUI\footnote{SAP GUI client} environment variable to 
-the nagging pop-up window and actual data compression routine.)}
+the pesky nagging pop-up window and actual data compression routine.)}
 
 \IFRU{Известно что сетевой траффик между SAPGUI и SAP по умолчанию не шифруется а сжимается} 
 {It's known that network traffic between SAPGUI and SAP is not crypted by default, it's rather compressed}
-(\IFRU{чиайте}{read} \href{http://blog.yurichev.com/node/44}{\IFRU{здесь}{here}} \IFRU{и}{and} \href{http://blog.yurichev.com/node/47}{\IFRU{здесь}{here}}). 
+(\IFRU{чиайте}{read} \href{http://blog.yurichev.com/node/44}{\IFRU{здесь}{here}} \And \href{http://blog.yurichev.com/node/47}{\IFRU{здесь}{here}}). 
 
 \IFRU{Известно также что если установить переменную окружения \IT{\TDWNC} в 1, можно выключить сжатие сетевых пакетов.}
 {It's also known that by setting environment variable \IT{\TDWNC} to 1, it's possible to turn network packets compression off.}
 
-\IFRU{Но вы увидите окно, которое нельзя будет закрыть}{But you will see a nagging pop-up windows that cannot be closed}:
+\IFRU{Но вы увидите окно, которое нельзя будет закрыть}
+{But you will see a nagging pop-up windows that cannot be closed}:
 
 \begin{figure}[ht!]
 \centering
@@ -248,7 +249,8 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 
 \IFRU{Они \textbf{очень} полезны}{It's \textbf{very} useful}.
 
-\IFRU{Посмотрим содержимое функции ``надоедливого всплывающего окна''}{So let's see contents of that nagging pop-up window function}:
+\IFRU{Посмотрим содержимое функции ``надоедливого всплывающего окна''}
+{So let's see contents of that pesky nagging pop-up window function}:
 
 \begin{lstlisting}
 .text:64404F4F CDwsGui__PrepareInfoWindow proc near
@@ -533,7 +535,7 @@ Depends of option turned on in the object, specific message part will be concate
 \lstinputlisting{\IFRU{examples/sapgui/2ru.lst}{examples/sapgui/2en.lst}}
 
 \dots \IFRU{заменим просто на \JMP и получим SAPGUI работающим без этого надоедливого всплывающего окна!}
-{replace it with just \JMP, and get SAPGUI working without that nagging pop-up window appearing!}
+{replace it with just \JMP, and get SAPGUI working without that pesky nagging pop-up window appearing!}
 
 \IFRU{Копнем немного глубже и проследим связь между смещением 0x15 в \TT{load\_command\_line()}
 (Это я дал имя этой функции) и переменной \TT{this+0x3D} в \IT{CDwsGui::PrepareInfoWindow}. 
@@ -631,7 +633,7 @@ Here is one of them in the \IT{CDwsGui::SapguiRun} function (again, thanks to de
 Очевидно, это то самое место где флаг отражающий сжатие пакетов выставляется в объекте \TT{CConnectionContext}.}
 {Let's check our findings. Replace the \TT{setz al} here to the \TT{xor eax, eax / nop} instructions,
 clear \TDWNC 
-environment variable and run SAPGUI. Wow! There is no nagging window (just as expected, 
+environment variable and run SAPGUI. Wow! There is no more pesky nagging window (just as expected, 
 because variable is not set) but in Wireshark we can see that the network packets are not compressed anymore! 
 Obviously, this is the point where compression flag is to be set in the \IT{CConnectionContext} object.}
 

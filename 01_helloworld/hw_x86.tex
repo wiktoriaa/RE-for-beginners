@@ -2,7 +2,11 @@
 
 \subsubsection{MSVC}
 
-\IFRU{Компилируем в}{Let's compile it in} MSVC 2010: \TT{cl 1.cpp /Fa1.asm}
+\IFRU{Компилируем в}{Let's compile it in} MSVC 2010:
+
+\begin{lstlisting}
+cl 1.cpp /Fa1.asm
+\end{lstlisting}
 
 \IFRU
 {(Ключ /Fa означает сгенерировать листинг на ассемблере)}
@@ -30,8 +34,8 @@ _TEXT	ENDS
 \end{lstlisting}
 
 \IFRU{MSVC выдает листинки в Intel-овском синтаксисе.}{MSVC produces assembly listings in Intel-syntax.} 
-\IFRU{Разница между Intel-синтаксисом и AT\&T будет рассмотрена немного позже.}{The difference between 
-Intel-syntax and AT\&T-syntax will be discussed below.}
+\IFRU{Разница между Intel-синтаксисом и AT\&T будет рассмотрена немного позже.}
+{The difference between Intel-syntax and AT\&T-syntax will be discussed below.}
 
 \IFRU{Компилятор сгенерировал файл \TT{1.obj}, который впоследствии будет слинкован линкером в \TT{1.exe}.} 
 {The compiler generated \TT{1.obj} file will be linked into \TT{1.exe}.}
@@ -85,7 +89,7 @@ It's 8 bytes in x64-code.}
 
 \TT{``ADD ESP, 4''} \IFRU{эквивалентно \TT{``POP регистр''}, но без использования какого-либо регистра\footnote{Флаги
 процессора, впрочем, модифицируются}.}
-{is effectively equivalent to \TT{``POP register''} but without using any register\footnote{CPU flags, however, modified}.}
+{is effectively equivalent to \TT{``POP register''} but without using any register\footnote{CPU flags, however, are modified}.}
 
 \index{Intel C++}
 \index{Oracle RDBMS}
@@ -190,66 +194,72 @@ This results in all values in the stack being aligned.
 on a 4 or 16 byte border)\footnote{\URLWPDA}.}
 
 \index{x86!\Instructions!SUB}
-\TT{SUB ESP, 10h} \IFRU{выделяет в стеке 16 байт, хотя, как будет видно далее, здесь достаточно только 4.}
-{allocates 16 bytes in stack, although, as we could see below, only 4 are necessary here.} 
+\TT{SUB ESP, 10h} \IFRU{выделяет в стеке 16 байт. Хотя, как будет видно далее, здесь достаточно только 4.}
+{allocates 16 bytes on the stack. Although, as we can see below, only 4 are necessary here.} 
 
 \IFRU{Это происходит потому что количество выделяемого места в локальном стеке тоже выровнено по 
-16-байтной границе.}{This is because the size of allocated stack is also aligned on 16-byte border.}
+16-байтной границе.}
+{This is because the size of the allocated stack is also aligned on a 16-byte border.}
 
 % TODO: rewrite.
 \index{x86!\Instructions!PUSH}
 \IFRU{Адрес строки (или указатель на строку) затем записывается прямо в стек без помощи инструкции \PUSH.
 \IT{var\_10} по совместительству ~--- и локальная переменная и одновременно аргумент для \printf{}. Подробнее об этом будет ниже.}
-{String address (or pointer to string) is then writing directly on the stack space without \PUSH instruction use.
-\IT{var\_10} ~--- is local variable, but also argument for \printf{}. Read below about it.}
+{The string address (or a pointer to the string) is then written directly on the stack space 
+without using the \PUSH instruction.
+\IT{var\_10} ~--- is a local variable but is also an argument for \printf{}.
+Read about it below.}
 
-\IFRU{Затем вызывается \printf.}{Then \printf function is called.}
+\IFRU{Затем вызывается \printf.}{Then the \printf function is called.}
 
 \IFRU{В отличие от MSVC, GCC в компиляции без включенной оптимизации генерирует \TT{MOV EAX, 0} вместо 
-более короткого опкода.}{Unlike MSVC, GCC while compiling without optimization turned on, 
-emits \TT{MOV EAX, 0} instead of shorter opcode.}
+более короткого опкода.}{Unlike MSVC, when GCC is compiling without optimization turned on,
+it emits \TT{MOV EAX, 0} instead of a shorter opcode.}
 
 \index{x86!\Instructions!LEAVE}
 \IFRU{Последняя инструкция \LEAVE ~--- это аналог команд \TT{MOV ESP, EBP} и \TT{POP EBP} ~--- 
 то есть возврат указателя стека и регистра \EBP в первоначальное состояние.} 
-{The last instruction \LEAVE ~--- is effectively \TT{MOV ESP, EBP} and \TT{POP EBP} instructions pair equivalent ~--- 
-in other words, this instruction setting back stack pointer (\ESP) and the \EBP register to its initial state.} 
+{The last instruction, \LEAVE ~--- is the equivalent of the \TT{MOV ESP, EBP} and \TT{POP EBP} instruction pair ~--- 
+in other words, this instruction sets the stack pointer (\ESP) back and restores 
+the \EBP register to its initial state.}
 
 \IFRU{Это необходимо, т.к., в начале функции мы модифицировали регистры \ESP и \EBP (при помощи}
-{This is necessary since we modified these register values (\ESP and \EBP) at the function start (executing}
+{This is necessary since we modified these register values (\ESP and \EBP) at the 
+beginning of the function (executing}
 \TT{\MOV EBP, ESP} / \TT{AND ESP, ...}).
 
 \subsubsection{GCC: \ATTSyntax}
 
 \IFRU{Попробуем посмотреть, как выглядит то же самое в AT\&T-синтаксисе языка ассемблера.}
-{Let's see how this can be represented in AT\&T syntax of assembly language.}
+{Let's see how this can be represented in the AT\&T syntax of assembly language.}
 \IFRU{Этот синтаксис больше распространен в UNIX-мире.}
-{This syntax is much more popular in UNIX-world.}
+{This syntax is much more popular in the UNIX-world.}
 
 \begin{lstlisting}[caption=\IFRU{компилируем в}{let's compile in} GCC 4.7.3]
 gcc -S 1_1.c
 \end{lstlisting}
 
-\IFRU{Получим такой файл:}{We got this:}
+\IFRU{Получим такой файл:}{We get this:}
 
 \lstinputlisting[caption=GCC 4.7.3]{01_helloworld/1_1.s}
 
-\IFRU{Здесь много макросов (начинающихся с точки), которые пока нам не интересны.}
-{There are a lot of macros (started with dot), which are not very interesting to us so far.}
+\IFRU{Здесь много макросов (начинающихся с точки). Они нам пока не интересны.}
+{There are a lot of macros (beginning with dot). These are not very interesting to us so far.}
 \IFRU{Пока что, ради упрощения, мы можем
 их игнорировать и впредь (кроме макроса \IT{.string}, при помощи которого кодируется последовательность символов 
-оканчивающихся нулем, такие же строки как в Си) и тогда получится следующее}
-{For now, for the sake of simplification, we can ignore them (except \IT{.string} macro, which
-encode null-terminated characters sequence, just like C-strings) and then we'll see this}
+оканчивающихся нулем, такие же строки как в Си). И тогда получится следующее}
+{For now, for the sake of simplification, we can ignore them (except the \IT{.string} macro which
+encodes a null-terminated character sequence just like a C-string). Then we'll see this}
 \footnote{\IFRU{Кстати, для уменьшения генерации ``лишних'' макросов, можно использовать такой ключ GCC}
-{By the way, for eliminating ``unnecessary'' macros, this GCC option can be used}: 
+{This GCC option can be used to eliminate ``unnecessary'' macros}: 
 \IT{-fno-asynchronous-unwind-tables}}:
 
 \lstinputlisting[caption=GCC 4.7.3]{01_helloworld/1_1_refined.s}
 
 \index{\ATTSyntax}
 \index{\IntelSyntax}
-\IFRU{Основные отличия синтаксиса Intel и AT\&T следующие:}{Major differences between Intel and AT\&T syntax are:}
+\IFRU{Основные отличия синтаксиса Intel и AT\&T следующие:}
+{Some of the major differences between Intel and AT\&T syntax are:}
 
 \begin{itemize}
 
@@ -263,27 +273,28 @@ encode null-terminated characters sequence, just like C-strings) and then we'll 
 {In AT\&T syntax: <instruction> <source operand> <destination operand>.}
 
 \IFRU{Чтобы легче понимать разницу, можно запомнить следующее}
-{Here is a thing can be memorized for easier difference understanding}: \IFRU{когда вы работаете с Intel-синтаксисом, можете в уме ставить знак равенства ($=$) между операндами}
-{when you work with Intel-syntax, you can put equality sign ($=$) in your mind between operands}, 
-\IFRU{а когда с AT\&T-синтаксисом, мысленно ставьте стрелку направо}{and when with AT\&T-syntax, put right arrow} 
+{Here is a way to think about them}: \IFRU{когда вы работаете с Intel-синтаксисом, можете в уме ставить знак равенства ($=$) между операндами,}
+{when you work with Intel-syntax, you can put in equality sign ($=$) in your mind between operands}
+\IFRU{а когда с AT\&T-синтаксисом, мысленно ставьте стрелку направо}
+{and when you work with AT\&T-syntax put in a right arrow} 
 ($\rightarrow$)
 \footnote{
 \index{\CStandardLibrary!memcpy()}
 \index{\CStandardLibrary!strcpy()}
 \IFRU{Кстати, в некоторые стандартных функциях библиотеки Си (например, memcpy(), strcpy()) также применяется 
 расстановка аргументов как в Intel-синтаксисе: в начале указатель в памяти на блок назначения, 
-затем указатель на блок-источник.}{By the way, in some C standard functions (e.g., memcpy(), strcpy()), arguments
+затем указатель на блок-источник.}{By the way, in some C standard functions (e.g., memcpy(), strcpy()) arguments
 are listed in the same way as in Intel-syntax: pointer to destination memory block at the beginning and then
 pointer to source memory block.}}.
 
 \item
-\IFRU{Перед именами регистров ставится знак процента (\%), а перед числами знак доллара (\$).}
-{Before registers names, percent sign should be written (\%), and dollar sign (\$) before numbers.}
+AT\&T: \IFRU{Перед именами регистров ставится знак процента (\%), а перед числами знак доллара (\$).}
+{Before register names a percent sign should be written (\%) and before numbers a dollar sign (\$).}
 \IFRU{Вместо квадратных скобок применяются круглые.}{Parentheses are used instead of brackets.}
 
 \item
-\IFRU{К каждой инструкции добавляется специальный символ, определяющий тип данных:}
-{A special symbol is to be added to each instruction, defining type of data:}
+AT\&T: \IFRU{К каждой инструкции добавляется специальный символ, определяющий тип данных:}
+{A special symbol is to be added to each instruction defining the type of data:}
 
 \begin{itemize}
 \item l --- long (32 \IFRU{бита}{bits})
@@ -294,11 +305,11 @@ pointer to source memory block.}}.
 \end{itemize}
 
 \IFRU{Возвращаясь к результату компиляции: он идентичен тому, который мы посмотрели в \IDA.}
-{Let's return back to compilation result: it is identical to which we saw in \IDA.}
-\IFRU{Одна мелочь}{One small difference}: \TT{0FFFFFFF0h} \IFRU{записывается как}{is written as} \TT{\$-16}.
-\IFRU{Это тоже самое}{It is the same}: \TT{16} \IFRU{в десятичной системе это}{in decimal system is} \TT{0x10} 
+{Let's go back to the compilation result: it is identical to which we saw in \IDA.}
+\IFRU{Одна мелочь}{With one subtle difference}: \TT{0FFFFFFF0h} \IFRU{записывается как}{is written as} \TT{\$-16}.
+\IFRU{Это тоже самое}{It is the same}: \TT{16} \IFRU{в десятичной системе это}{in the decimal system is} \TT{0x10} 
 \IFRU{в шестнадцатеричной}{in hexadecimal}. 
-\TT{-0x10} \IFRU{будет как раз}{is exactly} \TT{0xFFFFFFF0} 
-(\IFRU{в рамках 32-битных чисел}{within 32-bit data type}).
+\TT{-0x10} \IFRU{будет как раз}{is equal to} \TT{0xFFFFFFF0} 
+(\IFRU{в рамках 32-битных чисел}{for a 32-bit data type}).
 
 

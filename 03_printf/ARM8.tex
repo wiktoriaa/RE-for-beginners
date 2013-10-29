@@ -51,7 +51,7 @@ void printf_main2()
 \index{ARM!\Instructions!STR}
 \IFRU{Самая первая инструкция}{The very first} \TT{``STR LR, [SP,\#var\_4]!''} 
 \IFRU{сохраняет в стеке \LR, ведь, нам придется использовать этот регистр для вызова \printf}
-{instruction saves the \LR in stack, because we will use this register for \printf call}.
+{instruction saves the \LR on the stack, because we will use this register for \printf call}.
 
 \index{ARM!\Instructions!SUB}
 \IFRU{Вторая инструкция}{The second} \TT{``SUB SP, SP, \#0x14''} \IFRU{уменьшает указатель стека \SP, но на самом деле, эта процедура нужна для выделения в локальном стеке места размером \TT{0x14} ($20$) байт}
@@ -74,7 +74,7 @@ are written to the \Rzero, \Rone, \Rtwo and \Rthree registers respectively}.
 \IT{var\_14} \IFRU{это макрос ассемблера}{is an assembly macro}, \IFRU{равный}{equal to} $-0x14$, 
 \IFRU{такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку}{such macros are created by \IDA in order to show simply how code accessing stack}.
 \IFRU{Макросы \IT{var\_?}, создаваемые \IDA, отражают локальные переменные в стеке}{\IT{var\_?} macros created
-by \IDA reflecting local variables in stack}.
+by \IDA reflecting local variables in the stack}.
 \IFRU{Так что, в \TT{R12} будет записано $SP+4$}{So, $SP+4$ will be written into the \TT{R12} register}.
 \index{ARM!\Instructions!STMIA}
 \IFRU{Следующая инструкция}{The next} \TT{``STMIA R12, {R0-R3}''} 
@@ -88,7 +88,7 @@ writes \Rzero-\Rthree registers contents at the point in memory to which \TT{R12
 \item \IFRU{Передача $4$ через стек}{Passing $4$ via stack}:
 \IFRU{$4$ записывается в \Rzero, затем, это значение, при помощи инструкции}{$4$ is stored in the \Rzero and then,
 this value, with the help of} \TT{``STR R0, [SP,\#0x18+var\_18]''} \IFRU{попадает в стек}{instruction, is saved
-in stack}.
+on the stack}.
 \IT{var\_18} \IFRU{равен}{is} $-0x18$, \IFRU{смещение будет $0$}{offset will be $0$}, 
 \IFRU{так что, значение из регистра \Rzero ($4$) запишется туда, куда указывает \SP}
 {so, value from the \Rzero register ($4$) will be written to a point the \SP pointing to}.
@@ -111,12 +111,13 @@ registers right before \printf call}, \IFRU{а остальные 5 значен
 thus annulling what was written to stack}.
 \IFRU{Конечно, то что было записано в стек, там пока и останется, но всё это будет многократно 
 перезаписано во время исполнения последующих функций}
-{Of course, what was written in stack will stay there, but it all will be
+{Of course, what was written on the stack will stay there, but it all will be
 rewritten while execution of following functions}.
 
 \index{ARM!\Instructions!LDR}
 \IFRU{Инструкция }{}\TT{``LDR PC, [SP+4+var\_4],\#4''} \IFRU{загружает в \PC сохраненное значение \LR из стека, 
-таким образом, обеспечивая выход из функции}{instruction loads saved \LR value in stack into the \PC register, providing
+таким образом, обеспечивая выход из функции}
+{instruction loads saved \LR value from the stack into the \PC register, providing
 exit from the function}.
 
 \end{itemize}
@@ -212,10 +213,10 @@ places, at addresses \TT{0x2918}, \TT{0x2920} and \TT{0x2928}, when it would be 
 to place instructions better}.
 \IFRU{Процессор обычно пытается исполнять одновременно идущие друг за другом инструкции}{Usually,
 processor attempts to execute instructions located side-by-side}.
-\IFRU{К примеру, инструкции}{For example, instructions like} \TT{``MOVT R0, \#0''} \IFRU{и}{and} 
+\IFRU{К примеру, инструкции}{For example, instructions like} \TT{``MOVT R0, \#0''} \And 
 \TT{``ADD R0, PC, R0''} \IFRU{не могут быть исполнены одновременно, потому что обе инструкции модифицируют 
 регистр \Rzero}{cannot be executed simultaneously since they both modifying the \Rzero register}. 
-\IFRU{А вот инструкции}{On the other hand,} \TT{``MOVT R0, \#0''} \IFRU{и}{and} \TT{``MOV R2, \#4''} 
+\IFRU{А вот инструкции}{On the other hand,} \TT{``MOVT R0, \#0''} \And \TT{``MOV R2, \#4''} 
 \IFRU{легко можно исполнить одновременно, 
 потому что эффекты от их исполнения никак не конфликтуют друг с другом}{instructions can be executed
 simultaneously since effects of their execution are not conflicting with each other}.

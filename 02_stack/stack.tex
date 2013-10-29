@@ -3,35 +3,39 @@
 \index{\Stack}
 
 \IFRU{Стек в компьютерных науках ~--- это одна из наиболее фундаментальных вещей}
-{Stack ~--- is one of the most fundamental things in computer science.}\footnote{\url{http://en.wikipedia.org/wiki/Call_stack}}.
+{Stack ~--- is one of the most fundamental things in computer science}
+\footnote{\url{http://en.wikipedia.org/wiki/Call_stack}}.
 
 \IFRU{Технически, это просто блок памяти в памяти процесса + регистр \ESP или \RSP в x86, либо \SP в ARM, который указывает где-то в пределах этого блока.}
-{Technically, it's just a memory block in process memory + the \ESP or the \RSP register in x86, or the \SP register in ARM, as a pointer within this block.}
+{Technically it's just a memory block in process memory + the an \ESP or the \RSP register in x86 or the \SP register in ARM as a pointer within the block.}
 
 \index{ARM!\Instructions!PUSH}
 \index{ARM!\Instructions!POP}
 \index{x86!\Instructions!PUSH}
 \index{x86!\Instructions!POP}
 \IFRU{Часто используемые инструкции для работы со стеком это \PUSH и \POP (в x86 и thumb-режиме ARM). 
-\PUSH уменьшает \ESP/\RSP/\SP на $4$, затем записывает по адресу на который указывает \ESP/\RSP/\SP содержимое своего единственного операнда.}
-{Most frequently used stack access instructions are \PUSH and \POP (both in x86 and ARM thumb-mode). 
-\PUSH subtracting \ESP/\RSP/\SP by $4$ and then writing contents of its sole operand to the memory address pointing by \ESP/\RSP/\SP.} 
+\PUSH уменьшает \ESP/\RSP/\SP на $4$ в 32-битном режиме (или на $8$ в 64-битном),
+затем записывает по адресу на который указывает \ESP/\RSP/\SP содержимое своего единственного операнда.}
+{The most frequently used stack access instructions are \PUSH and \POP (in both x86 and ARM thumb-mode). 
+\PUSH subtracts $4$ in 32-bit mode (or $8$ in 64-bit mode) from \ESP/\RSP/\SP and then writes the contents of its sole operand to the memory address pointed to by \ESP/\RSP/\SP.} 
 
 \IFRU{\POP это обратная операция ~--- сначала достает из указателя стека\footnote{\ESP/\RSP/\SP} значение и помещает его в операнд 
-(который очень часто является регистром) и затем увеличивает указатель стека на $4$. 
-Конечно, это для 32-битной среды. В x64-среде это будет $8$ а не $4$.}
-{\POP is reverse operation: get a data from memory pointing by stack pointer\footnote{\ESP/\RSP/\SP}, 
-put it to operand (often register) and then add $4$ to the stack pointer.
-Of course, this is for 32-bit environment. $8$ will be here instead of $4$ in x64 environment.}
+(который очень часто является регистром) и затем увеличивает указатель стека на $4$ (или $8$).}
+{\POP is the reverse operation: get the data from memory pointed to by \SP, 
+put it in the operand (often a register) and then add $4$ (or $8$) to the stack pointer.}
 
-\IFRU{В самом начале, регистр-указатель указывает на конец стека.}{After stack allocation, stack pointer pointing to the end of stack.}
-\IFRU{\PUSH уменьшает регистр-указатель, а \POP ~--- увеличивает.}{\PUSH increasing stack pointer, and \POP decreasing.}
+\IFRU{В самом начале, регистр-указатель указывает на конец стека.}
+{After stack allocation the stack pointer points to the end of stack.}
+\IFRU{\PUSH уменьшает регистр-указатель, а \POP ~--- увеличивает.}
+{\PUSH increases the stack pointer and \POP decreases it.}
 \IFRU{Конец стека находится в начале блока памяти выделенного под стек. Это странно, но это так.}
-{The end of stack is actually at the beginning of allocated for stack memory block. 
+{The end of the stack is actually at the beginning of the memory allocated for the stack block. 
 It seems strange, but it is so.}
 
 \IFRU{В процессоре ARM, тем не менее, есть поддержка стеков растущих как в сторону уменьшения, так и в
-сторону увеличения}{Nevertheless, ARM has instructions supporting ascending stacks, but also descending stacks}. 
+сторону увеличения}
+{Nevertheless ARM has not only instructions supporting ascending stacks but also descending stacks}. \\
+\\
 \index{ARM!\Instructions!STMFD}
 \index{ARM!\Instructions!LDMFD}
 \index{ARM!\Instructions!STMED}
@@ -40,27 +44,22 @@ It seems strange, but it is so.}
 \index{ARM!\Instructions!LDMFA}
 \index{ARM!\Instructions!STMEA}
 \index{ARM!\Instructions!LDMEA}
-\IFRU{Например, инструкции}{For example,} 
+\IFRU{Например, инструкции}{For example the} 
 STMFD\footnote{\STMFDdesc}/LDMFD\footnote{\LDMFDDESC}, 
 STMED\footnote{\STMEDdesc}/LDMED\footnote{\LDMEDdesc} 
-\IFRU{предназначены для descending-стека, т.е., уменьшающегося}{instructions are intended for work with 
-descending stack}.
-\IFRU{Инструкции}{}
+\IFRU{предназначены для descending-стека, т.е., уменьшающегося}{instructions are intended to work with 
+a descending stack}.
+\IFRU{Инструкции}{The}
 STMFA\footnote{\STMFAdesc}/LMDFA\footnote{\LDMFAdesc}, 
 STMEA\footnote{\STMEAdesc}/LDMEA\footnote{\LDMEAdesc} 
-\IFRU{предназначены для ascending-стека, т.е., увеличивающегося}{instructions are intended for work with 
-ascending stack}.
+\IFRU{предназначены для ascending-стека, т.е., увеличивающегося}{instructions are intended to work with 
+an ascending stack}.
 
-\IFRU{Для чего используется стек?}{What stack is used for?}
+\subsection{\IFRU{Для чего используется стек?}{What is the stack used for?}}
 
 \input{02_stack/01_saving_ret_addr.tex}
-
 \input{02_stack/02_args_passing.tex}
-
 \input{02_stack/03_local_vars.tex}
-
 \input{02_stack/04_alloca.tex}
-
 \input{02_stack/05_SEH.tex}
-
 \input{02_stack/06_BO_protection.tex}

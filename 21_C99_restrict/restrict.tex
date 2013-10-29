@@ -35,11 +35,11 @@ a pointer to}
 \item \IFRU{вычислить следующий}{calculate next} \TT{update\_me[i]}
 \item \IFRU{вычислить следующий}{calculate next} \TT{sum\_product[i]} ~--- 
 \IFRU{на этой стадии придется снова загружать из памяти подсчитанные}
-{on this stage, we need to load from memory already calculated} \TT{sum[i]} \IFRU{и}{and} \TT{product[i]}
+{on this stage, we need to load from memory already calculated} \TT{sum[i]} \And \TT{product[i]}
 \end{itemize}
 
 \IFRU{Возможно ли соптимизировать последнюю стадию?}{Is it possible to optimize the last stage?}
-\IFRU{Ведь подсчитанные}{Since already calculated} \TT{sum[i]} \IFRU{и}{and} \TT{product[i]} 
+\IFRU{Ведь подсчитанные}{Since already calculated} \TT{sum[i]} \And \TT{product[i]} 
 \IFRU{не обязательно снова загружать из памяти, ведь мы их только что подсчитали.}
 {are not necessary to load from memory again, becuse we already calculated them.}
 \IFRU{Можно, но компилятор не уверен, что на третьей стадии ничего не затерлось!}
@@ -87,15 +87,15 @@ void f2 (int* restrict x, int* restrict y, int* restrict sum, int* restrict prod
 
 \lstinputlisting[caption=GCC x64: f2()]{21_C99_restrict/f2.asm}
 
-\IFRU{Разница между скомпилированной функцией \TT{f1()} и \TT{f2()} такая}{The difference between
-compiled \TT{f1()} and \TT{f2()} function as follows}:
-\IFRU{в}{in} \TT{f1()}, \TT{sum[i]} \IFRU{и}{and} \TT{product[i]} \IFRU{загружаются снова посреди тела цикла}
+\IFRU{Разница между скомпилированной функцией \TT{f1()} и \TT{f2()} такая}
+{The difference between compiled \TT{f1()} and \TT{f2()} function is as follows}:
+\In \TT{f1()}, \TT{sum[i]} \And \TT{product[i]} \IFRU{загружаются снова посреди тела цикла}
 {are reloaded in the middle of loop},
 \IFRU{а в}{and in} \TT{f2()} \IFRU{этого нет, используются уже подсчитанные значения}{there are no such thing,
 already calculated values are used}, 
 \IFRU{ведь мы ``пообещали'' компилятору}{since we ``promised'' to compiler}, 
 \IFRU{что никто и ничто не изменит значения в}{that no one and nothing will change values in} \TT{sum[i]} 
-\IFRU{и}{and} \TT{product[i]} \IFRU{во время исполнения тела цикла}{while execution of loop body}, 
+\And \TT{product[i]} \IFRU{во время исполнения тела цикла}{while execution of loop body}, 
 \IFRU{поэтому он ``уверен'', что значения из памяти можно не загружать снова}
 {so it is ``sure'' that value from memory may not be again}.
 \IFRU{Очевидно, второй вариант будет работать быстрее.}{Obviously, second example will work faster.}

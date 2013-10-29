@@ -1,4 +1,4 @@
-﻿\subsection{\IFRU{Передача параметров для функции}{Function arguments passing}}
+﻿\subsubsection{\IFRU{Передача параметров для функции}{Passing function arguments}}
 
 \begin{lstlisting}
 push arg3
@@ -9,22 +9,22 @@ add esp, 4*3
 \end{lstlisting}
 
 \IFRU{Вызываемая функция получает свои параметры также через указатель стека.}
-{Callee{\footnote{Function being called}} function get its arguments via stack ponter.}
+{Callee{\footnote{Function being called}} functions get their arguments via the stack ponter.}
 
 \IFRU{См.также в соответствующем разделе о способах передачи аргументов через стек}
-{See also section about calling conventions}~\ref{sec:callingconventions}.
+{See also the section about calling conventions}~\ref{sec:callingconventions}.
 
 \IFRU{Важно отметить, что, в общем, никто не заставляет программистов передавать параметры именно через стек,
 это не является требованием к исполняемому коду.}
-{It is important to note that no one oblige programmers to pass arguments through stack, it is not prerequisite.}
+{It is worth noting that no one obliges programmers to pass arguments through stack, it is not a requirement.}
 
 \IFRU{Вы можете делать это совершенно иначе, не используя стек вообще.}
-{One could implement any other method without using stack at all.}
+{One could implement any other method without using the stack at all.}
 
 \IFRU{К примеру, можно выделять в куче\footnote{heap в англоязычной литературе} место для аргументов, 
 заполнять их и передавать в функцию указатель на это место через \EAX. И это вполне будет работать}
-{For example, it is possible to allocate a space for arguments in heap, fill it and pass to a function 
-via pointer to this pack in the \EAX register. And this will work}
+{For example, it is possible to allocate a space for arguments in the heap, fill it and pass it to a function 
+via a pointer to this block in the \EAX register. And this will work}
 \footnote{\IFRU{Например, в книге Дональда Кнута ``Искусство программирования'', в разделе 1.4.1 
 посвященном подпрограммам\cite[раздел 1.4.1]{Knuth:1998:ACP:521463}, 
 мы можем прочитать о возможности располагать параметры для вызываемой подпрограммы после инструкции \JMP
@@ -35,8 +35,7 @@ we can read about one way to supply arguments to subroutine is simply to list th
 passing control to subroutine. Knuth writes that this method was particularly convenient on System/360.}}.
 
 \IFRU{Однако, так традиционно сложилось, что в x86 и ARM передача аргументов происходит именно через стек.}
-{However, it is convenient tradition in x86 and ARM to use stack for this.}
-\\
+{However, it is convenient tradition in x86 and ARM to use the stack for this.} \\
 \\
 \IFRU{Кстати, вызываемая ф-ция не имеет информации, сколько аргументов было ей было передано.}
 {By the way, callee function hasn't any information, how many arguments were passed.}
@@ -51,7 +50,7 @@ printf("%d %d %d", 1234);
 \end{lstlisting}
 
 \printf \IFRU{выведет 1234, затем еще два случайных числа, которые волею случая оказались в стеке рядом.}
-{will dump 1234, and then also two random numbers, which were laying near it in stack, by chance.}
+{will dump 1234, and then also two random numbers, which were laying near it in the stack, by chance.}
 \\
 \IFRU{Вот почему не так уж и важно, как объявлять ф-цию \main}
 {That's why it's not very important how to declare \main function}: \IFRU{как}{as} \main, 
@@ -70,7 +69,7 @@ call main
 \end{lstlisting}
 
 \IFRU{Если вы объявляете \main как \main без аргументов, они, тем не менее, присутствуют в стеке, но не используются.}
-{If you'll declare \main as \main without arguments, they are, nevertheless, are still present in stack, but
+{If you'll declare \main as \main without arguments, they are, nevertheless, are still present in the stack, but
 not used.}
 \IFRU{Если вы объявите \main как}{If you declare \main as} \TT{main(int argc, char *argv[])}, 
 \IFRU{вы будете использовать два аргумента, а третий останется для вашей ф-ции ``невидимым''.}
