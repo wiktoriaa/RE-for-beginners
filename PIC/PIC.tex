@@ -38,16 +38,17 @@
 .text:00057A15                 call    __assert_fail
 \end{lstlisting}
 
-\IFRU{Все указатели на строки корректируются при помощи некоторой константы из регистра \EBX, которая вычисляется в начале каждой функции.}{All pointers to strings are corrected by some constant and by \EBX value, 
+\IFRU{Все указатели на строки корректируются при помощи некоторой константы из регистра \EBX, которая вычисляется в начале каждой функции.}{All pointers to strings are corrected by some constant and by value in the \EBX,
 which calculated at the beginning of each function.}
-\IFRU{Это так называемый адресно-независимый код\footnote{position-independent code в англоязычной литературе} (PIC), он предназначен для исполнения будучи расположенным по любому адресу в памяти, вот почему он не содержит никаких абсолютных адресов в памяти}{This is so called position-independent code (PIC), it is intended to execute placed in any random place of memory, that's why it can't contain any absolute memory addresses}.
+\IFRU{Это так называемый адресно-независимый код\footnote{position-independent code в англоязычной литературе} (PIC), он предназначен для исполнения будучи расположенным по любому адресу в памяти, вот почему он не содержит никаких абсолютных адресов в памяти}
+{This is so called position-independent code (PIC), it is intended to execute placed at any random point of memory, that's why it can't contain any absolute memory addresses}.
 
 \IFRU{PIC был очень важен в ранних компьютерных системах и важен сейчас во встраиваемых\footnote{embedded}, не имеющих поддержки виртуальной памяти (все процессы расположены в одном непрерывном блоке памяти)}{PIC was 
 crucial in early computer systems and crucial now in embedded systems without 
 virtual memory support (where processes are all placed in single continous memory block)}.
-\IFRU{Он до сих пор используется в *NIX системах для динамических библиотек, потому что динамическая библиотека может использоваться одновременно в нескольких процессах, будучи загружена в память только один раз}{It is also 
-still used in *NIX systems for shared libraries, because, shared libraries are shared across many processes 
-while loaded in memory only once}.
+\IFRU{Он до сих пор используется в *NIX системах для динамических библиотек, потому что динамическая библиотека может использоваться одновременно в нескольких процессах, будучи загружена в память только один раз}
+{It is also still used in *NIX systems for shared libraries since shared libraries 
+are shared across many processes while loaded in memory only once}.
 \IFRU{Но все эти процессы могут загрузить одну и ту же динамическую библиотеку по разным адресам, вот почему динамическая библиотека должна работать корректно не привыязываясь к абсолютным адресам}{But all these processes may 
 map the same shared library on different addresses, so that's why
 shared library should be working correctly without fixing on any absolute address}.
@@ -116,8 +117,8 @@ gcc -fPIC -shared -O3 -o 1.so 1.c
 \newcommand{\globvar}{\IT{global\_variable}}
 
 \IFRU{Так и есть: указатели на строку \retstring{} и переменную \globvar{} корректируются при каждом исполнении функции}{That's it: pointers to \retstring{} string and \globvar{} are to be corrected at each function execution.}
-\IFRU{Функция}{The} \IT{\_\_x86\_get\_pc\_thunk\_bx()} \IFRU{возвращает адрес точки после вызова самой себя (здесь: 0x57C)в}{function return address of the point after call to itself (0x57C here) in} \EBX.
-\IFRU{Это очень простой способ получить значение указателя на текущую инструкцию (\EIP) в произвольном месте}{That's the simple way to get value of program counter (\EIP) at some place}.
+\IFRU{Функция}{The} \IT{\_\_x86\_get\_pc\_thunk\_bx()} \IFRU{возвращает адрес точки после вызова самой себя (здесь: \TT{0x57C}) в}{function return address of the point after call to itself (\TT{0x57C} here) in the} \EBX.
+\IFRU{Это очень простой способ получить значение указателя на текущую инструкцию (\EIP) в произвольном месте}{That's the simple way to get value of program counter (\EIP) at some point}.
 \IFRU{Константа}{The} \IT{0x1A84} \IFRU{связана с разницей между началом этой функции и так называемой}{constant is related to the difference between this function begin and so called}
 \IT{Global Offset Table Procedure Linkage Table} (GOT PLT), \IFRU{секцией, сразу же за}{the section right after} \IT{Global Offset Table} (GOT), \IFRU{где находится указатель на \globvar{}}{where pointer to \globvar{} is}.
 \IDA \IFRU{показыавет смещения уже обработанными, чтобы их было проще понимать, но на самом деле код такой}{shows these offset processed, so to understand them easily, but in fact the code is}:
@@ -131,9 +132,10 @@ gcc -fPIC -shared -O3 -o 1.so 1.c
 .text:0000058E                 lea     eax, [ebx-1A30h]
 \end{lstlisting}
 
-\IFRU{Так что, \EBX указывает на секцию GOT PLT и для вычисления указателя на \globvar{}, которая хранится в GOT, нужно вычесть 0xC}{So, \EBX pointing to GOT PLT section and to calculate pointer to \globvar{} which stored in 
-GOT, 0xC should be subtracted}.
-\IFRU{А чтобы вычислить указатель на \retstring{}, нужно вычесть 0x1A30}{To calculate pointer to the \retstring{} string, 0x1A30 should be subtracted}.
+\IFRU{Так что, \EBX указывает на секцию \TT{GOT PLT} и для вычисления указателя на \globvar{}, которая хранится в \TT{GOT}, нужно вычесть 0xC}{So, \EBX pointing to the \TT{GOT PLT} section and to calculate pointer to \globvar{} which stored in 
+the \TT{GOT}, \TT{0xC} should be subtracted}.
+\IFRU{А чтобы вычислить указатель на \retstring{}, нужно вычесть \TT{0x1A30}}
+{To calculate pointer to the \retstring{} string, \TT{0x1A30} should be subtracted}.
 
 \index{x86-64}
 \index{x86!\Registers!RIP}
@@ -143,7 +145,7 @@ GOT, 0xC should be subtracted}.
 
 \index{objdump}
 \IDA \IFRU{упростит код на выходе убирая упоминания RIP, так что я буду использовать \IT{objdump} вместо}
-{would simplify output code but suppressing RIP-relative addressing details, so I'll run \IT{objdump} instead to see the details}:
+{would simplify output code but suppressing RIP-relative addressing details, so I will run \IT{objdump} instead to see the details}:
 
 \begin{lstlisting}
 0000000000000720 <f1>:
@@ -167,11 +169,11 @@ GOT, 0xC should be subtracted}.
 \IFRU{Такой механизм не используется в Windows DLL. Если загрузчику в Windows приходится загружать DLL 
 в другое место, он ``патчит'' DLL прямо в памяти (на местах \IT{FIXUP}-ов) чтобы скорректировать 
 все адреса.}{The PIC mechanism is not used in Windows DLLs. If Windows loader needs to load DLL 
-to another place, it ``patches'' DLL in memory (at the \IT{FIXUP} places) in order to correct 
+on another base address, it ``patches'' DLL in memory (at the \IT{FIXUP} places) in order to correct 
 all addresses.}
 \IFRU{Это приводит к тому что загруженную один раз DLL нельзя использовать одновременно в разных 
 процессах, желающих расположить её по разным адресам ~--- потому что каждый загруженный в память 
 экземпляр DLL \IT{доводится} до того чтобы работать только по этим адресам.}{This means, several 
 Windows processes can't share once loaded DLL on different addresses in different process' memory 
-blocks ~--- because each loaded into memory DLL instance \IT{fixed} to be work only at these addresses..}
+blocks ~--- since each loaded into memory DLL instance \IT{fixed} to be work only at these addresses..}
 

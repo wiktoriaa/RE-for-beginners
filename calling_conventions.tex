@@ -13,14 +13,14 @@
 после возврата вызываемой функции.}
 {Caller pushing arguments to stack in reverse order: last argument, then penultimate element 
 and finally ~--- first argument.
-Caller also should return back \ESP to its initial state after callee function exit.}
+Caller also should return back value of the \ESP to its initial state after callee function exit.}
 
 \begin{lstlisting}[caption=cdecl]
 push arg3
 push arg2
 push arg3
 call function
-add esp, 12 ; return ESP
+add esp, 12 ; returns ESP
 \end{lstlisting}
 
 \subsection{stdcall}
@@ -58,7 +58,7 @@ ret 12
 но с их помощью можно легко проследить очень важную разницу между \IT{cdecl} и \IT{stdcall}.
 Начнем с того, что компилятор знает сколько аргументов было у \printf.}
 {\printf-like functions are, probably, the only case of variable arguments functions in \CCpp,
-but it's easy to illustrate an important difference between \IT{cdecl} and \IT{stdcall} with help of it.
+but it's easy to illustrate an important difference between \IT{cdecl} and \IT{stdcall} with the help of it.
 Let's start with the idea that compiler knows argument count of each \printf function calling.}
 \IFRU{Однако, вызываемая функция \printf, которая уже давно скомпилированна 
 и находится в системной библиотеке MSVCRT.DLL (если говорить о Windows), 
@@ -97,7 +97,7 @@ Caller should restore stack pointer into initial state.}
 
 \IFRU{Указатель стека должен быть возвращен в первоначальное состояние вызываемой функцией, 
 как в случае \IT{stdcall}.}
-{Stack pointer should be restored to initial state by callee, like in \IT{stdcall}.}
+{Stack pointer should be restored to initial state by callee (like in \IT{stdcall}).}
 
 \begin{lstlisting}[caption=fastcall]
 push arg3
@@ -121,10 +121,10 @@ ret 4
 {It's \IT{fastcall} evolution\footnote{\URLREGPARMM} is some sense.
 With the \TT{-mregparm} option it's possible to set, how many arguments will be passed via registers. 
 3 at maximum.
-Thus, \EAX, \EDX and \ECX registers will be used.}
+Thus, \EAX, \EDX and \ECX registers are to be used.}
 
 \IFRU{Разумеется, если аргументов у функции меньше трех, то будет задействована только часть регистров.}
-{Of course, if number of arguments is less then 3, not all registers 3 will be used.}
+{Of course, if number of arguments is less then 3, not all 3 registers are to be used.}
 
 \IFRU{Вызывающая функция возвращает указатель стека в первоначальное состояние.}
 {Caller restores stack pointer to its initial state.}
@@ -139,7 +139,7 @@ Thus, \EAX, \EDX and \ECX registers will be used.}
 {In C++, it's a \IT{this} pointer to object passing into function-method.}
 
 \IFRU{В MSVC указатель \IT{this} обычно передается в регистре \ECX.}
-{In MSVC, \IT{this} is usually passed in \ECX register.}
+{In MSVC, \IT{this} is usually passed in the \ECX register.}
 
 \IFRU{В GCC указатель \IT{this} обычно передается как самый первый аргумент. 
 Таким образом, внутри будет видно, что у всех функций-методов на один аргумент больше.}
@@ -161,7 +161,7 @@ Thus it will be seen that internally all function-methods has extra argument for
 но б\'{о}льшие могут сохранять их значения на будущее.}
 {The method of arguments passing in Win64 is somewhat resembling to \TT{fastcall}.
 First 4 arguments are passed via \TT{RCX}, \TT{RDX}, \TT{R8}, \TT{R9}, others ~--- via stack.
-Caller also must prepare a place for 32 bytes or 4 64-bit values,
+Caller also must prepare a space for 32 bytes or 4 64-bit values,
 so then callee can save there first 4 arguments.
 Short functions may use argument values just from registers,
 but larger may save its values for further use.}
@@ -179,8 +179,8 @@ but larger may save its values for further use.}
 \index{double}
 
 \IFRU{Во всех соглашениях кроме Win64, переменная типа \Tfloat или \Tdouble возвращается через регистр FPU \STZERO.}
-{In all conventions except of Win64, values of type \Tfloat or \Tdouble returning via FPU register \STZERO.}
+{In all conventions except of Win64, values of type \Tfloat or \Tdouble are returning via the FPU register \STZERO.}
 
 \IFRU{В Win64 переменные типа \Tfloat и \Tdouble возвращаются в регистре \XMMZERO вместо \STZERO.}
-{In Win64, return values of \Tfloat and \Tdouble types are returned in \XMMZERO register instead of \STZERO.}
+{In Win64, values of \Tfloat and \Tdouble types are returned in the \XMMZERO register instead of the \STZERO.}
 

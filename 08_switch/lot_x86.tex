@@ -8,7 +8,7 @@
 \IFRU{Здесь происходит следующее: в теле функции есть набор вызовов \printf с разными аргументами. 
 Все они имеют, конечно же, адреса, а также внутренние символические метки, которые присвоил им компилятор.
 Помимо всего прочего, все эти метки складываются во внутреннюю таблицу \TT{\$LN11@f}.}
-{OK, what we see here is: there are a set of \printf calls with various arguments. 
+{OK, what we see here is: there are a set of the \printf calls with various arguments. 
 All them has not only addresses in process memory, but also internal symbolic labels assigned 
 by compiler. 
 Besides, all these labels are also places into \TT{\$LN11@f} internal table.}
@@ -28,8 +28,8 @@ Besides, all these labels are also places into \TT{\$LN11@f} internal table.}
 table address. That is how address inside of table is constructed, pointing exactly to the 
 element we need. For example, let's say \TT{a} is equal to 2. $2*4 = 8$ (all table elements 
 are addresses within 32-bit process, that is why all elements contain 4 bytes). 
-Address of \TT{\$LN11@f} table + 8 = it will be table element where \TT{\$LN4@f} label is stored. 
-\JMP fetch \TT{\$LN4@f} address from the table and jump to it.}
+Address of the \TT{\$LN11@f} table + 8 ~--- it will be table element where \TT{\$LN4@f} label is stored.
+\JMP fetches \TT{\$LN4@f} address from the table and jump to it.}
 
 \IFRU{Эта таблица иногда называется}{This table called sometimes} \IT{jumptable}.
 
@@ -37,7 +37,7 @@ Address of \TT{\$LN11@f} table + 8 = it will be table element where \TT{\$LN4@f}
 Дословно, инструкция \TT{jmp DWORD PTR \$LN11@f[ecx*4]} 
 означает \IT{перейти по DWORD, который лежит по адресу} \TT{\$LN11@f + ecx * 4}.}
 {Then corresponding \printf is called with argument \TT{'two'}. 
-Literally, \TT{jmp DWORD PTR \$LN11@f[ecx*4]} instruction mean 
+Literally, \TT{jmp DWORD PTR \$LN11@f[ecx*4]} instruction means
 \IT{jump to DWORD, which is stored at address} \TT{\$LN11@f + ecx * 4}.}
 
 \TT{npad}~\ref{sec:npad} 
@@ -45,12 +45,12 @@ Literally, \TT{jmp DWORD PTR \$LN11@f[ecx*4]} instruction mean
 дабы она располагалась по 
 адресу кратному 4 (или 16). Это нужно для того чтобы процессор мог эффективнее загружать 32-битное 
 значения из памяти, через шину с памятью, кеш-память, итд.}
-{is assembly language macro, aligning next label so that it will be stored at address aligned by 4 bytes 
-(or 16). 
-This is very suitable for processor, because it can fetch 32-bit values from memory through memory bus, 
+{is assembly language macro, aligning next label so that it will be stored at address aligned on a 4 byte
+(or 16 byte) border.
+This is very suitable for processor since it's able to fetch 32-bit values from memory through memory bus,
 cache memory, etc, in much effective way if it is aligned.}
 
-\IFRU{Посмотрим что сгенерирует GCC 4.4.1}{Let's see what GCC 4.4.1 generate}:
+\IFRU{Посмотрим что сгенерирует GCC 4.4.1}{Let's see what GCC 4.4.1 generates}:
 
 \lstinputlisting[caption=GCC 4.4.1]{08_switch/8_6_gcc.asm}
 

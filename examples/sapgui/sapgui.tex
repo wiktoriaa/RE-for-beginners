@@ -6,7 +6,7 @@
 \IFRU{(Трассировка связи между переменной окружения \TDWNC{} SAPGUI\footnote{GUI-клиент от SAP}
 до ``надоедливого всплывающего окна'' и самой функции сжатия данных.)}
 {(Tracing connection between \TDWNC{} SAPGUI\footnote{SAP GUI client} environment variable to 
-nagging pop-up window and actual data compression routine.)}
+the nagging pop-up window and actual data compression routine.)}
 
 \IFRU{Известно что сетевой траффик между SAPGUI и SAP по умолчанию не шифруется а сжимается} 
 {It's known that network traffic between SAPGUI and SAP is not crypted by default, it's rather compressed}
@@ -78,7 +78,7 @@ Yes, it is present and there is only one reference to it.}
 After that, numerical value is stored to \TT{edi+15h}}.
 
 \IFRU{Обратите так же внимание на функцию \TT{chk\_env} (это я так назвал её)}
-{Also, take a look onto \TT{chk\_env()} function (I gave a name to it)}:
+{Also take a look onto \TT{chk\_env()} function (I gave a name to it)}:
 
 \begin{lstlisting}
 .text:64413F20 ; int __cdecl chk_env(char *VarName, int)
@@ -207,7 +207,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 \end{center}
 
 \IFRU{Настройки для каждой переменной записываются в массив через указатель в регистре \EDI. \EDI выставляется перед вызовом функции}
-{Settings for each variable are written to the array via pointer in \EDI register. \EDI is being set before that function call}:
+{Settings for each variable are written to the array via pointer in the \EDI register. \EDI is being set before that function call}:
 
 \begin{lstlisting}
 .text:6440EE00                 lea     edi, [ebp+2884h+var_2884] ; options here like +0x15...
@@ -500,7 +500,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 \IFRU{\ECX в начале функции содержит в себе указатель на объект (потому что это тип функции thiscall~\ref{thiscall}). 
 В нашем случае, класс имеет тип, очевидно, \IT{CDwsGui}. В зависимости от включенных опций в объекте, 
 разные сообщения добавляются к итоговому сообщению.}
-{\ECX at function start gets pointer to object (because it is thiscall~\ref{thiscall}-type of function). 
+{\ECX at function start gets pointer to object (since it is thiscall~\ref{thiscall}-type of function).
 In our case, that object obviously has class type \IT{CDwsGui}. 
 Depends of option turned on in the object, specific message part will be concatenated to resulting message.}
 
@@ -538,13 +538,13 @@ Depends of option turned on in the object, specific message part will be concate
 \IFRU{Копнем немного глубже и проследим связь между смещением 0x15 в \TT{load\_command\_line()}
 (Это я дал имя этой функции) и переменной \TT{this+0x3D} в \IT{CDwsGui::PrepareInfoWindow}. 
 Уверены ли мы что это одна и та же переменная?}
-{Now let's dig deeper and find connection between 0x15 offset in \TT{load\_command\_line()} 
-(I gave that name to that function) and \TT{this+0x3D} variable in \IT{CDwsGui::PrepareInfoWindow}. 
+{Now let's dig deeper and find connection between 0x15 offset in the \TT{load\_command\_line()} 
+(I gave that name to that function) function and \TT{this+0x3D} variable in the \IT{CDwsGui::PrepareInfoWindow}. 
 Are we sure that the value is the same?}
 
-\IFRU{Начинаю искать все места где в коде используется константа 0x15.
+\IFRU{Начинаю искать все места где в коде используется константа \TT{0x15}.
 Для таких небольших программ как SAPGUI, это иногда срабатывает. Вот первое что я нашел:}
-{I'm starting to search for all occurences of 0x15 value in code. 
+{I'm starting to search for all occurences of \TT{0x15} value in code. 
 For some small programs like SAPGUI, it sometimes works. Here is the first occurence I got:}
 
 \begin{lstlisting}
@@ -595,13 +595,13 @@ For some small programs like SAPGUI, it sometimes works. Here is the first occur
 
 \IFRU{Теперь ясно: массив заполняемый в \TT{load\_command\_line()} на самом деле расположен в классе \IT{CDwsGui} но по адресу
 \TT{this+0x28}. 0x15 + 0x28 это 0x3D. ОК, мы нашли место, куда наша переменная копируется.}
-{Finally, we understand: array filled in \TT{load\_command\_line()} is actually placed in \IT{CDwsGui} class 
-but on \TT{this+0x28} address. 0x15 + 0x28 is exactly 0x3D. OK, we found the place where the value is copied to.}
+{Finally, we understand: array filled in the \TT{load\_command\_line()} function is actually placed in the \IT{CDwsGui} class 
+but on \TT{this+0x28} address. 0x15 + 0x28 is exactly 0x3D. OK, we found the point where the value is copied to.}
 
 \IFRU{Посмотрим так же и другие места, где используется смещение 0x3D.
 Одно из таких мест находится в функции \IT{CDwsGui::SapguiRun} (и снова спасибо отладочным вызовам):}
 {Let's also find other places where 0x3D offset is used. 
-Here is one of them in \IT{CDwsGui::SapguiRun} function (again, thanks to debugging calls):}
+Here is one of them in the \IT{CDwsGui::SapguiRun} function (again, thanks to debugging calls):}
 
 \begin{lstlisting}
 .text:64409D58                 cmp     [esi+3Dh], bl   ; ESI is pointer to CDwsGui object
@@ -629,10 +629,11 @@ Here is one of them in \IT{CDwsGui::SapguiRun} function (again, thanks to debugg
 \TDWNC и запускаем SAPGUI. Wow! Надоедливого окна больше нет (как и ожидалось: ведь переменной окружении так же
 нет), но в Wireshark мы видим что сетевые пакеты больше не сжимаются!
 Очевидно, это то самое место где флаг отражающий сжатие пакетов выставляется в объекте \TT{CConnectionContext}.}
-{Let's check our findings. Replace \TT{setz al} here to \TT{xor eax, eax / nop}, clear \TDWNC 
+{Let's check our findings. Replace the \TT{setz al} here to the \TT{xor eax, eax / nop} instructions,
+clear \TDWNC 
 environment variable and run SAPGUI. Wow! There is no nagging window (just as expected, 
-because variable is not set), but in Wireshark we can see that the network packets are not compressed anymore! 
-Obviously, this is the place where compression flag is to be set in \IT{CConnectionContext} object.}
+because variable is not set) but in Wireshark we can see that the network packets are not compressed anymore! 
+Obviously, this is the point where compression flag is to be set in the \IT{CConnectionContext} object.}
 
 \IFRU{Так что, флаг сжатия передается в пятом аргументе функции \IT{CConnectionContext::CreateNetwork}. 
 Внутри этой функции, вызывается еще одна:}
@@ -650,11 +651,11 @@ Inside that function, another one is called:}
 \end{lstlisting}
 
 \IFRU{Флаг отвечающий за сжатие здесь передается в пятом аргументе для конструктора \IT{CNetwork::CNetwork}.}
-{Compression flag is passing here in the 5th argument to \IT{CNetwork::CNetwork} constructor.}
+{Compression flag is passing here in the 5th argument to the \IT{CNetwork::CNetwork} constructor.}
 
 \IFRU{И вот как конструктор \IT{CNetwork} выставляет некоторые флаги в объекте \IT{CNetwork} в соответствии с пятым аргументом \textbf{и}
 еще какую-то переменную, возможно, также отвечающую за сжатие сетевых пакетов.}
-{And here is how \IT{CNetwork} constructor sets some flag in \IT{CNetwork} object according to the 5th argument \textbf{and}
+{And here is how \IT{CNetwork} constructor sets some flag in the \IT{CNetwork} object according to the 5th argument \textbf{and}
 some another variable which probably could affect network packets compression too.}
 
 \begin{lstlisting}
@@ -681,12 +682,12 @@ some another variable which probably could affect network packets compression to
 \end{lstlisting}
 
 \IFRU{Теперь мы знаем что флаг отражающий сжатие данных сохраняется в классе \IT{CNetwork} по адресу \IT{this+0x3A4}.}
-{At this point we know that compression flag is stored in \IT{CNetwork} class at \IT{this+0x3A4} address.}
+{At this point we know that compression flag is stored in the \IT{CNetwork} class at \IT{this+0x3A4} address.}
 
-\IFRU{Поищем теперь значение 0x3A4 в SAPguilib.dll. Находим второе упоминание этого значения в функции
+\IFRU{Поищем теперь значение \TT{0x3A4} в SAPguilib.dll. Находим второе упоминание этого значения в функции
 \IT{CDwsGui::OnClientMessageWrite} (бесконечная благодарность отладочной информации):}
-{Now let's dig across SAPguilib.dll for 0x3A4 value. And here is the second occurence in 
-\IT{CDwsGui::OnClientMessageWrite} (endless thanks for debugging information):}
+{Now let's dig across SAPguilib.dll for \TT{0x3A4} value. And here is the second occurence in 
+the \IT{CDwsGui::OnClientMessageWrite} (endless thanks for debugging information):}
 
 \begin{lstlisting}
 .text:64406F76 loc_64406F76:

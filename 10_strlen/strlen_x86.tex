@@ -15,7 +15,7 @@
 Но регистр \EDX ~--- 32-битный. \MOVSX означает \IT{MOV with Sign-Extent}. 
 Оставшиеся биты с 8-го по 31-й \MOVSX сделает единицей, если исходный байт в памяти имеет знак \IT{минус}, 
 или заполнит нулями, если знак \IT{плюс}.}
-{About first: \MOVSX is intended to take byte from some place and store value in 32-bit register. 
+{About first: \MOVSX is intended to take byte from some point in memory and store value in 32-bit register. 
 \MOVSX meaning \IT{MOV with Sign-Extent}. 
 Rest bits starting at 8th till 31th \MOVSX will set to $1$ if source byte in memory has \IT{minus} 
 sign or to 0 if \IT{plus}.}
@@ -44,7 +44,7 @@ we need to identify its sign and extend it. That is what \MOVSX does.}
 а не его восьмибитной части, скажем, \DL. Но получилось как получилось: должно быть, 
 register allocator\footnote{функция компилятора распределяющая локальные переменные по регистрам процессора}
 компилятора сработал именно так.}
-{I'm not sure if compiler need to store \Tchar variable in \EDX, it could take 8-bit register part 
+{I'm not sure if the compiler needs to store \Tchar variable in the \EDX, it could take 8-bit register part 
 (let's say \DL). Apparently, compiler's register allocator\footnote{compiler's function 
 assigning local variables to CPU registers} works like that.}
 
@@ -54,7 +54,7 @@ assigning local variables to CPU registers} works like that.}
 Но конкретно здесь, эта инструкция просто проверяет состояние регистра \EDX на $0$.}
 {Then we see \TT{TEST EDX, EDX}. 
 About \TEST instruction, read more in section about bit fields~\ref{sec:bitfields}.
-But here, this instruction just checking \EDX value, if it is equals to $0$.}
+But here, this instruction just checking value in the \EDX, if it is equals to $0$.}
 
 \IFRU{Попробуем}{Let's try} GCC 4.4.1:
 
@@ -63,13 +63,13 @@ But here, this instruction just checking \EDX value, if it is equals to $0$.}
 \index{x86!\Instructions!MOVZX}
 \IFRU{Результат очень похож на MSVC, вот только здесь используется \MOVZX а не \MOVSX. 
 \MOVZX означает \IT{MOV with Zero-Extent}. Эта инструкция перекладывает какое-либо значение 
-в регистр и остальное добивает нулями. 
+в регистр и остальные биты выставляет в $0$.
 Фактически, преимущество этой инструкции только в том, что она позволяет 
 заменить две инструкции сразу: \TT{xor eax, eax / mov al, [...]}.}
 {The result almost the same as MSVC did, but here we see \MOVZX isntead of \MOVSX. 
-\MOVZX mean \IT{MOV with Zero-Extent}. 
-This instruction place 8-bit or 16-bit value into 32-bit register and set the rest bits to zero. 
-In fact, this instruction is convenient only because it enable us to replace two instructions at once: 
+\MOVZX means \IT{MOV with Zero-Extent}. 
+This instruction copies 8-bit or 16-bit value into 32-bit register and sets the rest bits to $0$. 
+In fact, this instruction is convenient only since it enable us to replace two instructions at once: 
 \TT{xor eax, eax / mov al, [...]}.}
 
 \IFRU{С другой стороны, нам очевидно, что здесь можно было бы написать вот так: 
@@ -79,20 +79,20 @@ In fact, this instruction is convenient only because it enable us to replace two
 Строго говоря, компилятор вообще не нацелен на то чтобы генерировать понятный (для человека) код.}
 {On other hand, it is obvious to us that compiler could produce that code: 
 \TT{mov al, byte ptr [eax] / test al, al} ~--- it is almost the same, however, 
-highest \EAX register bits will contain random noise. 
+the highest \EAX register bits will contain random noise. 
 But let's think it is compiler's drawback ~--- it can't produce more understandable code. 
 Strictly speaking, compiler is not obliged to emit understandable (to humans) code at all.}
 
 \index{x86!\Instructions!SETNZ}
 \IFRU{Следующая новая инструкция для нас ~--- \SETNZ. В данном случае, если в \AL был не ноль, 
-то \TT{test al, al} выставит флаг \ZF в 0, а \SETNZ, если \TT{ZF==0} 
-(\IT{NZ} значит \IT{not zero}) выставит единицу в \AL. 
+то \TT{test al, al} выставит флаг \ZF в $0$, а \SETNZ, если \TT{ZF==0} 
+(\IT{NZ} значит \IT{not zero}) выставит $1$ в \AL. 
 Смысл этой процедуры в том, что, если говорить человеческим языком, 
 \IT{если AL не ноль, то выполнить переход на} \TT{loc\_80483F0}.
 Компилятор выдал немного избыточный код, но не будем забывать что оптимизация выключена.}
 {Next new instruction for us is \SETNZ. Here, if \AL contain not zero, \TT{test al, al} 
-will set zero to \ZF flag, but \SETNZ, if \TT{ZF==0} (\IT{NZ} mean \IT{not zero}) will set 1 to \AL. 
-Speaking in natural language, \IT{if AL is not zero, let's jump to loc\_80483F0}. 
+will set $0$ to the \ZF flag, but \SETNZ, if \TT{ZF==0} (\IT{NZ} means \IT{not zero}) will set $1$ to the \AL.
+Speaking in natural language, \IT{if \AL is not zero, let's jump to loc\_80483F0}. 
 Compiler emitted slightly redundant code, but let's not forget that optimization is turned off.}
 
 \IFRU{Теперь скомпилируем все то же самое в MSVC 2010, но с включенной оптимизацией (\Ox)}
@@ -137,7 +137,7 @@ at any point.}
 Только происходит это слегка по-другому. Сначала \ECX, где хранится указатель на \IT{str}, 
 инвертируется и от него отнимается единица.}
 {After, we also see new instruction \NOT. This instruction inverts all bits in operand. 
-It can be said, it is synonym to \TT{XOR ECX, 0ffffffffh} instruction. 
+It can be said, it is synonym to the \TT{XOR ECX, 0ffffffffh} instruction. 
 \NOT and following \ADD calculating pointer difference and subtracting 1. 
 At the beginning \ECX, where pointer to str is stored, inverted and 1 is subtracted from it.}
 
@@ -154,7 +154,7 @@ eax=eax+ecx
 return eax
 \end{lstlisting}
 
-\dots \IFRU{что эквивалентно}{and this is equivalent to}:
+\dots \IFRU{что эквивалентно}{and this is effectively equivalent to}:
 
 \begin{lstlisting}
 ecx=str;
@@ -167,4 +167,4 @@ return eax
 \IFRU{Но почему GCC решил что так будет лучше? Снова не берусь сказать. Но я не сомневаюсь, 
 что эти оба варианта работают примерно равноценно в плане эффективности и скорости.}
 {Why GCC decided it would be better? I cannot be sure. 
-But I'm assure that both variants are equivalent in efficiency sense.}
+But I'm assure that both variants are effectively equivalent in efficiency sense.}

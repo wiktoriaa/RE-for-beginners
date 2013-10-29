@@ -9,7 +9,7 @@
 
 \index{x86!\Instructions!FLD}
 \IFRU{Итак, \FLD загружает \TT{\_b} в регистр \STZERO.}
-{So, \FLD loading \TT{\_b} into \STZERO register.}
+{So, \FLD loading \TT{\_b} into the \STZERO register.}
 
 \newcommand{\Czero}{\TT{C0}\xspace}
 \newcommand{\Ctwo}{\TT{C2}\xspace}
@@ -19,8 +19,10 @@
 \index{x86!\Instructions!FCOMP}
 \IFRU{\FCOMP сравнивает содержимое \STZERO с тем что лежит в \TT{\_a} и выставляет биты \CThreeBits в 
 регистре статуса FPU. Это 16-битный регистр отражающий текущее состояние FPU.} 
-{\FCOMP compares \STZERO register state with what is in \TT{\_a} value and set \CThreeBits bits in FPU 
-status word register. This is 16-bit register reflecting current state of FPU.} 
+{\FCOMP compares the value in the \STZERO register with what is in \TT{\_a} value 
+and set \CThreeBits bits in FPU 
+status word register. 
+This is 16-bit register reflecting current state of FPU.} 
 
 \IFRU{Итак, биты \CThreeBits выставлены, но, к сожалению, у процессоров до Intel P6 
 \footnote{Intel P6 это Pentium Pro, Pentium II, и далее} нет инструкций условного перехода,
@@ -44,8 +46,8 @@ This is what distinguish it from \FCOM, which is just comparing values, leaving 
 \IFRU{\FNSTSW копирует содержимое регистра статуса в \AX. Биты \CThreeBits занимают позиции, 
 соответственно, 14, 10, 8, в этих позициях они и остаются в регистре \AX, 
 и все они расположены в старшей части регистра ~--- \AH.}
-{\FNSTSW copies FPU status word register to \AX. Bits \CThreeBits are placed at positions 14/10/8, 
-they will be at the same positions in \AX registers and all them are placed in high part of \AX ~--- \AH.}
+{\FNSTSW copies FPU status word register to the \AX. Bits \CThreeBits are placed at positions 14/10/8, 
+they will be at the same positions in the \AX register and all them are placed in high part of the \AX ~--- \AH.}
 
 \begin{itemize}
 \item
@@ -62,7 +64,7 @@ they will be at the same positions in \AX registers and all them are placed in h
 на позициях 0 и 2 (внутри регистра \AH) 
 останутся соответственно \Czero и \Ctwo.}
 {After \TT{test ah, 5} execution, bits \Cthree and \TT{C1} will be set to 0, 
-but at positions 0 and 2 (in \AH registers) 
+but at positions 0 and 2 (in the \AH registers) 
 \Czero and \Ctwo bits will be leaved.}
 
 \index{x86!\Registers!\IFRU{Флаг четности}{Parity flag}}
@@ -79,28 +81,28 @@ with the FUCOM instructions.\footnote{\href{http://en.wikipedia.org/wiki/Parity_
 \end{quotation}
 \end{framed}
 
-\IFRU{Этот флаг выставляется в 1 если количество единиц в последнем результате ~--- четно. 
-И в ноль если ~--- нечетно.}
-{This flag is to be set to 1 if ones number is even. And to zero if odd.}
+\IFRU{Этот флаг выставляется в $1$ если количество единиц в последнем результате ~--- четно. 
+И в $0$ если ~--- нечетно.}
+{This flag is to be set to $1$ if ones number is even. And to $0$ if odd.}
 
 \index{x86!\Instructions!JP}
-\IFRU{Таким образом, что мы имеем, флаг \PF будет выставлен в единицу, если \Czero и \Ctwo 
-оба нули или оба единицы. 
+\IFRU{Таким образом, что мы имеем, флаг \PF будет выставлен в $1$, если \Czero и \Ctwo 
+оба $1$ или оба $0$. 
 И тогда сработает последующий \JP (\IT{jump if PF==1}). 
 Если мы вернемся чуть назад и посмотрим значения \CThreeBits 
 для разных вариантов, то увидим, что условный переход \JP сработает в двух случаях: если b>a или если a==b 
 (ведь бит \Cthree уже \IT{вылетел} после исполнения \TT{test ah, 5}).}
-{Thus, \PF flag will be set to 1 if both \Czero and \Ctwo are set to zero or both are ones. 
+{Thus, \PF flag will be set to 1 if both \Czero and \Ctwo are set to $0$ or both are $1$.
 And then following \JP (\IT{jump if PF==1}) will be triggered. 
-If we recall values of \CThreeBits for different cases, we will see that conditional jump 
+If we recall values of the \CThreeBits for various cases, we will see that conditional jump 
 \JP will be triggered in two cases: if b>a or a==b 
-(\Cthree bit is already not considering here, because it was cleared while execution of 
-\TT{test ah, 5} instruction).}
+(\Cthree bit is already not considering here since it was cleared while execution of 
+the \TT{test ah, 5} instruction).}
 
 \IFRU{Дальше все просто. Если условный переход сработал, то \FLD загрузит значение \TT{\_b} в \STZERO, 
 а если не сработал, то загрузится \TT{\_a} и произойдет выход из функции.}
-{It is all simple thereafter. If conditional jump was triggered, \FLD will load \TT{\_b} value 
-to \STZERO, and if it's not triggered, \TT{\_a} will be loaded.}
+{It is all simple thereafter. If conditional jump was triggered, \FLD will load the \TT{\_b} value 
+to the \STZERO register, and if it's not triggered, the value of the \TT{\_a} variable will be loaded.}
 
 \IFRU{Но это еще не все!}{But it is not over yet!}
 
@@ -113,10 +115,10 @@ to \STZERO, and if it's not triggered, \TT{\_a} will be loaded.}
 \IFRU{\FCOM отличается от \FCOMP тем что просто сравнивает значения и оставляет стек в том же состоянии. 
 В отличие от предыдущего примера, операнды здесь в другом порядке. 
 Поэтому и результат сравнения в \CThreeBits будет другим чем раньше:}
-{\FCOM is distinguished from \FCOMP is that sense that it just comparing values and leave FPU stack 
+{\FCOM is distinguished from \FCOMP is that sense that it just comparing values and leaves FPU stack 
 in the same state. 
 Unlike previous example, operands here in reversed order. 
-And that is why result of comparision in \CThreeBits will be different:}
+And that is why result of comparision in the \CThreeBits will be different:}
 
 \begin{itemize}
 \item
@@ -137,12 +139,12 @@ And that is why result of comparision in \CThreeBits will be different:}
 (где сейчас лежит \TT{\_a}) в \STONE. 
 После этого на вершине стека два раза лежат \TT{\_a}. Затем одно значение выдергивается. 
 После этого в \STZERO остается \TT{\_a} и функция завершается.}
-{It can be said, \TT{test ah, 65} instruction just leave two bits ~--- \Cthree and \Czero. 
+{It can be said, \TT{test ah, 65} instruction just leaves two bits ~--- \Cthree and \Czero. 
 Both will be zeroes if a>b: in that case \JNE jump will not be triggered. 
-Then \TT{FSTP ST(1)} is following ~--- this instruction copies \STZERO value into operand and 
+Then \TT{FSTP ST(1)} is following ~--- this instruction copies value in the \STZERO into operand and 
 popping one value from FPU stack.
-In other words, that instruction copies \STZERO (where \TT{\_a} value now) into \STONE. 
-After that, two values of {\_a} are at the top of stack now. 
+In other words, that instruction copies \STZERO (where \TT{\_a} value is now) into the \STONE.
+After that, two values of the {\_a} are at the top of stack now. 
 After that, one value is popping.
 After that, \STZERO will contain {\_a} and function is finished.}
 
@@ -154,9 +156,9 @@ After that, \STZERO will contain {\_a} and function is finished.}
 значение из стека и больше ничего.}
 {Conditional jump \JNE is triggered in two cases: of b>a or a==b. 
 \STZERO into \STZERO will be copied, it is just like idle (\NOP) operation, then one value 
-is popping from stack and top of stack (\STZERO) will contain what was in \STONE before 
+is popping from stack and top of stack (\STZERO) will contain what was in the \STONE before 
 (that is {\_b}). Then function finishes. 
-That instruction used here probably because FPU has no instruction to pop value from stack and 
+That instruction used here probably since FPU has no instruction to pop value from stack and 
 not to store it anywhere.}
 
 \IFRU{Но и это еще не все.}{Well, but it is still not over.}
@@ -185,7 +187,7 @@ NaN\NANFN{}.
 с сигнализирующим нечислом, то сработает исключение.}
 {FPU is able to work with special values which are \IT{not-a-numbers} or 
 NaNs\NANFN{}. 
-These are infinity, result of dividing by zero, etc. 
+These are infinity, result of dividing by $0$, etc. 
 Not-a-numbers can be ``quiet'' and ``signalling''. It is possible to continue to work with ``quiet'' NaNs, 
 but if one try to do some operation with ``signalling'' NaNs ~--- an exception will be raised.}
 
@@ -208,13 +210,13 @@ but if one try to do some operation with ``signalling'' NaNs ~--- an exception w
 \IFRU{Вспомним, что \FNSTSW перегружает интересующие нас биты \CThreeBits в \AH, 
 и соответственно они будут в позициях 6, 2, 0 в регистре \AH.}
 {Let's remember that \FNSTSW is moving interesting for us bits \CThreeBits into \AH 
-and they will be in positions 6, 2, 0 in \AH register.}
+and they will be in positions 6, 2, 0 in the \AH register.}
 
 \IFRU{Иными словами, пара инструкций \TT{fnstsw  ax / sahf} перекладывает биты \CThreeBits в флаги \ZF, \PF, \CF.}
 {In other words, \TT{fnstsw  ax / sahf} instruction pair is moving \CThreeBits into \ZF, \PF, \CF CPU flags.}
 
 \IFRU{Теперь снова вспомним, какие значения бит \CThreeBits будут при каких результатах сравнения:}
-{Now let's also recall, what values of \CThreeBits bits will be set:}
+{Now let's also recall, what values of the \CThreeBits bits will be set:}
 
 \begin{itemize}
 \item
@@ -248,11 +250,11 @@ and they will be in positions 6, 2, 0 in \AH register.}
 Это почти аналог \JNBE, за тем лишь исключением, что \SETcc
 \footnote{\IT{cc} это \IT{condition code}}
 выставляет 1 или 0 в \AL, а \Jcc делает переход или нет. 
-\SETNBE запишет 1 если только \TT{CF=0} и \TT{ZF=0}. Если это не так, то запишет 0 в \AL.}
+\SETNBE запишет 1 если только \TT{CF=0} и \TT{ZF=0}. Если это не так, то запишет $0$ в \AL.}
 {How \SETNBE instruction will store 1 or 0 to AL: it is depends of CPU flags. 
 It is almost \JNBE instruction counterpart, with exception that \SETcc 
-\footnote{\IT{cc} is \IT{condition code}} is storing 1 or 0 to \AL, but \Jcc do actual jump or not. 
-\SETNBE store 1 only if \TT{CF=0} and \TT{ZF=0}. If it is not true, zero will be stored into \AL.}
+\footnote{\IT{cc} is \IT{condition code}} is storing 1 or 0 to the \AL, but \Jcc do actual jump or not. 
+\SETNBE store 1 only if \TT{CF=0} and \TT{ZF=0}. If it is not true, $0$ will be stored into \AL.}
 
 \IFRU{\CF будет 0 и \ZF будет 0 одновременно только в одном случае: если a>b.}
 {Both \CF is 0 and \ZF is 0 simultaneously only in one case: if a>b.}
@@ -260,7 +262,7 @@ It is almost \JNBE instruction counterpart, with exception that \SETcc
 \IFRU{Тогда в \AL будет записана единица, последующий условный переход \JZ взят не будет, 
 и функция вернет \TT{\_a}. 
 В остальных случаях, функция вернет \TT{\_b}.}
-{Then one will be stored to \AL and the following \JZ will not be triggered and function will 
+{Then one will be stored to the \AL and the following \JZ will not be triggered and function will 
 return {\_a}. On all other cases, {\_b} will be returned.}
 
 \IFRU{Но и это еще не конец.}{But it is still not over.}

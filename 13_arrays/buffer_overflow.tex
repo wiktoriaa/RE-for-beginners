@@ -50,11 +50,11 @@ a[100]=760826203
 каждый раз проверяющий индекс на соответствие пределам массива, как в языках программирования 
 более высокого уровня\footnote{Java, Python, итд}, что делало бы запускаемый код медленнее.}
 {Indeed, how it could be done differently? Compiler may incorporate some code, checking index value to be always
-in array's bound, like in higher-level programming languages\footnote{Java, Python, etc}, 
+in array's bound (like in higher-level programming languages\footnote{Java, Python, etc})
 but this makes running code slower.}
 
 \IFRU{Итак, мы прочитали какое-то число из стека явно \IT{нелегально}, а что если мы запишем?}
-{OK, we read some values in stack \IT{illegally}, but what if we could write something to it?}
+{OK, we read some values in stack \IT{illegally} but what if we could write something to it?}
 
 \IFRU{Вот что мы пишем:}{Here is what we will write:}
 
@@ -83,7 +83,7 @@ int main()
 \IFRU{Отладчик я уже давно не использую, так как надоело для всяких мелких задач вроде подсмотреть состояние 
 регистров, запускать что-то, двигать мышью, итд. 
 Поэтому я написал очень минималистическую утилиту для себя, \tracer, коей обхожусь.}
-{I'm not using debugger anymore, because I tired to run it each time, move mouse, etc, when I need just to
+{I'm not using debugger anymore since I tired to run it each time, move mouse, etc, when I need just to
 spot some register's state at specific point.
 That's why I wrote very minimalistic tool for myself, \tracer, which is enough for my tasks.}
 
@@ -112,7 +112,7 @@ PID=7988|Process exit, return code -1073740791
 Мы там как-то очутились, причем, сами того не хотели. Интересен также тот факт что в \EBP хранится 0x14, 
 а в \ECX и \EDX ~--- 0x1D.}
 {Exception occured at address 0x15. It's not legal address for code ~--- at least for win32 code!
-We trapped there somehow against our will. It's also interesting fact that \EBP register contain 0x14,
+We trapped there somehow against our will. It's also interesting fact that the \EBP register contain 0x14,
 \ECX and \EDX ~--- 0x1D.}
 
 \IFRU{И еще немного изучим разметку стека.}{Let's study stack layout more.}
@@ -121,9 +121,9 @@ We trapped there somehow against our will. It's also interesting fact that \EBP 
 Затем, для массива + переменной \IT{i} было выделено 84 байта. Это \TT{(20+1)*sizeof(int)}. 
 \ESP сейчас указывает на переменную \TT{\_i} в локальном стеке и при исполнении следующего \TT{PUSH что-либо}, 
 \IT{что-либо} появится рядом с \TT{\_i}.}
-{After control flow was passed into \TT{\main}, \EBP register value was saved into stack.
+{After control flow was passed into \TT{\main}, the value in the \EBP register was saved on the stack.
 Then, 84 bytes was allocated for array and \IT{i} variable. That's \TT{(20+1)*sizeof(int)}.
-\ESP pointing now to \TT{\_i} variable in local stack and after execution of next \TT{PUSH something},
+The \ESP pointing now to the \TT{\_i} variable in the local stack and after execution of next \TT{PUSH something},
 \IT{something} will be appeared next to \TT{\_i}.}
 
 \IFRU{Вот так выглядит разметка стека пока управление находится внутри}
@@ -144,7 +144,7 @@ Then, 84 bytes was allocated for array and \IT{i} variable. That's \TT{(20+1)*si
 {Instruction \TT{a[19]=something} writes last \Tint in array bounds (in bounds so far!)}
 
 \IFRU{Команда \TT{a[20]=чего\_нибудь} записывает \IT{чего\_нибудь} на место где сохранено значение \EBP.}
-{Instruction \TT{a[20]=something} writes \IT{something} to the place where \EBP value is saved.}
+{Instruction \TT{a[20]=something} writes \IT{something} to the place where value from the \EBP is saved.}
 
 \IFRU{Обратите внимание на состояние регистров на момент падения процесса. В нашем случае, 
 в 20-й элемент записалось значение 20. 
@@ -153,9 +153,9 @@ Then, 84 bytes was allocated for array and \IT{i} variable. That's \TT{(20+1)*si
 Далее выполнилась инструкция \RET, которая на самом деле эквивалентна \TT{POP EIP}.}
 {Please take a look at registers state at the crash moment. In our case,
 number 20 was written to 20th element. 
-By the function ending, function epilogue restore \EBP value.
+By the function ending, function epilogue restores original \EBP value.
 (20 in decimal system is 0x14 in hexadecimal).
-Then, \RET instruction was executed, which is equivalent to \TT{POP EIP} instruction.}
+Then, \RET instruction was executed, which is effectively equivalent to \TT{POP EIP} instruction.}
 
 \IFRU{Инструкция \RET вытащила из стека адрес возврата (это адрес в какой-то CRT\footnote{C Run-Time}-функции, 
 которая вызвала \main), 
@@ -221,5 +221,5 @@ gs             0x33	51
 \end{lstlisting}
 
 \IFRU{Значения регистров немного другие чем в примере win32, это потому что разметка стека чуть другая.}
-{Register values are slightly different then in win32 example, 
-that's because stack layout is slightly different too.}
+{Register values are slightly different then in win32 example
+since stack layout is slightly different too.}

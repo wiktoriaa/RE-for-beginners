@@ -47,7 +47,7 @@ it's now located in other segment, namely data segment} (\IT{.data}).
 (\IT{.text}) and \TT{x} can be located right here?}
 \IFRU{Потому что эта переменная, и как следует из определения, она может меняться. 
 И может даже быть, меняться часто.}
-{Because, this is variable, and by its definition, it can be changed. And probably, can be changed 
+{Since this is variable, and by its definition, it can be changed. And probably, can be changed 
 very often.}
 \index{\RAM}
 \index{\ROM}
@@ -60,14 +60,14 @@ in RAM.}
 \IFRU{Хранить в ОЗУ неизменяемые данные, когда в наличии есть ПЗУ, не экономно.}
 {It's not very economically to store constant variables in RAM when one have ROM.}
 \IFRU{К тому же, сегмент данных в ОЗУ с константами нужно было бы инициализировать перед работой,
-ведь, после включения ОЗУ, очевидно, память содержит в себе совсем не то что нужно.}
-{Furthermore, data segment with constants in RAM should be initialized before, because,
-after RAM turning on, obviously, memory contains not what we need.}
+ведь, после включения ОЗУ, очевидно, она содержит в себе случайную информацию.}
+{Furthermore, data segment with constants in RAM should be initialized before, 
+since after RAM turning on, obviously, it contain random information.}
 
 \index{\IFRU{Компоновщик}{Linker}}
 \IFRU{Далее, мы видим, в сегменте кода, хранится указатель на переменную \TT{x} (\TT{off\_2C}) и вообще, 
 все операции с переменной, происходят через этот указатель.}
-{Onwards, we see, in code segment, a pointer to \TT{x} (\TT{off\_2C}) variable, and all
+{Onwards, we see, in code segment, a pointer to the \TT{x} (\TT{off\_2C}) variable, and all
 operations with variable occured via this pointer.}
 \IFRU{Это связано с тем что переменная \TT{x} может быть расположена где-то довольно далеко от 
 данного участка кода, так что её адрес нужно сохранить в непосредственной близости к этому коду.}
@@ -75,13 +75,13 @@ operations with variable occured via this pointer.}
 should be saved somewhere in close proximity to the code.}
 \IFRU{Инструкция \TT{LDR} в thumb-режиме может адресовать только переменные в пределах вплоть 
 до 1020 байт от места где она находится.}
-{\TT{LDR} instruction in thumb mode can address only variable in range of 1020 bytes from the place
-where it's located.}
+{\TT{LDR} instruction in thumb mode can address only variable in range of 1020 bytes from the point
+it is located.}
 \IFRU{Эта же инструкция в ARM-режиме ~--- переменные в пределах $\pm{}4095$ байт, таким образом,
 адрес глобальной переменной \TT{x} нужно расположить в непосредственной близости, ведь нет никакой гарантии, 
 что компоновщик\footnote{linker в англоязычной литературе} сможет разместить саму переменную где-то рядом, 
 она может быть даже в другом чипе памяти!}
-{Same instruction in ARM-mode ~--- variables in range $\pm{}4095$ bytes, this, address of \TT{x} variable
+{Same instruction in ARM-mode ~--- variables in range $\pm{}4095$ bytes, this, address of the \TT{x} variable
 should be located somewhere in close proximity, because, there are no guarantee that linker will able to place
 this variable near the code, it could be even in other memory chip!}
 
@@ -89,8 +89,8 @@ this variable near the code, it could be even in other memory chip!}
 \index{\ROM}
 \IFRU{Еще одна вещь: если переменную объявить как \IT{const}, то компилятор Keil разместит её в 
 сегменте \TT{.constdata}.}
-{One more thing: if variable will be declared as \IT{const}, Keil compiler will allocate it in 
-\TT{.constdata} segment.}
+{One more thing: if variable will be declared as \IT{const}, Keil compiler shall allocate it in 
+the \TT{.constdata} segment.}
 \IFRU{Должно быть, впоследствии, компоновщик и этот сегмент сможет разместить в ПЗУ, вместе
 с сегментом кода.}
 {Perhaps, thereafter, linker will able to place this segment in ROM too, along with code segment.}

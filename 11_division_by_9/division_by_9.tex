@@ -20,15 +20,15 @@ int f(int a)
 Результат возвращается из функции через \EAX, так что после операции деления, 
 это значение не перекладывается больше никуда, 
 оно уже там где надо.}
-{\IDIV divides 64-bit number stored in \TT{EDX:EAX} register pair by value in \ECX register. 
+{\IDIV divides 64-bit number stored in the \TT{EDX:EAX} register pair by value in the \ECX register.
 As a result, \EAX will contain quotient\FNQUOTIENT, and \EDX ~--- remainder.
-Result is returning from f() function in \EAX register, so, that value is not moved anymore after division 
+Result is returning from the \TT{f()} function in the \EAX register, so, that value is not moved anymore after division 
 operation, it is in right place already.}
 \IFRU
 {Из-за того что \IDIV требует пару регистров \TT{EDX:EAX}, то перед этим инструкция \TT{CDQ} 
 расширяет \EAX до 64-битного значения учитывая знак, также как это делает \MOVSX.}
-{Because \IDIV require value in \TT{EDX:EAX} register pair, \TT{CDQ} instruction (before \IDIV) extending 
-\EAX value to 64-bit value taking value sign into account, just as \MOVSX does.}
+{Since \IDIV requires value in the \TT{EDX:EAX} register pair, \TT{CDQ} instruction (before \IDIV) extending 
+value in the \EAX to 64-bit value taking value sign into account, just as \MOVSX does.}
 \IFRU{Со включенной оптимизацией (\Ox) получается:}
 {If we turn optimization on (\Ox), we got:}
 
@@ -43,14 +43,14 @@ operation, it is in right place already.}
 \footnote{Читайте подробнее о делении через умножение в \cite[глава 10]{Warren:2002:HD:515297}
 и \URLMSDN, \url{\URLN}} 
 создать код эквивалентный тому что мы хотим и работающий быстрее.}
-{This is ~--- division using multiplication. Multiplication operation working much faster. 
+{This is ~--- division by multiplication. Multiplication operation works much faster. 
 And it is possible to use that trick
 \footnote{Read more about division by multiplication in \cite[chapter 10]{Warren:2002:HD:515297}
 and: \URLMSDN, \url{\URLN}} 
-to produce a code which is equivalent and faster.}
+to produce a code which is effectively equivalent and faster.}
 \IFRU
 {GCC 4.4.1 даже без включенной оптимизации генерит примерно такой же код как и MSVC с оптимизацией:}
-{GCC 4.4.1 even without optimization turned on, generate almost the same code as MSVC with optimization turned on:}
+{GCC 4.4.1 even without optimization turned on, generates almost the same code as MSVC with optimization turned on:}
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.4.1]{11_division_by_9/11_2_gcc.asm}
 
@@ -60,9 +60,9 @@ to produce a code which is equivalent and faster.}
 Нет также возможности умножения на 32-битную константу одной инструкцией.}
 {ARM processor, just like in any other ''pure'' RISC-processors, lacks division instruction
 It lacks also a single instruction for multiplication by 32-bit constant.}
-\IFRU{Используя один любопытный трюк (или хак)\footnote{hack}, можно обойтись только тремя действиями: 
+\IFRU{При помощи одного любопытного трюка (или \IT{хака})\footnote{hack}, можно обойтись только тремя действиями: 
 сложением, вычитанием и битовыми сдвигами}
-{By using one clever trick, it's possible to do division using only three instructions: addition,
+{With the help of one clever trick (or \IT{hack}), it's possible to do division using only three instructions: addition,
 subtraction and bit shifts}~\ref{sec:bitfields}.
 
 \IFRU{Пример деления 32-битного числа на 10 из}{Here is an example of 32-bit number division by 10 from}
@@ -121,7 +121,8 @@ in fact, there are two instructions.}
 \IFRU{Инструкция }{}\TT{SMMUL} (\IT{Signed Most Significant Word Multiply}) 
 \IFRU{умножает числа считая их знаковыми (signed) и оставляет в \Rzero старшие 32 бита результата, 
 не сохраняя младшие 32 бита.}
-{instruction multilpy numbers treating them as signed numbers, and leaving high 32-bit part of result in \Rzero,
+{instruction multilpy numbers treating them as signed numbers,
+and leaving high 32-bit part of result in the \Rzero register,
 dropping low 32-bit part of result.}
 
 \index{ARM!Optional operators!ASR}
@@ -162,9 +163,9 @@ BX              LR
 \NonOptimizing LLVM 
 \IFRU{не занимается генерацией подобного кода а вместо этого просто вставляет вызов
 библиотечной функции \IT{\_\_\_divsi3}}
-{do not generate code we saw before in this section, but inserting a call to library function 
+{does not generate code we saw before in this section, but inserts a call to library function 
 \IT{\_\_\_divsi3} instead}.
 
 \IFRU{А Keil во всех случаях вставляет вызов функции}
-{What about Keil: it inserting call to library function} \IT{\_\_aeabi\_idivmod}\IFRU{}{ in all cases}.
+{What about Keil: it inserts call to library function} \IT{\_\_aeabi\_idivmod}\IFRU{}{ in all cases}.
 

@@ -2,7 +2,7 @@
 
 \lstinputlisting{13_arrays/simple_Keil_ARM_O0_en.asm}
 
-\IFRU{Тип \Tint требует 32 бита для хранения, или 4 байта}{\Tint type require 32 bits for storage,
+\IFRU{Тип \Tint требует 32 бита для хранения, или 4 байта}{\Tint type requires 32 bits for storage,
 or 4 bytes}, 
 \IFRU{так что для хранения 20 переменных типа \Tint, нужно $80$ (\TT{0x50}) байт}
 {so for storage of 20 \Tint variables, $80$ (\TT{0x50}) bytes are needed},
@@ -12,11 +12,11 @@ or 4 bytes},
 {instruction in function epilogue allocates exactly this ammount of space in local stack.}
 
 \IFRU{И в первом и во втором цикле, итератор цикла $i$ будет постоянно находится в регистре \Rfour.}
-{In both first and second loops, $i$ loop iterator will be placed in \Rfour register.}
+{In both first and second loops, $i$ loop iterator will be placed in the \Rfour register.}
 
 \IFRU{Число, которое нужно записать в массив}{A number to be written into array},
 \IFRU{вычисляется так $i*2$, и это эквивалентно сдвигу на 1 бит влево}
-{is calculating as $i*2$ which is equivalent to shifting left by one bit},
+{is calculating as $i*2$ which is effectively equivalent to shifting left by one bit},
 \index{ARM!Optional operators!LSL}
 \IFRU{инструкция}{so} \TT{``MOV R0, R4,LSL\#1''} \IFRU{делает это}{instruction do this}.
 
@@ -26,8 +26,8 @@ or 4 bytes},
 {Here is how a pointer to array element is to be calculated: \SP pointing to array begin, \Rfour is $i$.}
 \IFRU{Так что сдвигаем $i$ на 2 бита влево, что эквивалентно умножению на $4$ 
 (ведь каждый элемент массива занимает 4 байта) и прибавляем это к адресу начала массива.}
-{So shift $i$ left by 2 bits, that's equivalent to multiplication by $4$
-(because each array element has size of 4 bytes) and add it to address of array begin.}
+{So shift $i$ left by 2 bits, that's effectively equivalent to multiplication by $4$
+(since each array element has size of 4 bytes) and add it to address of array begin.}
 
 \index{ARM!\Instructions!LDR}
 \IFRU{Во втором цикле используется обратная инструкция}{The second loop has inverse} 
@@ -44,7 +44,7 @@ or 4 bytes},
 \IFRU{В thumb имеются отдельные инструкции для битовых сдвигов (как \TT{LSLS}), 
 вычисляющие и число для записи в массив и адрес каждого элемента массива.}
 {Thumb mode has special instructions for bit shifting (like \TT{LSLS}),
-calculating value to be written into array and address of each element in array as well.}
+which calculates value to be written into array and address of each element in array as well.}
 
 \IFRU{Компилятор почему-то выделил в локальном стеке немного больше места, 
 однако последние 4 байта не используются.}

@@ -7,7 +7,7 @@
 Тогда к ней смогут обращаться из любого другого места, а не только из тела функции. 
 Это снова не очень хорошая практика программирования, но ради примера мы можем себе это позволить.}
 {What if \TT{x} variable from previous example will not be local but global variable? 
-Then it will be accessible from any place but not only from function body. 
+Then it will be accessible from any point, not only from function body. 
 It is not very good programming practice, but for the sake of experiment we could do this.}
 
 \lstinputlisting{04_scanf/4_2_msvc.asm}
@@ -16,21 +16,22 @@ It is not very good programming practice, but for the sake of experiment we coul
 {Ничего особенного, в целом. Теперь \TT{x} объявлена в сегменте \TT{\_DATA}. 
 Память для нее в стеке более не выделяется. Все обращения к ней происходит не через стек, а уже напрямую. 
 Её значение неопределено. 
-Это означает, что память под нее будет выделена, но ни компилятор, ни ОС не будет заботиться о том, 
+Это означает, что память под нее будет выделена, но ни компилятор, ни \ac{ОС} не будет заботиться о том, 
 что там будет лежать на момент старта функции \main.
 В качестве домашнего задания, попробуйте объявить большой неопределенный массив и посмотреть 
 что там будет лежать после загрузки.}
-{Now \TT{x} variable is defined in \TT{\_DATA} segment. 
+{Now \TT{x} variable is defined in the \TT{\_DATA} segment. 
 Memory in local stack is not allocated anymore. 
 All accesses to it are not via stack but directly to process memory. 
 Its value is not defined. 
-This mean that memory will be allocated by operation system, but not compiler, 
-neither operation system will not take care about its initial value at the moment of 
-\main function start.
+This means that memory will be allocated by \ac{OS}, but not compiler, 
+neither \ac{OS} will not take care about its initial value at the moment of 
+the \main function start.
 As experiment, try to declare large array and see what will it contain after 
 program loading.}
 
-\IFRU{Попробуем изменить объявление этой переменной:}{Now let's assign value to variable explicitly:}
+\IFRU{Попробуем изменить объявление этой переменной:}
+{Now let's assign value to variable explicitly:}
 
 \begin{lstlisting}
 int x=10; // default value
@@ -46,12 +47,12 @@ _x	DD	0aH
 \end{lstlisting}
 
 \IFRU{Здесь уже по месту этой переменной записано \TT{0xA} с типом DD (dword = 32 бита).}
-{Here we see value 0xA of DWORD type (DD meaning DWORD = 32 bit).}
+{Here we see value \TT{0xA} of DWORD type (DD meaning DWORD = 32 bit).}
 
 \IFRU{Если вы откроете скомпилированный .exe-файл в \IDA, то увидите что \IT{x} 
 находится аккурат в начале сегмента \TT{\_DATA}, после этой переменной будут текстовые строки.}
-{If you will open compiled .exe in \IDA, you will see \IT{x} placed at the beginning of 
-\TT{\_DATA} segment, and after you'll see text strings.}
+{If you will open compiled .exe in \IDA, you will see the \IT{x} variable placed at the beginning of 
+the \TT{\_DATA} segment, and after you'll see text strings.}
 
 \IFRU{А вот если вы откроете в \IDA, .exe скомплированный в прошлом примере, 
 где значение \IT{x} неопределено, то в IDA вы увидите:}
@@ -77,16 +78,16 @@ you'll see something like this:}
 Это означает, что при загрузке .exe в память, место под все это выделено будет. 
 Но в самом .exe ничего этого нет. Неинициализированные переменные не занимают места в исполняемых файлах. Удобно для больших массивов, например.}
 {\TT{\_x} marked as \TT{?} among another variables not required to be initialized. 
-This mean that after loading .exe to memory, place for all these variables will be 
+This means that after loading .exe to memory, a space for all these variables will be 
 allocated and some random garbage will be here. 
-But in .exe file these not initialized variables are not occupy anything. 
+But in an .exe file these not initialized variables are not occupy anything. 
 It is suitable for large arrays, for example.}
 
 \index{ELF}
 \IFRU{В Linux все также почти. За исключением того что если значение \TT{x} не определено, 
 то эта переменная будет находится в сегменте \TT{\_bss}. В ELF\footnote{Формат исполняемых файлов, использующийся в Linux и некоторых других *NIX} этот сегмент имеет такие аттрибуты:}
 {It is almost the same in Linux, except segment names and properties: 
-not initialized variables are located in \TT{\_bss} segment. 
+not initialized variables are located in the \TT{\_bss} segment. 
 In ELF\footnote{Executable file format widely used in *NIX system including Linux} 
 file format this segment has such attributes:}
 
@@ -98,7 +99,7 @@ file format this segment has such attributes:}
 \IFRU{Ну а если сделать присвоение этой переменной значения $10$, то она будет находится 
 в сегменте \TT{\_data},
 это сегмент с такими аттрибутами:}
-{If to assign some value to variable, e.g. $10$, it will be placed in \TT{\_data} segment, 
+{If to assign some value to variable, e.g. $10$, it will be placed in the \TT{\_data} segment, 
 this is segment with such attributes:}
 
 \begin{lstlisting}

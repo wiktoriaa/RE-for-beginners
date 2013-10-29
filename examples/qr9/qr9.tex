@@ -63,7 +63,7 @@ source code of which was lost\footnote{I also got permit from customer to publis
 умножить на 64.
 Следующий код удаляет остаток от деления как если бы это значение уже было разделено 
 на 64 и добавляет 64. Это почти то же самое.}
-{This fragment of code calculates file size aligned to 64-byte border. 
+{This fragment of code calculates file size aligned on a 64-byte border. 
 This is because this cryptoalgorithm works with only 64-byte blocks. 
 Its operation is pretty simple: divide file size by 64, forget about remainder and add 1, 
 then multiple by 64. 
@@ -81,7 +81,7 @@ It is almost the same.}
 
 \index{\CStandardLibrary!calloc()}
 \IFRU{Вызвать memset(), т.е., очистить выделенный буфер\footnote{malloc() + memset() можно было бы 
-заменить на calloc()}.}{Call memset(), e,g, clear allocated buffer\footnote{malloc() + memset() could 
+заменить на calloc()}.}{Call memset(), e.g., clears allocated buffer\footnote{malloc() + memset() could 
 be replaced by calloc()}.}
 
 \lstinputlisting{\IFRU{examples/qr9/3ru.asm}{examples/qr9/3en.asm}}
@@ -123,7 +123,7 @@ File opening result is being checked though.}
 \end{lstlisting}
 
 \IFRU{Теперь хэндл созданного файла в регистре \EDI. Зписываем сигнатуру ``QR9''.}
-{Newly created file handle is in \EDI register now. Write signature ``QR9''.}
+{Newly created file handle is in the \EDI register now. Write signature ``QR9''.}
 
 \begin{lstlisting}
 .text:005413C3                 push    edi             ; File
@@ -404,7 +404,7 @@ void decrypt_file(char *fin, char* fout, char *pw)
 \IFRU{Этот фрагмент кода копирует часть входного буфера во внутренний буфер, который я поже назвал ``cube64''.}
 {This fragment of code copies part of input buffer to internal array I named later ``cube64''.}
 \IFRU{Длина в регистре \ECX. \TT{MOVSD} означает \IT{скопировать 32-битное слово}, так что, 16 32-битных слов
-это как раз 64 байта.}{The size is in \ECX register. \TT{MOVSD} means \IT{move 32-bit dword}, so, 
+это как раз 64 байта.}{The size is in the \ECX register. \TT{MOVSD} means \IT{move 32-bit dword}, so, 
 16 of 32-bit dwords are exactly 64 bytes.}
 
 \begin{lstlisting}
@@ -474,7 +474,7 @@ void crypt (BYTE *buf, int sz, char *pw)
 It takes two arguments: password string and number.}
 \IFRU{В функции \TT{crypt()}, число 1 используется и в \TT{decrypt()} (где \TT{rotate\_all\_with\_password()}
 функция вызывается также), число 3.}
-{In \TT{crypt()}, number 1 is used, and in \TT{decrypt()} (where \TT{rotate\_all\_with\_password()} function 
+{In \TT{crypt()}, number 1 is used, and in the \TT{decrypt()} function (where \TT{rotate\_all\_with\_password()} function 
 is called too), number is 3.}
 
 \begin{lstlisting}
@@ -556,7 +556,7 @@ This means, 26 latin alphabet symbols will become values in range 0..23, (24 in 
 \IFRU{Это, на самом деле, деление через умножение.
 Читайте об этом больше в секции ``\DivisionByNineSectionName''~\ref{sec:divisionbynine}.}
 {This is actually division via multiplication. 
-Read more about it in ``\DivisionByNineSectionName'' section~\ref{sec:divisionbynine}.}
+Read more about it in the ``\DivisionByNineSectionName'' section~\ref{sec:divisionbynine}.}
 
 \IFRU{Это код, на самом деле, делит значение символа пароля на 3.}
 {The code actually divides password character value by 3.}
@@ -584,7 +584,7 @@ Read more about it in ``\DivisionByNineSectionName'' section~\ref{sec:divisionby
 Так что здесь цикл, функции rotate1/2/3 будут вызываться столько же раз, сколько значение переменной
 в первом аргументе.}
 {If remainder is 2, call \TT{rotate3()}. 
-\EDI is a second argument of \TT{rotate\_all\_with\_password()}. 
+The \EDI is a second argument of the \TT{rotate\_all\_with\_password()} function.
 As I already wrote, 1 is for crypting operations and 3 is for decrypting. 
 So, here is a loop. When crypting, rotate1/2/3 will be called the same number of times as 
 given in the first argument.}
@@ -736,9 +736,9 @@ Isolate lowest bit and return it.}
 .text:00541015                 jz      short loc_54102B
 \end{lstlisting}
 
-\IFRU{DL тут равно 1. Сдвигаем эту единицу на количество указанное в arg\_8. Например, если в arg\_8 число 4,
-тогда значение в DL станет 0x10 или 1000 в двоичной системе счисления.}
-{DL is 1 here. Shift left it by arg\_8. For example, if arg\_8 is 4, DL register value became 
+\IFRU{\TT{DL} тут равно 1. Сдвигаем эту единицу на количество указанное в arg\_8. Например, если в arg\_8 число 4,
+тогда значение в \TT{DL} станет 0x10 или 1000 в двоичной системе счисления.}
+{Value in the \TT{DL} is 1 here. Shift left it by arg\_8. For example, if arg\_8 is 4, value in the \TT{DL} register became 
 0x10 or 1000 in binary form.}
 
 \begin{lstlisting}
@@ -807,7 +807,7 @@ or sets it otherwise.}
 
 \IFRU{Мы так же знаем что размер массива 64. Первые два аргумента и у \TT{set\_bit()} и у \TT{get\_bit()}
 могут быть представлены как двумерные координаты. Таким образом, массив это матрица 8*8.}
-{We also know that array size is 64. First two arguments both in \TT{set\_bit()} and \TT{get\_bit()} 
+{We also know that array size is 64. First two arguments both in the \TT{set\_bit()} and \TT{get\_bit()} functions
 could be seen as 2D cooridnates. Then array will be 8*8 matrix.}
 
 \IFRU{Представление на Си всего того, что мы уже знаем:}{Here is C representation of what we already know:}
@@ -874,8 +874,8 @@ int get_bit (int x, int y, int shift)
 Третий аргумент \TT{get\_bit()} это единственный аргумент \TT{rotate1()}. 
 То что возвращает \TT{get\_bit()} будет сохранено во внутреннем массиве.}
 {\dots we see that both loop counters are in range 0..7. 
-Also, they are used as first and second arguments of \TT{get\_bit()}. 
-Third argument of \TT{get\_bit()} is the only argument of \TT{rotate1()}. 
+Also they are used as the first and the second arguments of the \TT{get\_bit()} function.
+Third argument of the \TT{get\_bit()} is the only argument of \TT{rotate1()}. 
 What \TT{get\_bit()} returns, is being placed into internal array.}
 
 \IFRU{Снова приготовить указатель на внутренний массив:}{Prepare pointer to internal array again:}
@@ -914,7 +914,7 @@ void rotate1 (int v)
 
 \IFRU{\IT{Почти} то же самое, за исключением иного порядка аргументов в \TT{get\_bit()} и \TT{set\_bit()}.
 Перепишем это на Си-подобный код:}
-{It is \IT{almost} the same, except of different order of arguments of \TT{get\_bit()} and \TT{set\_bit()}. 
+{It is \IT{almost} the same, except of different order of arguments of the \TT{get\_bit()} and \TT{set\_bit()}. 
 Let's rewrite it in C-like code:}
 
 \begin{lstlisting}
@@ -1017,7 +1017,7 @@ in counter-clockwise direction.}
 \TT{rotate2()} is apparently for rotating ``top'' plane. 
 \TT{rotate3()} is apparently for rotating ``left'' plane.}
 
-\IFRU{Вернемся к ядру функции \TT{rotate\_all()}}{Let's get back to core of \TT{rotate\_all()} function:}
+\IFRU{Вернемся к ядру функции \TT{rotate\_all()}}{Let's get back to the core of \TT{rotate\_all()} function:}
 
 \begin{lstlisting}
 q=c-'a';

@@ -6,7 +6,7 @@
 {Stack ~--- is one of the most fundamental things in computer science.}\footnote{\url{http://en.wikipedia.org/wiki/Call_stack}}.
 
 \IFRU{Технически, это просто блок памяти в памяти процесса + регистр \ESP или \RSP в x86, либо \SP в ARM, который указывает где-то в пределах этого блока.}
-{Technically, it's just a memory block in process memory + \ESP or \RSP register in x86, or \SP register in ARM, as a pointer within this block.}
+{Technically, it's just a memory block in process memory + the \ESP or the \RSP register in x86, or the \SP register in ARM, as a pointer within this block.}
 
 \index{ARM!\Instructions!PUSH}
 \index{ARM!\Instructions!POP}
@@ -17,11 +17,11 @@
 {Most frequently used stack access instructions are \PUSH and \POP (both in x86 and ARM thumb-mode). 
 \PUSH subtracting \ESP/\RSP/\SP by $4$ and then writing contents of its sole operand to the memory address pointing by \ESP/\RSP/\SP.} 
 
-\IFRU{\POP это обратная операция ~--- сначала достает из \ESP/\RSP/\SP значение и помещает его в операнд 
-(который очень часто является регистром) и затем увеличивает \ESP/\RSP/\SP на $4$. 
+\IFRU{\POP это обратная операция ~--- сначала достает из указателя стека\footnote{\ESP/\RSP/\SP} значение и помещает его в операнд 
+(который очень часто является регистром) и затем увеличивает указатель стека на $4$. 
 Конечно, это для 32-битной среды. В x64-среде это будет $8$ а не $4$.}
-{\POP is reverse operation: get a data from memory pointing by \ESP/\RSP/\SP, put it to operand
-(often register) and then add $4$ to \ESP/\RSP/\SP. 
+{\POP is reverse operation: get a data from memory pointing by stack pointer\footnote{\ESP/\RSP/\SP}, 
+put it to operand (often register) and then add $4$ to the stack pointer.
 Of course, this is for 32-bit environment. $8$ will be here instead of $4$ in x64 environment.}
 
 \IFRU{В самом начале, регистр-указатель указывает на конец стека.}{After stack allocation, stack pointer pointing to the end of stack.}

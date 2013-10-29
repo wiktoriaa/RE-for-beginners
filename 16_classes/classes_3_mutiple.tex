@@ -63,28 +63,29 @@
 \end{center}
 
 \IFRU{Код методов \TT{box::get\_volume()} и \TT{solid\_object::get\_density()} тривиален:}
-{The code of \TT{box::get\_volume()} and \TT{solid\_object::get\_density()} methods is trivial:}
+{The code of the \TT{box::get\_volume()} and \TT{solid\_object::get\_density()} methods is trivial:}
 
 \lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{16_classes/classes3_4.asm}
 
 \lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{16_classes/classes3_5.asm}
 
 \IFRU{А вот код метода \TT{solid\_box::get\_weight()} куда интереснее:}
-{But the code of \TT{solid\_box::get\_weight()} method is much more interesting:}
+{But the code of the \TT{solid\_box::get\_weight()} method is much more interesting:}
 
 \lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{16_classes/classes3_6.asm}
 
 \IFRU{\TT{get\_weight()} просто вызывает два метода, но для \TT{get\_volume()} он передает просто указатель на \TT{this}, а для \TT{get\_density()}, он передает указатель на \TT{this} сдвинутый на \IT{12} байт (либо \IT{0xC} байт), а там, 
 в разметке класса \TT{solid\_box}, как раз начинаются поля класса \TT{solid\_object}.}
 {\TT{get\_weight()} just calling two methods, but for \TT{get\_volume()} it just passing pointer to \TT{this},
-and for \TT{get\_density()} it passing pointer to \TT{this} shifted by \IT{12} (or \IT{0xC}) bytes, and there, in \TT{solid\_box}
-class memory layout, fields of \TT{solid\_object} class are beginning.}
+and for \TT{get\_density()} it passing pointer to \TT{this} shifted by \IT{12} (or \IT{0xC}) bytes, and there,
+in the \TT{solid\_box}
+class memory layout, fields of the \TT{solid\_object} class are beginning.}
 
 \IFRU{Так, метод \TT{solid\_object::get\_density()} будет полагать что работает с обычным
 классом \TT{solid\_object}, а метод \TT{box::get\_volume()} будет работать только со своими тремя полями, полагая, 
 что работает с обычным экземпляром класса \TT{box}.}
 {Thus, \TT{solid\_object::get\_density()} method will believe it is working with usual \TT{solid\_object} class,
-and \TT{box::get\_volume()} method will work with its three fields, believing this is usual object of \TT{box} class.}
+and \TT{box::get\_volume()} method will work with its three fields, believing this is usual object of the \TT{box} class.}
 
 \IFRU{Таким образом, можно сказать, что экземпляр класса-наследника нескольких классов представляет в памяти просто 
 \IT{объедененный} класс, содержащий все унаследованные поля. А каждый унаследованный метод вызывается с передачей

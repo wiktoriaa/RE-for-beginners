@@ -49,7 +49,8 @@ switch()~\ref{sec:SwitchARMLot}.}
 {By the way, fixed-length instructions are handy in that way that one can calculate next (or previous) 
 instruction's address without effort. This feautre will be discussed in switch()~\ref{sec:SwitchARMLot} section.}}
 \IFRU{Режим thumb может выглядеть привлекательнее тем, что программа на нем может быть 1) компактнее; 2) эффективнее исполняться на микроконтроллере с 16-битной шиной данных}{Thumb mode may look attractive because program in it may be 1) compact; 2) executing faster on microcontroller having 16-bit memory datapath}. 
-\IFRU{Но за всё нужно платить: в режиме thumb куда меньше возможностей процессора, например, возможен доступ только к 8-и регистрам процессора, и чтобы совершить некоторые действия, выполнимые в режиме ARM одной инструкцией, нужны несколько thumb-инструкций}{Nothing come for free of charge, so, in thumb mode there are reduced instruction set, only 8 registers are accessible and one need several thumb instructions for doing some operations when in ARM mode you'll need just one}.
+\IFRU{Но за всё нужно платить: в режиме thumb куда меньше возможностей процессора, например, возможен доступ только к 8-и регистрам процессора, и чтобы совершить некоторые действия, выполнимые в режиме ARM одной инструкцией, нужны несколько thumb-инструкций}{Nothing come for free of charge, so, in thumb mode there are reduced instruction set, 
+only 8 registers are accessible and one needs several thumb instructions for doing some operations when in ARM mode you'll need just one}.
 \IFRU{Начиная с ARMv7, имеется также поддержка инструкций thumb-2, это thumb расширенный до поддержки куда большего числа инструкций}{Starting at ARMv7, there are also thumb-2 instructions set present, this is a thumb extended to support much bigger instructions set}.
 \IFRU{Распространено заблуждение что thumb-2 это смесь ARM и thumb. Это не верно. Просто thumb-2 был дополен до
 более полной поддержки возможностей процессора, что теперь может легко конкурировать с режимом ARM.}
@@ -58,31 +59,32 @@ But rather thumb-2 was extended to support processor features so fully,
 so now it can compete with ARM mode.}
 \IFRU{Программа для процессора ARM может представлять смесь процедур скомпилированных для обоих режимов}{A program for ARM processor may be mix of procedures compiled for both modes}.
 \IFRU{Основное количество приложений для \idevices скомпилировано для набора инструкций thumb-2, потому что Xcode
-делает так по умолчанию}{Majority of \idevices applications are compiled for thumb-2 instructions set, because Xcode do this by default}.
+делает так по умолчанию}{Majority of \idevices applications are compiled for thumb-2 instructions set, since Xcode do this by default}.
 
 \IFRU{В вышеприведененном примере можно легко увидеть что каждая инструкция имеет размер 4 байта}{In example we see here we can easily see that each instruction has size of 4 bytes}.
 \IFRU{Действительно, ведь мы же компилировали наш код для режима ARM а не thumb}{Indeed, we compiled our code for ARM mode, but for thumb}.
 
 \index{ARM!\Instructions!STMFD}
 \index{ARM!\Instructions!POP}
-\IFRU{Самая первая инструкция}{The very first instruction} \TT{''STMFD SP!, \{R4,LR\}''}\footnote{Store Multiple Full Descending} \IFRU{работает как инструкция}{works here as} \PUSH \IFRU{в}{in} x86, \IFRU{записывает значения двух регистров}{instruction, writing values of two} (\TT{R4} \IFRU{и}{and} \LR) \IFRU{в стек}{registers into stack}. 
+\IFRU{Самая первая инструкция}{The very first instruction} \TT{''STMFD SP!, \{R4,LR\}''}\footnote{Store Multiple Full Descending} \IFRU{работает как инструкция}{works here as} \PUSH \IFRU{в}{in} x86, \IFRU{записывает значения двух регистров}{instruction, writing values of two} (\TT{R4} \IFRU{и}{and} \LR) \IFRU{в стек}{registers on the stack}. 
 \IFRU{Действительно, в выдаваемом листинге на ассемблере, компилятор \IT{armcc}, для упрощения, указывает здесь инструкцию}{Indeed, in output listing, \IT{armcc} compiler, for the sake of simplification, showing here} \TT{''PUSH \{r4,lr\}''}\IFRU{}{instruction}.
 \IFRU{Но это не совсем точно, инструкция \PUSH доступна только в режиме thumb, поэтому, во избежания путанницы, я предложил работать в \IDA}{But it's not quite correct, \PUSH instruction available only in thumb mode, so, to make things less messy, I offered to work in \IDA}.
 
-\IFRU{Итак, эта инструкция записывает значения регистров \TT{R4} и \LR по адресу в памяти, на который указывает регистр \SPwithfootnote, затем уменьшает \TT{SP}, чтобы он указывал на место в стеке, доступное для новых записей}{So this instruction writes values of \TT{R4} and \LR registers at the address in memory to which \SPwithfootnote pointing, then decrements \SP so it will points to a place in stack free for new entries}.
+\IFRU{Итак, эта инструкция записывает значения регистров \TT{R4} и \LR по адресу в памяти, на который указывает регистр \SPwithfootnote, затем уменьшает \TT{SP}, чтобы он указывал на место в стеке, доступное для новых записей}{So this instruction writes values of the \TT{R4} and \LR registers at the address in memory to which \SPwithfootnote pointing, then decrements \SP so it will points to a place in stack free for new entries}.
 
-\IFRU{Эта инструкция, как и инструкция \PUSH в режиме thumb, может сохранить в стеке одновременно несколько значений регистров, что может быть очень удобно}{This instruction, like \PUSH instruction in thumb mode, is able save several register values at once and this may be useful}. 
+\IFRU{Эта инструкция, как и инструкция \PUSH в режиме thumb, может сохранить в стеке одновременно несколько значений регистров, что может быть очень удобно}{This instruction (like \PUSH instruction in thumb mode) is able to save several register values at once and this may be useful}. 
 \IFRU{Кстати, такого в x86 нет}{By the way, there is no such thing in x86}. 
-\IFRU{Так же следует заметить, что \TT{STMFD} ~--- генерализация инструкции \PUSH (то есть, расширяет её возможности), потому что может работать с любым регистром а не только с \SP, это тоже может быть очень удобно}{It's also can be noted that \TT{STMFD} ~--- generalization of \PUSH instruction (extending its features), because it can work with any register, not just with \SP and this can be very useful}.
+\IFRU{Так же следует заметить, что \TT{STMFD} ~--- генерализация инструкции \PUSH (то есть, расширяет её возможности), потому что может работать с любым регистром а не только с \SP, это тоже может быть очень удобно}{It's also can be noted that \TT{STMFD} ~--- generalization of \PUSH instruction (extending its features), since it can work with any register, not just with \SP and this can be very useful}.
 
 \index{\PICcode}
 \index{ARM!\Instructions!ADR}
-\IFRU{Инструкция}{} \TT{''ADR R0, aHelloWorld''} \IFRU{прибавляет значение регистра \PC к смещению, где хранится строка}{instruction adding \PC register value to the offset, where the} \IT{``hello, world''} \IFRU{}{string is located}. 
+\IFRU{Инструкция}{} \TT{''ADR R0, aHelloWorld''} \IFRU{прибавляет значение регистра \PC к смещению, где хранится строка}
+{instruction adds the value in the \PC register to the offset, where the} \IT{``hello, world''} \IFRU{}{string is located}. 
 \IFRU{Причем здесь \PC, можно спросить}{How \TT{PC} register used here, one might ask}?
 \IFRU{Притом, что это так называемый ``\PICcode''}{This is so called ``\PICcode''}
 \footnote{\IFRU{Читайте больше об этом в соответствующем разделе}{Read more about it in relevant section}~\ref{sec:PIC}}, 
 \IFRU{он предназначен для исполнения будучи не привязанным к каким-либо адресам в памяти}{it is intended to be executed not to be fixed to any addresses in memory}.
-\IFRU{В опкоде инструкции \TT{ADR} указывается разница между адресом этой инструкции и местом, где хранится строка}{In the opcode of \TT{ADR} instruction, here is encoded a difference between address of this instruction and the place where the string is located}.
+\IFRU{В опкоде инструкции \TT{ADR} указывается разница между адресом этой инструкции и местом, где хранится строка}{In the opcode of the \TT{ADR} instruction, here is encoded a difference between address of this instruction and the place where the string is located}.
 \IFRU{Эта разница всегда будет постоянной, вне зависимости от того, куда был загружен операционной системой наш код}{Difference will always be constant, without any dependence to the address where that code being loaded, by operation system, presumably}. 
 \IFRU{Поэтому всё что нужно это прибавить адрес текущей инструкции (из \PC) чтобы получить текущий абсолютный адрес нашей Си-строки}{That's why all we need is to add address of current instruction (from \PC) in order to get absolute address of our C-string in memory}.
 
@@ -93,39 +95,40 @@ so now it can compete with ARM mode.}
 \begin{itemize}
 \item
 \IFRU{записать адрес после инструкции \TT{BL} (\TT{0xC}) в регистр \LRwithfootnote}
-{write address after \TT{BL} instruction (\TT{0xC}) into \LRwithfootnote register};
+{write address after \TT{BL} instruction (\TT{0xC}) into the \LRwithfootnote register};
 \item
 \IFRU{затем собственно передать управление в \printf, записав адрес этой функции в регистр \PCwithfootnote}
-{then pass control flow into \printf by writing its address into \PCwithfootnote register}.
+{then pass control flow into \printf by writing its address into the \PCwithfootnote register}.
 \end{itemize}
 
 \IFRU{Ведь, когда функция \printf закончит работу, нужно знать, куда вернуть управление, поэтому закончив работу, всякая функция передает управление по адресу записанному в регистре \LR}
-{Because, when \printf finishes its work, it should have information, where it should return control, that's why each function passes control to the address stored in \LR register}.
+{Because, when \printf finishes its work, it should have information, where it should return control, that's why each function passes control to the address stored in the \LR register}.
 
 \IFRU{В этом разница между ``чистыми'' RISC-процессорами вроде ARM и x86, где адрес возврата записывается в стек}{That is the difference between ``pure'' RISC-processors like ARM and x86, where address of return is stored in stack}\footnote{\IFRU{Подробнее об этом будет описано в следующей главе}{Read more about this in next section}~\ref{sec:stack}}.
 
 \IFRU{Кстати, 32-битный абсолютный адрес, либо же смещение, невозможно закодировать в 32-битной инструкции \TT{BL}, в ней есть место только для 24-х бит}
-{By the way, absolute 32-bit address or offset cannot be encoded in 32-bit \TT{BL} instruction, because it has space only for 24 bits}.
+{By the way, absolute 32-bit address or offset cannot be encoded in 32-bit \TT{BL} instruction since it has space only for 24 bits}.
 \IFRU{Так же следует отметить, что из-за того что все инструкции в режиме ARM имеют длину 4 байта (32 бита), и инструкции могут находится только по адресам кратным 4, то последние 2 бита (всегда нулевых) можно не кодировать.}
-{It's also worth to note that all ARM mode instructions has size 4 bytes (32 bits), hence they all can be located only on 4-byte boundary addresses. This mean, last 2 bits of instruction address (always zero bits) may be omitted.}
+{It's also worth to note that all ARM mode instructions has size 4 bytes (32 bits), hence they all can be located only on 4-byte boundary addresses. This means, last 2 bits of instruction address (always zero bits) may be omitted.}
 \IFRU{В итоге имеем 26 бит, при помощи которых можно закодировать смещение}
 {In summary, we have 26 bit for offset encoding, this is enough to represent offset} $\pm{}\approx{}32M$.
 
 \index{ARM!\Instructions!MOV}
-\IFRU{Следующая инструкция}{Next} \TT{''MOV R0, \#0''}\footnote{MOVe} \IFRU{просто записывает $0$ в регистр \Rzero}{instruction just writes $0$ into \Rzero register}.
-\IFRU{Ведь наша Си-функция возвращает $0$ а возвращаемое значение всякая функция оставляет в \Rzero}{That's because our C-function returning $0$ and returning value is to be placed in \Rzero}.
+\IFRU{Следующая инструкция}{Next} \TT{''MOV R0, \#0''}\footnote{MOVe} \IFRU{просто записывает $0$ в регистр \Rzero}{instruction just writes $0$ into the \Rzero register}.
+\IFRU{Ведь наша Си-функция возвращает $0$ а возвращаемое значение всякая функция оставляет в \Rzero}{That's because our C-function returns $0$ and value to be returning is to be placed in the \Rzero register}.
 
 \index{ARM!\Registers!Link Register}
 \index{ARM!\Instructions!LDMFD}
 \index{ARM!\Instructions!POP}
-\IFRU{Последняя инструкция}{The last instruction} \TT{''LDMFD SP!, {R4,PC}''}\footnote{\LDMFDDESC} \IFRU{это инструкция обратная от}{is an inversive instruction of} \TT{STMFD}, \IFRU{она загружает из стека значения для сохранения их в \TT{R4} и \PC, увеличивая указатель стека \SP}{it loads values from stack for saving them into \TT{R4} and \PC, incremeting stack pointer \SP}.
+\IFRU{Последняя инструкция}{The last instruction} \TT{''LDMFD SP!, {R4,PC}''}\footnote{\LDMFDDESC} \IFRU{это инструкция обратная от}{is an inversive instruction of} \TT{STMFD}, \IFRU{она загружает из стека значения для сохранения их в \TT{R4} и \PC, увеличивая указатель стека \SP}
+{it loads values from stack in order to save them into \TT{R4} and \PC, incremeting stack pointer \SP}.
 \IFRU{Это, в каком-то смысле, аналог \POP}{It can be said, it is similar to \POP}. 
-\IFRU{Обратите внимание: самая первая инструкция \TT{STMFD} сохранила в стеке \TT{R4} и \LR, а \IT{восстанавливаются} \TT{R4} и \PC}{Note: the very first instruction \TT{STMFD} saved \TT{R4} and \LR into stack, but \TT{R4} and \PC are \IT{restored}}.
-\IFRU{Как я уже описывал, в регистре \LRwithfootnote обычно сохраняется адрес места, куда нужно всякой функции вернуть управление}{As I wrote before, in \LRwithfootnote register address of place saved, to where each function should return control}.
-\IFRU{Самая первая инструкция сохраняет это значение в стеке, потому что наша функция \main позже будет сама пользоваться этим регистром, в момент вызова \printf}{The very first function saving its value in stack because our \main function will use that register in order to call \printf}.
-\IFRU{А затем, в конце функции, это значение можно сразу записать в \PC, таким образом, передав управление туда, откуда была вызвана наша функция}{And then, in the function end this value can be written to \PC, thus, by passing control to where our function was called}.
+\IFRU{Обратите внимание: самая первая инструкция \TT{STMFD} сохранила в стеке \TT{R4} и \LR, а \IT{восстанавливаются} \TT{R4} и \PC}{Note: the very first instruction \TT{STMFD} saved \TT{R4} and \LR on the stack, but \TT{R4} and \PC are \IT{restored}}.
+\IFRU{Как я уже описывал, в регистре \LRwithfootnote обычно сохраняется адрес места, куда нужно всякой функции вернуть управление}{As I wrote before, in the \LRwithfootnote register address of place is saved, to where each function should return control}.
+\IFRU{Самая первая инструкция сохраняет это значение в стеке, потому что наша функция \main позже будет сама пользоваться этим регистром, в момент вызова \printf}{The very first function saves its value in stack since our \main function will use that register in order to call \printf}.
+\IFRU{А затем, в конце функции, это значение можно сразу записать в \PC, таким образом, передав управление туда, откуда была вызвана наша функция}{And then, in the function end this value can be written to the \PC register, thus, by passing control to where our function was called}.
 \IFRU{Так как функция \main обычно самая главная в \CCpp, вероятно, управление будет возвращено в загрузчик операционной системы, либо куда-то в runtime функции Си, или что-то в этом роде}
-{Since our \main function is usually primary function in \CCpp, apparently, control will be returned to operation system loader or to some place in runtime C functions, or something like that}.
+{Since our \main function is usually primary function in \CCpp, apparently, control will be returned to \ac{OS} loader or to some point in runtime C functions, or something like that}.
 
 \index{ARM!DCB}
 \TT{DCB} ~--- \IFRU{директива ассемблера, описывающая массивы байт или ASCII-строк, аналог директивы DB в 
@@ -158,17 +161,20 @@ armcc.exe --thumb --c90 -O0 1.c
 \index{ARM!\Instructions!BL}
 \IFRU{Кроме инструкции \TT{BL}}{Except \TT{BL} instruction}.
 \IFRU{Но на самом деле, она состоит из двух 16-битных инструкций}{In fact, it consisted in two 16-bit instructions}.
-\IFRU{Это потому что загрузить в \PC смещение, по которому находится функция \printf, используя так мало места в одном 16-битном опкоде, очевидно, нельзя}{That's because it's not possible to load offset to \printf function into \PC when using so small space in one 16-bit opcode, obviously}.
+\IFRU{Это потому что загрузить в \PC смещение, по которому находится функция \printf, используя так мало места в одном 16-битном опкоде, очевидно, нельзя}
+{That's because it's not possible to load offset to the \printf function into \PC while using so small space in one 16-bit opcode, obviously}.
 \IFRU{Поэтому первая 16-битная инструкция загружает старшие 10 бит смещения, а вторая ~--- младшие 11 бит смещения}{That's why first 16-bit instruction loads higher 10 bits of offset and second ~--- loads 11 lower bits of offset}.
 \IFRU{Как я уже упоминал, все инструкции в thumb-режиме имеют длину 2 байта или 16 бит}{As I mentioned, all instructions in thumb mode has size of 2 bytes or 16 bits}.
 \IFRU{Поэтому невозможна такая ситуация, когда thumb-инструкция начинается по нечетному адресу}
-{This mean, it's not possible for thumb-instruction to be on odd address whatsoever}.
-\IFRU{Следовательно, последний бит адреса можно не кодировать}{Considering this, last address bit may be omitted while instruction encoding}.
-\IFRU{Таким образом, в итоге, в thumb-инструкции \TT{BL} кодируется смещение}{Summarizing, in \TT{BL} thumb-instruction,} $\pm{}\approx{}2M$ \IFRU{от текущего адреса}{can be encoded as offset from current address}.
+{This means, it's not possible for thumb-instruction to be on odd address whatsoever}.
+\IFRU{Учитывая сказанное, последний бит адреса можно не кодировать}
+{Given the above, last address bit may be omitted while instruction encoding}.
+\IFRU{Таким образом, в итоге, в thumb-инструкции \TT{BL} кодируется смещение}{Summarizing, in the \TT{BL} thumb-instruction,} $\pm{}\approx{}2M$ \IFRU{от текущего адреса}{can be encoded as offset from current address}.
 
-\IFRU{Остальные инструкции в функции: \PUSH и \POP работают почти так же как и описанные \TT{STMFD}/\TT{LDMFD}, только регистр \SP здесь не указывается явно}{Other instructions in functions are: \PUSH and \POP works just like described \TT{STMFD}/\TT{LDMFD}, but \SP register not mentioned explicitely here}.
+\IFRU{Остальные инструкции в функции: \PUSH и \POP работают почти так же как и описанные \TT{STMFD}/\TT{LDMFD}, только регистр \SP здесь не указывается явно}{Other instructions in functions are: \PUSH and \POP works just like described \TT{STMFD}/\TT{LDMFD} but the \SP register not mentioned explicitely here}.
 \TT{ADR} \IFRU{работает также как и в предыдущем примере}{works just like in previous example}.
-\TT{MOVS} \IFRU{записывает $0$ в регистр \Rzero для возврата нуля}{writes $0$ in \Rzero register to zero returning}.
+\TT{MOVS} \IFRU{записывает $0$ в регистр \Rzero для возврата нуля}
+{writes $0$ into the \Rzero register in order to return zero value}.
 
 \subsubsection{\OptimizingXcode + \ARMMode}
 
@@ -190,9 +196,9 @@ __cstring:00003F62 48 65 6C 6C+aHelloWorld_0   DCB "Hello world!",0
 
 \IFRU{Инструкции}{Instructions} \TT{STMFD} \IFRU{и}{and} \TT{LDMFD} \IFRU{нам уже знакомы}{are familiar to us}.
 
-\IFRU{Инструкция \MOV просто записывает число \TT{0x1686} в регистр \Rzero, это смещение указывающее на строку ``Hello world!''}{\MOV instruction just writes \TT{0x1686} number into \Rzero register, this is offset pointing to the ``Hello world!'' string}.
+\IFRU{Инструкция \MOV просто записывает число \TT{0x1686} в регистр \Rzero, это смещение указывающее на строку ``Hello world!''}{\MOV instruction just writes \TT{0x1686} number into the \Rzero register, this is offset pointing to the ``Hello world!'' string}.
 
-\IFRU{Регистр \TT{R7}, по стандарту принятому в}{\TT{R7} register, as it is standardized in}\cite{IOSABI}
+\IFRU{Регистр \TT{R7}, по стандарту принятому в}{The \TT{R7} register, as it is standardized in}\cite{IOSABI}
 \IFRU{это}{is} frame pointer, \IFRU{о нем будет рассказано позже}{more on it below}.
 
 \index{ARM!\Instructions!MOVT}
@@ -200,20 +206,20 @@ __cstring:00003F62 48 65 6C 6C+aHelloWorld_0   DCB "Hello world!",0
 \IFRU{Дело в том, что обычная инструкция \MOV в режиме ARM может записывать какое-либо значение только в младшие 16 бит регистра, ведь, больше нельзя закодировать в ней}{The issue is here in that generic \MOV instruction in ARM mode may writes only lower 16 bit of register}.
 \IFRU{Помните, что в режиме ARM опкоды всех инструкций ограничены длиной в 32 бита. Конечно, это ограничение не касается перемещений между регистрами.}{Remember, all instruction's opcodes in ARM mode are limited in size to 32 bits. Of course, this limitation is not related to moving between registers.}
 \IFRU{Поэтому для записи в старшие биты (от 16-го по 31-го включительно) существует дополнительная команда \TT{MOVT}}{So that's why additional instruction \TT{MOVT} exist for writing into higher bits (from 16 to 31 inclusive)}.
-\IFRU{Впрочем, здесь её использование избыточно, потому что инструкция \TT{''MOV R0, \#0x1686''} выше итак обнулила старшую часть регистра}{However, its usage here is redundant, because \TT{''MOV R0, \#0x1686''} instruction above cleared higher part of register}. \IFRU{Возможно, это недочет компилятора}{Probably, it's compiler's shortcoming}.
+\IFRU{Впрочем, здесь её использование избыточно, потому что инструкция \TT{''MOV R0, \#0x1686''} выше итак обнулила старшую часть регистра}{However, its usage here is redundant since \TT{''MOV R0, \#0x1686''} instruction above clears higher part of register}. \IFRU{Возможно, это недочет компилятора}{Probably, it's compiler's shortcoming}.
 
 \index{ARM!\Instructions!ADD}
 \IFRU{Инструкция} \TT{''ADD R0, PC, R0''} \IFRU{прибавляет \PC к \Rzero, для вычисления действительного адреса строки ``Hello world!'', как нам уже известно, это ``\PICcode'', поэтому такая корректива необходима}
-{instruction adding \PC to \Rzero, for calculating absolute address of ``Hello world!'' string, 
+{instruction adding value in the \PC to the value in the \Rzero, for calculating absolute address of the ``Hello world!'' string, 
 and as we already know that, it's ``\PICcode'', so this corrective is essential here}.
 
-\IFRU{Инструкция \TT{BL} вызывает \puts вместо \printf}{\TT{BL} instruction calling \puts instead of \printf}.
+\IFRU{Инструкция \TT{BL} вызывает \puts вместо \printf}{\TT{BL} instruction calling the \puts function instead of \printf}.
 
 \label{puts}
 \index{puts() \IFRU{вместо}{instead of} printf()}
 \IFRU{Компилятор заменил вызов \printf на \puts. 
 Действительно, \printf с одним агрументом это почти аналог \puts.}
-{GCC replaced first \printf call to \puts. 
+{GCC replaced the first \printf call to the call to \puts function.
 Indeed: \printf with sole argument is almost analogous to \puts.} 
 
 \IFRU{\IT{Почти}, если принять условие что в строке не будет управляющих символов \printf 
@@ -222,17 +228,17 @@ Indeed: \printf with sole argument is almost analogous to \puts.}
 statements starting with \IT{\%}: then effect of these two functions will be different}
 \footnote{
 \IFRU{Также нужно заметить, что \puts не требует символа перевода строки '\textbackslash{}n' в конце строки,
-поэтому его здесь нет.}{It also should be noted that \puts doesn't require '\textbackslash{}n' new line symbol 
+поэтому его здесь нет.}{It also should be noted that \puts doesn't requires '\textbackslash{}n' new line symbol 
 at the end of string, so we do not see it here.}}.
 
 \IFRU{Зачем компилятор заменил один вызов на другой? Потому что \puts() работает быстрее}
-{Why compiler replaced \printf to \puts? Because \puts work faster}
+{Why compiler replaced the \printf to the \puts? Because \puts work faster}
 \footnote{\url{http://www.ciselant.de/projects/gcc_printf/gcc_printf.html}}. 
 
 \IFRU{Видимо потому, что \puts проталкивает символы в stdout не сравнивая каждый со знаком процента.}
-{\puts working faster because it just passes characters to stdout not comparing each with \IT{\%} symbol.}
+{\puts working faster since it just passes characters to stdout not comparing each with \IT{\%} symbol.}
 
-\IFRU{Далее уже знакомая инструкция}{Next, we see familiar to us} \TT{''MOV R0, \#0''}\IFRU{, служащая для установки в 0 возвращаемого значения функции}{instruction, intended to set 0 to \Rzero register}.
+\IFRU{Далее уже знакомая инструкция}{Next, we see familiar to us} \TT{''MOV R0, \#0''}\IFRU{, служащая для установки в 0 возвращаемого значения функции}{instruction, intended to set $0$ to the \Rzero register}.
 
 \subsubsection{\OptimizingXcode + \ThumbTwoMode}
 
@@ -264,14 +270,14 @@ may be encoded here as 32-bit instructions}.
 easily observable ~--- opcodes of thumb-2 instructions are also beginning with \TT{0xFx} or \TT{0xEx}}.
 \IFRU{Но в листинге \IDA, первый байт опкода стоит вторым, это из-за того что в ARM инструкции кодируются так:
 в начале последний байт, потом первый (для thumb и thumb-2 режима), либо, 
-(для инструкций в режиме ARM) в начале четвертый байт, затем третий, второй и первый}{But in \IDA listings,
-first byte of opcode is at the place of second, that's because instructions here encoded as follows: last byte and then first one (for thumb and thumb-2 modes), or, (for instructions in ARM mode): fourth byte, then third, then second and first}.
+(для инструкций в режиме ARM) в начале четвертый байт, затем третий, второй и первый}{But in the \IDA listings,
+first byte of opcode is at the place of second since instructions here encoded as follows: last byte and then first one (for thumb and thumb-2 modes), or, (for instructions in ARM mode): fourth byte, then third, then second and first}.
 \index{ARM!\Instructions!MOVW}
 \index{ARM!\Instructions!MOVT.W}
 \index{ARM!\Instructions!BLX}
 \IFRU{Так что мы видим здесь что инструкции \TT{MOVW}, \TT{MOVT.W} и \TT{BLX} начинаются с}{So as we see, \TT{MOVW}, \TT{MOVT.W} and \TT{BLX} instructions are beginning with} \TT{0xFx}.
 
-\IFRU{Одна из thumb-2 инструкций это}{One of thumb-2 instructions is} \TT{``MOVW R0, \#0x13D8''} ~--- \IFRU{она записывает 16-битное число в младшую часть регистра \Rzero}{it writes 16-bit value into lower part of \Rzero register}.
+\IFRU{Одна из thumb-2 инструкций это}{One of thumb-2 instructions is} \TT{``MOVW R0, \#0x13D8''} ~--- \IFRU{она записывает 16-битное число в младшую часть регистра \Rzero}{it writes 16-bit value into lower part of the \Rzero register}.
 
 \IFRU{Еще}{Also} \TT{``MOVT.W R0, \#0''} ~--- \IFRU{эта инструкция работает так же как и}{this instruction works just like} 
 \TT{MOVT} \IFRU{из предыдущего примера, но она работает в}{from previous example, but it works in} thumb-2.
@@ -279,8 +285,9 @@ first byte of opcode is at the place of second, that's because instructions here
 \index{ARM!\IFRU{переключение режимов}{mode switching}}
 \index{ARM!\Instructions!BLX}
 \IFRU{Помимо прочих отличий, здесь используется инструкция}{Among other differences, here is} \TT{BLX} \IFRU{вместо}{instruction used instead of} \TT{BL}.
-\IFRU{Отличие в том, что помимо сохранения адреса возврата в регистре \LR и передаче управления в функцию \puts, происходит смена режима процессора с thumb на ARM, либо наоборот}{Difference in that way that beside saving of return address in \LR register and passing control to \puts function, processor is switching from thumb mode to ARM or back}.
-\IFRU{Здесь это нужно потому что инструкция, куда ведет переход, выглядит так (она закодирована в режиме ARM)}{This instruction in place here because the instruction to which control is passed looks like (it's encoded in ARM mode)}:
+\IFRU{Отличие в том, что помимо сохранения адреса возврата в регистре \LR и передаче управления в функцию \puts, происходит смена режима процессора с thumb на ARM, либо наоборот}
+{Difference in that way that beside saving of \ac{RA} in the \LR register and passing control to the \puts function, processor is switching from thumb mode to ARM or back}.
+\IFRU{Здесь это нужно потому что инструкция, куда ведет переход, выглядит так (она закодирована в режиме ARM)}{This instruction in place here since the instruction to which control is passed looks like (it's encoded in ARM mode)}:
 
 \begin{lstlisting}
 __symbolstub1:00003FEC _puts           ; CODE XREF: _hello_world+E
@@ -289,29 +296,30 @@ __symbolstub1:00003FEC 44 F0 9F E5     LDR  PC, =__imp__puts
 
 \IFRU{Итак, внимательный читатель может задать справделивый вопрос: почему бы не вызывать \puts сразу в 
 том же месте кода, где он нужен?}
-{So, observant reader may ask: why not to call \puts right at the place of code where it needed?}
+{So, observant reader may ask: why not to call \puts right at the point of code where it needed?}
 
 \IFRU{Но это не очень выгодно (в плане экономия места) и вот почему}{But that's not very space-efficient, and that's why}.
 
 \index{\IFRU{Динамически подгружаемые библиотеки}{Dynamically loaded libraries}}
-\IFRU{Практически любая программа использует внешние динамические библиотеки, будь то DLL в Windows, .so в *NIX 
-либо .dylib в Mac OS X}{Almost any program uses external dynamic libraries, like DLL in Windows, .so in *NIX or .dylib in Mac OS X}. 
+\IFRU{Практически любая программа использует внешние динамические библиотеки (будь то DLL в Windows, .so в *NIX 
+либо .dylib в Mac OS X)}{Almost any program uses external dynamic libraries (like DLL in Windows, .so in *NIX or .dylib in Mac OS X)}.
 \IFRU{В динамических библиотеках находятся часто используемые библиотечные функции, в том числе стандартная функция Си \puts}
 {Often used library functions are stored in dynamic libraries, including standard C-function \puts}.
 
 \index{Relocation}
 \IFRU{В исполняемом бинарном файле}{In executable binary file} (Windows PE .exe, ELF \IFRU{либо}{or} Mach-O) \IFRU{имеется секция импортов, список символов (функций либо глобальных переменных) импортируемых из внешних модулей, а также названия самих модулей}{a section of imports is present, that is list of symbols (functions or global variables) being imported from external modules and also names of these modules}.
 
-\IFRU{Загрузчик операционной системы загружает необходимые модули и, перебирая импортируемые символы в основном модуле, проставляет правильные адреса каждого символа}{Operation system loader loads all modules need and, while enumerating importing symbols in primary module, sets correct addresses of each symbol}.
+\IFRU{Загрузчик \ac{ОС} загружает необходимые модули и, перебирая импортируемые символы в основном модуле, проставляет правильные адреса каждого символа}{\ac{OS} loader loads all modules it needs and, while enumerating importing symbols in primary module, sets correct addresses of each symbol}.
 
-\IFRU{В нашем случае}{In our case}, \IT{\_\_imp\_\_puts} \IFRU{это 32-битная переменная, куда загрузчик ОС запишет правильный адрес этой же функции во внешней библиотеке}{is 32-bit variable where OS loader will write correct address of that function in external library}. 
-\IFRU{Так что инструкция \TT{LDR} просто берет 32-битное значение из этой переменной и, записывая его в регистр \PC, просто передает туда управление}{So that \TT{LDR} instruction just takes 32-bit value from this variable and, writing it into \PC register, just passing control to it}.
+\IFRU{В нашем случае}{In our case}, \IT{\_\_imp\_\_puts} \IFRU{это 32-битная переменная, куда загрузчик \ac{ОС} запишет правильный адрес этой же функции во внешней библиотеке}{is 32-bit variable where \ac{OS} loader will write correct address of that function in external library}. 
+\IFRU{Так что инструкция \TT{LDR} просто берет 32-битное значение из этой переменной и, записывая его в регистр \PC, просто передает туда управление}{So that \TT{LDR} instruction just takes 32-bit value from this variable and, writing it into the \PC register, just passing control to it}.
 
-\IFRU{Чтобы уменьшить время работы загрузчика ОС, нужно чтобы ему пришлось записать адрес каждого символа только один раз, в соответствующее для них место}{So to readuce a time OS loader needs for doing this procedure, it's good idea for it to write address of each symbol only once, to special place for it}.
+\IFRU{Чтобы уменьшить время работы загрузчика \ac{ОС}, нужно чтобы ему пришлось записать адрес каждого символа только один раз, в соответствующее выделенное для них место}
+{So to reduce a time \ac{OS} loader needs for doing this procedure, it's good idea for it to write address of each symbol only once, to specially allocated place for it}.
 
 \index{thunk-\IFRU{функции}{functions}}
-\IFRU{К тому же, как мы уже убедились, нельзя одной инструкцией загрузить в регистр 32-битное число без обращений к памяти}{Besides, as we already figured out, it's not possible to load 32-bit value into register 
-using only one instruction, without memory access}.
+\IFRU{К тому же, как мы уже убедились, нельзя одной инструкцией загрузить в регистр 32-битное число без обращений к памяти}{Besides, as we already figured out, it's not possible to load 32-bit value into a register 
+while using only one instruction, without memory access}.
 \IFRU{Так что, наиболее оптимально, выделить отдельную функцию, работающую в режиме ARM, 
 чья единственная цель ~--- передавать управление дальше, в динамическую библиотеку}
 {So, it is optimal to allocate separate function working in ARM mode with only one goal ~--- 

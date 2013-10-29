@@ -4,7 +4,7 @@
 
 \IFRU{Я намеренно расположил описание классов здесь сразу за структурами, 
 потому что внутреннее представление классов в Си++ почти такое же как и представление структур.}
-{I placed a C++ classes description here intentionally after structures description,
+{I placed the section about C++ classes here intentionally after structures description,
 because internally, C++ classes representation is almost the same as structures representation.}
 
 \IFRU{Давайте попробуем простой пример с двумя переменными, двумя конструкторами и одним методом:}
@@ -32,12 +32,12 @@ For \IT{c2} another constructor \TT{??0c@@QAE@HH@Z} is called and two numbers ar
 \index{x86!\Registers!ECX}
 \IFRU{А указатель на объект (\IT{this} в терминологии Си++) передается в регистре \ECX. 
 Это называется thiscall~\ref{thiscall} ~--- метод передачи указателя на объект.}
-{A pointer to object (\IT{this} in C++ terminology) is passed in \ECX register.
+{A pointer to object (\IT{this} in C++ terminology) is passed in the \ECX register.
 This is called thiscall~\ref{thiscall} ~--- a pointer to object passing method.}
 
 \IFRU{В данном случае, MSVC делает это через \ECX. Необходимо помнить, что это не стандартизированный метод, 
 и другие компиляторы могут делать это иначе, например через первый аргумент функции (как GCC).}
-{MSVC doing it using \ECX register. Needless to say, it's not a standardized method, other compilers could do it
+{MSVC doing it using the \ECX register. Needless to say, it's not a standardized method, other compilers could do it
 differently, e.g., via first function argument (like GCC).}
 
 %\newcommand{\URLNM}{\href{http://en.wikipedia.org/wiki/Visual_C\%2B\%2B_name_mangling}{Wikipedia: Visual C++ name mangling}}
@@ -58,12 +58,12 @@ And of course, different classes may own methods sharing the same name.}
 \index{\IFRU{Компоновщик}{Linker}}
 \IFRU{\IT{Name mangling} позволяет закодировать имя класса + имя метода + типы всех аргументов метода 
 в одной ASCII-строке, которая затем используется как внутреннее имя функции. 
-Это все потому что ни компоновщик\footnote{linker}, ни загрузчик DLL операционной системы 
+Это все потому что ни компоновщик\footnote{linker}, ни загрузчик DLL \ac{ОС}
 (мангленные имена могут быть среди экспортов/импортов в DLL), 
 ничего не знают о Си++ или ООП.}
-{\IT{Name mangling} enable us to encode class name + method name + all method argument types 
-in one ASCII-string, which will be used as internal function name.
-That's all because neither linker, nor DLL operation system loader (mangled names may be among 
+{\IT{Name mangling} enable us to encode class name + method name + all method argument types
+in one ASCII-string, which is to be used as internal function name.
+That's all because neither linker, nor DLL \ac{OS} loader (mangled names may be among 
 DLL exports as well) knows nothing about C++ or OOP.}
 
 \IFRU{Далее вызывается два раза \TT{dump()}.}{\TT{dump()} function called two times after.}
@@ -74,7 +74,7 @@ DLL exports as well) knows nothing about C++ or OOP.}
 
 \IFRU{Конструкторы это просто функции, они используют указатель на структуру в \ECX, 
 перекладывают его себе в локальную переменную, хотя это и не обязательно.}
-{Constructors are just functions, they use pointer to structure in \ECX,
+{Constructors are just functions, they use pointer to structure in the \ECX,
 moving the pointer into own local variable, however, it's not necessary.}
 
 \IFRU{И еще метод \TT{dump()}:}{Now \TT{dump()} method:}
@@ -83,7 +83,7 @@ moving the pointer into own local variable, however, it's not necessary.}
 
 \IFRU{Все очень просто, \TT{dump()} берет указатель на структуру состоящую из двух \Tint через \ECX, 
 выдергивает оттуда две переменные и передает их в \printf.}
-{Simple enough: \TT{dump()} taking pointer to the structure containing two \Tint's in \ECX,
+{Simple enough: \TT{dump()} taking pointer to the structure containing two \Tint's in the \ECX,
 takes two values from it and passing it into \printf.}
 
 \IFRU{А если скомпилировать с оптимизацией (\Ox), то будет намного меньше всего:}
@@ -97,7 +97,7 @@ takes two values from it and passing it into \printf.}
 \TT{add esp, X}. В то же время, в конце конструктора вместо \RET имеется \TT{RET 8}.}
 {That's all. One more thing to say is that stack pointer wasn't corrected
 with \TT{add esp, X} after constructor called. 
-Withal, constructor has \TT{ret 8} instead of \RET at the end.}
+Withal, constructor has \TT{ret 8} instead of the \RET at the end.}
 
 \index{thiscall}
 \IFRU{Это потому что здесь используется thiscall~\ref{thiscall}, который, вместе с stdcall~\ref{stdcall} 
@@ -106,7 +106,7 @@ Withal, constructor has \TT{ret 8} instead of \RET at the end.}
 {This is all because here used thiscall~\ref{thiscall} calling convention, the method of passing values through the
 stack, which is, together with stdcall~\ref{stdcall} method, offers to correct stack to callee 
 rather then to caller.
-\TT{ret x} instruction adding \TT{X} to \ESP, then passes control to caller function.}
+\TT{ret x} instruction adding \TT{X} to the value in the \ESP, then passes control to the caller function.}
 
 \IFRU{См.также в соответствующем разделе о способах передачи аргументов через стек}
 {See also section about calling conventions}~\ref{sec:callingconventions}.
@@ -223,4 +223,4 @@ used as pointer to the object (\IT{this}).}
 (через \ECX или через первый аргумент).}
 {Thus, if to base our judgment on these simple examples, the difference between MSVC and GCC
 is style of function names encoding (\IT{name mangling}) and passing pointer to object
-(via \ECX register or via first argument).}
+(via the \ECX register or via the first argument).}

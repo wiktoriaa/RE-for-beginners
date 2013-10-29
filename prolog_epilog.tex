@@ -17,20 +17,20 @@ code fragment:}
 \IFRU
 {Эти инструкции делают следующее: сохраняют значение регистра \EBP на будущее, выставляют \EBP равным \ESP, 
 затем подготавливают место в стеке для хранения локальных переменных.}
-{What these instruction do: save \EBP register value, set \EBP to \ESP and then allocate space in stack 
+{What these instruction do: saves the value in the \EBP register, set value of the \EBP register to the value of the \ESP and then allocates space in stack 
 for local variables.}
 
 \IFRU{\EBP сохраняет свое значение на протяжении всей функции, он будет использоваться здесь для доступа 
 к локальным переменным и аргументам. Можно было бы использовать и \ESP, но он постоянно меняется и 
 это не очень удобно.}
-{\EBP value is fixed over a period of function execution and it will be used for local variables and 
+{Value in the \EBP is fixed over a period of function execution and it is to be used for local variables and 
 arguments access. 
 One can use \ESP, but it changing over time and it is not convenient.}
 
 \IFRU{Эпилог функции аннулирует выделенное место в стеке, возвращает значение \EBP на то что было и возвращает 
 управление в вызывающую функцию:}
-{Function epilogue annuled allocated space in stack, returning \EBP value to initial state 
-and returning control flow to callee:}
+{Function epilogue annuled allocated space in stack, returns value in the \EBP register back to initial state 
+and returns flow control to callee:}
 
 \begin{lstlisting}
     mov    esp, ebp
@@ -47,9 +47,9 @@ and returning control flow to callee:}
 {Epilogue and prologue can make recursion performance worse.
 
 For example, once upon a time I wrote a function to seek right node in binary tree. 
-As a recursive function it would look stylish but because some time was spent at each function call
-for prologue/epilogue, it was working couple of times slower than the implementation 
-without recursion.}
+As a recursive function it would look stylish but since some time is to be spend at each function call
+for prologue/epilogue, it was working couple of times slower than iterative (recursion-free)
+implementation.}
 
 \index{\Recursion!Tail recursion}
 \newcommand{\URLT}{\url{http://en.wikipedia.org/wiki/Tail_call}}

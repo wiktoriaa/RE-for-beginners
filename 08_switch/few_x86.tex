@@ -19,7 +19,7 @@ switch() in source code, or just pack of if().}
 \index{\SyntacticSugar}
 \IFRU{То есть, switch() это синтаксический сахар для большого количества вложенных проверок 
 при помощи if().}
-{This mean, switch() is syntactic sugar for large number of nested checks constructed using if().}
+{This means, switch() is syntactic sugar for large number of nested checks constructed using if().}
 
 \IFRU{В самом выходном коде, в принципе, ничего особо нового для нас здесь, 
 за исключением того, что компилятор зачем-то 
@@ -46,21 +46,21 @@ turned on (\Othree option).}
 \index{x86!\Instructions!SUB}
 \IFRU
 {Первое: \TT{а} помещается в \EAX и от него отнимается 0. Звучит абсурдно, но нужно это для того, чтобы проверить, 
-0 ли в \EAX был до этого? Если да, то выставится флаг \ZF (что означает что результат отнимания нуля от числа 
-стал нулем) и первый условный переход \JE (\IT{Jump if Equal} или его синоним \JZ ~--- \IT{Jump if Zero}) 
+0 ли в \EAX был до этого? Если да, то выставится флаг \ZF (что означает что результат отнимания $0$ от числа 
+стал $0$) и первый условный переход \JE (\IT{Jump if Equal} или его синоним \JZ ~--- \IT{Jump if Zero}) 
 сработает на метку \TT{\$LN4@f}, где выводится сообщение \TT{'zero'}.
 Если первый переход не сработал, от значения отнимается по единице, 
 и если на какой-то стадии образуется в результате $0$, то сработает соответствующий переход.}
-{First: \TT{a} is placed into \EAX and $0$ subtracted from it. Sounds absurdly, but it may need to check if 
-0 was in \EAX before? If yes, flag \ZF will be set (this also mean that subtracting from zero is zero) 
+{First: the value of the \TT{a} variable is placed into \EAX and $0$ subtracted from it. Sounds absurdly, but it may needs to check if 
+$0$ was in the \EAX register before? If yes, flag \ZF will be set (this also means that subtracting from $0$ is $0$) 
 and first conditional jump \JE (\IT{Jump if Equal} or synonym \JZ ~--- \IT{Jump if Zero}) will be triggered 
-and control flow passed to \TT{\$LN4@f} label, where \TT{'zero'} message is begin printed. 
-If first jump was not triggered, 1 subtracted from input value and if at some stage 0 will be resulted, 
+and control flow passed to the \TT{\$LN4@f} label, where \TT{'zero'} message is begin printed. 
+If first jump was not triggered, $1$ subtracted from input value and if at some stage $0$ will be resulted, 
 corresponding jump will be triggered.}
 
 \IFRU{И в конце концов, если ни один из условных переходов не сработал, управление передается \printf
 с агрументом \TT{'something unknown'}.}
-{And if no jump triggered at all, control flow passed to \printf with argument \TT{'something unknown'}.}
+{And if no jump triggered at all, control flow passed to the \printf with argument \TT{'something unknown'}.}
 
 \label{jump_to_last_printf}
 \index{\Stack}
@@ -71,16 +71,16 @@ corresponding jump will be triggered.}
 \CALL в свою очередь затакливает в стек адрес возврата и делает безусловный переход на адрес нашей функции. 
 Наша функция в самом начале (да и в любом её месте, потому что в теле функции нет ни одной инструкции, 
 которая меняет что-то в стеке или в \ESP) имеет следующую разметку стека:}
-{Second: we see unusual thing for us: string pointer is placed into \TT{a} variable, and 
+{Second: we see unusual thing for us: string pointer is placed into the \TT{a} variable, and 
 then \printf is called not via \CALL, but via \JMP. This could be explained simply. 
 Caller pushing to stack some value and via \CALL calling our function. 
 \CALL itself pushing returning address to stack and do unconditional jump to our function address. 
-Our function at any place of its execution (since it do not contain any instruction moving stack 
+Our function at any point of execution (since it do not contain any instruction moving stack 
 pointer) has the following stack layout:}
 
 \begin{itemize}
-\item\ESP ~--- \IFRU{хранится адрес возврата}{pointing to return address} 
-\item\TT{ESP+4} ~--- \IFRU{хранится значение \TT{a}}{pointing to \TT{a} variable} 
+\item\ESP ~--- \IFRU{хранится}{pointing to} \ac{RA}
+\item\TT{ESP+4} ~--- \IFRU{хранится значение \TT{a}}{pointing to the \TT{a} variable} 
 \end{itemize}
 
 \IFRU{С другой стороны, чтобы вызвать \printf нам нужна почти такая же разметка стека, 
@@ -92,12 +92,12 @@ And that is what our code does.}
 \IFRU{Он заменяет свой первый аргумент на другой и затем передает управление \printf, как если бы вызвали не 
 нашу функцию \TT{f()}, а сразу \printf. 
 \printf выводит некую строку на \TT{stdout}, затем исполняет инструкцию \RET, 
-которая из стека достает адрес возврата и управление передается в ту функцию, 
+которая из стека достает \ac{RA} и управление передается в ту функцию, 
 которая вызывала \TT{f()}, минуя при этом саму \TT{f()}.}
 {It replaces function's first argument to different and 
-jumping to \printf, as if not our function \TT{f()} was called firstly, but immediately \printf.
+jumping to the \printf, as if not our function \TT{f()} was called firstly, but immediately \printf.
 \printf printing some string to \TT{stdout} and then execute \RET instruction, which POPping 
-return address from stack and control flow is returned not to \TT{f()}, but to \TT{f()}'s callee, 
+\ac{RA} from stack and control flow is returned not to \TT{f()} but to the \TT{f()}'s callee, 
 escaping \TT{f()}.}
 
 \index{\CStandardLibrary!longjmp()}
@@ -105,8 +105,8 @@ escaping \TT{f()}.}
 \IFRU{Все это возможно потому что \printf вызывается в \TT{f()} в самом конце. 
 Все это чем-то даже похоже на \TT{longjmp()}\footnote{\URLSJ}.
 И все это, разумеется, сделано для экономии времени исполнения.}
-{All it's possible because \printf is called right at the end of \TT{f()} in any case. 
-In some way, it's all similar to \TT{longjmp()}\footnote{\URLSJ}. 
+{All this is possible since \printf is called right at the end of the \TT{f()} function in any case. 
+In some way, it's all similar to the \TT{longjmp()}\footnote{\URLSJ} function.
 And of course, it's all done for the sake of speed.}
 
 \IFRU{Похожая ситуация с компилятором для ARM описана в секции}

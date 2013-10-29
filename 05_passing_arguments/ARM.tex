@@ -48,17 +48,17 @@ result into zeroth operand (\Rzero), via which, by standard, values are returned
 \IFRU{Самая первая инструкция}{The very first} \TT{MOV R3, R0}, \IFRU{по видимому, избыточна (можно было бы обойтись только одной инструкцией \TT{MLA})}
 {instruction, apparently, redundant (single \TT{MLA} instruction could be used here instead)}, 
 \IFRU{компилятор не оптимизировал её, ведь, это компиляция без оптимизации}{compiler wasn't optimized it,
-because, this is non-optimizing compilation}.
+since this is non-optimizing compilation}.
 
 \index{ARM!\IFRU{Переключение режимов}{Mode switching}}
 \index{ARM!\Instructions!BX}
 \IFRU{Инструкция \TT{BX} возвращает управление по адресу записанному в \LR и, если нужно, 
 переключает режимы процессора с thumb на ARM или наоборот.}
-{\TT{BX} instruction returns control to the address stored in \LR and, if need, 
+{\TT{BX} instruction returns control to the address stored in the \LR register and, if it's necessary, 
 switches processor mode from thumb to ARM or vice versa.}
 \IFRU{Это может быть необходимым потому, что, как мы видим, 
 функции \TT{f} неизвестно, из какого кода она будет вызываться, из ARM или thumb.}
-{This can be necessary because, as we can see, \TT{f} function is not aware, from which code it may be
+{This can be necessary since, as we can see, \TT{f} function is not aware, from which code it may be
 called, from ARM or thumb.}
 \IFRU{Поэтому, если она будет вызываться из кода thumb, \TT{BX} не только вернет
 управление в вызывающую функцию, но также переключит процессор в режим thumb.}
@@ -79,7 +79,8 @@ but also will switch processor mode to thumb mode.}
 {And here is \TT{f} function compiled by Keil compiler in full optimization mode} (\Othree).
 \IFRU{Инструкция \MOV была соптимизирована и теперь \TT{MLA} использует все входящие регистры 
 и помещает результат в \Rzero, как раз, где вызываемая функция будет его читать и использовать.}
-{\MOV instruction was optimized and now \TT{MLA} uses all input registers and place result into \Rzero, 
+{\MOV instruction was optimized (or reduced) and now \TT{MLA} uses all 
+input registers and also places result right into \Rzero,
 exactly where calling function will read it and use.}
 
 \subsubsection{\OptimizingKeil + \ThumbMode}
@@ -97,7 +98,7 @@ operations separately.}
 \index{ARM!\Instructions!MULS}
 \index{ARM!\Instructions!ADDS}
 \IFRU{Первая инструкция \TT{MULS} умножает \Rzero на \Rone оставляя результат в \Rone.}
-{First \TT{MULS} instruction multiply \Rzero by \Rone leaving result in \Rone.}
+{First \TT{MULS} instruction multiply \Rzero by \Rone leaving result in the \Rone register.}
 \IFRU{Вторая (\TT{ADDS}) складывает результат и \Rtwo, оставляя результат в \Rzero.}
-{Second (\TT{ADDS}) instruction adds result and \Rtwo leaving result in \Rzero.}
+{Second (\TT{ADDS}) instruction adds result and \Rtwo leaving result in the \Rzero register.}
 

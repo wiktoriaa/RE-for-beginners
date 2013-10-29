@@ -10,15 +10,15 @@
 то регистр FPU \STZERO будет использован.
 В ARM обычно результат возвращается в регистре R0.}
 {As of x86, function execution result is usually returned\footnote{See also: \MSDNURL} in 
-\EAX register. 
-If it's byte type or character (\IT{char}) ~--- then in lowest register \EAX part ~--- \AL. 
-If function returning \Tfloat number, FPU register 
-\STZERO will be used instead.
-In ARM, result is usually returned in R0 register.} \\
+the \EAX register. 
+If it's byte type or character (\IT{char}) ~--- then in the lowest register \EAX part ~--- \AL. 
+If function returns \Tfloat number, the FPU register 
+\STZERO is to be used instead.
+In ARM, result is usually returned in the \Rzero register.} \\
 \\
 
 \IFRU{Кстати, что будет если возвращаемое значение в ф-ции \main объявлять не как \IT{int} а как \IT{void}?}
-{By the way, what if returning value of \main function will be declared not as \IT{int} but as \IT{void}?}
+{By the way, what if returning value of the \main function will be declared not as \IT{int} but as \IT{void}?}
 
 \IFRU{Т.н. startup-код вызывает \main примерно так:}
 {So called startup-code is calling \main roughly as:}
@@ -42,7 +42,7 @@ exit(main(argc,argv,envp));
 то в единственный аргумент exit() попадет
 то, что лежало в регистре \EAX на момент выхода из \main.}
 {If you declare \main as \IT{void} and nothing will be returned explicitely (by \IT{return} statement),
-then something random, that was stored in \EAX register at the moment of \main finish, will come into
+then something random, that was stored in the \EAX register at the moment of the \main finish, will come into
 the sole exit() function argument.}
 \IFRU{Там, скорее всего, будет какие-то случайное число, оставшееся от работы вашей ф-ции.}
 {Most likely, there will be some random value, leaved from your function execution.}
@@ -52,13 +52,13 @@ the sole exit() function argument.}
 
 \index{\CLanguageElements!return}
 \IFRU{Вернемся к тому факту, что возвращемое значение остается в регистре \EAX}
-{Let's back to the fact that returning value is leaved in \EAX register}.
+{Let's back to the fact that returning value is leaved in the \EAX register}.
 \IFRU{Вот почему старые компиляторы Си не способны создавать функции возвращающие нечто большее нежели 
 помещается 
 в один регистр (обычно, тип \Tint), а когда нужно, приходится возвращать через указатели, указываемые 
 в аргументах.}
 {That is why old C compilers can't create functions capable of returning something not fitting in one 
-register (usually type \Tint), but if one need it, one should return information via pointers passed 
+register (usually type \Tint) but if one needs it, one should return information via pointers passed 
 in function arguments.}
 \IFRU{Хотя, позже и стало возможным, вернуть, скажем, целую структуру, но этот метод до сих пор не 
 очень популярен. 

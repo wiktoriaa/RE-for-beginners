@@ -13,13 +13,13 @@ BX              LR
 \index{ARM!\Registers!APSR}
 \index{ARM!\Registers!FPSCR}
 \IFRU{Очень простой случай.}{A very simple case.}
-\IFRU{Входные величины помещаются в}{Input values are placed into} \TT{D17} \IFRU{и}{and} \TT{D16} 
-\IFRU{и сравниваются при помощи инструкции}{and then compared with the help of} 
+\IFRU{Входные величины помещаются в}{Input values are placed into the} \TT{D17} \IFRU{и}{and} \TT{D16} 
+\IFRU{и сравниваются при помощи инструкции}{registers and then compared with the help of} 
 \TT{VCMPE}\IFRU{}{ instruction}.
 \IFRU{Как и в сопроцессорах x86, сопроцессор в ARM имеет свой собственный регистр статуса и флагов}
 {Just like in x86 coprocessor, ARM coprocessor has its own status and flags register}, (\TT{FPSCR}),
 \IFRU{потому как есть необходимость хранить специфичные для его работы флаги.}
-{because there is a need to store coprocessor-specific flags.}
+{since there is a need to store coprocessor-specific flags.}
 
 \index{ARM!\Instructions!VMRS}
 \IFRU{И так же как и в x86}{And just like in x86}, 
@@ -41,12 +41,12 @@ BX              LR
 
 \IFRU{А если не сработает}{And if it will not be triggered}, 
 \IFRU{то в \TT{D16} останется лежать значение $a$.}
-{then $a$ value will stay in \TT{D16}.}
+{then $a$ value will stay in the \TT{D16} register.}
 
 \index{ARM!\Instructions!VMOV}
 \IFRU{Предпоследняя инструкция \TT{VMOV} подготовит то что было в \TT{D16} для возврата через 
 пару регистров \Rzero и \Rone.}
-{Penultimate instruction \TT{VMOV} will prepare value in \TT{D16} for returning via \Rzero and \Rone
+{Penultimate instruction \TT{VMOV} will prepare value in the \TT{D16} register for returning via \Rzero and \Rone
 registers pair.}
 
 \subsubsection{ARM + \OptimizingXcode + \ThumbTwoMode}
@@ -88,7 +88,7 @@ and the instruction is to be executed if condition is true.}
 \IFRU{просто \IDA добавила суффикс \TT{-GT} к ней}
 {but \IDA added \TT{-GT} suffix to it}, 
 \IFRU{потому что перед этой инструкцией стоит \TT{``IT GT''}}
-{because there are \TT{``IT GT''} instruction placed right before}.
+{since there are \TT{``IT GT''} instruction placed right before}.
 
 \index{ARM!\Instructions!IT}
 \index{ARM!if-then block}
@@ -131,7 +131,7 @@ POPEQ           {R4-R7,PC}
 \end{lstlisting}
 
 \IFRU{4 символа ``T'' в инструкции означают что 4 следующие инструкции будут исполнены если условие соблюдается.}
-{4 ``T'' symbols in instruction mnemonic mean that 4 next instructions will be executed if condition is true.}
+{4 ``T'' symbols in instruction mnemonic means that 4 next instructions will be executed if condition is true.}
 \IFRU{Поэтому \IDA добавила ко всем четырем инструкциям суффикс}{That's why \IDA added} \TT{-EQ}\IFRU{}{ suffix
 to each 4 instructions}. 
 
@@ -158,7 +158,7 @@ NEGLE           R0, R0
 MOVGT           R10, R0
 \end{lstlisting}
 
-\TT{ITTE} (\IT{if-then-then-else}) \IFRU{означает что первая и вторая инструкции исполнятся}{mean that 1st and 2nd
+\TT{ITTE} (\IT{if-then-then-else}) \IFRU{означает что первая и вторая инструкции исполнятся}{means that 1st and 2nd
 instructions will be executed}, 
 \IFRU{если условие}{if} \TT{LE} (\IT{Less or Equal}) \IFRU{справедливо}{condition is true},
 \IFRU{а третья}{and 3rd} ~--- \IFRU{если справедливо обратное условие}{if inverse condition} 
@@ -190,7 +190,7 @@ cat AngryBirdsClassic.lst | grep " BF" | grep "IT" > results.lst
 где надо.}
 {By the way, if to program in ARM assembly language manually for thumb-2 mode, 
 with adding conditional suffixes,
-assembler will add \TT{IT} instructions automatically, with respectable flags, where it's need.}
+assembler will add \TT{IT} instructions automatically, with respectable flags, where it's necessary.}
 
 \subsubsection{ARM + \NonOptimizingXcode + \ARMMode}
 
@@ -257,7 +257,7 @@ loc_1C0
 
 \IFRU{Keil не генерирует специальную инструкцию для сравнения чисел с плавающей запятой, потому что не 
 расчитывает на то что она будет поддерживаться, а простым сравнением побитово здесь не обойтись.}
-{Keil not generate special instruction for float numbers comparing, because, it cannot rely it will 
+{Keil not generates special instruction for float numbers comparing since it cannot rely it will
 be supported on the target CPU, and it cannot be done by simple bitwise comparing.}
 %TODO: why?
 \IFRU{Для сравнения вызывается библиотечная функция}{So there is called external library

@@ -23,7 +23,7 @@ first instructions are just saves input value in} \IT{str} \IFRU{и}{and} \IT{eo
 \IFRU{Первые три инструкции в теле цикла}{First three instruction in loop body} (\TT{LDR}, \ADD, \TT{STR}) 
 \IFRU{загружают значение}{loads} \IT{eos} \IFRU{в}{value into} \Rzero, 
 \IFRU{затем происходит инкремент значения и оно сохраняется назад в локальной переменной \IT{eos} расположенной 
-в стеке.}{then value is incremented and it's saving back into \IT{eos} local variable located in stack.}
+в стеке.}{then value is incremented and it's saved back into \IT{eos} local variable located in stack.}
 
 \index{ARM!\Instructions!LDRSB}
 \IFRU{Следующая инструкция}{The next} \TT{``LDRSB R0, [R0]''} (\IT{Load Register Signed Byte}) 
@@ -32,7 +32,7 @@ first instructions are just saves input value in} \IT{str} \IFRU{и}{and} \IT{eo
 \index{x86!\Instructions!MOVSX}
 \IFRU{Это немного похоже на инструкцию}{This is similar to} \MOVSX \IFRU{в}{instruction in} x86.
 \IFRU{Компилятор считает этот байт знаковым (signed), потому что тип \Tchar по стандарту Си ~--- знаковый.}
-{The compiler treating this byte as signed because \Tchar type in C standard is signed.}
+{The compiler treating this byte as signed since \Tchar type in C standard is signed.}
 \IFRU{Об это я уже немного писал}{I already wrote about it}~\ref{MOVSX} \IFRU{в этой же секции, 
 но посвященной x86}{in this section, but related to x86}.
 
@@ -55,11 +55,11 @@ but ARM was developed from scratch as 32-bit RISC-processor.}
 
 \IFRU{Итак}{So}, \TT{LDRSB} \IFRU{загружает символ из строки в \Rzero, по одному}
 {loads symbol from string into \Rzero, one by one}.
-\IFRU{Следующие инструкции}{Next} \CMP \IFRU{и}{and} \TT{BEQ} \IFRU{проверяют, является ли этот символ нулем.}
-{instructions checks, if loaded symbol is zero.}
-\IFRU{Если не ноль, то происходит переход на начало тела цикла.}{If not zero, control passing to loop body
+\IFRU{Следующие инструкции}{Next} \CMP \IFRU{и}{and} \TT{BEQ} \IFRU{проверяют, является ли этот символ $0$.}
+{instructions checks, if loaded symbol is $0$.}
+\IFRU{Если не $0$, то происходит переход на начало тела цикла.}{If not $0$, control passing to loop body
 begin.}
-\IFRU{А если ноль, выходим из цикла.}{And if zero, loop is finishing.}
+\IFRU{А если $0$, выходим из цикла.}{And if $0$, loop is finishing.}
 
 \IFRU{В конце функции вычисляется разница между}{At the end of function, a difference between} 
 \IT{eos} \IFRU{и}{and} \IT{str}\IFRU{, вычитается еще единица и вычисленное 
@@ -75,13 +75,14 @@ wasn't saved in this function.}
 Таким образом, их можно использовать как захочется}
 {That's because by ARM calling convention, \Rzero-\Rthree registers are ``scratch registers'', 
 they are intended for arguments passing,
-its values may not be restored upon function exit, because calling function will not use them anymore.
+its values may not be restored upon function exit since calling function will not use them anymore.
 Consequently, they may be used for anything we want.}
 \IFRU{А так как никакие больше регистры не используются, то и сохранять нечего.}
 {Other registers are not used here, so that's why we have nothing to save in stack.}
 \IFRU{Поэтому, управление можно вернуть назад вызывающей функции 
 простым переходом (\TT{BX}), по адресу в регистре \LR.}
-{Thus, control may be returned back to calling function by simple jump (\TT{BX}), to address in \LR register.}
+{Thus, control may be returned back to calling function by simple jump (\TT{BX}),
+to address in the \LR register.}
 
 %\subsubsection{\NonOptimizingXcode + режим thumb}
 %Практически, точно такой же код.
@@ -91,7 +92,7 @@ Consequently, they may be used for anything we want.}
 \lstinputlisting[caption=\OptimizingXcode + \ThumbMode]{10_strlen/xcode_thumb_O3.asm}
 
 \IFRU{Оптимизирующий LLVM решил что под переменные \IT{eos} и \IT{str} выделять место в стеке не обязательно}
-{As optimizing LLVM concludes, place in stack for \IT{eos} and \IT{str} may not be allocated},
+{As optimizing LLVM concludes, space in stack for \IT{eos} and \IT{str} may not be allocated},
 \IFRU{и эти переменные можно хранить прямо в регистрах.}
 {and these variables may always be stored right in registers.}
 \IFRU{Перед началом тела цикла}{Before loop body beginning}, \IT{str} \IFRU{будет находиться в}{will always be in} 
@@ -105,8 +106,8 @@ Consequently, they may be used for anything we want.}
 {instruction loads byte from memory at the address \Rone into \Rtwo, sign-extending it to 32-bit value, but not
 only that.}
 \TT{\#1} \IFRU{в конце инструкции называется}{at the instruction's end calling} ``Post-indexed addressing'', 
-\IFRU{это значит что после загрузки байта, к \Rone добавится единица.}{this mean, $1$ is to be added
-to \Rone after byte load.}
+\IFRU{это значит что после загрузки байта, к \Rone добавится единица.}{this means, $1$ is to be added
+to the \Rone after byte load.}
 \IFRU{Это очень удобно для работы с массивами.}{That's convenient when accessing arrays.}
 
 \index{PDP-11}
@@ -185,7 +186,7 @@ $0$ will be met in string.}
 {In fact, these two instructions computes}
 $R0 = ~str + eos$, 
 \IFRU{что эквивалентно тому, что было в исходном коде, а почему это так, я уже описывал чуть раньше, здесь}
-{which is equivalent to what was in source code, and why it's so, I already described here}
+{which is effectively equivalent to what was in source code, and why it's so, I already described here}
 ~\ref{strlen_NOT_ADD}.
 
 \IFRU{Вероятно, LLVM, как и GCC, посчитал что такой код будет короче, или быстрее.}
@@ -206,9 +207,9 @@ $str - eos - 1$
 {expression may be computed not at the function's end, but right in loop body.}
 \IFRU{Суффикс }{}\TT{-EQ}\IFRU{, как мы помним, означает что инструкция будет выполнена только
 если операнды в исполненной перед этим инструкции \CMP были равны.}
-{suffix, as we may recall, mean that instruction will be executed only if operands in executed before
+{suffix, as we may recall, means that instruction will be executed only if operands in executed before
 \CMP were equal to each other.}
-\IFRU{Таким образом}{Thus}, \IFRU{если в \Rzero будет $0$}{if $0$ will be in \Rzero}, 
+\IFRU{Таким образом}{Thus}, \IFRU{если в \Rzero будет $0$}{if $0$ will be in the \Rzero register},
 \IFRU{обе инструкции}{both} \TT{SUBEQ} \IFRU{исполнятся и результат останется в \Rzero.}
-{instructions are to be executed and result is leaving in \Rzero.}
+{instructions are to be executed and result is leaving in the \Rzero register.}
 

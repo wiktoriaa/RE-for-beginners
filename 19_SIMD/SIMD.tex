@@ -30,15 +30,15 @@ to change brightness of 8 pixels simultaneously.}
 \IFRU{Когда MMX только появилось, эти регистры на самом деле распологались в FPU-регистрах. 
 Можно было использовать 
 либо FPU либо MMX в одно и то же время. Можно подумать что Intel решило немного сэкономить на транзисторах, 
-но на самом деле причина такого симбиоза проще ~--- более старая операционная система не знающая о дополнительных 
+но на самом деле причина такого симбиоза проще ~--- более старая \ac{ОС} не знающая о дополнительных 
 регистрах процессора не будет сохранять их во время переключения задач, а вот регистры FPU сохранять будет. 
-Таким образом, процессор с MMX + старая операционная система + задача использующая MMX = все 
+Таким образом, процессор с MMX + старая \ac{ОС} + задача использующая возможности MMX = все 
 это может работать вместе.}
 {When MMX appeared, these registers was actually located in FPU registers. 
 It was possible to use either FPU or MMX at the same time. One might think, Intel saved on transistors,
-but in fact, the reason of such symbiosis is simpler ~--- older operation system may not aware 
+but in fact, the reason of such symbiosis is simpler ~--- older \ac{OS} may not aware 
 of additional CPU registers wouldn't save them at the context switching, but will save FPU registers.
-Thus, MMX-enabled CPU + old operation system + process using MMX = that all will work together.}
+Thus, MMX-enabled CPU + old \ac{OS} + process utilizing MMX features = that all will work together.}
 
 \index{x86!SSE}
 \index{x86!SSE2}
@@ -163,7 +163,7 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 \begin{itemize}
 \item
 \MOVDQU (\IT{Move Unaligned Double Quadword}) ~--- \IFRU{она просто загружает 16 байт из памяти в XMM-регистр}
-{it just load 16 bytes from memory into XMM-register}.
+{it just load 16 bytes from memory into a XMM-register}.
 
 \item
 \PADDD (\IT{Add Packed Integers}) ~--- 
@@ -176,8 +176,8 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 {adding 4 pairs of 32-bit numbers and leaving result in first operand.
 By the way, no exception raised in case of overflow and no flags will be set, just low 32-bit of result will
 be stored.
-If one of \PADDD operands ~--- address of value in memory,
-address should be aligned by 16-byte border. If it's not aligned, exception will be raised
+If one of \PADDD operands is address of value in memory,
+then address should be aligned on a 16-byte border. If it's not aligned, exception will be occured
 \footnote{More about data aligning: \URLWPDA}.}
 
 \item
@@ -185,7 +185,7 @@ address should be aligned by 16-byte border. If it's not aligned, exception will
 что адрес в памяти выровнен по 16-байтной границе. 
 Если он не выровнен, произойдет исключение. 
 \MOVDQA работает быстрее чем \MOVDQU, но требует вышеозначенного.}
-{the same as \MOVDQU, but requires address of value in memory to be aligned by 16-bit border.
+{the same as \MOVDQU, but requires address of value in memory to be aligned on a 16-bit border.
 If it's not aligned, exception will be raised.
 \MOVDQA works faster than \MOVDQU, but requires aforesaid.}
 
@@ -194,10 +194,10 @@ If it's not aligned, exception will be raised.
 \IFRU{Итак, эти SSE2-инструкции исполнятся только в том случае если еще осталось просуммировать 
 4 пары переменных типа \Tint плюс если указатель \TT{ar3} выровнен по 16-байтной границе.}
 {So, these SSE2-instructions will be executed only in case if there are more 4 pairs to work on
-plus pointer \TT{ar3} is aligned on 16-byte border.}
+plus pointer \TT{ar3} is aligned on a 16-byte border.}
 
 \IFRU{Более того, если еще и \TT{ar2} выровнен по 16-байтной границе, то будет выполняться этот фрагмент кода:}
-{More than that, if \TT{ar2} is aligned on 16-byte border too, this fragment of code will be executed:}
+{More than that, if \TT{ar2} is aligned on a 16-byte border too, this fragment of code will be executed:}
 
 \begin{lstlisting}
 movdqu  xmm0, xmmword ptr [ebx+edi*4] ; ar1+i*4
@@ -207,7 +207,7 @@ movdqa  xmmword ptr [eax+edi*4], xmm0 ; ar3+i*4
 
 \IFRU{А иначе, значение из \TT{ar2} загрузится в \XMMZERO используя инструкцию \MOVDQU, 
 которая не требует выровненного указателя, зато может работать чуть медленнее:}
-{Otherwise, value from \TT{ar2} will be loaded to \XMMZERO using \MOVDQU,
+{Otherwise, value from \TT{ar2} will be loaded into \XMMZERO using \MOVDQU,
 it doesn't require aligned pointer, but may work slower:}
 
 \begin{lstlisting}
@@ -245,7 +245,7 @@ if to use \Othree option and to turn on SSE2 support: \TT{-msse2}.}
 макросов\footnote{\URLMSDNSSE}. В MSVC, часть находится в файле \TT{intrin.h}.}
 {It should be noted that SIMD-instructions may be inserted into \CCpp code via 
 special macros\footnote{\URLMSDNSSE}.
-As of MSVC, some of them are located in \TT{intrin.h} file.}
+As of MSVC, some of them are located in the \TT{intrin.h} file.}
 
 \index{\CStandardLibrary!strlen()}
 \IFRU{Имеется возможность реализовать функцию \strlen\footnote{strlen() ~--- стандартная функция Си 
@@ -253,7 +253,7 @@ As of MSVC, some of them are located in \TT{intrin.h} file.}
 Эта функция будет загружать в XMM-регистр сразу 16 байт и проверять каждый на ноль.}
 {It is possible to implement \strlen function\footnote{strlen() ~--- standard C library function for calculating
 string length} using SIMD-instructions, working 2-2.5 times faster than usual implementation.
-This function will load 16 characters into XMM-register and check each against zero.}
+This function will load 16 characters into a XMM-register and check each against zero.}
 
 \lstinputlisting{19_SIMD/18_3.c}
 
@@ -268,15 +268,15 @@ This function will load 16 characters into XMM-register and check each against z
 
 \IFRU{Итак, прежде всего, мы проверяем указатель \TT{str}, выровнен ли он по 16-байтной границе. 
 Если нет, то мы вызовем обычную реализацию \strlen.}
-{First of all, we check \TT{str} pointer, if it's aligned by 16-byte border.
+{First of all, we check \TT{str} pointer, if it's aligned on a 16-byte border.
 If not, let's call usual \strlen implementation.}
 
 \IFRU{Далее мы загружаем по 16 байт в регистр \XMMONE при помощи команды \MOVDQA.}
-{Then, load next 16 bytes into \XMMONE register using \MOVDQA instruction.}
+{Then, load next 16 bytes into the \XMMONE register using \MOVDQA instruction.}
 
 \IFRU{Наблюдательный читатель может спросить, почему в этом месте мы не можем использовать \MOVDQU, 
 которая может загружать откуда угодно не взирая на факт, выровнен ли указатель?}
-{Observant reader might ask, why \MOVDQU cannot be used here, because it can load data from the memory
+{Observant reader might ask, why \MOVDQU cannot be used here since it can load data from the memory
 regardless the fact if the pointer aligned or not.}
 
 \IFRU{Да, можно было бы сделать вот как: если указатель выровнен, загружаем используя \MOVDQA, 
@@ -290,12 +290,12 @@ if not ~--- use slower \MOVDQU.}
 \index{Page (memory)}
 \newcommand{\URLPAGE}{\url{http://en.wikipedia.org/wiki/Page_(computer_memory)}}
 
-\IFRU{В ОС линии Windows NT\footnote{Windows NT, 2000, XP, Vista, 7, 8}, и не только, память выделяется страницами по 4 KiB (4096 байт). 
+\IFRU{В \ac{ОС} линии Windows NT\footnote{Windows NT, 2000, XP, Vista, 7, 8}, и не только, память выделяется страницами по 4 KiB (4096 байт). 
 Каждый win32-процесс якобы имеет в наличии 4 GiB, но на самом деле, 
 только некоторые части этого адресного пространства присоеденены к реальной физической памяти. 
 Если процесс обратится к блоку памяти, которого не существует, сработает исключение. 
 Так работает виртуальная память\footnote{\URLPAGE}.}
-{In Windows NT line of operation systems\footnote{Windows NT, 2000, XP, Vista, 7, 8}, but not limited to it, memory allocated by pages of 4 KiB (4096 bytes).
+{In Windows NT line of \ac{OS}\footnote{Windows NT, 2000, XP, Vista, 7, 8} but not limited to it, memory allocated by pages of 4 KiB (4096 bytes).
 Each win32-process has ostensibly 4 GiB, but in fact, only some parts
 of address space are connected to real physical memory.
 If the process accessing to the absent memory block, exception will be raised.
@@ -303,15 +303,15 @@ That's how virtual memory works\footnote{\URLPAGE}.}
 
 \IFRU{Так вот, функция, читающая сразу по 16 байт, имеет возможность нечаянно вылезти за границу 
 выделенного блока памяти. 
-Предположим, ОС выделила программе 8192 (0x2000) байт по адресу 0x008c0000. 
+Предположим, \ac{ОС} выделила программе 8192 (0x2000) байт по адресу 0x008c0000. 
 Таким образом, блок занимает байты с адреса 0x008c0000 по 0x008c1fff включительно.}
 {So, some function loading 16 bytes at once, may step over a border of allocated memory block.
-Let's consider, OS allocated 8192 (0x2000) bytes at the address 0x008c0000.
+Let's consider, \ac{OS} allocated 8192 (0x2000) bytes at the address 0x008c0000.
 Thus, the block is the bytes starting from address 0x008c0000 to 0x008c1fff inclusive.}
 
-\IFRU{За этим блоком, то есть начиная с адреса 0x008c2000 нет вообще ничего, т.е., ОС не выделяла там память. 
+\IFRU{За этим блоком, то есть начиная с адреса 0x008c2000 нет вообще ничего, т.е., \ac{ОС} не выделяла там память. 
 Обращение к памяти начиная с этого адреса вызовет исключение.}
-{After that block, that is, starting from address 0x008c2008 there are nothing at all, e.g., OS not allocated
+{After that block, that is, starting from address 0x008c2008 there are nothing at all, e.g., \ac{OS} not allocated
 any memory there. Attempt to access a memory starting from that address will raise exception.}
 
 \IFRU{И предположим, что программа хранит некую строку из, скажем, пяти символов почти в самом конце блока, 
@@ -345,26 +345,26 @@ lying in memory at address 0x008c1ff8.
 будь он выровнен по 16-байтной границе или нет, 
 \MOVDQU попытается загрузить 16 байт с адреса 0x008c1ff8 по 0x008c2008, и произойдет исключение. 
 Это ситуация которой, конечно, хочется избежать.}
-{Now if we implement own \strlen reading 16 byte at once, starting at any address, will it be alligned or not,
+{Now if we implement our own \strlen reading 16 byte at once, starting at any address, will it be alligned or not,
 \MOVDQU may attempt to load 16 bytes at once at address 0x008c1ff8 up to 0x008c2008, 
 and then exception will be raised.
 That's the situation to be avoided, of course.}
 
 \IFRU{Поэтому мы будем работать только с адресами выровненными по 16 байт, что в сочетании со знанием 
-что размер страницы также как правило выровнен по 16 байт, 
+что размер страницы \ac{ОС} также как правило выровнен по 16 байт, 
 даст некоторую гарантию что наша функция не будет пытаться читать из мест в невыделенной памяти.}
-{So then we'll work only with the addresses aligned by 16 byte border, what in combination with a knowledge
-of operation system page size is usually aligned by 16 byte too, give us some warranty our function will not
+{So then we'll work only with the addresses aligned on a 16 byte border, what in combination with a knowledge
+of \ac{OS} page size is usually aligned on a 16-byte border too, give us some warranty our function will not
 read from unallocated memory.}
 
 \IFRU{Вернемся к нашей функции}{Let's back to our function}.
 
 \index{x86!\Instructions!PXOR}
 \verb|_mm_setzero_si128()| ~--- \IFRU{это макрос, генерирующий \TT{pxor xmm0, xmm0} ~--- инструкция просто обнуляет регистр \XMMZERO.}
-{is a macro generating \TT{pxor xmm0, xmm0} ~--- instruction just clear /XMMZERO register}
+{is a macro generating \TT{pxor xmm0, xmm0} ~--- instruction just clears the \XMMZERO register}
 
 \verb|_mm_load_si128()| ~--- \IFRU{это макрос для \MOVDQA, он просто загружает 16 байт по адресу из указателя в \XMMONE.}
-{is a macro for \MOVDQA, it just loading 16 bytes from the address in \XMMONE.}
+{is a macro for \MOVDQA, it just loading 16 bytes from the address in the \XMMONE register.}
 
 \index{x86!\Instructions!PCMPEQB}
 \verb|_mm_cmpeq_epi8()| ~--- \IFRU{это макрос для \PCMPEQB, это инструкция которая 
@@ -372,8 +372,8 @@ read from unallocated memory.}
 {is a macro for \PCMPEQB, is an instruction comparing two XMM-registers bytewise.}
 
 \IFRU{И если какой-то из байт равен другому, то в результирующем значении будет выставлено на месте этого 
-байта 0xff, либо 0, если байты не были равны.}
-{And if some byte was equals to other, there will be 0xff at this place in result or 0 if otherwise.}
+байта \TT{0xff}, либо 0, если байты не были равны.}
+{And if some byte was equals to other, there will be \TT{0xff} at this point in the result or 0 if otherwise.}
 
 \IFRU{Например.}{For example.}
 
@@ -383,7 +383,7 @@ XMM0: 11ab3444007877881111111111111111
 \end{verbatim}
 
 \IFRU{После исполнения \TT{pcmpeqb xmm1, xmm0}, регистр \XMMONE будет содержать:}
-{After \TT{pcmpeqb xmm1, xmm0} execution, \XMMONE register will contain:}
+{After \TT{pcmpeqb xmm1, xmm0} execution, the \XMMONE register shall contain:}
 
 \begin{verbatim}
 XMM1: ff0000ff0000ffff0000000000000000
@@ -392,7 +392,7 @@ XMM1: ff0000ff0000ffff0000000000000000
 \IFRU{Эта инструкция в нашем случае, сравнивает каждый 16-байтный блок с блоком состоящим из 16-и нулевых байт, 
 выставленным в \XMMZERO при помощи \TT{pxor xmm0, xmm0}.}
 {In our case, this instruction comparing each 16-byte block with the block of 16 zero-bytes,
-was set in \XMMZERO by \TT{pxor xmm0, xmm0}.}
+was set in the \XMMZERO register by \TT{pxor xmm0, xmm0}.}
 
 \index{x86!\Instructions!PMOVMSKB}
 \IFRU{Следующий макрос \TT{\_mm\_movemask\_epi8()} ~--- это инструкция \TT{PMOVMSKB}.}
@@ -405,17 +405,17 @@ was set in \XMMZERO by \TT{pxor xmm0, xmm0}.}
 
 \IFRU{Эта инструкция выставит самый первый бит \EAX в единицу, если старший бит первого байта в 
 регистре \XMMONE является единицей. 
-Иными словами, если первый байт в регистре \XMMONE является 0xff, то первый бит в \EAX будет также единицей, 
+Иными словами, если первый байт в регистре \XMMONE является \TT{0xff}, то первый бит в \EAX будет также единицей, 
 иначе нулем.}
-{This instruction will set first \EAX bit into 1 if most significant bit of the first byte in \XMMONE is 1.
-In other words, if first byte of \XMMONE register is 0xff, first \EAX bit will be set to 1 too.}
+{This instruction will set first \EAX bit into 1 if most significant bit of the first byte in the \XMMONE is $1$.
+In other words, if first byte of the \XMMONE register is \TT{0xff}, first \EAX bit will be set to 1 too.}
 
-\IFRU{Если второй байт в регистре \XMMONE является 0xff, то второй бит в \EAX также будет единицей. 
-Иными словами, инструкция отвечает на вопрос, \IT{какие из байт в \XMMONE являются 0xff?}
+\IFRU{Если второй байт в регистре \XMMONE является \TT{0xff}, то второй бит в \EAX также будет единицей. 
+Иными словами, инструкция отвечает на вопрос, \IT{какие из байт в \XMMONE являются \TT{0xff}?}
 В результате приготовит 16 бит и запишет в \EAX. Остальные биты в \EAX обнулятся.}
-{If second byte in \XMMONE register is 0xff, then second \EAX bit will be set to 1 too.
-In other words, the instruction is answer to the question \IT{which bytes in \XMMONE are 0xff?}
-And will prepare 16 bits in \EAX. Other \EAX bits will be cleared.}
+{If second byte in the \XMMONE register is \TT{0xff}, then second \EAX bit will be set to 1 too.
+In other words, the instruction is answer to the question \IT{which bytes in the \XMMONE are \TT{0xff?}}
+And will prepare 16 bits in the \EAX register. Other bits in the \EAX register are to be cleared.}
 
 \IFRU{Кстати, не забывайте также вот о какой особенности нашего алгоритма:}
 {By the way, do not forget about this feature of our algorithm:}
@@ -438,7 +438,7 @@ XMM1: 0000ff00000000000000ff0000000000
 \end{verbatim}
 
 \IFRU{Это означает что инструкция сравнения обнаружила два нулевых байта, что и не удивительно.}
-{This mean, the instruction found two zero bytes, and that's not surprising.}
+{This means, the instruction found two zero bytes, and that's not surprising.}
 
 \IFRU{\TT{PMOVMSKB} в нашем случае подготовит \EAX вот так (в двоичном представлении):} 
 {\TT{PMOVMSKB} in our case will prepare \EAX like (in binary representation):} \IT{0010000000100000b}.
@@ -458,7 +458,7 @@ EAX=0010000000100000b
 
 \IFRU{После исполнения этой инструкции \TT{bsf eax, eax}, в \EAX будет 5, что означает, 
 что единица найдена в пятой позиции (считая с нуля).}
-{After \TT{bsf eax, eax} instruction execution, \EAX will contain 5, this mean, 
+{After \TT{bsf eax, eax} instruction execution, \EAX will contain 5, this means, 
 1 found at 5th bit position (starting from zero).}
 
 \IFRU{Для использования этой инструкции, в MSVC также имеется макрос}

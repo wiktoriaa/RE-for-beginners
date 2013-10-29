@@ -11,7 +11,7 @@ But if we have to, we need at least check if \scanf finished correctly without e
 \lstinputlisting{04_scanf/retval_check.c}
 
 \IFRU{По стандарту}{By standard}, \scanf\footnote{\href{http://msdn.microsoft.com/en-us/library/9y6s16x1(VS.71).aspx}{MSDN: scanf, wscanf}} 
-\IFRU{возвращает количество успешно полученных значений.}{function returning number of fields it successfully read.}
+\IFRU{возвращает количество успешно полученных значений.}{function returns number of fields it successfully read.}
 
 \IFRU{В нашем случае, если все успешно и пользователь ввел таки некое число, \scanf вернет 1. 
 А если нет, то 0 или EOF.} 
@@ -29,22 +29,22 @@ But if we have to, we need at least check if \scanf finished correctly without e
 \IFRU{Для того чтобы вызывающая функция имела доступ к результату вызываемой функции, 
 вызываемая функция (в нашем случае \scanf) оставляет это значение в регистре \EAX.}
 {Caller function (\main) should have access to result of callee function (\scanf), 
-so callee leave this value in \EAX register.}
+so callee leaves this value in the \EAX register.}
 
 \index{x86!\Instructions!CMP}
 \IFRU{Мы проверяем его инструкцией \TT{CMP EAX, 1} (\IT{CoMPare}), то есть, 
 сравниваем значение в \EAX с 1.}
-{After, we check it using instruction \TT{CMP EAX, 1} (\IT{CoMPare}), 
-in other words, we compare value in \EAX with 1.} 
+{After, we check it with the help of instruction \TT{CMP EAX, 1} (\IT{CoMPare}),
+in other words, we compare value in the \EAX register with $1$.} 
 
 \index{x86!\Instructions!JNE}
 \IFRU{Следующий за инструкцией \CMP: условный переход \JNE. 
 Это означает \IT{Jump if Not Equal}, то есть, условный переход \IT{если не равно}.}
-{\JNE conditional jump follows \CMP instruction. \JNE mean \IT{Jump if Not Equal}.}
+{\JNE conditional jump follows \CMP instruction. \JNE means \IT{Jump if Not Equal}.}
 
 \IFRU{Итак, если \EAX не равен 1, то \JNE заставит перейти процессор 
 по адресу указанном в операнде \JNE, у нас это \TT{\$LN2@main}.}
-{So, if \EAX value not equals to 1, then the processor will pass execution to the 
+{So, if value in the \EAX register not equals to $1$, then the processor will pass execution to the 
 address mentioned in operand of \JNE, in our case it is \TT{\$LN2@main}.}
 \IFRU
 {Передав управление по этому адресу, процессор как раз начнет исполнять вызов \printf с 
@@ -62,14 +62,14 @@ will be executed, with two arguments: \TT{'You entered \%d...'} and value of var
 \IFRU {А для того чтобы после этого вызова не исполнился сразу второй вызов \printf, 
 после него имеется инструкция \JMP, безусловный переход, он отправит процессор на место аккурат 
 после второго \printf и перед инструкцией \TT{XOR EAX, EAX}, которая собственно \TT{return 0}.}
-{Because second subsequent \printf not needed to be executed, there are \JMP after (unconditional jump) 
-it will pass control to the place after second \printf and before \TT{XOR EAX, EAX} instruction, 
+{Since second subsequent \printf not needed to be executed, there are \JMP after (unconditional jump),
+it will pass control to the point after second \printf and before \TT{XOR EAX, EAX} instruction, 
 which implement \TT{return 0}.}
 
 \index{x86!\Registers!\Flags}
-\IFRU{Итак, можно сказать, что в подавляющем случае сравнение какой либо переменной с чем-то другим 
+\IFRU{Итак, можно сказать, что в подавляющих случаях сравнение какой либо переменной с чем-то другим 
 происходит при помощи пары инструкций \CMP и \Jcc, где \IT{cc} это \IT{condition code}.}
-{So, it can be said that most often, comparing some value with another is implemented 
+{So, it can be said that comparing some value with another is \IT{usually} implemented
 by \CMP/\Jcc instructions pair, where \IT{cc} is \IT{condition code}.}
 \IFRU{\CMP сравнивает два значения и выставляет 
 флаги процессора\footnote{См.также о флагах x86-процессора: \url{http://en.wikipedia.org/wiki/FLAGS_register_(computing)}.}.}
@@ -87,9 +87,9 @@ processor flags\footnote{About x86 flags, see also: \url{http://en.wikipedia.org
 {But in fact, this could be perceived paradoxial, but \CMP instruction is in fact \SUB (subtract).}
 \IFRU{Все арифметические инструкции также выставляют флаги в соответствии с результатом, не только \CMP.}
 {All arithmetic instructions set processor flags too, not only \CMP.}
-\IFRU{Если мы сравним 1 и 1, от единицы отнимется единица, получится ноль, и выставится флаг 
-\ZF (\IT{zero flag}), означающий что последний полученный результат является нулем.}
-{If we compare 1 and 1, $1-1$ will be zero in result, \ZF flag will be set (meaning that last result was zero).}
+\IFRU{Если мы сравним 1 и 1, от единицы отнимется единица, получится $0$, и выставится флаг 
+\ZF (\IT{zero flag}), означающий что последний полученный результат был $0$.}
+{If we compare 1 and 1, $1-1$ will be $0$ in result, \ZF flag will be set (meaning that last result was $0$).}
 \IFRU{Ни при каких других значениях \EAX, флаг \ZF выставлен не будет, кроме тех, когда операнды равны друг другу.}
 {There are no any other circumstances when it's possible except when operands are equal.}
 \index{x86!\Instructions!JNE}
@@ -103,7 +103,7 @@ processor flags\footnote{About x86 flags, see also: \url{http://en.wikipedia.org
 \IFRU
 {Таким образом, можно \CMP заменить на \SUB и все будет работать также, но разница в том что \SUB 
 все-таки испортит значение в первом операнде. \CMP это \IT{SUB без сохранения результата}.}
-{So, \CMP can be replaced to \SUB and almost everything will be fine, but the difference is in 
+{So, \CMP instruction can be replaced to \SUB instruction and almost everything will be fine, but the difference is in 
 that \SUB alter value at first operand. \CMP is \IT{``SUB without saving result''}.}
 
 \IFRU

@@ -62,7 +62,7 @@ but only most significant byte (\TT{ebp+dwDesiredAccess+3}) and checks it for 0x
 \index{x86!\Instructions!AND}
 \IFRU{\TEST это то же что и \AND, только без сохранения результата 
 (вспомните что \CMP это то же что и \SUB, только без сохранения результатов}
-{\TEST is merely the same instruction as \AND, but without result saving 
+{\TEST is merely the same instruction as \AND, but without result saving
 (recall the fact \CMP instruction is merely the same as \SUB, but without result saving}~\ref{CMPandSUB}).
 
 \IFRU{Логика данного фрагмента кода примерно такая:}{This fragment of code logic is as follows:}
@@ -77,9 +77,9 @@ if ((dwDesiredAccess&0x40000000) == 0) goto loc_7C83D417
 \JZ не сработает. 
 Переход возможен только если в переменной \TT{dwDesiredAccess} отсутствует бит \TT{0x40000000} ~--- 
 тогда результат \AND будет $0$, флаг \ZF будет поднят и переход сработает.}
-{If \AND instruction leaving this bit, \ZF flag will be cleared and \JZ conditional jump will not 
+{If \AND instruction leaving this bit, \ZF flag is to be cleared and \JZ conditional jump will not 
 be triggered.
-Conditional jump will be triggered only if \TT{0x40000000} bit is absent in \TT{dwDesiredAccess} variable ~--- 
+Conditional jump will be triggered only if \TT{0x40000000} bit is absent in the \TT{dwDesiredAccess} variable ~--- 
 then \AND result will be $0$, \ZF flag will be set and conditional jump is to be triggered.}
 
 \IFRU{Попробуем GCC 4.4.1 и Linux:}{Let's try GCC 4.4.1 and Linux:}
@@ -104,7 +104,7 @@ void main()
 \index{syscalls}
 \IFRU{Заглянем в реализацию функции \TT{open()} в библиотеке \TT{libc.so.6}, но обнаружим что там 
 только вызов сисколла:}
-{Let's take a look into \TT{open()} function in \TT{libc.so.6} library, but there is only syscall calling:}
+{Let's take a look into \TT{open()} function in the \TT{libc.so.6} library, but there is only syscall calling:}
 
 \begin{lstlisting}[caption=open() (libc.so.6)]
 .text:000BE69B                 mov     edx, [esp+4+mode] ; mode
@@ -125,7 +125,7 @@ but we are interesting to understand the matter without it.}
 \IFRU{Итак, при вызове сисколла \TT{sys\_open}, управление в конечном итоге передается в \TT{do\_sys\_open} в ядре Linux 2.6. 
 Оттуда ~--- в \TT{do\_filp\_open()} (эта функция находится в исходниках ядра в файле \TT{fs/namei.c}).}
 {So, as of Linux 2.6, when \TT{sys\_open} syscall is called, control eventually passed into \TT{do\_sys\_open} kernel function.
-From there ~--- to \TT{do\_filp\_open()} function (this function located in kernel source tree in the file \TT{fs/namei.c}).}
+From there ~--- to the \TT{do\_filp\_open()} function (this function located in kernel source tree in the file \TT{fs/namei.c}).}
 
 \newcommand{\URLREGPARM}{\url{http://ohse.de/uwe/articles/gcc-attributes.html\#func-regparm}}
 
@@ -138,7 +138,7 @@ From there ~--- to \TT{do\_filp\_open()} function (this function located in kern
 и с её помощью можно задать, сколько аргументов можно передать через регистры.}
 {Important note. Aside from usual passing arguments via stack, there are also method to pass some of them
 via registers. This is also called fastcall~\ref{fastcall}.
-This works faster, because CPU not needed to access a stack in memory to read argument values.
+This works faster since CPU not needed to access a stack in memory to read argument values.
 GCC has option \IT{regparm}\footnote{\URLREGPARM},
 and it's possible to set a number of arguments which might be passed via registers.}
 
@@ -155,8 +155,8 @@ and it's possible to set a number of arguments which might be passed via registe
 а остальные через стек. Разумеется, если аргументов у функции меньше трех, то будет задействована 
 только часть регистров.}
 {What it means to us, the first 3 arguments will be passed via \EAX, \EDX and \ECX registers, 
-the other ones via stack. Of course, if arguments number is less than 3, only part of registers 
-will be used.}
+the other ones via stack. Of course, if arguments number is less than 3, only part of registers
+are to be used.}
 
 \IFRU{Итак, качаем ядро 2.6.31, собираем его в Ubuntu: \TT{make vmlinux}, открываем в \IDA, 
 находим функцию \TT{do\_filp\_open()}. В начале мы увидим подобное (комментарии мои):}

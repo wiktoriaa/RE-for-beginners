@@ -12,13 +12,13 @@ to stack, and then unconditional jump to the address from CALL operand is execut
 \index{x86!\Instructions!PUSH}
 \index{x86!\Instructions!JMP}
 \IFRU{\CALL это аналог пары инструкций \TT{PUSH address\_after\_call / JMP}.}
-{\CALL is \TT{PUSH address\_after\_call / JMP operand} instructions pair equivalent}.
+{\CALL is effectively \TT{PUSH address\_after\_call / JMP operand} instructions pair equivalent}.
 
 \index{x86!\Instructions!RET}
 \index{x86!\Instructions!POP}
 \IFRU{\RET вытаскивает из стека значение и передает управление по этому адресу ~--- 
 это аналог пары инструкций \TT{POP tmp / JMP tmp}.}
-{\RET is fetching value from stack and jump to it ~--- it is \TT{POP tmp / JMP tmp} instructions pair equivalent.}
+{\RET is fetching the value from stack and jump to it ~--- it is effectively \TT{POP tmp / JMP tmp} instructions pair equivalent.}
 
 \index{\Stack!\IFRU{Переполнение стека}{Stack overflow}}
 \index{\Recursion}
@@ -62,7 +62,7 @@ c:\tmp6\ss.cpp(4) : warning C4717: 'f' : recursive on all control paths, functio
 \dots \IFRU
 {причем, если включить оптимизацию (\Ox), то будет даже интереснее, без переполнения стека, 
 но работать будет \IT{корректно}\footnote{здесь ирония}:}
-{Also, if we turn on optimization (\Ox option), the optimized code will not overflow stack, 
+{Also if we turn on optimization (\Ox option), the optimized code will not overflow stack, 
 but will work \IT{correctly}\footnote{irony here}:}
 
 \begin{lstlisting}
@@ -81,12 +81,13 @@ $LL3@f:
 \subsubsection{ARM}
 
 \index{ARM!\Registers!Link Register}
-\IFRU{Программы для ARM также используют стек для сохранения адреса, куда нужно вернуться, но несколько иначе}{ARM
-programs also use stack for return address savings, but differently}.
+\IFRU{Программы для ARM также используют стек для сохранения \ac{RA}, куда нужно вернуться, но несколько иначе}{ARM
+programs also use stack for \ac{RA} savings, but differently}.
 \IFRU{Как уже упоминалось в секции}{As it was mentioned in} ``\HelloWorldSectionName''~\ref{sec:hw_ARM}, 
-\IFRU{адрес возврата записывается в регистр}{return address is saved to} \LR (\IT{link register}).
+\IFRU{\ac{RA} записывается в регистр}{\ac{RA} is saved to the} \LR (\IT{link register}).
 \IFRU{Но если есть необходимость вызывать какую-то другую функцию, и использовать регистр \LR еще
-раз, его значение желательно сохранить}{However, if one need to call some another function and use \LR register
+раз, его значение желательно сохранить}
+{However, if one needs to call some another function and use the \LR register
 one more time, its value should be saved}.
 \index{Function prologue}
 \IFRU{Обычно, это происходит в прологе функции, часто мы видим там инструкцию вроде}{Usually, it is saved in
@@ -102,13 +103,13 @@ to be used in function are saved in stack, including} \LR.
 {Nevertheless, if some function never call any other function, in ARM terminology it's called}
 \IT{leaf function}\footnote{\url{http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.faqs/ka13785.html}}. 
 \IFRU{Как следствие, ``leaf''-функция не использует регистр \LR}{As a consequence, ``leaf'' function 
-don't use \LR register}.
+don't use the \LR register}.
 \IFRU{А если эта функция небольшая, использует мало регистров, она может не использовать стек вообще}
 {And if this function is small, if it use small number of registers, it may not use stack at all}.
 \IFRU{Таким образом, в ARM возможен вызов небольших ``leaf'' функций не используя стек}
-{Thus, it is possible to call ``leaf'' function without stack usage}.
+{Thus, it is possible to call ``leaf'' function without using stack}.
 \IFRU{Это может быть быстрее чем в x86, ведь внешняя память для стека не используется}
-{This could be faster than in x86, because external RAM is not used for stack}
+{This could be faster than in x86 since external RAM is not used for stack}
 \footnote{\IFRU{Когда-то очень давно, на PDP-11 и VAX, на инструкцию CALL (вызов других функций) могло тратиться
 вплоть до 50\% времени, возможно из-за работы с памятью, 
 поэтому считалось что много небольших функций это анти-паттерн}

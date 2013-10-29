@@ -57,10 +57,10 @@ kqftap_element.fn2=NULL
 time we query the \TT{X\$KSMLRU} table.}
 
 \IFRU{Здесь есть ссылки на ф-ции \TT{ksmsplu\_sp()} и \TT{ksmsplu\_jp()}, каждая из которых в итоге вызывает 
-\TT{ksmsplu()}.}{Here we see a references to \TT{ksmsplu\_sp()} and \TT{ksmsplu\_jp()} functions, each of 
-them call \TT{ksmsplu()} finally.}
-\IFRU{В конце ф-ции \TT{ksmsplu()} мы видим вызов \TT{memset()}:}{At the end of \TT{ksmsplu()} function we see 
-a call to \TT{memset()}:}
+\TT{ksmsplu()}.}{Here we see a references to the \TT{ksmsplu\_sp()} and \TT{ksmsplu\_jp()} functions, each of 
+them call the \TT{ksmsplu()} finally.}
+\IFRU{В конце ф-ции \TT{ksmsplu()} мы видим вызов \TT{memset()}:}{At the end of the \TT{ksmsplu()} function we see 
+a call to the \TT{memset()}:}
 
 \begin{lstlisting}[caption=ksm.o]
 ...
@@ -95,7 +95,8 @@ a call to \TT{memset()}:}
 \IFRU{Мы можем попробовать рискнуть, заблокировав вызов \TT{memset()} и посмотреть, что будет?}{What if we would take a risk, block \TT{memset()} call and see what will happen?}
 
 \IFRU{Запускаем \tracer со следующей опцией: поставить точку останова на \TT{0x434C7A} (там где начинается передача 
-параметров для ф-ции \TT{memset()}) так, чтобы \tracer в этом месте установил указатель инструкций процессора (\TT{EIP}) на место, где уже произошла очистка переданных параметров в \TT{memset()} (по адресу \TT{0x434C8A}):}{Let's run \tracer with the following options: set breakpoint at \TT{0x434C7A} (the point where \TT{memset()} arguments are to be passed), thus, that \tracer set program counter \TT{EIP} at this place to the place where passed to \TT{memset()} arguments are to be cleared (at \TT{0x434C8A})}
+параметров для ф-ции \TT{memset()}) так, чтобы \tracer в этом месте установил указатель инструкций процессора (\TT{EIP}) на место, где уже произошла очистка переданных параметров в \TT{memset()} (по адресу \TT{0x434C8A}):}
+{Let's run \tracer with the following options: set breakpoint at \TT{0x434C7A} (the point where \TT{memset()} arguments are to be passed), thus, that \tracer set program counter \TT{EIP} at this point to the point where passed to the \TT{memset()} arguments are to be cleared (at \TT{0x434C8A})}
 \IFRU{Можно сказать, при помощи этого, мы симулируем безусловный переход с адреса}{It can be said, we just simulate an unconditional jump from the address} \TT{0x434C7A} \IFRU{на}{to} \TT{0x434C8A}.
 
 \begin{lstlisting}
@@ -104,7 +105,7 @@ tracer -a:oracle.exe bpx=oracle.exe!0x00434C7A,set(eip,0x00434C8A)
 
 \IFRU{(Важно: все эти адреса справедливы только для win32-версии \oracle 11.2)}{(Important: all these addresses are valid only for win32-version of \oracle 11.2)}
 
-\IFRU{Действительно, после этого мы можем обращаться к таблице \TT{X\$KSMLRU} сколько угодно, и она уже не очищается!}{Indeed, now we can query \TT{X\$KSMLRU} table as many times as we want and it's not cleared anymore!}
+\IFRU{Действительно, после этого мы можем обращаться к таблице \TT{X\$KSMLRU} сколько угодно, и она уже не очищается!}{Indeed, now we can query \TT{X\$KSMLRU} table as many times as we want and it's not clearing anymore!}
 
 \IFRU{\sout{Не делайте этого дома ("Разрушители легенд")} Не делайте этого на своих production-серверах.}{\sout{Don't try this at home ("MythBusters")} Don't try this on your production servers.}
 
