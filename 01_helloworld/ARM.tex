@@ -161,7 +161,7 @@ where address of return is stored in stack}\footnote{\IFRU{Подробнее о
 {By the way, an absolute 32-bit address or offset cannot be encoded in the 32-bit \TT{BL} instruction because
 it only has space for 24 bits}.
 \IFRU{Так же следует отметить, что из-за того что все инструкции в режиме ARM имеют длину 4 байта (32 бита), и инструкции могут находится только по адресам кратным 4, то последние 2 бита (всегда нулевых) можно не кодировать.}
-{It's also worth noting that all ARM mode instructions have a size of 4 bytes (32 bits).
+{It is also worth noting that all ARM mode instructions have a size of 4 bytes (32 bits).
 Hence they can only be located on 4-byte boundary addresses.
 This means that the last 2 bits of the instruction address (always zero bits) may be omitted.}
 \IFRU{В итоге имеем 26 бит, при помощи которых можно закодировать смещение}
@@ -226,13 +226,13 @@ armcc.exe --thumb --c90 -O0 1.c
 \IFRU{Но на самом деле, она состоит из двух 16-битных инструкций}
 {which consists of two 16-bit instructions}.
 \IFRU{Это потому что загрузить в \PC смещение, по которому находится функция \printf, используя так мало места в одном 16-битном опкоде, нельзя}
-{This is because it's not possible to load an offset for the \printf function into \PC while using so small of a space as one 16-bit opcode}.
+{This is because it is not possible to load an offset for the \printf function into \PC while using so small of a space as one 16-bit opcode}.
 \IFRU{Поэтому первая 16-битная инструкция загружает старшие 10 бит смещения, а вторая ~--- младшие 11 бит смещения}{That's why the first 16-bit instruction loads the higher 10 bits of the offset and the second instruction loads 
 the lower 11 bits of the offset}.
 \IFRU{Как я уже упоминал, все инструкции в thumb-режиме имеют длину 2 байта (или 16 бит)}
 {As I mentioned, all instructions in thumb mode have a size of 2 bytes (or 16 bits)}.
 \IFRU{Поэтому невозможна такая ситуация, когда thumb-инструкция начинается по нечетному адресу}
-{This mean it's not possible for a thumb-instruction to be on an odd address whatsoever}.
+{This mean it is not possible for a thumb-instruction to be on an odd address whatsoever}.
 \IFRU{Учитывая сказанное, последний бит адреса можно не кодировать}
 {Given the above, the last address bit may be omitted while encoding instructions}.
 \IFRU{Таким образом, в итоге, в thumb-инструкции \TT{BL} кодируется смещение}
@@ -289,7 +289,7 @@ This is the offset pointing to the ``Hello world!'' string}.
 \index{ARM!\Instructions!ADD}
 \IFRU{Инструкция}{The} \TT{''ADD R0, PC, R0''} \IFRU{прибавляет \PC к \Rzero, для вычисления действительного адреса строки ``Hello world!'', как нам уже известно, это ``\PICcode'', поэтому такая корректива необходима}
 {instruction adds value in the \PC to the value in the \Rzero, to calculate absolute address of the ``Hello world!'' string. 
-And as we already know, it's ``\PICcode'' so this corrective is essential here}.
+And as we already know, it is ``\PICcode'' so this corrective is essential here}.
 
 \IFRU{Инструкция \TT{BL} вызывает \puts вместо \printf}
 {The \TT{BL} instruction calls the \puts function instead of \printf}.
@@ -382,7 +382,7 @@ then second and first for instructions in ARM mode (different endianness)}.
 \IFRU{Помимо прочих отличий, здесь используется инструкция}{Among other differences, here} \TT{BLX} \IFRU{вместо}{instruction is used instead of} \TT{BL}.
 \IFRU{Отличие в том, что помимо сохранения адреса возврата в регистре \LR и передаче управления в функцию \puts, происходит смена режима процессора с thumb на ARM, либо наоборот}
 {The difference in that way that beside saving of \ac{RA} in the \LR register and passing control to the \puts function, processor is also switching from thumb mode to ARM (or back)}.
-\IFRU{Здесь это нужно потому что инструкция, куда ведет переход, выглядит так (она закодирована в режиме ARM)}{This instruction in place here since the instruction to which control is passed looks like (it's encoded in ARM mode)}:
+\IFRU{Здесь это нужно потому что инструкция, куда ведет переход, выглядит так (она закодирована в режиме ARM)}{This instruction in place here since the instruction to which control is passed looks like (it is encoded in ARM mode)}:
 
 \begin{lstlisting}
 __symbolstub1:00003FEC _puts           ; CODE XREF: _hello_world+E
@@ -416,11 +416,11 @@ __symbolstub1:00003FEC 44 F0 9F E5     LDR  PC, =__imp__puts
 {Then the \TT{LDR} instruction just takes the 32-bit value from this variable and writes it into the \PC register, passing control to it}.
 
 \IFRU{Чтобы уменьшить время работы загрузчика \ac{OS}, нужно чтобы ему пришлось записать адрес каждого символа только один раз, в соответствующее выделенное для них место}
-{So to reduce the time an \ac{OS} loader needs for doing this procedure it's good idea for it to write the address of each symbol only once to a specially allocated place just for it}.
+{So to reduce the time an \ac{OS} loader needs for doing this procedure it is good idea for it to write the address of each symbol only once to a specially allocated place just for it}.
 
 \index{thunk-\IFRU{функции}{functions}}
 \IFRU{К тому же, как мы уже убедились, нельзя одной инструкцией загрузить в регистр 32-битное число без обращений к памяти}
-{Besides, as we have already figured out, it's not possible to load a 32-bit value into a register 
+{Besides, as we have already figured out, it is not possible to load a 32-bit value into a register 
 while using only one instruction without memory access}.
 \IFRU{Так что, наиболее оптимально, выделить отдельную функцию, работающую в режиме ARM, 
 чья единственная цель ~--- передавать управление дальше, в динамическую библиотеку.}

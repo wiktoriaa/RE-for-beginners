@@ -90,7 +90,7 @@ NLSRTL Version 11.2.0.1.0 - Production
 
 \IFRU{Вероятно, таблица \TT{kqfviw} содержащая в себе многие (а может даже и все) view с префиксом V\$, это служебные view (fixed views), присутствующие всегда.}{Probably, the table \TT{kqfviw} contain most (maybe even all) views prefixed with V\$, these are \IT{fixed views}, present all the time.}
 \IFRU{Бегло оценив цикличность данных, мы легко видим что в каждом элементе таблицы \TT{kqfviw} 12 полей 32-битных полей.}{Superficially, by noticing cyclic recurrence of data, we can easily see that each \TT{kqfviw} table element has 12 32-bit fields.}
-\IFRU{В \IDA легко создать структуру из 12-и элементов и применить её ко всем элементам таблицы.}{It's very simple to create a 12-elements structure in \IDA and apply it to all table elements.}
+\IFRU{В \IDA легко создать структуру из 12-и элементов и применить её ко всем элементам таблицы.}{It is very simple to create a 12-elements structure in \IDA and apply it to all table elements.}
 \IFRU{Для версии \oracle 11.2, здесь 1023 элемента в таблице, то есть, здесь описываются 1023 всех возможных \IT{fixed view}.}{As of \oracle version 11.2, there are 1023 table elements, i.e., there are described 1023 of all possible \IT{fixed views}.}
 \IFRU{Позже, мы еще вернемся к этому числу.}{We will return to this number later.}
 
@@ -193,7 +193,7 @@ kqfvip_element.params:
 
 \IFRU{\IT{Fixed view} \TT{GV\$VERSION} отличается от \TT{V\$VERSION} тем, что содержит еще и поле отражающее идентификатор \IT{instance}.}
 {\TT{GV\$VERSION} \IT{fixed view} is distinct from \TT{V\$VERSION} in only that way that it contains one more field with \IT{instance} identifier.}
-\IFRU{Но так или иначе, мы теперь упираемся в таблицу \TT{X\$VERSION}. Как и прочие X\$-таблицы, она недокументирована, однако, мы можем оттуда что-то прочитать}{Anyway, we stuck at the table \TT{X\$VERSION}. Just like any other X\$-tables, it's undocumented, however, we can query it}:
+\IFRU{Но так или иначе, мы теперь упираемся в таблицу \TT{X\$VERSION}. Как и прочие X\$-таблицы, она недокументирована, однако, мы можем оттуда что-то прочитать}{Anyway, we stuck at the table \TT{X\$VERSION}. Just like any other X\$-tables, it is undocumented, however, we can query it}:
 
 \begin{lstlisting}
 SQL> select * from x$version;
@@ -271,7 +271,7 @@ Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
 
 \IFRU{Интересно что здесь этот элемент проходит также под номером \TT{0x1f6} (502-й), как и ссылка на строку 
 \TT{X\$VERSION} в таблице \TT{kqftab}.}
-{It's interesting that this element here is \TT{0x1f6th} (502nd), just as a pointer to the \TT{X\$VERSION} string in 
+{It is interesting that this element here is \TT{0x1f6th} (502nd), just as a pointer to the \TT{X\$VERSION} string in 
 the \TT{kqftab} table.}
 \IFRU{Вероятно, таблицы \TT{kqftap} и \TT{kqftab} дополняют друг друга, как и \TT{kqfvip} и \TT{kqfviw}.}
 {Probably, \TT{kqftap} and \TT{kqftab} tables are complement each other, just like \TT{kqfvip} and \TT{kqfviw}.}
@@ -291,7 +291,7 @@ kqftap_element.fn1=kqvrow
 kqftap_element.fn2=NULL
 \end{lstlisting}
 
-\IFRU{При помощи \tracer, можно легко проверить, что эта ф-ция вызывается 6 раз кряду (из ф-ции \TT{qerfxFetch()}) при получении строк из \TT{X\$VERSION}.}{With the help of \tracer, it's easy to check that this function called 6 times in row (from the \TT{qerfxFetch()} function) while querying \TT{X\$VERSION} table.}
+\IFRU{При помощи \tracer, можно легко проверить, что эта ф-ция вызывается 6 раз кряду (из ф-ции \TT{qerfxFetch()}) при получении строк из \TT{X\$VERSION}.}{With the help of \tracer, it is easy to check that this function called 6 times in row (from the \TT{qerfxFetch()} function) while querying \TT{X\$VERSION} table.}
 
 \IFRU{Запустим \tracer в режиме \TT{cc} (он добавит комментарий к каждой исполненной инструкции):}{Let's run \tracer in the \TT{cc} mode (it will comment each executed instruction):}
 
@@ -301,7 +301,7 @@ tracer -a:oracle.exe bpf=oracle.exe!_kqvrow,trace:cc
 
 \lstinputlisting{examples/oracle/VERSION_kqvrow.asm}
 
-\IFRU{Так можно легко увидеть, что номер строки таблицы задается извне. Сама ф-ция возвращает строку, формируя её так:}{Now it's easy to see that row number is passed from outside of function. The function returns the string constructing it as follows:}
+\IFRU{Так можно легко увидеть, что номер строки таблицы задается извне. Сама ф-ция возвращает строку, формируя её так:}{Now it is easy to see that row number is passed from outside of function. The function returns the string constructing it as follows:}
 
 \begin{center}
 \begin{tabular}{ | l | l | }

@@ -3,7 +3,7 @@
 SIMD \IFRU{это акроним:}{is just acronym:} \IT{Single Instruction, Multiple Data}.
 
 \IFRU{Как можно судить по названию, это обработка множества данных исполняя только одну инструкцию.}
-{As it's said, it's multiple data processing using only one instruction.}
+{As it is said, it is multiple data processing using only one instruction.}
 
 \IFRU{Как и FPU, эта подсистема процессора выглядит также отдельным процессором внутри x86.}
 {Just as FPU, that CPU subsystem looks like separate processor inside x86.}
@@ -24,7 +24,7 @@ For example, it is possible to add 8 8-bit values (bytes) simultaneously by addi
 то с помощью MMX можно менять яркость сразу у восьми пикселей.}
 {One simple example is graphics editor, representing image as a two dimensional array.
 When user change image brightness, the editor should add some coefficient to each pixel value, or to subtract.
-For the sake of brevity, our image may be grayscale and each pixel defined by one 8-bit byte, then it's possible
+For the sake of brevity, our image may be grayscale and each pixel defined by one 8-bit byte, then it is possible
 to change brightness of 8 pixels simultaneously.}
 
 \IFRU{Когда MMX только появилось, эти регистры на самом деле распологались в FPU-регистрах. 
@@ -67,7 +67,7 @@ DES algorithm may be considered as a very large electronic circuit, with wires a
 Скажем, на x86 перменная типа \IT{unsigned int} вмещает в себе 32 бита, так что там можно хранить 
 промежуточные результаты сразу для 32-х блоков-ключей, используя 64+56 переменных типа \IT{unsigned int}.}
 {Bitslice DES\footnote{\URLBS} ~--- is an idea of processing group of blocks and keys simultaneously.
-Let's say, variable of type \IT{unsigned int} on x86 may hold up to 32 bits, so, it's possible to store there
+Let's say, variable of type \IT{unsigned int} on x86 may hold up to 32 bits, so, it is possible to store there
 intermediate results for 32 blocks-keys pairs simultaneously, using 64+56 variables of \IT{unsigned int} type.}
 
 \index{Oracle RDBMS}
@@ -75,7 +75,7 @@ intermediate results for 32 blocks-keys pairs simultaneously, using 64+56 variab
 переделав алгоритм bitslice DES для SSE2 и AVX ~--- и теперь возможно шифровать одновременно 
 128 или 256 блоков-ключей:}
 {I wrote an utility to brute-force Oracle RDBMS passwords/hashes (ones based on DES),
-slightly modified bitslice DES algorithm for SSE2 and AVX ~--- now it's possible to encrypt 128 
+slightly modified bitslice DES algorithm for SSE2 and AVX ~--- now it is possible to encrypt 128 
 or 256 block-keys pairs simultaneously.}
 
 \url{http://conus.info/utils/ops_SIMD/}
@@ -91,7 +91,7 @@ or 256 block-keys pairs simultaneously.}
 Векторизация ~--- это обрабатывать несколько элементов одновременно.}
 {Vectorization\footnote{\URLVEC}, for example, is when you have a loop taking couple of arrays at input and produces one array.
 Loop body takes values from input arrays, do something and put result into output array.
-It's important that there is only one single operation applied to each element.
+It is important that there is only one single operation applied to each element.
 Vectorization ~--- is to process several elements simultaneously.}
 
 \IFRU{Например:}{For example:}
@@ -117,9 +117,9 @@ for (i = 0; i < 1024; i++)
 по 4 из А в 128-битный XMM-регистр, 
 из B в другой XMM-регистр и выполнив инстукцию \PMULLD и \PMULHW, можно получить 4 64-битных 
 произведения\footnote{результат умножения} сразу.}
-{If each array element we have is 32-bit \Tint, then it's possible to load 4 elements from A into 128-bit 
+{If each array element we have is 32-bit \Tint, then it is possible to load 4 elements from A into 128-bit 
 XMM-register, from B to another XMM-registers, and by executing \PMULLD and \PMULHW, 
-it's possible to get 4 64-bit products\footnote{multiplication result} at once.}
+it is possible to get 4 64-bit products\footnote{multiplication result} at once.}
 
 \IFRU{Таким образом, тело цикла исполняется $1024/4$ раза вместо 1024, что в 4 раза меньше, и, конечно, быстрее.}
 {Thus, loop body count is $1024/4$ instead of 1024, that's 4 times less and, of course, faster.}
@@ -177,7 +177,7 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 By the way, no exception raised in case of overflow and no flags will be set, just low 32-bit of result will
 be stored.
 If one of \PADDD operands is address of value in memory,
-then address should be aligned on a 16-byte border. If it's not aligned, exception will be occured
+then address should be aligned on a 16-byte border. If it is not aligned, exception will be occured
 \footnote{More about data aligning: \URLWPDA}.}
 
 \item
@@ -186,7 +186,7 @@ then address should be aligned on a 16-byte border. If it's not aligned, excepti
 Если он не выровнен, произойдет исключение. 
 \MOVDQA работает быстрее чем \MOVDQU, но требует вышеозначенного.}
 {the same as \MOVDQU, but requires address of value in memory to be aligned on a 16-bit border.
-If it's not aligned, exception will be raised.
+If it is not aligned, exception will be raised.
 \MOVDQA works faster than \MOVDQU, but requires aforesaid.}
 
 \end{itemize}
@@ -268,7 +268,7 @@ This function will load 16 characters into a XMM-register and check each against
 
 \IFRU{Итак, прежде всего, мы проверяем указатель \TT{str}, выровнен ли он по 16-байтной границе. 
 Если нет, то мы вызовем обычную реализацию \strlen.}
-{First of all, we check \TT{str} pointer, if it's aligned on a 16-byte border.
+{First of all, we check \TT{str} pointer, if it is aligned on a 16-byte border.
 If not, let's call usual \strlen implementation.}
 
 \IFRU{Далее мы загружаем по 16 байт в регистр \XMMONE при помощи команды \MOVDQA.}
@@ -423,7 +423,7 @@ And will prepare 16 bits in the \EAX register. Other bits in the \EAX register a
 \IFRU{На вход может прийти 16 байт вроде}{There might be 16 bytes on input like} \TT{hello\textbackslash{}x00garbage\textbackslash{}x00ab}
 
 \IFRU{Это строка \TT{'hello'}, после нее терминирующий ноль, затем немного мусора в памяти.}
-{It's a \TT{'hello'} string, terminating zero after and some random noise in memory.}
+{It is a \TT{'hello'} string, terminating zero after and some random noise in memory.}
 
 \newcommand{\MSBFOOTNOTE}{\footnote{most significant bit}}
 \newcommand{\LSBFOOTNOTE}{\footnote{least significant bit}}
@@ -466,13 +466,13 @@ EAX=0010000000100000b
 
 \IFRU{А дальше все просто. Если нулевой байт найден, его позиция прибавляется к тому что 
 мы уже насчитали и возвращается результат.}
-{Now it's simple. If zero byte found, its position added to what we already counted and now we have 
+{Now it is simple. If zero byte found, its position added to what we already counted and now we have 
 ready to return result.}
 
 \IFRU{Почти всё.}{Almost all.}
 
 \IFRU{Кстати, следует также отметить, что компилятор MSVC сгенерировал два тела цикла сразу, для оптимизации.}
-{By the way, it's also should be noted, MSVC compiler emitted two loop bodies side by side, for optimization.}
+{By the way, it is also should be noted, MSVC compiler emitted two loop bodies side by side, for optimization.}
 
 \IFRU{Кстати, в SSE 4.2 (который появился в Intel Core i7) все эти манипуляции со строками могут быть еще проще:}
 {By the way, SSE 4.2 (appeared in Intel Core i7) offers more instructions where these string manipulations might be
