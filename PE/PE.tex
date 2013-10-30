@@ -138,38 +138,55 @@ fixed and shellcode can call it directly}.
 \IFRU{Разделение на секции присутствует, по видимому, во всех форматах исполняемых файлов}{Division by sections,
 as it seems, are present in all execuable file formats}.
 
-Сделано это для того, чтобы отделить код от данных, а данные --- от константных данных.
+\IFRU{Сделано это для того, чтобы отделить код от данных, а данные ~--- от константных данных.}
+{It is done in order to separate code from data, and data ~--- from constant data.}
 
 \begin{itemize}
 \item
-На секции кода будет стоять флаг \IT{IMAGE\_SCN\_CNT\_CODE} или \IT{IMAGE\_SCN\_MEM\_EXECUTE} --- это исполняемый код. 
+\IFRU{На секции кода будет стоять флаг}{There will be flag} 
+\IT{IMAGE\_SCN\_CNT\_CODE} \OrENRU \IT{IMAGE\_SCN\_MEM\_EXECUTE}\IFRU{}{ on code section}
+~--- \IFRU{это исполняемый код}{this is executable code}.
 
 \item
-На секции данных --- флаги \IT{IMAGE\_SCN\_CNT\_INITIALIZED\_DATA}, \IT{IMAGE\_SCN\_MEM\_READ} и \\
-\IT{IMAGE\_SCN\_MEM\_WRITE}.
+\IFRU{На секции данных}{On data section} ~--- \IFRU{флаги }{}\IT{IMAGE\_SCN\_CNT\_INITIALIZED\_DATA}, 
+\IT{IMAGE\_SCN\_MEM\_READ} \AndENRU \IT{IMAGE\_SCN\_MEM\_WRITE}\IFRU{}{ flags}.
 
 \item
-На пустой секции с неинициализированными данными --- \IT{IMAGE\_SCN\_CNT\_UNINITIALIZED\_DATA}, \\
-\IT{IMAGE\_SCN\_MEM\_READ} и \IT{IMAGE\_SCN\_MEM\_WRITE}.
+\IFRU{На пустой секции с неинициализированными данными}{On an empty section with uninitialized data} ~--- 
+\IT{IMAGE\_SCN\_CNT\_UNINITIALIZED\_DATA}, \IT{IMAGE\_SCN\_MEM\_READ} \AndENRU \IT{IMAGE\_SCN\_MEM\_WRITE}.
 
 \item
-А на секции с константными данными, то есть, защищенными от записи, могут быть флаги \\
-\IT{IMAGE\_SCN\_CNT\_INITIALIZED\_DATA} и \IT{IMAGE\_SCN\_MEM\_READ} без \IT{IMAGE\_SCN\_MEM\_WRITE}. 
-Если попытаться записать что-то в эту секцию, процесс упадет.
+\IFRU{А на секции с константными данными, то есть, защищенными от записи}{On a constant data section, in other words,
+protected from writing}, \IFRU{могут быть флаги}{there are may be flags} \\
+\IT{IMAGE\_SCN\_CNT\_INITIALIZED\_DATA} \AndENRU \IT{IMAGE\_SCN\_MEM\_READ} \IFRU{без}{without} \IT{IMAGE\_SCN\_MEM\_WRITE}. 
+\IFRU{Если попытаться записать что-то в эту секцию, процесс упадет}{A process will crash if it would try to write to this
+section}.
 \end{itemize}
 
-В PE можно задавать название для секции, но это не важно.
-Часто (но не всегда) секция кода называется \TT{.text}, данных --- \TT{.data}, константных данных --- \TT{.rdata} (readable data).
-Еще популярные имена секций: \TT{.idata} (секция импортов), \TT{.edata} (секция экспортов), \TT{.reloc} (секция релоков), \TT{.bss} (неинициализированные данные), \TT{.tls} --- thread local storage, \TT{.rsrc} (ресурсы).
+\IFRU{В PE-файле можно задавать название для секции, но это не важно}{Each section in PE-file may have a name, however,
+it is not very important}.
+\IFRU{Часто (но не всегда)}{Often (but not always)} \IFRU{секция кода называется}{code section have the name} \TT{.text}, 
+\IFRU{секция данных}{data section} --- \TT{.data}, \IFRU{константных данных}{constant data section} --- \TT{.rdata} 
+\IT{(readable data)}.
+\IFRU{Еще популярные имена секций}{Other popular section names are}: 
+\TT{.idata} (\IFRU{секция импортов}{imports section}),
+\TT{.edata} (\IFRU{секция экспортов}{exports section}),
+\TT{.reloc} (\IFRU{секция релоков}{relocs section}),
+\TT{.bss} (\IFRU{неинициализированные данные}{uninitialized data (\ac{BSS})}),
+\TT{.tls} ~--- thread local storage (\ac{TLS}),
+\TT{.rsrc} (\IFRU{ресурсы}{resources}).
 
-Запаковщики/зашифровщики PE-файлов часто затирают имена секций, или меняют на свои.
+\IFRU{Запаковщики/зашифровщики PE-файлов часто затирают имена секций, или меняют на свои}
+{PE-file packers/encryptors are often garble section names or replacing names to their own}.
 
-В MSVC можно объявлять данные в произвольно названной секции\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/cc307397.aspx}}.
+\IFRU{В \ac{MSVC} можно объявлять данные в произвольно названной секции}
+{\ac{MSVC} allows to declare data in arbitrarily named section}
+\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/cc307397.aspx}}.
 
 Некоторые компиляторы и линкеры могут добавлять также секцию с отладочными символами и вообще отладочной информацией
 (например, MinGW).
 \index{PDB}
-Хотя это не так в \ac{MSVC} (там принято отладочную информацию сохранять в PDB-файлах).
+Хотя это не так в современных версиях \ac{MSVC} (там принято отладочную информацию сохранять в PDB-файлах).
 
 \subsection{Релоки}
 
