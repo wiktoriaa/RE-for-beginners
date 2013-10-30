@@ -1,4 +1,4 @@
-\section{Win32 PE}
+\subsection{Win32 PE}
 
 \acs{PE} \IFRU{это формат исполняемых файлов, принятый в Windows}{is a executable file format used in
 Windows}.
@@ -30,7 +30,7 @@ message like} ``This program cannot be run in DOS mode.'' ---
 \IFRU{если запустить эту программу в DOS либо Windows 3.1, выведется это сообщение}
 {if to run this program in DOS or Windows 3.1, this message will be printed}.
 
-\subsection{\IFRU{Терминология}{Terminology}}
+\subsubsection{\IFRU{Терминология}{Terminology}}
 
 \begin{itemize}
 \item
@@ -39,7 +39,7 @@ message like} ``This program cannot be run in DOS mode.'' ---
 \item
 \IFRU{Процесс}{Process} --- \IFRU{это некая загруженная в память и работающая программа}{a program
 loaded into memory and running}.
-\IFRU{Как правило состоит из одного .exe-файла и массы .dll-файлов}{Usually consisting of 
+\IFRU{Как правило состоит из одного .exe-файла и массы .dll-файлов}{Commonly consisting of 
 one .exe-file and bunch of .dll-files}.
 
 \item
@@ -67,7 +67,7 @@ uses exactly} \ac{RVA}-\IFRU{адреса}{addresses}.
 imports}\footnote{\cite{Pietrek1}}.
 \end{itemize}
 
-\subsection{\IFRU{Базовый адрес}{Base address}}
+\subsubsection{\IFRU{Базовый адрес}{Base address}}
 
 \IFRU{Дело в том что несколько авторов модулей могут готовить DLL-файлы для других, и нет возможности договориться о том, какие адреса и кому будут отведены.}
 {The fact is that several module authors may prepare DLL-files for others and there are no possibility
@@ -77,7 +77,7 @@ to reach agreement, which addresses will be assigned to whose modules.}
 одна из них будет загружена по этому базовому адресу, 
 а вторая ~--- по другому свободному месту в памяти процесса, и все виртуальные адреса
 во второй DLL будут скорректированы.}
-{So that's why if two necessary for process loading DLLs has the same base addresses,
+{So that is why if two necessary for process loading DLLs has the same base addresses,
 one of which will be loaded at this base address, and another ~--- at the other spare space in process memory,
 and each virtual addresses in the second DLL will be corrected.} \\
 \\
@@ -113,7 +113,12 @@ fixed and shellcode can call it directly}.
 \IFRU{загружает и вашу программу, и все модули ей необходимые, по случайным адресам, разным при каждом запуске}
 {method loads your program and all modules it needs at random base addresses, each time different}.
 
-\subsection{\IFRU{Версия ОС}{OS version}}
+\subsubsection{Subsystem}
+
+Имеется также поле subsystem, обычно это native (.sys-драйвер), console (консольное приложение) или \ac{GUI}
+(не консольное).
+
+\subsubsection{\IFRU{Версия ОС}{OS version}}
 
 \IFRU{В PE-файле имеется минимальный номер версии Windows, необходимый для загрузки модуля.}
 {A PE-file also has minimal Windows version needed in order to load it.}
@@ -133,7 +138,7 @@ fixed and shellcode can call it directly}.
 {by changing compiler's options}}, 
 \IFRU{можно заставить генерировать и под Windows XP}{it is possible to force it to compile for Windows XP}.
 
-\subsection{\IFRU{Секции}{Sections}}
+\subsubsection{\IFRU{Секции}{Sections}}
 
 \IFRU{Разделение на секции присутствует, по видимому, во всех форматах исполняемых файлов}{Division by sections,
 as it seems, are present in all execuable file formats}.
@@ -183,82 +188,155 @@ it is not very important}.
 {\ac{MSVC} allows to declare data in arbitrarily named section}
 \footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/cc307397.aspx}}.
 
-Некоторые компиляторы и линкеры могут добавлять также секцию с отладочными символами и вообще отладочной информацией
-(например, MinGW).
+\IFRU{Некоторые компиляторы и линкеры могут добавлять также секцию с отладочными символами 
+и вообще отладочной информацией}
+{Some compilers and linkers can add a section with debugging symbols and other debugging information}
+(\IFRU{например}{for example}, MinGW).
 \index{PDB}
-Хотя это не так в современных версиях \ac{MSVC} (там принято отладочную информацию сохранять в PDB-файлах).
+\IFRU{Хотя это не так в современных версиях}{However it is not so in modern versions of} \ac{MSVC} 
+(\IFRU{там принято отладочную информацию сохранять в отдельных PDB-файлах}
+{a separate PDB-files are used there for this purpose}).
 
-\subsection{Релоки}
+\subsubsection{\IFRU{Релоки}{Relocations (relocs)}}
 
-Так же известны как FIXUP-ы.
+\IFRU{Так же известны как FIXUP-ы}{\ac{AKA} FIXUP-s}.
 
-Это тоже присутствует почти во всех форматах загружаемых и исполняемых файлов\footnote{Даже .exe-файлы в MS-DOS}.
+\IFRU{Это также присутствует почти во всех форматах загружаемых и исполняемых файлов}
+{This is also present in almost all executable file formats}
+\footnote{\IFRU{Даже .exe-файлы в}{Even .exe-files in} MS-DOS}.
 
-Как видно, модули могут загружаться по другим базовым адресам, но как же тогда работать с глобальными переменными,
-например? Ведь нужно обращаться к ней по адресу. Одно из решений это \PICcode\ref{sec:PIC}. 
-Но это далеко не всегда удобно.
-Поэтому имеется таблица релоков, где просто перечислены места в модуле с адресами подлежащими коррекции при загрузке
-по другому базовому адресу.
-Например, по 0x410000 лежит некая глобальная переменная, и вот как обеспечивается её чтение:
+\IFRU{Как видно, модули могут загружаться по другим базовым адресам,
+но как же тогда работать с глобальными переменными, например?}
+{Obviously, modules are can be loaded on different base addresses, but how to work with global variables,
+for example?}
+\IFRU{Ведь нужно обращаться к ним по адресу}{They must be accessed by an address}.
+\IFRU{Одно из решений это}{One solution is} \PICcode\ref{sec:PIC}. 
+\IFRU{Но это далеко не всегда удобно}{But it is not always suitable}.
+
+\IFRU{Поэтому имеется таблица релоков. 
+Там просто перечислены адреса мест в модуле подлежащими коррекции при загрузке
+по другому базовому адресу.}
+{That is why relocations table is present.
+The addresses of points needs to be corrected in case of loading on another base address 
+are just enumerated in the table.}
+
+\IFRU{Например, по}{For example, there are a global variable at the address}
+\TT{0x410000} 
+\IFRU{лежит некая глобальная переменная, и вот как обеспечивается её чтение}
+{and that is how it is accessed}:
 
 \begin{lstlisting}
 A1 00 00 41 00         mov         eax,[000410000]
 \end{lstlisting}
 
-Базовый адрес модуля, 0x400000, а \ac{RVA} глобальной переменной 0x10000. Если загружать модуль по базовому адресу
-0x500000, нужно чтобы адрес этой переменной в этой инструкции стал 0x510000. Как видно, адрес переменной закодирован
-в самой инструкции \TT{MOV}, после байта 0xA1. Поэтому адрес четырех байт, после 0xA1, записыватся в таблицу релоков.
-И если модуль загружается по другому базовому адресу, загрузчик обходит все адреса в таблице, находит каждое 32-битное
-слово, отнимает от него настоящий, оригинальный базовый адрес (в итоге получается \ac{RVA}), и прибавляет новый базовый адрес.
+\IFRU{Базовый адрес модуля}{Base address of module is} \TT{0x400000},
+\IFRU{а }{}\ac{RVA} \IFRU{глобальной переменной}{of global variable is} \TT{0x10000}.
 
-Так можно обходиться со всеми глобальными переменными.
+\IFRU{Если загружать модуль по базовому адресу}{If the module is loading on the base address}
+\TT{0x500000}, \IFRU{нужно чтобы адрес этой переменной в этой инструкции стал}{the factual address
+of the global variable must be} \TT{0x510000}.
 
-Релоки могут быть разных типов, однако в Windows для x86-процессоров, тип обычно \\
+\IFRU{Как видно, адрес переменной закодирован в самой инструкции}
+{As we can see, address of variable is encoded in the instruction} \TT{MOV}, 
+\IFRU{после байта}{after the byte} \TT{0xA1}.
+
+\IFRU{Поэтому адрес четырех байт}{That is why address of 4 bytes}, \IFRU{после}{after} \TT{0xA1},
+\IFRU{записыватся в таблицу релоков}{is written into relocs table}.
+
+\IFRU{Если модуль загружается по другому базовому адресу},
+\IFRU{загрузчик \ac{OS} обходит все адреса в таблице}{\ac{OS}-loader enumerates all addresses in table}, 
+\IFRU{находит каждое 32-битное слово по этому адресу}{finds each 32-bit word on that address},
+\IFRU{отнимает от него настоящий, оригинальный базовый адрес}{subtracts real, original base address of it}
+(\IFRU{в итоге получается}{we getting} \ac{RVA}\IFRU{}{ here}),
+\IFRU{и прибавляет к нему новый базовый адрес}{and adds new base address to it}.
+
+
+\IFRU{А если модуль загружается по своему оригинальному базовому адресу, ничего не происходит}
+{If module is loading on original base address, nothing happens}.
+
+\IFRU{Так можно обходиться со всеми глобальными переменными}{All global variables may be treated like that}.
+
+\IFRU{Релоки могут быть разных типов}{Relocs may have various types}, 
+\IFRU{однако в Windows для x86-процессоров, тип обычно}
+{however, in Windows, for x86 processors, the type is usually} \\
 \IT{IMAGE\_REL\_BASED\_HIGHLOW}.
 
-\subsection{\IFRU{Экспорты и импорты}{Exports and imports}}
+\subsubsection{\IFRU{Экспорты и импорты}{Exports and imports}}
 
-Как известно, любая исполняемая программа должна как-то пользоваться сервисами \ac{OS} и прочими DLL-библиотеками.
+\IFRU{Как известно}{As all we know}, 
+\IFRU{любая исполняемая программа должна как-то пользоваться сервисами \ac{OS} и прочими DLL-библиотеками}
+{any executable program must use \ac{OS} services and other DLL-libraries somehow}.
 
-Можно сказать, что нужно связывать функции из одного модуля (обычно DLL) и места их вызовов в 
-другом модуле (.exe-файл или DLL). 
-Для этого, у каждой DLL есть ``экспорты'', это таблица ф-ций плюс их адреса в модуле.
-А у .exe-файла, либо DLL, есть ``импорты'', это таблица ф-ций требующихся для исполнения, плюс список имен DLL-файлов.
-Загрузчик, после загрузки основного .exe-файла, проходит таблицу импортов, загружает дополнительные DLL-файлы, 
-находит имена ф-ций среди экспортов в DLL и прописывает их адреса в таблице импортов в головном .exe-модуле.
+\IFRU{Можно сказать, что нужно связывать функции из одного модуля (обычно DLL) и места их вызовов в 
+другом модуле (.exe-файл или другая DLL)}
+{It can be said, functions from one module (usually DLL) must be connected somehow to a points of their
+calls in other module (.exe-file or another DLL)}.
 
-Как видно, во время загрузки, нужно много сравнивать одни строки с другими, так что, 
+\IFRU{Для этого, у каждой DLL есть ``экспорты'', это таблица ф-ций плюс их адреса в модуле}
+{Each DLL has ``exports'' for this, this is table of functions plus its addresses in a module}.
+
+\IFRU{А у .exe-файла, либо DLL, есть ``импорты'', (\ac{IAT}) это таблица ф-ций требующихся для исполнения 
+включая список имен DLL-файлов}
+{Each .exe-file or DLL has ``imports'', (\ac{IAT}) this is a table of functions it needs for execution including
+list of DLL filenames}.
+
+\IFRU{Загрузчик \ac{OS}, после загрузки основного .exe-файла, проходит по \ac{IAT}:
+загружает дополнительные DLL-файлы, 
+находит имена ф-ций среди экспортов в DLL и прописывает их адреса в \ac{IAT} в головном .exe-модуле}
+{After loading main .exe-file, \ac{OS}-loader, processes \ac{IAT}: 
+it loads additional DLL-files, finds function names
+among DLL exports and writes their addresses down in an \ac{IAT} of main .exe-module}.
+
+\IFRU{Как видно, во время загрузки, загрузчику нужно много сравнивать одни имена ф-ций с другими, а сравнение строк
+это не очень быстрая процедура, так что,
 имеется также поддержка ``ординалов'' или 
-``hint''-ов, это когда в таблице импортов номера ф-ций вместо их имен. Так их быстрее находить в загружаемой DLL.
-В таблице экспортов ординалы присутствуют всегда.
+``hint''-ов, это когда в таблице импортов проставлены номера ф-ций вместо их имен}
+{As we can notice, during loading, loader must compare a lot of function names, but strings comparison is not a very
+fast procedure, so, there are support of ``ordinals'' or ``hints'',
+that is a function numbers stored in the table instead of their names}.
+
+\IFRU{Так их быстрее находить в загружаемой DLL}{That is how they can be located faster in loading DLL}.
+\IFRU{В таблице экспортов ординалы присутствуют всегда}{Ordinals are always present in ``export'' table}.
 
 \index{MFC}
-К примеру, программы использующие библиотеки \ac{MFC}, обычно загружают mfc*.dll по ординалам, и в таких программах,
-в таблице импорта, нет имен ф-ций \ac{MFC}. При загрузке такой программы в \IDA, она спросит у вас путь к mfc*.dll,
-чтобы установить имена ф-ций. Если в \IDA не указать путь к этой DLL, то вместо имен ф-ций будет что-то вроде 
-\IT{mfc80\_123}.
+\IFRU{К примеру}{For example}, \IFRU{программы использующие библиотеки}{program using} 
+\ac{MFC}\IFRU{, обычно загружают mfc*.dll по ординалам}{ library usually loads mfc*.dll by ordinals},
+\IFRU{и в таких программах, в \ac{IAT}, нет имен ф-ций \ac{MFC}}
+{and in such programs there are no \ac{MFC} function names in \ac{IAT}}.
 
-\subsubsection{\IFRU{Секция импортов}{Imports section}}
+\IFRU{При загрузке такой программы в \IDA, она спросит у вас путь к файлу mfc*.dll,
+чтобы установить имена ф-ций}{While loading such program in \IDA, it will asks for a path to mfs*.dll files,
+in order to determine function names}.
+\IFRU{Если в \IDA не указать путь к этой DLL, то вместо имен ф-ций будет что-то вроде}
+{If not to tell \IDA path to this DLL, there are will something like}
+\IT{mfc80\_123}\IFRU{}{ instead of function names}.
 
-Под таблицы связанные с импортами иногда отводится отдельная секция, но это не обязательно.
+\paragraph{\IFRU{Секция импортов}{Imports section}}
 
-Импорты это запутанная тема еще и из-за терминологической путанницы.
+\IFRU{Под \ac{IAT} и всё что с ней связано иногда отводится отдельная секция (с названием вроде \TT{.idata}),
+но это не обязательно}
+{Often a separate section is allocated for \ac{IAT} table and everything related to it (with name like \TT{.idata}),
+however, it is not a strict rule}.
 
+\IFRU{Импорты это запутанная тема еще и из-за терминологической путанницы. Попробуем собрать всё в одно место.}
+{Imports is also confusing subject because of terminological mess. Let's try to collect all information in one place.}
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[scale=0.66]{PE/unnamed0.png}
+\includegraphics[scale=0.66]{OS-specific/PE/unnamed0.png}
 \caption{\IFRU{схема, объеденяющая все структуры в PE-файлы, связанные с импортами}
 {The scheme, uniting all PE-file structures related to imports}}
 \end{figure}
 
-Самая главная структура, это массив \IT{IMAGE\_IMPORT\_DESCRIPTOR}. Каждый элемент на каждую импортируемую DLL.
+\IFRU{Самая главная структура, это массив}{Main structure is the array of} \IT{IMAGE\_IMPORT\_DESCRIPTOR}.
+\IFRU{Каждый элемент на каждую импортируемую DLL}{Each element for each DLL being imported}.
 
-У каждого элемента есть \ac{RVA}-адрес текстовой строки-имени DLL (\IT{Name}). \IT{OriginalFirstThink} это \ac{RVA}-адрес
-массива \ac{RVA}-адресов, каждый из которых указывает на текстовую строку где записано имя ф-ции, а перед строкой, 
-16-битное число (hint) --- ординал ф-ции. Если при загрузке удается найти ф-цию по ординалу, тогда сравнение текстовых
-строк не будет происходить. Массив оканчивается нулем. Есть также указатель с названием \IT{FirstThunk}, 
-это просто \ac{RVA}-адрес места, где загрузчик будет проставлять адреса найденных ф-ций.
+У каждого элемента есть \ac{RVA}-адрес текстовой строки-имени DLL (\IT{Name}).
+\IT{OriginalFirstThink} это \ac{RVA}-адрес массива \ac{RVA}-адресов, каждый из которых указывает на текстовую строку где записано имя ф-ции, а перед строкой, 
+16-битное число (hint) --- ординал ф-ции.
+Если при загрузке удается найти ф-цию по ординалу, тогда сравнение текстовых строк не будет происходить.
+Массив оканчивается нулем.
+Есть также указатель с названием \IT{FirstThunk}, это просто \ac{RVA}-адрес места, где загрузчик будет проставлять адреса найденных ф-ций.
 
 Там, где загрузчик проставляет адреса, \IDA именует их так: \IT{\_\_imp\_CreateFileA}, итд.
 
@@ -319,7 +397,7 @@ JMP EAX
 быстро запускаются), он ``мапится'' (map), и подгружается в память по мере
 обращения к этой памяти. И возможно в Microsoft решили что так будет быстрее.
 
-\subsection{Ресурсы}
+\subsubsection{Ресурсы}
 
 Ресурсы в PE-файле это набор иконок, картинок, текстовых строк, описаний диалогов.
 Возможно, их в свое время решили выделить в отдельное место, чтобы все эти вещи были мультиязычными,
@@ -328,7 +406,7 @@ JMP EAX
 В качестве побочного эффекта, их легко редактировать и сохранять обратно, даже не обладая специальными знаниями,
 например, редактором ResHack\ref{ResHack}.
 
-\subsection{.NET}
+\subsubsection{.NET}
 
 \index{.NET}
 Программы на .NET компилируются не в машинный код, а в свой собственный байткод.
@@ -342,7 +420,7 @@ jmp         mscoree.dll!_CorExeMain
 А в mscoree.dll и находится .NET-загрузчик, который уже сам будет работать с PE-файлом.
 
 \index{TLS}
-\subsection{TLS}
+\subsubsection{TLS}
 
 Эта секция содержит в себе инициализированные данные для \ac{TLS}\ref{TLS} (если нужно). При старте нового треда,
 его \ac{TLS}-данные инициализируются данными из этой секции. \\
@@ -351,7 +429,7 @@ jmp         mscoree.dll!_CorExeMain
 Если они присутствуют, то они будут вызваны перед тем как передать управление на точку входа (\ac{OEP}).
 Это широко используется запаковщиками/защифровщиками PE-файлов.
 
-\subsection{Инструменты}
+\subsubsection{Инструменты}
 
 \begin{itemize}
 \item
@@ -370,7 +448,7 @@ pefile --- Python-библиотека для работы с PE-файлами\
 ResHack \acs{AKA} Resource Hacker --- редактор ресурсов\footnote{\url{http://www.angusj.com/resourcehacker/}}
 \end{itemize}
 
-\subsection{Further reading}
+\subsubsection{Further reading}
 
 % FIXME: bibliography per chapter or section
 \begin{itemize}

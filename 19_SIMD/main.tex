@@ -122,7 +122,7 @@ XMM-register, from B to another XMM-registers, and by executing \PMULLD and \PMU
 it is possible to get 4 64-bit products\footnote{multiplication result} at once.}
 
 \IFRU{Таким образом, тело цикла исполняется $1024/4$ раза вместо 1024, что в 4 раза меньше, и, конечно, быстрее.}
-{Thus, loop body count is $1024/4$ instead of 1024, that's 4 times less and, of course, faster.}
+{Thus, loop body count is $1024/4$ instead of 1024, that is 4 times less and, of course, faster.}
 
 \newcommand{\URLINTELVEC}{\href{http://www.intel.com/intelpress/sum_vmmx.htm}{Excerpt: Effective Automatic Vectorization}}
 
@@ -252,7 +252,7 @@ As of MSVC, some of them are located in the \TT{intrin.h} file.}
 для подсчета длины строки} при помощи SIMD-инструкций, работающий в 2-2.5 раза быстрее обычной реализации. 
 Эта функция будет загружать в XMM-регистр сразу 16 байт и проверять каждый на ноль.}
 {It is possible to implement \strlen function\footnote{strlen() ~--- standard C library function for calculating
-string length} using SIMD-instructions, working 2-2.5 times faster than usual implementation.
+string length} using SIMD-instructions, working 2-2.5 times faster than common implementation.
 This function will load 16 characters into a XMM-register and check each against zero.}
 
 \lstinputlisting{19_SIMD/18_3.c}
@@ -269,7 +269,7 @@ This function will load 16 characters into a XMM-register and check each against
 \IFRU{Итак, прежде всего, мы проверяем указатель \TT{str}, выровнен ли он по 16-байтной границе. 
 Если нет, то мы вызовем обычную реализацию \strlen.}
 {First of all, we check \TT{str} pointer, if it is aligned on a 16-byte border.
-If not, let's call usual \strlen implementation.}
+If not, let's call generic \strlen implementation.}
 
 \IFRU{Далее мы загружаем по 16 байт в регистр \XMMONE при помощи команды \MOVDQA.}
 {Then, load next 16 bytes into the \XMMONE register using \MOVDQA instruction.}
@@ -317,7 +317,7 @@ any memory there. Attempt to access a memory starting from that address will rai
 \IFRU{И предположим, что программа хранит некую строку из, скажем, пяти символов почти в самом конце блока, 
 что не является преступлением:}
 {And let's consider, the program holding some string containing 5 characters almost at the end of block,
-and that's not a crime.}
+and that is not a crime.}
 
 \begin{center}
   \begin{tabular}{ | l | l | }
@@ -337,7 +337,7 @@ and that's not a crime.}
 \IFRU{В обычных условиях, программа вызвает \strlen передав ей указатель на строку \TT{'hello'} 
 лежащую по адресу 0x008c1ff8. 
 \strlen будет читать по одному байту до 0x008c1ffd, где ноль, и здесь она закончит работу.}
-{So, in usual conditions the program calling \strlen passing it a pointer to string \TT{'hello'} 
+{So, in common conditions the program calling \strlen passing it a pointer to string \TT{'hello'} 
 lying in memory at address 0x008c1ff8.
 \strlen will read one byte at a time until 0x008c1ffd, where zero-byte, and so here it will stop working.}
 
@@ -438,7 +438,7 @@ XMM1: 0000ff00000000000000ff0000000000
 \end{verbatim}
 
 \IFRU{Это означает что инструкция сравнения обнаружила два нулевых байта, что и не удивительно.}
-{This means, the instruction found two zero bytes, and that's not surprising.}
+{This means, the instruction found two zero bytes, and that is not surprising.}
 
 \IFRU{\TT{PMOVMSKB} в нашем случае подготовит \EAX вот так (в двоичном представлении):} 
 {\TT{PMOVMSKB} in our case will prepare \EAX like (in binary representation):} \IT{0010000000100000b}.

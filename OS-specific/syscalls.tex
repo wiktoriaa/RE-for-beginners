@@ -1,0 +1,61 @@
+﻿\section{\IFRU{Системные вызовы (syscall-ы)}{System calls (syscall-s)}}
+
+\index{syscall}
+
+\index{kernel space}
+\index{user space}
+Как известно, все работающие процессы в \ac{OS} делятся на две категории: имеющие полный доступ
+ко всему ``железу'' (kernel space) и не имеющие (user space).
+
+В первой категории ядро \ac{OS} и, обычно, драйвера.
+
+Во второй категории всё прикладное ПО.
+
+Это разделение существует для того, чтобы падающий процесс не мог испортить что-то в других процессах
+или даже в самом ядре \ac{OS}.
+\index{kernel panic}
+\index{BSoD}
+С другой стороны, падающий драйвер или ошибка внутри OS обычно приводит к kernel panic или BSoD.
+
+Защита x86-процессора устроена так что возможно разделить всё на 4 слоя защиты (rings), но и в Linux,
+и в Windows, используются только 2: ring0 (kernel space) и ring3 (user space).
+
+Системные вызовы (syscall-ы) это место где сходятся вместе оба эти пространства.
+Это, можно сказать, самое главное API предоставляемое прикладному ПО.
+
+Работа через syscall-ы популярна у авторов шеллкодов, потому что в шеллкоде обычно бывает трудно определить
+адреса нужных ф-ций в системных библиотеках, а syscall-ами проще пользоваться, хотя и придется писать больше
+кода. Также нельзя еще забывать, что номера syscall-ов, например, в Windows, могут отличаться от версии к
+версии.
+
+\subsection{Linux}
+
+\index{int 0x80}
+В Linux вызов syscall-а обычно происходит через \TT{int 0x80}. В регистре \EAX передается номер вызова,
+в остальных регистрах ~---- параметры.
+
+\lstinputlisting[caption=Простой пример использования пары syscall-ов]{OS-specific/linux_syscall.s}
+
+Компиляция:
+
+\begin{lstlisting}
+nasm -f elf32 1.s
+ld 1.o
+\end{lstlisting}
+
+Полный список syscall-ов в Linux: \url{http://syscalls.kernelgrok.com/}.
+
+\subsection{Windows}
+
+\index{int 0x2e}
+\index{x86!\Instructions!SYSENTER}
+
+Вызов происходит через \TT{int 0x2e} либо используя специальную инструкцию \TT{SYSENTER}.
+
+Полный список syscall-ов в Windows: \url{http://j00ru.vexillium.org/ntapi/}.
+
+\IFRU{Смотрите также}{Further reading}:
+
+\href{http://www.symantec.com/connect/articles/windows-syscall-shellcode}
+{``Windows Syscall Shellcode'' by Piotr Bania}.
+
