@@ -1,78 +1,142 @@
 \section{Win32 PE}
 
-\acs{PE} это формат исполняемых файлов, принятый в Windows.
+\acs{PE} \IFRU{это формат исполняемых файлов, принятый в Windows}{is a executable file format used in
+Windows}.
 
-Разница между .exe, .dll, .sys в том, что у .exe обычно нет экспортов, только импорты.
+\IFRU{Разница между .exe, .dll, и .sys в том, что у .exe и .sys обычно нет экспортов, только импорты}
+{The difference between .exe, .dll and .sys is that .exe and .sys usually doesn't have exports, only imports}.
 
-У .dll есть точка входа (\ac{OEP}), там располагается DllMain(), но обычно, эта
-функция ничего не делает.
+\IFRU{У \ac{DLL}, как и у всех PE-файлов, есть точка входа (\ac{OEP})
+(там располагается ф-ция DllMain()), но обычно эта ф-ция ничего не делает.}
+{A \ac{DLL}, just as any other PE-file, has entry point (\ac{OEP}) (the function DllMain() is located at it) 
+but usually this function does nothing.}
 
-.sys это обычно драйвера устройство. Для драйверов Windows требует чтобы контрольная сумма в файле была проставлена
-и была верной\footnote{Например, Hiew\ref{Hiew} умеет подсчитывать эту сумму}.
-А начиная с Windows Vista, файлы-драйвера должны быть также подписаны при помощи электронной подписи, 
-иначе они не будут загружаться.
+.sys \IFRU{это обычно драйвера устройств}{is usually device driver}.
+
+\IFRU{Для драйверов, Windows требует чтобы контрольная сумма в PE-файле была проставлена
+и была верной}
+{As of drivers, Windows require that checksum is present in PE-file and must be correct}
+\footnote{\IFRU{Например}{For example}, Hiew\ref{Hiew} \IFRU{умеет её подсчитывать}{can calculate it}}.
+
+\IFRU{А начиная с}{Starting at} Windows Vista, 
+\IFRU{PE-файлы-драйвера должны быть также подписаны при помощи электронной подписи, 
+иначе они не будут загружаться.}
+{driver PE-files must be also signed by digital signature. It will fail to load without signature.}
 
 \index{MS-DOS}
-В начале всякого PE-файла есть небольшая DOS-программа, выводящая на консоль сообщение вроде ``This program cannot be run in DOS mode.'' --- 
-это сделано для того, что если запустить эту программу в DOS либо Windows 3.1, выведется это сообщение.
+\IFRU{В начале всякого PE-файла есть крохотная DOS-программа,
+выводящая на консоль сообщение вроде}{Any PE-file begins with tiny DOS-program, printing a
+message like} ``This program cannot be run in DOS mode.'' --- 
+\IFRU{если запустить эту программу в DOS либо Windows 3.1, выведется это сообщение}
+{if to run this program in DOS or Windows 3.1, this message will be printed}.
 
 \subsection{\IFRU{Терминология}{Terminology}}
 
 \begin{itemize}
 \item
-Модуль --- это отдельный файл, .exe или .dll.
+\IFRU{Модуль}{Module} --- \IFRU{это отдельный файл}{is a separate file}, .exe \OrENRU .dll.
 
 \item
-Процесс --- это некая работающая загруженная в память и программа. Как правило состоит из одного .exe-файла и массы
-.dll-файлов.
+\IFRU{Процесс}{Process} --- \IFRU{это некая загруженная в память и работающая программа}{a program
+loaded into memory and running}.
+\IFRU{Как правило состоит из одного .exe-файла и массы .dll-файлов}{Usually consisting of 
+one .exe-file and bunch of .dll-files}.
 
 \item
-Память процесса --- память с которой работает процесс. Каждого процесса --- своя. Имеются загруженные модули, память
-стека, кучи (heap), итд.
+\IFRU{Память процесса}{Process memory} --- \IFRU{память с которой работает процесс}{the memory a process
+works with}.
+\IFRU{У каждого процесса --- своя}{Each process has its own}.
+\IFRU{Там обычно имеются загруженные модули, память стека, кучи (heap), итд}{There can usually be 
+loaded modules, memory of the stack, heap(s), etc}.
 
 \item
-\ac{VA} --- это адрес, который будет использоваться в самой программе.
+\ac{VA} --- \IFRU{это адрес, который будет использоваться в самой программе}{is address which will
+be used in program}.
 
 \item
-Базовый адрес --- это адрес, по которому модуль будет загружен в пространство процесса.
+\IFRU{Базовый адрес}{Base address} --- \IFRU{это адрес, по которому модуль будет загружен 
+в пространство процесса}{is the address within a process memory at which a module will be loaded}.
 
 \item
-\ac{RVA} --- это \ac{VA}-адрес минус базовый адрес. Многие адреса в таблицах PE-файла используют именно \ac{RVA}-адреса.
+\ac{RVA} --- \IFRU{это}{is a} \ac{VA}-\IFRU{адрес минус базовый адрес}{address minus base address}.
+\IFRU{Многие адреса в таблицах PE-файла используют именно}{Many addresses in PE-file tables
+uses exactly} \ac{RVA}-\IFRU{адреса}{addresses}.
 
 \item
-\ac{IAT} --- самая главная таблица описывающая импорты\footnote{\cite{Pietrek1}}.
+\ac{IAT} --- \IFRU{самая главная таблица описывающая импорты}{most important table which describes
+imports}\footnote{\cite{Pietrek1}}.
 \end{itemize}
 
 \subsection{\IFRU{Базовый адрес}{Base address}}
-Дело в том что несколько авторов могут готовить DLL-файлы для других, и нет возможности договориться о том, какие адреса и кому будут отведены.
-Поэтому, если у двух необходимых для загрузки DLL одинаковые базовые адреса, одна из них будет загружена по нему, а вторая --- по другому, свободному, и все виртуальные адреса во второй DLL будут изменены. \\
+
+\IFRU{Дело в том что несколько авторов модулей могут готовить DLL-файлы для других, и нет возможности договориться о том, какие адреса и кому будут отведены.}
+{The fact is that several module authors may prepare DLL-files for others and there are no possibility
+to reach agreement, which addresses will be assigned to whose modules.}
+
+\IFRU{Поэтому, если у двух необходимых для загрузки процесса DLL одинаковые базовые адреса,
+одна из них будет загружена по этому базовому адресу, 
+а вторая ~--- по другому свободному месту в памяти процесса, и все виртуальные адреса
+во второй DLL будут скорректированы.}
+{So that's why if two necessary for process loading DLLs has the same base addresses,
+one of which will be loaded at this base address, and another ~--- at the other spare space in process memory,
+and each virtual addresses in the second DLL will be corrected.} \\
 \\
-Очень часто, по крайней мере линкер в \ac{MSVC}, генерирует .exe-файлы с базовым адресом 0x400000, и с секцией кода начинающейся с 0x401000. Это значит что \ac{RVA} начала секции кода --- 0x1000. 
-А DLL часто генерируются этим линкером с базовым адресом 0x10000000\footnote{Это можно задавать опцией /BASE в линкере}.
+\IFRU{Очень часто линкер в}{Often, linker in} \ac{MSVC} \IFRU{генерирует .exe-файлы с базовым адресом}
+{generates an .exe-files with the base address} \TT{0x400000},
+\IFRU{и с секцией кода начинающейся с}{and with the code section started at} \TT{0x401000}.
+\IFRU{Это значит что}{This mean} \ac{RVA} \IFRU{начала секции кода ~---}{of code section begin is} \TT{0x1000}.
+\IFRU{А \ac{DLL} часто генерируются этим линкером с базовым адресом}
+{DLLs are often generated by this linked with the base address} \TT{0x10000000}
+\footnote{\IFRU{Это можно изменять опцией /BASE в линкере}{This can be changed by /BASE linker option}}.
 
 \index{ASLR}
-Помимо всего прочего, есть еще одна причина намеренно загружать модули по разным адресам, а точнее, по случайным. 
-Это \ac{ASLR}
-\footnote{\IFRU{\url{https://ru.wikipedia.org/wiki/Address_Space_Layout_Randomization}}{\url{https://en.wikipedia.org/wiki/Address_space_layout_randomization}}}.
-Дело в том, что некий шеллкод, пытающийся исполниться на зараженной системе, должен вызывать какие-то системные ф-ции. И в старых \ac{OS} (до Windows Vista, например), системные DLL (такие как kernel32.dll, user32.dll) загружались все время
-по одним и тем же адресам, а если еще и вспомнить, что само содержимое этих DLL редко менялось, то адреса отдельных
-ф-ций, можно сказать, фиксированы и шеллкод может вызывать их напрямую. Чтобы избежать этого, методика \ac{ASLR} загружает
-и вашу программу, и все остальные модули, по случайным адресам, при каждом запуске.
+\IFRU{Помимо всего прочего, есть еще одна причина намеренно загружать модули по разным адресам, а точнее, 
+по случайным}{There are also one more reason to load modules at different base addresses, rather at random ones}.
+
+\IFRU{Это}{It is} \ac{ASLR}
+\footnote{\IFRU{\url{https://ru.wikipedia.org/wiki/Address_Space_Layout_Randomization}}
+{\url{https://en.wikipedia.org/wiki/Address_space_layout_randomization}}}.
+
+\IFRU{Дело в том, что некий шеллкод, пытающийся исполниться на зараженной системе, 
+должен вызывать какие-то системные ф-ции}{The fact is that a shellcode trying to be executed on a compromised
+system must call a system functions}.
+
+\IFRU{И в старых}{In older} \ac{OS} (\IFRU{в линейке Windows NT: до}{in Windows NT line: before} Windows Vista),
+\IFRU{системные}{system} DLL (\IFRU{такие как}{like} kernel32.dll, user32.dll) \IFRU{загружались все время
+по одним и тем же адресам}{were always loaded at the known addresses}, 
+\IFRU{а если еще и вспомнить, что версии этих DLL редко менялись}{and also if to recall
+that its versions were rarely changed}, \IFRU{то адреса отдельных
+ф-ций, можно сказать, фиксированы и шеллкод может вызывать их напрямую}{an addresses of functions were
+fixed and shellcode can call it directly}.
+
+\IFRU{Чтобы избежать этого, методика}{In order to avoid this,} \ac{ASLR}
+\IFRU{загружает и вашу программу, и все модули ей необходимые, по случайным адресам, разным при каждом запуске}
+{method loads your program and all modules it needs at random base addresses, each time different}.
 
 \subsection{\IFRU{Версия ОС}{OS version}}
 
-В PE-файле имеется минимальный номер версии Windows, необходимый для загрузки модуля. 
-Соответствие номеров версий в файле и кодовых наименований Windows, можно посмотреть 
-\href{https://en.wikipedia.org/wiki/Windows_NT#Releases}{здесь}.
-Например, \ac{MSVC} 2005 еще компилирует .exe-файлы запускающиеся на Windows NT4 (версия 4.00),
-а вот \ac{MSVC} 2008 уже нет (генерируемые файлы имеют версию 5.00, для запуска необходима как минимум Windows 2000).
-\ac{MSVC} 2012 по умолчанию генерирует для версии 6.00, для запуска нужна как минимум Windows Vista, хотя 
-\href{http://blogs.msdn.com/b/vcblog/archive/2012/10/08/10357555.aspx}{изменив настройки компиляции}, 
-можно заставить генерировать и под Windows XP.
+\IFRU{В PE-файле имеется минимальный номер версии Windows, необходимый для загрузки модуля.}
+{A PE-file also has minimal Windows version needed in order to load it.}
+\IFRU{Соответствие номеров версий в файле и кодовых наименований Windows, можно посмотреть}
+{The table of version numbers stored in PE-file and corresponding Windows codenames is}
+\href{https://en.wikipedia.org/wiki/Windows_NT#Releases}{\IFRU{здесь}{here}}.
+
+\IFRU{Например}{For example}, \ac{MSVC} 2005 \IFRU{еще компилирует .exe-файлы запускающиеся на}{compiles
+.exe-files running on} Windows NT4 (\IFRU{версия}{version} 4.00),
+\IFRU{а вот}{but} \ac{MSVC} 2008 \IFRU{уже нет}{is not} 
+(\IFRU{генерируемые файлы имеют версию}{files generated has version} 5.00, 
+\IFRU{для запуска необходима как минимум Windows 2000}{at least Windows 2000 is needed to run them}).
+
+\ac{MSVC} 2012 \IFRU{по умолчанию генерирует .exe-файлы версии}{by default generates .exe-files of version} 6.00, 
+\IFRU{для запуска нужна как минимум Windows Vista}{targeting at least Windows Vista}, \IFRU{хотя}{however, by} 
+\href{http://blogs.msdn.com/b/vcblog/archive/2012/10/08/10357555.aspx}{\IFRU{изменив настройки компиляции}
+{by changing compiler's options}}, 
+\IFRU{можно заставить генерировать и под Windows XP}{it is possible to force it to compile for Windows XP}.
 
 \subsection{\IFRU{Секции}{Sections}}
 
-Разделение на секции присутствует, по видимому, во всех форматах исполняемых файлов.
+\IFRU{Разделение на секции присутствует, по видимому, во всех форматах исполняемых файлов}{Division by sections,
+as it seems, are present in all execuable file formats}.
 
 Сделано это для того, чтобы отделить код от данных, а данные --- от константных данных.
 
