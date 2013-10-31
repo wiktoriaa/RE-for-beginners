@@ -1,58 +1,81 @@
 ﻿\section{\IFRU{Системные вызовы (syscall-ы)}{System calls (syscall-s)}}
 
+\label{syscalls}
 \index{syscall}
 
 \index{kernel space}
 \index{user space}
-Как известно, все работающие процессы в \ac{OS} делятся на две категории: имеющие полный доступ
-ко всему ``железу'' (kernel space) и не имеющие (user space).
+\IFRU{Как известно, все работающие процессы в \ac{OS} делятся на две категории}{As we know, all running processes
+inside \ac{OS} are divided into two categories}:
+\IFRU{имеющие полный доступ ко всему ``железу''}{those having all access to the hardware} (``kernel space'') 
+\IFRU{и не имеющие}{and those have not} (``user space'').
 
-В первой категории ядро \ac{OS} и, обычно, драйвера.
+\IFRU{В первой категории ядро \ac{OS} и, обычно, драйвера}
+{There are \ac{OS} kernel and usually drivers in the first category}.
 
-Во второй категории всё прикладное ПО.
+\IFRU{Во второй категории всё прикладное ПО}{All applications are usually in the second category}.
 
-Это разделение существует для того, чтобы падающий процесс не мог испортить что-то в других процессах
-или даже в самом ядре \ac{OS}.
+\IFRU{Это разделение очень важно для безопасности \ac{OS}:
+очень важно чтобы никакой процесс не мог испортить что-то в других процессах
+или даже в самом ядре \ac{OS}}
+{This separation is crucial for \ac{OS} safety: it is very important not to give to any process possibility to screw up
+something in other processes or even in \ac{OS} kernel}.
 \index{kernel panic}
 \index{BSoD}
-С другой стороны, падающий драйвер или ошибка внутри OS обычно приводит к kernel panic или BSoD.
+\IFRU{С другой стороны, падающий драйвер или ошибка внутри ядра \ac{OS} обычно приводит к}
+{On the other hand, failing driver or error inside \ac{OS} kernel usually lead to} kernel panic \OrENRU BSoD.
 
-Защита x86-процессора устроена так что возможно разделить всё на 4 слоя защиты (rings), но и в Linux,
-и в Windows, используются только 2: ring0 (kernel space) и ring3 (user space).
+\IFRU{Защита x86-процессора устроена так что возможно разделить всё на 4 слоя защиты (rings), но и в Linux,
+и в Windows, используются только 2}
+{x86-processor protection allows to separate everything into 4 levels of protection (rings), but both in Linux
+and in Windows only two are used}: ring0 (``kernel space'') \AndENRU ring3 (``user space'').
 
-Системные вызовы (syscall-ы) это место где сходятся вместе оба эти пространства.
-Это, можно сказать, самое главное API предоставляемое прикладному ПО.
+\IFRU{Системные вызовы}{System calls} (syscall-\IFRU{ы}{s})
+\IFRU{это точка где соеденяются вместе оба эти пространства}{is a point where these two areas are connected}.
+\IFRU{Это, можно сказать, самое главное API предоставляемое прикладному ПО}{It can be said, this is the most
+principal API providing to application software}.
 
-Работа через syscall-ы популярна у авторов шеллкодов, потому что в шеллкоде обычно бывает трудно определить
+\index{shellcode}
+\IFRU{Работа через syscall-ы популярна у авторов шеллкодов, потому что в шеллкоде обычно бывает трудно определить
 адреса нужных ф-ций в системных библиотеках, а syscall-ами проще пользоваться, хотя и придется писать больше
-кода. Также нельзя еще забывать, что номера syscall-ов, например, в Windows, могут отличаться от версии к
-версии.
+кода из-за более низкого уровня абстракции этого API}
+{Usage of syscalls is very popular among shellcode authors, because it is hard to determine the addresses of
+needed functions in the system libraries, while it is easier to use syscalls, however, much more code should be
+written due to lower level of abstraction of the API}.
+\IFRU{Также нельзя еще забывать, что номера syscall-ов, например, в Windows, могут отличаться от версии к версии}
+{It is also worth noting the numbers of syscalls, for example, in Windows, may be different from version to version}.
 
 \subsection{Linux}
 
 \index{int 0x80}
-В Linux вызов syscall-а обычно происходит через \TT{int 0x80}. В регистре \EAX передается номер вызова,
-в остальных регистрах ~---- параметры.
+\IFRU{В Linux вызов syscall-а обычно происходит через}{In Linux, syscall is usually called via} \TT{int 0x80}.
+\IFRU{В регистре}{Call number is passed in the} \EAX \IFRU{передается номер вызова,
+в остальных регистрах ~---- параметры}{register, and any other parameters ~--- in the other registers}.
 
-\lstinputlisting[caption=Простой пример использования пары syscall-ов]{OS-specific/linux_syscall.s}
+\lstinputlisting[caption=\IFRU{Простой пример использования пары syscall-ов}{Simple example of two syscalls usage}]
+{OS-specific/linux_syscall.s}
 
-Компиляция:
+\IFRU{Компиляция}{Compilation}:
 
 \begin{lstlisting}
 nasm -f elf32 1.s
 ld 1.o
 \end{lstlisting}
 
-Полный список syscall-ов в Linux: \url{http://syscalls.kernelgrok.com/}.
+\IFRU{Полный список syscall-ов в}{The full list of syscalls in} Linux: \url{http://syscalls.kernelgrok.com/}.
+
+\IFRU{Для перехвата и трассировки системных вызовов в Linux, можно применять}
+{For system calls intercepting and tracing in Linux,} strace\ref{strace}\IFRU{}{ can be used}.
 
 \subsection{Windows}
 
 \index{int 0x2e}
 \index{x86!\Instructions!SYSENTER}
 
-Вызов происходит через \TT{int 0x2e} либо используя специальную инструкцию \TT{SYSENTER}.
+\IFRU{Вызов происходит через}{They are called by} \TT{int 0x2e} 
+\IFRU{либо используя специальную x86-инструкцию}{or using special x86 instruction} \TT{SYSENTER}.
 
-Полный список syscall-ов в Windows: \url{http://j00ru.vexillium.org/ntapi/}.
+\IFRU{Полный список syscall-ов в}{The full list of syscalls in} Windows: \url{http://j00ru.vexillium.org/ntapi/}.
 
 \IFRU{Смотрите также}{Further reading}:
 
