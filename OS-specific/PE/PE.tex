@@ -70,7 +70,7 @@ imports}\footnote{\cite{Pietrek1}}.
 \subsubsection{\IFRU{Базовый адрес}{Base address}}
 
 \IFRU{Дело в том что несколько авторов модулей могут готовить DLL-файлы для других, и нет возможности договориться о том, какие адреса и кому будут отведены.}
-{The fact is that several module authors may prepare DLL-files for others and there are no possibility
+{The fact is that several module authors may prepare DLL-files for others and there is no possibility
 to reach agreement, which addresses will be assigned to whose modules.}
 
 \IFRU{Поэтому, если у двух необходимых для загрузки процесса DLL одинаковые базовые адреса,
@@ -91,7 +91,8 @@ and each virtual addresses in the second DLL will be corrected.} \\
 
 \index{ASLR}
 \IFRU{Помимо всего прочего, есть еще одна причина намеренно загружать модули по разным адресам, а точнее, 
-по случайным}{There are also one more reason to load modules at different base addresses, rather at random ones}.
+по случайным}
+{There is also another reason to load modules at different base addresses, rather at random ones}.
 
 \IFRU{Это}{It is} \ac{ASLR}
 \footnote{\IFRU{\url{https://ru.wikipedia.org/wiki/Address_Space_Layout_Randomization}}
@@ -162,7 +163,8 @@ as it seems, are present in all execuable file formats}.
 
 \item
 \IFRU{А на секции с константными данными, то есть, защищенными от записи}{On a constant data section, in other words,
-protected from writing}, \IFRU{могут быть флаги}{there are may be flags} \\
+protected from writing}, \IFRU{могут быть флаги}
+{there are may be flags} \\
 \IT{IMAGE\_SCN\_CNT\_INITIALIZED\_DATA} \AndENRU \IT{IMAGE\_SCN\_MEM\_READ} \IFRU{без}{without} \IT{IMAGE\_SCN\_MEM\_WRITE}. 
 \IFRU{Если попытаться записать что-то в эту секцию, процесс упадет}{A process will crash if it would try to write to this
 section}.
@@ -220,10 +222,10 @@ for example?}
 The addresses of points needs to be corrected in case of loading on another base address 
 are just enumerated in the table.}
 
-\IFRU{Например, по}{For example, there are a global variable at the address}
+\IFRU{Например, по}{For example, there is a global variable at the address}
 \TT{0x410000} 
 \IFRU{лежит некая глобальная переменная, и вот как обеспечивается её чтение}
-{and that is how it is accessed}:
+{and this is how it is accessed}:
 
 \begin{lstlisting}
 A1 00 00 41 00         mov         eax,[000410000]
@@ -292,7 +294,7 @@ among DLL exports and writes their addresses down in an \ac{IAT} of main .exe-mo
 имеется также поддержка ``ординалов'' или 
 ``hint''-ов, это когда в таблице импортов проставлены номера ф-ций вместо их имен}
 {As we can notice, during loading, loader must compare a lot of function names, but strings comparison is not a very
-fast procedure, so, there are support of ``ordinals'' or ``hints'',
+fast procedure, so, there is a support of ``ordinals'' or ``hints'',
 that is a function numbers stored in the table instead of their names}.
 
 \IFRU{Так их быстрее находить в загружаемой DLL}{That is how they can be located faster in loading DLL}.
@@ -308,7 +310,7 @@ that is a function numbers stored in the table instead of their names}.
 чтобы установить имена ф-ций}{While loading such program in \IDA, it will asks for a path to mfs*.dll files,
 in order to determine function names}.
 \IFRU{Если в \IDA не указать путь к этой DLL, то вместо имен ф-ций будет что-то вроде}
-{If not to tell \IDA path to this DLL, there are will something like}
+{If not to tell \IDA path to this DLL, they will look like}
 \IT{mfc80\_123}\IFRU{}{ instead of function names}.
 
 \paragraph{\IFRU{Секция импортов}{Imports section}}
@@ -344,7 +346,8 @@ however, it is not a strict rule}.
 \IFRU{Если при загрузке удается найти ф-цию по ординалу, тогда сравнение текстовых строк не будет происходить.
 Массив оканчивается нулем}{While loading, if it is possible to find function by ordinal,
 then strings comparison will not occur. Array is terminated by zero}.
-\IFRU{Есть также указатель с названием}{There are also pointer with the name} \IT{FirstThunk},
+\IFRU{Есть также указатель с названием}
+{There is also a pointer with the name} \IT{FirstThunk},
 \IFRU{это просто}{it is just} \ac{RVA}-\IFRU{адрес}{address} 
 \IFRU{места, где загрузчик будет проставлять адреса найденных ф-ций}{of the place where loader will
 write addresses of functions resolved}.
@@ -377,7 +380,7 @@ relocs table significantly}.
 \item
 \IFRU{На каждую импортируемую ф-цию выделяется только один переход на импортируемую ф-цию используя
 инструкцию \JMP плюс релок на эту инструкцию}
-{For each imported function, there are only one jump allocated, using \JMP instruction 
+{For each imported function, there is only one jump allocated, using \JMP instruction 
 plus reloc to this instruction}.
 \IFRU{Такие места-``переходники'' называются также ``thunk''-ами}{Such points are also called ``thunks''}.
 \IFRU{А все вызовы импортируемой ф-ции это просто инструкция \CALL на соответствующий ``thunk''}
