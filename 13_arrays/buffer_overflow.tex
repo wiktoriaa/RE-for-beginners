@@ -49,7 +49,8 @@ a[100]=760826203
 \IFRU{Действительно, а как могло бы быть иначе? Компилятор мог бы встроить какой-то код, 
 каждый раз проверяющий индекс на соответствие пределам массива, как в языках программирования 
 более высокого уровня\footnote{Java, Python, итд}, что делало бы запускаемый код медленнее.}
-{Indeed, how it could be done differently? Compiler may incorporate some code, checking index value to be always
+{Indeed, how it could be done differently?
+Compiler may generate some additional code for checking index value to be always
 in array's bound (like in higher-level programming languages\footnote{Java, Python, etc})
 but this makes running code slower.}
 
@@ -84,7 +85,7 @@ int main()
 регистров, запускать что-то, двигать мышью, итд. 
 Поэтому я написал очень минималистическую утилиту для себя, \tracer, коей обхожусь.}
 {I'm not using debugger anymore since I tired to run it each time, move mouse, etc, when I need just to
-spot some register's state at specific point.
+spot a register's state at the specific point.
 That's why I wrote very minimalistic tool for myself, \tracer, which is enough for my tasks.}
 
 \IFRU{Помимо всего прочего, я могу использовать мою утилиту просто чтобы посмотреть 
@@ -157,11 +158,11 @@ By the function ending, function epilogue restores original \EBP value.
 (20 in decimal system is 0x14 in hexadecimal).
 Then, \RET instruction was executed, which is effectively equivalent to \TT{POP EIP} instruction.}
 
-\IFRU{Инструкция \RET вытащила из стека адрес возврата (это адрес в какой-то CRT\footnote{C Run-Time}-функции, 
+\IFRU{Инструкция \RET вытащила из стека адрес возврата (это адрес где-то внутри \ac{CRT}), 
 которая вызвала \main), 
 а там было записано 21 в десятичной системе, то есть 0x15 в шестнадцетиричной. 
 И вот процессор оказался по адресу 0x15, но исполняемого кода там нет, так что случилось исключение.}
-{\RET instruction taking returning adddress from stack (that is address in some CRT\footnote{C Run-Time}-function,
+{\RET instruction taking returning adddress from the stack (that is the address inside of \ac{CRT}),
 which was called \main),
 and 21 was stored there (0x15 in hexadecimal).
 The CPU trapped at the address 0x15,

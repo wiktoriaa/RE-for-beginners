@@ -38,7 +38,8 @@
 .text:00057A15                 call    __assert_fail
 \end{lstlisting}
 
-\IFRU{Все указатели на строки корректируются при помощи некоторой константы из регистра \EBX, которая вычисляется в начале каждой функции.}{All pointers to strings are corrected by some constant and by value in the \EBX,
+\IFRU{Все указатели на строки корректируются при помощи некоторой константы из регистра \EBX, которая вычисляется в начале каждой функции.}
+{All pointers to strings are corrected by a constant and by value in the \EBX,
 which calculated at the beginning of each function.}
 \IFRU{Это так называемый адресно-независимый код\footnote{position-independent code в англоязычной литературе} (PIC), он предназначен для исполнения будучи расположенным по любому адресу в памяти, вот почему он не содержит никаких абсолютных адресов в памяти}
 {This is so called position-independent code (PIC), it is intended to execute placed at any random point of memory, that is why it cannot contain any absolute memory addresses}.
@@ -53,7 +54,7 @@ are shared across many processes while loaded in memory only once}.
 map the same shared library on different addresses, so that is why
 shared library should be working correctly without fixing on any absolute address}.
 
-\IFRU{Простой эксперимент}{Let's do some simple experiment}:
+\IFRU{Простой эксперимент}{Let's do a simple experiment}:
 
 \begin{lstlisting}
 #include <stdio.h>
@@ -118,7 +119,8 @@ gcc -fPIC -shared -O3 -o 1.so 1.c
 
 \IFRU{Так и есть: указатели на строку \retstring{} и переменную \globvar{} корректируются при каждом исполнении функции}{That's it: pointers to \retstring{} string and \globvar{} are to be corrected at each function execution.}
 \IFRU{Функция}{The} \IT{\_\_x86\_get\_pc\_thunk\_bx()} \IFRU{возвращает адрес точки после вызова самой себя (здесь: \TT{0x57C}) в}{function return address of the point after call to itself (\TT{0x57C} here) in the} \EBX.
-\IFRU{Это очень простой способ получить значение указателя на текущую инструкцию (\EIP) в произвольном месте}{That's the simple way to get value of program counter (\EIP) at some point}.
+\IFRU{Это очень простой способ получить значение указателя на текущую инструкцию (\EIP) в произвольном месте}
+{That's the simple way to get value of program counter (\EIP) at some point}.
 \IFRU{Константа}{The} \IT{0x1A84} \IFRU{связана с разницей между началом этой функции и так называемой}{constant is related to the difference between this function begin and so called}
 \IT{Global Offset Table Procedure Linkage Table} (GOT PLT), \IFRU{секцией, сразу же за}{the section right after} \IT{Global Offset Table} (GOT), \IFRU{где находится указатель на \globvar{}}{where pointer to \globvar{} is}.
 \IDA \IFRU{показыавет смещения уже обработанными, чтобы их было проще понимать, но на самом деле код такой}{shows these offset processed, so to understand them easily, but in fact the code is}:

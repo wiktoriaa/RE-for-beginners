@@ -23,7 +23,7 @@ For example, it is possible to add 8 8-bit values (bytes) simultaneously by addi
 Для простоты можно представить, что изображение у нас бело-серо-черное и каждый пиксель занимает один байт, 
 то с помощью MMX можно менять яркость сразу у восьми пикселей.}
 {One simple example is graphics editor, representing image as a two dimensional array.
-When user change image brightness, the editor should add some coefficient to each pixel value, or to subtract.
+When user change image brightness, the editor should add a coefficient to each pixel value, or to subtract.
 For the sake of brevity, our image may be grayscale and each pixel defined by one 8-bit byte, then it is possible
 to change brightness of 8 pixels simultaneously.}
 
@@ -129,7 +129,7 @@ it is possible to get 4 64-bit products\footnote{multiplication result} at once.
 \index{Intel C++}
 \IFRU{Некоторые компиляторы умеют делать автоматическую векторизацию в простых случаях, 
 например Intel C++\footnote{Еще о том как Intel C++ умеет автоматически векторизировать циклы: \URLINTELVEC}.}
-{Some compilers can do vectorization automatically in some simple cases, 
+{Some compilers can do vectorization automatically in a simple cases, 
 e.g., Intel C++\footnote{More about Intel C++ automatic vectorization: \URLINTELVEC}.}
 
 \IFRU{Я написал очень простую функцию:}{I wrote tiny function:}
@@ -227,7 +227,7 @@ movdqa  xmmword ptr [eax+edi*4], xmm1 ; ar3+i*4
 
 \IFRU{Но и GCC умеет кое-что векторизировать\footnote{Подробнее о векторизации в GCC: \URLGCCVEC}, 
 если компилировать с опциями \Othree и включить поддержку SSE2: \TT{-msse2}.}
-{GCC may also vectorize in some simple cases\footnote{More about GCC vectorization support: \URLGCCVEC},
+{GCC may also vectorize in a simple cases\footnote{More about GCC vectorization support: \URLGCCVEC},
 if to use \Othree option and to turn on SSE2 support: \TT{-msse2}.}
 
 \IFRU{Вот что вышло}{What we got} (GCC 4.4.1):
@@ -305,7 +305,7 @@ That's how virtual memory works\footnote{\URLPAGE}.}
 выделенного блока памяти. 
 Предположим, \ac{OS} выделила программе 8192 (0x2000) байт по адресу 0x008c0000. 
 Таким образом, блок занимает байты с адреса 0x008c0000 по 0x008c1fff включительно.}
-{So, some function loading 16 bytes at once, may step over a border of allocated memory block.
+{So, a function loading 16 bytes at once, may step over a border of allocated memory block.
 Let's consider, \ac{OS} allocated 8192 (0x2000) bytes at the address 0x008c0000.
 Thus, the block is the bytes starting from address 0x008c0000 to 0x008c1fff inclusive.}
 
@@ -316,7 +316,7 @@ any memory there. Attempt to access a memory starting from that address will rai
 
 \IFRU{И предположим, что программа хранит некую строку из, скажем, пяти символов почти в самом конце блока, 
 что не является преступлением:}
-{And let's consider, the program holding some string containing 5 characters almost at the end of block,
+{And let's consider, the program holding a string containing 5 characters almost at the end of block,
 and that is not a crime.}
 
 \begin{center}
@@ -423,7 +423,7 @@ And will prepare 16 bits in the \EAX register. Other bits in the \EAX register a
 \IFRU{На вход может прийти 16 байт вроде}{There might be 16 bytes on input like} \TT{hello\textbackslash{}x00garbage\textbackslash{}x00ab}
 
 \IFRU{Это строка \TT{'hello'}, после нее терминирующий ноль, затем немного мусора в памяти.}
-{It is a \TT{'hello'} string, terminating zero after and some random noise in memory.}
+{It is a \TT{'hello'} string, terminating zero, and also a random noise in memory.}
 
 \newcommand{\MSBFOOTNOTE}{\footnote{most significant bit}}
 \newcommand{\LSBFOOTNOTE}{\footnote{least significant bit}}
