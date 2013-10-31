@@ -19,7 +19,7 @@ but in x86 architecture used ``two's complement''.}
 Если их оба представить как знаковые, то первое будет $-2$, которое, разумеется, меньше чем второе ($2$).
 Вот почему инструкции для условных переходов~\ref{sec:Jcc} представлены в обоих версиях ~--- 
 и для знаковых сравнений (например \JG, \JL) и для беззнаковых (\JA, \JB).}
-{The Difference between signed and unsigned numbers is that if we represent \TT{0xFFFFFFFE} and \TT{0x0000002} 
+{The difference between signed and unsigned numbers is that if we represent \TT{0xFFFFFFFE} and \TT{0x0000002} 
 as unsigned, then first number ($4294967294$) is bigger than second ($2$). 
 If to represent them both as signed, first will be $-2$, and it is lesser than second ($2$). 
 That is the reason why conditional jumps~\ref{sec:Jcc} are present both for signed (e.g. \JG, \JL) 
@@ -35,23 +35,22 @@ and unsigned (\JA, \JB) operations.}
 В пакете есть заголовок где указана длина пакета. Это 32-битное значение. 
 В процессе приема пакета, 
 сервис проверяет это значение и сверяет, больше ли оно чем максимальный размер пакета, скажем, константа
-\TT{MAX\_PACKET\_SIZE} (например, 10 килобайт). 
+\TT{MAX\_PACKET\_SIZE} (например, 10 килобайт), и если да, то пакет отвергается как некорректный. 
 Сравнение знаковое. Злоумышленник подставляет значение \TT{0xFFFFFFFF}. Это число трактуется как знаковое $-1$ 
 и оно меньше чем $10000$. Проверка проходит. Продолжаем дальше и копируем этот пакет куда-нибудь себе 
 в сегмент данных\dots вызов функции \TT{memcpy (dst, src, 0xFFFFFFFF)} скорее всего, 
 затрет много чего внутри процесса.}
 {For example, we have a network service, it receives network packets. 
-In that packets there is also a field where subpacket length is coded. 
+In the packets there is also a field where subpacket length is coded. 
 It is 32-bit value. 
-After network packet received, service checking that field, and if it is larger than, 
-for example, some \TT{MAX\_PACKET\_SIZE} (let's say, 10 kilobytes), packet ignored as incorrect. 
+After network packet received, service checking the field, and if it is larger than, 
+for example, some \TT{MAX\_PACKET\_SIZE} (let's say, 10 kilobytes), the packet is rejected as incorrect.
 Comparison is signed. Intruder set this value to the \TT{0xFFFFFFFF}.
 While comparison, this number is considered as signed $-1$ and it is lesser than 10 kilobytes. 
 No error here. 
-Service would like to copy that subpacket to another place in memory and call 
+Service would like to copy the subpacket to another place in memory and call 
 \TT{memcpy (dst, src, 0xFFFFFFFF)} function: this operation, rapidly garbling a lot of 
 inside of process memory.}
 
 % TODO: move to .bib
 \IFRU{Немного подробнее}{More about it}: \url{http://www.phrack.org/issues.html?issue=60&id=10}
-

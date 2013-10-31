@@ -38,7 +38,7 @@ BX              LR
 
 \IFRU{Если она сработает}{If it will be executed}, 
 \IFRU{в \TT{D16} запишется значение $b$}{$b$ value will be written into \TT{D16}}, 
-\IFRU{лежащее в тот момент в}{stored at that moment in} \TT{D17}.
+\IFRU{лежащее в тот момент в}{stored at the moment in} \TT{D17}.
 
 \IFRU{А если не сработает}{And if it will not be triggered}, 
 \IFRU{то в \TT{D16} останется лежать значение $a$.}
@@ -96,7 +96,7 @@ and the instruction is to be executed if condition is true.}
 \index{ARM!if-then block}
 \IFRU{Инструкция }\TT{IT} \IFRU{определяет так называемый}{instruction defines so-called} \IT{if-then block}. 
 \IFRU{После этой инструкции, можно указывать до четырех инструкций, к которым будет добавлен суффикс условия.}
-{After that instruction, it is possible to place up to 4 instructions, to which predicate suffix will be added.}
+{After the instruction, it is possible to place up to 4 instructions, to which predicate suffix will be added.}
 \IFRU{В нашем примере}{In our example}, \TT{``IT GT''} \IFRU{означает}{meaning},
 \IFRU{что следующая за ней инструкция будет исполнена}{the next instruction will be executed}, 
 \IFRU{если условие}{if} \IT{GT} (\IT{Greater Than}) \IFRU{справедливо}{condition is true}.
@@ -116,8 +116,9 @@ VMOVEQ          R2, R3, D17
 {and it encode suffixes for two next instructions.}
 \IFRU{Первая из них исполнится, если условие закодированное в}
 {First instruction will execute if condition encoded in} \TT{ITE} (\IT{NE, not equal}) 
-\IFRU{будет в тот момент справедливо}{will be true at that moment},
-\IFRU{а вторая ~--- если это условие не сработает}{and the second ~--- if that condition will not be true}.
+\IFRU{будет в тот момент справедливо}{will be true at the moment},
+\IFRU{а вторая ~--- если это условие не сработает}{and the second ~--- 
+if the condition will not be true}.
 (\IFRU{Обратное условие от}{Inverse condition of} \TT{NE} \IFRU{это}{is} \TT{EQ} (\IT{equal})).
 
 \index{Angry Birds}
@@ -133,8 +134,10 @@ POPEQ           {R4-R7,PC}
 \end{lstlisting}
 
 \IFRU{4 символа ``T'' в инструкции означают что 4 следующие инструкции будут исполнены если условие соблюдается.}
-{4 ``T'' symbols in instruction mnemonic means that 4 next instructions will be executed if condition is true.}
-\IFRU{Поэтому \IDA добавила ко всем четырем инструкциям суффикс}{That's why \IDA added} \TT{-EQ}\IFRU{}{ suffix
+{4 ``T'' symbols in instruction mnemonic means 
+the 4 next instructions will be executed if condition is true.}
+\IFRU{Поэтому \IDA добавила ко всем четырем инструкциям суффикс}
+{That's why \IDA added} \TT{-EQ}\IFRU{}{ suffix
 to each 4 instructions}. 
 
 \IFRU{А если бы здесь было, например}{And if there will be, for example}, 
@@ -160,8 +163,8 @@ NEGLE           R0, R0
 MOVGT           R10, R0
 \end{lstlisting}
 
-\TT{ITTE} (\IT{if-then-then-else}) \IFRU{означает что первая и вторая инструкции исполнятся}{means that 1st and 2nd
-instructions will be executed}, 
+\TT{ITTE} (\IT{if-then-then-else}) \IFRU{означает что первая и вторая инструкции исполнятся}
+{means the 1st and 2nd instructions will be executed}, 
 \IFRU{если условие}{if} \TT{LE} (\IT{Less or Equal}) \IFRU{справедливо}{condition is true},
 \IFRU{а третья}{and 3rd} ~--- \IFRU{если справедливо обратное условие}{if inverse condition} 
 (\TT{GT} ~--- \IT{Greater Than})\IFRU{}{ is true}.
@@ -180,7 +183,8 @@ instructions will be executed},
 {In \IDA it is possible to produce listing files, so I did it, but I also set in options 
 to show 4 bytes of each opcodes .}
 \IFRU{Затем, зная что старшая часть 16-битного опкода \TT{IT} это \TT{0xBF}, я сделал при помощи \TT{grep} это:}
-{Then, knowing that high part of 16-bit opcode \TT{IT} is \TT{0xBF}, I did this with \TT{grep}:}
+{Then, knowing the high part of 16-bit opcode \TT{IT} is \TT{0xBF},
+I did this with \TT{grep}:}
 
 \begin{lstlisting}
 cat AngryBirdsClassic.lst | grep " BF" | grep "IT" > results.lst

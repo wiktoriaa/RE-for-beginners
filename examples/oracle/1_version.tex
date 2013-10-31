@@ -26,10 +26,13 @@ NLSRTL Version 11.2.0.1.0 - Production
 
 \IFRU{Начнем. Где в самом \oracle мы можем найти строку}{Let's start. Where in the \oracle we may find a string} \TT{V\$VERSION}?
 
-\IFRU{Для win32-версии, эта строка имеется в файле \TT{oracle.exe}, это легко увидеть.}{As of win32-version, \TT{oracle.exe} file contain that string, that can be investigated easily.}
+\IFRU{Для win32-версии, эта строка имеется в файле \TT{oracle.exe}, это легко увидеть.}
+{As of win32-version, \TT{oracle.exe} file contain the string,
+which can be investigated easily.}
 \IFRU{Но мы так же можем использовать объектные (.o) файлы от версии \oracle для Linux, потому что в них сохраняются имена функций и глобальных переменных, а в \TT{oracle.exe} для win32 этого нет.}{But we can also use object (.o) files from Linux version of \oracle since, unlike win32 version \TT{oracle.exe}, function names (and global variables as well) are preserved there.}
 
-\IFRU{Итак, строка \TT{V\$VERSION} имеется в файле \TT{kqf.o}, в самой главной Oracle-библиотеке \TT{libserver11.a}.}{So, \TT{kqf.o} file contain \TT{V\$VERSION} string. That object file is in main Oracle-library \TT{libserver11.a}.}
+\IFRU{Итак, строка \TT{V\$VERSION} имеется в файле \TT{kqf.o}, в самой главной Oracle-библиотеке \TT{libserver11.a}.}{So, \TT{kqf.o} file contain \TT{V\$VERSION} string.
+The object file is in the main Oracle-library \TT{libserver11.a}.}
 
 \IFRU{Ссылка на эту текстовую строку имеется в таблице \TT{kqfviw}, размещенной в этом же файле \TT{kqf.o}}{A reference to this text string we may find in the \TT{kqfviw} table stored in the same file, \TT{kqf.o}}:
 
@@ -86,7 +89,8 @@ NLSRTL Version 11.2.0.1.0 - Production
 \end{lstlisting}
 
 \IFRU{Кстати, нередко, при изучении внутренностей \oracle, появляется вопрос, почему имена функций и глобальных переменных такие странные}{By the way, often, while analysing \oracle internals, you may ask yourself, why functions and global variable names are so weird}. \IFRU{Вероятно, дело в том что \oracle очень старый продукт сам по себе и писался на Си еще в 1980-х}
-{Supposedly, since \oracle is very old product and was developed in C in 1980-s}. \IFRU{А в те времена стандарт Си гарантировал поддержку имен переменных длиной только до шести символов включительно}{And that was a time when C standard guaranteed function names/variables support only up to 6 characters inclusive}: <<6 significant initial characters in an external identifier>>\footnote{\href{http://yurichev.com/ref/Draft\%20ANSI\%20C\%20Standard\%20(ANSI\%20X3J11-88-090)\%20(May\%2013,\%201988).txt}{Draft ANSI C Standard (ANSI X3J11/88-090) (May 13, 1988)}}
+{Supposedly, since \oracle is very old product and was developed in C in 1980-s}. \IFRU{А в те времена стандарт Си гарантировал поддержку имен переменных длиной только до шести символов включительно}
+{And that was a time when C standard guaranteed function names/variables support only up to 6 characters inclusive}: <<6 significant initial characters in an external identifier>>\footnote{\href{http://yurichev.com/ref/Draft\%20ANSI\%20C\%20Standard\%20(ANSI\%20X3J11-88-090)\%20(May\%2013,\%201988).txt}{Draft ANSI C Standard (ANSI X3J11/88-090) (May 13, 1988)}}
 
 \IFRU{Вероятно, таблица \TT{kqfviw} содержащая в себе многие (а может даже и все) view с префиксом V\$, это служебные view (fixed views), присутствующие всегда.}{Probably, the table \TT{kqfviw} contain most (maybe even all) views prefixed with V\$, these are \IT{fixed views}, present all the time.}
 \IFRU{Бегло оценив цикличность данных, мы легко видим что в каждом элементе таблицы \TT{kqfviw} 12 полей 32-битных полей.}{Superficially, by noticing cyclic recurrence of data, we can easily see that each \TT{kqfviw} table element has 12 32-bit fields.}
@@ -98,7 +102,8 @@ NLSRTL Version 11.2.0.1.0 - Production
 {As we can see, there is not much information in these numbers in fields. The very first number is always equals to name of view (without terminating zero.}
 \IFRU{Это справедливо для всех элементов. Но эта информация не очень полезна.}{This is correct for each element. But this information is not very useful.}
 
-\IFRU{Мы также знаем, что информацию обо всех fixed views можно получить из \IT{fixed view} под названием}{We also know that information about all fixed views can be retrieved from \IT{fixed view} named} \TT{V\$FIXED\_VIEW\_DEFINITION}
+\IFRU{Мы также знаем, что информацию обо всех fixed views можно получить из \IT{fixed view} под названием}
+{We also know that information about all fixed views can be retrieved from \IT{fixed view} named} \TT{V\$FIXED\_VIEW\_DEFINITION}
 \IFRU{(кстати, информация для этого view также берется из таблиц \TT{kqfviw} и \TT{kqfvip}).}{(by the way, the information for this view is also taken from \TT{kqfviw} and \TT{kqfvip} tables.)}
 \IFRU{Кстати, там тоже 1023 элемента.}{By the way, there are 1023 elemens too.}
 
@@ -305,7 +310,8 @@ tracer -a:oracle.exe bpf=oracle.exe!_kqvrow,trace:cc
 
 \lstinputlisting{examples/oracle/VERSION_kqvrow.asm}
 
-\IFRU{Так можно легко увидеть, что номер строки таблицы задается извне. Сама ф-ция возвращает строку, формируя её так:}{Now it is easy to see that row number is passed from outside of function. The function returns the string constructing it as follows:}
+\IFRU{Так можно легко увидеть, что номер строки таблицы задается извне. Сама ф-ция возвращает строку, формируя её так:}
+{Now it is easy to see that row number is passed from outside of function. The function returns the string constructing it as follows:}
 
 \begin{center}
 \begin{tabular}{ | l | l | }
@@ -319,5 +325,6 @@ tracer -a:oracle.exe bpf=oracle.exe!_kqvrow,trace:cc
 \end{tabular}
 \end{center}
 
-\IFRU{Так вызываются соответствующие ф-ции для определения номеров версий отдельных модулей.}{That's how corresponding functions are called for determining each module's version.}
+\IFRU{Так вызываются соответствующие ф-ции для определения номеров версий отдельных модулей.}
+{That's how corresponding functions are called for determining each module's version.}
 
