@@ -30,6 +30,80 @@ from which this function called and most important: how the results are used.}
 There are cases of unexpected \rand usage in data compression algorithm (for encryption imitation):}
 \url{http://blog.yurichev.com/node/44}.
 
+\subsection{\IFRU{Часто используемые ф-ции}{Often used functions in} Windows API}
+
+\begin{itemize}
+
+\item
+\IFRU{Работа с реестром}{Registry access} (advapi32.dll): 
+RegEnumKeyEx\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms724862(v=vs.85).aspx}}
+\footnote{
+	\IFRU{Может иметь суффикс -A для ASCII-версии и -W для Unicode-версии}
+	{May have -A suffix for ASCII-version and -W for Unicode-version}
+	\label{note1}},
+RegEnumValue\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms724865(v=vs.85).aspx}}
+\footnoteref{note1},
+RegGetValue\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms724868(v=vs.85).aspx}}
+\footnoteref{note1},
+RegOpenKeyEx\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms724897(v=vs.85).aspx}}
+\footnoteref{note1},
+RegQueryValueEx\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms724911(v=vs.85).aspx}}
+\footnoteref{note1}.
+
+\item
+\IFRU{Работа с текстовыми .ini-файлами}{Access to text .ini-files} (kernel32.dll): 
+GetPrivateProfileString
+\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms724353(v=vs.85).aspx}}
+\footnoteref{note1}.
+
+\item
+\IFRU{Диалоговые окна}{Dialog boxes} (user32.dll): 
+MessageBox
+\footnote{\url{http://msdn.microsoft.com/en-us/library/ms645505(VS.85).aspx}}
+\footnoteref{note1}, 
+MessageBoxEx
+\footnote{\url{http://msdn.microsoft.com/en-us/library/ms645507(v=vs.85).aspx}}
+\footnoteref{note1},
+SetDlgItemText
+\footnote{\url{http://msdn.microsoft.com/en-us/library/ms645521(v=vs.85).aspx}}
+\footnoteref{note1},
+GetDlgItemText
+\footnote{\url{http://msdn.microsoft.com/en-us/library/ms645489(v=vs.85).aspx}}
+\footnoteref{note1}.
+
+\item
+\IFRU{Работа с ресурсами}{Resources access}\ref{PEresources}: (user32.dll): LoadMenu
+\footnote{\url{http://msdn.microsoft.com/en-us/library/ms647990(v=vs.85).aspx}}
+\footnoteref{note1}.
+\item
+\IFRU{Работа с TCP/IP-сетью}{TCP/IP-network} (ws2\_32.dll):
+WSARecv
+\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms741688(v=vs.85).aspx}},
+WSASend
+\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms742203(v=vs.85).aspx}}.
+
+\item
+\IFRU{Работа с файлами}{File access} (kernel32.dll):
+CreateFile
+\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/aa363858(v=vs.85).aspx}}
+\footnoteref{note1},
+ReadFile
+\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/aa365467(v=vs.85).aspx}},
+ReadFileEx
+\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/aa365468(v=vs.85).aspx}},
+WriteFile
+\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/aa365747(v=vs.85).aspx}},
+WriteFileEx
+\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/aa365748(v=vs.85).aspx}}.
+
+\item
+\IFRU{Стандартная библиотека MSVC (при случае динамического связывания)}
+{Standard MSVC library (in case of dynamic linking)} (msvcr*.dll):
+assert, itoa, ltoa, open, printf, read, strcmp, atol, atoi, fopen, fread, fwrite, memcmp, rand,
+strlen, strstr, strchr.
+
+\end{itemize}
+
 \subsection{tracer: \IFRU{Перехват всех ф-ций в отдельном модуле}
 {Intercepting all functions in specific module}}
 
