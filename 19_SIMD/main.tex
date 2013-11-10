@@ -23,7 +23,7 @@ For example, it is possible to add 8 8-bit values (bytes) simultaneously by addi
 Для простоты можно представить, что изображение у нас бело-серо-черное и каждый пиксель занимает один байт, 
 то с помощью MMX можно менять яркость сразу у восьми пикселей.}
 {One simple example is graphics editor, representing image as a two dimensional array.
-When user change image brightness, the editor should add a coefficient to each pixel value, or to subtract.
+When user change image brightness, the editor must add a coefficient to each pixel value, or to subtract.
 For the sake of brevity, our image may be grayscale and each pixel defined by one 8-bit byte, then it is possible
 to change brightness of 8 pixels simultaneously.}
 
@@ -177,7 +177,7 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 By the way, no exception raised in case of overflow and no flags will be set, just low 32-bit of result will
 be stored.
 If one of \PADDD operands is address of value in memory,
-then address should be aligned on a 16-byte border. If it is not aligned, exception will be occured
+then address must be aligned on a 16-byte border. If it is not aligned, exception will be occured
 \footnote{More about data aligning: \URLWPDA}.}
 
 \item
@@ -445,9 +445,9 @@ XMM1: 0000ff00000000000000ff0000000000
 \IFRU{\TT{PMOVMSKB} в нашем случае подготовит \EAX вот так (в двоичном представлении):} 
 {\TT{PMOVMSKB} in our case will prepare \EAX like (in binary representation):} \IT{0010000000100000b}.
 
-\IFRU{Совершенно очевидно что далее наша функция должна учитывать только первый встретившийся ноль 
-и игнорировать все остальное.}
-{Obviously, our function should consider only first zero and ignore others.}
+\IFRU{Совершенно очевидно что далее наша функция должна учитывать только первый встретившийся
+нулевой бит и игнорировать все остальное.}
+{Obviously, our function must consider only first zero bit and ignore others.}
 
 \index{x86!\Instructions!BSF}
 \IFRU{Следующая инструкция}{The next instruction} ~--- \TT{BSF} (\IT{Bit Scan Forward}). 

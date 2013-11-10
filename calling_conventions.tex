@@ -13,7 +13,7 @@
 после возврата вызываемой функции.}
 {Caller pushing arguments to stack in reverse order: last argument, then penultimate element 
 and finally ~--- first argument.
-Caller also should return back value of the \ESP to its initial state after callee function exit.}
+Caller also must return back value of the \ESP to its initial state after callee function exit.}
 
 \begin{lstlisting}[caption=cdecl]
 push arg3
@@ -93,11 +93,11 @@ different \IT{fastcall} calling conventions.}
 \IFRU{MSVC и GCC передает первый и второй аргумент через \ECX и \EDX а остальные аргументы через стек. 
 Вызываемая функция возвращает указатель стека в первоначальное состояние.}
 {Both MSVC and GCC passing first and second argument via \ECX and \EDX and other arguments via stack.
-Caller should restore stack pointer into initial state.}
+Caller must restore stack pointer into initial state.}
 
 \IFRU{Указатель стека должен быть возвращен в первоначальное состояние вызываемой функцией, 
 как в случае \IT{stdcall}.}
-{Stack pointer should be restored to initial state by callee (like in \IT{stdcall}).}
+{Stack pointer must be restored to initial state by callee (like in \IT{stdcall}).}
 
 \begin{lstlisting}[caption=fastcall]
 push arg3
@@ -167,7 +167,7 @@ Short functions may use argument values just from registers,
 but larger may save its values for further use.}
 
 \IFRU{Вызывающая функция должна вернуть указатель стека в первоначальное состояние.}
-{Caller also should return stack pointer into initial state.}
+{Caller also must return stack pointer into initial state.}
 
 \IFRU{Это же соглашение используется и в системных библиотеках Windows x86-64 (вместо \IT{stdcall} в win32).}
 {This calling convention is also used in Windows x86-64 system DLLs (instead if \IT{stdcall} in win32).}
