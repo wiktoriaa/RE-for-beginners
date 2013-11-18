@@ -1,4 +1,4 @@
-﻿_main
+_main
                 PUSH    {R4,LR}
                 MOVS    R4, #2
 
