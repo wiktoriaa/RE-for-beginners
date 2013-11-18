@@ -1,4 +1,4 @@
-﻿CONST    SEGMENT
+CONST    SEGMENT
 __real@40400147ae147ae1 DQ 040400147ae147ae1r    ; 32.01
 __real@3ff8a3d70a3d70a4 DQ 03ff8a3d70a3d70a4r    ; 1.54
 CONST    ENDS

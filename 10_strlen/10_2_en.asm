@@ -1,4 +1,4 @@
-﻿_str$ = 8                       ; size = 4
+_str$ = 8                       ; size = 4
 _strlen PROC
     mov    ecx, DWORD PTR _str$[esp-4]  ; ECX -> pointer to the string
     mov    eax, ecx                     ; move to EAX

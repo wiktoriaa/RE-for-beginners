@@ -1,4 +1,4 @@
-﻿_eos$ = -4                       ; size = 4
+_eos$ = -4                       ; size = 4
 _str$ = 8                        ; size = 4
 _strlen PROC
     push    ebp

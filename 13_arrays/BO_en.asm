@@ -1,4 +1,4 @@
-﻿_TEXT    SEGMENT
+_TEXT    SEGMENT
 _i$ = -84                ; size = 4
 _a$ = -80                ; size = 80
 _main   PROC
