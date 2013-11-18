@@ -1,4 +1,4 @@
-﻿                public f
+                public f
 f               proc near
 
 arg_0           = qword ptr  8
