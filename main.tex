@@ -1,6 +1,7 @@
 \documentclass[11pt,a4paper,oneside]{book}
 
 \usepackage{cmap}
+\usepackage{fancyhdr}
 
 \ifdefined\RUSSIAN
 \usepackage[english,russian]{babel}
@@ -36,6 +37,22 @@
 \usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
 \usepackage[]{hyperref} % must be last
 
+% fancyhdr
+\makeatletter
+    \let\stdchapter\chapter
+    \renewcommand*\chapter{%
+    \@ifstar{\starchapter}{\@dblarg\nostarchapter}}
+    \newcommand*\starchapter[1]{%
+        \stdchapter*{#1}
+        \thispagestyle{fancy}
+        \markboth{\MakeUppercase{#1}}{}
+    }
+    \def\nostarchapter[#1]#2{%
+        \stdchapter[{#1}]{#2}
+        \thispagestyle{fancy}
+    }
+\makeatother
+
 \newcommand{\footnoteref}[1]{\textsuperscript{\ref{#1}}}
 
 \definecolor{lstbgcolor}{rgb}{0.94,0.94,0.94}
@@ -70,6 +87,7 @@
 }
 
 \begin{document}
+\pagestyle{fancy}
 
 \VerbatimFootnotes
 
