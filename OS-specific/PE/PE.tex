@@ -207,7 +207,7 @@ it is not very important}.
 \IFRU{Некоторые компиляторы и линкеры могут добавлять также секцию с отладочными символами 
 и вообще отладочной информацией}
 {Some compilers and linkers can add a section with debugging symbols and other debugging information}
-(\IFRU{например}{for example}, MinGW).
+(\IFRU{например,}{e.g.} MinGW).
 \index{PDB}
 \IFRU{Хотя это не так в современных версиях}{However it is not so in modern versions of} \ac{MSVC} 
 (\IFRU{там принято отладочную информацию сохранять в отдельных PDB-файлах}
@@ -223,8 +223,8 @@ it is not very important}.
 
 \IFRU{Как видно, модули могут загружаться по другим базовым адресам,
 но как же тогда работать с глобальными переменными, например?}
-{Obviously, modules are can be loaded on different base addresses, but how to work with global variables,
-for example?}
+{Obviously, modules are can be loaded on different base addresses,
+but how to work with e.g. global variables?}
 \IFRU{Ведь нужно обращаться к ним по адресу}{They must be accessed by an address}.
 \IFRU{Одно из решений это}{One solution is} \PICcode(\ref{sec:PIC}).
 \IFRU{Но это далеко не всегда удобно}{But it is not always suitable}.
@@ -502,7 +502,7 @@ and it would be simpler to pick text or picture for the language that is current
 \IFRU{В качестве побочного эффекта, их легко редактировать и сохранять обратно в исполняемый файл,
 даже не обладая специальными знаниями,
 например, редактором}{As a side effect, they can be edited easily and saved back to the executable file,
-even, if one does not have special knowledge, for example, using} ResHack\IFRU{}{ editor}(\ref{ResHack}).
+even, if one does not have special knowledge, e.g. using} ResHack\IFRU{}{ editor}(\ref{ResHack}).
 
 \subsubsection{.NET}
 
@@ -535,32 +535,6 @@ data for} \ac{TLS}(\ref{TLS}) (\IFRU{если нужно}{if needed}).
 \IFRU{При старте нового треда, его}{When new thread starting, its} 
 \ac{TLS}-\IFRU{данные инициализируются данными из этой секции}
 {data is initialized by the data from this section}. \\
-\\
-\index{C++!C++11}
-\IFRU{В}{In the} C++11 \IFRU{ввели модификатор}{standard, a new} \IT{thread\_local} 
-\IFRU{показывающий что каждый тред будет иметь свою версию этой переменной}
-{modifier was added, showing that each thread will have its own version of the variable},
-\IFRU{и её можно инициализировать, и она расположена в}{it can be initialized, and it is located in the} \ac{TLS}
-\footnote{
-\index{C11}
-\IFRU{В C11 также есть поддержка тредов, хотя и опциональная}
-{C11 also has thread support, optional though}}:
-
-\begin{lstlisting}[caption=C++11]
-#include <iostream>
-#include <thread>
-
-thread_local int tmp=3;
-
-int main()
-{
-	std::cout << tmp << std::endl;
-};
-\end{lstlisting}
-\footnote{\IFRU{Компилируется в}{Compiled in} MinGW GCC 4.8.1, \IFRU{но не в}{but not in} MSVC 2012}
-
-\IFRU{В исполняемом файле значение}{In the resulting executable file, the} \IT{tmp} 
-\IFRU{будет именно в}{variable will be stored in the} \ac{TLS}.
 \\
 \index{TLS!Callbacks}
 \IFRU{Помимо всего прочего, спецификация PE-файла предусматривает инициализацию}
