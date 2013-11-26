@@ -9,11 +9,11 @@
 
 \IFRU{Вызывающая функция заталкивает в стек аргументы в обратном порядке: сначала последний аргумент в стек, 
 затем предпоследний, и в самом конце ~--- первый аргумент. 
-Вызывающая функция должна также затем вернуть указатель \ESP в нормальное состояние, 
+Вызывающая функция должна также затем вернуть \glslink{stack pointer}{указатель стека} в нормальное состояние, 
 после возврата вызываемой функции.}
-{Caller pushing arguments to stack in reverse order: last argument, then penultimate element 
+{\Gls{caller} pushing arguments to stack in reverse order: last argument, then penultimate element 
 and finally ~--- first argument.
-Caller also must return back value of the \ESP to its initial state after callee function exit.}
+\Gls{caller} also must return back value of the \gls{stack pointer} (\ESP) to its initial state after \gls{callee} function exit.}
 
 \begin{lstlisting}[caption=cdecl]
 push arg3
@@ -33,10 +33,10 @@ add esp, 12 ; returns ESP
 \IFRU{Это почти то же что и \IT{cdecl}, за исключением того что вызываемая функция сама возвращает \ESP 
 в нормальное состояние, выполнив инструкцию \TT{RET x} вместо \RET, где 
 \TT{x = количество\_аргументов * sizeof(int)\footnote{\SIZEOFINT}}.
-Вызывающая функция не будет корректировать указатель стека при помощи инструкции \TT{add esp, x}.}
-{Almost the same thing as \IT{cdecl}, with the exception the callee set \ESP to initial state executing \TT{RET x} instruction instead of \RET, where
+Вызывающая функция не будет корректировать \glslink{stack pointer}{указатель стека} при помощи инструкции \TT{add esp, x}.}
+{Almost the same thing as \IT{cdecl}, with the exception the \gls{callee} set \ESP to initial state executing \TT{RET x} instruction instead of \RET, where
 \TT{x = arguments number * sizeof(int)\footnote{\SIZEOFINT}}.
-Caller will not adjust stack pointer by \TT{add esp, x} instruction.}
+\Gls{caller} will not adjust \gls{stack pointer} by \TT{add esp, x} instruction.}
 
 \begin{lstlisting}[caption=stdcall]
 push arg3
@@ -65,12 +65,13 @@ Let's start with the idea the compiler knows argument count of each \printf func
 не знает сколько аргументов ей передали, хотя может установить их количество по строке формата.}
 {However, called \printf, which is already compiled and located in MSVCRT.DLL (if to talk about Windows),
 has not any information about how much arguments were passed, however it can determine it from format string.}
-\IFRU{Таким образом, если бы \printf была \IT{stdcall}-функцией и возвращала указатель стека 
+\IFRU{Таким образом, если бы \printf была \IT{stdcall}-функцией и возвращала
+\glslink{stack pointer}{указатель стека}
 в первоначальное состояние 
 подсчитав количество аргументов в строке формата, это была бы потенциально опасная ситуация, 
 когда одна опечатка программиста могла бы вызывать неожиданные падения программы. 
 Таким образом, для таких функций \IT{stdcall} явно не подходит, а подходит \IT{cdecl}.}
-{Thus, if \printf would be \IT{stdcall}-function and restored stack pointer to its initial state by counting
+{Thus, if \printf would be \IT{stdcall}-function and restored \gls{stack pointer} to its initial state by counting
 number of arguments in format string, this could be dangerous situation, when one programmer's typo may
 provoke sudden program crash.
 Thus it is not suitable for such functions to use \IT{stdcall}, \IT{cdecl} is better.}
@@ -91,13 +92,13 @@ Well known caveat: if you have two DLLs, one uses another, and they are built by
 different \IT{fastcall} calling conventions.}
 
 \IFRU{MSVC и GCC передает первый и второй аргумент через \ECX и \EDX а остальные аргументы через стек. 
-Вызываемая функция возвращает указатель стека в первоначальное состояние.}
+Вызываемая функция возвращает \glslink{stack pointer}{указатель стека} в первоначальное состояние.}
 {Both MSVC and GCC passing first and second argument via \ECX and \EDX and other arguments via stack.
-Caller must restore stack pointer into initial state.}
+\Gls{caller} must restore \gls{stack pointer} into initial state.}
 
-\IFRU{Указатель стека должен быть возвращен в первоначальное состояние вызываемой функцией, 
+\IFRU{\glslink{stack pointer}{Указатель стека} должен быть возвращен в первоначальное состояние вызываемой функцией, 
 как в случае \IT{stdcall}.}
-{Stack pointer must be restored to initial state by callee (like in \IT{stdcall}).}
+{\Gls{stack pointer} must be restored to initial state by \gls{callee} (like in \IT{stdcall}).}
 
 \begin{lstlisting}[caption=fastcall]
 push arg3
@@ -126,8 +127,8 @@ Thus, \EAX, \EDX and \ECX registers are to be used.}
 \IFRU{Разумеется, если аргументов у функции меньше трех, то будет задействована только часть регистров.}
 {Of course, if number of arguments is less then 3, not all 3 registers are to be used.}
 
-\IFRU{Вызывающая функция возвращает указатель стека в первоначальное состояние.}
-{Caller restores stack pointer to its initial state.}
+\IFRU{Вызывающая функция возвращает \glslink{stack pointer}{указатель стека} в первоначальное состояние.}
+{\Gls{caller} restores \gls{stack pointer} to its initial state.}
 
 % TODO: example
 
@@ -161,13 +162,13 @@ Thus it will be seen: internally, all function-methods has extra argument.}
 но б\'{о}льшие могут сохранять их значения на будущее.}
 {The method of arguments passing in Win64 is somewhat resembling to \TT{fastcall}.
 First 4 arguments are passed via \TT{RCX}, \TT{RDX}, \TT{R8}, \TT{R9}, others ~--- via stack.
-Caller also must prepare a space for 32 bytes or 4 64-bit values,
-so then callee can save there first 4 arguments.
+\Gls{caller} also must prepare a space for 32 bytes or 4 64-bit values,
+so then \gls{callee} can save there first 4 arguments.
 Short functions may use argument values just from registers,
 but larger may save its values for further use.}
 
-\IFRU{Вызывающая функция должна вернуть указатель стека в первоначальное состояние.}
-{Caller also must return stack pointer into initial state.}
+\IFRU{Вызывающая функция должна вернуть \glslink{stack pointer}{указатель стека} в первоначальное состояние.}
+{\Gls{caller} also must return \gls{stack pointer} into initial state.}
 
 \IFRU{Это же соглашение используется и в системных библиотеках Windows x86-64 (вместо \IT{stdcall} в win32).}
 {This calling convention is also used in Windows x86-64 system DLLs (instead if \IT{stdcall} in win32).}

@@ -2,16 +2,17 @@
 
 \index{x86!\Instructions!LOOP}
 \IFRU{Для организации циклов, в архитектуре x86 есть старая инструкция \LOOP, 
-она проверяет значение регистра \ECX и если оно не $0$, делает декремент\footnote{уменьшение на $1$} \ECX 
+она проверяет значение регистра \ECX и если оно не $0$, делает \glslink{decrement}{декремент} \ECX 
 и переход по метке указанной в операнде. 
 Возможно, эта инструкция не слишком удобная, поэтому я не видел современных компиляторов, 
 которые использовали бы её. Так что, если вы видите где-то \LOOP, то это, с большой вероятностью, 
 вручную написанный код на ассемблере.}
 {There is a special \LOOP instruction in x86 instruction set, it is checking value in the \ECX register and 
-if it is not $0$, do \ECX decrement\footnote{subtracts $1$ from it} 
+if it is not $0$, do \ECX \gls{decrement}
 and pass control flow to the label mentioned in the \LOOP operand. 
 Probably, this instruction is not very convenient, so, I did not ever see any modern compiler emit it automatically.
-So, if you see the instruction somewhere in code, it is most likely this is manually written piece of assembly code.}
+So, if you see the instruction somewhere in code, it is most likely this is manually written piece 
+of assembly code.}
 
 \IFRU{Кстати, в качестве домашнего задания, вы можете попытаться объяснить, чем именно эта инструкция неудобна.}
 {By the way, as home exercise, you could try to explain, why this instruction is not very convenient.}
@@ -22,10 +23,11 @@ So, if you see the instruction somewhere in code, it is most likely this is manu
 \IFRU{Начнем с}{Let's start with} \TT{for()}.
 \index{\CLanguageElements!for}
 
-\IFRU{Это выражение описывает инициализацию, условие, что делать после каждой итерации (инкремент/декремент) 
+\IFRU{Это выражение описывает инициализацию, условие, что делать после каждой итерации
+(\glslink{increment}{инкремент}/\glslink{decrement}{декремент})
 и тело цикла.}
 {This statement defines loop initialization (set loop counter to initial value), 
-loop condition (is counter is bigger than a limit?), what is done at each iteration (increment/decrement) 
+loop condition (is counter is bigger than a limit?), what is done at each iteration (\gls{increment}/\gls{decrement})
 and of course loop body.}
 
 \IFRU{\lstinputlisting{09_loops/loops_1_ru.c}}{\lstinputlisting{09_loops/loops_1_en.c}}
@@ -80,13 +82,13 @@ at the function begin and end.}
 
 \index{Loop unwinding}
 \IFRU
-{Однако, GCC просто \IT{развернул} цикл\footnote{loop unwinding в англоязычной литературе}.}
+{Однако, GCC просто \IT{развернул} цикл\footnote{\gls{loop unwinding} в англоязычной литературе}.}
 {Huh, GCC just unwind our loop.}
 
 \IFRU{Делается это в тех случаях, когда итераций не слишком много, как в нашем примере, 
 и можно немного сэкономить время, убрав все инструкции обеспечивающие цикл. 
 В качестве обратной стороны медали, размер кода увеличился.}
-{Loop unwinding has advantage in these cases when there is not so much iterations and 
+{\Gls{loop unwinding} has advantage in these cases when there is not so much iterations and 
 we could economy some execution speed by removing all loop supporting instructions. 
 On the other side, resulting code is obviously larger.}
 

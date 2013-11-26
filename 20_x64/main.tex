@@ -44,7 +44,7 @@ For example, it is possible to access lower 32-bit part of the \TT{RAX} register
 их значения на будущее.}
 {In Win64, function calling convention is slightly different, somewhat resembling fastcall~(\ref{fastcall}).
 First 4 arguments stored in the \TT{RCX}, \TT{RDX}, \TT{R8}, \TT{R9} registers, others ~--- in the stack.
-Caller function must also allocate 32 bytes so the callee may save there 4 first arguments and use these 
+\Gls{caller} function must also allocate 32 bytes so the \gls{callee} may save there 4 first arguments and use these 
 registers for own needs.
 Short functions may use arguments just from registers, but larger may save their values on the stack.}
 
@@ -61,10 +61,10 @@ Short functions may use arguments just from registers, but larger may save their
 
 \index{Register allocation}
 \IFRU{Из-за того что регистров общего пользования теперь вдвое больше, у компиляторов теперь больше 
-свободного места для маневра называемого \IT{register allocation}\footnote{распределение переменных по регистрам}. 
+свободного места для маневра называемого \glslink{register allocator}{register allocation}.
 Для нас это означает, что в итоговом коде будет меньше локальных переменных.}
 {Since now registers number are doubled, compilers has more space now for maneuvering calling 
-\IT{register allocation}\footnote{assigning variables to registers}.
+\glslink{register allocator}{register allocation}.
 What it meanings for us, emitted code will contain less local variables.}
 
 \index{DES}
@@ -99,7 +99,7 @@ Let's compile it with MSVC 2008 with \Ox option:}
 \IFRU{Кстати, видно что функция сохраняет регистры \TT{RCX}, \TT{RDX} в отведенных для 
 этого вызываемой функцией местах, 
 а \TT{R8} и \TT{R9} не сохраняет, а начинает использовать их сразу.}
-{By the way, we can see here, the function saved \TT{RCX} and \TT{RDX} registers in allocated by caller space,
+{By the way, we can see here, the function saved \TT{RCX} and \TT{RDX} registers in allocated by \gls{caller} space,
 but \TT{R8} and \TT{R9} are not saved but used from the beginning.}
 
 \IFRU{Кстати, существуют процессоры с еще большим количеством регистров общего использования, например, 

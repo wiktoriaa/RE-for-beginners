@@ -75,8 +75,8 @@ its own name.}
 \IFRU{После того как функция \printf возвращает управление в функцию \main, адрес строки (или указатель на нее) все еще лежит в стеке.}
 {When the \printf function returns flow control to the \main function, string address (or pointer to it) is still in stack.}
 
-\IFRU{Так как он больше не нужен, то указатель стека (регистр \ESP) корректируется.} 
-{Since we do not need it anymore the stack pointer (the \ESP register) needs to be corrected.}
+\IFRU{Так как он больше не нужен, то \glslink{stack pointer}{указатель стека} (регистр \ESP) корректируется.} 
+{Since we do not need it anymore the \gls{stack pointer} (the \ESP register) needs to be corrected.}
 
 \index{x86!\Instructions!ADD}
 \TT{ADD ESP, 4} \IFRU{означает прибавить 4 к значению в регистре \ESP.}
@@ -139,11 +139,10 @@ return $0$ as the result of the \main function.}
 
 \index{x86!\Instructions!RET}
 \IFRU{Самая последняя инструкция \RET возвращает управление в вызывающую функцию.
-Обычно, это код \CCpp CRT\footnote{C Run-Time Code}, который, в свою очередь, 
+Обычно, это код \CCpp \ac{CRT}, который, в свою очередь, 
 вернет управление операционной системе.}
-{The last instruction \RET returns control flow to the caller\footnote{calling function}.
-Usually, it is \CCpp CRT\footnote{C Run-Time Code} code which in turn
-returns control to the \ac{OS}.}
+{The last instruction \RET returns control flow to the \gls{caller}.
+Usually, it is \CCpp \ac{CRT} code which in turn returns control to the \ac{OS}.}
 
 \subsubsection{GCC}
 
@@ -218,9 +217,9 @@ it emits \TT{MOV EAX, 0} instead of a shorter opcode.}
 
 \index{x86!\Instructions!LEAVE}
 \IFRU{Последняя инструкция \LEAVE ~--- это аналог команд \TT{MOV ESP, EBP} и \TT{POP EBP} ~--- 
-то есть возврат указателя стека и регистра \EBP в первоначальное состояние.} 
+то есть возврат \glslink{stack pointer}{указателя стека} и регистра \EBP в первоначальное состояние.} 
 {The last instruction, \LEAVE ~--- is the equivalent of the \TT{MOV ESP, EBP} and \TT{POP EBP} instruction pair ~--- 
-in other words, this instruction sets the stack pointer (\ESP) back and restores 
+in other words, this instruction sets the \gls{stack pointer} (\ESP) back and restores 
 the \EBP register to its initial state.}
 
 \IFRU{Это необходимо, т.к., в начале функции мы модифицировали регистры \ESP и \EBP (при помощи}

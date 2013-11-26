@@ -10,7 +10,7 @@
 {For my experiments with ARM processors I chose two compilers}: 
 \IFRU{популярный в embedded-среде}{popular in the embedded area} Keil Release 6/2013 
 \IFRU{и среду разработки}{and} Apple Xcode 4.6.3 \IFRU{}{IDE} (\IFRU{с компилятором}{with} LLVM-GCC 4.2 \IFRU{}{compiler}), 
-\IFRU{генерирующую код для ARM-совместимых процессоров и}{which produces code for ARM-compatible processors and} \IFRU{SoC}{SoCs}\footnote{system on chip} \InENRU \idevices, 
+\IFRU{генерирующую код для ARM-совместимых процессоров и}{which produces code for ARM-compatible processors and} \ac{SOC} \InENRU \idevices, 
 \IFRU{планшетных компьютеров для Windows 8 и Windows RT}{Windows 8 and Window RT tables}\footnote{\url{http://en.wikipedia.org/wiki/List_of_Windows_8_and_RT_tablet_devices}} 
 \IFRU{и таких устройствах как}{and also such devices as} Raspberry Pi.
 
@@ -102,7 +102,7 @@ So, to make things less messy, I offered to work in \IDA}.
 \IFRU{Итак, эта инструкция записывает значения регистров \Rfour и \LR по адресу в памяти, на который указывает регистр \SPwithfootnote, затем уменьшает \TT{SP}, 
 чтобы он указывал на место в стеке, доступное для новых записей}
 {This instruction writes the values of the \Rfour and \LR registers at the address in memory to which 
-\SPwithfootnote is pointing, then it decrements \SP so it will point to the place in the stack that 
+\SPwithfootnote is pointing, then it \glspl{decrement} \SP so it will point to the place in the stack that 
 is free for new entries}.
 
 \IFRU{Эта инструкция, как и инструкция \PUSH в режиме thumb, может сохранить в стеке одновременно несколько значений регистров, что может быть очень удобно}
@@ -179,8 +179,8 @@ This means the the last 2 bits of the instruction address (always zero bits) may
 \index{ARM!\Instructions!LDMFD}
 \index{ARM!\Instructions!POP}
 \IFRU{Последняя инструкция}{The last instruction} \TT{''LDMFD SP!, {R4,PC}''}\footnote{\LDMFDDESC} \IFRU{это инструкция обратная от}{is an inverse instruction of} \TT{STMFD}. 
-\IFRU{Она загружает из стека значения для сохранения их в \Rfour и \PC, увеличивая указатель стека \SP}
-{It loads values from the stack in order to save them into \Rfour and \PC, and increments stack pointer \SP}.
+\IFRU{Она загружает из стека значения для сохранения их в \Rfour и \PC, увеличивая \glslink{stack pointer}{указатель стека} \SP}
+{It loads values from the stack in order to save them into \Rfour and \PC, and \glslink{increment}{increments} \gls{stack pointer} \SP}.
 \IFRU{Это, в каком-то смысле, аналог \POP}{It can be said it is similar to \POP}. 
 N.B. \IFRU{Самая первая инструкция \TT{STMFD} сохранила в стеке \Rfour и \LR, а \IT{восстанавливаются} во время исполнения \TT{LDMFD} регистры \Rfour и \PC}
 {The very first instruction \TT{STMFD} saves the \Rfour and \LR registers pair on the stack, but \Rfour and \PC are \IT{restored} during execution of \TT{LDMFD}}.
@@ -365,11 +365,11 @@ easily observable ~--- opcodes of thumb-2 instructions also begin with \TT{0xFx}
 \IFRU{Но в листинге \IDA байты опкода переставлены местами,
 это из-за того что в процессоре ARM инструкции кодируются так:
 в начале последний байт, потом первый (для thumb и thumb-2 режима), либо, 
-(для инструкций в режиме ARM) в начале четвертый байт, затем третий, второй и первый (т.е., другой endianness
-\footnote{порядок байт})}
+(для инструкций в режиме ARM) в начале четвертый байт, затем третий, второй и первый 
+(т.е., другой \gls{endianness})}
 {But in the \IDA listings
 two opcode bytes are swapped (for thumb and thumb-2 modes), or fourth byte, then third,
-then second and first for instructions in ARM mode (different endianness)}.
+then second and first for instructions in ARM mode (different \gls{endianness})}.
 \index{ARM!\Instructions!MOVW}
 \index{ARM!\Instructions!MOVT.W}
 \index{ARM!\Instructions!BLX}
