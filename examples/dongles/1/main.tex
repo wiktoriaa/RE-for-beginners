@@ -1,0 +1,177 @@
+\subsection{\IFRU{Пример}{Example} \#1: MacOS Classic \AndENRU PowerPC}
+
+\index{PowerPC}
+\index{Mac OS Classic}
+\IFRU{Как-то я получил программу для}{I've got a program for} MacOS Classic
+\footnote{\IFRU{MacOS перед тем как перейти на UNIX}{pre-UNIX MacOS}}, \IFRU{для}{for} PowerPC.
+\IFRU{Компания разработавшая этот продукт давно исчезла, так что (легальный) пользователь
+боялся того что донгла может сломаться}{The company who developed the software product
+was disappeared long time ago, so the (legal) customer was afraid of physical dongle damage}.
+
+\IFRU{Если запустить программу без подключенной донглы, можно увидеть окно с надписью}
+{While running without dongle connected, a message box with a text}
+"Invalid Security Device"\IFRU{}{ appeared}.
+\IFRU{Мне повезло потому что этот текст можно было легко найти внутри исполняемого файла}
+{Luckily, this text string can be found easily in the executable binary file}.
+
+\IFRU{Я не был знаком ни с Mac OS Classic, ни с PowerPC, но решил попробовать}
+{I was not very familiar both with Mac OS Classic and PowerPC, but I tried anyway}.
+
+\ac{IDA} \IFRU{открывает исполняемый файл легко, показывая его тип как}
+{opens the executable file smoothly, reported its type as} 
+"PEF (Mac OS or Be OS executable)" (\IFRU{действительно, это стандартный тип файлов в Mac OS Classic}
+{indeed, it is a standard Mac OS Classic file format}).
+
+\IFRU{В поисках текстовой строки с сообщение об ошибке, я попал на этот фрагмент кода}
+{By searching for the text string with error message, I've got into this code fragment}:
+
+\lstinputlisting{examples/dongles/1/1.lst}
+
+\index{ARM}
+\index{MIPS}
+\IFRU{Да, это код PowerPC}{Yes, this is PowerPC code}.
+\IFRU{Это очень типичный процессор для \ac{RISC} 1990-х}
+{The CPU is very typical 32-bit \ac{RISC} of 1990s era}.
+\IFRU{Каждая инструкция занимает 4 байта (как и в MIPS и ARM) и их имена немного похожи на имена 
+инструкций MIPS}
+{Each instruction occupies 4 bytes (just as in MIPS and ARM) and its names are somewhat resembling
+MIPS instruction names}.
+
+\TT{check1()} \IFRU{это имя которое я дал этой ф-ции позже}{is a function name I gave it to lately}.
+\TT{BL} \IFRU{это инструкция}{is} \IT{Branch Link} 
+\IFRU{т.е., предназначенная для вызова подпрограмм}{instruction, e.g., intended for subroutines calling}.
+\IFRU{Самое важное место это инструкция \ac{BNE} срабатывающая если проверка наличия донглы прошла
+успешно, либо не срабатывающая в случае ошибки: и тогда адрес текстовой строки с сообщением об ошибке
+будет загружен в регистр r3 для последующей передачи в функцию отображения диалогового окна}
+{The crucial point is \ac{BNE} instruction jumping if dongle protection check is passed 
+or not jumping if error is occured: 
+then the address of the text string being loaded into r3 register for the subsequent passage into message box routine}.
+
+\IFRU{Из}{From the} \cite{PPCABI} \IFRU{я узнал что регистр r3 используется для возврата
+значений (и еще r4 если значение 64-битное)}
+{I've got to know the r3 egister is used for values returning (and r4, in case of 64-bit values)}.
+
+\index{x86!\Instructions!MOVZX}
+\IFRU{Еще одна пока что неизвестная инструкция}{Another yet unknown instruction is} \TT{CLRLWI}. 
+\IFRU{Из}{From} \cite{PPC} \IFRU{я узнал что эта инструкция одновременно и очищает и загружает}{I've got to know that this instruction
+do both clearing and loading}. 
+\IFRU{В нашем случае, она очищает 24 старших бита из значения в r3 и записывает всё это в r0, 
+так что это аналог}{In our case, it clears 24 high bits from the value in r3
+and put it to r0, so it is analogical to} \MOVZX \InENRU x86 (\ref{movzx}),
+\IFRU{но также устанавливает флаги, так что}{but it also sets the flags, so the} \ac{BNE} 
+\IFRU{может проверить их потом}{can check them after}.
+
+\IFRU{Посмотрим внутрь}{Let's take a look into} \TT{check1()}\IFRU{}{ function}:
+
+\lstinputlisting{examples/dongles/1/check1.lst}
+
+\IFRU{Как можно увидеть в \ac{IDA}, эта ф-ция вызывается из многих мест в программе, но только значение
+в регистре r3 проверяется сразу после каждого вызова}
+{As I can see in \ac{IDA}, that function is called from many places in program, but only r3 register value
+is checked right after each call}.
+\index{thunk-\IFRU{функции}{functions}}
+\IFRU{Всё что эта ф-ция делает это только вызывает другую ф-цию, так что это}
+{All this function does is calling other function, so it is} \gls{thunk function}: 
+\IFRU{здесь присутствует и пролог ф-ции и эпилог, но регистр r3 не трогается, так что}
+{there is function prologue and epilogue, but r3 register is not touched, so} \TT{checkl()} 
+\IFRU{возвращает то, что возвращает}{returns what} \TT{check2()}\IFRU{}{ returns}.
+
+\ac{BLR} \IFRU{это похоже возврат из ф-ции, но так как IDA делает всю разметку ф-ций автоматически,
+наверное мы можем пока не интересоваться этим}{is seems return from function, but since \ac{IDA} does functions layout, we probably do not need
+to be interesting in this}.
+\IFRU{Так как это типичный \ac{RISC}, похоже, подпрограммы вызываются используя}
+{It seems, since it is a typical \ac{RISC}, subroutines are called using} \gls{link register},
+\IFRU{точно как в}{just like in} ARM.
+
+\IFRU{Ф-ция }{}\TT{check2()} \IFRU{более сложная}{function is more complex}:
+
+\lstinputlisting{examples/dongles/1/check2.lst}
+
+\IFRU{Снова повезло: имена некоторых ф-ций оставлены в исполняемом файле
+(в символах в отладочной секции? Я не уверен, т.к. я не знаком с этим форматом файлов,
+может быть это что-то вроде PE-экспортов (\ref{PE_exports_imports})?
+как например \TT{.RBEFINDNEXT()} and \TT{.RBEFINDFIRST()}.}
+{I'm lucky again: some function names are leaved in the executable 
+(debug symbols section? I'm not sure, since I'm not very familiar with the file format, maybe it is
+some kind of PE exports? (\ref{PE_exports_imports})),
+like \TT{.RBEFINDNEXT()} and \TT{.RBEFINDFIRST()}.}
+\IFRU{В самом конце, эти ф-ции вызывают ф-ции с именами вроде}
+{Eventually these functions are called functions with names like} \TT{.GetNextDeviceViaUSB()}, 
+\TT{.USBSendPKT()},
+\IFRU{так что они явно работают с каким-то USB-устройством}{so these are clearly dealing with USB device}.
+
+\IFRU{В начале посмотрим на то как устанавливается регистр r3 одновременно игнорируя всё остальное}
+{Let's first take a look on how r3 register is set before return simultaneously ignoring all we see}.
+\IFRU{Мы знаем что ``хорошее'' значение в r3 должно быть не нулевым, а нулевой r3 приведет
+к выводу диалогового окна с ошибкой}
+{We know that ``good'' r3 value should be non-zero, zero r3 will lead execution
+flow to the message box with error}.
+
+\IFRU{В ф-ции имеются две инструкции}{There are two instructions} \TT{li \%r3, 1} 
+\IFRU{и одна}{present in the function and one} \TT{li \%r3, 0} 
+(\IT{Load Immediate}, \IFRU{т.е., загрузить значение в регистр}{i.e., loading value into register}).
+\IFRU{Самая первая инструкция находится на}{The very first instruction at} \TT{0x001186B0} ~--- 
+\IFRU{и честно говоря, я не знаю что это означает, нужно больше времени на изучение ассемблера PowerPC}
+{frankly speaking, I don't know
+what it mean, I need some more time to learn PowerPC assembly language}.
+
+\IFRU{А вот то что мы видим дальше понять проще}{What we see next is, however, easier to understand}: 
+\IFRU{вызывается }{}\TT{.RBEFINDFIRST()} \IFRU{и в случае ошибки, 0 будет записан в r3
+и мы перейдем на \IT{exit}, а иначе будет вызвана ф-ция \TT{check3()} ~--- если и она будет
+выполнена с ошибкой, будет вызвана}{is called:
+in case of its failure, 0 is written into r3 and we jump to \IT{exit}, otherwise another
+function is called (\TT{check3()}) ~--- if it is failing too, 
+the} \TT{.RBEFINDNEXT()} \IFRU{вероятно, для поиска другого USB-устройства}
+{is called, probably, in order to look for another USB device}.
+
+N.B.: \TT{clrlwi. \%r0, \%r3, 16} \IFRU{это аналог того что мы уже видели, но она очищает 16 старших бит,
+т.е.}{it is analogical to what we already saw, but it clears
+16 bits, i.e.}, \TT{.RBEFINDFIRST()} \IFRU{вероятно возвращает 16-битное значение}
+{probably returns 16-bit value}.
+
+\TT{B} \IFRU{означает}{meaning} \IT{branch} \IFRU{~--- безусловный переход}{is unconditional jump}.
+
+\ac{BEQ} \IFRU{это обратная инструкция от}{is inverse instruction of} \ac{BNE}.
+
+\IFRU{Посмотрим на}{Let's see} \TT{check3()}:
+
+\lstinputlisting{examples/dongles/1/check3.lst}
+
+\IFRU{Здесь много вызовов}{There are a lot of calls to} \TT{.RBEREAD()}. 
+\IFRU{Эта ф-ция вероятно читает какие-то значения из донглы, которые потом сравниваются здесь при помощи}
+{The function is probably return some values from the dongle,
+so they are compared here with hard-coded variables using} \TT{CMPLWI}.
+
+\IFRU{Мы также видим в регистр r3 записывается перед каждым вызовом}
+{We also see that r3 register is also filled before each call to} \TT{.RBEREAD()} 
+\IFRU{одно из этих значений}{by one of these values}: 0, 1, 8, 0xA, 0xB, 0xC, 0xD, 4, 5.
+\IFRU{Вероятно адрес в памяти или что-то в этом роде}{Probably memory address or something like that}?
+
+\IFRU{Мне даже наверное не нужно изучать остальные инструкции PowerPC: всё что делает эта ф-ция это просто
+вызывает}
+{I probably even do not need to learn other PowerPC instructions: all this function does is just
+calls} \TT{.RBEREAD()}, \IFRU{сравнивает его результаты с константами и возвращает 1 если результат сравнения положительный или 0 в другом случае}{compare its results with constants and returns 1 if comparisons
+are fine or 0 otherwise}.
+
+\IFRU{Всё ясно: \TT{check1()} должна всегда возвращать 1 или иное ненулевое значение}
+{OK, all we've got is that \TT{check1()} should return always 1 or any other non-zero value}.
+\IFRU{Но так как я не очень уверен в своих знаниях инструкций PowerPC, я буду осторожен и пропатчу
+переходы в \TT{check2} на адресах}{But since I'm not very confident in PowerPC instructions,
+I will be careful: I will patch
+jumps in \TT{check2()} at} \TT{0x001186FC} \AndENRU \TT{0x00118718}.
+
+\IFRU{На}{At} \TT{0x001186FC} \IFRU{я записал байты}{I wrote bytes} 0x48 \AndENRU 0 
+\IFRU{таким образом превращая инструкцию}{thus converting} \ac{BEQ} 
+\IFRU{в инструкцию}{instruction into} 
+\TT{B} (\IFRU{безусловный переход}{unconditional jump}):
+\IFRU{Я заметил этот опкод прямо в коде даже без обращения к}
+{I spot its opcode in the code without even referring to} \cite{PPC}.
+
+\IFRU{На}{At} \TT{0x00118718} \IFRU{я записал байт}{I wrote} 0x60 \AndENRU \IFRU{еще 3 нулевых байта,
+таким образом превращая её в инструкцию}{3 zero bytes thus converting it to}
+\ac{NOP}\IFRU{}{ instruction}:
+\IFRU{Этот опкод я тоже подсмотрел прямо в коде}{I spot its opcode in the code too}.
+
+\IFRU{Резюмируя, такие простые модификации можно делать в \ac{IDA} даже с минимальными знаниями
+ассемблера}{Summarizing, such small modifications can be done with \ac{IDA} and minimal assembly language knowledge}.
+
