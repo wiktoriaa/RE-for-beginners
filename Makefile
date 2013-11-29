@@ -1,7 +1,7 @@
 all: 
 	rm -f *.fls
 	#rm -f *.gls
-	rm -f *.log
+	#rm -f *.log
 	rm -f *.bbl
 	rm -f *.aux
 	latexmk -c
