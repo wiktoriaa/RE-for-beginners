@@ -1,0 +1,261 @@
+\subsection{\IFRU{Пример}{Example} \#3: MS-DOS}
+
+\index{MS-DOS}
+\IFRU{Еще одна очень старая программа для}{Another very old software for} MS-DOS \IFRU{от}{from} 1995 
+\IFRU{также разработанная давно исчезнувшей компанией}
+{also developed by a company disappeared long time ago}.
+
+\index{8086}
+\index{80286}
+\IFRU{Во времена перед DOS-экстендерами, всё ПО для MS-DOS расчитывалось на процессоры 8086 или 80286,
+так что в своей массе весь код был 16-битным}
+{In the pre-DOS extenders era, all the software for MS-DOS were mostly rely on 16-bit 8086 or 80286 CPUs,
+so en masse code was 16-bit}.
+\IFRU{16-битный код в основном такой же, какой вы уже видели в этой книге, но все регистры 16-битные,
+и доступно меньше инструкций}
+{16-bit code is mostly same as you already saw in this book, but all registers
+are 16-bit and there are less number of instructions available}.
+
+\index{x86!\Instructions!IN}
+\index{x86!\Instructions!OUT}
+\IFRU{Среда MS-DOS не могла иметь никаких драйверов, и ПО работало с ``голым'' железом через порты,
+так что здесь вы можете увидеть инструкции \TT{OUT}/\TT{IN}, 
+которые в наше время присутствуют в основном только
+в драйверах (в современных OS нельзя обращаться на прямую к портам из \gls{user mode})}
+{MS-DOS environment has no any system drivers, any program may work with bare hardware via ports,
+so here you may see \TT{OUT}/\TT{IN} instructions, which are mostly present in drivers in our times
+(it is not possible to access ports directly in \gls{user mode} in all modern OS)}.
+
+\IFRU{Учитывая это, ПО для MS-DOS должно работать с донглой обращаясь к принтерному LPT-порту
+напрямую}
+{Given that, the MS-DOS program working with a dongle should access LPT printer port directly}.
+\IFRU{Так что мы можем просто поискать эти инструкции. И да, вот они}
+{So we can just search for such instructions. And yes, here it is}:
+
+\lstinputlisting{examples/dongles/3/1.lst}
+
+(\IFRU{Все имена меток в этом примере даны мною}{All label names in this example were given by me}).
+
+\IFRU{Функция }{}\TT{out\_port()} \IFRU{вызывается только из одной ф-ции}
+{is referenced only in one function}:
+
+\lstinputlisting{examples/dongles/3/2.lst}
+
+\IFRU{Это также ``хеширующая'' донгла Sentinel Pro как и в предыдущем примере}
+{It is also Sentinel Pro ``hashing'' dongle as in the previous example}.
+\IFRU{Я заметил это по тому что текстовые строки передаются и здесь, 
+16-битные значения также возвращаются и сравниваются с другими}
+{I figured out its type by noticing that a text strings are also passed here and 16 bit values
+are also returned and compared with other}.
+
+\IFRU{Так вот как происходит работа с Sentinel Pro через порты}
+{So that is how Sentinel Pro is accessed via ports}.
+\IFRU{Адрес выходного порта обычно 0x378, т.е., принтерного порта, данные для него во времена
+перед USB отправлялись прямо сюда}
+{Output port address is usually 0x378, i.e.,
+printer port, the data to the old printers in pre-USB era were passed to it}.
+\IFRU{Порт однонаправленный, потому что когда его разрабатывали, никто не мог предположить
+что кому-то понадобится получать информацию из принтера}
+{The port is one-directional, because when it was developed, no one can imagined someone
+will need to transfer information from the printer}
+\footnote{\IFRU{Если учитывать только Centronics и не учитывать последующий стандарт IEEE 1284 ~---
+в нем из принтера можно получать информацию}
+{If to consider Centronics only. Following IEEE 1284 standard allows to transfer information from
+the printer}.}.
+\IFRU{Единственный способ получить информацию из принтера это регистр статуса на порту 0x379,
+он содержит такие биты как ``paper out'', ``ack'', ``busy'' ~--- так принтер может сигнализировать
+о том что он готов или нет, и о том, есть ли в нем бумага}
+{The only way to get information from the printer, is a status register on port 0x379, it contain
+such bits as ``paper out'', ``ack'', ``busy'' ~--- thus printer may signal to the host computer
+that it is ready or not and if a paper present in it}.
+\IFRU{Так что донгла возвращает информацию через какой-то из этих бит, по одному биту на каждой
+итерации}
+{So the dongle return information from one of these bits, by one bit at each iteration}.
+
+\TT{\_in\_port\_2} \IFRU{содержит адрес статуса}{has address of status word} (0x379) \AndENRU 
+\TT{\_in\_port\_1} \IFRU{содержит адрес управляющего регистра}{has control register address} (0x37A).
+
+\IFRU{Судя по всему, донгла возвращает информацию только через флаг ``busy'' на}
+{It seems, the dongle return information via ``busy'' flag at} \TT{seg030:00B9}: 
+\IFRU{каждый бит записывается в регистре \TT{DI} позже возвращаемый в самом конце ф-ции}
+{each bit is stored in the \TT{DI} register, later returned at the function end}.
+
+\IFRU{Что означают все эти отсылаемые в выходной порт байты}
+{What all these bytes sent to output port mean}?
+\IFRU{Я не знаю. Возможно, команды донглы.}
+{I don't know. Probably commands to the dongle.}
+\IFRU{Но честно говоря, нам и не обязательно знать: нашу задачу можно легко решить и без этих знаний}
+{But generally speaking, it is not necessary to know: it is easy to solve our task without that knowledge}.
+
+\IFRU{Вот ф-ция проверки донглы}{Here is a dongle checking routine}:
+
+\lstinputlisting{examples/dongles/3/3.lst}
+
+\IFRU{А так как эта ф-ция может вызываться слишком часто, например, 
+перед выполнением каждой важной фичи ПО,
+а обращение к донгле вообще-то медленное (и из-за медленного принтерного порта и из-за медленного
+\ac{MCU} в донгле), так что они наверное добавили возможность пропускать проверку донглы слишком часто,
+используя текущее время в ф-ции \TT{biostime()}}
+{Since the routine may be called too frequently, e.g., before each important software feature executing, 
+and the dongle accessing process is generally slow (because of slow printer port and also slow
+\ac{MCU} in the dongle), so they probably added a way to skip dongle checking too often,
+using checking current time in \TT{biostime()} function}.
+
+\index{\CStandardLibrary!rand()}
+\IFRU{Ф-ция }{}\TT{get\_rand()} \IFRU{использует стандартную ф-цию Си}
+{function uses standard C function}:
+
+\lstinputlisting{examples/dongles/3/4.lst}
+
+\IFRU{Так что текстовая строка выбирается случайно, отправляется в донглу и результат
+хеширования сверяется с корректным значением}
+{So the text string is selected randomly, passed into dongle, and then the result of hashing 
+is compared with correct value}.
+
+\IFRU{Текстовые строки, похоже, выбирались так же случайно}
+{Text strings are seems to be chosen randomly as well}.
+
+\IFRU{И вот как вызывается главная процедура проверки донглы}
+{And that is how the main dongle checking function is called}:
+
+\lstinputlisting{examples/dongles/3/5.lst}
+
+\IFRU{Заставить работать программу без донглы очень просто: просто заставить ф-цию
+\TT{check\_dongle()} возвращать всегда 0}
+{Dongle bypassing is easy, just force the \TT{check\_dongle()} function to always return 0}.
+
+\IFRU{Например, вставив такой код в самом её начале}{For example, by inserting this code at its beginning}:
+
+\begin{lstlisting}
+mov ax,0
+retf
+\end{lstlisting}
+
+\subsubsection{\IFRU{Модель памяти в MS-DOS}{MS-DOS memory model}}
+
+\index{MS-DOS\IFRU{Модель памяти}{Memory model}}
+\label{dos_memory_model}
+\index{\CStandardLibrary!strcpy()}
+\IFRU{Наблюдательный читатель может заметить что ф-ция Си \TT{strcpy()} имеет 2 аргумента, но здесь
+мы видим что передается 4}
+{Observant reader might recall that \TT{strcpy()} C function usually requires two pointers in arguments,
+but we saw how 4 values are passed}:
+
+\begin{lstlisting}
+seg033:088F 1E                          push    ds
+seg033:0890 68 22 44                    push    offset aTrupcRequiresA ; "This Software Requires a Software Lock\n"
+seg033:0893 1E                          push    ds
+seg033:0894 68 60 E9                    push    offset byte_6C7E0 ; dest
+seg033:0897 9A 79 65 00+                call    _strcpy
+seg033:089C 83 C4 08                    add     sp, 8
+\end{lstlisting}
+
+\IFRU{Что это означает? О да, еще один дивный артефакт MS-DOS и 8086}
+{What it means? Oh yes, that is another MS-DOS and 8086 weird artefact}.
+
+8086/8088 \IFRU{был 16-битным процессором, но мог адресовать 20-битное адресное
+пространство (таким образом мог адресовать 1MB внешней памяти)}
+{was a 16-bit CPU, but was able to address 20-bit address RAM 
+(thus resulting 1MB external memory)}.
+\IFRU{Внешняя адресное пространство было разделено между \ac{RAM} (максимум 640KB),
+\ac{ROM}, окна для видеопамяти, EMS-карт, итд}
+{External memory address space was divided between \ac{RAM} (640KB max),
+\ac{ROM}, windows for video memory, EMS cards, etc}.
+
+\IFRU{Припомним также что 8086/8088 был на самом деле наследником 8-битного процессора 8080}
+{Let's also recall that 8086/8088 was in fact inheritor of 8-bit 8080 CPU}.
+\IFRU{Процессор 8080 имел 16-битное адресное пространство, т.е., мог адресовать только}
+{The 8080 has 16-bit memory spaces, i.e., it was able to address only} 64KB.
+\IFRU{И возможно в расчете на портирование старого ПО\footnote{Хотя я и не уверен на 100\%},
+8086 может поддерживать 64-килобайтные
+окна, одновременно много таких, расположенных внутри одномегабайтного адресного пространства}
+{And probably of old software porting reason\footnote{I'm not 100\% sure here},
+8086 can support 64KB windows, many of them placed simultaneously
+within 1MB address space}.
+\IFRU{Все регистры 8086 16-битные, так что, чтобы адресовать больше, специальные сегментные
+регистры (CS, DS, ES, SS) были введены}
+{All 8086 registers are 16-bit, so to address more, a special segment registers (CS, DS, ES, SS) were
+introduced}.
+\IFRU{Каждый 20-битный указатель вычисляется используя значения из пары состоящей из сегментного регистра
+и адресного регистра (например DS:BX) вот так}
+{Each 20-bit pointer is calculated using values from a segment register and 
+an address register pair (e.g. DS:BX) as follows:}
+
+\begin{center}
+$real\_address = (segment\_register \ll 4) | address\_register$
+\end{center}
+
+\IFRU{Например, окно памяти для графики (\ac{EGA}, \ac{VGA}) на старых IBM PC-совместимых компьютерах
+имело размер 64KB.}
+{For example, graphics (\ac{EGA}, \ac{VGA}) video \ac{RAM} window on old IBM PC-compatibles 
+has size of 64KB.}
+\IFRU{Для доступа к нему, значение 0xA000 должно быть записано в один из сегментных регистров,
+например, в DS.}
+{For accessing it, a 0xA000 value should be stored in one of segment registers, e.g. into DS.}
+\IFRU{Тогда DS:0 будет адресовать самый первый байт видеопамяти, а DS:0xFFFF ~--- самый последний байт.}
+{Then DS:0 will address the very first byte of video \ac{RAM} and DS:0xFFFF is the very last byte of RAM.}
+\IFRU{А реальный адрес на 20-битной адресной шине, на самом деле будет от 0xA0000 до 0xAFFFF.}
+{The real address on 20-bit address bus, however, will range from 0xA0000 to 0xAFFFF.}
+
+\IFRU{Программа может содержать жесткопривязанные адреса вроде 0x1234, но \ac{OS} может иметь необходимость
+загрузить программу по другим адресам, так что она пересчитает значения для сегментных регистров так,
+что программа будет нормально работать не обращая внимания на то,
+в каком месте памяти она была расположена.}
+{The program may contain hardcoded addresses like 0x1234, but \ac{OS} may need to load program on arbitrary
+addresses, so it recalculate segment register values in such way, so the program will not care about
+where in the RAM it is placed.}
+
+\IFRU{Так что, любой указатель в окружении старой MS-DOS на самом деле состоял из адреса сегмента
+и адреса внутри сегента, т.е., из двух 16-битных значений. 20-битного значения было бы достаточно для
+этого, хотя, тогда пришлось бы вычислять адреса слишком часто: так что передача большего количества
+информации в стеке это более хороший баланс между экономией места и удобством}
+{So, any pointer it old MS-DOS environment was in fact consisted of segment address and the address inside
+segment, i.e., two 16-bit values. 20-bit was enough for that, though, but one will need to recalculate
+the addresses very often: passing more information on stack is seems better space/convenience balance}.
+
+\IFRU{Кстати, из-за всего этого, не было возможным выделить блок памяти больше чем}
+{By the way, because of all this, it was not possible to allocate the memory block larger than} 64KB.
+
+\IFRU{Так что, \TT{strcpy()}, как и любая другая ф-ция принимающая указатель (-и) в аргументах,
+работает с 16-битными парами}
+{So as you may see, \TT{strcpy()} and any other function taking pointer(s) in arguments,
+works with 16-bit pairs}.
+
+\IFRU{Вернемся к нашему примеру}{Let's back to our example}.
+\TT{DS} \IFRU{сейчас указывает на сегмент данных размещенный в исполняемом файле, там где хранится текстовая
+строка.}
+{is currently set to data segment located in the executable,
+that is where the text string is stored.}
+
+\index{x86!\Instructions!LES}
+\IFRU{В ф-ции \TT{sent\_pro()} каждый байт строки загружается на \TT{seg030:00EF}: инструкция
+\TT{LES} загружает из переданного аргумента пару ES:BX одновременно}
+{In the \TT{sent\_pro()} function, each byte of string is loaded at \TT{seg030:00EF}: the \TT{LES} instruction
+loads ES:BX pair simultaneously from the passed argument}.
+\IFRU{\MOV на \TT{seg030:00F5} загружает байт из памяти, на который указывает пара ES:BX.}
+{The \MOV at \TT{seg030:00F5} loads the byte from the memory to which ES:BX pair points.}
+
+\IFRU{На \TT{seg030:00F2} \glslink{increment}{инкрементируется} только 16-битное слово,
+но не значение сегмента.}
+{At \TT{seg030:00F2} only 16-bit word is \glslink{increment}{incremented}, not segment value.}
+\IFRU{Это значит что переданная в ф-цию строка не может находится на границе двух сегментов.}
+{This means, the string passed to the function cannot be located on two data segments boundaries.}
+
+\index{80286}
+\index{80386}
+\IFRU{В 80286 сегментные регистры получили новую роль селекторов, имеющих немного другую ф-цию.}
+{Segment registers were reused at 80286 as selectors, serving different function.}
+
+\index{MS-DOS!DOS extenders}
+\IFRU{Когда появился процессор 80386 и компьютеры с большей памятью,
+MS-DOS была всё еще популярна, так что появились DOS-экстендеры: на самом деле это уже был шаг
+к ``серьезным'' \ac{OS}, они переключали \ac{CPU} в защищенный режим и предлагали куда лучшее API для
+программ, которые всё еще предполагалось запускать в MS-DOS.}
+{When 80386 CPU and computers with bigger \ac{RAM} were introduced,
+MS-DOS was still popular, so the DOS extenders are emerged: these were in fact
+a step toward ``serious'' \ac{OS},
+switching CPU into protected mode and providing much better memory APIs for the programs 
+which still needs to be runned from MS-DOS.}
+\IFRU{Широко известные примеры это DOS/4GW (игра DOOM была скопилирована под него), Phar Lap, PMODE}
+{Widely popular examples include DOS/4GW (DOOM video game was compiled for it), Phar Lap, PMODE.}
+

@@ -25,7 +25,7 @@ by a company disappeared long time ago}.
 {The program without dongle connected reports error, but the error string cannot be found in the executables}.
 
 \index{COFF}
-\IFRU{Спасибо \ac{IDA}, она легко загружает исполняемые файлы формата COFF использующиеся в}
+\IFRU{Еще раз спасибо \ac{IDA}, она легко загружает исполняемые файлы формата COFF использующиеся в}
 {Thanks to \ac{IDA}, it does its job perfectly working out COFF executable used in} SCO OpenServer.
 
 \IFRU{Я попробовал также поискать строку}{I've tried to find} ``rbsl'' 
@@ -39,7 +39,7 @@ by a company disappeared long time ago}.
 
 \index{thunk-\IFRU{функции}{functions}}
 \IFRU{Единственное место где вызывается ф-ция}{The only place} \TT{SSQC()}
-\IFRU{называется}{function called is the} \gls{thunk function}:
+\IFRU{это}{function called is the} \gls{thunk function}:
 
 \lstinputlisting{examples/dongles/2/2.lst}
 
@@ -53,8 +53,9 @@ by a company disappeared long time ago}.
 ``\TT{3C}'' \AndENRU ``\TT{3E}'' \IFRU{~--- это звучит знакомо: когда-то была донгла}
 {are sounds familiar: there was a} Sentinel Pro \IFRU{от Rainbow без памяти,
 предоставляющая только одну секретную крипто-хеширующую ф-цию}{dongle by Rainbow with no memory,
-providing only one crypto-hashing secret function}.
-
+providing only one crypto-hashing secret function}. \\
+\\
+% TODO: digression here? http://www.ctan.org/pkg/mdframed
 \index{\IFRU{Хеш-функции}{Hash functions}}
 \index{CRC32}
 \IFRU{Но что такое хеш-функция}{But what is hashing function}?
@@ -82,37 +83,32 @@ like MD5, SHA1, etc}.
 {Indeed: an internet forum database may not contain user passwords (stolen database will compromise
 all user's passwords) but only hashes (a cracker will not be able to reveal passwords)}.
 \IFRU{К тому же, скрипту интернет-форума вовсе не обязательно знать ваш пароль, он только должен
-проверить его хеш с тем что лежит в БД, и дать вам доступ если проверка проходит}
+cверить его хеш с тем что лежит в БД, и дать вам доступ если cверка проходит}
 {Besides, an internet forum engine is not aware of your password, it should only check if its hash
 is the same as in the database, then it will give you access in this case}.
 \IFRU{Один из самых простых способов взлома это просто перебирать все пароли и ждать пока
 результат будет такой же как тот что нам нужен}
 {One of the simplest passwords cracking methods is just to brute-force all passwords in order to wait
 when resulting value will be the same as we need}.
-\IFRU{Другие методы намного сложнее}{Other methods are much more complex}.
-
+\IFRU{Другие методы намного сложнее}{Other methods are much more complex}. \\
+\\
 \IFRU{Но вернемся к нашей программе}{But let's back to the program}.
-
 \IFRU{Так что программа может только проверить подключена ли донгла или нет}
 {So the program can only check the presence or absence dongle connected}.
 \IFRU{Никакой больше информации в такую донглу без памяти записать нельзя}
 {No other information can be written to such dongle with no memory}.
-
 \IFRU{Двухсимвольные коды это команды}{Two-character codes are commands}
 (\IFRU{можно увидеть как они обрабатывюатся в ф-ции}{we can see how commands are handled in} 
 \TT{SSQC()}\IFRU{}{ function}) 
 \IFRU{а все остальные строки хешируются внутри донглы превращаясь в 16-битное число}
 {and all other strings are hashed inside the dongle transforming into 16-bit number}.
-
 \IFRU{Алгоритм был секретный, так что нельзя было написать замену драйверу или сделать
 электронную копию донглы идеально эмулирующую алгоритм}{The algorithm was secret,
 so it was not possible to write driver replacement or to remake dongle hardware emulating it perfectly}.
-
 \IFRU{С другой стороны, всегда можно было перехватить все обращения к ней и найти те константы, с которыми
 сравнивается результат хеширования}
 {However, it was always possible to intercept all accesses to it and to find what constants
 the hash function results compared to}.
-
 \IFRU{Но надо сказать, вполне возможно создать устойчивую защиту от копирования базирующуюся
 на секретной хеш-функции: пусть она шифрует все файлы с которыми ваша программа работает}
 {Needless to say it is possible to build a robust software copy protection scheme based on secret
@@ -123,9 +119,9 @@ cryptographical hash-function: let it to encrypt/decrypt data files your softwar
 \IFRU{Коды}{Codes} 51/52/53 \IFRU{используются для выбора номера принтеровского LPT-порта}
 {are used for LPT printer port selection}.
 3x/4x \IFRU{используются для выбора}{is for} ``family'' \IFRU{так донглы Sentinel Pro
-можно отличать друг от друга: ведь более одной может быть подключено к LPT-порту}
+можно отличать друг от друга: ведь более одной донглы может быть подключено к LPT-порту}
 {selection (that's how Sentinel Pro dongles are differentiated from each other: more than one
-can be connected to LPT port)}.
+dongle can be connected to LPT port)}.
 
 \IFRU{Единственная строка передающаяся в хеш-функцию это}
 {The only non-2-character string passed to the hashing function is} "0123456789".
@@ -138,8 +134,8 @@ can be connected to LPT port)}.
 \IFRU{Еще одна строка для хеширования:}{Another text string to be passed is}
 "PRESS ANY KEY TO CONTINUE: ", \IFRU{но результат не проверяется}{but the result is not checked}.
 \IFRU{Не знаю зачем это, может быть по ошибке}{I don't know why, probably by mistake}.
-(\IFRU{Это очень странное чувство, находить ошибки в столь древнем ПО}
-{What a strange feeling to find bugs in such ancient software}.)
+(\IFRU{Это очень странное чувство: находить ошибки в столь древнем ПО}
+{What a strange feeling: to reveal bugs in such ancient software}.)
 
 \IFRU{Давайте посмотрим, где проверяется значение глобальной переменной}
 {Let's see where the value from the global variable} \TT{ctl\_mode}\IFRU{}{ is used}.
