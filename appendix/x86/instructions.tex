@@ -5,125 +5,58 @@
 \subsubsection{\IFRU{Наиболее часто используемые}{Most frequently used}}
 
 \begin{description}
-\index{x86!\Instructions!ADC}
-  \item[ADC] (\IT{add with carry}) \IFRU{сложить два значения, \glslink{increment}{инкремент} 
-  если выставлен флаг CF.
-  часто используется для складывания больших значений, например, складывания двух 64-битных
-  значений в 32-битной среде используя две инструкции ADD и ADC, например:}
-  {add values, \gls{increment} result if CF flag is set.
-  often used for addition of large values, for example, 
-  to add two 64-bit values in 32-bit environment using two ADD and ADC instructions, for example:}
-
-\lstinputlisting{appendix/x86/ADC_example_\IFRU{ru}{en}.lst}
-
-\index{x86!\Instructions!ADD}
-  \item[ADD] \IFRU{сложить два значения}{add two values}
-\index{x86!\Instructions!AND}
-  \item[AND] \IFRU{логическое ``И''}{logical ``and''}
-\index{x86!\Instructions!CALL}
-  \item[CALL] \IFRU{вызвать другую ф-цию}{call another function}: \TT{PUSH address\_after\_CALL\_instruction; JMP label}
-\index{x86!\Instructions!CMP}
-  \item[CMP] \IFRU{сравнение значений и установка флагов, то же что и \TT{SUB}, но только без записи результата}
-\index{x86!\Instructions!DEC}
-  \item[DEC] \gls{decrement}
-\index{x86!\Instructions!IMUL} 
-  \item[IMUL] \IFRU{умножение с учетом знаковых значений}{signed multiply}
-\index{x86!\Instructions!INC} 
-  \item[INC] \gls{increment}
-\index{x86!\Instructions!JAE}
-  \item[JAE] \IFRU{переход если больше или равно (беззнаковый)}{jump if above or equal (unsigned)}
-\index{x86!\Instructions!JA}
-  \item[JA] AKA JNBE: \IFRU{переход если больше (беззнаковый)}{jump if greater (unsigned)}
-\index{x86!\Instructions!JBE}
-  \item[JBE] \IFRU{переход если меньше или равно (беззнаковый)}{jump if lesser or equal (unsigned)}
-\index{x86!\Instructions!JB}
-  \item[JB] \IFRU{переход если меньше (беззнаковый)}{jump if below (unsigned)}
-\index{x86!\Instructions!JE}
-  \item[JE] \ac{AKA} JZ: \IFRU{переход если равно или ноль}{jump if equal or zero}
-\index{x86!\Instructions!JGE}
-  \item[JGE] \IFRU{переход если больше или равно (знаковый)}{jump if greater or equal (signed)}
-\index{x86!\Instructions!JG}
-  \item[JG] \IFRU{переход если больше (знаковый)}{jump if greater (signed)}
-\index{x86!\Instructions!JLE}
-  \item[JLE] \IFRU{переход если меньше или равно (знаковый)}{jump if lesser or equal (signed)}
-\index{x86!\Instructions!JL}
-  \item[JL] \IFRU{переход если меньше (знаковый)}{jump if lesser (signed)}
-\index{x86!\Instructions!JMP}
-  \item[JMP] \IFRU{перейти на другой адрес}{jump to another address}
-\index{x86!\Instructions!JNE}
-  \item[JNE] \ac{AKA} JNZ: \IFRU{переход если не равно или не ноль}{jump if not equal or not zero}
-\index{x86!\Instructions!JP}
-  \item[JP] \IFRU{переход если выставлен флаг PF}{jump if PF flag is set}
-\index{x86!\Instructions!LEA}
-  \item[LEA] \IFRU{сформировать адрес}{form address} \IFRU{см.также}{see also}: \ref{sec:LEA}
-\index{\CStandardLibrary!memcpy()}
-\index{x86!\Instructions!MOVSB}
-\index{x86!\Instructions!MOVSW}
-\index{x86!\Instructions!MOVSD}
-\index{x86!\Instructions!MOVSQ}
-  \item[MOVSB/MOVSW/MOVSD/MOVSQ] \IFRU{скопировать}{copy} CX/ECX/RCX \IFRU{байт}{bytes}/16-\IFRU{битных слов}{bit words}/32-\IFRU{битных слов}{bit words}/64-\IFRU{битных слов}{bit words} \IFRU{из}{from} SI/ESI/RSI \IFRU{в}{into} DI/EDI/RDI, \IFRU{работает как}{works like} memcpy() \IFRU{в Си}{in C}
-\index{x86!\Instructions!MOVSX}
-  \item[MOVSX] \IFRU{загрузить с расширением знака}{load with sign extension} \IFRU{см.также}{see also}: (\ref{MOVSX})
-\index{x86!\Instructions!MOVZX}
-  \item[MOVZX] \IFRU{загрузить и очистить все остальные биты}{load and clear all the rest bits} \IFRU{см.также}{see also}: (\ref{movzx})
-\index{x86!\Instructions!MOV}
-  \item[MOV] \IFRU{загрузить значение}{load value}. \IFRU{эта инструкция была названа неудачно, что является результатом путанницы: в других архитектурах эта же инструкция называется LOAD или что-то в этом роде}
-  {this instruction was named awry resulting confusion: in other architectures the same instructions is usually named LOAD or something like that}.
-\index{x86!\Instructions!MUL}
-  \item[MUL] \IFRU{умножение с учетом беззнаковых значений}{unsigned multiply}
-\index{x86!\Instructions!NOP}
-  \item[NOP] \ac{NOP}
-\index{x86!\Instructions!NOT}
-  \item[NOT] \IFRU{логическое ``НЕ''}{logical inversion}
-\index{x86!\Instructions!OR}
-  \item[OR] \IFRU{логическое ``ИЛИ''}{logical ``or''}
-\index{x86!\Instructions!POP}
-  \item[POP] \IFRU{взять значение из стека}{get value from the stack}: \TT{value=SS:[ESP]; ESP=ESP+4 (or 8)}
-\index{x86!\Instructions!PUSH}
-  \item[PUSH] \IFRU{записать значение в стек}{push value to stack}: \TT{ESP=ESP-4 (or 8); SS:[ESP]=value}
-\index{x86!\Instructions!RET}
-  \item[RET] \ac{AKA} RETN: \IFRU{возврат из процедуры}{return from subroutine}: \TT{POP tmp; JMP tmp}
-\index{x86!\Instructions!SAHF}
-  \item[SAHF] \IFRU{скопировать биты из AH в флаги, см.также}{copy bits from AH to flags, see also}: \ref{SAHF}
-\index{x86!\Instructions!SBB}
-  \item[SBB] (\IT{subtraction with borrow}) 
-  \IFRU{вычесть одно значение из другого, \glslink{decrement}{декремент} результата если флаг CF выставлен.
-  часто используется для вычитания больших значений, например, для вычитания двух 64-битных
-  значений в 32-битной среде используя инструкции SUB и SBB, например:}
-  {subtract values, \gls{decrement} result if CF flag is set.
-  often used for subtraction of large values, for example,
-  to subtract two 64-bit values in 32-bit environment using two SUB and SBB instructions, for example:}
-
-\lstinputlisting{appendix/x86/ADC_example_\IFRU{ru}{en}.lst}
-
-\index{x86!\Instructions!SHL}
-  \item[SHL] \IFRU{сдвинуть значение влево на один бит}{shift value left by one bit}
-\index{x86!\Instructions!SHR}
-  \item[SHR] \IFRU{сдвинуть значение вправо на один бит}{shift value right by one bit}
-\index{x86!\Instructions!SUB}
-  \item[SUB] \IFRU{вычесть одно значение из другого. часто встречающийся вариант \TT{SUB reg,reg} означает обнуление reg.}{subtract values. frequenly occured pattern \TT{SUB reg,reg} meaning write 0 to reg.}
-\index{x86!\Instructions!TEST}
-  \item[TEST] \IFRU{то же что и AND, но без записи результатов, см.также}{same as AND but without results saving, see also}: \ref{sec:bitfields}
-\index{x86!\Instructions!XOR}
-  \item[XOR] \ac{XOR} \IFRU{значений}{values}. \IFRU{часто встречающийся вариант}{frequenly occured pattern} \TT{XOR reg,reg} \IFRU{означает обнуление reg}{meaning write 0 to reg}.
-  {compare values and set flags, the same as \TT{SUB} but no results writing}
+% in order to keep them easily sorted...
+\input{appendix/x86/instructions/ADC}
+\input{appendix/x86/instructions/ADD}
+\input{appendix/x86/instructions/AND}
+\input{appendix/x86/instructions/CALL}
+\input{appendix/x86/instructions/CMP}
+\input{appendix/x86/instructions/DEC}
+\input{appendix/x86/instructions/IMUL}
+\input{appendix/x86/instructions/INC}
+\input{appendix/x86/instructions/JAE}
+\input{appendix/x86/instructions/JA}
+\input{appendix/x86/instructions/JBE}
+\input{appendix/x86/instructions/JB}
+\input{appendix/x86/instructions/JE}
+\input{appendix/x86/instructions/JGE}
+\input{appendix/x86/instructions/JG}
+\input{appendix/x86/instructions/JLE}
+\input{appendix/x86/instructions/JL}
+\input{appendix/x86/instructions/JMP}
+\input{appendix/x86/instructions/JNE}
+\input{appendix/x86/instructions/MOVSB_W_D_Q}
+\input{appendix/x86/instructions/MOVSX}
+\input{appendix/x86/instructions/MOVZX}
+\input{appendix/x86/instructions/MOV}
+\input{appendix/x86/instructions/MUL}
+\input{appendix/x86/instructions/NOP}
+\input{appendix/x86/instructions/NOT}
+\input{appendix/x86/instructions/OR}
+\input{appendix/x86/instructions/POP}
+\input{appendix/x86/instructions/PUSH}
+\input{appendix/x86/instructions/RET}
+\input{appendix/x86/instructions/SAHF}
+\input{appendix/x86/instructions/SBB}
+\input{appendix/x86/instructions/SHL}
+\input{appendix/x86/instructions/SHR}
+\input{appendix/x86/instructions/SUB}
+\input{appendix/x86/instructions/XOR}
 \end{description}
 
 \subsubsection{\IFRU{Реже используемые}{Less frequently used}}
 
 \begin{description}
-\index{x86!\Instructions!BSF}
-  \item[BSF] \IT{bit scan forward}, \IFRU{см.также}{see also}: \ref{instruction_BSF}
-\index{x86!\Instructions!CLC}
-  \item[CLC] \IFRU{сбросить флаг CF}{clear CF flag}
-\index{x86!\Instructions!CLD}
-  \item[CLD] \IFRU{сбросить флаг DF}{clear DF flag}
-\index{x86!\Instructions!CLI}
-  \item[CLI] \IFRU{сбросить флаг IF}{clear IF flag}
-\index{x86!\Instructions!CMC}
-  \item[CMC] \IFRU{инвертировать флаг CF}{toggle CF flag}
-\index{x86!\Instructions!CMOVcc}
-  \item[CMOVcc] \IFRU{условный}{conditional} MOV: \IFRU{загрузить значение если условие верно}{load if condition is true}
+\input{appendix/x86/instructions/BSF}
+\input{appendix/x86/instructions/CLD}
+\input{appendix/x86/instructions/CLI}
+\input{appendix/x86/instructions/CMC}
+\input{appendix/x86/instructions/CMOV}
+\input{appendix/x86/instructions/SAL}
+\input{appendix/x86/instructions/STC}
+\input{appendix/x86/instructions/STD}
+\input{appendix/x86/instructions/STI}
+\input{appendix/x86/instructions/SYSENTER}
   %\item[CMPSB/CMPSW/CMPSD/CMPSQ]
   %\item[CPUID]
   %\item[ENTER]
@@ -136,19 +69,9 @@
   %\item[RCR]
   %\item[ROL]
   %\item[ROR]
-\index{x86!\Instructions!SAL}
-  \item[SAL] \IFRU{синонимично}{synonymous to} \TT{SHL}
   %\item[SAR]
   %\item[SETcc]
-\index{x86!\Instructions!STC}
-  \item[STC] \IFRU{установить флаг CF}{set CF flag}
-\index{x86!\Instructions!STD}
-  \item[STD] \IFRU{установить флаг DF}{set DF flag}
-\index{x86!\Instructions!STI}
-  \item[STI] \IFRU{установить флаг IF}{set IF flag}
   %\item[STOSx]
-\index{x86!\Instructions!SYSENTER}
-  \item[SYSENTER] \IFRU{вызов сисколла}{call syscall} (\ref{syscalls})
 \end{description}
 
 \iffalse
