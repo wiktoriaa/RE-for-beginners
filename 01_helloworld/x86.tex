@@ -112,8 +112,8 @@ This instruction has almost the same effect but the \ECX register contents will 
 \index{\CLanguageElements!return}
 \IFRU{После вызова \printf, в оригинальном коде на \CCpp указано \TT{return 0} ~--- вернуть $0$ 
 в качестве результата функции \main.} 
-{After the call to \printf, in the original \CCpp code was \TT{return 0} ~--- 
-return $0$ as the result of the \main function.}
+{After the call to \printf, in the original \CCpp code was 
+\TT{return 0}~---return $0$ as the result of the \main function.}
 
 \index{x86!\Instructions!XOR}
 \IFRU{В сгенерированном коде это обеспечивается инструкцией}
@@ -125,10 +125,8 @@ return $0$ as the result of the \main function.}
 \footnote{\url{http://en.wikipedia.org/wiki/Exclusive_or}}
 \IFRU{, но компиляторы часто используют его вместо простого}
 {but compilers often use it instead of}
-\TT{MOV EAX, 0} ~--- 
-\IFRU
-{снова потому что опкод короче (2 байта против 5).}
-{again because it is a slightly shorter opcode (2 bytes against 5).}
+\TT{MOV EAX, 0}\IFRU{ ~--- снова потому что опкод короче (2 байта против 5).}
+{~---again because it is a slightly shorter opcode (2 bytes against 5).}
 
 \index{x86!\Instructions!SUB}
 \IFRU{Бывает так, что некоторые компиляторы генерируют}{Some compilers emit}
@@ -186,8 +184,8 @@ main            endp
 в памяти по адресам кратным 4 или 16)\footnote{\URLWPDA}.}
 {The result is almost the same.
 The address of the ``hello world'' string (stored in the data segment) is saved in the \EAX register first then it is stored on the stack.
-Also in the function prologue we see \TT{AND ESP, 0FFFFFFF0h} ~--- 
-this instruction aligns the value in the \ESP register on a 16-byte border.
+Also in the function prologue we see \TT{AND ESP, 0FFFFFFF0h}~---this 
+instruction aligns the value in the \ESP register on a 16-byte border.
 This results in all values in the stack being aligned.
 (CPU performs better if the values it is working with are located in memory at addresses aligned 
 on a 4 or 16 byte border)\footnote{\URLWPDA}.}
@@ -206,7 +204,7 @@ on a 4 or 16 byte border)\footnote{\URLWPDA}.}
 \IT{var\_10} по совместительству ~--- и локальная переменная и одновременно аргумент для \printf{}. Подробнее об этом будет ниже.}
 {The string address (or a pointer to the string) is then written directly on the stack space 
 without using the \PUSH instruction.
-\IT{var\_10} ~--- is a local variable but is also an argument for \printf{}.
+\IT{var\_10}~---is a local variable but is also an argument for \printf{}.
 Read about it below.}
 
 \IFRU{Затем вызывается \printf.}{Then the \printf function is called.}
@@ -218,8 +216,8 @@ it emits \TT{MOV EAX, 0} instead of a shorter opcode.}
 \index{x86!\Instructions!LEAVE}
 \IFRU{Последняя инструкция \LEAVE ~--- это аналог команд \TT{MOV ESP, EBP} и \TT{POP EBP} ~--- 
 то есть возврат \glslink{stack pointer}{указателя стека} и регистра \EBP в первоначальное состояние.} 
-{The last instruction, \LEAVE ~--- is the equivalent of the \TT{MOV ESP, EBP} and \TT{POP EBP} instruction pair ~--- 
-in other words, this instruction sets the \gls{stack pointer} (\ESP) back and restores 
+{The last instruction, \LEAVE~---is the equivalent of the \TT{MOV ESP, EBP} and \TT{POP EBP} instruction 
+pair~---in other words, this instruction sets the \gls{stack pointer} (\ESP) back and restores 
 the \EBP register to its initial state.}
 
 \IFRU{Это необходимо, т.к., в начале функции мы модифицировали регистры \ESP и \EBP (при помощи}

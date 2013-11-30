@@ -36,16 +36,16 @@ to change brightness of 8 pixels simultaneously.}
 это может работать вместе.}
 {When MMX appeared, these registers was actually located in FPU registers. 
 It was possible to use either FPU or MMX at the same time. One might think, Intel saved on transistors,
-but in fact, the reason of such symbiosis is simpler ~--- older \ac{OS} may not aware 
+but in fact, the reason of such symbiosis is simpler~---older \ac{OS} may not aware 
 of additional CPU registers would not save them at the context switching, but will save FPU registers.
 Thus, MMX-enabled CPU + old \ac{OS} + process utilizing MMX features = that all will work together.}
 
 \index{x86!SSE}
 \index{x86!SSE2}
-SSE ~--- \IFRU{это расширение регистров до 128 бит, теперь уже отдельно от FPU.}{is extension of SIMD registers up to 128 bits, now separately from FPU.}
+SSE\IFRU{ ~--- }{~---}\IFRU{это расширение регистров до 128 бит, теперь уже отдельно от FPU.}{is extension of SIMD registers up to 128 bits, now separately from FPU.}
 
 \index{x86!AVX}
-AVX ~--- \IFRU{расширение регистров до 256 бит.}{another extension to 256 bits.}
+AVX\IFRU{ ~--- }{~---}\IFRU{расширение регистров до 256 бит.}{another extension to 256 bits.}
 
 \IFRU{Немного о практическом применении.}{Now about practical usage.}
 
@@ -66,7 +66,7 @@ DES algorithm may be considered as a very large electronic circuit, with wires a
 \IFRU{Идея bitslice DES\footnote{\URLBS} ~--- это обработка сразу группы блоков и ключей одновременно. 
 Скажем, на x86 перменная типа \IT{unsigned int} вмещает в себе 32 бита, так что там можно хранить 
 промежуточные результаты сразу для 32-х блоков-ключей, используя 64+56 переменных типа \IT{unsigned int}.}
-{Bitslice DES\footnote{\URLBS} ~--- is an idea of processing group of blocks and keys simultaneously.
+{Bitslice DES\footnote{\URLBS}~---is an idea of processing group of blocks and keys simultaneously.
 Let's say, variable of type \IT{unsigned int} on x86 may hold up to 32 bits, so, it is possible to store there
 intermediate results for 32 blocks-keys pairs simultaneously, using 64+56 variables of \IT{unsigned int} type.}
 
@@ -75,7 +75,7 @@ intermediate results for 32 blocks-keys pairs simultaneously, using 64+56 variab
 переделав алгоритм bitslice DES для SSE2 и AVX ~--- и теперь возможно шифровать одновременно 
 128 или 256 блоков-ключей:}
 {I wrote an utility to brute-force Oracle RDBMS passwords/hashes (ones based on DES),
-slightly modified bitslice DES algorithm for SSE2 and AVX ~--- now it is possible to encrypt 128 
+slightly modified bitslice DES algorithm for SSE2 and AVX~---now it is possible to encrypt 128 
 or 256 block-keys pairs simultaneously.}
 
 \url{http://conus.info/utils/ops_SIMD/}
@@ -92,7 +92,7 @@ or 256 block-keys pairs simultaneously.}
 {Vectorization\footnote{\URLVEC}, for example, is when you have a loop taking couple of arrays at input and produces one array.
 Loop body takes values from input arrays, do something and put result into output array.
 It is important that there is only one single operation applied to each element.
-Vectorization ~--- is to process several elements simultaneously.}
+Vectorization~---is to process several elements simultaneously.}
 
 \IFRU{Например:}{For example:}
 
@@ -162,12 +162,11 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 \index{x86!\Instructions!PADDD}
 \begin{itemize}
 \item
-\MOVDQU (\IT{Move Unaligned Double Quadword}) ~--- \IFRU{она просто загружает 16 байт из памяти в XMM-регистр}
+\MOVDQU (\IT{Move Unaligned Double Quadword})\IFRU{ ~--- }{~---}\IFRU{она просто загружает 16 байт из памяти в XMM-регистр}
 {it just load 16 bytes from memory into a XMM-register}.
 
 \item
-\PADDD (\IT{Add Packed Integers}) ~--- 
-\IFRU{складывает сразу 4 пары 32-битных чисел чисел и оставляет в первом операнде результат. 
+\PADDD (\IT{Add Packed Integers})\IFRU{ ~--- }{~---}\IFRU{складывает сразу 4 пары 32-битных чисел чисел и оставляет в первом операнде результат. 
 Кстати, если произойдет переполнение, то исключения не произойдет и никакие флаги не установятся, 
 запишутся просто младшие 32 бита результата. 
 Если один из операндов \PADDD ~--- адрес значения в памяти, 
@@ -181,7 +180,7 @@ then address must be aligned on a 16-byte border. If it is not aligned, exceptio
 \footnote{More about data aligning: \URLWPDA}.}
 
 \item
-\MOVDQA (\IT{Move Aligned Double Quadword}) ~--- \IFRU{тоже что и \MOVDQU, только подразумевает 
+\MOVDQA (\IT{Move Aligned Double Quadword})\IFRU{ ~--- }{~---}\IFRU{тоже что и \MOVDQU, только подразумевает 
 что адрес в памяти выровнен по 16-байтной границе. 
 Если он не выровнен, произойдет исключение. 
 \MOVDQA работает быстрее чем \MOVDQU, но требует вышеозначенного.}
@@ -251,7 +250,7 @@ As of MSVC, some of them are located in the \TT{intrin.h} file.}
 \IFRU{Имеется возможность реализовать функцию \strlen\footnote{strlen() ~--- стандартная функция Си 
 для подсчета длины строки} при помощи SIMD-инструкций, работающий в 2-2.5 раза быстрее обычной реализации. 
 Эта функция будет загружать в XMM-регистр сразу 16 байт и проверять каждый на ноль.}
-{It is possible to implement \strlen function\footnote{strlen() ~--- standard C library function for calculating
+{It is possible to implement \strlen function\footnote{strlen()~---standard C library function for calculating
 string length} using SIMD-instructions, working 2-2.5 times faster than common implementation.
 This function will load 16 characters into a XMM-register and check each against zero.}
 
@@ -282,7 +281,7 @@ regardless the fact if the pointer aligned or not.}
 \IFRU{Да, можно было бы сделать вот как: если указатель выровнен, загружаем используя \MOVDQA, 
 иначе используем работающую чуть медленнее \MOVDQU.}
 {Yes, it might be done in this way: if pointer is aligned, load data using \MOVDQA,
-if not ~--- use slower \MOVDQU.}
+if not~---use slower \MOVDQU.}
 
 \IFRU{Однако здесь кроется не сразу заметная проблема, которая проявляется вот в чем:}
 {But here we are may stick into hard to notice caveat:}
@@ -361,14 +360,14 @@ read from unallocated memory.}
 \IFRU{Вернемся к нашей функции}{Let's back to our function}.
 
 \index{x86!\Instructions!PXOR}
-\verb|_mm_setzero_si128()| ~--- \IFRU{это макрос, генерирующий \TT{pxor xmm0, xmm0} ~--- инструкция просто обнуляет регистр \XMMZERO.}
-{is a macro generating \TT{pxor xmm0, xmm0} ~--- instruction just clears the \XMMZERO register}
+\verb|_mm_setzero_si128()|\IFRU{ ~--- }{~---}\IFRU{это макрос, генерирующий \TT{pxor xmm0, xmm0} ~--- инструкция просто обнуляет регистр \XMMZERO.}
+{is a macro generating \TT{pxor xmm0, xmm0}~---instruction just clears the \XMMZERO register}
 
-\verb|_mm_load_si128()| ~--- \IFRU{это макрос для \MOVDQA, он просто загружает 16 байт по адресу из указателя в \XMMONE.}
+\verb|_mm_load_si128()|\IFRU{ ~--- }{~---}\IFRU{это макрос для \MOVDQA, он просто загружает 16 байт по адресу из указателя в \XMMONE.}
 {is a macro for \MOVDQA, it just loading 16 bytes from the address in the \XMMONE register.}
 
 \index{x86!\Instructions!PCMPEQB}
-\verb|_mm_cmpeq_epi8()| ~--- \IFRU{это макрос для \PCMPEQB, это инструкция которая 
+\verb|_mm_cmpeq_epi8()|\IFRU{ ~--- }{~---}\IFRU{это макрос для \PCMPEQB, это инструкция которая 
 побайтово сравнивает значения из двух XMM регистров.} 
 {is a macro for \PCMPEQB, is an instruction comparing two XMM-registers bytewise.}
 
@@ -397,8 +396,7 @@ was set in the \XMMZERO register by \TT{pxor xmm0, xmm0}.}
 
 \index{x86!\Instructions!PMOVMSKB}
 \IFRU{Следующий макрос \TT{\_mm\_movemask\_epi8()} ~--- это инструкция \TT{PMOVMSKB}.}
-{The next macro is \TT{\_mm\_movemask\_epi8()} ~---
-that is \TT{PMOVMSKB} instruction.}
+{The next macro is \TT{\_mm\_movemask\_epi8()}~---that is \TT{PMOVMSKB} instruction.}
 
 \IFRU{Она очень удобна как раз для использования в паре с \PCMPEQB.}
 {It is very useful if to use it with \PCMPEQB.}
@@ -450,7 +448,7 @@ XMM1: 0000ff00000000000000ff0000000000
 {Obviously, our function must consider only first zero bit and ignore others.}
 
 \index{x86!\Instructions!BSF}
-\IFRU{Следующая инструкция}{The next instruction} ~--- \TT{BSF} (\IT{Bit Scan Forward}). 
+\IFRU{Следующая инструкция}{The next instruction}\IFRU{ ~--- }{~---}\TT{BSF} (\IT{Bit Scan Forward}). 
 \IFRU{Это инструкция находит самый младший бит во втором операнде и записывает его позицию в первый операнд.}
 {This instruction find first bit set to 1 and stores its position into first operand.}
 

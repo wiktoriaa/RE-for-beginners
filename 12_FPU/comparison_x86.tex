@@ -35,8 +35,8 @@ This is 16-bit register reflecting current state of FPU.}
 \footnote{Intel P6 is Pentium Pro, Pentium II, etc} has not any conditional 
 jumps instructions which are checking these bits. 
 Probably, it is a matter of history (remember: FPU was separate chip in past). 
-Modern CPU starting at Intel P6 has \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP instructions ~--- 
-which does the same, but modifies CPU flags \ZF/\PF/\CF.}
+Modern CPU starting at Intel P6 has \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP 
+instructions~---which does the same, but modifies CPU flags \ZF/\PF/\CF.}
 
 \IFRU{После этого, инструкция \FCOMP выдергивает одно значение из стека. 
 Это отличает её от \FCOM, которая просто сравнивает значения, оставляя стек в таком же состоянии.}
@@ -48,7 +48,7 @@ This is what distinguish it from \FCOM, which is just comparing values, leaving 
 соответственно, 14, 10, 8, в этих позициях они и остаются в регистре \AX, 
 и все они расположены в старшей части регистра ~--- \AH.}
 {\FNSTSW copies FPU status word register to the \AX. Bits \CThreeBits are placed at positions 14/10/8, 
-they will be at the same positions in the \AX register and all they are placed in high part of the \AX ~--- \AH.}
+they will be at the same positions in the \AX register and all they are placed in high part of the \AX{}~---\AH{}.}
 
 \begin{itemize}
 \item
@@ -142,9 +142,9 @@ And that is why result of comparison in the \CThreeBits will be different:}
 (где сейчас лежит \TT{\_a}) в \STONE. 
 После этого на вершине стека два раза лежат \TT{\_a}. Затем одно значение выдергивается. 
 После этого в \STZERO остается \TT{\_a} и функция завершается.}
-{It can be said, \TT{test ah, 65} instruction just leaves two bits ~--- \Cthree and \Czero. 
+{It can be said, \TT{test ah, 65} instruction just leaves two bits~---\Cthree and \Czero. 
 Both will be zeroes if \TT{a>b}: in that case \JNE jump will not be triggered. 
-Then \TT{FSTP ST(1)} is following ~--- this instruction copies value in the \STZERO into operand and 
+Then \TT{FSTP ST(1)} is following~---this instruction copies value in the \STZERO into operand and 
 popping one value from FPU stack.
 In other words, the instruction copies \STZERO (where \TT{\_a} value is now) into the \STONE.
 After that, two values of the {\_a} are at the top of stack now. 
@@ -173,7 +173,7 @@ not to store it anywhere.}
 \index{x86!\Instructions!FUCOMPP}
 \IFRU{\FUCOMPP ~--- это почти то же что и \FCOM, только выкидывает из стека оба значения после сравнения, 
 а также несколько иначе реагирует на ``не-числа''.}
-{\FUCOMPP ~--- is almost like \FCOM, but popping both values from stack and handling 
+{\FUCOMPP{}~---is almost like \FCOM, but popping both values from stack and handling 
 ``not-a-numbers'' differently.}
 
 \index{\IFRU{Не-числа}{Non-a-numbers} (NaNs)}
@@ -192,20 +192,20 @@ NaN\NANFN{}.
 NaNs\NANFN{}. 
 These are infinity, result of dividing by $0$, etc. 
 Not-a-numbers can be ``quiet'' and ``signalling''. It is possible to continue to work with ``quiet'' NaNs, 
-but if one try to do any operation with ``signalling'' NaNs ~--- an exception will be raised.}
+but if one try to do any operation with ``signalling'' NaNs~---an exception will be raised.}
 
 \index{x86!\Instructions!FCOM}
 \index{x86!\Instructions!FUCOM}
 \IFRU{Так вот, \FCOM вызовет исключение если любой из операндов ~--- какое-либо нечисло.
 \FUCOM же вызовет исключение только если один из операндов именно ``сигнализирующее нечисло''.}
-{\FCOM will raise exception if any operand ~--- NaN. 
-\FUCOM will raise exception only if any operand ~--- signalling NaN (SNaN).}
+{\FCOM will raise exception if any operand~---NaN. 
+\FUCOM will raise exception only if any operand~---signalling NaN (SNaN).}
 
 \index{x86!\Instructions!SAHF}
 \IFRU{Далее мы видим \SAHF ~--- это довольно редкая инструкция в коде не использущим FPU. 
 8 бит из \AH перекладываются в младшие 8 бит регистра статуса процессора в таком порядке: 
 \TT{SF:ZF:-:AF:-:PF:-:CF <- AH}.}
-{The following instruction is \SAHF ~--- this is rare instruction in the code which is not use FPU. 
+{The following instruction is \SAHF~---this is rare instruction in the code which is not use FPU. 
 8 bits from AH is movinto into lower 8 bits of CPU flags in the following order: 
 \TT{SF:ZF:-:AF:-:PF:-:CF <- AH}.}
 
