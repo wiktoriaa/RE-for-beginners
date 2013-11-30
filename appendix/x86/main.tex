@@ -4,9 +4,9 @@
 
 \index{x86-64}
 \IFRU{Регистры имеющие префикс R- появились только в x86-64, а префикс E- ~--- в 80386}
-{Registers prefixed with R- appeared in x86-84, and those prefixed with E- ~--- in 80386}.
+{Registers prefixed with R- appeared in x86-84, and those prefixed with E-~---in 80386}.
 \IFRU{Таким образом, R-регистры 64-битные, а E-регистры ~--- 32-битные}
-{Thus, R-registers are 64-bit, and E-registers ~--- 32-bit}.
+{Thus, R-registers are 64-bit, and E-registers~---32-bit}.
 
 \IFRU{В x86-64 добавили еще 8 регистров общего назначения: R8-R15}
 {8 more general purpose registers were added in x86-86: R8-R15}.
@@ -366,9 +366,113 @@ AVX \IFRU{это расширение всех регистры до 256 бит}
 % TODO: debugging registers
 % TODO: control registers
 
-%\subsection{Инструкции}
+\subsection{\IFRU{Инструкции}{Instructions}}
 
-%\subsubsection{Наиболее часто используемые}
+\subsubsection{\IFRU{Наиболее часто используемые}{Most frequently used}}
 
-%\subsubsection{Реже используемые}
+\begin{description}
+  \item[ADD]
+  \item[AND]
+  \item[CALL] \IFRU{вызвать другую ф-цию}{call another function}: \TT{PUSH address\_after\_CALL\_instruction; JMP label}
+  \item[CMP] \IFRU{сравнение значений и установка флагов, то же что и \TT{SUB}, но только без записи результата}
+  {compare values and set flags, the same as \TT{SUB} but no results writing}
+  \item[DEC]
+  \item[IMUL]
+  \item[INC]
+  \item[JA]
+  \item[JAE]
+  \item[JB]
+  \item[JBE]
+  \item[JE] \ac{AKA} JZ
+  \item[JG]
+  \item[JGE]
+  \item[JL]
+  \item[JLE]
+  \item[JMP] \IFRU{перейти на другой адрес}{jump to another address}
+  \item[JNBE]
+  \item[JNE] \ac{AKA} JNZ
+  \item[JP]
+  \item[LEA]
+  \item[MOVSX]
+  \item[MOVSB/MOVSW/MOVSD/MOVSQ]
+  \item[MOVZX]
+  \item[MOV] \IFRU{скопировать значение}{copy value}
+  \item[NOP] \ac{NOP}
+  \item[NOT]
+  \item[OR]
+  \item[POP] \IFRU{взять значение из стека}{get value from the stack}: \TT{value=SS:[ESP]; ESP=ESP+4 (or 8)}
+  \item[PUSH] \IFRU{записать значение в стек}{push value to stack}: \TT{ESP=ESP-4 (or 8); SS:[ESP]=value}
+  \item[RET] \ac{AKA} RETN
+  \item[SAHF]
+  \item[SHL] \IFRU{сдвинуть значение влево на один бит}{shift value by one bit left}
+  \item[SHR]
+  \item[SUB] \IFRU{вычесть одно значение из другого. часто встречающаяся инструкция \TT{SUB reg,reg} означает обнуление reg.}{subtract values. frequenly occured pattern \TT{SUB reg,reg} meaning write 0 to reg.}
+  \item[TEST]
+  \item[XOR] \ac{XOR} \IFRU{значений}{values}. \IFRU{часто встречающаяся инструкция}{frequenly occured pattern} \TT{XOR reg,reg} \IFRU{означает обнуление reg}{meaning write 0 to reg}.
+  \item[SBB]
+  \item[ADC]
+\end{description}
+
+\subsubsection{\IFRU{Реже используемые}{Less frequently used}}
+
+\begin{description}
+  \item[BSF]
+  \item[CMOVcc] \IFRU{условный}{conditional} MOV: \IFRU{скопировать значение если условие верно}{do copy if condition is true}
+  \item[CMPSB/CMPSW/CMPSD/CMPSQ]
+  \item[CPUID]
+  \item[ENTER]
+  \item[IN]
+  \item[LEAVE]
+  \item[LES]
+  \item[LOOP]
+  \item[OUT]
+  \item[RCL]
+  \item[RCR]
+  \item[ROL]
+  \item[ROR]
+  \item[SAL] \IFRU{синонимично}{synonymous to} \TT{SHL}
+  \item[SAR]
+  \item[SETcc]
+  \item[STOSx]
+  \item[SYSENTER]
+  \item[CLD]
+  \item[STD]
+  \item[CLI]
+  \item[STI]
+  \item[CMC]
+  \item[CLC]
+  \item[STC]
+\end{description}
+
+\subsubsection{\IFRU{Инструкции FPU}{FPU instructions}}
+
+\begin{description}
+  \item[FADDP]
+  \item[FCOM]
+  \item[FCOMP]
+  \item[FDIV]
+  \item[FDIVP]
+  \item[FDIVR]
+  \item[FLD]
+  \item[FLD]
+  \item[FMUL]
+  \item[FNSTSW]
+  \item[FSTP]
+  \item[FUCOM]
+  \item[FUCOMPP]
+\end{description}
+
+\subsubsection{\IFRU{SIMD-инструкции}{SIMD-instructions}}
+
+\begin{description}
+  \item[DIVSD]
+  \item[MOVDQA]
+  \item[MOVDQU]
+  \item[PADDD]
+  \item[PCMPEQB]
+  \item[PLMULHW]
+  \item[PLMULLD]
+  \item[PMOVMSKB]
+  \item[PXOR]
+\end{description}
 
