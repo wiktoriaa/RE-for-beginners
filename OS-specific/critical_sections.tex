@@ -1,0 +1,143 @@
+﻿\section{Windows NT: \IFRU{Критические секции}{Critical section}}
+
+\label{critical_sections}
+
+\IFRU{Критические секции в любой \ac{OS} очень важны в мультитредовой среде, используются в основном
+для обеспечения гарантии что только один тред будет иметь доступ к данным, блокируя остальные треды}
+{Critical sections in any \ac{OS} are very important in multithreaded environment,
+mostly used for issuing a guarantee
+that only one thread will access some data, while blocking other threads}. \\
+\\
+\IFRU{Вот как объявлена структура}{That is how} \TT{CRITICAL\_SECTION} 
+\IFRU{объявлена в линейке OS}{structure is declared in} \gls{Windows NT}\IFRU{}{ line OS}:
+
+\begin{lstlisting}[caption=(Windows Research Kernel v1.2) public/sdk/inc/nturtl.h]
+typedef struct _RTL_CRITICAL_SECTION {
+    PRTL_CRITICAL_SECTION_DEBUG DebugInfo;
+
+    //
+    //  The following three fields control entering and exiting the critical
+    //  section for the resource
+    //
+
+    LONG LockCount;
+    LONG RecursionCount;
+    HANDLE OwningThread;        // from the thread's ClientId->UniqueThread
+    HANDLE LockSemaphore;
+    ULONG_PTR SpinCount;        // force size on 64-bit systems when packed
+} RTL_CRITICAL_SECTION, *PRTL_CRITICAL_SECTION;
+\end{lstlisting}
+
+\IFRU{Вот как работает ф-ция}{That's is how} EnterCriticalSection()\IFRU{}{ function works}:
+
+\index{x86!\Instructions!LOCK}
+\begin{lstlisting}[caption=Windows 2008/ntdll.dll/x86 (begin)]
+_RtlEnterCriticalSection@4
+
+var_C           = dword ptr -0Ch
+var_8           = dword ptr -8
+var_4           = dword ptr -4
+arg_0           = dword ptr  8
+
+                mov     edi, edi
+                push    ebp
+                mov     ebp, esp
+                sub     esp, 0Ch
+                push    esi
+                push    edi
+                mov     edi, [ebp+arg_0]
+                lea     esi, [edi+4] ; LockCount
+                mov     eax, esi
+                lock btr dword ptr [eax], 0
+                jnb     wait ; jump if CF=0
+
+loc_7DE922DD:
+                mov     eax, large fs:18h
+                mov     ecx, [eax+24h]
+                mov     [edi+0Ch], ecx
+                mov     dword ptr [edi+8], 1
+                pop     edi
+                xor     eax, eax
+                pop     esi
+                mov     esp, ebp
+                pop     ebp
+                retn    4
+
+... skipped
+\end{lstlisting}
+
+\index{x86!\Instructions!BTR}
+\IFRU{Самая важная инструкция в этом фрагменте кода это}
+{The most important instruction in this code fragment is} \TT{LOCK BTR}: 
+\IFRU{нулевой бит сохраняется в флаге CF и очищается в памяти}
+{the zeroth bit is stored in CF flag and cleared in memory}.
+\IFRU{Это \glslink{atomic operation}{атомическая операция}}{This is \gls{atomic operation}}, 
+\IFRU{блокирующая доступ всех остальных процессоров
+к этому значению в памяти (обратите внимание на префикс \TT{LOCK} перед инструкцией \TT{BTR}.}
+{blocking all other CPUs to access this piece of memory 
+(take a notice of \TT{LOCK} prefix before \TT{BTR} instruction).}
+\IFRU{Если бит в}{If the bit at} \TT{LockCount} \IFRU{был}{was} 1, 
+\IFRU{хорошо, сбросить его и вернуться из ф-ции: мы в критической секции}
+{fine, reset it and return from the function: we are in critical section}.
+\IFRU{Если нет ~--- критическая секция уже занята другим тредом, тогда ждем}
+{If not~---critical section is already occupied by other thread, then wait}. \\
+\\
+\IFRU{А вот как работает ф-ция}{And here is how} LeaveCriticalSection()\IFRU{}{ function works}:
+
+\begin{lstlisting}[caption=Windows 2008/ntdll.dll/x86 (begin)]
+_RtlLeaveCriticalSection@4 proc near
+
+arg_0           = dword ptr  8
+
+                mov     edi, edi
+                push    ebp
+                mov     ebp, esp
+                push    esi
+                mov     esi, [ebp+arg_0]
+                add     dword ptr [esi+8], 0FFFFFFFFh ; RecursionCount
+                jnz     short loc_7DE922B2
+                push    ebx
+                push    edi
+                lea     edi, [esi+4]    ; LockCount
+                mov     dword ptr [esi+0Ch], 0
+                mov     ebx, 1
+                mov     eax, edi
+                lock xadd [eax], ebx
+                inc     ebx
+                cmp     ebx, 0FFFFFFFFh
+                jnz     loc_7DEA8EB7
+
+loc_7DE922B0:
+                pop     edi
+                pop     ebx
+
+loc_7DE922B2:
+                xor     eax, eax
+                pop     esi
+                pop     ebp
+                retn    4
+
+... skipped
+\end{lstlisting}
+
+\index{x86!\Instructions!XADD}
+\TT{XADD} \IFRU{это ``обменять и прибавить''}{is ``exchange and add''}. 
+\IFRU{В данном случае, это значит прибавить 1 к значению в \TT{LockCount}, сохранить результат
+в регистре \TT{EBX}, и в то же время 1 записывается в \TT{LockCount}}
+{In this case, it summing \TT{LockCount} value and 1 and stores result in \TT{EBX} register, 
+and at the same time 1 goes to \TT{LockCount}}.
+\IFRU{Эта операция также атомическая, потому что также имеет префикс \TT{LOCK}, что означает что другие CPU
+или ядра CPU в системе не будут иметь доступа к этой ячейке памяти}
+{This operation is atomic since it is prefixed by \TT{LOCK} as well,
+meaning that all other CPUs or CPU cores in system are blocked from accessing this point of memory}.
+
+\IFRU{Префикс }{}\TT{LOCK} \IFRU{очень важен}{prefix is very important}: 
+\IFRU{два треда, каждый из которых работает на разных CPU или ядрах CPU, могут попытаться одновременно
+войти в критическую секцию, одновременно модифицируя значение в памяти, и это может привести к
+непредсказуемым результатам}
+{two threads, each of which working on separate CPUs or CPU cores may try to
+enter critical section and to modify the value in memory simultaneously,
+this will result in unpredictable behaviour}.
+
+% TODO linux
+
