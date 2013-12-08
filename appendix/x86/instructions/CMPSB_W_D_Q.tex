@@ -1,0 +1,34 @@
+﻿% to be proofreaded
+\index{\CStandardLibrary!memcmp()}
+\index{x86!\Instructions!CMPSB}
+\index{x86!\Instructions!CMPSW}
+\index{x86!\Instructions!CMPSD}
+\index{x86!\Instructions!CMPSQ}
+\item[CMPSB/CMPSW/CMPSD/CMPSQ] 
+\IFRU{сравнить}{compare} \IFRU{байт}{byte}/
+16-\IFRU{битное слово}{bit word}/
+32-\IFRU{битное слово}{bit word}/
+64-\IFRU{битное слово}{bit word} \IFRU{из места адрес которого находится в}{from the place
+address of which is in the} SI/ESI/RSI \IFRU{со значением, адрес которого находится
+в}{with a variable address of which is in the} DI/EDI/RDI.
+\IFRU{Выставить флаги так же как это делает \CMP}{Set flags as \CMP does}.
+
+\label{REPE_CMPSx}
+\IFRU{Вместе с префиксом REPE, инструкция будет исполняться в цикле, счетчик будет
+находится в регистре CX/ECX/RCX, процесс будет продолжаться пока флаг ZF=0 (т.е., до тех пор
+пока все сравниваемые значения равны, отсюда ``E'' в REPE)}
+{Together with REP prefix, it will repeated in loop, count is stored in the CX/ECX/RCX register,
+the process will be running util ZF flag is zero (e.g., until compared values are equal to each
+other, hence ``E'' in REPE)}.
+
+\IFRU{Это работает как}{It works like} memcmp() \IFRU{в Си}{in C}.
+
+\IFRU{Пример из ядра Windows NT}{Example from Windows NT kernel} (Windows Research Kernel v1.2):
+
+\lstinputlisting[caption=base\textbackslash{}ntos\textbackslash{}rtl\textbackslash{}i386\textbackslash{}movemem.asm]{appendix/x86/instructions/RtlCompareMemory_WRK12.asm}
+
+N.B.: \IFRU{эта ф-ция использует сравнение 32-битных слов (CMPSD) если длина блоков
+кратна 4-м байтам, либо побайтовое сравнение (CMPSB) если не кратна}
+{this function uses 32-bit words comparison (CMPSD) if block size is multiple of 4,
+or per-byte comparison (CMPSB) otherwise}.
+

@@ -1,0 +1,37 @@
+﻿% to be proofreaded
+\index{\CStandardLibrary!strlen()}
+\index{\CStandardLibrary!memchr()}
+\index{x86!\Instructions!SCASB}
+\index{x86!\Instructions!SCASW}
+\index{x86!\Instructions!SCASD}
+\index{x86!\Instructions!SCASQ}
+\item[SCASB/SCASW/SCASD/SCASQ]
+\IFRU{сравнить}{compare} \IFRU{байт}{byte}/
+16-\IFRU{битное слово}{bit word}/
+32-\IFRU{битное слово}{bit word}/
+64-\IFRU{битное слово}{bit word} \IFRU{записанный в}{stored in the}
+AX/EAX/RAX \IFRU{со значением, адрес которого находится
+в}{with a variable address of which is in the} DI/EDI/RDI.
+\IFRU{Выставить флаги так же как это делает \CMP}{Set flags as \CMP does}.
+
+\label{REPNE_SCASx}
+\IFRU{Эта инструкция часто используется с префиксом REPNE: продолжать сканировать буффер до тех
+пор, пока не встретится специальное значение записанное в AX/EAX/RAX}
+{This instruction is often used with REPNE prefix: continue to scan a buffer until a special value
+stored in AX/EAX/RAX is found}.
+\IFRU{Отсюда ``NE'' в REPNE: продолжать сканирование если сравниваемые значения не равны и остановиться
+если равны}
+{Hence ``NE'' in REPNE: continue to scan if compared values are not equal and stop when equal}.
+
+\IFRU{Она часто используется как стандартная ф-ция Си strlen(), для определения длины \ac{ASCIIZ}-строки}
+{It is often used as strlen() C standard function, to determine \ac{ASCIIZ} string length}:
+
+\IFRU{Пример}{Example}:
+
+\lstinputlisting{appendix/x86/instructions/SCASB_ex1_\IFRU{ru}{en}.asm}
+
+\IFRU{Если использовать другое значение AX/EAX/RAX, ф-ция будет работать как стандартная ф-ция Си memchr(),
+т.е., для поиска определенного байта}
+{If to use different AX/EAX/RAX value, the function will act as memchr() standard C function, i.e.,
+it will find specific byte}.
+
