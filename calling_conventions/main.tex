@@ -147,14 +147,14 @@ Thus, \EAX, \EDX and \ECX registers are to be used.}
 {In GCC, \IT{this} pointer is passed as a first function-method argument.
 Thus it will be seen: internally, all function-methods has extra argument.}
 
-% TODO: example
+% TODO: example: see relevant section
 
 \subsection{x86-64}
+\index{x86-64}
 
-\subsubsection{win64}
+\subsubsection{Windows x64}
 \label{sec:callingconventions_win64}
 
-\index{x86-64}
 \IFRU{В win64 метод передачи всех параметров немного похож на \TT{fastcall}. 
 Первые 4 аргумента записываются в регистры \TT{RCX}, \TT{RDX}, \TT{R8}, \TT{R9}, а остальные ~--- в стек. 
 Вызывающая функция также должна подготовить место из 32 байт или для четырех 64-битных значений, 
@@ -168,13 +168,62 @@ so then \gls{callee} can save there first 4 arguments.
 Short functions may use argument values just from registers,
 but larger may save its values for further use.}
 
-\IFRU{Вызывающая функция должна вернуть \glslink{stack pointer}{указатель стека} в первоначальное состояние.}
-{\Gls{caller} also must return \gls{stack pointer} into initial state.}
+\IFRU{Вызывающая функция должна вернуть \glslink{stack pointer}{указатель стека} 
+в первоначальное состояние}
+{\Gls{caller} also must return \gls{stack pointer} into initial state}.
 
-\IFRU{Это же соглашение используется и в системных библиотеках Windows x86-64 (вместо \IT{stdcall} в win32).}
-{This calling convention is also used in Windows x86-64 system DLLs (instead if \IT{stdcall} in win32).}
+\IFRU{Это же соглашение используется и в системных библиотеках Windows x86-64 
+(вместо \IT{stdcall} в win32).}
+{This calling convention is also used in Windows x86-64 system DLLs 
+(instead of \IT{stdcall} in win32).}
 
-% TODO: example
+\IFRU{Пример}{Example}:
+
+\lstinputlisting{calling_conventions/x64.c}
+
+\lstinputlisting[caption=MSVC 2012 /0b]{calling_conventions/x64_MSVC_Ob.asm}
+
+% to be proofreaded (begin)
+
+\index{Scratch space}
+\IFRU{Здесь мы легко видим как 7 аргументов передаются: 4 через регистры и остальные 3 через стек}
+{Here we clearly see how 7 arguments are passed: 4 via registers and the rest 3 via stack}.
+\IFRU{Код пролога ф-ции f1() сохраняет аргументы в ``scratch space'' --- место в стеке предназначенное
+именно для этого}
+{The code of f1() function's prologue saves the arguments in ``scratch space''---a space in the stack
+intended exactly for the purpose}.
+\IFRU{Это делается потому что компилятор может быть не уверен, достаточно ли ему будет остальных регистров
+для работы исключая эти 4, которые иначе будут заняты аргументами до конца исполнения ф-ции}
+{It is done because compiler may not be sure if it will be enough to use other registers without these 4,
+which will otherwise be occupied by arguments until function execution end}.
+\IFRU{Выделение ``scratch space'' в стеке лежит на ответственности вызывающей ф-ции}
+{The ``scratch space'' allocation in the stack is on the caller's shoulders}.
+
+\lstinputlisting[caption=MSVC 2012 /Ox /0b]{calling_conventions/x64_MSVC_Ox_Ob.asm}
+
+\IFRU{Если компилировать этот пример с оптимизацией, то выйдет почти то же самое, только ``scratch space''
+не используется, потому что незачем}
+{If to compile the example with optimization switch, it is almost the same, but ``scratch space''
+is not used, because no need to}.
+
+\IFRU{Обратите также внимание на то как MSVC 2012 оптимизирует примитивную загрузку значений в регистры
+используя LEA (\ref{sec:LEA})}
+{Also take a look on how MSVC 2012 optimizes primitive value loads into registers by using 
+LEA (\ref{sec:LEA})}.
+\IFRU{Я не уверен что это того стоит, но может быть}{I'm not sure if it worth so, but maybe}.
+
+\subsubsection{Linux x64}
+
+\IFRU{Метод передачи аргументо в Linux для x86-64 почти такой же как и в Windows, но 6 регистров
+используется вместо 4 (RDI, RSI, RDX, RCX, R8, R9), и здесь нет ``scratch space'', но \gls{callee}
+может сохранять значения регистров в стеке, если нужно}
+{The way arguments passed in Linux for x86-64 is almost the same as in Windows, but 6 registers are
+used instead of 4 (RDI, RSI, RDX, RCX, R8, R9) and there are no ``scratch space'', but \gls{callee}
+may save register values in the stack, if it needs to}.
+
+\lstinputlisting[caption=GCC 4.7.3 -O3]{calling_conventions/x64_linux_O3.s}
+
+% to be proofreaded (end)
 
 \subsection{\IFRU{Возвращение переменных типа \Tfloat, \Tdouble}{Returning values of \Tfloat and \Tdouble type}}
 \index{float}
