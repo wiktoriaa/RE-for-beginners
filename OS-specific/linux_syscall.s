@@ -8,7 +8,7 @@ _start:
 	mov	eax,4	; syscall number. sys_write is 4
 	int	0x80                
 
-	mov	eax,1	; ; syscall number. sys_exit is 4
+	mov	eax,1	; syscall number. sys_exit is 4
 	int	0x80                
 
 section	.data
