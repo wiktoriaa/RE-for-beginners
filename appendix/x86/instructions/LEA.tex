@@ -1,2 +1,42 @@
 ﻿\index{x86!\Instructions!LEA}
-  \item[LEA] \IFRU{сформировать адрес}{form address} \IFRU{см.также}{see also}: \ref{sec:LEA}
+\item[LEA] (\IT{Load Effective Address}) \IFRU{сформировать адрес}{form address}
+
+\label{sec:LEA}
+
+\newcommand{\URLAM}{\url{http://en.wikipedia.org/wiki/Addressing_mode}}
+
+% to be proofreaded (begin)
+\IFRU{Это инструкция которая задумывалась вовсе не для складывания 
+и умножения чисел, 
+а для формирования адреса например из указателя на массив и прибавления индекса к нему
+\footnote{См. также: \URLAM}.}
+{This instruction was intended not for values summing and multiplication 
+but for address forming, 
+e.g., for forming address of array element by adding array address, element index, with 
+multiplication of element size\footnote{See also: \URLAM}.}
+
+\IFRU{Тем не менее, её можно использовать для любых других вычислений}
+{But nevertheless, it is can be used for any other calculations}.
+
+\IFRU{\LEA удобна тем, что производимые ею вычисления не модифицируют флаги \ac{CPU}.}
+{\LEA is convenient because the computations performing by it is not alter \ac{CPU} flags.}
+% to be proofreaded (end)
+
+\begin{lstlisting}
+int f(int a, int b)
+{
+	return a*8+b;
+};
+\end{lstlisting}
+
+\begin{lstlisting}[caption=MSVC 2010 /Ox]
+_a$ = 8							; size = 4
+_b$ = 12						; size = 4
+_f	PROC
+	mov	eax, DWORD PTR _b$[esp-4]
+	mov	ecx, DWORD PTR _a$[esp-4]
+	lea	eax, DWORD PTR [eax+ecx*8]
+	ret	0
+_f	ENDP
+\end{lstlisting}
+

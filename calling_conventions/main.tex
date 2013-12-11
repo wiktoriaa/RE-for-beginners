@@ -130,10 +130,9 @@ Thus, \EAX, \EDX and \ECX registers are to be used.}
 \IFRU{Вызывающая функция возвращает \glslink{stack pointer}{указатель стека} в первоначальное состояние.}
 {\Gls{caller} restores \gls{stack pointer} to its initial state.}
 
-% TODO: example: see relevant section
+\IFRU{Для примера, см.}{For the example, see} (\ref{regparm}).
 
 \subsection{thiscall}
-\label{thiscall}
 \index{thiscall}
 
 \IFRU{В С++, это передача в функцию-метод указателя \IT{this} на объект.}
@@ -147,7 +146,7 @@ Thus, \EAX, \EDX and \ECX registers are to be used.}
 {In GCC, \IT{this} pointer is passed as a first function-method argument.
 Thus it will be seen: internally, all function-methods has extra argument.}
 
-% TODO: example: see relevant section
+\IFRU{Для примера, см.}{For the example, see} (\ref{thiscall}).
 
 \subsection{x86-64}
 \index{x86-64}
@@ -222,6 +221,16 @@ used instead of 4 (RDI, RSI, RDX, RCX, R8, R9) and there are no ``scratch space'
 may save register values in the stack, if it needs to}.
 
 \lstinputlisting[caption=GCC 4.7.3 -O3]{calling_conventions/x64_linux_O3.s}
+
+\IFRU{N.B.: здесь значения записываются в 32-битные части регистров (например EAX) а не в весь 64-битный
+регистр (RAX).
+Это связано с тем что в x86-64,
+запись в младшую 32-битную часть 64-битного регистра автоматически обнуляет старшие 32 бита.
+Вероятно, это сделано для упрощения портирования кода под x86-64.}
+{N.B.: here values are written into 32-bit parts of registers (e.g., EAX) but not to the whole 64-bit 
+register (RAX).
+This is because each write to low 32-bit part of register automatically clears high 32 bits.
+Supposedly, it was done for x86-64 code porting simplification.}
 
 % to be proofreaded (end)
 
