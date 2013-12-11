@@ -40,3 +40,21 @@ _f	PROC
 _f	ENDP
 \end{lstlisting}
 
+\index{Intel C++}
+Intel C++ \IFRU{использует LEA даже больше}{uses LEA even more}:
+
+\begin{lstlisting}
+int f1(int a)
+{
+	return a*13;
+};
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Intel C++ 2011]
+_f1	PROC NEAR 
+        mov       ecx, DWORD PTR [4+esp]      ; ecx = a
+	lea       edx, DWORD PTR [ecx+ecx*8]  ; edx=a*9
+	lea       eax, DWORD PTR [edx+ecx*4]  ; a*9 + a*4 = a*13
+        ret                                
+\end{lstlisting}
+
