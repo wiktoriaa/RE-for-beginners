@@ -1,0 +1,128 @@
+% to be proofreaded
+\section{\IFRU{Перестановка basic block-ов}{Basic blocks reordering}}
+
+% TODO __builtin_expect in GCC?
+
+\subsection{Profile-guided optimization}
+
+\index{Oracle RDBMS}
+\index{Intel C++}
+
+\IFRU{Этот метод оптимизации кода может перемещать некоторые \gls{basic block}-и в другую секцию
+исполняемого бинарного файла}
+{This optimization method may move some \gls{basic block}s to another section of the executable binary
+file}.
+
+\IFRU{Очевидно, в ф-ции есть места которые исполняются чаще всего (например, тела циклов)
+и реже всего (например, код обработки ошибок, обработчики исключений)}
+{Obviously, there are parts in function which are executed most often (e.g., loop bodies)
+and less often (e.g., error reporting code, exception handlers)}.
+
+\IFRU{Компилятор добавляет дополнительный (instrumentation) код в исполняемый файл,
+затем разработчик запускает его с тестами для сбора статистики.}
+{The compiler adding instrumentation code into the executable, then developer run it with
+a lot of tests for statistics collecting.}
+\IFRU{Затем компилятор, при помощи собранной статистики, приготавливает итоговый исполняемый
+файл где весь редко исполняемый код перемещен в другую секцию}
+{Then the compiler, with the help of statistics gathered,
+prepares final executable file with all infrequently executed code moved into another section}.
+
+\IFRU{В результате, весь часто исполняемый код ф-ции становится компактным, что очень важно для скорости
+исполнения и кэш-памяти}
+{As a result, all frequently executed function code is compacted, and that is very important
+for execution speed and cache memory}.
+
+\IFRU{Пример из Oracle RDBMS, который скомпилирован при помощи Intel C++}
+{Example from Oracle RDBMS code, which was compiled by Intel C++}:
+
+\begin{lstlisting}[caption=orageneric11.dll (win32)]
+                public _skgfsync
+_skgfsync       proc near
+
+; FUNCTION CHUNK AT .text1:60B953F0 SIZE 0000003E BYTES
+
+                db      66h
+                nop
+                push    ebp
+                mov     ebp, esp
+                mov     edx, [ebp+0Ch]
+                test    edx, edx
+                jz      short loc_6030D884
+                mov     eax, [edx+30h]
+                test    eax, 400h
+                jnz     __VInfreq__skgfsync  ; write to log
+contiune:
+                mov     eax, [ebp+8]
+                mov     edx, [ebp+10h]
+                mov     dword ptr [eax], 0
+                lea     eax, [edx+0Fh]
+                and     eax, 0FFFFFFFCh
+                mov     ecx, [eax]
+                cmp     ecx, 45726963h
+                jnz     error                ; exit with error
+                mov     esp, ebp
+                pop     ebp
+                retn
+_skgfsync       endp
+
+...
+
+; START OF FUNCTION CHUNK FOR _skgfsync
+
+__VInfreq__skgfsync:
+                mov     eax, [edx]
+                test    eax, eax
+                jz      contiune
+                mov     ecx, [ebp+10h]
+                push    ecx
+                mov     ecx, [ebp+8]
+                push    edx
+                push    ecx
+                push    offset ... ; "skgfsync(se=0x%x, ctx=0x%x, iov=0x%x)\n"
+                push    dword ptr [edx+4]
+                call    dword ptr [eax] ; write to log
+                add     esp, 14h
+                jmp     contiune
+; ---------------------------------------------------------------------------
+
+error:
+                mov     edx, [ebp+8]
+                mov     dword ptr [edx], 69AAh ; 27050 "function called with invalid FIB/IOV structure"
+                mov     eax, [eax]
+                mov     [edx+4], eax
+                mov     dword ptr [edx+8], 0FA4h ; 4004
+                mov     esp, ebp
+                pop     ebp
+                retn
+; END OF FUNCTION CHUNK FOR _skgfsync
+\end{lstlisting}
+
+\IFRU{Весь редко исполняемый код помещен в конце секции кода DLL-файла, среди редко
+исполняемых частей прочих ф-ций}
+{All infrequently executed code was placed at the end of the code section of DLL file,
+among all function parts}.
+\IFRU{Эта часть ф-ции была отмечена компилятором Intel C++ префиксом \TT{VInfreg}}
+{This part of function was marked by Intel C++ compiler with \TT{VInfreq} prefix}.
+\IFRU{Мы видим часть ф-ции которая записывает в лог-файл (вероятно, в случае ошибки или предупреждения
+или чего-то в этом роде) которая наверное не исполнялась слишком часто когда разработчики Oracle
+собирали статистику (если вообще исполнялась).}
+{Here we see that a part of function which writes to log-file (presumably in case of error or warning
+or something like that) which was probably not executed very often when Oracle developers gathered 
+statistics (if was executed at all).}
+\IFRU{Basic block записывающий в лог-файл, в конце концов возвращает управление в ``горячую'' часть
+ф-ции}
+{The writing to log basic block is eventually return control flow into the ``hot'' part of the function.}
+
+\IFRU{Другая ``редкая'' часть это \gls{basic block} возвращающий код ошибки 27050}
+{Another ``infrequent'' part is a \gls{basic block} returning error code 27050}.
+
+\IFRU{В ELF-файлах для Linux весь редко исполняемый код перемещается компилятором Intel C++
+в другую секцию (\TT{text.unlikely}) оставляя весь ``горячий'' код в секции \TT{text.hot}}
+{In Linux ELF files, all infrequently executed code is moved by Intel C++ into separate 
+\TT{text.unlikely} section, leaving all ``hot'' code in the \TT{text.hot} section}.
+
+\IFRU{С точки зрения reverse engineer-а, эта информация может помощь разделить ф-цию на её основу
+и обработку ошибок}
+{From a reverse engineer's perspective, this information may help to split the function
+to its base and error handling}.
+
