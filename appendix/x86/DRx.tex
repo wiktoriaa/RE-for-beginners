@@ -1,0 +1,128 @@
+﻿% to be proofreaded (begin)
+\subsection{\IFRU{Отладочные регистры}{Debugging registers}}
+
+\IFRU{Применяются для работы с т.н.}{Used for} hardware breakpoints\IFRU{}{ control}.
+
+\begin{itemize}
+	\item DR0 --- \IFRU{адрес точки останова}{address of breakpoint} \#1
+	\item DR1 --- \IFRU{адрес точки останова}{address of breakpoint} \#2
+	\item DR2 --- \IFRU{адрес точки останова}{address of breakpoint} \#3
+	\item DR3 --- \IFRU{адрес точки останова}{address of breakpoint} \#4
+	\item DR6 --- \IFRU{здесь отображается причина останова}{a cause of break is reflected here}
+	\item DR7 --- \IFRU{здесь можно задать типы точек останова}{breakpoint types are set here}
+\end{itemize}
+
+\subsubsection{DR6}
+
+\begin{center}
+\begin{tabular}{ | l | l | }
+\hline
+\headercolor{} \IFRU{Бит}{Bit} (\IFRU{маска}{mask}) &
+\headercolor{} \IFRU{Описание}{Description} \\
+\hline
+0 (1)       &  B0 --- \IFRU{сработала точка останова \#1}{breakpoint \#1 was triggered} \\
+\hline
+1 (2)       &  B1 --- \IFRU{сработала точка останова \#2}{breakpoint \#2 was triggered} \\
+\hline
+2 (4)       &  B2 --- \IFRU{сработала точка останова \#3}{breakpoint \#3 was triggered} \\
+\hline
+3 (8)       &  B3 --- \IFRU{сработала точка останова \#4}{breakpoint \#4 was triggered} \\
+\hline
+13 (0x2000) &  BD --- \IFRU{была попытка модифицировать один из регистров DRx.}
+               {modification attempt of one of DRx registers.} \\
+            &  \IFRU{может быть выставлен если бит GD выставлен.}
+	       {may be raised if GD is enabled} \\
+\hline
+14 (0x4000) &  BS --- \IFRU{точка останова типа single step (флаг TF был выставлен в EFLAGS)}
+               {single step breakpoint (TF flag was set in EFLAGS)}. \\
+	    &  \IFRU{Наивысший приоритет. Другие биты также могут быть выставлены}
+	       {Highest priority. Other bits may be also set}. \\
+\hline
+% FIXME: describe BT
+15 (0x8000) &  BT (task switch flag) \\
+\hline
+\end{tabular}
+\end{center}
+
+N.B. \IFRU{Точка останова single step это срабатывающая после каждой инструкции}
+{Single step breakpoint is a breakpoint occuring after each instruction}.
+\IFRU{Может быть включена выставлением флага TF в EFLAGS}
+{It can be enabled by setting TF in EFLAGS} (\ref{EFLAGS}).
+
+\subsubsection{DR7}
+
+\IFRU{В этом регистре задаются типы точек останова}{Breakpoint types are set here}.
+
+\begin{center}
+\begin{tabular}{ | l | l | }
+\hline
+\headercolor{} \IFRU{Бит}{Bit} (\IFRU{маска}{mask}) &
+\headercolor{} \IFRU{Описание}{Description} \\
+\hline
+0 (1)       &  L0 --- \IFRU{разрешить точку останова}{enable breakpoint} \#1 \IFRU{для текущей задачи}{for the current task} \\
+\hline
+1 (2)       &  G0 --- \IFRU{разрешить точку останова}{enable breakpoint} \#1 \IFRU{для всех задач}{for all tasks} \\
+\hline
+2 (4)       &  L1 --- \IFRU{разрешить точку останова}{enable breakpoint} \#2 \IFRU{для текущей задачи}{for the current task} \\
+\hline
+3 (8)       &  G1 --- \IFRU{разрешить точку останова}{enable breakpoint} \#2 \IFRU{для всех задач}{for all tasks} \\
+\hline
+4 (0x10)    &  L2 --- \IFRU{разрешить точку останова}{enable breakpoint} \#3 \IFRU{для текущей задачи}{for the current task} \\
+\hline
+5 (0x20)    &  G2 --- \IFRU{разрешить точку останова}{enable breakpoint} \#3 \IFRU{для всех задач}{for all tasks} \\
+\hline
+6 (0x40)    &  L3 --- \IFRU{разрешить точку останова}{enable breakpoint} \#4 \IFRU{для текущей задачи}{for the current task} \\
+\hline
+7 (0x80)    &  G3 --- \IFRU{разрешить точку останова}{enable breakpoint} \#4 \IFRU{для всех задач}{for all tasks} \\
+\hline
+8 (0x100)   &  LE --- \IFRU{не поддерживается начиная с P6}{not supported since P6} \\
+\hline
+9 (0x200)   &  GE --- \IFRU{не поддерживается начиная с P6}{not supported since P6} \\
+\hline
+13 (0x2000) &  GD --- \IFRU{исключение будет вызвано если какая-либо инструкция MOV}
+			{exception will be raised if any MOV instruction} \\
+            & \IFRU{попытается модифицировать один из DRx-регистров}
+			{tries to modify one of DRx registers} \\
+\hline
+16,17 (0x30000)    &  \IFRU{точка останова}{breakpoint} \#1: R/W --- \IFRU{тип}{type} \\
+\hline
+18,19 (0xC0000)    &  \IFRU{точка останова}{breakpoint} \#1: LEN --- \IFRU{длина}{length} \\
+\hline
+20,21 (0x300000)   &  \IFRU{точка останова}{breakpoint} \#2: R/W --- \IFRU{тип}{type} \\
+\hline
+22,23 (0xC00000)   &  \IFRU{точка останова}{breakpoint} \#2: LEN --- \IFRU{длина}{length} \\
+\hline
+24,25 (0x3000000)  &  \IFRU{точка останова}{breakpoint} \#3: R/W --- \IFRU{тип}{type} \\
+\hline
+26,27 (0xC000000)  &  \IFRU{точка останова}{breakpoint} \#3: LEN --- \IFRU{длина}{length} \\
+\hline
+28,29 (0x30000000) &  \IFRU{точка останова}{breakpoint} \#4: R/W --- \IFRU{тип}{type} \\
+\hline
+30,31 (0xC0000000) &  \IFRU{точка останова}{breakpoint} \#4: LEN --- \IFRU{длина}{length} \\
+\hline
+\end{tabular}
+\end{center}
+
+\IFRU{Так задается тип точки останова}{Breakpoint type is to be set as follows} (R/W):
+
+\begin{itemize}
+\item 00 --- \IFRU{исполнение инструкции}{instruction execution}
+\item 01 --- \IFRU{запись в память}{data writes}
+\item 10 --- \IFRU{обращения к I/O-портам (недоступно из user-mode)}{I/O reads or writes (not available in user-mode)}
+\item 11 --- \IFRU{обращение к памяти (чтение или запись)}{on data reads or writes}
+\end{itemize}
+
+N.B.: \IFRU{отдельного типа для чтения из памяти действительно нет}
+{breakpoint type for data reads is absent, indeed}. \\
+\\
+\IFRU{Так задается длина точки останова}{Breakpoint length is to be set as follows} (LEN):
+
+\begin{itemize}
+\item 00 --- \IFRU{1 байт}{one-byte}
+\item 01 --- \IFRU{2 байта}{two-byte}
+\item 10 --- \IFRU{не определено для 32-битного режима, 8 байт для 64-битного}
+		{undefined for 32-bit mode, eight-byte in 64-bit mode}
+\item 11 --- \IFRU{4 байта}{four-byte}
+\end{itemize}
+
+% to be proofreaded (end)
