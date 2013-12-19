@@ -1,5 +1,8 @@
 ﻿\subsubsection{\IFRU{Передача параметров для функции}{Passing function arguments}}
 
+\IFRU{Самый распространенный способ передачи параметров в x86 называется}
+{Most popular way to pass parameters in x86 is called} ``cdecl'':
+
 \begin{lstlisting}
 push arg3
 push arg2
@@ -11,8 +14,20 @@ add esp, 4*3
 \IFRU{Вызываемая функция получает свои параметры также через указатель стека.}
 {\Gls{callee} functions get their arguments via the stack ponter.}
 
-\IFRU{См.также в соответствующем разделе о способах передачи аргументов через стек}
-{See also the section about calling conventions}~(\ref{sec:callingconventions}).
+\IFRU{Следовательно, так будут расположены значения в стеке перед исполнением самой первой инструкции
+ф-ции f():}
+{Consequently, that is how values will be located in the stack before execution
+of the very first instruction of f() function:}
+
+\begin{itemize}
+\item ESP --- \IFRU{адрес возврата}{return address}
+\item ESP+4 --- arg1
+\item ESP+8 --- arg2
+\item ESP+0xA --- arg3
+\end{itemize}
+
+\IFRU{См.также в соответствующем разделе о других способах передачи аргументов через стек}
+{See also the section about other calling conventions}~(\ref{sec:callingconventions}).
 
 \IFRU{Важно отметить, что, в общем, никто не заставляет программистов передавать параметры именно через стек,
 это не является требованием к исполняемому коду.}
