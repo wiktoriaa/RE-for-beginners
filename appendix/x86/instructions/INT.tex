@@ -31,3 +31,29 @@
   {In post-MS-DOS era, this instruction was still used as syscall both in Linux and 
   Windows (\ref{syscalls}), but later replaced by SYSENTER or SYSCALL instruction}.
 
+\item[INT 3] (M): \IFRU{эта инструкция стоит немного в стороне от}{this instruction is somewhat standing aside of} 
+\TT{INT}, \IFRU{она имеет собственный 1-байтный опкод}{it has its own 1-byte opcode} (\TT{0xCC}), 
+\IFRU{и активно используется в отладке}{and actively used while debugging}.
+\IFRU{Часто, отладчик просто записывает байт}{Often, debuggers just write} \TT{0xCC} 
+\IFRU{по адресу в памяти где устанавливается брякпойнт, и когда исключение поднимается, оригинальный байт
+будет восстановлен и оригинальная инструкция по этому адресу исполнена заново}{byte at the address of 
+breakpoint to be set, and when exception is raised,
+original byte will be restored and original instruction at this address will be re-executed}.
+\IFRU{В}{As of} \gls{Windows NT}, \IFRU{исключение}{an} \TT{EXCEPTION\_BREAKPOINT} \IFRU{поднимается,
+когда \ac{CPU} исполняет эту инструкцию}{exception will be raised when \ac{CPU} executes this instruction}.
+\IFRU{Это отладочное событие может быть перехвачено и обработано отладчиком, если он загружен}
+{This debugging event may be intercepted and handled by a host debugger, if loaded}.
+\IFRU{Если он не загружен, Windows предложит запустить один из зарегистрированных в системе отладчиком}
+{If it is not loaded, Windows will offer to run one of the registered in the system debuggers}.
+\IFRU{Если}{If} \ac{MSVS} \IFRU{заинсталлирована, его отладчик может быть загружен и подключен к процессу}{is installed, 
+its debugger may be loaded and connected to the process}.
+\IFRU{В целях защиты от}{In order to protect from} \gls{reverse engineering}, \IFRU{множество анти-отладочных методов
+проверяют целостность загруженного кода}{a lot of anti-debugging methods are checking integrity of the code loaded}.
+
+\IFRU{В }{}\ac{MSVC} \IFRU{есть}{has} \gls{compiler intrinsic} \IFRU{для этой инструкции}{for the instruction}:
+\TT{\_\_debugbreak()}\footnote{\url{http://msdn.microsoft.com/en-us/library/f408b4et.aspx}}.
+
+\IFRU{В win32 также имеется ф-ция в}{There are also a win32 function in} kernel32.dll \IFRU{с названием}{named}
+\TT{DebugBreak()}\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms679297(v=vs.85).aspx}},
+\IFRU{которая также исполняет}{which also executes} \TT{INT 3}.
+
