@@ -49,8 +49,8 @@ that short string will occupy at least} $16 + 4 + 4 = 24$
 
 \IFRU{Несколько замечаний}{Couple notes}:
 
-\IFRU{Если строка короче 16-и символов, то отдельный буфер для строки в куче (heap) выделяться не будет}
-{If the string is shorter than 16 symbols, a buffer for the string will not be allocated in the heap}.
+\IFRU{Если строка короче 16-и символов, то отдельный буфер для строки в \glslink{heap}{куче} выделяться не будет}
+{If the string is shorter than 16 symbols, a buffer for the string will not be allocated in the \gls{heap}}.
 \IFRU{Это удобно потому что на практике, действительно немало строк короткие}
 {This is convenient because
 in practice, large ammount of strings are short indeed}.
@@ -120,9 +120,9 @@ has stronger type checking, nevertheless, printf() works here without c\_str() a
 \lstinputlisting[caption=MSVC 2012]{cpp/STL/string/3_MSVC.asm}
 
 \IFRU{Собственно, компилятор не конструирует строки статически: да в общем-то и как
-это возможно, если буфер с ней нужно хранить в куче?}
+это возможно, если буфер с ней нужно хранить в \glslink{heap}{куче}?}
 {Compiler not constructing strings statically: how it is possible anyway if buffer should be located
-in the heap?}
+in the \gls{heap}?}
 \IFRU{Вместо этого в сегменте данных хранятся обычные \ac{ASCIIZ}-строки, а позже, во время выполнения, 
 при помощи метода ``assign'', конструируются строки s1 и s2}
 {Usual \ac{ASCIIZ} strings are stored in the data segment instead, and later, at the moment of execution,
@@ -132,20 +132,20 @@ with the help of ``assing'' method, s1 and s2 strings are constructed}.
 \IFRU{Обратите внимание на то что вызов метода c\_str() отсутствует,
 потому что его код достаточно короткий и компилятор вставил его прямо здесь:
 если строка короче 16-и байт, то в регистре EAX остается указатель на буфер,
-а если длиннее, то из этого же места достается адрес на буфер расположенный в куче}{Please note that 
+а если длиннее, то из этого же места достается адрес на буфер расположенный в \glslink{heap}{куче}}{Please note that 
 there are no call to c\_str() method, because, its code is tiny enough so compiler
 inlined it right here: if the string is shorter than 16 characters, a pointer to buffer is leaved
-in EAX register, and an address of the string buffer located in the heap is fetched otherwise}.
+in EAX register, and an address of the string buffer located in the \gls{heap} is fetched otherwise}.
 
 \IFRU{Далее следуют вызовы трех деструкторов, причем, они вызываются только если строка длиннее 16-и байт:
-тогда нужно освободить буфера в куче}{Next, we see calls to the 3 destructors, and they are called if
-string is longer than 16 characters: then a buffers in the heap should be freed}.
+тогда нужно освободить буфера в \glslink{heap}{куче}}{Next, we see calls to the 3 destructors, and they are called if
+string is longer than 16 characters: then a buffers in the \gls{heap} should be freed}.
 \IFRU{В противном случае, так как все три объекта std::string хранятся в стеке,
 они освобождаются автоматически после выхода из ф-ции}{Otherwise, since all three std::string objects
 are stored in the stack, they are freed automatically, upon function finish}.
 
-\IFRU{Следовательно работа с короткими строками более быстрая из-за м\`{е}ньшего обращения к куче}
-{As a consequence, short strings processing is faster because of lesser heap accesses}.
+\IFRU{Следовательно работа с короткими строками более быстрая из-за м\`{е}ньшего обращения к \glslink{heap}{куче}}
+{As a consequence, short strings processing is faster because of lesser \gls{heap} accesses}.
 
 \IFRU{Код на GCC даже проще (из-за того что в GCC, как я уже указывал, не реализована возможность хранить короткую
 строку прямо в структуре)}{GCC code is even simpler (because GCC way, as I mentioned above, is not to store
