@@ -98,7 +98,7 @@ void main()
 
 \IFRU{Получим}{We got}:
 
-\lstinputlisting{14_bitfields/check.asm}[caption=GCC 4.4.1]
+\lstinputlisting[caption=GCC 4.4.1]{14_bitfields/check.asm}
 
 \index{Linux!libc.so.6}
 \index{syscalls}
@@ -165,19 +165,19 @@ are to be used.}
 {So, let's download Linux Kernel 2.6.31, compile it in Ubuntu: \TT{make vmlinux}, open it in \IDA, 
 find the \TT{do\_filp\_open()} function. At the beginning, we will see (comments are mine):}
 
-\lstinputlisting{\IFRU{14_bitfields/check2_ru.asm}{14_bitfields/check2_en.asm}}[caption=do\_filp\_open() (linux kernel 2.6.31)]
+\lstinputlisting[caption=do\_filp\_open() (linux kernel 2.6.31)]{\IFRU{14_bitfields/check2_ru.asm}{14_bitfields/check2_en.asm}}
 
 \IFRU{GCC сохраняет значения первых трех аргументов в локальном стеке. Иначе, если эти три регистра 
 не трогать вообще, то функции компилятора, распределяющей переменные по регистрам (так называемый 
-\IT{register allocator}), 
+\gls{register allocator}), 
 будет очень тесно.}
 {GCC saves first 3 arguments values in local stack. 
 Otherwise, if compiler would not touch these registers, 
-it would be too tight environment for compiler's register allocator}.
+it would be too tight environment for compiler's \gls{register allocator}}.
 
 \IFRU{Далее находим примерно такой фрагмент кода}{Let's find this fragment of code}:
 
-\lstinputlisting{14_bitfields/check3.asm}[caption=do\_filp\_open() (linux kernel 2.6.31)]
+\lstinputlisting[caption=do\_filp\_open() (linux kernel 2.6.31)]{14_bitfields/check3.asm}
 
 \IFRU{\TT{0x40} ~--- это то чему равен макрос \TT{O\_CREAT}. 
 \TT{open\_flag} проверяется на наличие бита \TT{0x40} и если бит равен $1$, то выполняется следующие 
