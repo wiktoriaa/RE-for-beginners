@@ -10,7 +10,9 @@ int f(int a)
 };
 \end{lstlisting}
 
-\IFRU{Компилируется вполне предсказуемо:}{Is compiled in a very predictable way:}
+\subsection{x86}
+
+\dots \IFRU{компилируется вполне предсказуемо:}{is compiled in a very predictable way:}
 
 \lstinputlisting[caption=MSVC]{\IFRU{11_division_by_9/11_1_msvc_ru.asm}{11_division_by_9/11_1_msvc_en.asm}}
 
@@ -41,12 +43,12 @@ value in the \EAX to 64-bit value taking value sign into account, just as \MOVSX
 
 \IFRU{Это ~--- деление через умножение. Умножение конечно быстрее работает. 
 Поэтому можно используя этот трюк
-\footnote{Читайте подробнее о делении через умножение в \cite[глава 10]{Warren:2002:HD:515297}
+\footnote{Читайте подробнее о делении через умножение в \cite[10-3]{Warren:2002:HD:515297}
 и \URLMSDN, \url{\URLN}} 
 создать код эквивалентный тому что мы хотим и работающий быстрее.}
 {This is~---division by multiplication. Multiplication operation works much faster. 
 And it is possible to use the trick
-\footnote{Read more about division by multiplication in \cite[chapter 10]{Warren:2002:HD:515297}
+\footnote{Read more about division by multiplication in \cite[10-3]{Warren:2002:HD:515297}
 and: \URLMSDN, \url{\URLN}} 
 to produce a code which is effectively equivalent and faster.}
 \IFRU
@@ -170,4 +172,41 @@ BX              LR
 
 \IFRU{А Keil во всех случаях вставляет вызов функции}
 {What about Keil: it inserts call to library function} \IT{\_\_aeabi\_idivmod}\IFRU{}{ in all cases}.
+
+\subsection{\IFRU{Определение делителя}{Getting divisor}}
+
+\IFRU{Часто, код имеет вид}{Often, the code has a form of}:
+
+\lstinputlisting{11_division_by_9/form_\IFRU{RU}{EN}.asm}
+
+\IFRU{Определим 32-битную магическую константу через}{Let's denote 32-bit magical constant as} $M$, 
+\IFRU{коэффициент сдвига через}{shifting coefficient by} $C$ \IFRU{и делитель через}{and divisor by} $D$.
+
+\IFRU{Делитель который нам нужен это}{The divisor we need to get is}:
+
+\[
+D=\frac{2^{32} \cdot 2^C}{M}
+\]
+
+\IFRU{Например}{For example}:
+
+\lstinputlisting[caption=\Optimizing MSVC 2012]{11_division_by_9/ex1.asm}
+
+\IFRU{Это}{This is}:
+
+\[
+D=\frac{2^{32} \cdot 2^3}{2021161081}
+\]
+
+\index{Wolfram Mathematica}
+\IFRU{Числа больше чем 32-битные, так что я использовал}
+{Numbers are larger than 32-bit ones, so I use} Wolfram Mathematica \IFRU{для удобства}{for convenience}:
+
+\begin{lstlisting}
+In[1]:=N[2^32*2^3/2021161081]
+
+Out[1]:=17.
+\end{lstlisting}
+
+\IFRU{Так что искомый делитель это}{So the divisor from the code I used for example is} 17.
 
