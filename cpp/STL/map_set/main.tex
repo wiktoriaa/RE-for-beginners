@@ -1,0 +1,79 @@
+\subsection{std::map \AndENRU std::set}
+\index{\Cpp!STL!std::map}
+\index{\Cpp!STL!std::set}
+\index{Binary tree}
+
+Binary tree is another fundamental data structure.
+As it states, this is a tree, but each node has at most 2 links to other nodes.
+Each node have key and/or value.
+
+Binary trees are usually the structure used in ``dictionaries'' of key-values (\ac{AKA} ``associative arrays'') 
+implementations.
+
+There are at least three important properties binary trees has:
+1) All keys are stored in always sorted form.
+2) Keys of any types can be stored easily.
+Binary tree algorithms are unaware of key type, as long as comparison function is present for it.
+3) Finding needed key is relatively fast in comparison with other data structures.
+
+Here is a very simple example: let's store these numbers in binary tree:
+0, 1, 2, 3, 5, 6, 9, 10, 11, 12, 20, 99, 100, 101, 107, 1001, 1010.
+
+\input{cpp/STL/map_set/example_tikz}
+
+All keys lesser than node key value is stored on the left side.
+All keys greater than node key value is stored on the right side.
+
+Hence, finding algorithm is straightforward: if the value you looking for is lesser than current node's key value,
+move left, if it is greater, move right, stop if the value required is equals to the node's key value.
+One important thing is that searching algorithm may search for numbers, text strings, etc, as long as 
+comparison function is supplied.
+
+All keys has unique values.
+
+Having that, one need $\approx \log_{2} n$ steps in order to find a key in the balanced binary tree of $n$ keys.
+It is $\approx 10$ steps for $\approx 1000$ keys or $\approx 13$ steps for $\approx 10000$ keys.
+Not bad, but tree should always be balanced for this: i.e., keys should be distributed evenly on all tiers.
+
+There are several popular balancing algorithms available, including AVL tree and red-black tree.
+The latter adds a ``color'' value to each node for simplifying balancing process, hence, each node may be red or black.
+
+Both GCC and MSVC \TT{std::map} and \TT{std::set} template implementations use red-black trees.
+
+\TT{std::set} contain only keys.
+\TT{std::map} is ``extended'' version of set: it also has a value at each node.
+
+\subsubsection{MSVC}
+
+\lstinputlisting{cpp/STL/map_set/MSVC.cpp}
+
+\lstinputlisting[caption=MSVC 2012]{cpp/STL/map_set/MSVC.txt}
+
+Structure is not packed, so both char values occupy 4 bytes each.
+
+As for \TT{std::map}, \TT{first} and \TT{second} can be viewed as a single value of \TT{std::pair} type.
+\TT{std::set} has only one value at this point in the structure instead.
+
+Current size of tree is always present, as in case of \TT{std::list} (\ref{std_list}).
+
+As in case of \TT{std::list}, iterators are just pointers to the nodes.
+\TT{.begin()} iterator pointing to the minimal key.
+That pointer is not stored somewhere (as for lists), minimal value is to be found each time.
+\TT{operator--} and \TT{operator++} moves current pointer to predecessor and successor respectively.
+The algorithms for all these operations are described in \cite{Cormen:2009:IAT:1614191}.
+
+\TT{.end()} iterator pointing to the root node, it has $1$ in \TT{Isnil}, meaning, it has no key and/or value.
+So it can be viewed as a ``landing zone''.
+
+\subsubsection{GCC}
+
+\lstinputlisting{cpp/STL/map_set/GCC.cpp}
+
+\lstinputlisting[caption=GCC 4.8.1]{cpp/STL/map_set/GCC.txt}
+
+GCC implementation is very similar
+\footnote{\url{http://gcc.gnu.org/onlinedocs/libstdc++/libstdc++-html-USERS-4.1/stl__tree_8h-source.html}}.
+The only difference is absence of \TT{Isnil} field,
+so the structure occupy slightly less space in memory than as it is implemented in MSVC.
+Root node is also used as the place \TT{.end()} iterator pointing to and also has no key and/or value.
+
