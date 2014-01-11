@@ -1,0 +1,65 @@
+\section{\Stack}
+\label{sec:stack}
+\index{\Stack}
+
+\IFRU{Стек в компьютерных науках ~--- это одна из наиболее фундаментальных вещей}
+{Stack~---is one of the most fundamental things in computer science}
+\footnote{\url{http://en.wikipedia.org/wiki/Call_stack}}.
+
+\IFRU{Технически, это просто блок памяти в памяти процесса + регистр \ESP или \RSP в x86, либо \SP в ARM, который указывает где-то в пределах этого блока.}
+{Technically it is just a memory block in process memory + the an \ESP or the \RSP register in x86 or the \SP register in ARM as a pointer within the block.}
+
+\index{ARM!\Instructions!PUSH}
+\index{ARM!\Instructions!POP}
+\index{x86!\Instructions!PUSH}
+\index{x86!\Instructions!POP}
+\IFRU{Часто используемые инструкции для работы со стеком это \PUSH и \POP (в x86 и thumb-режиме ARM). 
+\PUSH уменьшает \ESP/\RSP/\SP на $4$ в 32-битном режиме (или на $8$ в 64-битном),
+затем записывает по адресу на который указывает \ESP/\RSP/\SP содержимое своего единственного операнда.}
+{The most frequently used stack access instructions are \PUSH and \POP (in both x86 and ARM thumb-mode). 
+\PUSH subtracts $4$ in 32-bit mode (or $8$ in 64-bit mode) from \ESP/\RSP/\SP and then writes the contents of its sole operand to the memory address pointed to by \ESP/\RSP/\SP.} 
+
+\IFRU{\POP это обратная операция ~--- сначала достает из \glslink{stack pointer}{указателя стека} значение и помещает его в операнд 
+(который очень часто является регистром) и затем увеличивает указатель стека на $4$ (или $8$).}
+{\POP is the reverse operation: get the data from memory pointed to by \SP, 
+put it in the operand (often a register) and then add $4$ (or $8$) to the \gls{stack pointer}.}
+
+\IFRU{В самом начале, \glslink{stack pointer}{регистр-указатель} указывает на конец стека.}
+{After stack allocation the \gls{stack pointer} points to the end of stack.}
+\IFRU{\PUSH уменьшает \glslink{stack pointer}{регистр-указатель}, а \POP ~--- увеличивает.}
+{\PUSH increases the \gls{stack pointer} and \POP decreases it.}
+\IFRU{Конец стека находится в начале блока памяти выделенного под стек. Это странно, но это так.}
+{The end of the stack is actually at the beginning of the memory allocated for the stack block. 
+It seems strange, but it is so.}
+
+\IFRU{В процессоре ARM, тем не менее, есть поддержка стеков растущих как в сторону уменьшения, так и в
+сторону увеличения}
+{Nevertheless ARM has not only instructions supporting ascending stacks but also descending stacks}. \\
+\\
+\index{ARM!\Instructions!STMFD}
+\index{ARM!\Instructions!LDMFD}
+\index{ARM!\Instructions!STMED}
+\index{ARM!\Instructions!LDMED}
+\index{ARM!\Instructions!STMFA}
+\index{ARM!\Instructions!LDMFA}
+\index{ARM!\Instructions!STMEA}
+\index{ARM!\Instructions!LDMEA}
+\IFRU{Например, инструкции}{For example the} 
+STMFD\footnote{\STMFDdesc}/LDMFD\footnote{\LDMFDDESC}, 
+STMED\footnote{\STMEDdesc}/LDMED\footnote{\LDMEDdesc} 
+\IFRU{предназначены для descending-стека, т.е., уменьшающегося}{instructions are intended to deal with 
+a descending stack}.
+\IFRU{Инструкции}{The}
+STMFA\footnote{\STMFAdesc}/LMDFA\footnote{\LDMFAdesc}, 
+STMEA\footnote{\STMEAdesc}/LDMEA\footnote{\LDMEAdesc} 
+\IFRU{предназначены для ascending-стека, т.е., увеличивающегося}{instructions are intended to deal with 
+an ascending stack}.
+
+\subsection{\IFRU{Для чего используется стек?}{What is the stack used for?}}
+
+\input{patterns/02_stack/01_saving_ret_addr.tex}
+\input{patterns/02_stack/02_args_passing.tex}
+\input{patterns/02_stack/03_local_vars.tex}
+\input{patterns/02_stack/04_alloca.tex}
+\input{patterns/02_stack/05_SEH.tex}
+\input{patterns/02_stack/06_BO_protection.tex}

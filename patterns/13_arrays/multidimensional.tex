@@ -1,0 +1,124 @@
+﻿\subsection{\IFRU{Многомерные массивы}{Multidimensional arrays}}
+
+\IFRU{Внутри, многомерный массив выглядит так же как и линейный.}
+{Internally, multidimensional array is essentially the same thing as linear array.}
+
+\IFRU{Ведь память компьютера линейная, это одномерный массив.
+Но для удобства, этот одномерный массив легко представить как многомерный.}
+{Since computer memory in linear, it is one-dimensional array.
+But this one-dimensional array can be easily represented as multidimensional for convenience.}
+
+\IFRU{К примеру, элементы массива $a[3][4]$ будут так расположены в одномерном массиве из 12-и ячеек:}
+{For example, that is how $a[3][4]$ array elements will be placed in one-dimensional array of 12 cells:}
+
+\begin{center}
+\begin{tabular}{ | l | l | l | l | }
+\hline                        
+0 & 1 & 2 & 3 \\
+\hline  
+4 & 5 & 6 & 7 \\
+\hline  
+8 & 9 & 10 & 11 \\
+\hline  
+\end{tabular}
+\end{center}
+
+\index{row-major order}
+\IFRU{То есть, чтобы адресовать нужный элемент, в начале умножаем первый индекс на 4 (ширину матрицы), 
+затем прибавляем второй индекс.}{So, in order to address elements we need, first multiply first index by
+4 (matrix width) and then add second index.}
+\IFRU{Это называется}{That's called} \IT{row-major order}, 
+\IFRU{и такой способ представления массивов и матриц используется по крайней мере в}
+{and this method of arrays and matrices representation is used in at least in} \CCpp, Python. 
+\IFRU{Термин }\IT{row-major order} \IFRU{означает по-русски
+примерно следующее: ``в начале записываем элементы первой строки, затем второй \dots и элементы последней 
+строки в самом конце''.}
+{term in plain English language means: ``first, write elements of first row, then second row \dots 
+and finally elements of last row''.}
+
+\index{column-major order}
+\index{FORTRAN}
+\IFRU{Другой способ представления называется}{Another method of representation called} 
+\IT{column-major order} (\IFRU{индексы массива используются в обратном порядке}
+{array indices used in reverse order}) \IFRU{и это используется по крайней мере в}{and it is used at least in} 
+FORTRAN, MATLAB, R. 
+\IFRU{Термин }\IT{column-major order} \IFRU{означает по-русски
+следующее: ``в начале записываем элементы первого столбца, затем второго \dots и элементы последнего столбца
+в самом конце''.}
+{term in plain English language means: ``first, write elements of first column, then second columnt \dots
+and finally elements of last column''.}
+
+\IFRU{То же самое и для многомерных массивов.}{Same thing about multidimensional arrays.}
+
+\IFRU{Попробуем}{Let's see}:
+
+\lstinputlisting[caption=\IFRU{простой пример}{simple example}]{patterns/13_arrays/multi.c}
+
+\subsubsection{x86}
+
+\IFRU{В итоге}{We got} (MSVC 2010):
+
+\lstinputlisting[caption=MSVC 2010]{patterns/13_arrays/multi_msvc.asm}
+
+\IFRU{В принципе, ничего удивительного. В \TT{insert()} для вычисления адреса нужного элемента массива, 
+три входных аргумента перемножаются по формуле $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$, 
+чтобы представить массив трехмерным.
+Не забывайте также что тип \Tint 32-битный (4 байта), поэтому все коэффициенты нужно умножить на 4.}
+{Nothing special. For index calculation, three input arguments are multiplying 
+by formula $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$ to represent array as multidimensional.
+Do not forget the \Tint type is 32-bit (4 bytes),
+so all coefficients must be multiplied by 4.}
+
+\lstinputlisting[caption=GCC 4.4.1]{patterns/13_arrays/multi_gcc.asm}
+
+\IFRU{Компилятор GCC решил всё сделать немного иначе}{GCC compiler does it differently}.
+\IFRU{Для вычисления одной из операций ($30y$), GCC создал код, где нет самой операции умножения.}
+{For one of operations calculating ($30y$), GCC produced a code without multiplication instruction.}
+\IFRU{Происходит это так}{This is how it done}: 
+$(y+y) \ll 4 - (y+y) = (2y) \ll 4 - 2y = 2 \cdot 16 \cdot y - 2y = 32y - 2y = 30y$. 
+\IFRU{Таким образом, для вычисления $30y$ используется только операция сложения, 
+операция битового сдвига и операция вычитания.}{Thus, for $30y$ calculation, only one addition operation
+used, one bitwise shift operation and one subtraction operation.}
+\IFRU{Это работает быстрее}{That works faster}.
+
+\subsubsection{ARM + \NonOptimizingXcode + \ThumbMode}
+
+\lstinputlisting[caption=\NonOptimizingXcode + \ThumbMode]{patterns/13_arrays/multi_Xcode_thumb_O0_en.asm}
+
+\NonOptimizing LLVM \IFRU{сохраняет все переменные в локальном стеке, хотя это и избыточно.}
+{saves all variables in local stack, however, it is redundant.}
+\IFRU{Адрес элемента массива вычисляется по уже рассмотренной формуле.}
+{Address of array element is calculated by formula we already figured out.}
+
+\subsubsection{ARM + \OptimizingXcode + \ThumbMode}
+
+\lstinputlisting[caption=\OptimizingXcode + \ThumbMode]{patterns/13_arrays/multi_Xcode_thumb_O3_en.asm}
+
+\IFRU{Тут используются уже описанные трюки для замены умножения на операции сдвига, сложения и вычитания.}
+{Here is used tricks for replacing multiplication by shift, addition and subtraction we already considered.}
+
+\index{ARM!\Instructions!RSB}
+\index{ARM!\Instructions!SUB}
+\IFRU{Также мы видим новую для себя инструкцию}{Here we also see new instruction for us:} 
+\TT{RSB} (\IT{Reverse Subtract}).
+\IFRU{Она работает так же как и \SUB, только меняет операнды местами.}
+{It works just as \SUB, but swapping operands with each other.}
+\IFRU{Зачем?}{Why?}
+\index{ARM!Optional operators!LSL}
+\SUB, \TT{RSB}, \IFRU{это те инструкции, ко второму операнду которых можно применить коэффициент сдвига, 
+как мы видим и здесь}
+{are those instructions, to the second operand of which shift coefficient may be applied}: (\TT{LSL\#4}). 
+\IFRU{Но этот коэффициент можно применить только ко второму операнду.}
+{But this coefficient may be applied only to second operand.}
+\IFRU{Для коммутативных операций, таких как сложение или умножение, 
+там операнды можно менять местами и это не влияет на результат.}
+{That's fine for commutative operations like addition or multiplication, operands may be swapped there
+without result affecting.}
+\IFRU{Но вычитание ~--- операция некоммутативная, так что, для этих случаев существует инструкция \TT{RSB}.}
+{But subtraction is non-commutative operation, so, for these cases, \TT{RSB} exist.}
+
+\index{ARM!\Instructions!LDR.W}
+\IFRU{Инструкция }\TT{``LDR.W R9, [R9]''} \IFRU{работает как}{works like} \LEA~(\ref{sec:LEA})
+\IFRU{в x86, и здесь она ничего не делает, она избыточна.}{in x86, but here it does nothing, it is redundant.}
+\IFRU{Вероятно, компилятор несоптимизировал её.}{Apparently, compiler not optimized it.}
+
