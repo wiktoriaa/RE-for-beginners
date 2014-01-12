@@ -42,10 +42,10 @@ Thus, MMX-enabled CPU + old \ac{OS} + process utilizing MMX features = that all 
 
 \index{x86!SSE}
 \index{x86!SSE2}
-SSE\IFRU{ ~--- }{~---}\IFRU{это расширение регистров до 128 бит, теперь уже отдельно от FPU.}{is extension of SIMD registers up to 128 bits, now separately from FPU.}
+SSE\EMDASH\IFRU{это расширение регистров до 128 бит, теперь уже отдельно от FPU.}{is extension of SIMD registers up to 128 bits, now separately from FPU.}
 
 \index{x86!AVX}
-AVX\IFRU{ ~--- }{~---}\IFRU{расширение регистров до 256 бит.}{another extension to 256 bits.}
+AVX\EMDASH\IFRU{расширение регистров до 256 бит.}{another extension to 256 bits.}
 
 \IFRU{Немного о практическом применении.}{Now about practical usage.}
 
@@ -169,11 +169,11 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 \index{x86!\Instructions!PADDD}
 \begin{itemize}
 \item
-\MOVDQU (\IT{Move Unaligned Double Quadword})\IFRU{ ~--- }{~---}\IFRU{она просто загружает 16 байт из памяти в XMM-регистр}
+\MOVDQU (\IT{Move Unaligned Double Quadword})\EMDASH\IFRU{она просто загружает 16 байт из памяти в XMM-регистр}
 {it just load 16 bytes from memory into a XMM-register}.
 
 \item
-\PADDD (\IT{Add Packed Integers})\IFRU{ ~--- }{~---}\IFRU{складывает сразу 4 пары 32-битных чисел чисел и оставляет в первом операнде результат. 
+\PADDD (\IT{Add Packed Integers})\EMDASH\IFRU{складывает сразу 4 пары 32-битных чисел чисел и оставляет в первом операнде результат. 
 Кстати, если произойдет переполнение, то исключения не произойдет и никакие флаги не установятся, 
 запишутся просто младшие 32 бита результата. 
 Если один из операндов \PADDD ~--- адрес значения в памяти, 
@@ -187,7 +187,7 @@ then address must be aligned on a 16-byte border. If it is not aligned, exceptio
 \footnote{More about data aligning: \URLWPDA}.}
 
 \item
-\MOVDQA (\IT{Move Aligned Double Quadword})\IFRU{ ~--- }{~---}\IFRU{тоже что и \MOVDQU, только подразумевает 
+\MOVDQA (\IT{Move Aligned Double Quadword})\EMDASH\IFRU{тоже что и \MOVDQU, только подразумевает 
 что адрес в памяти выровнен по 16-байтной границе. 
 Если он не выровнен, произойдет исключение. 
 \MOVDQA работает быстрее чем \MOVDQU, но требует вышеозначенного.}
@@ -367,14 +367,14 @@ read from unallocated memory.}
 \IFRU{Вернемся к нашей функции}{Let's back to our function}.
 
 \index{x86!\Instructions!PXOR}
-\verb|_mm_setzero_si128()|\IFRU{ ~--- }{~---}\IFRU{это макрос, генерирующий \TT{pxor xmm0, xmm0} ~--- инструкция просто обнуляет регистр \XMMZERO.}
+\verb|_mm_setzero_si128()|\EMDASH\IFRU{это макрос, генерирующий \TT{pxor xmm0, xmm0} ~--- инструкция просто обнуляет регистр \XMMZERO.}
 {is a macro generating \TT{pxor xmm0, xmm0}~---instruction just clears the \XMMZERO register}
 
-\verb|_mm_load_si128()|\IFRU{ ~--- }{~---}\IFRU{это макрос для \MOVDQA, он просто загружает 16 байт по адресу из указателя в \XMMONE.}
+\verb|_mm_load_si128()|\EMDASH\IFRU{это макрос для \MOVDQA, он просто загружает 16 байт по адресу из указателя в \XMMONE.}
 {is a macro for \MOVDQA, it just loading 16 bytes from the address in the \XMMONE register.}
 
 \index{x86!\Instructions!PCMPEQB}
-\verb|_mm_cmpeq_epi8()|\IFRU{ ~--- }{~---}\IFRU{это макрос для \PCMPEQB, это инструкция которая 
+\verb|_mm_cmpeq_epi8()|\EMDASH\IFRU{это макрос для \PCMPEQB, это инструкция которая 
 побайтово сравнивает значения из двух XMM регистров.} 
 {is a macro for \PCMPEQB, is an instruction comparing two XMM-registers bytewise.}
 
@@ -456,7 +456,7 @@ XMM1: 0000ff00000000000000ff0000000000
 
 \index{x86!\Instructions!BSF}
 \label{instruction_BSF}
-\IFRU{Следующая инструкция}{The next instruction}\IFRU{ ~--- }{~---}\TT{BSF} (\IT{Bit Scan Forward}). 
+\IFRU{Следующая инструкция}{The next instruction}\EMDASH\TT{BSF} (\IT{Bit Scan Forward}). 
 \IFRU{Это инструкция находит самый младший бит во втором операнде и записывает его позицию в первый операнд.}
 {This instruction find first bit set to 1 and stores its position into first operand.}
 
