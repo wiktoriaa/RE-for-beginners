@@ -1,0 +1,101 @@
+\section{\IFRU{Идентификация исполняемых файлов}{Identification of executable files}}
+
+\subsection{Microsoft Visual C++}
+
+\IFRU{Версии MSVC и DLL которые могут быть импортированы}{MSVC versions and DLLs which may be imported}:
+
+\begin{center}
+\begin{tabular}{ | l | l | l | l | l | }
+\hline
+\cellcolor{blue!25} \IFRU{Маркетинговая версия}{Marketing version} & 
+\cellcolor{blue!25} \IFRU{Внутренняя версия}{Internal version} & 
+\cellcolor{blue!25} \IFRU{Версия }{}CL.EXE\IFRU{}{ version} &
+\cellcolor{blue!25} \IFRU{Импортируемые DLL}{DLLs may be imported} &
+\cellcolor{blue!25} \IFRU{Дата выхода}{Release date} \\
+\hline
+% 4.0, April 1995
+% 97 & 5.0 & February 1997
+6		&  6.0 & 12.00 & msvcrt.dll, msvcp60.dll    & June 1998 \\
+\hline
+.NET (2002)	&  7.0 & 13.00 & msvcr70.dll, msvcp70.dll   & February 13, 2002 \\
+\hline
+.NET 2003	&  7.1 & 13.10 & msvcr71.dll, msvcp71.dll   & April 24, 2003 \\
+\hline
+2005		&  8.0 & 14.00 & msvcr80.dll, msvcp80.dll   & November 7, 2005 \\
+\hline
+2008		&  9.0 & 15.00 & msvcr90.dll, msvcp90.dll   & November 19, 2007 \\
+\hline
+2010		& 10.0 & 16.00 & msvcr100.dll, msvcp100.dll & April 12, 2010 \\
+\hline
+2012		& 11.0 & 17.00 & msvcr110.dll, msvcp110.dll & September 12, 2012 \\
+\hline
+2013		& 12.0 & 18.00 & msvcr120.dll, msvcp120.dll & October 17, 2013 \\
+\hline
+\end{tabular}
+\end{center}
+
+msvcp*.dll \IFRU{содержит ф-ции связанные с Си++, так что если она импортируется, скорее всего, 
+вы имеете дело с программой на Си++}{contain C++-related functions, so, if it is imported, 
+this is probably C++ program}.
+
+\subsubsection{Name mangling}
+
+\IFRU{Имена обычно начинаются с символа}{Names are usually started with} \TT{?}\IFRU{}{ symbol}.
+
+\IFRU{О}{Read more about MSVC} \gls{name mangling} \IFRU{в MSVC читайте также здесь}{here}: \ref{namemangling}.
+
+\subsection{GCC}
+\index{GCC}
+
+\IFRU{Кроме компиляторов под *NIX, GCC имеется также и для win32-окружения: в виде}
+{Aside from *NIX targets, GCC is also present in win32 environment: in form of} Cygwin \AndENRU MinGW.
+
+\subsubsection{Name mangling}
+
+\IFRU{Имена обычно начинаются с символов}{Names are usually started with} \TT{\_Z}\IFRU{}{ symbols}.
+
+\IFRU{О}{Read more about GCC} \gls{name mangling} \IFRU{в GCC читайте также здесь}{here}: \ref{namemangling}.
+
+\subsubsection{Cygwin}
+\index{Cygwin}
+
+cygwin1.dll \IFRU{часто импортируется}{is often imported}.
+
+\subsubsection{MinGW}
+\index{MinGW}
+
+msvcrt.dll \IFRU{может импортироваться}{may be imported}.
+
+\subsection{Borland}
+\index{Borland Delphi}
+\index{Borland C++Builder}
+
+\IFRU{Вот пример \gls{name mangling} в Borland Delphi и C++Builder}
+{Here is an example of Borland Delphi and C++Builder \gls{name mangling}}:
+
+\lstinputlisting{digging_into_code/identification/borland_mangling.txt}
+
+\IFRU{Имена всегда начинаются с символа}{Names are always started with} \TT{@} 
+\IFRU{затем следует имя класса, имя метода
+и закодированные типы аргументов}{symbol, then class name came, method name, and encoded method argument types}.
+
+\IFRU{Эти имена могут присутствовать с импортах .exe, экспортах .dll, отладочной информации, итд}
+{These names can be in .exe imports, .dll exports, debug data, etc}.
+
+Borland Visual Component Libraries (VCL) \IFRU{находятся в файлах .bpl вместо .dll, например}
+{are stored in .bpl files instead of .dll ones, for example}, vcl50.dll, rtl60.dll.
+
+\IFRU{Другие DLL которые могут импортироваться}{Other DLL might be imported}: BORLNDMM.DLL.
+
+\subsubsection{Delphi}
+
+\IFRU{Почти все исполняемые файлы имеют текстовую строку}{Almost all Delphi executables has} ``Boolean'' 
+\IFRU{в самом начале сегмента кода, среди остальных имен типов}
+{text string at the very beginning of code segment, along with other type names}.
+
+\IFRU{Вот очень характерное для Delphi начало сегмента \TT{.text}, 
+этот блок следует сразу за заголовком win32 PE-файла}
+{This is a very typical beginning of \TT{.text} 
+segment of a Delphi program, this block came right after win32 PE file header}:
+
+\lstinputlisting{digging_into_code/identification/delphi.txt}
