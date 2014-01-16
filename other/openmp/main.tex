@@ -1,0 +1,222 @@
+﻿\section{OpenMP}
+\label{openmp}
+\index{OpenMP}
+
+OpenMP \IFRU{это один из простейших способов распараллелить работу простого алгоритма}
+{is one of the simpliest ways to parallelize simple algorithm}.
+
+\index{Bitcoin}
+\IFRU{В качестве примера, попытаемся написать программу для вычисления криптографического nonce}
+{As an example, let's try to build a program to compute cryptographic nonce}.
+\IFRU{В моем простейшем примере, nonce это число добавляемое к нешифрованному тексту, чтобы получить
+хэш с какой-то особенностью}
+{In my simplistic example, 
+nonce is a number added to the plain unencrypted text in order to produce hash with some specific 
+feauture}.
+\IFRU{Например, на одной из стадии, протокол Bitcoin требует найти такую nonce, чтобы в результате
+хэширования подряд шли определенное количество нулей}
+{For example, at some step, Bitcoin protocol require to find a such nonce so resulting hash
+will contain specific number of running zeroes}. 
+\IFRU{Это еще называется}{This is also called} ``proof of work''
+\footnote{\IFRU{\url{https://ru.wikipedia.org/wiki/Proof-of-work}}
+{\url{https://en.wikipedia.org/wiki/Proof-of-work_system}}} 
+(\IFRU{т.е., система доказывает что она произвела какие-то очень ресурсоёмкие вычисления и затратила
+время н аэто}
+{i.e., system prove it did some intensive calculations and spent some time for it}).
+
+\index{SHA512}
+\IFRU{Мой пример не связан с}{My example is not related to} Bitcoin, 
+\IFRU{он будет пытаться добавлять числа к строке}{it will try to add a numbers to the} ``hello, world!\_''
+\IFRU{чтобы найти такое число, при котором строка вида}{string in order to find such number when} 
+``hello, world!\_<number>'' \IFRU{после хеширования алгоритмом SHA512 будет содержать как минимум 3 нулевых
+байта в начале}{will contain at least 3 zero bytes after hashing this string by SHA512 algorithm}.
+
+\IFRU{Алгоритм очень простой}{The algorithm is pretty straightforward}:
+
+\lstinputlisting{other/openmp/openmp_example.c}
+
+\TT{check\_nonce()} \IFRU{просто добавляет число к строке, хеширует алгоритмом SHA512 и проверяет 
+3 нулевых байта в начале}{function is just add a number to the string, 
+hashes it by SHA512 and checks for 3 zero bytes in the result}.
+
+\IFRU{Очень важная часть кода это}{Very important part of the code is}:
+
+\begin{lstlisting}
+	#pragma omp parallel for
+	for (i=0; i<INT32_MAX; i++)
+		check_nonce (i);
+\end{lstlisting}
+
+\IFRU{Да, вот настолько просто, без}{Yes, that simple, without} \TT{\#pragma} \IFRU{мы просто вызываем}
+{we just call} \TT{check\_nonce()} \IFRU{для каждого числа от 0 до}{for each number from 0 to} 
+\TT{INT32\_MAX} (\TT{0x7fffffff} \OrENRU 2147483647).
+\IFRU{С}{With} \TT{\#pragma}, \IFRU{компилятор добавляет специальный код, который разрежет интервал цикла
+на меньшие интервалы, чтобы запустить их на доступных ядрах \ac{CPU}}{a compiler adds a special 
+code which will splice the loop interval to smaller intervals,
+to run them by all \ac{CPU} cores avaiable}.
+
+\IFRU{Пример может быть скомпилирован}{The example may be compiled}
+\footnote{\IFRU{файлы }{}sha512.c \AndENRU u64.h \IFRU{можно взять из библиотеки OpenSSL}
+{files can be taken from the OpenSSL library}:
+\url{http://www.openssl.org/source/}}
+\InENRU MSVC 2012:
+% FIXME: \footnote{other source code files can be downloaded here: ...} 
+
+\begin{lstlisting}
+cl openmp_example.c sha512.obj /openmp /O1 /Zi /Faopenmp_example.asm
+\end{lstlisting}
+
+\IFRU{Или в}{Or in} GCC:
+
+\begin{lstlisting}
+gcc -fopenmp 2.c sha512.c -S -masm=intel
+\end{lstlisting}
+
+\subsection{MSVC}
+
+\IFRU{Вот как}{Now that's how} MSVC 2012 \IFRU{генерирует главный цикл}{generates main loop}:
+
+\lstinputlisting[caption=MSVC 2012]{other/openmp/MSVC_loop.asm}
+
+\IFRU{Ф-ции с префиксом}{All functions prefixed by} \TT{vcomp} 
+\IFRU{связаны с}{are} OpenMP\IFRU{ и находятся в файле}{-related and stored in the} 
+vcomp*.dll\IFRU{}{ file}.
+\IFRU{Так что тут запускаются группа тредов}{So here is a group of threads are started}.
+
+\IFRU{Посмотрим на}{Let's take a look on} \TT{\_main\$omp\$1}:
+
+\lstinputlisting[caption=MSVC 2012]{other/openmp/MSVC_1.asm}
+
+\IFRU{Эта ф-ция будет запущена}{This function will be started} $n$ \IFRU{раз параллельно, где}
+{times in parallel, where} $n$ \IFRU{это число ядер \ac{CPU}}{is number of \ac{CPU} cores}.
+\TT{vcomp\_for\_static\_simple\_init()} \IFRU{вычисляет интервал для конструкта}
+{is calculating interval for the} for() \IFRU{для текущего треда, в зависимости от текущего номера треда}
+{construct for the current
+thread, depending on the current thread number}.
+\IFRU{Значения начала и конца цикла записаны в локальных переменных}
+{Loop begin and end values are stored in} \TT{\$T1} \AndENRU \TT{\$T2}\IFRU{}{ local variables}.
+\IFRU{Вы также можете заметить}{You may also notice} \TT{7ffffffeh} (\OrENRU 2147483646) 
+\IFRU{как аргумент для ф-ции}{as an argument to the} 
+\TT{vcomp\_for\_static\_simple\_init()}
+\IFRU{это количество итераций всего цикла, оно будет поделено на равные части}
+{function---this is a number of iterations of the whole loop to by divided evenly}.
+
+\IFRU{Потом мы видим новый цикл с вызовом ф-ции}{Then we see a new loop with a call to} 
+\TT{check\_nonce()} \IFRU{делающей всю работу}{function which do all work}.
+
+\IFRU{Я также добавил немного кода в начале ф-ции}
+{I also added some code in the beginning of} \TT{check\_nonce()} \IFRU{для сбора статистики,
+с какими аргументами эта ф-ция вызывалась}{function to gather statistics, with which
+arguments the function was called}.
+
+\IFRU{Вот что мы видим если запустим}{This is what we see while run it}:
+
+\begin{lstlisting}
+threads=4
+...
+checked=2800000
+checked=3000000
+checked=3200000
+checked=3300000
+found (thread 3): [hello, world!_1611446522]. seconds spent=3
+__min[0]=0x00000000 __max[0]=0x1fffffff
+__min[1]=0x20000000 __max[1]=0x3fffffff
+__min[2]=0x40000000 __max[2]=0x5fffffff
+__min[3]=0x60000000 __max[3]=0x7ffffffe
+\end{lstlisting}
+
+\IFRU{Да, результат правильный, первые 3 байта это нули}{Yes, result is correct, first 3 bytes are zeroes}:
+
+\begin{lstlisting}
+C:\...\sha512sum test
+000000f4a8fac5a4ed38794da4c1e39f54279ad5d9bb3c5465cdf57adaf60403df6e3fe6019f5764fc9975e505a7395fed78
+0fee50eb38dd4c0279cb114672e2 *test
+\end{lstlisting}
+
+\IFRU{Оно требует}{Running time is} $\approx2..3$ 
+\IFRU{секунды на моем 4-х ядерном}{seconds on my 4-core} 
+Intel Xeon E3-1220 3.10 GHz.
+\InENRU task manager \IFRU{я вижу 5 тредов}{I see 5 threads}: \IFRU{один главный тред + 4 запущенных}
+{1 main thread + 4 more started}.
+\IFRU{Я не делал никаких оптимизаций, чтобы оставить пример в как можно более простом виде}
+{I did not any further optimizations to keep my example as small and clear as possible}.
+\IFRU{Но наверное этот алгоритм может работать быстрее}{But probably it can be done much faster}.
+\IFRU{У моего}{My} \ac{CPU} \IFRU{4 ядра, вот почему}{has 4 cores, that is why} OpenMP 
+\IFRU{запустил именно 4 треда}{started exactly 4 threads}.
+
+\IFRU{Глядя на таблицу статистики, можно легко увидеть что цикл был разделен очень точно на 4 равных 
+части}{By looking at the statistics table we can clearly see how loop was finely spliced by 4 even 
+parts}.
+\IFRU{Хорошо, почти равных, если не учитывать последний бит}{Well, almost even, 
+if not to consider the last bit}.
+
+\IFRU{Имеются также прагмы и для}{There are also pragmas for} 
+\glslink{atomic operation}{\IFRU{атомарных операций}{atomic operations}}.
+
+\IFRU{Посмотрим как вот этот код будет скомпилирован}{Let's see how this code is compiled}:
+
+\begin{lstlisting}
+	#pragma omp atomic
+	checked++;
+
+	#pragma omp critical
+	if ((checked % 100000)==0)
+		printf ("checked=%d\n", checked);
+\end{lstlisting}
+
+\lstinputlisting[caption=MSVC 2012]{other/openmp/MSVC_2.asm}
+
+\IFRU{Как выясняется, ф-ция}{As it turns out,} \TT{vcomp\_atomic\_add\_i4()} 
+\IFRU{в}{function in the} vcomp*.dll \IFRU{это просто крохотная ф-ция имеющая инструкцию}
+{is just a a tiny function
+having} \TT{LOCK XADD}\IFRU{}{ instruction}\footnote{\IFRU{О префиксе LOCK читайте больше}
+{Read more about LOCK prefix}: \ref{x86_lock}}.
+
+\TT{vcomp\_enter\_critsect()} \IFRU{в конце концов вызывает ф-цию win32 API}
+{eventually callins win32 API function} \TT{EnterCriticalSection()}
+\footnote{\IFRU{О критических секциях читайте больше тут}{Read more about critical sections 
+here}: \ref{critical_sections}}.
+
+\subsection{GCC}
+
+GCC 4.8.1 \IFRU{выдает программу показывающую точно такую же таблицу со статистикой}
+{produces the program which shows exactly the same statistics table}, 
+\IFRU{так что, реализация GCC делит цикл на части точно также}
+{so, GCC implementation divides the loop by parts in the same fashion}.
+
+\begin{lstlisting}[caption=GCC 4.8.1]
+	mov	edi, OFFSET FLAT:main._omp_fn.0
+	call	GOMP_parallel_start
+	mov	edi, 0
+	call	main._omp_fn.0
+	call	GOMP_parallel_end
+\end{lstlisting}
+
+\IFRU{В отличие от реализации MSVC, то что делает код GCC это запускает 4 треда, но также запускает 
+четвертый прямо в текущем треде}{Unlike MSVC implementation, what GCC code is doing is starting 3 threads,
+but also runs fourth in the current thread}. \IFRU{Так что здесь всего 4 треда а не 5 как в случае
+с MSVC}{So there will be 4 threads instead of 5 as in MSVC}.
+
+\IFRU{Вот ф-ция}{Here is a} \TT{main.\_omp\_fn.0}\IFRU{}{ function}:
+ 
+\lstinputlisting[caption=GCC 4.8.1]{other/openmp/GCC_1.asm}
+
+\IFRU{Здесь мы видим это деление явно: вызывая}{Here we see that division clearly: by calling to} 
+\TT{omp\_get\_num\_threads()} \AndENRU \TT{omp\_get\_thread\_num()}
+\IFRU{мы получаем количество запущенных тредов, а также номер текущего треда}
+{we got number of threads running, and also current thread number}, \IFRU{и затем определяем
+интервал цикла}{and then determine loop interval}.
+\IFRU{И затем запускаем}{Then run} \TT{check\_nonce()}.
+
+GCC \IFRU{также вставляет инструкцию}{also inserted} \TT{LOCK ADD} 
+\IFRU{прямо в том месте кода, где MSVC сгенерировал вызов отдельной ф-ции в DLL}
+{instruction right in the code, where MSVC generated call to separate DLL function}:
+
+\lstinputlisting[caption=GCC 4.8.1]{other/openmp/GCC_2.asm}
+
+\IFRU{Ф-ции с префиксом}{Functions prefixed with} GOMP \IFRU{это часть библиотеки}{are from} 
+GNU OpenMP\IFRU{}{ library}.
+\IFRU{В отличие от}{Unlike} vcomp*.dll, \IFRU{её исходный код свободно доступен}
+{its sources are freely available}: 
+\url{https://github.com/mirrors/gcc/tree/master/libgomp}.
+
