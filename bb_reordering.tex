@@ -51,7 +51,7 @@ _skgfsync       proc near
                 mov     eax, [edx+30h]
                 test    eax, 400h
                 jnz     __VInfreq__skgfsync  ; write to log
-contiune:
+continue:
                 mov     eax, [ebp+8]
                 mov     edx, [ebp+10h]
                 mov     dword ptr [eax], 0
@@ -72,7 +72,7 @@ _skgfsync       endp
 __VInfreq__skgfsync:
                 mov     eax, [edx]
                 test    eax, eax
-                jz      contiune
+                jz      continue
                 mov     ecx, [ebp+10h]
                 push    ecx
                 mov     ecx, [ebp+8]
@@ -82,7 +82,7 @@ __VInfreq__skgfsync:
                 push    dword ptr [edx+4]
                 call    dword ptr [eax] ; write to log
                 add     esp, 14h
-                jmp     contiune
+                jmp     continue
 ; ---------------------------------------------------------------------------
 
 error:
