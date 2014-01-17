@@ -175,6 +175,8 @@ BX              LR
 
 \subsection{\IFRU{Определение делителя}{Getting divisor}}
 
+\subsubsection{\IFRU{Вариант}{Variant} \#1}
+
 \IFRU{Часто, код имеет вид}{Often, the code has a form of}:
 
 \lstinputlisting{patterns/11_division_by_9/form_\IFRU{RU}{EN}.asm}
@@ -209,4 +211,40 @@ Out[1]:=17.
 \end{lstlisting}
 
 \IFRU{Так что искомый делитель это}{So the divisor from the code I used for example is} 17.
+
+\subsubsection{\IFRU{Вариант}{Variant} \#2}
+
+\IFRU{Бывает также вариант с пропущенным арифметическим сдвигом, например}{A variant with omitted arithmetic
+shift is also exist}:
+
+\begin{lstlisting}
+		mov     eax, 55555556h ; 1431655766
+		imul    ecx
+		mov     eax, edx
+		shr     eax, 1Fh
+\end{lstlisting}
+
+\IFRU{Метод определения делителя упрощается}{The method of getting divisor is simplified}:
+
+\[
+D=\frac{2^{32}}{M}
+\]
+
+\IFRU{Для моего примера, это}{As of my example, this is}:
+
+\[
+D=\frac{2^{32}}{1431655766}
+\]
+
+\index{Wolfram Mathematica}
+\IFRU{Снова использую}
+{And again I use} Wolfram Mathematica:
+
+\begin{lstlisting}
+In[1]:=N[2^32/16^^55555556]
+
+Out[1]:=3.
+\end{lstlisting}
+
+\IFRU{Искомый делитель это}{The divisor is} 3.
 
