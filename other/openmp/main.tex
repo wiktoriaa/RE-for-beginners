@@ -6,16 +6,16 @@ OpenMP \IFRU{это один из простейших способов расп
 {is one of the simpliest ways to parallelize simple algorithm}.
 
 \index{Bitcoin}
-\IFRU{В качестве примера, попытаемся написать программу для вычисления криптографического nonce}
-{As an example, let's try to build a program to compute cryptographic nonce}.
-\IFRU{В моем простейшем примере, nonce это число добавляемое к нешифрованному тексту, чтобы получить
+\IFRU{В качестве примера, попытаемся написать программу для вычисления криптографического \IT{nonce}}
+{As an example, let's try to build a program to compute cryptographic \IT{nonce}}.
+\IFRU{В моем простейшем примере, \IT{nonce} это число добавляемое к нешифрованному тексту, чтобы получить
 хэш с какой-то особенностью}
 {In my simplistic example, 
-nonce is a number added to the plain unencrypted text in order to produce hash with some specific 
+\IT{nonce} is a number added to the plain unencrypted text in order to produce hash with some specific 
 feauture}.
-\IFRU{Например, на одной из стадии, протокол Bitcoin требует найти такую nonce, чтобы в результате
+\IFRU{Например, на одной из стадии, протокол Bitcoin требует найти такую \IT{nonce}, чтобы в результате
 хэширования подряд шли определенное количество нулей}
-{For example, at some step, Bitcoin protocol require to find a such nonce so resulting hash
+{For example, at some step, Bitcoin protocol require to find a such \IT{nonce} so resulting hash
 will contain specific number of running zeroes}. 
 \IFRU{Это еще называется}{This is also called} ``proof of work''
 \footnote{\IFRU{\url{https://ru.wikipedia.org/wiki/Proof-of-work}}
@@ -59,7 +59,7 @@ to run them by all \ac{CPU} cores avaiable}
 example, but in practice, usage of OpenMP may be harder and more complex}}.
 
 \IFRU{Пример может быть скомпилирован}{The example may be compiled}
-\footnote{\IFRU{файлы }{}sha512.c \AndENRU u64.h \IFRU{можно взять из библиотеки OpenSSL}
+\footnote{\IFRU{файлы }{}sha512.(c|h) \AndENRU u64.h \IFRU{можно взять из библиотеки OpenSSL}
 {files can be taken from the OpenSSL library}:
 \url{http://www.openssl.org/source/}}
 \InENRU MSVC 2012:
@@ -84,7 +84,7 @@ gcc -fopenmp 2.c sha512.c -S -masm=intel
 \IFRU{Ф-ции с префиксом}{All functions prefixed by} \TT{vcomp} 
 \IFRU{связаны с}{are} OpenMP\IFRU{ и находятся в файле}{-related and stored in the} 
 vcomp*.dll\IFRU{}{ file}.
-\IFRU{Так что тут запускаются группа тредов}{So here is a group of threads are started}.
+\IFRU{Так что тут запускается группа тредов}{So here is a group of threads are started}.
 
 \IFRU{Посмотрим на}{Let's take a look on} \TT{\_main\$omp\$1}:
 
@@ -139,7 +139,7 @@ C:\...\sha512sum test
 \IFRU{Оно требует}{Running time is} $\approx2..3$ 
 \IFRU{секунды на моем 4-х ядерном}{seconds on my 4-core} 
 Intel Xeon E3-1220 3.10 GHz.
-\InENRU task manager \IFRU{я вижу 5 тредов}{I see 5 threads}: \IFRU{один главный тред + 4 запущенных}
+\IFRU{В}{In the} task manager \IFRU{я вижу 5 тредов}{I see 5 threads}: \IFRU{один главный тред + 4 запущенных}
 {1 main thread + 4 more started}.
 \IFRU{Я не делал никаких оптимизаций, чтобы оставить пример в как можно более простом виде}
 {I did not any further optimizations to keep my example as small and clear as possible}.
@@ -150,7 +150,7 @@ Intel Xeon E3-1220 3.10 GHz.
 \IFRU{Глядя на таблицу статистики, можно легко увидеть что цикл был разделен очень точно на 4 равных 
 части}{By looking at the statistics table we can clearly see how loop was finely spliced by 4 even 
 parts}.
-\IFRU{Хорошо, почти равных, если не учитывать последний бит}{Well, almost even, 
+\IFRU{Ну хорошо, почти равных, если не учитывать последний бит}{Oh well, almost even, 
 if not to consider the last bit}.
 
 \IFRU{Имеются также прагмы и для}{There are also pragmas for} 
@@ -195,7 +195,7 @@ GCC 4.8.1 \IFRU{выдает программу показывающую точ�
 	call	GOMP_parallel_end
 \end{lstlisting}
 
-\IFRU{В отличие от реализации MSVC, то что делает код GCC это запускает 4 треда, но также запускает 
+\IFRU{В отличие от реализации MSVC, то что делает код GCC это запускает 3 треда, но также запускает 
 четвертый прямо в текущем треде}{Unlike MSVC implementation, what GCC code is doing is starting 3 threads,
 but also runs fourth in the current thread}. \IFRU{Так что здесь всего 4 треда а не 5 как в случае
 с MSVC}{So there will be 4 threads instead of 5 as in MSVC}.
