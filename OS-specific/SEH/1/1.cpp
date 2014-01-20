@@ -1,5 +1,3 @@
-// the code of this example is largely based on the code by Matt Pietrek from his article:
-// http://www.microsoft.com/msj/0197/Exception/Exception.aspx
 #include <windows.h>
 #include <stdio.h>
 

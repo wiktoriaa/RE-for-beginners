@@ -75,13 +75,18 @@ and offering to collect all information and send it to developers in Microsoft}.
 {it saves huge dumps containing all possible information about \ac{CPU} and memory state}.
 
 \IFRU{Попробуем написать свой примитивный обработчик исключений}
-{Let's write our own primitive exception handler}:
+{Let's write our own primitive exception handler}
+\footnote{
+	\IFRU{Пример основан на примере из}{The example is based on the example from} \cite{PietrekSEH}
+
+	\IFRU{Он должен компилироваться с опцией}{It is compiled with the} SAFESEH\IFRU{}{ option}: 
+	\TT{cl seh1.cpp /link /safeseh:no}
+
+	\href{http://msdn.microsoft.com/en-us/library/9a89h429.aspx}
+	{\IFRU{Подробнее об опции}{More about} SAFESEH}
+}:
 
 \lstinputlisting{OS-specific/SEH/1/1.cpp}
-\footnote{\IFRU{Он должен компилироваться с опцией}{It is compiled with the} SAFESEH\IFRU{}{ option}: 
-\TT{cl seh1.cpp /link /safeseh:no}}
-\footnote{\href{http://msdn.microsoft.com/en-us/library/9a89h429.aspx}
-{\IFRU{Подробнее об опции}{More about} SAFESEH}}
 
 \IFRU{Сегментный регистр FS: в win32 указывает на \ac{TIB}}
 {FS: segment register is pointing to the \ac{TIB} in win32}.
@@ -93,14 +98,20 @@ an address of our handler there}.
 \IFRU{это простейший односвязный список, и эти элементы хранятся прямо в стеке}{it is a simplest singly-linked
 list and its elements are stored right in the stack}.
 
-\begin[caption=MSVC/VC/crt/src/exsup.inc]{lstlisting}
+\begin{lstlisting}[caption=MSVC/VC/crt/src/exsup.inc]
 \_EXCEPTION\_REGISTRATION struc
      prev    dd      ?
      handler dd      ?
 \_EXCEPTION\_REGISTRATION ends
 \end{lstlisting}
 
-% picture
+\IFRU{Так что каждое поле}{So each} ``handler'' \IFRU{указывает на обработчик,
+а каждое поле}{field points to handler and an each} ``prev'' \IFRU{указывает на предыдущую структуру
+в стеке}{field points to previous record in the stack}.
+\IFRU{Самая последняя структура имеет}{The last record has} \TT{0xFFFFFFFF} (-1) \IFRU{в поле}{in} 
+``prev''\IFRU{}{ field}.
+
+\input{OS-specific/SEH/1/tikz}
 
 \IFRU{После инсталляции своего обработчика, вызываем}{When our handler is installed, let's call}
 \TT{RaiseException()}
@@ -253,4 +264,13 @@ there are no any guarantee that \EAX will be used for pointer}.
 припомнить, применяется ли где-то подобное на практике для исправления ошибок ``на лету''}
 {Nevertheless, I cannot recall
 where it is used for ``on-fly'' error fixing in practice}.
+
+\IFRU{Почему SEH-записи хранятся именно в стеке а не в каком-то другом месте}
+{Why SEH-related records are stored right in the stack instead of some other place}?
+\IFRU{Вероятно, потому что тогда \ac{OS} не будет заботиться об освобождении этой информации, эти записи
+пропадают как ненужные когда ф-ция заканчивает работу}
+{Supposedly because then \ac{OS} will not need to care about freeing this information, these records
+will be disposed when function finishing its execution}.
+\IFRU{Но я не уверен на}{But I'm not} 100\%\IFRU{ и могу ошибаться}{-sure and can be wrong}.
+\IFRU{Это чем-то похоже на}{This is somewhat like} alloca(): (\ref{alloca}).
 
