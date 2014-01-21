@@ -29,7 +29,7 @@ __in$ = 8          ; size = 4
     shl    eax, 23          ; 00000017H - shift result to place of bits 30:23
     mov    ecx, DWORD PTR _t$[ebp]
     and    ecx, -2139095041 ; 807fffffH - drop exponent
-    or     ecx, eax         ; add original value without exponent with new calculated explonent
+    or     ecx, eax         ; add original value without exponent with new calculated exponent
     mov    DWORD PTR _t$[ebp], ecx
 
     push   4
