@@ -15,7 +15,7 @@
 .text:005410BA    inc     esi             ; инкремент счетчика второго цикла
 .text:005410BB    cmp     esi, 8
 .text:005410BE    jl      short second_loop2_begin
-.text:005410C0    dec     edi             ; декремент счетика первого цикла
+.text:005410C0    dec     edi             ; декремент счетчика первого цикла
 .text:005410C1    add     ebx, 8          ; инкремент указателя во внутреннем массиве
 .text:005410C4    cmp     edi, 0FFFFFFFFh
 .text:005410C7    jg      short second_loop1_begin

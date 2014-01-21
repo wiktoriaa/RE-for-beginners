@@ -22,7 +22,7 @@
 \IFRU{Следующая инструкция}{The next} \TT{``ADDCC PC, PC, R0,LSL\#2''}
 \footnote{ADD\EMDASH\IFRU{складывание чисел}{addition}}
 \IFRU{сработает только в случае если}{instruction will execute only if} $R0 < 5$ (\IT{CC=Carry clear / Less than}). 
-\IFRU{Следвательно, если}{Consequently, if} \TT{ADDCC} \IFRU{не сработает}{will not trigger} 
+\IFRU{Следовательно, если}{Consequently, if} \TT{ADDCC} \IFRU{не сработает}{will not trigger} 
 (\IFRU{это случай с}{it is a} $R0 \geq 5$\IFRU{}{ case}), 
 \IFRU{выполнится переход на метку}{a jump to} 
 \IT{default\_case}\IFRU{.}{label will be occurred.}
@@ -43,15 +43,15 @@ current value in the \PC},
 \IFRU{совершая, таким образом, переход на одну из расположенных ниже инструкций \TT{B} (\IT{Branch}).}
 {thus jumping to one of \TT{B} (\IT{Branch}) instructions located below.}
 
-\IFRU{На момент исполнения}{At the moment of} \TT{ADDCC} \IFRU{}{execution}, 
+\IFRU{На момент исполнения}{At the moment of} \TT{ADDCC}\IFRU{,}{ execution,}
 \IFRU{содержимое \PC на 8 байт больше}{value in the \PC is 8 bytes ahead} (\TT{0x180}) 
 \IFRU{чем адрес по которому расположена сама инструкция} 
 {than address at which} \TT{ADDCC} \IFRU{}{instruction is located} (\TT{0x178}), 
 \IFRU{либо, говоря иным языком, на 2 инструкции больше.}
 {or, in other words, 2 instructions ahead.}
 
-\index{ARM!\IFRU{Конвеер}{Pipeline}}
-\IFRU{Это связано с работой конвеера процессора ARM:
+\index{ARM!\IFRU{Конвейер}{Pipeline}}
+\IFRU{Это связано с работой конвейера процессора ARM:
 пока исполняется инструкция \TT{ADDCC}, процессор уже начинает обрабатывать инструкцию после следующей, 
 поэтому \PC указывает туда.}
 {This is how ARM processor pipeline works: when \TT{ADDCC} instruction is executed,
@@ -84,7 +84,7 @@ there are 5 of them in row.}
 {Each of these five \TT{B} instructions passing control further, where something is going on, 
 what was programmed in}
 \IT{switch()}.
-\IFRU{Там происходит загрузка указателя на свою строку, итд.}
+\IFRU{Там происходит загрузка указателя на свою строку, и т.д.}
 {Pointer loading to corresponding string occurring there, etc.}
 
 \subsubsection{ARM: \OptimizingKeil + \ThumbMode}
@@ -93,9 +93,9 @@ what was programmed in}
 
 \index{ARM!\ThumbMode}
 \index{ARM!\ThumbTwoMode}
-\IFRU{В режимах thumb и thumb-2, уже нельзя надеятся на то что все инструкции будут иметь одну длину.}
+\IFRU{В режимах thumb и thumb-2, уже нельзя надеяться на то что все инструкции будут иметь одну длину.}
 {One cannot be sure all instructions in thumb and thumb-2 modes will have same size.}
-\IFRU{Можно даже сказать что в этих режимах инструкции переменной длины, как в x86.}
+\IFRU{Можно даже сказать, что в этих режимах инструкции переменной длины, как в x86.}
 {It is even can be said that in these modes instructions has variable length, just like in x86.}
 
 \index{jumptable}
@@ -114,7 +114,7 @@ corresponding case.}
 \IFRU{Она начинается с инструкции}{It is beginning with} \TT{``BX PC''}
 \IFRU{, чья функция ~--- переключить процессор в ARM-режим.}
 {instruction, which function is to switch processor to ARM-mode.}
-\IFRU{Далее функция работающая с таблицей.}{Then you may see the function for table processing.} 
+\IFRU{Далее функция, работающая с таблицей.}{Then you may see the function for table processing.} 
 \IFRU{Она слишком сложная для 
 рассмотрения в данном месте, так что я пропущу объяснения.}
 {It is too complex for describing it here now, so I will omit elaborations.}
@@ -129,7 +129,7 @@ corresponding case.}
 { instruction, and the table is beginning right there.}
 
 \IFRU{Еще можно отметить что код для этого выделен в отдельную функцию для того, чтобы и в других местах,
-в похожих случаях, обрабатывались \IT{switch()}-и и не нужно было каждый раз генерировать во всех этих
+в похожих случаях, обрабатывались \IT{switch()}-и, и не нужно было каждый раз генерировать во всех этих
 местах такой фрагмент кода.}
 {It is also worth noting the code is generated as a separate function in order to reuse it, in similar places,
 in similar cases, for \IT{switch()} processing, so compiler will not generate same code at each point.}

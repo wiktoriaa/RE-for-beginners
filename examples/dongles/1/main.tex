@@ -4,7 +4,7 @@
 \index{Mac OS Classic}
 \IFRU{Как-то я получил программу для}{I've got a program for} MacOS Classic
 \footnote{\IFRU{MacOS перед тем как перейти на UNIX}{pre-UNIX MacOS}}, \IFRU{для}{for} PowerPC.
-\IFRU{Компания разработавшая этот продукт давно исчезла, так что (легальный) пользователь
+\IFRU{Компания, разработавшая этот продукт давно исчезла, так что (легальный) пользователь
 боялся того что донгла может сломаться}{The company who developed the software product
 was disappeared long time ago, so the (legal) customer was afraid of physical dongle damage}.
 
@@ -40,20 +40,20 @@ MIPS instruction names}.
 \TT{check1()} \IFRU{это имя которое я дал этой ф-ции позже}{is a function name I gave it to lately}.
 \TT{BL} \IFRU{это инструкция}{is} \IT{Branch Link} 
 \IFRU{т.е., предназначенная для вызова подпрограмм}{instruction, e.g., intended for subroutines calling}.
-\IFRU{Самое важное место это инструкция \ac{BNE} срабатывающая если проверка наличия донглы прошла
+\IFRU{Самое важное место ~--- это инструкция \ac{BNE} срабатывающая если проверка наличия донглы прошла
 успешно, либо не срабатывающая в случае ошибки: и тогда адрес текстовой строки с сообщением об ошибке
 будет загружен в регистр r3 для последующей передачи в функцию отображения диалогового окна}
 {The crucial point is \ac{BNE} instruction jumping if dongle protection check is passed 
 or not jumping if error is occurred: 
 then the address of the text string being loaded into r3 register for the subsequent passage into message box routine}.
 
-\IFRU{Из}{From the} \cite{PPCABI} \IFRU{я узнал что регистр r3 используется для возврата
+\IFRU{Из}{From the} \cite{PPCABI} \IFRU{я узнал, что регистр r3 используется для возврата
 значений (и еще r4 если значение 64-битное)}
 {I've got to know the r3 register is used for values returning (and r4, in case of 64-bit values)}.
 
 \index{x86!\Instructions!MOVZX}
 \IFRU{Еще одна пока что неизвестная инструкция}{Another yet unknown instruction is} \TT{CLRLWI}. 
-\IFRU{Из}{From} \cite{PPC} \IFRU{я узнал что эта инструкция одновременно и очищает и загружает}{I've got to know that this instruction
+\IFRU{Из}{From} \cite{PPC} \IFRU{я узнал, что эта инструкция одновременно и очищает и загружает}{I've got to know that this instruction
 do both clearing and loading}. 
 \IFRU{В нашем случае, она очищает 24 старших бита из значения в r3 и записывает всё это в r0, 
 так что это аналог}{In our case, it clears 24 high bits from the value in r3
@@ -77,7 +77,7 @@ is checked right after each call}.
 \IFRU{возвращает то, что возвращает}{returns what} \TT{check2()}\IFRU{}{ returns}.
 
 \ac{BLR} \IFRU{это похоже возврат из ф-ции, но так как IDA делает всю разметку ф-ций автоматически,
-наверное мы можем пока не интересоваться этим}{is seems return from function, but since \ac{IDA} does functions layout, we probably do not need
+наверное, мы можем пока не интересоваться этим}{is seems return from function, but since \ac{IDA} does functions layout, we probably do not need
 to be interesting in this}.
 \IFRU{Так как это типичный \ac{RISC}, похоже, подпрограммы вызываются используя}
 {It seems, since it is a typical \ac{RISC}, subroutines are called using} \gls{link register},
@@ -106,7 +106,7 @@ like \TT{.RBEFINDNEXT()} and \TT{.RBEFINDFIRST()}.}
 
 \IFRU{В начале посмотрим на то как устанавливается регистр r3 одновременно игнорируя всё остальное}
 {Let's first take a look on how r3 register is set before return simultaneously ignoring all we see}.
-\IFRU{Мы знаем что ``хорошее'' значение в r3 должно быть не нулевым, а нулевой r3 приведет
+\IFRU{Мы знаем, что ``хорошее'' значение в r3 должно быть не нулевым, а нулевой r3 приведет
 к выводу диалогового окна с сообщением об ошибке}
 {We know that ``good'' r3 value should be non-zero, zero r3 will lead execution
 flow to the message box with an error message}.
@@ -154,7 +154,7 @@ so they are compared here with hard-coded variables using} \TT{CMPLWI}.
 \IFRU{Да, действительно, если погуглить имена этих ф-ций, можно легко найти документацию к}
 {Yes, indeed, by googling these function names it is easy to find} Sentinel Eve3\IFRU{}{ dongle manual}!
 
-\IFRU{Мне даже наверное не нужно изучать остальные инструкции PowerPC: всё что делает эта ф-ция это просто
+\IFRU{Мне даже, наверное, не нужно изучать остальные инструкции PowerPC: всё что делает эта ф-ция это просто
 вызывает}
 {I probably even do not need to learn other PowerPC instructions: all this function does is just
 calls} \TT{.RBEREAD()}, \IFRU{сравнивает его результаты с константами и возвращает 1 если результат сравнения положительный или 0 в другом случае}{compare its results with constants and returns 1 if comparisons

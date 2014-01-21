@@ -3,7 +3,7 @@
 \subsubsection{x86}
 
 \IFRU
-{А что если переменная \TT{x} из предыдущего примера будет глобальной переменной а не локальной? 
+{А что если переменная \TT{x} из предыдущего примера будет глобальной переменной, а не локальной? 
 Тогда к ней смогут обращаться из любого другого места, а не только из тела функции. 
 Это снова не очень хорошая практика программирования, но ради примера мы можем себе это позволить.}
 {What if \TT{x} variable from previous example will not be local but global variable? 
@@ -15,7 +15,7 @@ It is not very good programming practice, but for the sake of experiment we coul
 \IFRU
 {Ничего особенного, в целом. Теперь \TT{x} объявлена в сегменте \TT{\_DATA}. 
 Память для нее в стеке более не выделяется. Все обращения к ней происходит не через стек, а уже напрямую. 
-Её значение неопределено. 
+Её значение не определено. 
 Это означает, что память под нее будет выделена, но ни компилятор, ни \ac{OS} не будет заботиться о том, 
 что там будет лежать на момент старта функции \main.
 В качестве домашнего задания, попробуйте объявить большой неопределенный массив и посмотреть 
@@ -54,8 +54,8 @@ _x	DD	0aH
 {If you will open compiled .exe in \IDA, you will see the \IT{x} variable placed at the beginning of 
 the \TT{\_DATA} segment, and after you'll see text strings.}
 
-\IFRU{А вот если вы откроете в \IDA, .exe скомплированный в прошлом примере, 
-где значение \IT{x} неопределено, то в IDA вы увидите:}
+\IFRU{А вот если вы откроете в \IDA, .exe скомпилированный в прошлом примере, 
+где значение \IT{x} не определено, то в IDA вы увидите:}
 {If you will open compiled .exe in \IDA from previous example where \IT{x} value is not defined, 
 you'll see something like this:}
 
@@ -74,7 +74,7 @@ you'll see something like this:}
 .data:0040FA94 dword_40FA94    dd ?                    ; DATA XREF: ___sbh_free_block+2FE
 \end{lstlisting}
 
-\IFRU{\TT{\_x} обозначен как \TT{?}, наряду с другими переменными не требующими инициализции. 
+\IFRU{\TT{\_x} обозначен как \TT{?}, наряду с другими переменными не требующими инициализации. 
 Это означает, что при загрузке .exe в память, место под все это выделено будет. 
 Но в самом .exe ничего этого нет. Неинициализированные переменные не занимают места в исполняемых файлах. Удобно для больших массивов, например.}
 {\TT{\_x} marked as \TT{?} among other variables not required to be initialized. 
@@ -84,9 +84,9 @@ But in an .exe file these not initialized variables are not occupy anything.
 E.g. it is suitable for large arrays.}
 
 \index{ELF}
-\IFRU{В Linux все также почти. За исключением того что если значение \TT{x} не определено, 
+\IFRU{В Linux все также почти. За исключением того, что если значение \TT{x} не определено, 
 то эта переменная будет находится в сегменте \TT{\_bss}.
-В \ac{ELF} этот сегмент имеет такие аттрибуты:}
+В \ac{ELF} этот сегмент имеет такие атрибуты:}
 {It is almost the same in Linux, except segment names and properties: 
 not initialized variables are located in the \TT{\_bss} segment. 
 In \ac{ELF} file format this segment has such attributes:}
@@ -97,9 +97,9 @@ In \ac{ELF} file format this segment has such attributes:}
 \end{lstlisting}
 
 \IFRU{Ну а если сделать статическое присвоение этой переменной какого-либо
-значения, например $10$, то она будет находится 
+значения, например, $10$, то она будет находится 
 в сегменте \TT{\_data},
-это сегмент с такими аттрибутами:}
+это сегмент с такими атрибутами:}
 {If to statically assign a value to variable, e.g. $10$, it will be placed in the \TT{\_data} segment, 
 this is segment with the following attributes:}
 

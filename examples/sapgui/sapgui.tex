@@ -8,7 +8,7 @@
 {(Tracing connection between \TDWNC{} SAPGUI\footnote{SAP GUI client} environment variable to 
 the pesky nagging pop-up window and actual data compression routine.)}
 
-\IFRU{Известно что сетевой траффик между SAPGUI и SAP по умолчанию не шифруется а сжимается} 
+\IFRU{Известно, что сетевой траффик между SAPGUI и SAP по умолчанию не шифруется а сжимается} 
 {It is known that network traffic between SAPGUI and SAP is not crypted by default, it is rather compressed}
 (\IFRU{читайте}{read} \href{http://blog.yurichev.com/node/44}{\IFRU{здесь}{here}} \AndENRU \href{http://blog.yurichev.com/node/47}{\IFRU{здесь}{here}}). 
 
@@ -28,11 +28,11 @@ the pesky nagging pop-up window and actual data compression routine.)}
 {Let's see, if we can remove the window somehow}.
 
 \IFRU{Но в начале давайте посмотрим, что мы уже знаем}{But before this, let's see what we already know}.
-\IFRU{Первое: мы знаем что переменна окружения \IT{\TDWNC} проверяется где-то внутри клиента SAPGUI.}
+\IFRU{Первое: мы знаем, что переменна окружения \IT{\TDWNC} проверяется где-то внутри клиента SAPGUI.}
 {First: we know the environment variable \IT{\TDWNC} is checked somewhere inside of SAPGUI client.}
 \IFRU{Второе: строка вроде ``data compression switched off'' так же должна где-то присутствовать.}
 {Second: string like ``data compression switched off'' must be present somewhere too.}
-\IFRU{При помощи файлового менджера FAR я нашел обе эти строки в файле SAPguilib.dll.}
+\IFRU{При помощи файлового менеджера FAR я нашел обе эти строки в файле SAPguilib.dll.}
 {With the help of FAR file manager I found that both of these strings are stored in the SAPguilib.dll file.}
 
 \IFRU{Так что давайте откроем файл SAPguilib.dll в \IDA и поищем там строку \IT{``\TDWNC''}.
@@ -171,7 +171,7 @@ After that, numerical value is stored to \TT{edi+15h}}.
 \end{lstlisting}
 
 \IFRU{Да}{Yes}. \IFRU{Функция}{} \TT{getenv\_s()}\footnote{\url{http://msdn.microsoft.com/en-us/library/tb2sfw2z(VS.80).aspx}} 
-\IFRU{это \IT{безопасная} версия функции \TT{getenv()}\footnote{Стандартная функция Си возвращающая значение переменной окружения} в MSVC}
+\IFRU{это \IT{безопасная} версия функции \TT{getenv()}\footnote{Стандартная функция Си, возвращающая значение переменной окружения} в MSVC}
 {function is Microsoft security-enhanced version of \TT{getenv()}\footnote{Standard C library returning environment variable}}.
 
 \IFRU{Тут так же имеются манипуляции со строками при помощи функций из MFC}
@@ -229,7 +229,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 
 \IFRU{А теперь, можем ли мы найти строку \IT{``data record mode switched on''}?}{Now, can we find \IT{``data record mode switched on''} string?}
 \IFRU{Да, и есть только одна ссылка на эту строку в функции}{Yes, and here is the only reference in function} \TT{CDwsGui::PrepareInfoWindow()}.
-\IFRU{Откуда я узнал имена классов/методов? Здесь много специальных отладочных вызовов пишущих в лог-файл вроде}
+\IFRU{Откуда я узнал имена классов/методов? Здесь много специальных отладочных вызовов, пишущих в лог-файл вроде}
 {How do I know class/method names? There is a lot of special debugging calls writing to log-files like}:
 
 \begin{lstlisting}
@@ -632,7 +632,7 @@ Here is one of them in the \IT{CDwsGui::SapguiRun} function (again, thanks to de
 
 \IFRU{Проверим нашу идею. Заменяем \TT{setz al} здесь на \TT{xor eax, eax / nop}, убираем переменную окружения 
 \TDWNC и запускаем SAPGUI. Wow! Надоедливого окна больше нет (как и ожидалось: ведь переменной окружении так же
-нет), но в Wireshark мы видим что сетевые пакеты больше не сжимаются!
+нет), но в Wireshark мы видим, что сетевые пакеты больше не сжимаются!
 Очевидно, это то самое место где флаг отражающий сжатие пакетов выставляется в объекте \TT{CConnectionContext}.}
 {Let's check our findings. Replace the \TT{setz al} here to the \TT{xor eax, eax / nop} instructions,
 clear \TDWNC 
@@ -686,7 +686,7 @@ an another variable which probably could affect network packets compression too.
 .text:64411E0B                 mov     [ebx+3A4h], eax ; EBX is pointer to CNetwork object
 \end{lstlisting}
 
-\IFRU{Теперь мы знаем что флаг отражающий сжатие данных сохраняется в классе \IT{CNetwork} по адресу \IT{this+0x3A4}.}
+\IFRU{Теперь мы знаем, что флаг отражающий сжатие данных сохраняется в классе \IT{CNetwork} по адресу \IT{this+0x3A4}.}
 {At this point we know the compression flag is stored in the \IT{CNetwork} class at \IT{this+0x3A4} address.}
 
 \IFRU{Поищем теперь значение \TT{0x3A4} в SAPguilib.dll. Находим второе упоминание этого значения в функции
@@ -732,7 +732,7 @@ the \IT{CDwsGui::OnClientMessageWrite} (endless thanks for debugging information
 .text:64406FE0                 call    SapPcTxtRead
 \end{lstlisting}
 
-\IFRU{Заглянем в функцию \IT{sub\_644055C5}. Всё что в ней мы находим это вызов memcpy() и еще какую-то функцию названную
+\IFRU{Заглянем в функцию \IT{sub\_644055C5}. Всё что в ней мы находим это вызов memcpy() и еще какую-то функцию, названную
 \IDA \IT{sub\_64417440}.}
 {Let's take a look into \IT{sub\_644055C5}. In it we can only see call to memcpy() and an other function named 
 (by \IDA) \IT{sub\_64417440}.}
@@ -763,10 +763,10 @@ So it is available in sources.}
 
 \IFRU{Заменим \JNZ на безусловный переход \JMP. Уберем переменную окружения \TDWNC.}
 {Replace \JNZ here for unconditional \JMP. Remove environment variable \TDWNC.} Voilà! 
-\IFRU{В Wireshark мы видим что сетевые пакеты исходящие от клиента не сжаты. Ответы сервера, впрочем, сжаты.}
+\IFRU{В Wireshark мы видим, что сетевые пакеты, исходящие от клиента, не сжаты. Ответы сервера, впрочем, сжаты.}
 {In Wireshark we see the client messages are not compressed. Server responses, however, are compressed.}
 
-\IFRU{Так что мы нашли связь между переменной окружения и местом где функция сжатия данных вызывается, а так же
+\IFRU{Так что мы нашли связь между переменной окружения и местом где функция сжатия данных вызывается, а также
 может быть отключена.}
 {So we found exact connection between environment variable and the point where data compression 
 routine may be called or may be bypassed.}

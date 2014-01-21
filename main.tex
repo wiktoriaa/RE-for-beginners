@@ -1,4 +1,5 @@
-\documentclass[11pt,a4paper,oneside]{book}
+%\documentclass[11pt,a4paper,oneside]{book}
+\documentclass[a4paper,oneside]{book}
 
 \usepackage{cmap}
 \usepackage{fancyhdr}
@@ -6,16 +7,22 @@
 \ifdefined\RUSSIAN
 \usepackage[english,russian]{babel}
 \usepackage[T2A]{fontenc}
-\usepackage{paratype}
+
+% if to turn this font on, copy&paste from Adobe Acrobat to clipboard will not work
+%\usepackage{paratype}
 \renewcommand*\familydefault{\sfdefault}
+
 % http://www.emerson.emory.edu/services/latex/latex_169.html
-\newcommand{\lstlistingsize}{\scriptsize}
+% too small!
+%\newcommand{\lstlistingsize}{\scriptsize}
+
 \else
 \usepackage[english]{babel}
 %\usepackage[T2A]{fontenc}
 \usepackage[T1]{fontenc}
 \usepackage[default]{sourcesanspro}
-\newcommand{\lstlistingsize}{\footnotesize}
+% too small!
+%\newcommand{\lstlistingsize}{\footnotesize}
 \fi
 
 \usepackage[utf8]{inputenc} % but not utf8x - glossary package will grizzle
@@ -88,7 +95,8 @@
 \ifdefined\RUSSIAN
 \lstset{
     backgroundcolor=\color{lstbgcolor},
-    basicstyle=\ttfamily\lstlistingsize, 
+    basicstyle=\ttfamily,
+    %basicstyle=\ttfamily\lstlistingsize, 
     breaklines=true,
     frame=single,
     inputencoding=cp1251,
@@ -98,7 +106,8 @@
 \selectlanguage{english}
 \lstset{
     backgroundcolor=\color{lstbgcolor},
-    basicstyle=\ttfamily\lstlistingsize, 
+    basicstyle=\ttfamily, 
+    %basicstyle=\ttfamily\lstlistingsize, 
     breaklines=true,
     frame=single,
     columns=fullflexible,keepspaces,
@@ -147,7 +156,7 @@ To view a copy of this license, visit} \url{http://creativecommons.org/licenses/
 \IFRU{Возможно, более новая версии текста, а так же англоязычная версия, также доступна по ссылке}
 {There is probably a newer version of this text, and also Russian language version also accessible at} \url{http://yurichev.com/RE-book.html}
 
-\IFRU{Вы также можете подписаться на мой twitter для получения информации о новых версиях этого текста, итд:
+\IFRU{Вы также можете подписаться на мой twitter для получения информации о новых версиях этого текста, и т.д:
 \href{https://twitter.com/yurichev_ru}{@yurichev\_ru}, либо подписаться на \href{http://yurichev.com/mailing_lists.html}{список рассылки}}
 {You may also subscribe to my twitter, to get information about updates of this text, etc: 
 \href{https://twitter.com/yurichev}{@yurichev}, or to subscribe to \href{http://yurichev.com/mailing_lists.html}{mailing list}}.
@@ -169,6 +178,7 @@ consisting of two sliced gloss magazine pages}.
 
 \mainmatter
 
+%\iffalse
 % only chapters here!
 \include{patterns/main}
 \include{cpp/main}
@@ -184,6 +194,7 @@ consisting of two sliced gloss magazine pages}.
 \include{afterword}
 \include{appendix/appendix}
 \include{acronyms}
+%\fi
 
 %\bibliographystyle{alpha}
 \bibliographystyle{plain} % FIXME

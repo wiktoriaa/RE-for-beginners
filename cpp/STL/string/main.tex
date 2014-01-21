@@ -27,7 +27,7 @@ however, it is usually implemented as described above}.
 {By standard, std::string is not a class (as QString in Qt, for instance) but template,
 this is done in order to support various character types: at least char and wchar\_t.}
 
-\IFRU{Здесь пока не будет листингов на ассемблере, потому что проиллистрировать внутренности std::string 
+\IFRU{Здесь пока не будет листингов на ассемблере, потому что проиллюстрировать внутренности std::string 
 в MSVC и GCC можно и без этого}
 {There are no assembly listings, because std::string internals in MSVC and GCC can be illustrated without them}.
 
@@ -144,17 +144,17 @@ string is longer than 16 characters: then a buffers in the \gls{heap} should be 
 они освобождаются автоматически после выхода из ф-ции}{Otherwise, since all three std::string objects
 are stored in the stack, they are freed automatically, upon function finish}.
 
-\IFRU{Следовательно работа с короткими строками более быстрая из-за м\`{е}ньшего обращения к \glslink{heap}{куче}}
+\IFRU{Следовательно, работа с короткими строками более быстрая из-за м\`{е}ньшего обращения к \glslink{heap}{куче}}
 {As a consequence, short strings processing is faster because of lesser \gls{heap} accesses}.
 
-\IFRU{Код на GCC даже проще (из-за того что в GCC, как я уже указывал, не реализована возможность хранить короткую
+\IFRU{Код на GCC даже проще (из-за того, что в GCC, как я уже указывал, не реализована возможность хранить короткую
 строку прямо в структуре)}{GCC code is even simpler (because GCC way, as I mentioned above, is not to store
 shorter string right in the structure)}:
 
 % TODO comment each function meaning
 \lstinputlisting[caption=GCC 4.8.1]{cpp/STL/string/3_GCC.s}
 
-\IFRU{Можно заметить что в деструкторы передается не указатель на объект,
+\IFRU{Можно заметить, что в деструкторы передается не указатель на объект,
 а указатель на место за 12 байт (или 3 слова) перед ним, то есть, на настоящее начало структуры}
 {It can be seen that not a pointer to object is passed to destructors, but rather a place 12 bytes (or 3 words)
 before, i.e., pointer to the real start of the structure}.

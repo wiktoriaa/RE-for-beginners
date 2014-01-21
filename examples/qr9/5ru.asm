@@ -1,5 +1,5 @@
 .text:00541081 first_loop1_begin:
-.text:00541081    xor     esi, esi        ; ESI is счетчик второго цикла
+.text:00541081    xor     esi, esi        ; ESI это счетчик второго цикла
 .text:00541083
 .text:00541083 first_loop2_begin:
 .text:00541083    push    ebp             ; arg_0

@@ -98,8 +98,8 @@ It is 8 bytes in x64-code.}
 \index{Intel C++}
 \index{Oracle RDBMS}
 \index{x86!\Instructions!POP}
-\IFRU{Некоторые компиляторы, например Intel C++ Compiler, в этой же ситуации, могут вместо 
-\ADD сгенерировать \TT{POP ECX} (подобное можно встретить например в коде \oracle{}, им скомпилированном),
+\IFRU{Некоторые компиляторы, например, Intel C++ Compiler, в этой же ситуации, могут вместо 
+\ADD сгенерировать \TT{POP ECX} (подобное можно встретить, например в коде \oracle{}, им скомпилированном),
 что почти то же самое, только портится значение в регистре \ECX.}
 {Some compilers (like Intel C++ Compiler) in the same situation may emit \TT{POP ECX} 
 instead of \ADD (e.g. such a pattern can be observed in the \oracle{} code as it is compiled by Intel C++ compiler).
@@ -151,7 +151,7 @@ Usually, it is \CCpp \ac{CRT} code which in turn returns control to the \ac{OS}.
 \IFRU{Теперь скомпилируем то же самое компилятором GCC 4.4.1 в Linux}
 {Now let's try to compile the same \CCpp code in the GCC 4.4.1 compiler in Linux}: \TT{gcc 1.c -o 1}
 
-\IFRU{Затем при помощи \IDA. посмотрим как создалась функция \main.}
+\IFRU{Затем, при помощи \IDA{}, посмотрим, как создалась функция \main.}
 {After, with the assistance of the \IDA disassembler, let's see how the \main function was created.} 
 
 (\IDA, \IFRU{как и MSVC, показывает код в Intel-синтаксисе}{as MSVC, showing code in Intel-syntax}).
@@ -184,7 +184,7 @@ main            endp
 Адрес строки ``hello, world'' лежащей в сегменте данных, в начале сохраняется в \EAX, затем записывается в стек.
 А еще в прологе функции мы видим \TT{AND ESP, 0FFFFFFF0h} ~--- 
 эта инструкция выравнивает значение в \ESP по 16-байтной границе, делая все значения 
-в стеке также выровненными по этой границе (процессор более эффективно работает с переменными расположенными
+в стеке также выровненными по этой границе (процессор более эффективно работает с переменными, расположенными
 в памяти по адресам кратным 4 или 16)\footnote{\URLWPDA}.}
 {The result is almost the same.
 The address of the ``hello world'' string (stored in the data segment) is saved in the \EAX register first then it is stored on the stack.
@@ -247,7 +247,7 @@ gcc -S 1_1.c
 \IFRU{Здесь много макросов (начинающихся с точки). Они нам пока не интересны.}
 {There are a lot of macros (beginning with dot). These are not very interesting to us so far.}
 \IFRU{Пока что, ради упрощения, мы можем
-их игнорировать и впредь (кроме макроса \IT{.string}, при помощи которого кодируется последовательность символов 
+их игнорировать и впредь (кроме макроса \IT{.string}, при помощи которого кодируется последовательность символов, 
 оканчивающихся нулем, такие же строки как в Си). И тогда получится следующее}
 {For now, for the sake of simplification, we can ignore them (except the \IT{.string} macro which
 encodes a null-terminated character sequence just like a C-string). Then we'll see this}

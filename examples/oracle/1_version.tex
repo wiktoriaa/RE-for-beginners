@@ -88,12 +88,12 @@ The object file is in the main Oracle-library \TT{libserver11.a}.}
 .rodata:0800C55C                 dd 0
 \end{lstlisting}
 
-\IFRU{Кстати, нередко, при изучении внутренностей \oracle, появляется вопрос, почему имена функций и глобальных переменных такие странные}{By the way, often, while analysing \oracle internals, you may ask yourself, why functions and global variable names are so weird}. \IFRU{Вероятно, дело в том что \oracle очень старый продукт сам по себе и писался на Си еще в 1980-х}
+\IFRU{Кстати, нередко, при изучении внутренностей \oracle, появляется вопрос, почему имена функций и глобальных переменных такие странные}{By the way, often, while analysing \oracle internals, you may ask yourself, why functions and global variable names are so weird}. \IFRU{Вероятно, дело в том, что \oracle очень старый продукт сам по себе и писался на Си еще в 1980-х}
 {Supposedly, since \oracle is very old product and was developed in C in 1980-s}. \IFRU{А в те времена стандарт Си гарантировал поддержку имен переменных длиной только до шести символов включительно}
 {And that was a time when C standard guaranteed function names/variables support only up to 6 characters inclusive}: <<6 significant initial characters in an external identifier>>\footnote{\href{http://yurichev.com/ref/Draft\%20ANSI\%20C\%20Standard\%20(ANSI\%20X3J11-88-090)\%20(May\%2013,\%201988).txt}{Draft ANSI C Standard (ANSI X3J11/88-090) (May 13, 1988)}}
 
 \IFRU{Вероятно, таблица \TT{kqfviw} содержащая в себе многие (а может даже и все) view с префиксом V\$, это служебные view (fixed views), присутствующие всегда.}{Probably, the table \TT{kqfviw} contain most (maybe even all) views prefixed with V\$, these are \IT{fixed views}, present all the time.}
-\IFRU{Бегло оценив цикличность данных, мы легко видим что в каждом элементе таблицы \TT{kqfviw} 12 полей 32-битных полей.}{Superficially, by noticing cyclic recurrence of data, we can easily see that each \TT{kqfviw} table element has 12 32-bit fields.}
+\IFRU{Бегло оценив цикличность данных, мы легко видим, что в каждом элементе таблицы \TT{kqfviw} 12 полей 32-битных полей.}{Superficially, by noticing cyclic recurrence of data, we can easily see that each \TT{kqfviw} table element has 12 32-bit fields.}
 \IFRU{В \IDA легко создать структуру из 12-и элементов и применить её ко всем элементам таблицы.}{It is very simple to create a 12-elements structure in \IDA and apply it to all table elements.}
 \IFRU{Для версии \oracle 11.2, здесь 1023 элемента в таблице, то есть, здесь описываются 1023 всех возможных \IT{fixed view}.}{As of \oracle version 11.2, there are 1023 table elements, i.e., there are described 1023 of all possible \IT{fixed views}.}
 \IFRU{Позже, мы еще вернемся к этому числу.}{We will return to this number later.}
@@ -178,7 +178,7 @@ $0$ and \IT{null} C-string:}
 .rodata:080BBAD0                 dd offset _2__STRING_0_0
 \end{lstlisting}
 
-\IFRU{Объеденив данные из таблиц \TT{kqfviw} и \TT{kqfvip}, мы получим SQL-запросы, которые исполняются, когда пользователь хочет получить информацию из какого-либо \IT{fixed view}.}{By joining data from both \TT{kqfviw} and \TT{kqfvip} tables, we may get SQL-statements which are executed when user wants to query information from specific \IT{fixed view}.}
+\IFRU{Объединив данные из таблиц \TT{kqfviw} и \TT{kqfvip}, мы получим SQL-запросы, которые исполняются, когда пользователь хочет получить информацию из какого-либо \IT{fixed view}.}{By joining data from both \TT{kqfviw} and \TT{kqfvip} tables, we may get SQL-statements which are executed when user wants to query information from specific \IT{fixed view}.}
 
 \IFRU{Я написал программу \oracletables, которая собирает всю эту информацию из объектных файлов от \oracle под Linux.}{So I wrote an \oracletables program, so to gather all this information from \oracle for Linux object files.}
 \IFRU{Для \TT{V\$VERSION}, мы можем найти следующее:}{For \TT{V\$VERSION}, we may find this:}
@@ -201,7 +201,7 @@ kqfvip_element.params:
 
 \IFRU{\IT{Fixed view} \TT{GV\$VERSION} отличается от \TT{V\$VERSION} тем, что содержит еще и поле отражающее идентификатор \IT{instance}.}
 {\TT{GV\$VERSION} \IT{fixed view} is distinct from \TT{V\$VERSION} in only that way that it contains one more field with \IT{instance} identifier.}
-\IFRU{Но так или иначе, мы теперь упираемся в таблицу \TT{X\$VERSION}. Как и прочие X\$-таблицы, она недокументирована, однако, мы можем оттуда что-то прочитать}{Anyway, we stuck at the table \TT{X\$VERSION}. Just like any other X\$-tables, it is undocumented, however, we can query it}:
+\IFRU{Но так или иначе, мы теперь упираемся в таблицу \TT{X\$VERSION}. Как и прочие X\$-таблицы, она не документирована, однако, мы можем оттуда что-то прочитать}{Anyway, we stuck at the table \TT{X\$VERSION}. Just like any other X\$-tables, it is undocumented, however, we can query it}:
 
 \begin{lstlisting}
 SQL> select * from x$version;

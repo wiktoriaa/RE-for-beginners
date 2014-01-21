@@ -51,7 +51,7 @@ virtual memory support (where processes are all placed in single continous memor
 \IFRU{Он до сих пор используется в *NIX системах для динамических библиотек, потому что динамическая библиотека может использоваться одновременно в нескольких процессах, будучи загружена в память только один раз}
 {It is also still used in *NIX systems for shared libraries since shared libraries 
 are shared across many processes while loaded in memory only once}.
-\IFRU{Но все эти процессы могут загрузить одну и ту же динамическую библиотеку по разным адресам, вот почему динамическая библиотека должна работать корректно не привыязываясь к абсолютным адресам}{But all these processes may 
+\IFRU{Но все эти процессы могут загрузить одну и ту же динамическую библиотеку по разным адресам, вот почему динамическая библиотека должна работать корректно, не привязываясь к абсолютным адресам}{But all these processes may 
 map the same shared library on different addresses, so that is why
 shared library should be working correctly without fixing on any absolute address}.
 
@@ -125,7 +125,7 @@ gcc -fPIC -shared -O3 -o 1.so 1.c
 {That's the simple way to get value of program counter (\EIP) at some point}.
 \IFRU{Константа}{The} \IT{0x1A84} \IFRU{связана с разницей между началом этой функции и так называемой}{constant is related to the difference between this function begin and so called}
 \IT{Global Offset Table Procedure Linkage Table} (GOT PLT), \IFRU{секцией, сразу же за}{the section right after} \IT{Global Offset Table} (GOT), \IFRU{где находится указатель на \globvar{}}{where pointer to \globvar{} is}.
-\IDA \IFRU{показыавет смещения уже обработанными, чтобы их было проще понимать, но на самом деле код такой}{shows these offset processed, so to understand them easily, but in fact the code is}:
+\IDA \IFRU{показывает смещения уже обработанными, чтобы их было проще понимать, но на самом деле код такой}{shows these offset processed, so to understand them easily, but in fact the code is}:
 
 \begin{lstlisting}
 .text:00000577                 call    __x86_get_pc_thunk_bx
@@ -179,7 +179,7 @@ the \TT{GOT}, \TT{0xC} must be subtracted}.
 (хотя это и стало лучше в x64)}
 {As you might see, the need to recalculate addresses frequently makes execution slower 
 (it is better in x64, though)}.
-\IFRU{Так что если вы заботитесь о скорости исполнения, то наверное нужно задуматься о статической
+\IFRU{Так что если вы заботитесь о скорости исполнения, то, наверное, нужно задуматься о статической
 компоновке (static linking)}
 {So it is probably better to link statically if you aware of performace} (\cite{AgnerFogCPP}).
 % to be proofreaded (end)

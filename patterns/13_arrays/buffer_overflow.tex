@@ -1,7 +1,7 @@
 \subsection{\IFRU{Переполнение буфера}{Buffer overflow}}
 \label{subsec:bufferoverflow}
 
-\IFRU{Итак, индексация массива это просто \IT{массив\lbrack{}индекс\rbrack}.  % TODO как-то плохо отображаются []
+\IFRU{Итак, индексация массива ~--- это просто \IT{массив\lbrack{}индекс\rbrack}.  % TODO как-то плохо отображаются []
 Если вы присмотритесь к коду, в цикле печати значений массива через \printf вы 
 не увидите проверок индекса, \IT{меньше ли он двадцати?} 
 А что будет если он будет больше двадцати? 
@@ -48,7 +48,7 @@ a[100]=760826203
 
 \IFRU{Действительно, а как могло бы быть иначе? Компилятор мог бы встроить какой-то код, 
 каждый раз проверяющий индекс на соответствие пределам массива, как в языках программирования 
-более высокого уровня\footnote{Java, Python, итд}, что делало бы запускаемый код медленнее.}
+более высокого уровня\footnote{Java, Python, и т.д.}, что делало бы запускаемый код медленнее.}
 {Indeed, how it could be done differently?
 Compiler may generate some additional code for checking index value to be always
 in array's bound (like in higher-level programming languages\footnote{Java, Python, etc})
@@ -82,7 +82,7 @@ int main()
 {Run compiled program and its crashing. No wonder. Let's see, where exactly it is crashing.}
 
 \IFRU{Отладчик я уже давно не использую, так как надоело для всяких мелких задач вроде подсмотреть состояние 
-регистров, запускать что-то, двигать мышью, итд. 
+регистров, запускать что-то, двигать мышью, и т.д. 
 Поэтому я написал очень минималистическую утилиту для себя, \tracer, коей обхожусь.}
 {I'm not using debugger anymore since I tired to run it each time, move mouse, etc, when I need just to
 spot a register's state at the specific point.
@@ -110,7 +110,7 @@ PID=7988|Process exit, return code -1073740791
 {Now please keep your eyes on registers.}
 
 \IFRU{Исключение произошло по адресу 0x15. Это явно нелегальный адрес для кода ~--- по крайней мере, win32-кода! 
-Мы там как-то очутились, причем, сами того не хотели. Интересен также тот факт что в \EBP хранится 0x14, 
+Мы там как-то очутились, причем, сами того не хотели. Интересен также тот факт, что в \EBP хранится 0x14, 
 а в \ECX и \EDX ~--- 0x1D.}
 {Exception occurred at address 0x15. It is not legal address for code~---at least for win32 code!
 We trapped there somehow against our will.
@@ -152,7 +152,7 @@ The \ESP pointing now to the \TT{\_i} variable in the local stack and after exec
 \IFRU{Обратите внимание на состояние регистров на момент падения процесса. В нашем случае, 
 в 20-й элемент записалось значение 20. 
 И вот все дело в том, что заканчиваясь, эпилог функции восстанавливал значение \EBP. 
-(20 в десятичной системе это как раз 0x14 в шестнадцетиричной). 
+(20 в десятичной системе это как раз 0x14 в шестнадцатеричной). 
 Далее выполнилась инструкция \RET, которая на самом деле эквивалентна \TT{POP EIP}.}
 {Please take a look at registers state at the crash moment. In our case,
 number 20 was written to 20th element. 
@@ -162,7 +162,7 @@ Then, \RET instruction was executed, which is effectively equivalent to \TT{POP 
 
 \IFRU{Инструкция \RET вытащила из стека адрес возврата (это адрес где-то внутри \ac{CRT}), 
 которая вызвала \main), 
-а там было записано 21 в десятичной системе, то есть 0x15 в шестнадцетиричной. 
+а там было записано 21 в десятичной системе, то есть 0x15 в шестнадцатеричной. 
 И вот процессор оказался по адресу 0x15, но исполняемого кода там нет, так что случилось исключение.}
 {\RET instruction taking returning adddress from the stack (that is the address inside of \ac{CRT}),
 which was called \main),

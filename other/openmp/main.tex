@@ -8,7 +8,7 @@ OpenMP \IFRU{это один из простейших способов расп
 \index{Bitcoin}
 \IFRU{В качестве примера, попытаемся написать программу для вычисления криптографического \IT{nonce}}
 {As an example, let's try to build a program to compute cryptographic \IT{nonce}}.
-\IFRU{В моем простейшем примере, \IT{nonce} это число добавляемое к нешифрованному тексту, чтобы получить
+\IFRU{В моем простейшем примере, \IT{nonce} это число, добавляемое к нешифрованному тексту, чтобы получить
 хэш с какой-то особенностью}
 {In my simplistic example, 
 \IT{nonce} is a number added to the plain unencrypted text in order to produce hash with some specific 
@@ -20,8 +20,8 @@ will contain specific number of running zeroes}.
 \IFRU{Это еще называется}{This is also called} ``proof of work''
 \footnote{\IFRU{\url{https://ru.wikipedia.org/wiki/Proof-of-work}}
 {\url{https://en.wikipedia.org/wiki/Proof-of-work_system}}} 
-(\IFRU{т.е., система доказывает что она произвела какие-то очень ресурсоёмкие вычисления и затратила
-время н аэто}
+(\IFRU{т.е., система доказывает, что она произвела какие-то очень ресурсоёмкие вычисления и затратила
+время на это}
 {i.e., system prove it did some intensive calculations and spent some time for it}).
 
 \index{SHA512}
@@ -146,11 +146,11 @@ Intel Xeon E3-1220 3.10 GHz.
 {1 main thread + 4 more started}.
 \IFRU{Я не делал никаких оптимизаций, чтобы оставить пример в как можно более простом виде}
 {I did not any further optimizations to keep my example as small and clear as possible}.
-\IFRU{Но наверное этот алгоритм может работать быстрее}{But probably it can be done much faster}.
+\IFRU{Но, наверное, этот алгоритм может работать быстрее}{But probably it can be done much faster}.
 \IFRU{У моего}{My} \ac{CPU} \IFRU{4 ядра, вот почему}{has 4 cores, that is why} OpenMP 
 \IFRU{запустил именно 4 треда}{started exactly 4 threads}.
 
-\IFRU{Глядя на таблицу статистики, можно легко увидеть что цикл был разделен очень точно на 4 равных 
+\IFRU{Глядя на таблицу статистики, можно легко увидеть, что цикл был разделен очень точно на 4 равных 
 части}{By looking at the statistics table we can clearly see how loop was finely spliced by 4 even 
 parts}.
 \IFRU{Ну хорошо, почти равных, если не учитывать последний бит}{Oh well, almost even, 
@@ -159,7 +159,7 @@ if not to consider the last bit}.
 \IFRU{Имеются также прагмы и для}{There are also pragmas for} 
 \glslink{atomic operation}{\IFRU{атомарных операций}{atomic operations}}.
 
-\IFRU{Посмотрим как вот этот код будет скомпилирован}{Let's see how this code is compiled}:
+\IFRU{Посмотрим, как вот этот код будет скомпилирован}{Let's see how this code is compiled}:
 
 \begin{lstlisting}
 	#pragma omp atomic
@@ -198,7 +198,7 @@ GCC 4.8.1 \IFRU{выдает программу показывающую точ�
 	call	GOMP_parallel_end
 \end{lstlisting}
 
-\IFRU{В отличие от реализации MSVC, то что делает код GCC это запускает 3 треда, но также запускает 
+\IFRU{В отличие от реализации MSVC, то, что делает код GCC, это запускает 3 треда, но также запускает 
 четвертый прямо в текущем треде}{Unlike MSVC implementation, what GCC code is doing is starting 3 threads,
 but also runs fourth in the current thread}. \IFRU{Так что здесь всего 4 треда а не 5 как в случае
 с MSVC}{So there will be 4 threads instead of 5 as in MSVC}.

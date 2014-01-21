@@ -37,11 +37,11 @@ from the point of signed \Tint view is $254$, but not $-2$. In signed int, $-2$ 
 So if we need to transfer \TT{0xFE} value from variable of \Tchar type to \Tint, 
 we need to identify its sign and extend it. That is what \MOVSX does.}
 
-\IFRU{См.также об этом раздел}
+\IFRU{См. также об этом раздел}
 {See also in section} ``\IT{\SignedNumbersSectionName}''~(\ref{sec:signednumbers}).
 
 \IFRU{Хотя, конкретно здесь, компилятору врядли была особая надобность хранить значение \Tchar в регистре \EDX 
-а не его восьмибитной части, скажем, \DL. Но получилось как получилось: должно быть, 
+а не его восьмибитной части, скажем, \DL. Но получилось, как получилось: должно быть, 
 \gls{register allocator} компилятора сработал именно так.}
 {I'm not sure if the compiler needs to store \Tchar variable in the \EDX, it could take 8-bit register part 
 (let's say \DL). Apparently, compiler's \gls{register allocator} works like that.}
@@ -88,7 +88,7 @@ Strictly speaking, compiler is not obliged to emit understandable (to humans) co
 (\IT{NZ} значит \IT{not zero}) выставит $1$ в \AL. 
 Смысл этой процедуры в том, что, если говорить человеческим языком, 
 \IT{если AL не ноль, то выполнить переход на} \TT{loc\_80483F0}.
-Компилятор выдал немного избыточный код, но не будем забывать что оптимизация выключена.}
+Компилятор выдал немного избыточный код, но не будем забывать, что оптимизация выключена.}
 {Next new instruction for us is \SETNZ. Here, if \AL contain not zero, \TT{test al, al} 
 will set $0$ to the \ZF flag, but \SETNZ, if \TT{ZF==0} (\IT{NZ} means \IT{not zero}) will set $1$ to the \AL.
 Speaking in natural language, \IT{if \AL is not zero, let's jump to loc\_80483F0}. 
@@ -111,7 +111,7 @@ only in small functions with small number of local variables.}
 увеличить на единицу или уменьшить.}
 {are \gls{increment}/\gls{decrement} instruction, in other words: add 1 to variable or subtract.}
 
-\IFRU{Попробуем GCC 4.4.1 с влюченной оптимизацией (ключ \Othree:}
+\IFRU{Попробуем GCC 4.4.1 с включенной оптимизацией (ключ \Othree:}
 {Let's check GCC 4.4.1 with optimization turned on (\Othree key):}
 
 \lstinputlisting{patterns/10_strlen/10_3_gcc_O3.asm}
@@ -119,11 +119,11 @@ only in small functions with small number of local variables.}
 \IFRU{Здесь GCC не очень отстает от MSVC за исключением наличия \MOVZX.} 
 {Here GCC is almost the same as MSVC, except of \MOVZX presence.}
 
-\IFRU {Впрочем, только кроме того что почему-то используется \MOVZX, который явно можно заменить на}
+\IFRU {Впрочем, только кроме того, что почему-то используется \MOVZX, который явно можно заменить на}
 {However, \MOVZX could be replaced here to} \TT{mov dl, byte ptr [eax]}.
 
-\IFRU{Но, возможно, компилятору GCC просто проще помнить что у него под переменную типа \Tchar отведен целый 
-32-битный регистр и быть уверенным в том что старшие биты регистра не будут замусорены.}
+\IFRU{Но, возможно, компилятору GCC просто проще помнить, что у него под переменную типа \Tchar отведен целый 
+32-битный регистр и быть уверенным в том, что старшие биты регистра не будут замусорены.}
 {Probably, it is simpler for GCC compiler's code generator to \IT{remember} the whole register 
 is allocated for \Tchar variable and it can be sure the highest bits will not contain any noise 
 at any point.}
@@ -132,7 +132,7 @@ at any point.}
 \index{x86!\Instructions!NOT}
 \index{x86!\Instructions!XOR}
 \IFRU{Далее мы видим новую для нас инструкцию \NOT. Эта инструкция инвертирует все биты в операнде. 
-Можно сказать что здесь это синонимично инструкции \TT{XOR ECX, 0ffffffffh}. 
+Можно сказать, что здесь это синонимично инструкции \TT{XOR ECX, 0ffffffffh}. 
 \NOT и следующая за ней инструкция \ADD вычисляют разницу указателей и отнимают от результата единицу. 
 Только происходит это слегка по-другому. Сначала \ECX, где хранится указатель на \IT{str}, 
 инвертируется и от него отнимается единица.}
@@ -164,7 +164,7 @@ eax=eax-1;
 return eax
 \end{lstlisting}
 
-\IFRU{Но почему GCC решил что так будет лучше? Снова не берусь сказать. Но я не сомневаюсь, 
+\IFRU{Но почему GCC решил, что так будет лучше? Снова не берусь сказать. Но я не сомневаюсь, 
 что эти оба варианта работают примерно равноценно в плане эффективности и скорости.}
 {Why GCC decided it would be better? I cannot be sure. 
 But I'm sure the both variants are effectively equivalent in efficiency sense.}

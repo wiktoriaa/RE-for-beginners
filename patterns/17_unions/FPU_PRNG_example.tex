@@ -8,14 +8,14 @@
 Mersenne twister produces random 32-bit values in DWORD form, transform this value to \Tfloat and then
 dividing it by \TT{RAND\_MAX} (\IT{0xffffffff} in our case)~---value we got will be in 0..1 interval.}
 
-\IFRU{Но как известно, операция деления это медленная операция. 
+\IFRU{Но как известно, операция деления ~--- это медленная операция. 
 Сможем ли мы избежать её, как в случае с делением через умножение?}
 {But as we know, division operation is slow.
 Will it be possible to get rid of it, as in case of division by multiplication?}
 ~(\ref{sec:divisionbynine})
 
 \index{IEEE 754}
-\IFRU{Вспомним состав числа с плавающей запятой: это бит знака, биты мантиссы и биты экпоненты. 
+\IFRU{Вспомним состав числа с плавающей запятой: это бит знака, биты мантиссы и биты экспоненты. 
 Для получения случайного числа, нам нужно просто заполнить случайными битами все биты мантиссы!}
 {Let's recall what float number consisted of: sign bit, significand bits and exponent bits.
 We need just to store random bits to all significand bits for getting random float number!}
@@ -41,7 +41,7 @@ The PRNG initializing by current time in UNIX-style.}
 
 \IFRU{Далее, тип \Tfloat представляется в виде \IT{union} ~--- это конструкция \CCpp позволяющая 
 интерпретировать часть памти по-разному. В нашем случае, мы можем создать переменную типа \TT{union} 
-и затем обращаться к ней как к \Tfloat или как к \IT{uint32\_t}. Можно сказать что это хак, причем грязный.}
+и затем обращаться к ней как к \Tfloat или как к \IT{uint32\_t}. Можно сказать, что это хак, причем грязный.}
 {Then, \Tfloat type represented as \IT{union}~---it is the \CCpp construction enabling us
 to interpret piece of memory as differently typed.
 In our case, we are able to create a variable

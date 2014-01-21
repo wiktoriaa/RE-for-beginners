@@ -27,9 +27,9 @@ When user change image brightness, the editor must add a coefficient to each pix
 For the sake of brevity, our image may be grayscale and each pixel defined by one 8-bit byte, then it is possible
 to change brightness of 8 pixels simultaneously.}
 
-\IFRU{Когда MMX только появилось, эти регистры на самом деле распологались в FPU-регистрах. 
+\IFRU{Когда MMX только появилось, эти регистры на самом деле располагались в FPU-регистрах. 
 Можно было использовать 
-либо FPU либо MMX в одно и то же время. Можно подумать что Intel решило немного сэкономить на транзисторах, 
+либо FPU либо MMX в одно и то же время. Можно подумать, что Intel решило немного сэкономить на транзисторах, 
 но на самом деле причина такого симбиоза проще ~--- более старая \ac{OS} не знающая о дополнительных 
 регистрах процессора не будет сохранять их во время переключения задач, а вот регистры FPU сохранять будет. 
 Таким образом, процессор с MMX + старая \ac{OS} + задача использующая возможности MMX = все 
@@ -54,7 +54,7 @@ AVX\EMDASH\IFRU{расширение регистров до 256 бит.}{anothe
 
 \index{DES}
 \IFRU{Еще пример: имеется алгоритм шифрования DES, который берет 64-битный блок, 56-битный ключ, 
-шифрует блок с ключем и образуется 64-битный результат.
+шифрует блок с ключом и образуется 64-битный результат.
 Алгоритм DES можно легко представить в виде очень большой электронной цифровой схемы, 
 с проводами, элементами И, ИЛИ, НЕ.}
 {One more example: we got DES encryption algorithm, it takes 64-bit block, 56-bit key, encrypt block and produce 64-bit result.
@@ -64,7 +64,7 @@ DES algorithm may be considered as a very large electronic circuit, with wires a
 \newcommand{\URLBS}{\url{http://www.darkside.com.au/bitslice/}}
 
 \IFRU{Идея bitslice DES\footnote{\URLBS} ~--- это обработка сразу группы блоков и ключей одновременно. 
-Скажем, на x86 перменная типа \IT{unsigned int} вмещает в себе 32 бита, так что там можно хранить 
+Скажем, на x86 переменная типа \IT{unsigned int} вмещает в себе 32 бита, так что там можно хранить 
 промежуточные результаты сразу для 32-х блоков-ключей, используя 64+56 переменных типа \IT{unsigned int}.}
 {Bitslice DES\footnote{\URLBS}~---is an idea of processing group of blocks and keys simultaneously.
 Let's say, variable of type \IT{unsigned int} on x86 may hold up to 32 bits, so, it is possible to store there
@@ -87,17 +87,17 @@ or 256 block-keys pairs simultaneously.}
 \IFRU{Векторизация\footnote{\URLVEC} это когда у вас есть цикл, который берет на вход несколько массивов и выдает, 
 например, один массив данных. 
 Тело цикла берет некоторые элементы из входных массивов, что-то делает с ними и помещает в выходной. 
-Важно что операция применяемая ко всем элементам одна и та же. 
+Важно, что операция применяемая ко всем элементам одна и та же. 
 Векторизация ~--- это обрабатывать несколько элементов одновременно.}
 {Vectorization\footnote{\URLVEC}, for example, is when you have a loop taking couple of arrays at input and produces one array.
 Loop body takes values from input arrays, do something and put result into output array.
 It is important that there is only one single operation applied to each element.
 Vectorization~---is to process several elements simultaneously.}
 
-\IFRU{Векторизация это не самая новая технология: автор сих строк видел её по крайней мере на 
+\IFRU{Векторизация ~--- это не самая новая технология: автор сих строк видел её по крайней мере на 
 линейке суперкомпьютеров Cray Y-MP от 1988, когда работал на его версии-``лайт'' Cray Y-MP EL
-\footnote{Удаленно. Он находится в музее суперкомпьюетров: \url{http://www.cray-cyber.org}}}
-{Vectorization is not very fresh technology: author of this textbook saw it at least in Cray Y-MP 
+\footnote{Удаленно. Он находится в музее суперкомпьютеров: \url{http://www.cray-cyber.org}}}
+{Vectorization is not very fresh technology: author of this textbook saw it at least on Cray Y-MP 
 supercomputer line from 1988 when played with its ``lite'' version Cray Y-MP EL
 \footnote{Remotely. It is installed in the museum of supercomputers: \url{http://www.cray-cyber.org}}}.
 
@@ -120,12 +120,12 @@ for (i = 0; i < 1024; i++)
 \newcommand{\PMULHW}{\TT{PMULHW} (\IT{\IFRU{Перемножить запакованные знаковые DWORD и сохранить старшую часть результата}
 {Multiply Packed Signed Integers and Store High Result}})}
 
-\IFRU{Если представить что каждый элемент массива ~--- это 32-битный \Tint, то их можно загружать сразу 
+\IFRU{Если представить, что каждый элемент массива ~--- это 32-битный \Tint, то их можно загружать сразу 
 по 4 из А в 128-битный XMM-регистр, 
-из B в другой XMM-регистр и выполнив инстукцию \PMULLD и \PMULHW, можно получить 4 64-битных 
+из B в другой XMM-регистр и выполнив инструкцию \PMULLD{} и \PMULHW{}, можно получить 4 64-битных 
 \glslink{product}{произведения} сразу.}
 {If each array element we have is 32-bit \Tint, then it is possible to load 4 elements from A into 128-bit 
-XMM-register, from B to another XMM-registers, and by executing \PMULLD and \PMULHW, 
+XMM-register, from B to another XMM-registers, and by executing \PMULLD{} and \PMULHW{}, 
 it is possible to get 4 64-bit \glspl{product} at once.}
 
 \IFRU{Таким образом, тело цикла исполняется $1024/4$ раза вместо 1024, что в 4 раза меньше, и, конечно, быстрее.}
@@ -135,7 +135,7 @@ it is possible to get 4 64-bit \glspl{product} at once.}
 
 \index{Intel C++}
 \IFRU{Некоторые компиляторы умеют делать автоматическую векторизацию в простых случаях, 
-например Intel C++\footnote{Еще о том как Intel C++ умеет автоматически векторизировать циклы: \URLINTELVEC}.}
+например Intel C++\footnote{Еще о том, как Intel C++ умеет автоматически векторизовать циклы: \URLINTELVEC}.}
 {Some compilers can do vectorization automatically in a simple cases, 
 e.g., Intel C++\footnote{More about Intel C++ automatic vectorization: \URLINTELVEC}.}
 
@@ -163,7 +163,7 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 
 \lstinputlisting{patterns/19_SIMD/18_1_en.asm}
 
-\IFRU{Инструкции имеющие отношение к SSE2 это:}{SSE2-related instructions are:}
+\IFRU{Инструкции, имеющие отношение к SSE2 это:}{SSE2-related instructions are:}
 \index{x86!\Instructions!MOVDQA}
 \index{x86!\Instructions!MOVDQU}
 \index{x86!\Instructions!PADDD}
@@ -173,7 +173,7 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 {it just load 16 bytes from memory into a XMM-register}.
 
 \item
-\PADDD (\IT{Add Packed Integers})\EMDASH\IFRU{складывает сразу 4 пары 32-битных чисел чисел и оставляет в первом операнде результат. 
+\PADDD (\IT{Add Packed Integers})\EMDASH\IFRU{складывает сразу 4 пары 32-битных чисел и оставляет в первом операнде результат. 
 Кстати, если произойдет переполнение, то исключения не произойдет и никакие флаги не установятся, 
 запишутся просто младшие 32 бита результата. 
 Если один из операндов \PADDD ~--- адрес значения в памяти, 
@@ -223,7 +223,7 @@ paddd   xmm1, xmm0
 movdqa  xmmword ptr [eax+edi*4], xmm1 ; ar3+i*4
 \end{lstlisting}
 
-\IFRU{А во всех остальных случаях, будет исполняться код, который был бы как если бы не была 
+\IFRU{А во всех остальных случаях, будет исполняться код, который был бы, как если бы не была 
 включена поддержка SSE2.}
 {In all other cases, non-SSE2 code will be executed.}
 
@@ -298,7 +298,7 @@ if not~---use slower \MOVDQU.}
 
 \IFRU{В \ac{OS} линии \gls{Windows NT}, и не только, память выделяется страницами по 4 KiB (4096 байт). 
 Каждый win32-процесс якобы имеет в наличии 4 GiB, но на самом деле, 
-только некоторые части этого адресного пространства присоеденены к реальной физической памяти. 
+только некоторые части этого адресного пространства присоединены к реальной физической памяти. 
 Если процесс обратится к блоку памяти, которого не существует, сработает исключение. 
 Так работает виртуальная память\footnote{\URLPAGE}.}
 {In \gls{Windows NT} line of \ac{OS} but not limited to it, memory allocated by pages of 4 KiB (4096 bytes).
@@ -341,7 +341,7 @@ and that is not a crime.}
   \end{tabular}
 \end{center}
 
-\IFRU{В обычных условиях, программа вызвает \strlen передав ей указатель на строку \TT{'hello'} 
+\IFRU{В обычных условиях, программа вызывает \strlen передав ей указатель на строку \TT{'hello'} 
 лежащую по адресу 0x008c1ff8. 
 \strlen будет читать по одному байту до 0x008c1ffd, где ноль, и здесь она закончит работу.}
 {So, in common conditions the program calling \strlen passing it a pointer to string \TT{'hello'} 
@@ -357,7 +357,7 @@ lying in memory at address 0x008c1ff8.
 and then exception will be raised.
 That's the situation to be avoided, of course.}
 
-\IFRU{Поэтому мы будем работать только с адресами выровненными по 16 байт, что в сочетании со знанием 
+\IFRU{Поэтому мы будем работать только с адресами, выровненными по 16 байт, что в сочетании со знанием 
 что размер страницы \ac{OS} также как правило выровнен по 16 байт, 
 даст некоторую гарантию что наша функция не будет пытаться читать из мест в невыделенной памяти.}
 {So then we'll work only with the addresses aligned on a 16 byte border, what in combination with a knowledge
@@ -450,7 +450,7 @@ XMM1: 0000ff00000000000000ff0000000000
 \IFRU{\TT{PMOVMSKB} в нашем случае подготовит \EAX вот так (в двоичном представлении):} 
 {\TT{PMOVMSKB} in our case will prepare \EAX like (in binary representation):} \IT{0010000000100000b}.
 
-\IFRU{Совершенно очевидно что далее наша функция должна учитывать только первый встретившийся
+\IFRU{Совершенно очевидно, что далее наша функция должна учитывать только первый встретившийся
 нулевой бит и игнорировать все остальное.}
 {Obviously, our function must consider only first zero bit and ignore the rest ones.}
 

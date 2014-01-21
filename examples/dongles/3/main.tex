@@ -7,7 +7,7 @@
 
 \index{8086}
 \index{80286}
-\IFRU{Во времена перед DOS-экстендерами, всё ПО для MS-DOS расчитывалось на процессоры 8086 или 80286,
+\IFRU{Во времена перед DOS-экстендерами, всё ПО для MS-DOS рассчитывалось на процессоры 8086 или 80286,
 так что в своей массе весь код был 16-битным}
 {In the pre-DOS extenders era, all the software for MS-DOS were mostly rely on 16-bit 8086 or 80286 CPUs,
 so en masse code was 16-bit}.
@@ -56,7 +56,7 @@ are also returned and compared with others}.
 перед USB отправлялись прямо сюда}
 {Output port address is usually 0x378, i.e.,
 printer port, the data to the old printers in pre-USB era were passed to it}.
-\IFRU{Порт однонаправленный, потому что когда его разрабатывали, никто не мог предположить
+\IFRU{Порт однонаправленный, потому что когда его разрабатывали, никто не мог предположить,
 что кому-то понадобится получать информацию из принтера}
 {The port is one-directional, because when it was developed, no one can imagined someone
 will need to transfer information from the printer}
@@ -66,7 +66,7 @@ will need to transfer information from the printer}
 the printer}.}.
 \IFRU{Единственный способ получить информацию из принтера это регистр статуса на порту 0x379,
 он содержит такие биты как ``paper out'', ``ack'', ``busy'' ~--- так принтер может сигнализировать
-о том что он готов или нет, и о том, есть ли в нем бумага}
+о том, что он готов или нет, и о том, есть ли в нем бумага}
 {The only way to get information from the printer, is a status register on port 0x379, it contain
 such bits as ``paper out'', ``ack'', ``busy''~---thus printer may signal to the host computer
 that it is ready or not and if a paper present in it}.
@@ -94,9 +94,9 @@ that it is ready or not and if a paper present in it}.
 \lstinputlisting{examples/dongles/3/3.lst}
 
 \IFRU{А так как эта ф-ция может вызываться слишком часто, например, 
-перед выполнением каждой важной фичи ПО,
+перед выполнением каждой важной возможности ПО,
 а обращение к донгле вообще-то медленное (и из-за медленного принтерного порта и из-за медленного
-\ac{MCU} в донгле), так что они наверное добавили возможность пропускать проверку донглы слишком часто,
+\ac{MCU} в донгле), так что они, наверное, добавили возможность пропускать проверку донглы слишком часто,
 используя текущее время в ф-ции \TT{biostime()}}
 {Since the routine may be called too frequently, e.g., before each important software feature executing, 
 and the dongle accessing process is generally slow (because of slow printer port and also slow
@@ -139,7 +139,7 @@ retf
 \label{dos_memory_model}
 \index{\CStandardLibrary!strcpy()}
 \IFRU{Наблюдательный читатель может заметить что ф-ция Си \TT{strcpy()} имеет 2 аргумента, но здесь
-мы видим что передается 4}
+мы видим, что передается 4}
 {Observant reader might recall that \TT{strcpy()} C function usually requires two pointers in arguments,
 but we saw how 4 values are passed}:
 
@@ -160,7 +160,7 @@ seg033:089C 83 C4 08                    add     sp, 8
 {was a 16-bit CPU, but was able to address 20-bit address RAM 
 (thus resulting 1MB external memory)}.
 \IFRU{Внешняя адресное пространство было разделено между \ac{RAM} (максимум 640KB),
-\ac{ROM}, окна для видеопамяти, EMS-карт, итд}
+\ac{ROM}, окна для видеопамяти, EMS-карт, и т.д}
 {External memory address space was divided between \ac{RAM} (640KB max),
 \ac{ROM}, windows for video memory, EMS cards, etc}.
 
@@ -210,9 +210,9 @@ addresses, so it recalculate segment register values in such way, so the program
 where in the RAM it is placed.}
 
 \IFRU{Так что, любой указатель в окружении старой MS-DOS на самом деле состоял из адреса сегмента
-и адреса внутри сегента, т.е., из двух 16-битных значений. 20-битного значения было бы достаточно для
+и адреса внутри сегмента, т.е., из двух 16-битных значений. 20-битного значения было бы достаточно для
 этого, хотя, тогда пришлось бы вычислять адреса слишком часто: так что передача большего количества
-информации в стеке это более хороший баланс между экономией места и удобством}
+информации в стеке ~--- это более хороший баланс между экономией места и удобством}
 {So, any pointer it old MS-DOS environment was in fact consisted of segment address and the address inside
 segment, i.e., two 16-bit values. 20-bit was enough for that, though, but one will need to recalculate
 the addresses very often: passing more information on stack is seems better space/convenience balance}.
@@ -226,7 +226,7 @@ the addresses very often: passing more information on stack is seems better spac
 works with 16-bit pairs}.
 
 \IFRU{Вернемся к нашему примеру}{Let's back to our example}.
-\TT{DS} \IFRU{сейчас указывает на сегмент данных размещенный в исполняемом файле, там где хранится текстовая
+\TT{DS} \IFRU{сейчас указывает на сегмент данных размещенный в исполняемом файле, там, где хранится текстовая
 строка.}
 {is currently set to data segment located in the executable,
 that is where the text string is stored.}
@@ -242,7 +242,7 @@ loads ES:BX pair simultaneously from the passed argument}.
 \IFRU{На \TT{seg030:00F2} \glslink{increment}{инкрементируется} только 16-битное слово,
 но не значение сегмента.}
 {At \TT{seg030:00F2} only 16-bit word is \glslink{increment}{incremented}, not segment value.}
-\IFRU{Это значит что переданная в ф-цию строка не может находится на границе двух сегментов.}
+\IFRU{Это значит, что переданная в ф-цию строка не может находится на границе двух сегментов.}
 {This means, the string passed to the function cannot be located on two data segments boundaries.}
 
 \index{80286}
@@ -260,7 +260,7 @@ MS-DOS was still popular, so the DOS extenders are emerged: these were in fact
 a step toward ``serious'' \ac{OS},
 switching CPU into protected mode and providing much better memory \ac{API}s for the programs 
 which still needs to be runned from MS-DOS.}
-\IFRU{Широко известные примеры это DOS/4GW (игра DOOM была скопилирована под него), Phar Lap, PMODE}
+\IFRU{Широко известные примеры это DOS/4GW (игра DOOM была скомпилирована под него), Phar Lap, PMODE}
 {Widely popular examples include DOS/4GW (DOOM video game was compiled for it), Phar Lap, PMODE.} \\
 \\
 \index{Windows 3.x}
