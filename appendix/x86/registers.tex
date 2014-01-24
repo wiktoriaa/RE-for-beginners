@@ -197,16 +197,41 @@ FS \InENRU win32 \IFRU{указывает на}{points to} \ac{TLS}, \IFRU{а в
 N.B.: \ac{IDA} \IFRU{называет}{calls} ST(0) \IFRU{просто}{as just} ST.
 \IFRU{Числа хранятся в формате}{Numbers are stored in the} IEEE 754\IFRU{}{ format}.
 
-\index{IEEE 754}
-\index{float}
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.66]{appendix/x86/762px-X86_Extended_Floating_Point_Format.png}
-\caption{\IFRU{Формат значения \IT{long double}\protect\footnotemark}
-{\IT{long double} value format\protect\footnotemark}}
-\end{figure}
+\IFRU{Формат значения \IT{long double}}{\IT{long double} value format}:
 
-\footnotetext{\IFRU{иллюстрация взята из}{illustration taken from} wikipedia}
+\bigskip
+% a hack used here! http://tex.stackexchange.com/questions/73524/bytefield-package
+\begin{center}
+\begingroup
+\makeatletter
+\let\saved@bf@bitformatting\bf@bitformatting
+\renewcommand*{\bf@bitformatting}{%
+	\ifnum\value{header@val}=21 %
+	\value{header@val}=62 %
+	\else\ifnum\value{header@val}=22 %
+	\value{header@val}=63 %
+	\else\ifnum\value{header@val}=23 %
+	\value{header@val}=64 %
+	\else\ifnum\value{header@val}=30 %
+	\value{header@val}=78 %
+	\else\ifnum\value{header@val}=31 %
+	\value{header@val}=79 %
+	\fi\fi\fi\fi\fi
+	\saved@bf@bitformatting
+}%
+\begin{bytefield}{32}
+	\bitheader[endianness=big]{0,21,22,23,30,31} \\
+	\bitbox{1}{S} &
+	\bitbox{8}{\IFRU{экспонента}{exponent}} &
+	\bitbox{1}{I} &
+	\bitbox{22}{\IFRU{мантисса}{mantissa or fraction}}
+\end{bytefield}
+\endgroup
+\end{center}
+
+\begin{center}
+( S\EMDASH{}\IFRU{знак}{sign}, I\EMDASH{}\IFRU{целочисленная часть}{integer part} )
+\end{center}
 
 \label{FPU_control_word}
 \subsubsection{\IFRU{Регистр управления}{Control Word}}
