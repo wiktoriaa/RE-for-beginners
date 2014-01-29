@@ -19,11 +19,11 @@ __sehtable$_main DD 0fffffffeH     ; GS Cookie Offset
 	DD	FLAT:$LN13@main    ; inner block handler
 xdata$x	ENDS
 
-$T2 = -40						; size = 4
-$T3 = -36						; size = 4
-_p$ = -32						; size = 4
-tv72 = -28						; size = 4
-__$SEHRec$ = -24					; size = 24
+$T2 = -40		; size = 4
+$T3 = -36		; size = 4
+_p$ = -32		; size = 4
+tv72 = -28		; size = 4
+__$SEHRec$ = -24	; size = 24
 _main	PROC
 	push	ebp
 	mov	ebp, esp
@@ -32,7 +32,7 @@ _main	PROC
 	push	OFFSET __except_handler4
 	mov	eax, DWORD PTR fs:0
 	push	eax                                     ; prev
-	add	esp, -24				; ffffffe8H
+	add	esp, -24
 	push	ebx
 	push	esi
 	push	edi
@@ -58,7 +58,7 @@ _main	PROC
 	call	_printf
 	add	esp, 4
 	mov	eax, DWORD PTR _p$[ebp]
-	mov	DWORD PTR [eax], 13			; 0000000dH
+	mov	DWORD PTR [eax], 13
 	mov	DWORD PTR __$SEHRec$[ebp+20], 0         ; exiting inner try block, set previous try level back to 0
 	jmp	SHORT $LN2@main
 
@@ -70,7 +70,7 @@ $LN18@main:
 	mov	edx, DWORD PTR [ecx]
 	mov	eax, DWORD PTR [edx]
 	mov	DWORD PTR $T3[ebp], eax
-	cmp	DWORD PTR $T3[ebp], -1073741819		; c0000005H
+	cmp	DWORD PTR $T3[ebp], -1073741819	; c0000005H
 	jne	SHORT $LN5@main
 	mov	DWORD PTR tv72[ebp], 1
 	jmp	SHORT $LN6@main
@@ -133,8 +133,8 @@ $LN7@main:
 	ret	0
 _main	ENDP
 
-_code$ = 8						; size = 4
-_ep$ = 12						; size = 4
+_code$ = 8	; size = 4
+_ep$ = 12	; size = 4
 _filter_user_exceptions PROC
 	push	ebp
 	mov	ebp, esp

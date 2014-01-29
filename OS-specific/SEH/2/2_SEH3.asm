@@ -14,9 +14,9 @@ $T74622	DD	0ffffffffH    ; previous try level
 
 CONST	ENDS
 _TEXT	SEGMENT
-$T74621 = -32						; size = 4
-_p$ = -28						; size = 4
-__$SEHRec$ = -24					; size = 24
+$T74621 = -32    ; size = 4
+_p$ = -28	 ; size = 4
+__$SEHRec$ = -24 ; size = 24
 _main	PROC NEAR
 	push	ebp
 	mov	ebp, esp
@@ -26,7 +26,7 @@ _main	PROC NEAR
 	mov	eax, DWORD PTR fs:__except_list
 	push	eax                             ; prev
 	mov	DWORD PTR fs:__except_list, esp
-	add	esp, -16				; fffffff0H
+	add	esp, -16
 	push	ebx   ; saved 3 registers
 	push	esi   ; saved 3 registers
 	push	edi   ; saved 3 registers
@@ -37,7 +37,7 @@ _main	PROC NEAR
 	call	_printf
 	add	esp, 4
 	mov	eax, DWORD PTR _p$[ebp]
-	mov	DWORD PTR [eax], 13			; 0000000dH
+	mov	DWORD PTR [eax], 13
 	push	OFFSET FLAT:$SG74606 ; 'hello #2!'
 	call	_printf
 	add	esp, 4
@@ -53,7 +53,7 @@ $L74627:
 	mov	eax, DWORD PTR [edx]
 	mov	DWORD PTR $T74621[ebp], eax
 	mov	eax, DWORD PTR $T74621[ebp]
-	sub	eax, -1073741819			; c0000005H
+	sub	eax, -1073741819; c0000005H
 	neg	eax
 	sbb	eax, eax
 	inc	eax

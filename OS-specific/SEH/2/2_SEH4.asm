@@ -14,19 +14,19 @@ __sehtable$_main DD 0fffffffeH  ; GS Cookie Offset
 	DD	FLAT:$LN8@main  ; handler
 xdata$x	ENDS
 
-$T2 = -36						; size = 4
-_p$ = -32						; size = 4
-tv68 = -28						; size = 4
-__$SEHRec$ = -24					; size = 24
+$T2 = -36		; size = 4
+_p$ = -32		; size = 4
+tv68 = -28		; size = 4
+__$SEHRec$ = -24	; size = 24
 _main	PROC
 	push	ebp
 	mov	ebp, esp
-	push	-2					; fffffffeH
+	push	-2
 	push	OFFSET __sehtable$_main
 	push	OFFSET __except_handler4
 	mov	eax, DWORD PTR fs:0
 	push	eax
-	add	esp, -20				; ffffffecH
+	add	esp, -20
 	push	ebx
 	push	esi
 	push	edi
@@ -43,7 +43,7 @@ _main	PROC
 	call	_printf
 	add	esp, 4
 	mov	eax, DWORD PTR _p$[ebp]
-	mov	DWORD PTR [eax], 13			; 0000000dH
+	mov	DWORD PTR [eax], 13
 	push	OFFSET $SG85486                   ; 'hello #2!'
 	call	_printf
 	add	esp, 4
@@ -58,7 +58,7 @@ $LN12@main:
 	mov	edx, DWORD PTR [ecx]
 	mov	eax, DWORD PTR [edx]
 	mov	DWORD PTR $T2[ebp], eax
-	cmp	DWORD PTR $T2[ebp], -1073741819		; c0000005H
+	cmp	DWORD PTR $T2[ebp], -1073741819	; c0000005H
 	jne	SHORT $LN4@main
 	mov	DWORD PTR tv68[ebp], 1
 	jmp	SHORT $LN5@main

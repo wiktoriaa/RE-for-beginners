@@ -6,8 +6,8 @@ $SG74619 DB	'0x112233 raised. now let''s crash', 0aH, 00H
 $SG74621 DB	'access violation, can''t recover', 0aH, 00H
 $SG74623 DB	'user exception caught', 0aH, 00H
 
-_code$ = 8						; size = 4
-_ep$ = 12						; size = 4
+_code$ = 8	; size = 4
+_ep$ = 12	; size = 4
 _filter_user_exceptions PROC NEAR
 	push	ebp
 	mov	ebp, esp
@@ -16,7 +16,7 @@ _filter_user_exceptions PROC NEAR
 	push	OFFSET FLAT:$SG74606 ; 'in filter. code=0x%08X'
 	call	_printf
 	add	esp, 8
-	cmp	DWORD PTR _code$[ebp], 1122867		; 00112233H
+	cmp	DWORD PTR _code$[ebp], 1122867; 00112233H
 	jne	SHORT $L74607
 	push	OFFSET FLAT:$SG74608 ; 'yes, that is our exception'
 	call	_printf
@@ -44,10 +44,10 @@ $T74644	DD	0ffffffffH   ; previous try level for outer block
 	DD	FLAT:$L74639 ; inner block handler
 CONST	ENDS
 
-$T74643 = -36						; size = 4
-$T74642 = -32						; size = 4
-_p$ = -28						; size = 4
-__$SEHRec$ = -24					; size = 24
+$T74643 = -36		; size = 4
+$T74642 = -32		; size = 4
+_p$ = -28		; size = 4
+__$SEHRec$ = -24	; size = 24
 _main	PROC NEAR
 	push	ebp
 	mov	ebp, esp
@@ -57,7 +57,7 @@ _main	PROC NEAR
 	mov	eax, DWORD PTR fs:__except_list
 	push	eax
 	mov	DWORD PTR fs:__except_list, esp
-	add	esp, -20				; ffffffecH
+	add	esp, -20
 	push	ebx
 	push	esi
 	push	edi
@@ -71,13 +71,13 @@ _main	PROC NEAR
 	push	0
 	push	0
 	push	0
-	push	1122867					; 00112233H
+	push	1122867	; 00112233H
 	call	DWORD PTR __imp__RaiseException@16
 	push	OFFSET FLAT:$SG74619 ; '0x112233 raised. now let''s crash'
 	call	_printf
 	add	esp, 4
 	mov	eax, DWORD PTR _p$[ebp]
-	mov	DWORD PTR [eax], 13			; 0000000dH
+	mov	DWORD PTR [eax], 13
 	mov	DWORD PTR __$SEHRec$[ebp+20], 0         ; inner try block exited. set previous try level back to 0
 	jmp	SHORT $L74615
 
@@ -90,7 +90,7 @@ $L74650:
 	mov	eax, DWORD PTR [edx]
 	mov	DWORD PTR $T74643[ebp], eax
 	mov	eax, DWORD PTR $T74643[ebp]
-	sub	eax, -1073741819			; c0000005H
+	sub	eax, -1073741819; c0000005H
 	neg	eax
 	sbb	eax, eax
 	inc	eax
