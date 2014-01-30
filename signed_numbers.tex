@@ -10,6 +10,41 @@
 {There are several methods of representing signed numbers\footnote{\URLS}, 
 but in x86 architecture used ``two's complement''.}
 
+\begin{center}
+\begin{tabular}{ | l | l | l | l | }
+\hline
+\cellcolor{blue!25} \IFRU{двоичное}{binary} & 
+\cellcolor{blue!25} \IFRU{шестнадцатеричное}{hexadecimal} & 
+\cellcolor{blue!25} \IFRU{беззнаковое}{unsigned} &
+\cellcolor{blue!25} \IFRU{знаковое}{signed} (\IFRU{дополнительный код}{2's complement}) \\
+\hline
+01111111 & 0x7f & 127 & 127 \\
+\hline
+01111110 & 0x7e & 126 & 126 \\
+\hline
+\multicolumn{4}{ |c| }{...} \\
+\hline
+00000010 & 0x2 & 2 & 2 \\
+\hline
+00000001 & 0x1 & 1 & 1 \\
+\hline
+00000000 & 0x0 & 0 & 0 \\
+\hline
+11111111 & 0xff & 255 & -1 \\
+\hline
+11111110 & 0xfe & 254 & -2 \\
+\hline
+\multicolumn{4}{ |c| }{...} \\
+\hline
+10000010 & 0x82 & 130 & -126 \\
+\hline
+10000001 & 0x81 & 129 & -127 \\
+\hline
+10000000 & 0x80 & 128 & -128 \\
+\hline
+\end{tabular}
+\end{center}
+
 \index{x86!\Instructions!JA}
 \index{x86!\Instructions!JB}
 \index{x86!\Instructions!JL}
@@ -23,7 +58,28 @@ but in x86 architecture used ``two's complement''.}
 as unsigned, then first number ($4294967294$) is bigger than second ($2$). 
 If to represent them both as signed, first will be $-2$, and it is lesser than second ($2$). 
 That is the reason why conditional jumps~(\ref{sec:Jcc}) are present both for signed (e.g. \JG, \JL) 
-and unsigned (\JA, \JB) operations.}
+and unsigned (\JA, \JB) operations.} \\
+\\
+\IFRU{Для простоты, вот что нужно знать}{For the sake of simplicity, that is what one need to know}:
+\begin{itemize}
+\item \IFRU{Числа бывают знаковые и беззнаковые}{Number can be signed or unsigned}.
+\item \IFRU{Знаковые типы в \CCpp}{\CCpp signed types}:
+	\TT{int} (-2147483646..2147483647 \OrENRU \TT{0x80000000..0x7FFFFFFF}),
+	\TT{char} (-127..128 \OrENRU \TT{0x7F..0x80}).
+	\IFRU{Беззнаковые}{Unsigned}: \TT{unsigned int} (0..4294967295 \OrENRU \TT{0..0xFFFFFFFF}),
+	\TT{unsigned char} (0..255 \OrENRU \TT{0..0xFF}),
+	\TT{size\_t}.
+\item \IFRU{У знаковых чисел знак определяется самым старшим битом: 1 означает ``минус'', 0 означает ``плюс''}
+	{Signed types has sign in the most significant bit: 1 mean ``minus'', 0 mean ``plus''}.
+\item \IFRU{Инструкции сложения и вычитания работают одинаково хорошо и для знаковых и для беззнаковых значений}
+	{Addition and subtraction operations are working well for both signed and unsigned values}.
+	\IFRU{Но для операций умножения и деления, в x86 имеются разные инструкции}
+	{But for multiplication and division operations, x86 has different instructions}:
+	\TT{IDIV}/\TT{IMUL} \IFRU{для знаковых}{for signed}
+	\AndENRU \TT{DIV}/\TT{MUL} \IFRU{для беззнаковых}{for unsigned}.
+\item \IFRU{Еще инструкции работающие с знаковыми числами}{More instructions working with signed numbers}:
+	\TT{CBW/CWD/CWDE/CDQ/CDQE} (\ref{ins:CBW_CWD_etc}), \TT{MOVSX} (\ref{MOVSX}), \TT{SAR} (\ref{ins:SAR}).
+\end{itemize}
 
 \subsection{\IFRU{Переполнение integer}{Integer overflow}}
 
