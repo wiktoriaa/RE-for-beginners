@@ -1,0 +1,109 @@
+\section{\IFRU{64-битные значения в 32-битной среде}{64-bit values in 32-bit environment}}
+\label{sec:64bit_in_32_env}
+
+\IFRU{В среде, где \ac{GPR}-ы 32-битные, 64-битные значения передаются как пары 32-битных значений}
+{In the 32-bit environment \ac{GPR}'s are 32-bit, so 64-bit values are passed as 32-bit value pairs}
+\footnote{\IFRU{Кстати, в 16-битной среде, 32-битные значения передаются 16-битными парами точно так же}
+{By the way, 32-bit values are passed as pairs in 16-bit environment just as the same}}.
+
+\subsection{\IFRU{Передача аргументов, сложение, вычитание}{Arguments passing, addition, subtraction}}
+
+\lstinputlisting{patterns/185_64bit_in_32_env/1.c}
+
+\lstinputlisting[caption=MSVC 2012 /Ox /Ob1]{patterns/185_64bit_in_32_env/1_MSVC.asm}
+
+\IFRU{В}{We may see in the} \TT{f1\_test()} \IFRU{видно как каждое 64-битное число передается двумя 32-битными значениями,
+сначала старшая часть, затем младшая}{function as each 64-bit value is passed by two 32-bit values,
+high part first, then low part}. \\
+\\
+\IFRU{Сложение и вычитание происходит также парами}{Addition and subtraction occurring by pairs as well}. \\
+\\
+\index{x86!\Instructions!ADC}
+\IFRU{При сложении, в начале складываются младшие 32 бита}{While addition, low 32-bit part are added first}.
+\IFRU{Если при сложении был перенос, выставляется флаг CF}{If carry was occurred while addition, CF flag is set}.
+\IFRU{Следующая инструкция \TT{ADC} складывает старшие части чисел, но также прибавляет единицу если CF=1}
+{The next \TT{ADC} instruction adds high parts of values, but also adding 1 if CF=1}. \\
+\\
+\index{x86!\Instructions!SBB}
+\IFRU{Вычитание также происходит парами}{Subtraction is also occurred by pairs}.
+\IFRU{Первый}{The very first} \SUB \IFRU{может также включить флаг переноса CF, который затем будет проверяться в \TT{SBB}}
+{may also turn CF flag on, which will be checked in the subsequent \TT{SBB} instruction}:
+\IFRU{если флаг переноса включен, то от результата отнимется единица}{if carry flag is on, then 1 will also be subtracted
+from the result}. \\
+\\
+\IFRU{64-битные значения в 32-битной среде возвращаются из ф-ций в паре регистров \EDX{}:\EAX{}}
+{In a 32-bit environment, 64-bit values are returned from a functions in \EDX{}:\EAX{} registers pair}.
+\IFRU{Легко увидеть, как результат работы \TT{f1()} затем передается в \printf{}}{It is easily can be seen how
+\TT{f1()} function is then passed to \printf{}}.
+
+\lstinputlisting[caption=GCC 4.8.1 -O1 -fno-inline]{patterns/185_64bit_in_32_env/1_GCC.asm}
+
+\IFRU{Код GCC почти такой же}{GCC code is the same}.
+
+\subsection{\IFRU{Умножение, деление}{Multiplication, division}}
+
+\lstinputlisting{patterns/185_64bit_in_32_env/2.c}
+
+\lstinputlisting[caption=MSVC 2012 /Ox /Ob1]{patterns/185_64bit_in_32_env/2_MSVC.asm}
+
+\IFRU{Умножение и деление это более сложная операция, так что обычно, компилятор встраивает вызовы библиотечных ф-ций,
+делающих это}{Multiplication and division is more complex operation, so usually, the compiler embedds calls to
+the library functions doing that}. \\
+\\
+\IFRU{Значение этих библиотечных ф-ций, здесь}{These functions meaning are here}: \ref{sec:MSVC_library_func}.
+
+\lstinputlisting[caption=GCC 4.8.1 -O3 -fno-inline]{patterns/185_64bit_in_32_env/2_GCC.asm}
+
+\IFRU{GCC делает почти то же самое, тем не менее,
+встраивает код умножения прямо в ф-цию, посчитав что так будет эффективнее}{GCC doing almost the same, but multiplication
+code is inlined right in the function, thinking it could be more efficient}.
+\IFRU{У GCC другие имена библиотечных ф-ций}{GCC has different library function names}: \ref{sec:GCC_library_func}.
+
+\subsection{\IFRU{Сдвиг вправо}{Shifting right}}
+
+\lstinputlisting{patterns/185_64bit_in_32_env/3.c}
+
+\lstinputlisting[caption=MSVC 2012 /Ox /Ob1]{patterns/185_64bit_in_32_env/3_MSVC.asm}
+
+\lstinputlisting[caption=GCC 4.8.1 -O3 -fno-inline]{patterns/185_64bit_in_32_env/3_GCC.asm}
+
+\index{x86!\Instructions!SHRD}
+\IFRU{Сдвиг происходит также в две операции: в начале сдвигается младшая часть, затем старшая}
+{Shifting also occurring in two passes: first lower part is shifting, then higher part}.
+\IFRU{Но младшая часть сдвигается
+при помощи инструкции \TT{SHRD}, она сдвигает значение в \EDX{} на 7 бит, но подтягивает новые биты из \EAX{}, т.е., из старшей части}
+{But the lower part is shifting with the help of \TT{SHRD} instruction, it shifting \EDX{} value by 7 bits, but pulling new bits
+from \EAX{}, i.e., from the higher part}.
+\IFRU{Старшая часть сдвигается более известной инструкцией \SHR{}: действительно, ведь освободившиеся биты в старшей части нужно
+просто заполнить нулями}{Higher part is shifting using more popular \SHR{} instruction: indeed, freed bits in the higher part
+should be just filled with zeroes}.
+
+\subsection{\IFRU{Конвертирование 32-битного значения в 64-битное}{Converting of 32-bit value into 64-bit one}}
+\label{subsec:sign_extending_32_to_64}
+
+\lstinputlisting{patterns/185_64bit_in_32_env/4.c}
+
+\lstinputlisting[caption=MSVC 2012 /Ox /Ob1]{patterns/185_64bit_in_32_env/4_MSVC.asm}
+
+\IFRU{Здесь появляется необходимость расширить 32-битное знаковое значение из $c$ в 64-битное знаковое}
+{Here we also run into necessity to extend 32-bit signed value from $c$ into 64-bit signed}.
+\IFRU{Конвертировать беззнаковые значения очень просто: нужно просто выставить в 0 все биты в старшей части}
+{Unsigned values are converted straightforwardly: all bits in higher part should be set to 0}.
+\IFRU{Но для знаковых типов это не подходит: знак числа должен быть скопирован в старшую часть числа-результата}
+{But it is not appropriate for signed data types: sign should be copied into higher part of resulting number}.
+\index{x86!\Instructions!CDQ}
+\IFRU{Здесь это делает инструкция \TT{CDQ}, она берет входное значение в \EAX{}, расширяет число до 64-битного,
+и оставляет его в паре регистров \EDX{}:\EAX{}}
+{An instruction \TT{CDQ} doing that here, it takes input value in \EAX{}, extending value to 64-bit and leaving it
+in the \EDX{}:\EAX{} registers pair}.
+\IFRU{Иными словами, инструкция \TT{CDQ} узнает знак числа в \EAX{} (просто берет самый старший бит в \EAX{}) и в зависимости от этого,
+выставляет все 32 бита в \EDX{} в 0 или в 1}{In other words, \TT{CDQ} instruction getting number sign in \EAX{} (by getting just
+most significant bit in \EAX{}), and depending of it, setting all 32-bits in \EDX{} to 0 or 1}.
+\IFRU{Её работа в каком-то смысле напоминает работу инструкции \MOVSX{}}{Its operation is somewhat
+similar to the \MOVSX{} instruction}.
+
+\lstinputlisting[caption=GCC 4.8.1 -O3 -fno-inline]{patterns/185_64bit_in_32_env/4_GCC.asm}
+
+\IFRU{GCC генерирует такой же код как и MSVC, но обходится без вызова библиотечной ф-ции для перемножения значений.}
+{GCC generates just the same code as MSVC, but inlines multiplication code right in the function.}
+
