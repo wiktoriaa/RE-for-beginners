@@ -1,5 +1,25 @@
 \section{\IFRU{Подозрительные паттерны кода}{Suspicious code patterns}}
 
+\subsection{\IFRU{Инструкции XOR}{XOR instructions}}
+\index{x86!\Instructions!XOR}
+
+\IFRU{Инструкции вроде}{instructions like} \TT{XOR op, op} (\IFRU{например}{for example}, \TT{XOR EAX, EAX}) 
+\IFRU{обычно используются для обнуления регистра,
+однако, если операнды разные, то применяется операция именно}{are usually used for setting register value
+to zero, but if operands are different,} \IT{\IFRU{исключающего или}{exclusive or}}\IFRU{}{ operation
+is executed}.
+\IFRU{Эта операция очень редко применяется в обычном программировании, но применяется очень часто в криптографии,
+включая любительскую}{This operation is rare in common programming, but used often in cryptography,
+including amateur}.
+\IFRU{Особенно подозрительно, если второй операнд это большое 32-битное число}{Especially suspicious case if the
+second operand is big 32-bit number}.
+\IFRU{Это может указывать на шифрование, вычисление контрольной суммы, итд}
+{This may points to encrypting/decrypting, checksum computing, etc}.\\
+\\
+\IFRU{Одно из исключений из правила о котором стоит сказать, то, что генерация и проверка значения ``канарейки''
+(\ref{subsec:BO_protection}) часто происходит используя инструкцию \XOR}
+{One exception worth to note is ``canary'' (\ref{subsec:BO_protection}) generation and checking is often done using \XOR instruction}.
+
 \subsection{\IFRU{Вручную написанный код на ассемблере}{Hand-written assembly code}}
 
 \index{Function prologue}
@@ -13,16 +33,16 @@
 {Modern compilers do not emit \TT{LOOP} and \TT{RCL} instructions.
 On the other hand, these instructions are well-known to coders who like to code in straight assembly language.
 If you spot these, it can be said, with a high probability, this fragment of code is hand-written.
-Such instructions are marked as (M) in the instructions list in appendix: \ref{sec:x86_instructions}.}
-
+Such instructions are marked as (M) in the instructions list in appendix: \ref{sec:x86_instructions}.}\\
+\\
 \IFRU{Также, пролог/эпилог функции обычно не встречается в ассемблерном коде, написанном вручную.}
-{Also function prologue/epilogue is not commonly present in hand-written assembly copy.}
-
+{Also function prologue/epilogue is not commonly present in hand-written assembly copy.}\\
+\\
 \IFRU{Как правило, в вручную написанном коде, нет никакого четкого метода передачи аргументов в 
 функцию}
 {Commonly there is no fixed system in passing arguments into functions in the hand-written
-code}.
-
+code}.\\
+\\
 \IFRU{Пример из ядра}{Example from} Windows 2003\IFRU{}{ kernel} 
 (\IFRU{файл }{}ntoskrnl.exe\IFRU{}{ file}):
 

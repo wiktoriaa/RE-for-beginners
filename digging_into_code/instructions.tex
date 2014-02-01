@@ -3,31 +3,31 @@
 \IFRU{Если программа использует инструкции сопроцессора, и их не очень много, 
 то можно попробовать вручную проверить отладчиком какую-то из них.}
 {If the program is utilizing FPU instructions and there are very few of them in a code,
-one can try to check each one manually by debugger.}
-
+one can try to check each one manually by debugger.}\\
+\\
 \IFRU{К примеру, нас может заинтересовать, при помощи чего Microsoft Excel считает 
 результаты формул введенных пользователем. Например, операция деления.}
 {For example, we may be interesting, how Microsoft Excel calculating formulae entered by user.
-For example, division operation.}
-
+For example, division operation.}\\
+\\
 \index{\GrepUsage}
 \IFRU{Если загрузить excel.exe (из Office 2010) версии 14.0.4756.1000 в \IDA, затем сделать полный листинг 
 и найти все инструкции \FDIV (но кроме тех, которые в качестве второго операнда используют константы ~--- они, 
 очевидно, не подходят нам):}
 {If to load excel.exe (from Office 2010) version 14.0.4756.1000 into \IDA, then make a full listing
 and to find each \FDIV instructions (except ones which use constants as a second 
-operand~---obviously, it is not suits us):}
+operand~---obviously, it is not suits us):}\\
 
 \begin{lstlisting}
 cat EXCEL.lst | grep fdiv | grep -v dbl_ > EXCEL.fdiv
 \end{lstlisting}
 
 \IFRU{\dots то окажется, что их всего 144.}
-{\dots then we realizing they are just 144.}
-
+{\dots then we realizing they are just 144.}\\
+\\
 \IFRU{Мы можем вводить в Excel строку вроде \TT{=(1/3)} и проверить все эти инструкции.}
-{We can enter string like \TT{=(1/3)} in Excel and check each instruction.}
-
+{We can enter string like \TT{=(1/3)} in Excel and check each instruction.}\\
+\\
 \IFRU{Проверяя каждую инструкцию в отладчике или \tracer 
 (проверять эти инструкции можно по 4 за раз), 
 окажется, что нам везет и срабатывает всего лишь 14-я по счету:}
@@ -51,11 +51,11 @@ FPU ST(0): 1.000000
 \end{lstlisting}
 
 \IFRU{В \STZERO содержится первый аргумент (1), второй содержится в}
-{\STZERO holding first argument (1) and second one is in} \TT{[ebx]}.
-
+{\STZERO holding first argument (1) and second one is in} \TT{[EBX]}.\\
+\\
 \index{x86!\Instructions!FDIV}
 \IFRU{Следующая за \FDIV инструкция записывает результат в память:}
-{Next instruction after \FDIV writes result into memory:}
+{Next instruction after \FDIV writes result into memory:}\\
 
 \begin{lstlisting}
 .text:3011E91B DD 1E                                fstp    qword ptr [esi]
@@ -76,7 +76,7 @@ FPU ST(0): 0.333333
 \end{lstlisting}
 
 \IFRU{А также, в рамках пранка\footnote{practical joke}, модифицировать его на лету:}
-{Also as a practical joke, we can modify it on-fly:}
+{Also as a practical joke, we can modify it on-fly:}\\
 
 \begin{lstlisting}
 tracer -l:excel.exe bpx=excel.exe!BASE+0x11E91B,set(st0,666)
