@@ -1,8 +1,6 @@
 CONST    SEGMENT
 $SG3831    DB    'Enter X:', 0aH, 00H
-    ORG $+2
 $SG3832    DB    '%d', 00H
-    ORG $+1
 $SG3833    DB    'You entered %d...', 0aH, 00H
 CONST    ENDS
 PUBLIC    _main

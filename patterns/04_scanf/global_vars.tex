@@ -14,21 +14,17 @@ It is not very good programming practice, but for the sake of experiment we coul
 
 \IFRU
 {Ничего особенного, в целом. Теперь \TT{x} объявлена в сегменте \TT{\_DATA}. 
-Память для нее в стеке более не выделяется. Все обращения к ней происходит не через стек, а уже напрямую. 
-Её значение не определено. 
-Это означает, что память под нее будет выделена, но ни компилятор, ни \ac{OS} не будет заботиться о том, 
-что там будет лежать на момент старта функции \main.
-В качестве домашнего задания, попробуйте объявить большой неопределенный массив и посмотреть 
-что там будет лежать после загрузки.}
+Память для нее в стеке более не выделяется.
+Все обращения к ней происходит не через стек, а уже напрямую. 
+Место в исполняемом файле для нее не определено (и действительно, зачем в исполняемом файле
+нужно выделять место под изначально нулевые переменные?), но тогда, когда к этому месту в памяти
+кто-то обратится, \ac{OS} подставит туда блок состоящий из нулей\footnote{Так работает \ac{VM}}.}
 {Now \TT{x} variable is defined in the \TT{\_DATA} segment. 
 Memory in local stack is not allocated anymore. 
 All accesses to it are not via stack but directly to process memory. 
-Its value is not defined. 
-This means the memory will be allocated by \ac{OS}, but not compiler, 
-neither \ac{OS} will not take care about its initial value at the moment of 
-the \main function start.
-As experiment, try to declare large array and see what will it contain after 
-program loading.}
+There are no place for it in the executable file (indeed, why we should allocate a place
+in the executable file for initially zeroed variables?), but when someone will access this place
+in memory, \ac{OS} will allocate a block of zeroes there\footnote{That is how \ac{VM} behaves}.}
 
 \IFRU{Попробуем изменить объявление этой переменной:}
 {Now let's assign value to variable explicitly:}

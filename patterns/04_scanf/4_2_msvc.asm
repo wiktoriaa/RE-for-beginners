@@ -1,9 +1,7 @@
 _DATA    SEGMENT
 COMM    _x:DWORD
 $SG2456    DB    'Enter X:', 0aH, 00H
-    ORG $+2
 $SG2457    DB    '%d', 00H
-    ORG $+1
 $SG2458    DB    'You entered %d...', 0aH, 00H
 _DATA    ENDS
 PUBLIC    _main
