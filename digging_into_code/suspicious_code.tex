@@ -11,14 +11,14 @@ is executed}.
 \IFRU{Эта операция очень редко применяется в обычном программировании, но применяется очень часто в криптографии,
 включая любительскую}{This operation is rare in common programming, but used often in cryptography,
 including amateur}.
-\IFRU{Особенно подозрительно, если второй операнд это большое 32-битное число}{Especially suspicious case if the
-second operand is big 32-bit number}.
+\IFRU{Особенно подозрительно, если второй операнд это большое число}{Especially suspicious case if the
+second operand is big number}.
 \IFRU{Это может указывать на шифрование, вычисление контрольной суммы, итд}
 {This may points to encrypting/decrypting, checksum computing, etc}.\\
 \\
-\IFRU{Одно из исключений из правила о котором стоит сказать, то, что генерация и проверка значения ``канарейки''
+\IFRU{Одно из исключений из этого наблюдения о котором стоит сказать, то, что генерация и проверка значения ``канарейки''
 (\ref{subsec:BO_protection}) часто происходит используя инструкцию \XOR}
-{One exception worth to note is ``canary'' (\ref{subsec:BO_protection}) generation and checking is often done using \XOR
+{One exception to this observation worth to note is ``canary'' (\ref{subsec:BO_protection}) generation and checking is often done using \XOR
 instruction}. \\
 \\
 \index{AWK}
@@ -26,13 +26,13 @@ instruction}. \\
 {This AWK script can be used for processing \IDA{} listing (.lst) files}:
 
 \begin{lstlisting}
-gawk -e '$2=="xor" { tmp=substr($3, 0, length($3)-1); if (tmp!=$4) if($4!="esp") if ($4!="ebp") { print $1, $2, tmp, ",", $4
-} }' filename.lst
+gawk -e '$2=="xor" { tmp=substr($3, 0, length($3)-1); if (tmp!=$4) if($4!="esp") if ($4!="ebp") { print $1, $2, tmp, ",", $4 } }' filename.lst
 \end{lstlisting}
 
 \IFRU{Нельзя также забывать,
-что если использовать подобный скрипт, то возможно он захватит и неверно дизассемблированный
-код}{It is also worth to note that such script may also capture incorrectly disassembled code}.
+что если использовать подобный скрипт, то, возможно, он захватит и неверно дизассемблированный
+код}{It is also worth to note that such script may also capture incorrectly disassembled code} 
+(\ref{sec:incorrectly_disasmed_code}).
 
 \subsection{\IFRU{Вручную написанный код на ассемблере}{Hand-written assembly code}}
 
