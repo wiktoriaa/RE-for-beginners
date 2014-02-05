@@ -198,8 +198,6 @@ but larger may save its values for further use.}
 
 \lstinputlisting[caption=MSVC 2012 /0b]{calling_conventions/x64_MSVC_Ob.asm}
 
-% to be proofreaded (begin)
-
 \index{Scratch space}
 \IFRU{Здесь мы легко видим как 7 аргументов передаются: 4 через регистры и остальные 3 через стек}
 {Here we clearly see how 7 arguments are passed: 4 via registers and the rest 3 via stack}.
@@ -248,8 +246,6 @@ register (RAX).
 This is because each write to low 32-bit part of register automatically clears high 32 bits.
 Supposedly, it was done for x86-64 code porting simplification.}
 
-% to be proofreaded (end)
-
 \subsection{\IFRU{Возвращение переменных типа \Tfloat, \Tdouble}{Returning values of \Tfloat and \Tdouble type}}
 \index{float}
 \index{double}
@@ -259,4 +255,26 @@ Supposedly, it was done for x86-64 code porting simplification.}
 
 \IFRU{В Win64 переменные типа \Tfloat и \Tdouble возвращаются в регистре \XMMZERO вместо \STZERO.}
 {In Win64, values of \Tfloat and \Tdouble types are returned in the \XMMZERO register instead of the \STZERO.}
+
+\subsection{\IFRU{Модификация аргументов}{Modifying arguments}}
+
+\IFRU{Иногда программисты на \CCpp{} (и не только этих \ac{PL}) задаются вопросом,
+что будет если модифицировать аргументы?}
+{Sometimes, \CCpp{} programmers (not limited to these \ac{PL}, though),
+may ask, what will happen if to modify arguments?}
+\IFRU{Ответ прост: аргументы хранятся в стеке, именно там и будет происходит модификация.}
+{The answer is simple: arguments are stored in the stack, that is where modification will occurr.}
+\IFRU{А вызывающие ф-ции не использует их после вызова ф-ции (обратного случая в своей практике я не видел
+ни разу).}
+{Calling functions are not use them after \gls{callee} exit (I have not seen any opposite case in my practice).}
+
+\lstinputlisting{calling_conventions/change_arguments.c}
+
+\lstinputlisting[caption=MSVC 2012]{calling_conventions/change_arguments.asm}
+
+\IFRU{Следовательно, модифицировать аргументы ф-ции можно запросто.}{So yes, one may modify arguments easily.}
+\IFRU{Разумеется, если это не}{Of course, if it is not} \IT{references} \InENRU \Cpp{} (\ref{cpp_references}),
+\IFRU{и если вы не модифицируете данные по указателю}{and if you not modify data a pointer pointing to} 
+(\IFRU{тогда эффект распространится не только на текущую ф-цию}
+{then the effect will be propagated outside of current function}).
 
