@@ -225,6 +225,32 @@ it is not very important}.
 (\IFRU{там принято отладочную информацию сохранять в отдельных PDB-файлах}
 {a separate PDB-files are used there for this purpose}).
 
+\IFRU{Вот как секция описывается в файле}{That is how section described in the file}:
+
+\begin{lstlisting}
+typedef struct _IMAGE_SECTION_HEADER {
+  BYTE  Name[IMAGE_SIZEOF_SHORT_NAME];
+  union {
+    DWORD PhysicalAddress;
+    DWORD VirtualSize;
+  } Misc;
+  DWORD VirtualAddress;
+  DWORD SizeOfRawData;
+  DWORD PointerToRawData;
+  DWORD PointerToRelocations;
+  DWORD PointerToLinenumbers;
+  WORD  NumberOfRelocations;
+  WORD  NumberOfLinenumbers;
+  DWORD Characteristics;
+} IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;
+\end{lstlisting}
+\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms680341(v=vs.85).aspx}}
+
+\index{Hiew}
+\IFRU{Еще немного терминологии}{A word about terminology}:
+\IT{PointerToRawData} \IFRU{называется}{it called} ``Offset''
+\AndENRU \IT{VirtualAddress} \IFRU{называется}{is called} ``RVA'' \InENRU Hiew.
+
 \subsubsection{\IFRU{Релоки}{Relocations (relocs)}}
 
 \IFRU{Так же известны как FIXUP-ы}{\ac{AKA} FIXUP-s}.
