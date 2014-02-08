@@ -1,0 +1,48 @@
+wcl -i=C:\WATCOM\h\win\ -s -os -bt=windows -bcl=windows ex6.c
+
+WinMain         proc near
+
+var_4           = word ptr -4
+var_2           = word ptr -2
+
+                push    bp
+                mov     bp, sp
+                push    ax
+                push    ax
+                xor     ax, ax
+                call    time_
+                mov     [bp+var_4], ax
+                mov     [bp+var_2], dx
+                lea     ax, [bp+var_4]
+                call    localtime_
+                mov     bx, ax
+                push    word ptr [bx]
+                push    word ptr [bx+2]
+                push    word ptr [bx+4]
+                push    word ptr [bx+6]
+                push    word ptr [bx+8]
+                mov     ax, [bx+0Ah]
+                add     ax, 1900
+                push    ax
+                mov     ax, offset a04d02d02d02d02 ; "%04d-%02d-%02d %02d:%02d:%02d"
+                push    ax
+                mov     ax, offset strbuf
+                push    ax
+                call    sprintf_
+                add     sp, 10h
+                xor     ax, ax
+                push    ax
+                push    ds
+                mov     ax, offset strbuf
+                push    ax
+                push    ds
+                mov     ax, offset aCaption ; "caption"
+                push    ax
+                xor     ax, ax          ; MB_OK
+                push    ax
+                call    MESSAGEBOX
+                xor     ax, ax
+                mov     sp, bp
+                pop     bp
+                retn    0Ah
+WinMain         endp
