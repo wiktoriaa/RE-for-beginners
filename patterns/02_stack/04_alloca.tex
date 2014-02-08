@@ -25,7 +25,7 @@ allocated memory will be just annulled.}
 {It is worth noting how \TT{alloca()} implemented.}
 
 \IFRU{Эта функция, если упрощенно, просто сдвигает \ESP вглубь стека 
-на столько байт сколько вам нужно и возвращает \ESP в качестве указателя на выделенный блок.}
+на столько байт, сколько вам нужно и возвращает \ESP в качестве указателя на выделенный блок.}
 {This function, if to simplify, just shifting \ESP deeply to stack bottom so much bytes you 
 need and set \ESP as a pointer to the \IT{allocated} block.}
 \IFRU{Попробуем:}{Let's try:}
@@ -50,18 +50,18 @@ function calls might be replaced by one \printf call, but I would like to illust
 \IFRU {Единственный параметр в \TT{alloca()} передается через \EAX, а не как обычно через стек}
 {The sole \TT{alloca()} argument passed via \EAX (instead of pushing into stack)}
 \footnote{
-\IFRU{Это потому что alloca() это не сколько функция, сколько т.е. \IT{compiler intrinsic} (\ref{sec:compiler_intrinsic})}
+\IFRU{Это потому, что alloca() ~--- это не сколько функция, сколько т.н. \IT{compiler intrinsic} (\ref{sec:compiler_intrinsic})}
 {It is because alloca() is rather compiler intrinsic (\ref{compiler_intrinsic}) than usual function}.
 
-\IFRU{Одна из причин, почему здесь нужна именно ф-ция а не несколько инструкций прямо в коде, в том что в реализации 
-ф-ции alloca() от \ac{MSVC}
-есть так же код читающий из только что выделенной памяти, чтобы \ac{OS} подключила физическую память к этому региону \ac{VM}.}
+\IFRU{Одна из причин, почему здесь нужна именно функция, а не несколько инструкций прямо в коде в том, что в реализации 
+функции alloca() от \ac{MSVC}
+есть также код, читающий из только что выделенной памяти, чтобы \ac{OS} подключила физическую память к этому региону \ac{VM}.}
 {One of the reason the is in the separated function instead of couple instructions just in the code,
 because \ac{MSVC} implementation
 of the alloca() function also has a code which reads from the memory just allocated, in order to let \ac{OS} to map
 physical memory to this \ac{VM} region.}
 }.
-\IFRU{После вызова \TT{alloca()}, \ESP теперь указывает на блок в 600 байт который 
+\IFRU{После вызова \TT{alloca()}, \ESP теперь указывает на блок в 600 байт, который 
 мы можем использовать под \TT{buf}.}
 {After \TT{alloca()} call, \ESP is now pointing to the block of 600 bytes and we can 
 use it as memory for \TT{buf} array.}
@@ -80,11 +80,11 @@ use it as memory for \TT{buf} array.}
 \lstinputlisting[caption=GCC 4.7.3]{patterns/02_stack/2_1_gcc_ATT_O3.s}
 
 \index{\ATTSyntax}
-\IFRU{Всё то же самое что и в прошлом листинге.}{The same code as in previos listing.}
+\IFRU{Всё то же самое, что и в прошлом листинге.}{The same code as in previos listing.}
 
 N.B. \IFRU{Например,}{E.g.} \TT{movl \$3, 20(\%esp)} 
-\IFRU{это аналог}{is analogous to} \TT{mov DWORD PTR [esp+20], 3} \IFRU{в Intel-синтаксисе}
-{in Intel-syntax}\IFRU{ ~--- при адресации памяти в виде}{~---when addressing memory in form} \IT{\IFRU{регистр+смещение}{register+offset}}, 
+\IFRU{ ~--- это аналог}{is analogous to} \TT{mov DWORD PTR [esp+20], 3} \IFRU{в Intel-синтаксисе:}
+{in Intel-syntax}\IFRU{ при адресации памяти в виде}{~---when addressing memory in form} \IT{\IFRU{регистр+смещение}{register+offset}}, 
 \IFRU{это записывается в AT\&T синтаксисе как}{it is written in AT\&T syntax as} 
 \TT{\IFRU{смещение}{offset}(\%\IFRU{регистр}{register})}.
 
