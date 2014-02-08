@@ -50,12 +50,12 @@ void printf_main2()
 
 \index{ARM!\Instructions!STR}
 \IFRU{Самая первая инструкция}{The very first} \TT{``STR LR, [SP,\#var\_4]!''} 
-\IFRU{сохраняет в стеке \LR, ведь, нам придется использовать этот регистр для вызова \printf}
+\IFRU{сохраняет в стеке \LR, ведь нам придется использовать этот регистр для вызова \printf}
 {instruction saves the \LR on the stack, because we will use this register for \printf call}.
 
 \index{ARM!\Instructions!SUB}
 \IFRU{Вторая инструкция}{The second} \TT{``SUB SP, SP, \#0x14''}
-\IFRU{уменьшает \glslink{stack pointer}{указатель стека} \SP, но на самом деле, эта процедура нужна для выделения в локальном стеке места размером \TT{0x14} ($20$) байт}
+\IFRU{уменьшает \glslink{stack pointer}{указатель стека} \SP, но, на самом деле, эта процедура нужна для выделения в локальном стеке места размером \TT{0x14} ($20$) байт}
 {instruction decreasing
 \SP \gls{stack pointer}, but in fact, 
 this procedure is needed for allocating a space of size \TT{0x14} ($20$) bytes in the stack}.
@@ -73,23 +73,23 @@ are written to the \Rzero, \Rone, \Rtwo and \Rthree registers respectively}.
 \IFRU{записывает в регистр \TT{R12} адрес места в стеке, куда будут помещены эти 4 значения}
 {instruction writes an address of the point in the stack, where these 4 variables will be written, into the \TT{R12} register}.
 \index{IDA!var\_?}
-\IT{var\_14} \IFRU{это макрос ассемблера}{is an assembly macro}, \IFRU{равный}{equal to} $-0x14$, 
+\IT{var\_14} \IFRU{~--- это макрос ассемблера}{is an assembly macro}, \IFRU{равный}{equal to} $-0x14$, 
 \IFRU{такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку}
 {such macros are created by \IDA in order to demonstrate simply how code accessing stack}.
 \IFRU{Макросы \IT{var\_?}, создаваемые \IDA, отражают локальные переменные в стеке}{\IT{var\_?} macros created
 by \IDA reflecting local variables in the stack}.
-\IFRU{Так что, в \TT{R12} будет записано $SP+4$}{So, $SP+4$ will be written into the \TT{R12} register}.
+\IFRU{Так что в \TT{R12} будет записано $SP+4$}{So, $SP+4$ will be written into the \TT{R12} register}.
 \index{ARM!\Instructions!STMIA}
 \IFRU{Следующая инструкция}{The next} \TT{``STMIA R12, {R0-R3}''} 
 \IFRU{записывает содержимое регистров \Rzero-\Rthree по адресу в памяти, на который указывает \TT{R12}}
 {instruction
 writes \Rzero-\Rthree registers contents at the point in memory to which \TT{R12} pointing}.
 \IFRU{Инструкция }\TT{STMIA} \IFRU{означает}{instruction meaning} \IT{Store Multiple Increment After}. 
-\IT{Increment After} \IFRU{означает что \TT{R12} будет увеличиваться на 4 после записи каждого значения регистра}
+\IT{Increment After} \IFRU{означает, что \TT{R12} будет увеличиваться на 4 после записи каждого значения регистра}
 {meaning the \TT{R12} will be increasing by $4$ after each register value write}.
 
 \item \IFRU{Передача $4$ через стек}{Passing $4$ via stack}:
-\IFRU{$4$ записывается в \Rzero, затем, это значение, при помощи инструкции}{$4$ is stored in the \Rzero and then,
+\IFRU{$4$ записывается в \Rzero, затем это значение при помощи инструкции}{$4$ is stored in the \Rzero and then,
 this value, with the help of} \TT{``STR R0, [SP,\#0x18+var\_18]''} \IFRU{попадает в стек}{instruction, is saved
 on the stack}.
 \IT{var\_18} \IFRU{равен}{is} $-0x18$, \IFRU{смещение будет $0$}{offset will be $0$}, 
@@ -109,7 +109,7 @@ registers right before \printf call}, \IFRU{а остальные 5 значен
 \item \IFRU{Эпилог функции}{Function epilogue}:
 
 \IFRU{Инструкция }{}\TT{``ADD SP, SP, \#0x14''} \IFRU{возвращает \SP на прежнее место, 
-аннулируя таким образом, всё что было записано в стеке}
+аннулируя таким образом всё, что было записано в стеке}
 {instruction returns the \SP pointer back to former point,
 thus annulling what was written to stack}.
 \IFRU{Конечно, то что было записано в стек, там пока и останется, но всё это будет многократно 
@@ -118,8 +118,8 @@ thus annulling what was written to stack}.
 rewritten while execution of following functions}.
 
 \index{ARM!\Instructions!LDR}
-\IFRU{Инструкция }{}\TT{``LDR PC, [SP+4+var\_4],\#4''} \IFRU{загружает в \PC сохраненное значение \LR из стека, 
-таким образом, обеспечивая выход из функции}
+\IFRU{Инструкция }{}\TT{``LDR PC, [SP+4+var\_4],\#4''} \IFRU{загружает в \PC сохраненное значение \LR из стека,
+обеспечивая таким образом выход из функции}
 {instruction loads saved \LR value from the stack into the \PC register, providing
 exit from the function}.
 
@@ -156,7 +156,7 @@ exit from the function}.
 .text:00000040 00 BD                       POP     {PC}
 \end{lstlisting}
 
-\IFRU{Это почти то же самое что и в предыдущем примере, только код для thumb и значения помещаются в 
+\IFRU{Это почти то же самое, что и в предыдущем примере, только код для thumb и значения помещаются в 
 стек немного иначе: в начале $8$ за первый раз, затем $5$, $6$, $7$ за второй раз и $4$ за третий раз}{Almost 
 same as
 in previous example, however, this is thumb code and values are packed into stack differently: 
@@ -194,16 +194,16 @@ __text:00002958 80 80 BD E8                 LDMFD           SP!, {R7,PC}
 
 \index{ARM!\Instructions!STMFA}
 \index{ARM!\Instructions!STMIB}
-\IFRU{Почти то же самое что мы уже видели, за исключением того, что}
+\IFRU{Почти то же самое, что мы уже видели, за исключением того, что}
 {Almost the same what we already figured out, with the
 exception of} \TT{STMFA} (Store Multiple Full Ascending) 
-\IFRU{это синоним инструкции}{instruction, it is synonym to} 
+\IFRU{~--- это синоним инструкции}{instruction, it is synonym to} 
 \TT{STMIB} (Store Multiple Increment Before) \IFRU{}{instruction}. 
 \IFRU{Эта инструкция увеличивает \SP и только затем записывает в память значение очередного регистра, 
 но не наоборот}{This
 instruction increasing value in the \SP register and only then writing next register value into memory, but not vice versa}.
 
-\IFRU{Второе что бросается в глаза, это то что инструкции как будто бы расположены случайно}{Another thing
+\IFRU{Второе, что бросается в глаза, это то, что инструкции как будто бы расположены случайно}{Another thing
 we easily spot is the instructions are ostensibly located randomly}.
 \IFRU{Например, значение в регистре \Rzero подготавливается в трех местах, по адресам \TT{0x2918}, \TT{0x2920} 
 и \TT{0x2928}, 
@@ -222,7 +222,7 @@ to place instructions better}.
 \IFRU{легко можно исполнить одновременно, 
 потому что эффекты от их исполнения никак не конфликтуют друг с другом}{instructions can be executed
 simultaneously since effects of their execution are not conflicting with each other}.
-\IFRU{Вероятно, компилятор старается генерировать код именно таким образом, конечно, там где это возможно}
+\IFRU{Вероятно, компилятор старается генерировать код именно таким образом там, где это возможно}
 {Presumably, compiler tries to generate code in such way, where it is possible, of course}.
  
 \subsubsection{\OptimizingXcode: \ThumbTwoMode}
@@ -257,8 +257,8 @@ __text:00002BD6 05 B0                             ADD             SP, SP, #0x14
 __text:00002BD8 80 BD                             POP             {R7,PC}
 \end{lstlisting}
 
-\IFRU{Почти то же самое что и в предыдущем примере,
-лишь за тем исключением что здесь используются thumb-инструкции}
+\IFRU{Почти то же самое, что и в предыдущем примере,
+лишь за тем исключением, что здесь используются thumb-инструкции}
 {Almost the same as in previous example,
 with the exception the thumb-instructions are used here instead}.
 
