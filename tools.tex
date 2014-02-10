@@ -1,37 +1,64 @@
 \chapter{\IFRU{Инструменты}{Tools}}
 
-\begin{itemize}
+\section{\IFRU{Дизассемблер}{Disassembler}}
 
-\item
+\subsection{IDA}
+
 \label{IDA}
-\IFRU{IDA как дизассемблер. Старая бесплатная версия доступна для скачивания}
-{IDA as disassembler. Older freeware version is available for downloading}: 
-\url{http://www.hex-rays.com/idapro/idadownfreeware.htm}.
+\IFRU{Старая бесплатная версия доступна для скачивания}{Older freeware version is available for downloading}
+\footnote{\url{http://www.hex-rays.com/idapro/idadownfreeware.htm}}.
 
-\item
-Microsoft Visual Studio Express\footnote{\url{http://www.microsoft.com/express/Downloads/}}:
-\IFRU{Усеченная бесплатная версия Visual Studio, пригодная для простых экспериментов}
-{Stripped-down free Visual Studio version, convenient for simple experiments}.
+\IFRU{Краткий справочник хот-кеев}{Short hot-keys cheatsheet}:
 
-\item
-\label{Hiew}
-Hiew\footnote{\url{http://www.hiew.ru/}} \IFRU{для мелкой модификации кода в исполняемых файлах}
-{for small modifications of code in binary files}.
+\begin{center}
+\begin{tabular}{ | l | l | }
+\cellcolor{blue!25} \IFRU{клавиша}{key} & \cellcolor{blue!25} \IFRU{значение}{meaning} \\
+Space 	& \IFRU{переключать между листингом и просмотром кода в виде графа}{switch listing and graph view} \\
+C 	& \IFRU{конвертировать в код}{convert to code} \\
+D 	& \IFRU{конвертировать в данные}{convert to data} \\
+A 	& \IFRU{конвертировать в строку}{convert to string} \\
+* 	& \IFRU{конвертировать в массив}{convert to array} \\
+U 	& \IFRU{сделать неопределенным}{undefine} \\
+O 	& \IFRU{сделать смещение из операнда}{make offset of operand} \\
+H 	& \IFRU{сделать десятичное число}{make decimal number} \\
+R 	& \IFRU{сделать символ}{make char} \\
+B 	& \IFRU{сделать двоичное число}{make binary number} \\
+Q 	& \IFRU{сделать шестнадцатеричное число}{make hexadecimal number} \\
+N 	& \IFRU{переменовать идентификатор}{rename identificator} \\
+? 	& \IFRU{калькулятор}{calculator} \\
+G 	& \IFRU{переход на адрес}{jump to address} \\
+: 	& \IFRU{добавить комментарий}{add comment} \\
+Ctrl-X 	& \IFRU{показать ссылки на текущую ф-цию, метку, переменную (в т.ч., в стеке)}
+		{show refernces to the current function, label, variable (incl. in local stack)} \\
+X 	& \IFRU{показать ссылки на ф-цию, метку, переменную, итд}
+		{show references to the function, label, variable, etc} \\
+Alt-I 	& \IFRU{искать константу}{search for constant} \\
+Ctrl-I 	& \IFRU{искать следующее вхождение константы}{search for the next occurrence of constant} \\
+Alt-B 	& \IFRU{искать последовательность байт}{search for byte sequence} \\
+Ctrl-B 	& \IFRU{искать следующее вхождение последовательности байт}
+		{search for the next occurrence of byte sequence} \\
+Alt-T 	& \IFRU{искать текст (включая инструкции, итд)}{search for text (including instructions, etc)} \\
+Ctrl-T 	& \IFRU{искать следующее вхождение текста}{search for the next occurrence of text} \\
+Alt-P 	& \IFRU{редактировать текущую функцию}{edit current function} \\
+Enter 	& \IFRU{перейти к ф-ции, переменной, итд}{jump to function, variable, etc} \\
+Esc 	& \IFRU{вернуться назад}{get back} \\
+Num -   & \IFRU{свернуть ф-цию или отмеченную область}{fold function or selected area} \\
+Num + 	& \IFRU{снова показать ф-цию или область}{unhide function or area}\\
+\end{tabular}
+\end{center}
 
-\item
-\index{binary grep}
+\IFRU{Сворачивание ф-ции или области может быть удобно чтобы прятать те части ф-ции,
+чья функция вам стала уже ясна}
+{Function/area folding may be useful for hiding function parts when you realize what they do}.
+\IFRU{это используется в моем скрипте\footnote{\url{\YurichevIDAIDCScripts}}}{this is used in my}
+\IFRU{для сворачивания некоторых очень часто используемых фрагментов inline-кода}
+{script\footnote{\url{\YurichevIDAIDCScripts}} for hiding some often used patterns of inline code}.
 
-binary grep: \IFRU{небольшая утилита для поиска констант (либо просто последовательности байт)
-в большом  кол-ве файлов, включая неисполняемые: \BGREPURL.}
-{the small utility for constants searching (or just any byte sequence) in a big pile of files, 
-including non-executable: \BGREPURL.}
-
-\end{itemize}
-
-\subsection{\IFRU{Отладчик}{Debugger}}
+\section{\IFRU{Отладчик}{Debugger}}
 
 \label{tracer}
-\IT{tracer}\footnote{\IFRU{\url{http://yurichev.com/tracer-ru.html}}{\url{http://yurichev.com/tracer-en.html}}} \IFRU{вместо отладчика}{instead of debugger}.
+\IFRU{Я использую}{I use} \IT{tracer}\footnote{\url{http://yurichev.com/tracer-\IFRU{ru}{en}.html}}
+\IFRU{вместо отладчика}{instead of debugger}.
 
 \IFRU{Со временем я отказался использовать отладчик, потому что все что мне нужно от него: это иногда подсмотреть 
 какие-либо аргументы какой-либо функции во время исполнения или состояние регистров в определенном месте. 
@@ -51,7 +78,7 @@ set breakpoints at arbitrary places, spot registers' state, modify it, etc.}
 changing (e.g. classic SoftICE, OllyDbg, WinDbg highlighting changed registers), flags, data, change them
 manually, watch reaction, etc.}
 
-\subsection{\IFRU{Трассировка системных вызовов}{System calls tracing}}
+\section{\IFRU{Трассировка системных вызовов}{System calls tracing}}
 
 \label{strace}
 \index{strace}
@@ -76,11 +103,32 @@ mmap2(NULL, 1780508, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb
 \end{lstlisting}
 
 \index{MacOSX}
-\IFRU{В MacOSX для этого же имеется dtruss}{MacOSX has dtruss for the same goal}.
+\IFRU{В MacOSX для этого же имеется dtruss}{MacOSX has dtruss for the same aim}.
 
 \index{cygwin}
 \IFRU{В Cygwin также есть strace, впрочем, если я верно понял, 
 он показывает результаты только для .exe-файлов скомпилированных для среды самого cygwin}
 {The Cygwin also has strace, but if I understood correctly, it works only for .exe-files
 compiled for cygwin environment itself}.
+
+\section{\IFRU{Прочие инструменты}{Other tools}}
+
+\begin{itemize}
+\item
+Microsoft Visual Studio Express\footnote{\url{http://www.microsoft.com/express/Downloads/}}:
+\IFRU{Усеченная бесплатная версия Visual Studio, пригодная для простых экспериментов}
+{Stripped-down free Visual Studio version, convenient for simple experiments}.
+
+\item
+\label{Hiew}
+Hiew\footnote{\url{http://www.hiew.ru/}} \IFRU{для мелкой модификации кода в исполняемых файлах}
+{for small modifications of code in binary files}.
+
+\item
+\index{binary grep}
+binary grep: \IFRU{небольшая утилита для поиска констант (либо просто последовательности байт)
+в большом  кол-ве файлов, включая неисполняемые: \BGREPURL.}
+{the small utility for constants searching (or just any byte sequence) in a big pile of files, 
+including non-executable: \BGREPURL.}
+\end{itemize}
 
