@@ -1,0 +1,43 @@
+﻿\subsection{\Example{} \#4}
+
+\label{win16_32bit_values}
+
+\lstinputlisting{patterns/win16/ex4.c}
+
+\lstinputlisting{patterns/win16/ex4.lst}
+
+\IFRU{32-битные значения (тип данных \TT{long} означает 32-бита, а \TT{int} здесь 16-битный) 
+в 16-битном коде (и в MS-DOS и в Win16) передаются парами)}
+{32-bit values (\TT{long} data type mean 32-bit, while \TT{int} is fixed on 16-bit data type)
+in 16-bit code (both MS-DOS and Win16) are passed by pairs}.
+\IFRU{Это так же как и 64-битные значения передаются в 32-битной среде}
+{It is just like 64-bit values are used in 32-bit environment} (\ref{sec:64bit_in_32_env}).
+
+\TT{sub\_B2 here} \IFRU{здесь это библиотечная ф-ция написанная разработчиками компилятора, делающая}
+{is a library function written by compiler developers, doing} ``long multiplication'', \IFRU{т.е., перемножает
+два 32-битных значения}{i.e., multiplies two 32-bit values}.
+\IFRU{Другие ф-ции компиляторов делающие то же самое перечислены здесь}
+{Other compiler functions doing the same are listed here}: \ref{sec:MSVC_library_func}, \ref{sec:GCC_library_func}.
+
+\index{x86!\Instructions!ADD}
+\index{x86!\Instructions!ADC}
+\RU{Пара инструкций }\TT{ADD}/\TT{ADC} \IFRU{используется для сложения этих составных значений}
+{instruction pair is used for addition of compound values}: 
+\TT{ADD} \IFRU{может установить или сбросить флаг}{may set/clear} \TT{CF}\EN{ carry flag}, \TT{ADC} \IFRU{будет
+использовать его}{will use it}.
+\index{x86!\Instructions!ADD}
+\index{x86!\Instructions!ADC}
+\RU{Пара инструкций }\TT{SUB}/\TT{SBB} \IFRU{используется для вычитания}{instruction pair is used for subtraction}: 
+\TT{SUB} \IFRU{может установить или сбросить флаг}{may set/clear} \TT{CF}\EN{ flag}, \TT{SBB} \IFRU{будет использовать
+его}{will use it}.
+
+\IFRU{32-битные значения возвращаются из ф-ций в паре регистров \TT{DX:AX}}
+{32-bit values are returned from functions in \TT{DX:AX} register pair}.
+
+\IFRU{Константы так же передаются как пары в}{Constant also passed by pairs in} \TT{WinMain()}\EN{ here}.
+
+\index{x86!\Instructions!CWD}
+\IFRU{Константа 123 типа \TT{int} в начале конвертируется (учитывая знак) в 32-битное значение 
+используя инструкция \TT{CWD}}
+{\TT{int}-typed 123 constant is first converted respecting its sign into 32-bit value using \TT{CWD} instruction}.
+
