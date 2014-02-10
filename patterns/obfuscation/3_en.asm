@@ -1,3 +1,3 @@
 add	eax, ebx	; real code
 mul	ecx		; real code
-add	eax, esi	; opaue predicate. XOR, AND or SHL can be here, etc.
+add	eax, esi	; opaque predicate. XOR, AND or SHL, etc, can be here instead of ADD.
