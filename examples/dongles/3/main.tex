@@ -1,4 +1,5 @@
 \subsection{\IFRU{Пример}{Example} \#3: MS-DOS}
+\label{dongle_16bit_dos}
 
 \index{MS-DOS}
 \IFRU{Еще одна очень старая программа для}{Another very old software for} MS-DOS \IFRU{от}{from} 1995 
@@ -133,10 +134,6 @@ mov ax,0
 retf
 \end{lstlisting}
 
-\subsubsection{\IFRU{Модель памяти в MS-DOS}{MS-DOS memory model}}
-
-\index{MS-DOS\IFRU{Модель памяти}{Memory model}}
-\label{dos_memory_model}
 \index{\CStandardLibrary!strcpy()}
 \IFRU{Наблюдательный читатель может заметить что ф-ция Си \TT{strcpy()} имеет 2 аргумента, но здесь
 мы видим, что передается 4}
@@ -152,73 +149,7 @@ seg033:0897 9A 79 65 00+                call    _strcpy
 seg033:089C 83 C4 08                    add     sp, 8
 \end{lstlisting}
 
-\IFRU{Что это означает? О да, еще один дивный артефакт MS-DOS и 8086}
-{What it means? Oh yes, that is another MS-DOS and 8086 weird artefact}.
-
-8086/8088 \IFRU{был 16-битным процессором, но мог адресовать 20-битное адресное
-пространство (таким образом мог адресовать 1MB внешней памяти)}
-{was a 16-bit CPU, but was able to address 20-bit address RAM 
-(thus resulting 1MB external memory)}.
-\IFRU{Внешняя адресное пространство было разделено между \ac{RAM} (максимум 640KB),
-\ac{ROM}, окна для видеопамяти, EMS-карт, и т.д}
-{External memory address space was divided between \ac{RAM} (640KB max),
-\ac{ROM}, windows for video memory, EMS cards, etc}.
-
-\IFRU{Припомним также что 8086/8088 был на самом деле наследником 8-битного процессора 8080}
-{Let's also recall that 8086/8088 was in fact inheritor of 8-bit 8080 CPU}.
-\IFRU{Процессор 8080 имел 16-битное адресное пространство, т.е., мог адресовать только}
-{The 8080 has 16-bit memory spaces, i.e., it was able to address only} 64KB.
-\IFRU{И возможно в расчете на портирование старого ПО\footnote{Хотя я и не уверен на 100\%},
-8086 может поддерживать 64-килобайтные
-окна, одновременно много таких, расположенных внутри одномегабайтного адресного пространства}
-{And probably of old software porting reason\footnote{I'm not 100\% sure here},
-8086 can support 64KB windows, many of them placed simultaneously
-within 1MB address space}.
-\IFRU{Это, в каком-то смысле, игрушечная виртуализация}
-{This is some kind of toy-level virtualization}.
-\IFRU{Все регистры 8086 16-битные, так что, чтобы адресовать больше, специальные сегментные
-регистры (CS, DS, ES, SS) были введены}
-{All 8086 registers are 16-bit, so to address more, a special segment registers (CS, DS, ES, SS) were
-introduced}.
-\IFRU{Каждый 20-битный указатель вычисляется используя значения из пары состоящей из сегментного регистра
-и адресного регистра (например DS:BX) вот так}
-{Each 20-bit pointer is calculated using values from a segment register and 
-an address register pair (e.g. DS:BX) as follows:}
-
-\begin{center}
-$real\_address = (segment\_register \ll 4) + address\_register$
-\end{center}
-
-\IFRU{Например, окно памяти для графики (\ac{EGA}, \ac{VGA}) на старых IBM PC-совместимых компьютерах
-имело размер 64KB.}
-{For example, graphics (\ac{EGA}, \ac{VGA}) video \ac{RAM} window on old IBM PC-compatibles 
-has size of 64KB.}
-\IFRU{Для доступа к нему, значение 0xA000 должно быть записано в один из сегментных регистров,
-например, в DS.}
-{For accessing it, a 0xA000 value should be stored in one of segment registers, e.g. into DS.}
-\IFRU{Тогда DS:0 будет адресовать самый первый байт видеопамяти, а DS:0xFFFF ~--- самый последний байт.}
-{Then DS:0 will address the very first byte of video \ac{RAM} and DS:0xFFFF is the very last byte of RAM.}
-\IFRU{А реальный адрес на 20-битной адресной шине, на самом деле будет от 0xA0000 до 0xAFFFF.}
-{The real address on 20-bit address bus, however, will range from 0xA0000 to 0xAFFFF.}
-
-\IFRU{Программа может содержать жесткопривязанные адреса вроде 0x1234, но \ac{OS} может иметь необходимость
-загрузить программу по другим адресам, так что она пересчитает значения для сегментных регистров так,
-что программа будет нормально работать не обращая внимания на то,
-в каком месте памяти она была расположена.}
-{The program may contain hardcoded addresses like 0x1234, but \ac{OS} may need to load program on arbitrary
-addresses, so it recalculate segment register values in such way, so the program will not care about
-where in the RAM it is placed.}
-
-\IFRU{Так что, любой указатель в окружении старой MS-DOS на самом деле состоял из адреса сегмента
-и адреса внутри сегмента, т.е., из двух 16-битных значений. 20-битного значения было бы достаточно для
-этого, хотя, тогда пришлось бы вычислять адреса слишком часто: так что передача большего количества
-информации в стеке ~--- это более хороший баланс между экономией места и удобством}
-{So, any pointer it old MS-DOS environment was in fact consisted of segment address and the address inside
-segment, i.e., two 16-bit values. 20-bit was enough for that, though, but one will need to recalculate
-the addresses very often: passing more information on stack is seems better space/convenience balance}.
-
-\IFRU{Кстати, из-за всего этого, не было возможным выделить блок памяти больше чем}
-{By the way, because of all this, it was not possible to allocate the memory block larger than} 64KB.
+\IFRU{Об этом больше читайте здесь}{Read more about it here}: \ref{8086_memory_model}.
 
 \IFRU{Так что, \TT{strcpy()}, как и любая другая ф-ция принимающая указатель (-и) в аргументах,
 работает с 16-битными парами}
@@ -244,26 +175,3 @@ loads ES:BX pair simultaneously from the passed argument}.
 {At \TT{seg030:00F2} only 16-bit word is \glslink{increment}{incremented}, not segment value.}
 \IFRU{Это значит, что переданная в ф-цию строка не может находится на границе двух сегментов.}
 {This means, the string passed to the function cannot be located on two data segments boundaries.}
-
-\index{80286}
-\index{80386}
-\IFRU{В 80286 сегментные регистры получили новую роль селекторов, имеющих немного другую ф-цию.}
-{Segment registers were reused at 80286 as selectors, serving different function.}
-
-\index{MS-DOS!DOS extenders}
-\IFRU{Когда появился процессор 80386 и компьютеры с большей памятью,
-MS-DOS была всё еще популярна, так что появились DOS-экстендеры: на самом деле это уже был шаг
-к ``серьезным'' \ac{OS}, они переключали \ac{CPU} в защищенный режим и предлагали куда лучшее \ac{API} для
-программ, которые всё еще предполагалось запускать в MS-DOS.}
-{When 80386 CPU and computers with bigger \ac{RAM} were introduced,
-MS-DOS was still popular, so the DOS extenders are emerged: these were in fact
-a step toward ``serious'' \ac{OS},
-switching CPU into protected mode and providing much better memory \ac{API}s for the programs 
-which still needs to be runned from MS-DOS.}
-\IFRU{Широко известные примеры это DOS/4GW (игра DOOM была скомпилирована под него), Phar Lap, PMODE}
-{Widely popular examples include DOS/4GW (DOOM video game was compiled for it), Phar Lap, PMODE.} \\
-\\
-\index{Windows 3.x}
-\index{Win32}
-\IFRU{Кстати, точно такой же способ адресации памяти был и в 16-битной линейке Windows 3.x, перед Win32}
-{By the way, the same was of addressing memory was in 16-bit line of Windows 3.x, before Win32}.

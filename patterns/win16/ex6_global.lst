@@ -1,5 +1,3 @@
-wcl -i=C:\WATCOM\h\win\ -s -os -bt=windows -bcl=windows ex7.c
-
 unix_time_low   dw 0
 unix_time_high  dw 0
 t               dw 0
@@ -14,13 +12,13 @@ WinMain         proc near
                 mov     ax, offset unix_time_low
                 call    localtime_
                 mov     bx, ax
-                mov     t, ax
-                push    word ptr [bx]
-                push    word ptr [bx+2]
-                push    word ptr [bx+4]
-                push    word ptr [bx+6]
-                push    word ptr [bx+8]
-                mov     ax, [bx+0Ah]
+                mov     t, ax               ; will not be used in future...
+                push    word ptr [bx]       ; seconds
+                push    word ptr [bx+2]     ; minutes
+                push    word ptr [bx+4]     ; hour
+                push    word ptr [bx+6]     ; day
+                push    word ptr [bx+8]     ; month
+                mov     ax, [bx+0Ah]        ; year
                 add     ax, 1900
                 push    ax
                 mov     ax, offset a04d02d02d02d02 ; "%04d-%02d-%02d %02d:%02d:%02d"
@@ -29,7 +27,7 @@ WinMain         proc near
                 push    ax
                 call    sprintf_
                 add     sp, 10h
-                xor     ax, ax
+                xor     ax, ax          ; NULL
                 push    ax
                 push    ds
                 mov     ax, offset strbuf
@@ -40,7 +38,7 @@ WinMain         proc near
                 xor     ax, ax          ; MB_OK
                 push    ax
                 call    MESSAGEBOX
-                xor     ax, ax
+                xor     ax, ax          ; return 0
                 pop     bp
                 retn    0Ah
 WinMain         endp
