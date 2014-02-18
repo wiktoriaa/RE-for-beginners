@@ -59,19 +59,34 @@ be used in program}.
 
 \item
 \index{\IFRU{Базовый адрес}{Base address}}
-\IFRU{Базовый адрес}{Base address} --- \IFRU{это адрес, по которому модуль будет загружен 
+\IFRU{Базовый адрес}{Base address}\EMDASH{}\IFRU{это адрес, по которому модуль будет загружен 
 в пространство процесса}{is the address within a process memory at which a module will be loaded}.
 
 \item
 \index{RVA}
-\ac{RVA} --- \IFRU{это}{is a} \ac{VA}-\IFRU{адрес минус базовый адрес}{address minus base address}.
+\ac{RVA}\EMDASH{}\IFRU{это}{is a} \ac{VA}-\IFRU{адрес минус базовый адрес}{address minus base address}.
 \IFRU{Многие адреса в таблицах PE-файла используют именно}{Many addresses in PE-file tables
 uses exactly} \ac{RVA}-\IFRU{адреса}{addresses}.
 
-\item
+%\item
+%Data directory\EMDASH{}...
+
+\item 
 \index{IAT}
-\ac{IAT} --- \IFRU{самая главная таблица, описывающая импорты}{most important table which describes
-imports}\footnote{\cite{Pietrek1}}.
+\ac{IAT}\EMDASH{}\IFRU{массив адресов импортированных символов}{an array of addresses of imported symbols}
+\footnote{\cite{Pietrek1}}. 
+\IFRU{Иногда, директория}{Sometimes, a} \TT{IMAGE\_DIRECTORY\_ENTRY\_IAT} \IFRU{указывает на}
+{data directory is points to the} \ac{IAT}. 
+\label{IDA_idata}
+\IFRU{Важно отметить, что}{It is worth to note that} \ac{IDA} (\IFRU{по крайней мере}{as of} 6.1) 
+\IFRU{может выделить псевдо-секцию с именем}{may allocate a pseudo-section named} \TT{.idata} \ForENRU
+\ac{IAT}, \IFRU{даже если}{even if} \ac{IAT} \IFRU{является частью совсем другой секции}
+{is a part of another section}!
+
+\item 
+\index{INT}
+\ac{INT}\EMDASH{}\IFRU{массив имен символов для импортирования}
+{an array of names of symbols to be imported}\footnote{\cite{Pietrek1}}.
 \end{itemize}
 
 \subsubsection{\IFRU{Базовый адрес}{Base address}}
@@ -197,7 +212,9 @@ it is not very important}.
 
 \index{MIPS}
 \begin{itemize}
-\item \TT{.idata}\EMDASH{}\IFRU{секция импортов}{imports section}
+\item \TT{.idata}\EMDASH{}\IFRU{секция импортов}{imports section}.
+\ac{IDA} \IFRU{может создавать псевдо-секцию с этим же именем}
+{may create pseudo-section named like this}: \ref{IDA_idata}.
 \item \TT{.edata}\EMDASH{}\IFRU{секция экспортов}{exports section}
 \item \TT{.pdata}\EMDASH{}\IFRU{секция содержащая информацию об исключениях в Windows NT для MIPS, \ac{IA64} и x64}
 {section containing all information about exceptions in Windows NT for MIPS, \ac{IA64} and x64}: \ref{SEH_win64}
@@ -253,7 +270,7 @@ typedef struct _IMAGE_SECTION_HEADER {
 
 \subsubsection{\IFRU{Релоки}{Relocations (relocs)}}
 
-\IFRU{Так же известны как FIXUP-ы}{\ac{AKA} FIXUP-s}.
+\IFRU{Так же известны как FIXUP-ы}{\ac{AKA} FIXUP-s} (\IFRU{по крайней мере в}{at least in} Hiew).
 
 \IFRU{Это также присутствует почти во всех форматах загружаемых и исполняемых файлов}
 {This is also present in almost all executable file formats}
@@ -332,15 +349,15 @@ calls in other module (.exe-file or another DLL)}.
 \IFRU{Для этого, у каждой DLL есть ``экспорты'', это таблица ф-ций плюс их адреса в модуле}
 {Each DLL has ``exports'' for this, this is table of functions plus its addresses in a module}.
 
-\IFRU{А у .exe-файла, либо DLL, есть ``импорты'', (\ac{IAT}) это таблица ф-ций требующихся для исполнения 
+\IFRU{А у .exe-файла, либо DLL, есть ``импорты'', это таблица ф-ций требующихся для исполнения 
 включая список имен DLL-файлов}
-{Each .exe-file or DLL has ``imports'', (\ac{IAT}) this is a table of functions it needs for execution including
+{Each .exe-file or DLL has ``imports'', this is a table of functions it needs for execution including
 list of DLL filenames}.
 
-\IFRU{Загрузчик \ac{OS}, после загрузки основного .exe-файла, проходит по \ac{IAT}:
+\IFRU{Загрузчик \ac{OS}, после загрузки основного .exe-файла, проходит по таблице импортов:
 загружает дополнительные DLL-файлы, 
 находит имена ф-ций среди экспортов в DLL и прописывает их адреса в \ac{IAT} в головном .exe-модуле}
-{After loading main .exe-file, \ac{OS}-loader, processes \ac{IAT}: 
+{After loading main .exe-file, \ac{OS}-loader, processes imports table: 
 it loads additional DLL-files, finds function names
 among DLL exports and writes their addresses down in an \ac{IAT} of main .exe-module}.
 
@@ -360,8 +377,8 @@ that is a function numbers stored in the table instead of their names}.
 \index{MFC}
 \IFRU{К примеру}{For example}, \IFRU{программы использующие библиотеки}{program using} 
 \ac{MFC}\IFRU{, обычно загружают mfc*.dll по ординалам}{ library usually loads mfc*.dll by ordinals},
-\IFRU{и в таких программах, в \ac{IAT}, нет имен ф-ций \ac{MFC}}
-{and in such programs there are no \ac{MFC} function names in \ac{IAT}}.
+\IFRU{и в таких программах, в \ac{INT}, нет имен ф-ций \ac{MFC}}
+{and in such programs there are no \ac{MFC} function names in \ac{INT}}.
 
 \IFRU{При загрузке такой программы в \IDA, она спросит у вас путь к файлу mfc*.dll,
 чтобы установить имена ф-ций}{While loading such program in \IDA, it will asks for a path to mfs*.dll files,
@@ -372,9 +389,10 @@ in order to determine function names}.
 
 \paragraph{\IFRU{Секция импортов}{Imports section}}
 
-\IFRU{Под \ac{IAT} и всё что с ней связано иногда отводится отдельная секция (с названием вроде \TT{.idata}),
+\IFRU{Под таблицу импортов и всё что с ней связано иногда отводится отдельная секция 
+(с названием вроде \TT{.idata}),
 но это не обязательно}
-{Often a separate section is allocated for \ac{IAT} table and everything related to it (with name like \TT{.idata}),
+{Often a separate section is allocated for imports table and everything related to it (with name like \TT{.idata}),
 however, it is not a strict rule}.
 
 \IFRU{Импорты ~--- это запутанная тема еще и из-за терминологической путаницы. Попробуем собрать всё в одно место.}
@@ -393,7 +411,8 @@ however, it is not a strict rule}.
 \IFRU{У каждого элемента есть}{Each element holds} \ac{RVA}-\IFRU{адрес}{address} 
 \IFRU{текстовой строки (имя DLL)}{of text string (DLL name)} (\IT{Name}).
 
-\IT{OriginalFirstThink} \IFRU{это}{is a} \ac{RVA}-\IFRU{адрес}{address} \IFRU{массива}{of array of} 
+\IT{OriginalFirstThink} \IFRU{это}{is a} \ac{RVA}-\IFRU{адрес таблицы \ac{INT}}{address of \ac{INT} table}. 
+\IFRU{Это массив}{This is array of} 
 \ac{RVA}-\IFRU{адресов}{addresses},
 \IFRU{каждый из которых указывает на текстовую строку где записано имя ф-ции}
 {each of which points to the text string with function name}. 
@@ -403,8 +422,8 @@ however, it is not a strict rule}.
 \IFRU{Если при загрузке удается найти ф-цию по ординалу, тогда сравнение текстовых строк не будет происходить.
 Массив оканчивается нулем}{While loading, if it is possible to find function by ordinal,
 then strings comparison will not occur. Array is terminated by zero}.
-\IFRU{Есть также указатель с названием}
-{There is also a pointer with the name} \IT{FirstThunk},
+\IFRU{Есть также указатель на таблицу \ac{IAT} с названием}
+{There is also a pointer to the \ac{IAT} table with a name} \IT{FirstThunk},
 \IFRU{это просто}{it is just} \ac{RVA}-\IFRU{адрес}{address} 
 \IFRU{места, где загрузчик будет проставлять адреса найденных ф-ций}{of the place where loader will
 write addresses of functions resolved}.
@@ -458,11 +477,12 @@ but by default it is not to be created}. \\
 не обязательно может быть в секции \ac{IAT}}{By the way, an array of function addresses to which FirstThunk is
 pointing is not necessary to be located in \ac{IAT} section}.
 \IFRU{К примеру, я написал утилиту}{For example, I once wrote the}
-PE\_add\_import\footnote{\url{http://yurichev.com/PE_add_import.html}} 
+PE\_add\_import\footnote{\url{http://yurichev.com/PE_add_imports.html}} 
 \IFRU{для добавления импорта в уже существующий .exe-файл}{utility for adding import to an existing .exe-file}.
-\IFRU{На месте ф-ции, вместо которой вы хотите подставить вызов в другую DLL,
-моя утилита вписывает такой код}{At the place of the function you want to substitute by call to another DLL,
-the following code my utility writes}:
+\IFRU{Раньше, в прошлых версиях утилиты, на месте ф-ции, вместо которой вы хотите подставить вызов в другую DLL,
+моя утилита вписывала такой код}{Some time earlier, in the previous versions of the utility, 
+at the place of the function you want to substitute by call to another DLL,
+the following code my utility writed}:
 
 \begin{lstlisting}
 MOV EAX, [yourdll.dll!function]
@@ -508,8 +528,8 @@ Matt Pietrek \InENRU \cite{Pietrek1}, \IFRU{предлагает делать bi
 вашей программы на компьютере конечного пользователя}{offers to do binding shortly after your program
 installation on the computer of the end user}. \\
 \\
-\IFRU{Запаковщики/зашифровщики PE-файлов могут также сжимать/шифровать \ac{IAT}}
-{PE-files packers/encryptors may also compress/encrypt \ac{IAT}}.
+\IFRU{Запаковщики/зашифровщики PE-файлов могут также сжимать/шифровать таблицу импортов}
+{PE-files packers/encryptors may also compress/encrypt imports table}.
 \IFRU{В этом случае, загрузчик Windows, конечно же, не загрузит все нужные DLL}
 {In this case, Windows loader, of course, will not load all necessary DLLs}.
 \index{Windows!LoadLibrary}
