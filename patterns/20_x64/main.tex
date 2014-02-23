@@ -18,9 +18,9 @@
 В итоге имеются эти \ac{GPR}-ы:}
 {Almost all registers (except FPU and SIMD) are extended to 64 bits and got r- prefix.
 8 additional registers added.
-Now \ac{GPR}'s are:} \TT{rax}, \TT{rbx}, \TT{rcx}, \TT{rdx}, 
-\TT{rbp}, \TT{rsp}, \TT{rsi}, \TT{rdi}, \TT{r8}, \TT{r9}, \TT{r10}, 
-\TT{r11}, \TT{r12}, \TT{r13}, \TT{r14}, \TT{r15}. 
+Now \ac{GPR}'s are:} \RAX, \RBX, \RCX, \RDX, 
+\RBP, \RSP, \RSI, \RDI, \Reg{8}, \Reg{9}, \Reg{10}, 
+\Reg{11}, \Reg{12}, \Reg{13}, \Reg{14}, \Reg{15}. 
 
 \IFRU{К ним также можно обращаться так же, как и прежде. Например, для доступа к младшим 32 битам \TT{RAX} 
 можно использовать \EAX.}
@@ -38,16 +38,21 @@ For example, it is possible to access lower 32-bit part of the \TT{RAX} register
 
 \item
 \IFRU{В win64 передача всех параметров немного иная, это немного похоже на fastcall~(\ref{fastcall}).
-Первые 4 аргумента записываются в регистры \TT{RCX}, \TT{RDX}, \TT{R8}, \TT{R9}, а остальные ~--- в стек. 
+Первые 4 аргумента записываются в регистры \RCX, \RDX, \Reg{8}, \Reg{9}, а остальные ~--- в стек. 
 Вызывающая функция также должна подготовить место из 32 байт чтобы вызываемая функция могла сохранить 
 там первые 4 аргумента и использовать эти регистры по своему усмотрению. 
 Короткие функции могут использовать аргументы прямо из регистров, но б\'{о}льшие функции могут сохранять 
 их значения на будущее.}
 {In Win64, function calling convention is slightly different, somewhat resembling fastcall~(\ref{fastcall}).
-First 4 arguments stored in the \TT{RCX}, \TT{RDX}, \TT{R8}, \TT{R9} registers, others~---in the stack.
+First 4 arguments stored in the \RCX, \RDX, \Reg{8}, \Reg{9} registers, others~---in the stack.
 \Gls{caller} function must also allocate 32 bytes so the \gls{callee} may save there 4 first arguments and use these 
 registers for own needs.
 Short functions may use arguments just from registers, but larger may save their values on the stack.}
+
+\RU{Соглашение }System V AMD64 ABI (Linux, *BSD, MacOSX) \IFRU{также напоминает}{also somewhat resembling}
+fastcall, \IFRU{использует 6 регистров}{it uses 6 registers} 
+\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9} \IFRU{для первых шести аргументов}{for the first 6 arguments}.
+\IFRU{Остальные передаются через стек}{All the rest are passed in the stack}.
 
 \IFRU{См. также в соответствующем разделе о способах передачи аргументов через стек}
 {See also section about calling conventions}~(\ref{sec:callingconventions}).
@@ -107,11 +112,11 @@ Let's compile it with MSVC 2008 with \Ox option:}
 \IFRU{Компилятор ничего не выделил в локальном стеке, а \TT{x36} это синоним для \TT{a5}.}
 {Nothing allocated in local stack by compiler, \TT{x36} is synonym for \TT{a5}.}
 
-\IFRU{Кстати, видно, что функция сохраняет регистры \TT{RCX}, \TT{RDX} в отведенных для 
+\IFRU{Кстати, видно, что функция сохраняет регистры \RCX, \RDX в отведенных для 
 этого вызываемой функцией местах, 
-а \TT{R8} и \TT{R9} не сохраняет, а начинает использовать их сразу.}
-{By the way, we can see here, the function saved \TT{RCX} and \TT{RDX} registers in allocated by \gls{caller} space,
-but \TT{R8} and \TT{R9} are not saved but used from the beginning.}
+а \Reg{8} и \Reg{9} не сохраняет, а начинает использовать их сразу.}
+{By the way, we can see here, the function saved \RCX and \RDX registers in allocated by \gls{caller} space,
+but \Reg{8} and \Reg{9} are not saved but used from the beginning.}
 
 \IFRU{Кстати, существуют процессоры с еще большим количеством \ac{GPR}, например, 
 Itanium ~--- 128 регистров.}

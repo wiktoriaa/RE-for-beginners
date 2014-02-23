@@ -26,18 +26,18 @@
 first one (\TT{f}).}
 
 \IFRU{Как я уже упоминал, первые 4 значения, в ARM обычно передаются в первых 4-х регистрах}
-{As I mentioned before, in ARM, first 4 values are usually passed in first 4 registers} (\Rzero-\Rthree).
+{As I mentioned before, in ARM, first 4 values are usually passed in first 4 registers} (\Reg{0}-\Reg{3}).
 
-\IFRU{Функция }{}\TT{f}\IFRU{, как видно, использует три первых регистра (\Rzero-\Rtwo) как аргументы.}
-{function, as it seems, use first 3 registers (\Rzero-\Rtwo) as arguments.}
+\IFRU{Функция }{}\TT{f}\IFRU{, как видно, использует три первых регистра (\Reg{0}-\Reg{2}) как аргументы.}
+{function, as it seems, use first 3 registers (\Reg{0}-\Reg{2}) as arguments.}
 
 \index{ARM!\Instructions!MLA}
-\IFRU{Инструкция }{}\TT{MLA} (\IT{Multiply Accumulate}) \IFRU{перемножает два первых операнда (\Rthree и \Rone), 
+\IFRU{Инструкция }{}\TT{MLA} (\IT{Multiply Accumulate}) \IFRU{перемножает два первых операнда (\Reg{3} и \Reg{1}), 
 прибавляет к произведению
-третий операнд (\Rtwo) и помещает результат в нулевой операнд (\Rzero), через который, по стандарту, 
+третий операнд (\Reg{2}) и помещает результат в нулевой операнд (\Reg{0}), через который, по стандарту, 
 возвращаются значения функций.}
-{instruction multiplicates two first operands (\Rthree and \Rone), adds third operand (\Rtwo) to product and places
-result into zeroth operand (\Rzero), via which, by standard, values are returned from functions.}
+{instruction multiplicates two first operands (\Reg{3} and \Reg{1}), adds third operand (\Reg{2}) to product and places
+result into zeroth operand (\Reg{0}), via which, by standard, values are returned from functions.}
 
 \index{Fused multiply–add}
 \IFRU{Умножение и сложение одновременно}{Multiplication and addition at once}\footnote{\WPMAO} 
@@ -78,9 +78,9 @@ but also will switch processor mode to thumb mode.}
 \IFRU{А вот и функция \TT{f} скомпилированная компилятором Keil в режиме полной оптимизации}
 {And here is \TT{f} function compiled by Keil compiler in full optimization mode} (\Othree).
 \IFRU{Инструкция \MOV была соптимизирована и теперь \TT{MLA} использует все входящие регистры 
-и помещает результат в \Rzero, как раз, где вызываемая функция будет его читать и использовать.}
+и помещает результат в \Reg{0}, как раз, где вызываемая функция будет его читать и использовать.}
 {\MOV instruction was optimized (or reduced) and now \TT{MLA} uses all 
-input registers and also places result right into \Rzero,
+input registers and also places result right into \Reg{0},
 exactly where calling function will read it and use.}
 
 \subsubsection{\OptimizingKeil + \ThumbMode}
@@ -97,8 +97,8 @@ exactly where calling function will read it and use.}
 operations separately.}
 \index{ARM!\Instructions!MULS}
 \index{ARM!\Instructions!ADDS}
-\IFRU{Первая инструкция \TT{MULS} умножает \Rzero на \Rone оставляя результат в \Rone.}
-{First \TT{MULS} instruction multiply \Rzero by \Rone leaving result in the \Rone register.}
-\IFRU{Вторая (\TT{ADDS}) складывает результат и \Rtwo, оставляя результат в \Rzero.}
-{Second (\TT{ADDS}) instruction adds result and \Rtwo leaving result in the \Rzero register.}
+\IFRU{Первая инструкция \TT{MULS} умножает \Reg{0} на \Reg{1} оставляя результат в \Reg{1}.}
+{First \TT{MULS} instruction multiply \Reg{0} by \Reg{1} leaving result in the \Reg{1} register.}
+\IFRU{Вторая (\TT{ADDS}) складывает результат и \Reg{2}, оставляя результат в \Reg{0}.}
+{Second (\TT{ADDS}) instruction adds result and \Reg{2} leaving result in the \Reg{0} register.}
 

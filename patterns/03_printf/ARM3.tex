@@ -1,10 +1,10 @@
 \subsection{ARM: \IFRU{3 аргумента в \printf}{3 \printf arguments}}
 
 \IFRU{В ARM традиционно принята такая схема передачи аргументов в функцию: 
-4 первых аргумента через регистры \Rzero-\Rthree,
+4 первых аргумента через регистры \Reg{0}-\Reg{3},
 а остальные ~--- через стек}
 {Traditionally, ARM arguments passing scheme (calling convention) is as follows:
-the 4 first arguments are passed in the \Rzero-\Rthree registers and remaining arguments~---via stack}.
+the 4 first arguments are passed in the \Reg{0}-\Reg{3} registers and remaining arguments~---via stack}.
 \IFRU{Это немного похоже на то, как аргументы передаются в}{This resembling arguments passing scheme in} 
 fastcall~(\ref{fastcall}) \OrENRU win64~(\ref{sec:callingconventions_win64}).
 
@@ -21,11 +21,11 @@ fastcall~(\ref{fastcall}) \OrENRU win64~(\ref{sec:callingconventions_win64}).
 .text:0000002C 10 80 BD E8                 LDMFD   SP!, {R4,PC}
 \end{lstlisting}
 
-\IFRU{Итак, первые 4 аргумента передаются через регистры \Rzero-\Rthree, по порядку: 
+\IFRU{Итак, первые 4 аргумента передаются через регистры \Reg{0}-\Reg{3}, по порядку: 
 указатель на формат-строку для \printf
-в \Rzero, затем $1$ в R1, $2$ в R2 и $3$ в R3}
-{So, the first 4 arguments are passing via \Rzero-\Rzero arguments in this order:
-pointer to the \printf format string in the \Rzero, then $1$ in R1, $2$ in R2 and $3$ in R3}.
+в \Reg{0}, затем $1$ в R1, $2$ в R2 и $3$ в R3}
+{So, the first 4 arguments are passing via \Reg{0}-\Reg{0} arguments in this order:
+pointer to the \printf format string in the \Reg{0}, then $1$ in R1, $2$ in R2 and $3$ in R3}.
 
 \IFRU{Пока что здесь нет ничего необычного}{Nothing unusual so far}.
 
@@ -50,10 +50,10 @@ pointer to the \printf format string in the \Rzero, then $1$ in R1, $2$ in R2 an
 the last instruction instead of familiar \TT{BL}}.
 \IFRU{Отличия между этой соптимизированной версией и предыдущей, скомпилированной без оптимизации, 
 еще и в том, 
-что здесь нет пролога и эпилога функции (инструкций, сохраняющих состояние регистров \TT{\Rzero} и \LR)}
+что здесь нет пролога и эпилога функции (инструкций, сохраняющих состояние регистров \TT{\Reg{0}} и \LR)}
 {Another difference between this optimized version and previous one (compiled without optimization)
 is also in the
-fact that there are no function prologue and epilogue (instructions which are saving \TT{\Rzero} and \LR registers values)}.
+fact that there are no function prologue and epilogue (instructions which are saving \TT{\Reg{0}} and \LR registers values)}.
 \index{x86!\Instructions!JMP}
 \IFRU{Инструкция \TT{B} просто переходит на другой адрес, без манипуляций с регистром \LR, то есть
 это аналог \JMP в x86}

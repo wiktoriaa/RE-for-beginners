@@ -152,15 +152,15 @@ those having other calling convention}.
 \subsection{thiscall}
 \index{thiscall}
 
-\IFRU{В С++, это передача в функцию-метод указателя \IT{this} на объект.}
-{In C++, it is a \IT{this} pointer to object passing into function-method.}
+\IFRU{В С++, это передача в функцию-метод указателя \ITthis на объект.}
+{In C++, it is a \ITthis pointer to object passing into function-method.}
 
-\IFRU{В MSVC указатель \IT{this} обычно передается в регистре \ECX.}
-{In MSVC, \IT{this} is usually passed in the \ECX register.}
+\IFRU{В MSVC указатель \ITthis обычно передается в регистре \ECX.}
+{In MSVC, \ITthis is usually passed in the \ECX register.}
 
-\IFRU{В GCC указатель \IT{this} обычно передается как самый первый аргумент. 
+\IFRU{В GCC указатель \ITthis обычно передается как самый первый аргумент. 
 Таким образом, внутри будет видно: у всех функций-методов на один аргумент больше.}
-{In GCC, \IT{this} pointer is passed as a first function-method argument.
+{In GCC, \ITthis pointer is passed as a first function-method argument.
 Thus it will be seen: internally, all function-methods has extra argument.}
 
 \IFRU{Для примера, см.}{For the example, see} (\ref{thiscall}).
@@ -172,13 +172,13 @@ Thus it will be seen: internally, all function-methods has extra argument.}
 \label{sec:callingconventions_win64}
 
 \IFRU{В win64 метод передачи всех параметров немного похож на \TT{fastcall}. 
-Первые 4 аргумента записываются в регистры \TT{RCX}, \TT{RDX}, \TT{R8}, \TT{R9}, а остальные ~--- в стек. 
+Первые 4 аргумента записываются в регистры \RCX, \RDX, \Reg{8}, \Reg{9}, а остальные ~--- в стек. 
 Вызывающая функция также должна подготовить место из 32 байт или для четырех 64-битных значений, 
 чтобы вызываемая функция могла сохранить там первые 4 аргумента. 
 Короткие функции могут использовать переменные прямо из регистров, 
 но б\'{о}льшие могут сохранять их значения на будущее.}
 {The method of arguments passing in Win64 is somewhat resembling to \TT{fastcall}.
-First 4 arguments are passed via \TT{RCX}, \TT{RDX}, \TT{R8}, \TT{R9}, other~---via stack.
+First 4 arguments are passed via \RCX, \RDX, \Reg{8}, \Reg{9}, other~---via stack.
 \Gls{caller} also must prepare a space for 32 bytes or 4 64-bit values,
 so then \gls{callee} can save there first 4 arguments.
 Short functions may use argument values just from registers,
@@ -221,18 +221,26 @@ which will otherwise be occupied by arguments until function execution end}.
 is not used, because no need to}.
 
 \IFRU{Обратите также внимание на то как MSVC 2012 оптимизирует примитивную загрузку значений в регистры
-используя LEA (\ref{sec:LEA})}
+используя \LEA (\ref{sec:LEA})}
 {Also take a look on how MSVC 2012 optimizes primitive value loads into registers by using 
-LEA (\ref{sec:LEA})}.
+\LEA (\ref{sec:LEA})}.
 \IFRU{Я не уверен, что это того стоит, но может быть}{I'm not sure if it worth so, but maybe}.
 
+\paragraph{\IFRU{Передача \ITthis}{\ITthis passing}}
+
+\RU{Указатель }\ITthis \IFRU{передается через}{pointer is passed in} \RCX, 
+\IFRU{первый аргумент метода через}{first method argument in} \RDX, \IFRU{итд}{etc}.
+\IFRU{Для примера, см. также}{See also for an example}: \ref{simple_CPP_MSVC_x64}.
+ 
 \subsubsection{Linux x64}
 
 \IFRU{Метод передачи аргументов в Linux для x86-64 почти такой же, как и в Windows, но 6 регистров
-используется вместо 4 (RDI, RSI, RDX, RCX, R8, R9), и здесь нет ``scratch space'', но \gls{callee}
+используется вместо 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}), и здесь нет ``scratch space'', 
+но \gls{callee}
 может сохранять значения регистров в стеке, если нужно}
 {The way arguments passed in Linux for x86-64 is almost the same as in Windows, but 6 registers are
-used instead of 4 (RDI, RSI, RDX, RCX, R8, R9) and there are no ``scratch space'', but \gls{callee}
+used instead of 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}) and there are no ``scratch space'', 
+but \gls{callee}
 may save register values in the stack, if it needs to}.
 
 \lstinputlisting[caption=GCC 4.7.3 -O3]{calling_conventions/x64_linux_O3.s}

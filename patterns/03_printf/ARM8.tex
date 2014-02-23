@@ -66,9 +66,9 @@ registers}.
 
 \item \IFRU{Передача 5, 6, 7 и 8 через стек}{Passing 5, 6, 7 and 8 via stack}:
 
-\IFRU{Затем значения 5, 6, 7 и 8 записываются в регистры \Rzero, \Rone, \Rtwo и \Rthree соответственно}
+\IFRU{Затем значения 5, 6, 7 и 8 записываются в регистры \Reg{0}, \Reg{1}, \Reg{2} и \Reg{3} соответственно}
 {Then values 5, 6, 7 and 8
-are written to the \Rzero, \Rone, \Rtwo and \Rthree registers respectively}.
+are written to the \Reg{0}, \Reg{1}, \Reg{2} and \Reg{3} registers respectively}.
 \IFRU{Затем инструкция}{Then} \TT{``ADD R12, SP, \#0x18+var\_14''} 
 \IFRU{записывает в регистр \TT{R12} адрес места в стеке, куда будут помещены эти 4 значения}
 {instruction writes an address of the point in the stack, where these 4 variables will be written, into the \TT{R12} register}.
@@ -81,20 +81,20 @@ by \IDA reflecting local variables in the stack}.
 \IFRU{Так что в \TT{R12} будет записано $SP+4$}{So, $SP+4$ will be written into the \TT{R12} register}.
 \index{ARM!\Instructions!STMIA}
 \IFRU{Следующая инструкция}{The next} \TT{``STMIA R12, {R0-R3}''} 
-\IFRU{записывает содержимое регистров \Rzero-\Rthree по адресу в памяти, на который указывает \TT{R12}}
+\IFRU{записывает содержимое регистров \Reg{0}-\Reg{3} по адресу в памяти, на который указывает \TT{R12}}
 {instruction
-writes \Rzero-\Rthree registers contents at the point in memory to which \TT{R12} pointing}.
+writes \Reg{0}-\Reg{3} registers contents at the point in memory to which \TT{R12} pointing}.
 \IFRU{Инструкция }\TT{STMIA} \IFRU{означает}{instruction meaning} \IT{Store Multiple Increment After}. 
 \IT{Increment After} \IFRU{означает, что \TT{R12} будет увеличиваться на 4 после записи каждого значения регистра}
 {meaning the \TT{R12} will be increasing by $4$ after each register value write}.
 
 \item \IFRU{Передача $4$ через стек}{Passing $4$ via stack}:
-\IFRU{$4$ записывается в \Rzero, затем это значение при помощи инструкции}{$4$ is stored in the \Rzero and then,
+\IFRU{$4$ записывается в \Reg{0}, затем это значение при помощи инструкции}{$4$ is stored in the \Reg{0} and then,
 this value, with the help of} \TT{``STR R0, [SP,\#0x18+var\_18]''} \IFRU{попадает в стек}{instruction, is saved
 on the stack}.
 \IT{var\_18} \IFRU{равен}{is} $-0x18$, \IFRU{смещение будет $0$}{offset will be $0$}, 
-\IFRU{так что, значение из регистра \Rzero ($4$) запишется туда, куда указывает \SP}
-{so, value from the \Rzero register ($4$) will be written to a point the \SP pointing to}.
+\IFRU{так что, значение из регистра \Reg{0} ($4$) запишется туда, куда указывает \SP}
+{so, value from the \Reg{0} register ($4$) will be written to a point the \SP pointing to}.
 
 \item \IFRU{Передача 1, 2 и 3 через регистры}{Passing 1, 2 and 3 via registers}:
 
@@ -205,9 +205,9 @@ instruction increasing value in the \SP register and only then writing next regi
 
 \IFRU{Второе, что бросается в глаза, это то, что инструкции как будто бы расположены случайно}{Another thing
 we easily spot is the instructions are ostensibly located randomly}.
-\IFRU{Например, значение в регистре \Rzero подготавливается в трех местах, по адресам \TT{0x2918}, \TT{0x2920} 
+\IFRU{Например, значение в регистре \Reg{0} подготавливается в трех местах, по адресам \TT{0x2918}, \TT{0x2920} 
 и \TT{0x2928}, 
-когда это можно было бы сделать в одном месте}{For instance, value in the \Rzero register is prepared in three
+когда это можно было бы сделать в одном месте}{For instance, value in the \Reg{0} register is prepared in three
 places, at addresses \TT{0x2918}, \TT{0x2920} and \TT{0x2928}, when it would be possible to do it in one single point}.
 \IFRU{Однако, у оптимизирующего компилятора могут быть свои доводы о том, как лучше составлять инструкции 
 друг с другом для лучшей эффективности исполнения}
@@ -217,7 +217,7 @@ to place instructions better}.
 {Usually, processor attempts to simultaneously execute instructions located side-by-side}.
 \IFRU{К примеру, инструкции}{For example, instructions like} \TT{``MOVT R0, \#0''} \AndENRU 
 \TT{``ADD R0, PC, R0''} \IFRU{не могут быть исполнены одновременно, потому что обе инструкции модифицируют 
-регистр \Rzero}{cannot be executed simultaneously since they both modifying the \Rzero register}. 
+регистр \Reg{0}}{cannot be executed simultaneously since they both modifying the \Reg{0} register}. 
 \IFRU{А вот инструкции}{On the other hand,} \TT{``MOVT R0, \#0''} \AndENRU \TT{``MOV R2, \#4''} 
 \IFRU{легко можно исполнить одновременно, 
 потому что эффекты от их исполнения никак не конфликтуют друг с другом}{instructions can be executed

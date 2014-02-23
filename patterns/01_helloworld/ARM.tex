@@ -90,7 +90,7 @@ compete with ARM mode.}
 \IFRU{Самая первая инструкция}{The very first instruction}, \TT{''STMFD SP!, \{R4,LR\}''}\footnote{\STMFDdesc}, 
 \IFRU{работает как инструкция}{works as an x86} \PUSH \IFRU{в x86}{instruction},
 \IFRU{записывая значения двух регистров}{writing the values of two registers}
-(\Rfour \AndENRU \LR) \IFRU{в стек}{into the stack}.
+(\Reg{4} \AndENRU \LR) \IFRU{в стек}{into the stack}.
 \IFRU{Действительно, в выдаваемом листинге на ассемблере компилятор \IT{armcc}, для упрощения, указывает здесь инструкцию}
 {Indeed, in the output listing from the \IT{armcc} compiler, for the sake of simplification, 
 actually shows the} \TT{''PUSH \{r4,lr\}''}\IFRU{}{ instruction}.
@@ -99,9 +99,9 @@ actually shows the} \TT{''PUSH \{r4,lr\}''}\IFRU{}{ instruction}.
 {But it is not quite correct. \PUSH instruction are only available in thumb mode.
 So, to make things less messy, I offered to work in \IDA}.
 
-\IFRU{Итак, эта инструкция записывает значения регистров \Rfour и \LR по адресу в памяти, на который указывает регистр \SPwithfootnote, затем уменьшает \TT{SP}, 
+\IFRU{Итак, эта инструкция записывает значения регистров \Reg{4} и \LR по адресу в памяти, на который указывает регистр \SPwithfootnote, затем уменьшает \TT{SP}, 
 чтобы он указывал на место в стеке, доступное для новых записей}
-{This instruction writes the values of the \Rfour and \LR registers at the address in memory to which 
+{This instruction writes the values of the \Reg{4} and \LR registers at the address in memory to which 
 \SPwithfootnote is pointing, then it \glspl{decrement} \SP so it will point to the place in the stack that 
 is free for new entries}.
 
@@ -171,19 +171,19 @@ This means the the last 2 bits of the instruction address (always zero bits) may
 
 \index{ARM!\Instructions!MOV}
 \IFRU{Следующая инструкция}{Next, the} \TT{''MOV R0, \#0''}\footnote{MOVe}
-\IFRU{просто записывает $0$ в регистр \Rzero}{instruction just writes $0$ into the \Rzero register}.
-\IFRU{Ведь наша Си-функция возвращает $0$, а возвращаемое значение всякая функция оставляет в \Rzero}
-{That's because our C-function returns $0$ and the returned value is to be placed in the \Rzero register}.
+\IFRU{просто записывает $0$ в регистр \Reg{0}}{instruction just writes $0$ into the \Reg{0} register}.
+\IFRU{Ведь наша Си-функция возвращает $0$, а возвращаемое значение всякая функция оставляет в \Reg{0}}
+{That's because our C-function returns $0$ and the returned value is to be placed in the \Reg{0} register}.
 
 \index{ARM!\Registers!Link Register}
 \index{ARM!\Instructions!LDMFD}
 \index{ARM!\Instructions!POP}
 \IFRU{Последняя инструкция  ~---}{The last instruction} \TT{''LDMFD SP!, {R4,PC}''}\footnote{\LDMFDDESC} \IFRU{это инструкция, обратная от}{is an inverse instruction of} \TT{STMFD}. 
-\IFRU{Она загружает из стека значения для сохранения их в \Rfour и \PC, увеличивая \glslink{stack pointer}{указатель стека} \SP}
-{It loads values from the stack in order to save them into \Rfour and \PC, and \glslink{increment}{increments} \gls{stack pointer} \SP}.
+\IFRU{Она загружает из стека значения для сохранения их в \Reg{4} и \PC, увеличивая \glslink{stack pointer}{указатель стека} \SP}
+{It loads values from the stack in order to save them into \Reg{4} and \PC, and \glslink{increment}{increments} \gls{stack pointer} \SP}.
 \IFRU{Это, в каком-то смысле, аналог \POP}{It can be said it is similar to \POP}. 
-N.B. \IFRU{Самая первая инструкция \TT{STMFD} сохранила в стеке \Rfour и \LR, а \IT{восстанавливаются} во время исполнения \TT{LDMFD} регистры \Rfour и \PC}
-{The very first instruction \TT{STMFD} saves the \Rfour and \LR registers pair on the stack, but \Rfour and \PC are \IT{restored} during execution of \TT{LDMFD}}.
+N.B. \IFRU{Самая первая инструкция \TT{STMFD} сохранила в стеке \Reg{4} и \LR, а \IT{восстанавливаются} во время исполнения \TT{LDMFD} регистры \Reg{4} и \PC}
+{The very first instruction \TT{STMFD} saves the \Reg{4} and \LR registers pair on the stack, but \Reg{4} and \PC are \IT{restored} during execution of \TT{LDMFD}}.
 \IFRU{Как я уже описывал, в регистре \LR обычно сохраняется адрес места, куда нужно всякой функции вернуть управление}
 {As I wrote before, address of place to where each function must return control is usually saved in the \LR
 register}.
@@ -249,8 +249,8 @@ the lower 11 bits of the offset}.
 \IFRU{Остальные инструкции в функции: \PUSH и \POP работают почти так же, как и описанные \TT{STMFD}/\TT{LDMFD}, только регистр \SP здесь не указывается явно}
 {Other instructions in functions are: \PUSH and \POP work just like the described \TT{STMFD}/\TT{LDMFD} but the \SP register is not mentioned explicitly here}.
 \TT{ADR} \IFRU{работает так же, как и в предыдущем примере}{works just like in previous example}.
-\TT{MOVS} \IFRU{записывает $0$ в регистр \Rzero для возврата нуля}
-{writes $0$ into the \Rzero register in order to return zero value}.
+\TT{MOVS} \IFRU{записывает $0$ в регистр \Reg{0} для возврата нуля}
+{writes $0$ into the \Reg{0} register in order to return zero value}.
 
 \subsubsection{\OptimizingXcode + \ARMMode}
 
@@ -273,8 +273,8 @@ __cstring:00003F62 48 65 6C 6C+aHelloWorld_0   DCB "Hello world!",0
 
 \IFRU{Инструкции}{The instructions} \TT{STMFD} \AndENRU \TT{LDMFD} \IFRU{нам уже знакомы}{are familiar to us}.
 
-\IFRU{Инструкция \MOV просто записывает число \TT{0x1686} в регистр \Rzero ~--- это смещение, указывающее на строку ``Hello world!''}
-{The \MOV instruction just writes the number \TT{0x1686} into the \Rzero register.
+\IFRU{Инструкция \MOV просто записывает число \TT{0x1686} в регистр \Reg{0} ~--- это смещение, указывающее на строку ``Hello world!''}
+{The \MOV instruction just writes the number \TT{0x1686} into the \Reg{0} register.
 This is the offset pointing to the ``Hello world!'' string}.
 
 \IFRU{Регистр \TT{R7}, по стандарту, принятому в}{The \TT{R7} register as it is standardized in}\cite{IOSABI}
@@ -294,8 +294,8 @@ This is the offset pointing to the ``Hello world!'' string}.
 \IFRU{Возможно, это недочет компилятора}{It is probably the compiler's shortcoming}.
 
 \index{ARM!\Instructions!ADD}
-\IFRU{Инструкция}{The} \TT{''ADD R0, PC, R0''} \IFRU{прибавляет \PC к \Rzero для вычисления действительного адреса строки ``Hello world!''. Как нам уже известно, это ``\PICcode'', поэтому такая корректива необходима}
-{instruction adds value in the \PC to the value in the \Rzero, to calculate absolute address of the ``Hello world!'' string. 
+\IFRU{Инструкция}{The} \TT{''ADD R0, PC, R0''} \IFRU{прибавляет \PC к \Reg{0} для вычисления действительного адреса строки ``Hello world!''. Как нам уже известно, это ``\PICcode'', поэтому такая корректива необходима}
+{instruction adds value in the \PC to the value in the \Reg{0}, to calculate absolute address of the ``Hello world!'' string. 
 And as we already know, it is ``\PICcode'' so this corrective is essential here}.
 
 \IFRU{Инструкция \TT{BL} вызывает \puts вместо \printf}
@@ -327,7 +327,7 @@ at the end of a string, so we do not see it here.}}.
 
 \IFRU{Далее уже знакомая инструкция}{Next, we see the familiar} 
 \TT{''MOV R0, \#0''}\IFRU{, служащая для установки в $0$ возвращаемого значения функции}
-{instruction intended to set $0$ to the \Rzero register}.
+{instruction intended to set $0$ to the \Reg{0} register}.
 
 \subsubsection{\OptimizingXcode + \ThumbTwoMode}
 
@@ -377,8 +377,8 @@ then second and first for instructions in ARM mode (different \gls{endianness})}
 {So as we see, \TT{MOVW}, \TT{MOVT.W} and \TT{BLX} instructions begin with} \TT{0xFx}.
 
 \IFRU{Одна из thumb-2 инструкций это}{One of the thumb-2 instructions is}
-\TT{``MOVW R0, \#0x13D8''}\IFRU{ ~--- она записывает 16-битное число в младшую часть регистра \Rzero}
-{~---it writes a 16-bit value into the lower part of the \Rzero register}.
+\TT{``MOVW R0, \#0x13D8''}\IFRU{ ~--- она записывает 16-битное число в младшую часть регистра \Reg{0}}
+{~---it writes a 16-bit value into the lower part of the \Reg{0} register}.
 
 \IFRU{Еще}{Also,} \TT{``MOVT.W R0, \#0''}\IFRU{ ~--- эта инструкция работает так же, как и}
 {~---this instruction works just like} 

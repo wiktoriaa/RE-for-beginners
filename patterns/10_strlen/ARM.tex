@@ -22,14 +22,14 @@ first instructions are just saves input value in} \IT{str} \AndENRU \IT{eos}.
 \IFRU{Начиная с метки}{Loop body is beginning at} \IT{loc\_2CB8}\IFRU{, начинается тело цикла}{ label}.
 
 \IFRU{Первые три инструкции в теле цикла}{First three instruction in loop body} (\TT{LDR}, \ADD, \TT{STR}) 
-\IFRU{загружают значение}{loads} \IT{eos} \IFRU{в}{value into} \Rzero, 
+\IFRU{загружают значение}{loads} \IT{eos} \IFRU{в}{value into} \Reg{0}, 
 \IFRU{затем происходит инкремент значения и оно сохраняется назад в локальной переменной \IT{eos} расположенной 
 в стеке.}{then value is \glslink{increment}{incremented} and it is saved back into \IT{eos} local variable located in the stack.}
 
 \index{ARM!\Instructions!LDRSB}
 \IFRU{Следующая инструкция}{The next} \TT{``LDRSB R0, [R0]''} (\IT{Load Register Signed Byte}) 
-\IFRU{загружает байт из памяти по адресу \Rzero, расширяет его до 32-бит считая его знаковым (signed) 
-и сохраняет в \Rzero}{instruction loading byte from memory at \Rzero address and sign-extends it to 32-bit}.
+\IFRU{загружает байт из памяти по адресу \Reg{0}, расширяет его до 32-бит считая его знаковым (signed) 
+и сохраняет в \Reg{0}}{instruction loading byte from memory at \Reg{0} address and sign-extends it to 32-bit}.
 \index{x86!\Instructions!MOVSX}
 \IFRU{Это немного похоже на инструкцию}{This is similar to} \MOVSX \IFRU{в}{instruction in} x86.
 \IFRU{Компилятор считает этот байт знаковым (signed), потому что тип \Tchar по стандарту Си ~--- знаковый.}
@@ -55,8 +55,8 @@ but ARM was developed from scratch as 32-bit RISC-processor.}
 32-битные регистры.}
 {Consequently, in order to process separate bytes in ARM, one have to use 32-bit registers anyway.}
 
-\IFRU{Итак}{So}, \TT{LDRSB} \IFRU{загружает символ из строки в \Rzero, по одному}
-{loads symbol from string into \Rzero, one by one}.
+\IFRU{Итак}{So}, \TT{LDRSB} \IFRU{загружает символ из строки в \Reg{0}, по одному}
+{loads symbol from string into \Reg{0}, one by one}.
 \IFRU{Следующие инструкции}{Next} \CMP \AndENRU \ac{BEQ} \IFRU{проверяют, является ли этот символ $0$.}
 {instructions checks, if loaded symbol is $0$.}
 \IFRU{Если не $0$, то происходит переход на начало тела цикла.}{If not $0$, control passing to loop body
@@ -65,16 +65,16 @@ begin.}
 
 \IFRU{В конце функции вычисляется разница между}{At the end of function, a difference between} 
 \IT{eos} \AndENRU \IT{str}\IFRU{, вычитается еще единица и вычисленное 
-значение возвращается через \Rzero.}{ is calculated, 1 is also subtracting, and resulting value is returned
-via \Rzero.}
+значение возвращается через \Reg{0}.}{ is calculated, 1 is also subtracting, and resulting value is returned
+via \Reg{0}.}
 
 N.B. \IFRU{В этой функции не сохранялись регистры}{Registers was not saved in this function}.
 \index{ARM!\Registers!scratch registers}
-\IFRU{Это потому что, по стандарту, регистры \Rzero-\Rthree называются также ``scratch registers'',
+\IFRU{Это потому что, по стандарту, регистры \Reg{0}-\Reg{3} называются также ``scratch registers'',
 они предназначены для передачи аргументов, 
 их значения не нужно восстанавливать при выходе из функции, потому что они больше не нужны в вызывающей функции.
 Таким образом, их можно использовать как захочется}
-{That's because by ARM calling convention, \Rzero-\Rthree registers are ``scratch registers'', 
+{That's because by ARM calling convention, \Reg{0}-\Reg{3} registers are ``scratch registers'', 
 they are intended for arguments passing,
 its values may not be restored upon function exit since calling function will not use them anymore.
 Consequently, they may be used for anything we want.}
@@ -97,18 +97,18 @@ to address in the \LR register.}
 \IFRU{и эти переменные можно хранить прямо в регистрах.}
 {and these variables may always be stored right in registers.}
 \IFRU{Перед началом тела цикла}{Before loop body beginning}, \IT{str} \IFRU{будет находиться в}{will always be in} 
-\Rzero, \IFRU{а}{and} \IT{eos}\EMDASH\InENRU \Rone.
+\Reg{0}, \IFRU{а}{and} \IT{eos}\EMDASH\InENRU \Reg{1}.
 
 \index{ARM!\Instructions!LDRB.W}
 \index{ARM!\IFRU{Режимы адресации}{Adressing modes}}
-\IFRU{Инструкция }{}\TT{``LDRB.W R2, [R1],\#1''} \IFRU{загружает в \Rtwo байт из памяти по адресу \Rone, 
+\IFRU{Инструкция }{}\TT{``LDRB.W R2, [R1],\#1''} \IFRU{загружает в \Reg{2} байт из памяти по адресу \Reg{1}, 
 расширяя его как знаковый (signed), до 32-битного
 значения, но не только это.}
-{instruction loads byte from memory at the address \Rone into \Rtwo, sign-extending it to 32-bit value, but not
+{instruction loads byte from memory at the address \Reg{1} into \Reg{2}, sign-extending it to 32-bit value, but not
 only that.}
 \TT{\#1} \IFRU{в конце инструкции называется}{at the instruction's end calling} ``Post-indexed addressing'', 
-\IFRU{это значит, что после загрузки байта, к \Rone добавится единица.}{this means, $1$ is to be added
-to the \Rone after byte load.}
+\IFRU{это значит, что после загрузки байта, к \Reg{1} добавится единица.}{this means, $1$ is to be added
+to the \Reg{1} after byte load.}
 \IFRU{Это очень удобно для работы с массивами.}
 {That's convenient when accessing arrays.}
 
@@ -211,7 +211,7 @@ $str - eos - 1$
 если операнды в исполненной перед этим инструкции \CMP были равны.}
 {suffix, as we may recall, means the instruction will be executed only if operands in executed before
 \CMP were equal to each other.}
-\IFRU{Таким образом}{Thus}, \IFRU{если в \Rzero будет $0$}{if $0$ will be in the \Rzero register},
-\IFRU{обе инструкции}{both} \TT{SUBEQ} \IFRU{исполнятся и результат останется в \Rzero.}
-{instructions are to be executed and result is leaving in the \Rzero register.}
+\IFRU{Таким образом}{Thus}, \IFRU{если в \Reg{0} будет $0$}{if $0$ will be in the \Reg{0} register},
+\IFRU{обе инструкции}{both} \TT{SUBEQ} \IFRU{исполнятся и результат останется в \Reg{0}.}
+{instructions are to be executed and result is leaving in the \Reg{0} register.}
 
