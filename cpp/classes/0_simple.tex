@@ -154,12 +154,14 @@ earlier}: \ref{JMP_instead_of_RET}.
 
 \lstinputlisting[caption=GCC 4.4.1]{cpp/classes/simple_GCC.asm}
 
-% FIXME move to .bib
-\newcommand{\URLAGNER}{\url{http://www.agner.org/optimize/calling_conventions.pdf}}
-
-\IFRU{Здесь мы видим, что применяется иной \IT{name mangling} характерный для стандартов 
-GNU\footnote{Еще о name mangling разных компиляторов: \URLAGNER}. Во-вторых, указатель на экземпляр передается как первый аргумент функции ~--- конечно же, скрыто от программиста.}
-{Here we see another \IT{name mangling} style, specific to GNU\footnote{One more document about different compilers name mangling types: \URLAGNER} standards. It is also can be noted the pointer to object is passed as first function 
+\IFRU{Здесь мы видим, что применяется иной \IT{name mangling} характерный для стандартов GNU
+\footnote{Еще о name mangling разных компиляторов: \cite{AgnerFogCC}.}
+Во-вторых, указатель на экземпляр передается как первый аргумент функции ~--- 
+конечно же, скрыто от программиста.}
+{Here we see another \IT{name mangling} style, specific to GNU
+\footnote{One more document about different compilers name mangling types:
+\cite{AgnerFogCC} standards.}
+It is also can be noted the pointer to object is passed as first function 
 argument~---transparently from programmer, of course.}
 
 \IFRU{Это первый конструктор:}{First constructor:}
@@ -262,11 +264,11 @@ is style of function names encoding (\IT{name mangling}) and passing pointer to 
 
 \IFRU{Первые 6 аргументов, как мы уже знаем, передаются через 6 регистров}
 {The first 6 arguments, as we already know, are passed in the} \RDI, \RSI, \RDX, \RCX, \Reg{8}, 
-\Reg{9}\IFRU{, а указатель на \ITthis через первый (\RDI) что мы здесь и видим}{ registers,
+\Reg{9}\cite{SysVABI}\IFRU{, а указатель на \ITthis через первый (\RDI) что мы здесь и видим}{ registers,
 and the pointer to \ITthis via first one (\RDI) and that is what we see here}.
 \IFRU{Тип \Tint 32-битный и здесь}{\Tint data type is also 32-bit here}.
 \IFRU{\IT{Хак} с \JMP вместо \RET используется и здесь}
 {\JMP instead of \RET \IT{hack} is also used here}.
 
-\lstinputlisting[caption=GCC 4.4.6]{cpp/classes/simple_GCC_x64.s}
+\lstinputlisting[caption=GCC 4.4.6 x64]{cpp/classes/simple_GCC_x64.s}
 

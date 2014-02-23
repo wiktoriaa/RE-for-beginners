@@ -1,0 +1,153 @@
+﻿\subsubsection{MSVC\EMDASH{}x86}
+
+\IFRU{Компилируем в}{Let's compile it in} MSVC 2010:
+
+\begin{lstlisting}
+cl 1.cpp /Fa1.asm
+\end{lstlisting}
+
+\IFRU
+{(Ключ /Fa означает сгенерировать листинг на ассемблере)}
+{(/Fa option means generate assembly listing file)}
+
+\begin{lstlisting}[caption=MSVC 2010]
+CONST	SEGMENT
+$SG3830	DB	'hello, world', 00H
+CONST	ENDS
+PUBLIC	_main
+EXTRN	_printf:PROC
+; Function compile flags: /Odtp
+_TEXT	SEGMENT
+_main	PROC
+	push	ebp
+	mov	ebp, esp
+	push	OFFSET $SG3830
+	call	_printf
+	add	esp, 4
+	xor	eax, eax
+	pop	ebp
+	ret	0
+_main	ENDP
+_TEXT	ENDS
+\end{lstlisting}
+
+\IFRU{MSVC выдает листинги в Intel-овском синтаксисе.}{MSVC produces assembly listings in Intel-syntax.} 
+\IFRU{Разница между Intel-синтаксисом и AT\&T будет рассмотрена немного позже.}
+{The difference between Intel-syntax and AT\&T-syntax will be discussed hereafter.}
+
+\IFRU{Компилятор сгенерировал файл \TT{1.obj}, который впоследствии будет слинкован линкером в \TT{1.exe}.} 
+{The compiler generated \TT{1.obj} file will be linked into \TT{1.exe}.}
+
+\IFRU{В нашем случае, этот файл состоит из двух сегментов: \TT{CONST} (для данных-констант) и \TT{\_TEXT} (для кода).}
+{In our case, the file contain two segments: \TT{CONST} (for data constants) and \TT{\_TEXT} (for code).} 
+
+\index{\CLanguageElements!const}
+\IFRU{Строка \TT{``hello, world''} в \CCpp имеет тип \TT{const char*}, однако не имеет имени.}
+{The string \TT{``hello, world''} in \CCpp has type \TT{const char*}, however it does not have
+its own name.}
+
+\IFRU{Но компилятору нужно как-то с ней работать, так что он дает ей внутреннее имя \TT{\$SG3830}.}
+{The compiler needs to deal with the string somehow so it defines the internal name \TT{\$SG3830} for it.}
+
+\IFRU{Так что пример можно было бы переписать вот так}{So the example may be rewritten as}:
+
+\lstinputlisting{patterns/01_helloworld/hw_2.c}
+
+\IFRU{Вернемся к листингу на ассемблере. Как видно, строка заканчивается нулевым байтом ~--- 
+это требования стандарта \CCpp для строк}
+{Let's back to the assembly listing. 
+As we can see, the string is terminated by a zero byte which is standard for \CCpp strings}
+\footnote{\IFRU{Причина, почему формат строки в Си именно такой (оканчивающийся нулем) вероятно историческая}
+{The reason why C string format is as it is (zero-terminating) is apparently hisorical}.
+\IFRU{В}{In} \cite{Ritchie79} \IFRU{мы можем прочитать}{we can read}:
+``A minor difference was that the unit of I/O was the word, not the byte, because the PDP-7 was a word-addressed
+machine. In practice this meant merely that all programs dealing with character streams ignored null
+characters, because null was used to pad a file to an even number of characters.''}.
+
+\IFRU{В сегменте кода \TT{\_TEXT} находится пока только одна функция}
+{In the code segment, \TT{\_TEXT}, there is only one function so far}: \main.
+
+\IFRU{Функция \main, как и практически все функции, начинается с пролога и заканчивается эпилогом}
+{The function \main starts with prologue code and ends with epilogue code (like almost any function)}
+\footnote{\IFRU{Об этом смотрите подробнее в разделе о прологе и эпилоге функции}
+{Read more about it in section about function prolog and epilog}
+~(\ref{sec:prologepilog}).}.
+
+\index{x86!\Instructions!CALL}
+\IFRU{Далее следует вызов функции \printf}
+{After the function prologue we see the call to the \printf function}: \TT{CALL \_printf}. 
+
+\index{x86!\Instructions!PUSH}
+\IFRU
+{Перед этим вызовом адрес строки (или указатель на неё) с нашим приветствием при помощи инструкции \PUSH помещается в стек.}
+{Before the call the string address (or a pointer to it) containing our greeting is placed on the stack with the help of the \PUSH instruction.}
+
+\IFRU{После того, как функция \printf возвращает управление в функцию \main, адрес строки (или указатель на неё) всё еще лежит в стеке.}
+{When the \printf function returns flow control to the \main function, string address (or pointer to it) is still in stack.}
+
+\IFRU{Так как он больше не нужен, то \glslink{stack pointer}{указатель стека} (регистр \ESP) корректируется.} 
+{Since we do not need it anymore the \gls{stack pointer} (the \ESP register) needs to be corrected.}
+
+\index{x86!\Instructions!ADD}
+\TT{ADD ESP, 4} \IFRU{означает прибавить 4 к значению в регистре \ESP.}
+{means add 4 to the value in the \ESP register.}
+
+\IFRU
+{Почему 4? Так как это 32-битный код, для передачи адреса нужно аккурат 4 байта. В x64-коде это 8 байт.}
+{Why 4? Since it is 32-bit code we need exactly 4 bytes for address passing through the stack. 
+It is 8 bytes in x64-code.}
+
+\TT{``ADD ESP, 4''} \IFRU{эквивалентно \TT{``POP регистр''}, но без использования какого-либо регистра\footnote{Флаги
+процессора, впрочем, модифицируются}.}
+{is effectively equivalent to \TT{``POP register''} but without using any register\footnote{CPU flags, however, are modified}.}
+
+\index{Intel C++}
+\index{Oracle RDBMS}
+\index{x86!\Instructions!POP}
+\IFRU{Некоторые компиляторы, например, Intel C++ Compiler, в этой же ситуации могут вместо 
+\ADD сгенерировать \TT{POP ECX} (подобное можно встретить, например, в коде \oracle{}, им скомпилированном),
+что почти то же самое, только портится значение в регистре \ECX.}
+{Some compilers (like Intel C++ Compiler) in the same situation may emit \TT{POP ECX} 
+instead of \ADD (e.g. such a pattern can be observed in the \oracle{} code as it is compiled by Intel C++ compiler).
+This instruction has almost the same effect but the \ECX register contents will be rewritten.}
+
+\IFRU
+{Возможно, компилятор применяет \TT{POP ECX}, потому что эта инструкция короче (1 байт против 3).}
+{The Intel C++ compiler probably uses \TT{POP ECX} since this instruction's opcode is shorter then 
+\TT{ADD ESP, x} (1 byte against 3).}
+
+\IFRU{О стеке можно прочитать в соответствующем разделе}
+{Read more about the stack in section}~(\ref{sec:stack}).
+
+\index{\CLanguageElements!return}
+\IFRU{После вызова \printf в оригинальном коде на \CCpp указано \TT{return 0} ~--- вернуть $0$ 
+в качестве результата функции \main.} 
+{After the call to \printf, in the original \CCpp code was 
+\TT{return 0}~---return $0$ as the result of the \main function.}
+
+\index{x86!\Instructions!XOR}
+\IFRU{В сгенерированном коде это обеспечивается инструкцией}
+{In the generated code this is implemented by instruction} \TT{XOR EAX, EAX} 
+
+\index{x86!\Instructions!MOV}
+\IFRU{\XOR, на самом деле, как легко догадаться, ``исключающее ИЛИ''}
+{\XOR is in fact, just ``eXclusive OR''}
+\footnote{\url{http://en.wikipedia.org/wiki/Exclusive_or}}
+\IFRU{, но компиляторы часто используют его вместо простого}
+{but compilers often use it instead of}
+\TT{MOV EAX, 0}\IFRU{ ~--- снова потому, что опкод короче (2 байта против 5).}
+{~---again because it is a slightly shorter opcode (2 bytes against 5).}
+
+\index{x86!\Instructions!SUB}
+\IFRU{Бывает так, что некоторые компиляторы генерируют}{Some compilers emit}
+\TT{SUB EAX, EAX}, 
+\IFRU
+{что значит \IT{отнять значение в \EAX от значения в \EAX}, что в любом случае даст 0 в результате.}
+{which means \IT{SUBtract the value in the \EAX from the value in \EAX}, which in any case will result zero.}
+
+\index{x86!\Instructions!RET}
+\IFRU{Самая последняя инструкция \RET возвращает управление в вызывающую функцию.
+Обычно это код \CCpp \ac{CRT}, который, в свою очередь, 
+вернёт управление операционной системе.}
+{The last instruction \RET returns control flow to the \gls{caller}.
+Usually, it is \CCpp \ac{CRT} code which in turn returns control to the \ac{OS}.}
