@@ -44,6 +44,33 @@ to have an access to local variables and function arguments via \TT{EBP+offset}.
 {It is also possible to use \ESP, but it is often changing and not very convenient.
 So it can be said, the value of the \EBP is \IT{frozen state} of the value of the \ESP at the moment of function execution start.}
 
+\IFRU{Разметка типичного стекового фрейма в 32-битной среде}
+{A very typical stack frame layout in 32-bit environment is}:
+
+\begin{center}
+\begin{tabular}{ | l | l | }
+\hline
+\dots & \dots \\
+\hline
+EBP-8 & \IFRU{локальная переменная}{local variable} \#2, \MarkedInIDAAs{} \TT{var\_8} \\
+\hline
+EBP-4 & \IFRU{локальная переменная}{local variable} \#1, \MarkedInIDAAs{} \TT{var\_4} \\
+\hline
+EBP & \IFRU{сохраненное значение}{saved value of} \EBP \\
+\hline
+EBP+4 & \IFRU{адрес возврата}{return address} \\
+\hline
+EBP+8 & \argument \#1, \MarkedInIDAAs{} \TT{arg\_0} \\
+\hline
+EBP+0xC & \argument \#2, \MarkedInIDAAs{} \TT{arg\_4} \\
+\hline
+EBP+0x10 & \argument \#3, \MarkedInIDAAs{} \TT{arg\_8} \\
+\hline
+\dots & \dots \\
+\hline
+\end{tabular}
+\end{center}
+
 \IFRU
 {У функции \scanf в нашем примере два аргумента.}{Function \scanf in our example has two arguments.}
 

@@ -111,3 +111,33 @@ The user-core part of an image is divided into three logical segments. The progr
 \input{patterns/02_stack/04_alloca.tex}
 \input{patterns/02_stack/05_SEH.tex}
 \input{patterns/02_stack/06_BO_protection.tex}
+
+\subsection{\IFRU{Разметка типичного стека}{Typical stack layout}}
+
+\IFRU{Разметка типичного стека в 32-битной среде на момент начала ф-ции выглядит так}
+{A very typical stack layout in 32-bit environment at the function start is}:
+
+\begin{center}
+\begin{tabular}{ | l | l | }
+\hline
+\dots & \dots \\
+\hline
+ESP-0xC & \IFRU{локальная переменная}{local variable} \#2, \MarkedInIDAAs{} \TT{var\_8} \\
+\hline
+ESP-8 & \IFRU{локальная переменная}{local variable} \#1, \MarkedInIDAAs{} \TT{var\_4} \\
+\hline
+ESP-4 & \IFRU{сохраненное значение}{saved value of} \EBP \\
+\hline
+ESP & \IFRU{адрес возврата}{return address} \\
+\hline
+ESP+4 & \argument \#1, \MarkedInIDAAs{} \TT{arg\_0} \\
+\hline
+ESP+8 & \argument \#2, \MarkedInIDAAs{} \TT{arg\_4} \\
+\hline
+ESP+0xC & \argument \#3, \MarkedInIDAAs{} \TT{arg\_8} \\
+\hline
+\dots & \dots \\
+\hline
+\end{tabular}
+\end{center}
+
