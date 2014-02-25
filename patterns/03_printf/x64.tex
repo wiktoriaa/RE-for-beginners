@@ -20,7 +20,7 @@ to be passed to 9 (\printf format string + 8 \Tint variables)}:
 {However, \MOV instruction used here for stack preparing instead of \PUSH, so the values are written
 to the stack straightforwardly}.
 
-\lstinputlisting{patterns/03_printf/2_MSVC_x64.asm}
+\lstinputlisting[caption=MSVC 2012 x64]{patterns/03_printf/2_MSVC_x64.asm}
 
 \subsubsection{GCC}
 
@@ -32,5 +32,8 @@ to the stack straightforwardly}.
 это мы уже рассмотрели чуть раньше}{GCC generates the code writing string pointer into \EDI instead if \RDI{}---we
 saw this thing shortly before}: \ref{hw_EDI_instead_of_RDI}.
 
-\lstinputlisting{patterns/03_printf/2_GCC_x64.s}
+\IFRU{Почему перед вызовом \printf очищается регистр \EAX, мы уже рассмотрели раннее}
+{Why \EAX register is cleared before \printf call, we saw before}: \ref{SysVABI_input_EAX}.
+
+\lstinputlisting[caption=GCC 4.4.6 -O3 x64]{patterns/03_printf/2_GCC_x64_\IFRU{ru}{en}.s}
 

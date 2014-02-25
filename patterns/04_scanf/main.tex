@@ -4,19 +4,7 @@
 
 \IFRU{Теперь попробуем использовать scanf().}{Now let's use scanf().}
 
-\begin{lstlisting}
-int main() 
-{
-	int x;
-	printf ("Enter X:\n");
-
-	scanf ("%d", &x);
-
-	printf ("You entered %d...\n", x);
-
-	return 0;
-};
-\end{lstlisting}
+\lstinputlisting{patterns/04_scanf/ex1.c}
 
 \IFRU
 {Да, согласен, использовать \scanf в наши времена для того, чтобы спросить у пользователя что-то, 
@@ -82,6 +70,27 @@ it also should return all these values.}
 {Internally, in compiled code, there is no information about pointers types.}
 
 \input{patterns/04_scanf/x86}
+\input{patterns/04_scanf/x64}
 \input{patterns/04_scanf/ARM}
-\input{patterns/04_scanf/global_vars}
+
+\subsection{\IFRU{Глобальные переменные}{Global variables}}
+\index{\IFRU{Глобальные переменные}{Global variables}}
+
+\IFRU
+{А что если переменная \TT{x} из предыдущего примера будет глобальной переменной, а не локальной? 
+Тогда к ней смогут обращаться из любого другого места, а не только из тела функции. 
+Глобальные переменные считаются \glslink{anti-pattern}{анти-паттерном},
+но ради примера мы можем себе это позволить.}
+{What if \TT{x} variable from previous example will not be local but global variable? 
+Then it will be accessible from any point, not only from function body. 
+Global variables are considered as \gls{anti-pattern}, but for the sake of experiment we could do this.}
+
+\lstinputlisting{patterns/04_scanf/ex2.c}
+
+\input{patterns/04_scanf/global_vars_x86}
+\input{patterns/04_scanf/global_vars_ARM}
+
+\subsection{\IFRU{Проверка результата scanf()}{scanf() result checking}}
 \input{patterns/04_scanf/checking_retval}
+\input{patterns/04_scanf/checking_retval_ARM}
+
