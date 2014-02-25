@@ -6,7 +6,7 @@ arg_0  = dword ptr  8
        push    ebp
        mov     ebp, esp
        mov     ecx, [ebp+arg_0]
-       mov     edx, 954437177
+       mov     edx, 954437177 ; 38E38E39h
        mov     eax, ecx
        imul    edx
        sar     edx, 1
