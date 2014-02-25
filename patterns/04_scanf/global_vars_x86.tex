@@ -1,4 +1,4 @@
-\subsubsection{x86}
+\subsubsection{MSVC: x86}
 
 \lstinputlisting{patterns/04_scanf/ex2_MSVC.asm}
 
@@ -70,6 +70,8 @@ allocated and a random garbage will be here.
 But in an .exe file these not initialized variables are not occupy anything. 
 E.g. it is suitable for large arrays.}
 
+\subsubsection{GCC: x86}
+
 \index{ELF}
 \IFRU{В Linux все также почти. За исключением того, что если значение \TT{x} не определено, 
 то эта переменная будет находится в сегменте \TT{\_bss}.
@@ -94,4 +96,20 @@ this is segment with the following attributes:}
 ; Segment type: Pure data
 ; Segment permissions: Read/Write
 \end{lstlisting}
+
+\subsubsection{MSVC: x64}
+
+\lstinputlisting[caption=MSVC 2012 x64]{patterns/04_scanf/ex2_MSVC_x64.asm}
+
+\IFRU{Почти такой же код как и в}{Almost the same code as in} x86.
+\IFRU{Обратите внимание что для \TT{scanf()} адрес переменной $x$ передается
+при помощи инструкции \LEA, а во второй \printf передается само значение переменной при помощи \MOV}
+{Take a notice that $x$ variable address is passed to \TT{scanf()} using \LEA instruction,
+while the value of variable is passed to the second \printf using \MOV instruction}.
+\TT{``DWORD PTR''}\EMDASH{}\IFRU{это часть языка ассемблера (не имеющая отношения к машинным кодам) 
+показывающая, что тип переменной в памяти\EMDASH{}именно 32-битный, 
+и инструкция \MOV должна быть здесь закодирована соответственно}{is a part of assembly language 
+(no related to machine codes), showing that the variable data type is 32-bit and the \MOV instruction
+should be encoded accordingly}.
+
 
