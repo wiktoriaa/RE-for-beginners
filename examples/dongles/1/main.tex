@@ -10,7 +10,7 @@ was disappeared long time ago, so the (legal) customer was afraid of physical do
 
 \IFRU{Если запустить программу без подключенной донглы, можно увидеть окно с надписью}
 {While running without dongle connected, a message box with a text}
-"Invalid Security Device"\IFRU{}{ appeared}.
+"Invalid Security Device"\EN{ appeared}.
 \IFRU{Мне повезло потому что этот текст можно было легко найти внутри исполняемого файла}
 {Luckily, this text string can be found easily in the executable binary file}.
 
@@ -61,7 +61,7 @@ and put it to r0, so it is analogical to} \MOVZX \InENRU x86 (\ref{movzx}),
 \IFRU{но также устанавливает флаги, так что}{but it also sets the flags, so the} \ac{BNE} 
 \IFRU{может проверить их потом}{can check them after}.
 
-\IFRU{Посмотрим внутрь}{Let's take a look into} \TT{check1()}\IFRU{}{ function}:
+\IFRU{Посмотрим внутрь}{Let's take a look into} \TT{check1()}\EN{ function}:
 
 \lstinputlisting{examples/dongles/1/check1.lst}
 
@@ -74,7 +74,7 @@ is checked right after each call}.
 {All this function does is calling other function, so it is} \gls{thunk function}: 
 \IFRU{здесь присутствует и пролог ф-ции и эпилог, но регистр r3 не трогается, так что}
 {there is function prologue and epilogue, but r3 register is not touched, so} \TT{checkl()} 
-\IFRU{возвращает то, что возвращает}{returns what} \TT{check2()}\IFRU{}{ returns}.
+\IFRU{возвращает то, что возвращает}{returns what} \TT{check2()}\EN{ returns}.
 
 \ac{BLR} \IFRU{это похоже возврат из ф-ции, но так как IDA делает всю разметку ф-ций автоматически,
 наверное, мы можем пока не интересоваться этим}{is seems return from function, but since \ac{IDA} does functions layout, we probably do not need
@@ -83,7 +83,7 @@ to be interesting in this}.
 {It seems, since it is a typical \ac{RISC}, subroutines are called using} \gls{link register},
 \IFRU{точно как в}{just like in} ARM.
 
-\IFRU{Ф-ция }{}\TT{check2()} \IFRU{более сложная}{function is more complex}:
+\RU{Ф-ция }\TT{check2()} \IFRU{более сложная}{function is more complex}:
 
 \lstinputlisting{examples/dongles/1/check2.lst}
 
@@ -120,7 +120,7 @@ flow to the message box with an error message}.
 what it mean, I need some more time to learn PowerPC assembly language}.
 
 \IFRU{А вот то что мы видим дальше понять проще}{What we see next is, however, easier to understand}: 
-\IFRU{вызывается }{}\TT{.RBEFINDFIRST()} \IFRU{и в случае ошибки, 0 будет записан в r3
+\RU{вызывается }\TT{.RBEFINDFIRST()} \IFRU{и в случае ошибки, 0 будет записан в r3
 и мы перейдем на \IT{exit}, а иначе будет вызвана ф-ция \TT{check3()} ~--- если и она будет
 выполнена с ошибкой, будет вызвана}{is called:
 in case of its failure, 0 is written into r3 and we jump to \IT{exit}, otherwise another
@@ -152,7 +152,7 @@ so they are compared here with hard-coded variables using} \TT{CMPLWI}.
 \IFRU{Вероятно адрес в памяти или что-то в этом роде}{Probably memory address or something like that}?
 
 \IFRU{Да, действительно, если погуглить имена этих ф-ций, можно легко найти документацию к}
-{Yes, indeed, by googling these function names it is easy to find} Sentinel Eve3\IFRU{}{ dongle manual}!
+{Yes, indeed, by googling these function names it is easy to find} Sentinel Eve3\EN{ dongle manual}!
 
 \IFRU{Мне даже, наверное, не нужно изучать остальные инструкции PowerPC: всё что делает эта ф-ция это просто
 вызывает}
@@ -176,7 +176,7 @@ jumps in \TT{check2()} at} \TT{0x001186FC} \AndENRU \TT{0x00118718}.
 
 \IFRU{На}{At} \TT{0x00118718} \IFRU{я записал байт}{I wrote} 0x60 \AndENRU \IFRU{еще 3 нулевых байта,
 таким образом превращая её в инструкцию}{3 zero bytes thus converting it to}
-\ac{NOP}\IFRU{}{ instruction}:
+\ac{NOP}\EN{ instruction}:
 \IFRU{Этот опкод я тоже подсмотрел прямо в коде}{I spot its opcode in the code too}.
 
 \IFRU{Резюмируя, такие простые модификации можно делать в \ac{IDA} даже с минимальными знаниями

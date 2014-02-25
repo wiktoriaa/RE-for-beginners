@@ -10,7 +10,7 @@ mostly used for issuing a guarantee
 that only one thread will access some data, while blocking other threads and interrupts}. \\
 \\
 \IFRU{Вот как объявлена структура}{That is how} \TT{CRITICAL\_SECTION} 
-\IFRU{объявлена в линейке OS}{structure is declared in} \gls{Windows NT}\IFRU{}{ line OS}:
+\IFRU{объявлена в линейке OS}{structure is declared in} \gls{Windows NT}\EN{ line OS}:
 
 \begin{lstlisting}[caption=(Windows Research Kernel v1.2) public/sdk/inc/nturtl.h]
 typedef struct _RTL_CRITICAL_SECTION {
@@ -29,7 +29,7 @@ typedef struct _RTL_CRITICAL_SECTION {
 } RTL_CRITICAL_SECTION, *PRTL_CRITICAL_SECTION;
 \end{lstlisting}
 
-\IFRU{Вот как работает ф-ция}{That's is how} EnterCriticalSection()\IFRU{}{ function works}:
+\IFRU{Вот как работает ф-ция}{That's is how} EnterCriticalSection()\EN{ function works}:
 
 \index{x86!\Instructions!LOCK}
 \begin{lstlisting}[caption=Windows 2008/ntdll.dll/x86 (begin)]
@@ -85,7 +85,7 @@ loc_7DE922DD:
 {If not~---critical section is already occupied by other thread, then wait}. \\
 \IFRU{Ожидание там сделано через вызов}{Wait is done there using} WaitForSingleObject(). \\
 \\
-\IFRU{А вот как работает ф-ция}{And here is how} LeaveCriticalSection()\IFRU{}{ function works}:
+\IFRU{А вот как работает ф-ция}{And here is how} LeaveCriticalSection()\EN{ function works}:
 
 \begin{lstlisting}[caption=Windows 2008/ntdll.dll/x86 (begin)]
 _RtlLeaveCriticalSection@4 proc near
@@ -134,7 +134,7 @@ and at the same time 1 goes to \TT{LockCount}}.
 {This operation is atomic since it is prefixed by \TT{LOCK} as well,
 meaning that all other CPUs or CPU cores in system are blocked from accessing this point of memory}.
 
-\IFRU{Префикс }{}\TT{LOCK} \IFRU{очень важен}{prefix is very important}: 
+\RU{Префикс }\TT{LOCK} \IFRU{очень важен}{prefix is very important}: 
 \IFRU{два треда, каждый из которых работает на разных CPU или ядрах CPU, могут попытаться одновременно
 войти в критическую секцию, одновременно модифицируя значение в памяти, и это может привести к
 непредсказуемым результатам}

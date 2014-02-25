@@ -1,7 +1,7 @@
 \subsection{std::vector}
 \index{\Cpp!STL!std::vector}
 
-\IFRU{Я бы назвал}{I would call} \TT{std::vector} ``\IFRU{безопасной оболочкой (wrapper)}{safe wrapper}'' \IFRU{}{of }\ac{PODT} \IFRU{массива в Си}{C array}.
+\IFRU{Я бы назвал}{I would call} \TT{std::vector} ``\IFRU{безопасной оболочкой (wrapper)}{safe wrapper}'' \EN{of }\ac{PODT} \IFRU{массива в Си}{C array}.
 \IFRU{Изнутри он очень похож на}{Internally, it is somewhat similar to} \TT{std::string} (\ref{std_string}):
 \IFRU{он имеет указатель на буфер, указатель на конец массива и указатель на конец буфера}{it has a pointer to buffer, pointer to the end of array, and a pointer to the end of buffer}.
 
@@ -18,7 +18,7 @@
 {\IFRU{внутренности GCC}{GCC internals}: \url{http://gcc.gnu.org/onlinedocs/libstdc++/libstdc++-html-USERS-4.4/a01371.html}}, \IFRU{так что здесь один исходник работающий для обоих компиляторов}{so here is one source
 code working for both compilters}.
 \IFRU{И снова здесь Си-подобный код для вывода структуры}{Here is again a 
-C-like code for dumping} \TT{std::vector}\IFRU{}{ structure}:
+C-like code for dumping} \TT{std::vector}\EN{ structure}:
 
 \lstinputlisting{cpp/STL/vector/2.cpp}
 
@@ -36,12 +36,12 @@ C-like code for dumping} \TT{std::vector}\IFRU{}{ structure}:
 {function reallocates the buffer in the \gls{heap} each time}.
 \IFRU{Это дорогая операция, вот почему очень важно предсказать размер будущего массива и зарезервировать место для него
 при помощи метода}{It is costly operation, that's why it is very important to predict future array size and reserve 
-a space for it with} \TT{.reserve()}\IFRU{}{ method}.
+a space for it with} \TT{.reserve()}\EN{ method}.
 \IFRU{Самое последнее число это мусор: там нет элементов массива в этом месте, вот откуда это случайное число}
 {The very last number is a garbage: there are no array elements at this point, so random number is printed}.
 \IFRU{Это иллюстрация того факта что метод}{This is illustration to the fact that} \TT{operator[]} \IFRU{в}{of} 
 \TT{std::vector} \IFRU{не проверяет индекс на правильность}{is not checking if the index in the array bounds}.
-\IFRU{Метод }{}\TT{.at()} \IFRU{с другой стороны, проверяет, и подкидывает исключение}{method, however, does checking and 
+\RU{Метод }\TT{.at()} \IFRU{с другой стороны, проверяет, и подкидывает исключение}{method, however, does checking and 
 throw} \TT{std::out\_of\_range} \IFRU{в случае ошибки}{exception in case of error}.
 
 \IFRU{Давайте посмотрим код}{Let's see the code}:
@@ -64,7 +64,7 @@ throw} \TT{std::out\_of\_range} \IFRU{в случае ошибки}{exception in
 
 \lstinputlisting[caption=GCC 4.8.1 -fno-inline-small-functions -O1]{cpp/STL/vector/GCC.asm}
 
-\IFRU{Метод }{}\TT{.reserve()} \IFRU{точно также вставлен прямо в код \main}{method is inlined as well}.
+\RU{Метод }\TT{.reserve()} \IFRU{точно также вставлен прямо в код \main}{method is inlined as well}.
 \IFRU{Он вызывает}{It calls} \TT{new()} \IFRU{если буфер слишком мал для нового массива}
 {if buffer is too small for new size}, \IFRU{вызывает}{call} \TT{memmove()} 
 \IFRU{для копирования содержимого буфера}{to copy buffer contents},
