@@ -87,6 +87,73 @@ but the difference is in
 the \SUB alter the value of the first operand.
 \CMP is \IT{``SUB without saving result''}.}
 
+\subsubsection{MSVC: x86: IDA}
+
+\IFRU{Наверное, уже пора делать первые попытки анализа кода в \IDA}
+{It's time to run \IDA and try to do something in it}.
+\IFRU{Кстати, для начинающих, полезно компилировать в MSVC с ключом \TT{/MD}, что означает что все эти стандартные
+ф-ции не будут скомпонованы с исполняемым файлу, а будут импортироваться из файла \TT{MSVCR*.DLL}}
+{By the way, it is good idea to use \TT{/MD} option in MSVC for beginners: this mean that all these
+standard functions will not be linked with executable file, but will be imported from the \TT{MSVCR*.DLL}
+file instead}.
+\IFRU{Так будет легче увидеть, где какая стандартная ф-ция используется}{Thus it will be easier to see
+which standard function used and where}.
+
+\IFRU{Анализируя код в \IDA, очень полезно делать пометки для себя (и других)}
+{While analysing code in \IDA, it is very advisable to do notes for oneself (and others)}.
+\IFRU{Например, разбирая этот пример, мы сразу видим что \TT{JNZ} срабатывает в случае ошибки}
+{For example, analysing this example, we see that \TT{JNZ} will be triggered in case of error}.
+\IFRU{Можно навести курсор на эту метку, нажать ``n'' и переименовать метку в ``error''}
+{So it's possible to move cursor to the label, press ``n'' and rename it to ``error''}.
+\IFRU{Еще одну метку}{Another label}\EMDASH{}\IFRU{в}{into} ``exit''.
+\IFRU{Вот как у меня получилось в итоге}{What I've got}:
+
+\lstinputlisting{patterns/04_scanf/ex3.lst}
+
+\IFRU{Так понимать код становится чуть легче}{Now it's slightly easier to understand the code}.
+\IFRU{Впрочем, меру нужно знать во всем и комментировать каждую инструкцию не стоит}
+{However, it's not good idea to comment every instruction excessively}.
+
+\IFRU{В \IDA также можно скрывать части ф-ций: нужно отметить часть, нажать ``-'' на цифровой клавиатуре и ввести
+текст}{A part of function can also be hidden in \IDA: a block should be marked, then ``-'' on numerical pad
+is pressed and text to be entered}.
+
+\IFRU{Я скрыл две части и придумал им названия}{I've hide two parts and gave names to them}:
+
+\lstinputlisting{patterns/04_scanf/ex3_2.lst}
+
+\IFRU{Раскрывать скрытые части ф-ций можно при помощи ``+'' на цифровой клавиатуре}
+{To unhide these parts, ``+'' on numerical pad can be used}.
+
+\IFRU{Нажав ``пробел'', мы увидим как \IDA может представить ф-цию в виде графа}{By pressing ``space'',
+we can see how \IDA can represent a function as a graph}: \figname{} \ref{fig:ex3_IDA_1}.
+\IFRU{После каждого условного перехода видны две стрелки: зеленая и красная}{There are two arrows
+after each conditional jump: green and red}.
+\IFRU{Зеленая ведет к тому блоку, который исполнится если переход сработал, а красная --- если не сработал}
+{Green arrow pointing to the block which will be executed if jump is triggered, and red if otherwise}.
+
+\IFRU{В этом режиме так же можно сворачивать узлы и давать им названия}
+{It is possible to fold nodes is this mode and give them names as well} (``group nodes'').
+\IFRU{Я сделал это для трех блоков}{I did it for 3 blocks}: \figname{} \ref{fig:ex3_IDA_2}.
+
+\IFRU{Всё это очень полезно делать}{It's very useful}.
+\IFRU{Вообще, очень важная часть работы реверсера состоит в том, чтобы уменьшать количество имеющейся информации}
+{It can be said, a very important part of reverse engineer's job is to reduce information he/she have}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/04_scanf/ex3_IDA.png}
+\caption{\IFRU{Отображение в IDA в виде графа}{Graph mode in IDA}}
+\label{fig:ex3_IDA_1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/04_scanf/ex3_2_IDA.png}
+\caption{\IFRU{Отображение в IDA в виде графа с тремя свернутыми блоками}{Graph mode in IDA with 3 nodes folded}}
+\label{fig:ex3_IDA_2}
+\end{figure}
+
 \subsubsection{GCC: x86}
 
 \IFRU{Код созданный при помощи GCC 4.4.1 в Linux практически такой же, если не считать мелких отличий, 
