@@ -82,13 +82,13 @@ characters, because null was used to pad a file to an even number of characters.
 \index{x86!\Instructions!PUSH}
 \IFRU
 {Перед этим вызовом адрес строки (или указатель на неё) с нашим приветствием при помощи инструкции \PUSH помещается в стек.}
-{Before the call the string address (or a pointer to it) containing our greeting is placed on the stack with the help of the \PUSH instruction.}
+{Before the call, the address of the string containing our greeting is placed on the stack with the help of the \PUSH instruction.}
 
 \IFRU{После того, как функция \printf возвращает управление в функцию \main, адрес строки (или указатель на неё) всё еще лежит в стеке.}
-{When the \printf function returns flow control to the \main function, string address (or pointer to it) is still in stack.}
+{When the \printf function returns flow control to the \main function, the address of the string is still on the stack.}
 
 \IFRU{Так как он больше не нужен, то \glslink{stack pointer}{указатель стека} (регистр \ESP) корректируется.} 
-{Since we do not need it anymore the \gls{stack pointer} (the \ESP register) needs to be corrected.}
+{Since we do not need it anymore, the \gls{stack pointer} (the \ESP register) needs to be corrected.}
 
 \index{x86!\Instructions!ADD}
 \TT{ADD ESP, 4} \IFRU{означает прибавить 4 к значению в регистре \ESP.}
@@ -96,8 +96,8 @@ characters, because null was used to pad a file to an even number of characters.
 
 \IFRU
 {Почему 4? Так как это 32-битный код, для передачи адреса нужно аккурат 4 байта. В x64-коде это 8 байт.}
-{Why 4? Since it is 32-bit code we need exactly 4 bytes for address passing through the stack. 
-It is 8 bytes in x64-code.}
+{Why 4? Since it is 32-bit code, we need exactly 4 bytes for passing an address through the stack. 
+It is 8 bytes in x64 code.}
 
 \TT{``ADD ESP, 4''} \IFRU{эквивалентно \TT{``POP регистр''}, но без использования какого-либо регистра\footnote{Флаги
 процессора, впрочем, модифицируются}.}
@@ -109,14 +109,14 @@ It is 8 bytes in x64-code.}
 \IFRU{Некоторые компиляторы, например, Intel C++ Compiler, в этой же ситуации могут вместо 
 \ADD сгенерировать \TT{POP ECX} (подобное можно встретить, например, в коде \oracle{}, им скомпилированном),
 что почти то же самое, только портится значение в регистре \ECX.}
-{Some compilers (like Intel C++ Compiler) in the same situation may emit \TT{POP ECX} 
-instead of \ADD (e.g. such a pattern can be observed in the \oracle{} code as it is compiled by Intel C++ compiler).
-This instruction has almost the same effect but the \ECX register contents will be rewritten.}
+{Some compilers (like Intel's C++ Compiler) in the same situation may emit \TT{POP ECX} 
+instead of \ADD (e.g. such a pattern can be observed in the \oracle{} code as it is compiled by Intel's C++ compiler).
+This instruction has almost the same effect but the \ECX register contents will be overwritten.}
 
 \IFRU
 {Возможно, компилятор применяет \TT{POP ECX}, потому что эта инструкция короче (1 байт против 3).}
 {The Intel C++ compiler probably uses \TT{POP ECX} since this instruction's opcode is shorter then 
-\TT{ADD ESP, x} (1 byte against 3).}
+\TT{ADD ESP, x} (1 byte versus 3 bytes).}
 
 \IFRU{О стеке можно прочитать в соответствующем разделе}
 {Read more about the stack in section}~(\ref{sec:stack}).
@@ -138,7 +138,7 @@ This instruction has almost the same effect but the \ECX register contents will 
 \IFRU{, но компиляторы часто используют его вместо простого}
 {but compilers often use it instead of}
 \TT{MOV EAX, 0}\IFRU{ ~--- снова потому, что опкод короче (2 байта против 5).}
-{~---again because it is a slightly shorter opcode (2 bytes against 5).}
+{~---again because it is a slightly shorter opcode (2 bytes versus 5).}
 
 \index{x86!\Instructions!SUB}
 \IFRU{Бывает так, что некоторые компиляторы генерируют}{Some compilers emit}
@@ -162,7 +162,7 @@ Usually, it is \CCpp \ac{CRT} code which in turn returns control to the \ac{OS}.
 \IFRU{Затем, при помощи \IDA{}, посмотрим, как создалась функция \main.}
 {After, with the assistance of the \IDA disassembler, let's see how the \main function was created.} 
 
-(\IDA, \IFRU{как и MSVC, показывает код в Intel-синтаксисе}{as MSVC, showing code in Intel-syntax}).
+(\IDA, \IFRU{как и MSVC, показывает код в Intel-синтаксисе}{like MSVC, shows code in Intel-syntax}).
 
 N.B. \IFRU{Мы также можем заставить GCC генерировать листинги в этом формате при помощи ключей}
 {We could also have GCC produce assembly listings in Intel-syntax by applying the options} 
@@ -195,12 +195,12 @@ main            endp
 в стеке также выровненными по этой границе (процессор более эффективно работает с переменными, расположенными
 в памяти по адресам кратным 4 или 16)\footnote{\URLWPDA}.}
 {The result is almost the same.
-The address of the ``hello world'' string (stored in the data segment) is saved in the \EAX register first then it is stored on the stack.
+The address of the ``hello, world'' string (stored in the data segment) is saved in the \EAX register first and then it is stored on the stack.
 Also in the function prologue we see \TT{AND ESP, 0FFFFFFF0h}~---this 
-instruction aligns the value in the \ESP register on a 16-byte border.
+instruction aligns the value in the \ESP register on a 16-byte boundary.
 This results in all values in the stack being aligned.
-(CPU performs better if the values it is dealing with are located in memory at addresses aligned 
-on a 4 or 16 byte border)\footnote{\URLWPDA}.}
+(The CPU performs better if the values it is dealing with are located in memory at addresses aligned 
+on a 4- or 16-byte boundary)\footnote{\URLWPDA}.}
 
 \index{x86!\Instructions!SUB}
 \TT{SUB ESP, 10h} \IFRU{выделяет в стеке 16 байт. Хотя, как будет видно далее, здесь достаточно только 4.}
@@ -208,15 +208,15 @@ on a 4 or 16 byte border)\footnote{\URLWPDA}.}
 
 \IFRU{Это происходит потому, что количество выделяемого места в локальном стеке тоже выровнено по 
 16-байтной границе.}
-{This is because the size of the allocated stack is also aligned on a 16-byte border.}
+{This is because the size of the allocated stack is also aligned on a 16-byte boundary.}
 
 % TODO: rewrite.
 \index{x86!\Instructions!PUSH}
 \IFRU{Адрес строки (или указатель на строку) затем записывается прямо в стек без помощи инструкции \PUSH.
 \IT{var\_10} по совместительству ~--- и локальная переменная и одновременно аргумент для \printf{}. Подробнее об этом будет ниже.}
-{The string address (or a pointer to the string) is then written directly on the stack space 
+{The string address (or a pointer to the string) is then written directly onto the stack space 
 without using the \PUSH instruction.
-\IT{var\_10}~---is a local variable but is also an argument for \printf{}.
+\IT{var\_10}~---is a local variable and is also an argument for \printf{}.
 Read about it below.}
 
 \IFRU{Затем вызывается \printf.}{Then the \printf function is called.}
@@ -314,7 +314,7 @@ AT\&T: \IFRU{К каждой инструкции добавляется спе�
 \end{itemize}
 
 \IFRU{Возвращаясь к результату компиляции: он идентичен тому, который мы посмотрели в \IDA.}
-{Let's go back to the compilation result: it is identical to which we saw in \IDA.}
+{Let's go back to the compiled result: it is identical to what we saw in \IDA.}
 \IFRU{Одна мелочь}{With one subtle difference}: \TT{0FFFFFFF0h} \IFRU{записывается как}{is written as} \TT{\$-16}.
 \IFRU{Это то же самое}{It is the same}: \TT{16} \IFRU{в десятичной системе это}{in the decimal system is} \TT{0x10} 
 \IFRU{в шестнадцатеричной}{in hexadecimal}. 
@@ -324,7 +324,7 @@ AT\&T: \IFRU{К каждой инструкции добавляется спе�
 \index{x86!\Instructions!MOV}
 % to be proofreaded
 \IFRU{Ещё: возвращаемый результат устанавливается в 0 обычной инструкцией \MOV а не \XOR}
-{One more thing: returning value is to be set to 0 by using usual \MOV, not \XOR}.
+{One more thing: the return value is to be set to 0 by using usual \MOV, not \XOR}.
 \MOV \IFRU{просто загружает значение в регистр}{just loads value to a register}. 
 \IFRU{Её название не очень удачное (данные не перемещаются), 
 в других архитектурах подобная инструкция обычно носит название 
