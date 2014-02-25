@@ -1,4 +1,4 @@
-﻿\subsubsection{GCC\EMDASH{}x86}
+\subsubsection{GCC\EMDASH{}x86}
 
 \IFRU{Теперь скомпилируем то же самое компилятором GCC 4.4.1 в Linux}
 {Now let's try to compile the same \CCpp code in the GCC 4.4.1 compiler in Linux}: \TT{gcc 1.c -o 1}
@@ -6,7 +6,7 @@
 \IFRU{Затем, при помощи \IDA{}, посмотрим, как создалась функция \main.}
 {After, with the assistance of the \IDA disassembler, let's see how the \main function was created.} 
 
-(\IDA, \IFRU{как и MSVC, показывает код в Intel-синтаксисе}{as MSVC, showing code in Intel-syntax}).
+(\IDA, \IFRU{как и MSVC, показывает код в Intel-синтаксисе}{like MSVC, shows code in Intel-syntax}).
 
 N.B. \IFRU{Мы также можем заставить GCC генерировать листинги в этом формате при помощи ключей}
 {We could also have GCC produce assembly listings in Intel-syntax by applying the options} 
@@ -39,12 +39,12 @@ main            endp
 в стеке также выровненными по этой границе (процессор более эффективно работает с переменными, расположенными
 в памяти по адресам кратным 4 или 16)\footnote{\URLWPDA}.}
 {The result is almost the same.
-The address of the ``hello world'' string (stored in the data segment) is saved in the \EAX register first then it is stored on the stack.
+The address of the ``hello, world'' string (stored in the data segment) is saved in the \EAX register first and then it is stored on the stack.
 Also in the function prologue we see \TT{AND ESP, 0FFFFFFF0h}~---this 
-instruction aligns the value in the \ESP register on a 16-byte border.
+instruction aligns the value in the \ESP register on a 16-byte boundary.
 This results in all values in the stack being aligned.
-(CPU performs better if the values it is dealing with are located in memory at addresses aligned 
-on a 4 or 16 byte border)\footnote{\URLWPDA}.}
+(The CPU performs better if the values it is dealing with are located in memory at addresses aligned 
+on a 4- or 16-byte boundary)\footnote{\URLWPDA}.}
 
 \index{x86!\Instructions!SUB}
 \TT{SUB ESP, 10h} \IFRU{выделяет в стеке 16 байт. Хотя, как будет видно далее, здесь достаточно только 4.}
@@ -52,15 +52,15 @@ on a 4 or 16 byte border)\footnote{\URLWPDA}.}
 
 \IFRU{Это происходит потому, что количество выделяемого места в локальном стеке тоже выровнено по 
 16-байтной границе.}
-{This is because the size of the allocated stack is also aligned on a 16-byte border.}
+{This is because the size of the allocated stack is also aligned on a 16-byte boundary.}
 
 % TODO: rewrite.
 \index{x86!\Instructions!PUSH}
 \IFRU{Адрес строки (или указатель на строку) затем записывается прямо в стек без помощи инструкции \PUSH.
 \IT{var\_10} по совместительству ~--- и локальная переменная и одновременно аргумент для \printf{}. Подробнее об этом будет ниже.}
-{The string address (or a pointer to the string) is then written directly on the stack space 
+{The string address (or a pointer to the string) is then written directly onto the stack space 
 without using the \PUSH instruction.
-\IT{var\_10}~---is a local variable but is also an argument for \printf{}.
+\IT{var\_10}~---is a local variable and is also an argument for \printf{}.
 Read about it below.}
 
 \IFRU{Затем вызывается \printf.}{Then the \printf function is called.}
@@ -158,7 +158,7 @@ AT\&T: \IFRU{К каждой инструкции добавляется спе�
 \end{itemize}
 
 \IFRU{Возвращаясь к результату компиляции: он идентичен тому, который мы посмотрели в \IDA.}
-{Let's go back to the compilation result: it is identical to which we saw in \IDA.}
+{Let's go back to the compiled result: it is identical to what we saw in \IDA.}
 \IFRU{Одна мелочь}{With one subtle difference}: \TT{0FFFFFFF0h} \IFRU{записывается как}{is written as} \TT{\$-16}.
 \IFRU{Это то же самое}{It is the same}: \TT{16} \IFRU{в десятичной системе это}{in the decimal system is} \TT{0x10} 
 \IFRU{в шестнадцатеричной}{in hexadecimal}. 
@@ -168,7 +168,7 @@ AT\&T: \IFRU{К каждой инструкции добавляется спе�
 \index{x86!\Instructions!MOV}
 % to be proofreaded
 \IFRU{Ещё: возвращаемый результат устанавливается в 0 обычной инструкцией \MOV а не \XOR}
-{One more thing: returning value is to be set to 0 by using usual \MOV, not \XOR}.
+{One more thing: the return value is to be set to 0 by using usual \MOV, not \XOR}.
 \MOV \IFRU{просто загружает значение в регистр}{just loads value to a register}. 
 \IFRU{Её название не очень удачное (данные не перемещаются), 
 в других архитектурах подобная инструкция обычно носит название 

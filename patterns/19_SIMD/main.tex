@@ -183,7 +183,7 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 By the way, no exception raised in case of overflow and no flags will be set, just low 32-bit of result will
 be stored.
 If one of \PADDD operands is address of value in memory,
-then address must be aligned on a 16-byte border. If it is not aligned, exception will be occurred
+then address must be aligned on a 16-byte boundary. If it is not aligned, exception will be occurred
 \footnote{More about data aligning: \URLWPDA}.}
 
 \item
@@ -200,10 +200,10 @@ If it is not aligned, exception will be raised.
 \IFRU{Итак, эти SSE2-инструкции исполнятся только в том случае если еще осталось просуммировать 
 4 пары переменных типа \Tint плюс если указатель \TT{ar3} выровнен по 16-байтной границе.}
 {So, these SSE2-instructions will be executed only in case if there are more 4 pairs to work on
-plus pointer \TT{ar3} is aligned on a 16-byte border.}
+plus pointer \TT{ar3} is aligned on a 16-byte boundary.}
 
 \IFRU{Более того, если еще и \TT{ar2} выровнен по 16-байтной границе, то будет выполняться этот фрагмент кода:}
-{More than that, if \TT{ar2} is aligned on a 16-byte border too, this fragment of code will be executed:}
+{More than that, if \TT{ar2} is aligned on a 16-byte boundary as well, this fragment of code will be executed:}
 
 \begin{lstlisting}
 movdqu  xmm0, xmmword ptr [ebx+edi*4] ; ar1+i*4
@@ -274,7 +274,7 @@ This function will load 16 characters into a XMM-register and check each against
 
 \IFRU{Итак, прежде всего, мы проверяем указатель \TT{str}, выровнен ли он по 16-байтной границе. 
 Если нет, то мы вызовем обычную реализацию \strlen.}
-{First of all, we check \TT{str} pointer, if it is aligned on a 16-byte border.
+{First of all, we check \TT{str} pointer, if it is aligned on a 16-byte boundary.
 If not, let's call generic \strlen implementation.}
 
 \IFRU{Далее мы загружаем по 16 байт в регистр \XMMONE при помощи команды \MOVDQA.}
@@ -360,8 +360,8 @@ That's the situation to be avoided, of course.}
 \IFRU{Поэтому мы будем работать только с адресами, выровненными по 16 байт, что в сочетании со знанием 
 что размер страницы \ac{OS} также как правило выровнен по 16 байт, 
 даст некоторую гарантию что наша функция не будет пытаться читать из мест в невыделенной памяти.}
-{So then we'll work only with the addresses aligned on a 16 byte border, what in combination with a knowledge
-of \ac{OS} page size is usually aligned on a 16-byte border too, give us some warranty our function will not
+{So then we'll work only with the addresses aligned on a 16 byte boundary, what in combination with a knowledge
+of \ac{OS} page size is usually aligned on a 16-byte boundary too, give us some warranty our function will not
 read from unallocated memory.}
 
 \IFRU{Вернемся к нашей функции}{Let's back to our function}.
