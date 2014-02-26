@@ -1,6 +1,7 @@
 _main
                 PUSH    {R4,R5,LR}
-                SUB     SP, SP, #0x54   ; allocate place for 20 int variables + one more variable
+; allocate place for 20 int variables + one more variable
+                SUB     SP, SP, #0x54   
 
 ; first loop
 
@@ -28,5 +29,6 @@ loc_1DC
                 CMP     R4, #20         ; i<20?
                 BLT     loc_1DC         ; yes, i<20, run loop body again
                 MOVS    R0, #0          ; value to return
-                ADD     SP, SP, #0x54   ; deallocate place for 20 int variables + one more variable
+; deallocate place, allocated for 20 int variables + one more variable
+                ADD     SP, SP, #0x54   
                 POP     {R4,R5,PC}

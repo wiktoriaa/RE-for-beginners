@@ -15,7 +15,7 @@ struct vector_of_ints
 
 void dump(struct vector_of_ints *in)
 {
-	printf ("_Myfirst=0x%p, _Mylast=0x%p, _Myend=0x%p\n", in->Myfirst, in->Mylast, in->Myend);
+	printf ("_Myfirst=%p, _Mylast=%p, _Myend=%p\n", in->Myfirst, in->Mylast, in->Myend);
 	size_t size=(in->Mylast-in->Myfirst);
 	size_t capacity=(in->Myend-in->Myfirst);
 	printf ("size=%d, capacity=%d\n", size, capacity);
