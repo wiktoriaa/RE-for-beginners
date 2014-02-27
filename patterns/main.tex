@@ -13,52 +13,52 @@ between the \CCpp code and what the compiler produced was imprinted in my mind s
 I can quickly understand what was in the original C code when I look at produced x86 code. 
 Perhaps this technique may be helpful for someone else so I will try to describe some examples here.}
 
-\section{\IFRU{Краткое введенение в CPU}{Short introduction into CPU}}
+\section{\IFRU{Краткое введенение в CPU}{Short introduction to the CPU}}
 
-\ac{CPU} \IFRU{это собственно устройство исполняющее все программы}{is a very unit executing all the programs}.
+\IFRU{}{The} \ac{CPU} \IFRU{это собственно устройство исполняющее все программы}{is the unit which executes all of the programs}.
 
 \IFRU{Немного терминологии}{Short glossary}:
 
 \begin{description}
 \item[\IFRU{Инструкция}{Instruction}]: \IFRU{примитивная команда}{a primitive command to the} \ac{CPU}.
 \IFRU{Простейшие примеры: перемещение между регистрами, работа с памятью, примитивные арифметические операции}
-{Simplest examples: moving between registers, working with memory, arithmetic primitives}.
-\IFRU{Как правило, каждый}{As a rule, each} \ac{CPU} \IFRU{имеет свой набор инструкций}{has its own instructions set} 
+{Simplest examples: moving data between registers, working with memory, arithmetic primitives}.
+\IFRU{Как правило, каждый}{As a rule, each} \ac{CPU} \IFRU{имеет свой набор инструкций}{has its own instruction set architecture} 
 (\ac{ISA}).
 
-\item[\IFRU{Машинный код}{Machine code}]: \IFRU{код понимаемый}{a code for the} \ac{CPU}. 
+\item[\IFRU{Машинный код}{Machine code}]: \IFRU{код понимаемый}{code for the} \ac{CPU}. 
 \IFRU{Каждая инструкция обычно кодируется несколькими байтами}{Each instruction is usually encoded by several bytes}.
 
 \item[\IFRU{Язык ассемблера}{Assembly language}]: 
 \IFRU{машинный код плюс некоторые расширения призванные облегчить труд программиста: макросы, итд}
-{machine code plus some extensions like macros, aimed at making programmer's work easier}.
+{mnemonic code and some extensions like macros which are intended to make a programmer's life easier}.
 
 \item[\IFRU{Регистр CPU}{CPU register}]: 
 \IFRU{Каждый}{Each} \ac{CPU} \IFRU{имеет некоторый фиксированный набор регистров общего назначения}{has a fixed set
 of general purpose registers} (\ac{GPR}).
 $\approx 8$ \InENRU x86, $\approx 16$ \InENRU x86-64, $\approx 16$ \InENRU ARM.
 \IFRU{Проще всего понимать регистр как временную переменную без типа}
-{Easiest way to understand register as an untyped temporary variable}.
+{The easiest way to understand a register is to think of it as an untyped temporary variable}.
 \IFRU{Можно представить что вы пишете на \ac{PL} высокого уровня и у вас только 8 переменных шириной 32 бита}
-{Imagine you work with a high-level \ac{PL} and you have got only 8 32-bit variables}.
+{Imagine you are working with a high-level \ac{PL} and you have only 8 32-bit variables}.
 \IFRU{Можно сделать очень много используя только их}{A lot of things can be done using only these}!
 \end{description}
 
 \IFRU{Откуда взялась разница между машинным кодом и \ac{PL} высокого уровня}
-{Whence the difference between machine code and \ac{PL} came}?
+{What is the difference between machine code and a \ac{PL}}?
 \IFRU{Человеку проще писать на \ac{PL} высокого уровня вроде \CCpp, Java, Python, 
 а \ac{CPU} проще работать с абстракциями куда более низкого уровня}
-{It is much easier for humans to use high-level \ac{PL} like \CCpp, Java, Python, 
-but it is easier for \ac{CPU} to use much lower level of abstraction}.
+{It is much easier for humans to use a high-level \ac{PL} like \CCpp, Java, Python, etc., 
+but it is easier for a \ac{CPU} to use a much lower level of abstraction}.
 \IFRU{Возможно, можно было бы придумать \ac{CPU} исполняющий код \ac{PL} высокого уровня, но он был бы значительно сложнее}
-{Perhaps, it would be possible to invent \ac{CPU} executing high-level \ac{PL} code, but it would be much more complex}.
+{Perhaps, it would be possible to invent a \ac{CPU} which can execute high-level \ac{PL} code, but it would be much more complex}.
 \IFRU{И наоборот, человеку очень неудобно писать на ассемблере из-за его низкоуровневости, к тому же, крайне трудно обойтись
 без мелких ошибок}
-{On contrary, it is very inconvenient for humans to use assembly language due to its low-levelness, besides, it is very hard
-to do it without huge ammount of annoying mistakes}.
+{On the contrary, it is very inconvenient for humans to use assembly language due to its low-levelness. Besides, it is very hard
+to do it without making a huge amount of annoying mistakes}.
 \IFRU{Программа переводящая код из \ac{PL} высокого уровня в ассемблер называется \IT{компилятором}
 \footnote{В более старой русскоязычной литературе также часто встречается термин ``транслятор''.}}
-{The program converting high-level \ac{PL}code into assembly is called \IT{compiler}}.
+{The program which converts high-level \ac{PL} code into assembly is called a \IT{compiler}}.
 
 % sections here:
 
