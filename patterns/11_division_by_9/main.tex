@@ -37,22 +37,20 @@ value in the \EAX to 64-bit value taking value sign into account, just as \MOVSX
 
 \lstinputlisting[caption=\Optimizing MSVC]{patterns/11_division_by_9/11_1_msvc_Ox.asm}
 
-\newcommand{\URLMSDN}{\href{http://blogs.msdn.com/b/devdev/archive/2005/12/12/502980.aspx}
-{MSDN: Integer division by constants}}
-\newcommand{\URLN}{http://www.nynaeve.net/?p=115}
-
 \IFRU{Это ~--- деление через умножение. Умножение конечно быстрее работает. 
 Поэтому можно используя этот трюк
-\footnote{Читайте подробнее о делении через умножение в \cite[10-3]{Warren:2002:HD:515297}
-и \URLMSDN, \url{\URLN}} 
+\footnote{Читайте подробнее о делении через умножение в \cite[10-3]{Warren:2002:HD:515297}} 
 создать код эквивалентный тому что мы хотим и работающий быстрее.}
 {This is~---division by multiplication. Multiplication operation works much faster. 
 And it is possible to use the trick
-\footnote{Read more about division by multiplication in \cite[10-3]{Warren:2002:HD:515297}
-and: \URLMSDN, \url{\URLN}} 
+\footnote{Read more about division by multiplication in \cite[10-3]{Warren:2002:HD:515297}} 
 to produce a code which is effectively equivalent and faster.}
-\IFRU
-{GCC 4.4.1 даже без включенной оптимизации генерирует примерно такой же код, как и MSVC с оптимизацией:}
+
+\IFRU{В оптимизации компиляторов, это так же называется}{This is also called} 
+``strength reduction''\EN{ in compiler optimization}.
+
+\IFRU{GCC 4.4.1 даже без включенной оптимизации генерирует примерно такой же код, 
+как и MSVC с оптимизацией:}
 {GCC 4.4.1 even without optimization turned on, generates almost the same code as MSVC with optimization turned on:}
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.4.1]{patterns/11_division_by_9/11_2_gcc.asm}
@@ -173,6 +171,76 @@ BX              LR
 \IFRU{А Keil во всех случаях вставляет вызов функции}
 {What about Keil: it inserts call to library function} \IT{\_\_aeabi\_idivmod}\EN{ in all cases}.
 
+\subsection{\IFRU{Как это работает}{How it works}}
+
+\IFRU{Вот как деление может быть заменено на умножение и деление на числа $2^{n}$}
+{That's how division can be replaced by multiplication and division by $2^{n}$ numbers}:
+
+\[
+	result = 
+	\frac{input}{divisor} = 
+	\frac{input \cdot \frac{2^{n}}{divisor}}{2^{n}} = 
+	\frac{input \cdot M}{2^{n}}
+\]
+
+\IFRU{Где}{Where} $M$ \IFRU{это}{is} \IT{magic}-\IFRU{коэффициент}{coefficient}.
+
+\IFRU{Как вычислить $M$}{That's how $M$ can be computed}:
+
+\[
+	M = \frac{2^{n}}{divisor}
+\]
+
+\IFRU{Так что эти фрагменты кода обычно имеют форму}
+{So these code snippets are usually have this form}:
+
+\[
+	result = \frac{input \cdot M}{2^{n}}
+\]
+
+\IFRU{$n$ это произвольное число, оно может быть 32 (тогда старшая часть результата умножения берется из
+регистра \EDX или \RDX) или 31 (тогда старшая часть результата умножения дополнительно сдвигается)}
+{$n$ can be arbitrary number, it may be 32 (then high part of multiplication result is taked from
+\EDX or \RDX register), or 31 (then high part of multiplication result is shifted right additionally)}.
+
+$n$ \IFRU{выбирается так, чтобы улучшить точность результата}{is choosen in order to minimize
+error}.
+
+\IFRU{Если делать знаковое деление, знак результата умножения также добавляется к результату}
+{When doing signed division, sign of multiplication result also added to the output result}.
+
+\IFRU{Посмотрите на разницу}{Take a look at the difference}:
+
+\begin{lstlisting}
+int f3_32_signed(int a)
+{
+	return a/3;
+};
+
+unsigned int f3_32_unsigned(unsigned int a)
+{
+	return a/3;
+};
+\end{lstlisting}
+
+\IFRU{В беззнаковой версии функции}{In the unsigned version of function}, 
+\IT{magic}-\IFRU{коэффициент это}{coefficient is} \TT{0xAAAAAAAB} \IFRU{и результат умножения делится на}
+{and multiplication result is divided by} $2^33$.
+
+\IFRU{В знаковой версии функции}{In the signed version of function}, \IT{magic}-\IFRU{коэффициент это}
+{coefficient is} \TT{0x55555556} \IFRU{и результат умножения делится на}
+{and multiplication result is divided by} $2^{32}$. 
+\IFRU{Знак результата умножения также учитывается: старшие 32 бита результата сдвигаются на 32
+(таким образом, оставляя знак в самом младшем бите\EAX).}
+{Sign also taken from multiplication result: high 32 bits of result is shifted by 31 
+(leaving sign in least significant bit of \EAX).}
+$1$ \IFRU{прибавляется к конечному результату, если знак отрицательный}
+{is added to the final result if sign is negative}.
+
+\lstinputlisting[caption=MSVC 2012 /Ox]{patterns/11_division_by_9/2_\IFRU{RU}{EN}.asm}
+
+\IFRU{Читайте больше об этом в}{Read more about it in} \cite[10-3]{Warren:2002:HD:515297}.
+
 \subsection{\IFRU{Определение делителя}{Getting divisor}}
 
 \subsubsection{\IFRU{Вариант}{Variant} \#1}
@@ -181,13 +249,14 @@ BX              LR
 
 \lstinputlisting{patterns/11_division_by_9/form_\IFRU{RU}{EN}.asm}
 
-\IFRU{Определим 32-битную магическую константу через}{Let's denote 32-bit magical constant as} $M$, 
+\IFRU{Определим 32-битную \IT{magic}-коэффициент через}
+{Let's denote 32-bit \IT{magic}-coefficient as} $M$, 
 \IFRU{коэффициент сдвига через}{shifting coefficient by} $C$ \IFRU{и делитель через}{and divisor by} $D$.
 
 \IFRU{Делитель, который нам нужен это}{The divisor we need to get is}:
 
 \[
-D=\frac{2^{32} \cdot 2^C}{M}
+D=\frac{2^{32 + C}}{M}
 \]
 
 \IFRU{Например}{For example}:
@@ -197,25 +266,49 @@ D=\frac{2^{32} \cdot 2^C}{M}
 \IFRU{Это}{This is}:
 
 \[
-D=\frac{2^{32} \cdot 2^3}{2021161081}
+D=\frac{2^{32 + 3}}{2021161081}
 \]
 
 \index{Wolfram Mathematica}
 \IFRU{Числа больше чем 32-битные, так что я использовал}
 {Numbers are larger than 32-bit ones, so I use} Wolfram Mathematica \IFRU{для удобства}{for convenience}:
 
-\begin{lstlisting}
-In[1]:=N[2^32*2^3/2021161081]
-
+\begin{lstlisting}[caption=Wolfram Mathematica]
+In[1]:=N[2^(32+3)/2021161081]
 Out[1]:=17.
 \end{lstlisting}
 
 \IFRU{Так что искомый делитель это}{So the divisor from the code I used for example is} 17.
 
+\IFRU{При делении в x64, всё то же самое, только нужно использовать}{As of x64 division, things 
+are the same, but} $2^{64}$ \IFRU{вместо}{should be used instead of} $2^{32}$:
+
+\begin{lstlisting}
+uint64_t f1234(uint64_t a)
+{
+	return a/1234;
+};
+\end{lstlisting}
+
+\begin{lstlisting}[caption=MSVC 2012 x64 /Ox]
+f1234	PROC
+	mov	rax, 7653754429286296943		; 6a37991a23aead6fH
+	mul	rcx
+	shr	rdx, 9
+	mov	rax, rdx
+	ret	0
+f1234	ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Wolfram Mathematica]
+In[1]:=N[2^(64+9)/16^^6a37991a23aead6f]
+Out[1]:=1234.
+\end{lstlisting}
+
 \subsubsection{\IFRU{Вариант}{Variant} \#2}
 
-\IFRU{Бывает также вариант с пропущенным арифметическим сдвигом, например}{A variant with omitted arithmetic
-shift is also exist}:
+\IFRU{Бывает также вариант с пропущенным арифметическим сдвигом, например}{A variant with 
+omitted arithmetic shift is also exist}:
 
 \begin{lstlisting}
 		mov     eax, 55555556h ; 1431655766
@@ -240,11 +333,11 @@ D=\frac{2^{32}}{1431655766}
 \IFRU{Снова использую}
 {And again I use} Wolfram Mathematica:
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=Wolfram Mathematica]
 In[1]:=N[2^32/16^^55555556]
-
 Out[1]:=3.
 \end{lstlisting}
 
 \IFRU{Искомый делитель это}{The divisor is} 3.
+
 
