@@ -154,8 +154,6 @@ dongle can be connected to LPT port)}.
 
 \lstinputlisting{examples/dongles/2/err_warn.lst}
 
-% TODO: reverse the function with examples
-
 \IFRU{Вот почему не получилось найти сообщение об ошибке в исполняемых файлах, потому что оно было
 зашифровано, это очень популярная практика}
 {That's why I was unable to find error messages in the executable files, because they are encrypted,
@@ -177,4 +175,86 @@ connected dongle to be reconnected and check again?) and then decrypt another er
 
 \IFRU{Еще одна возможность ~--- это написать свой драйвер для SCO OpenServer}
 {Another option is to write our own SCO OpenServer driver}.
+
+\subsubsection{\IFRU{Дешифровка сообщений об ошибке}{Decrypting error messages}}
+
+\IFRU{Кстати, мы так же можем дешифровать все сообщения об ошибке}{By the way, we can also 
+try to decrypt all error messages}.
+\IFRU{Алкгоритм, находящийся в ф-ции}{The algorithm, locating in} \TT{err\_warn()} 
+\IFRU{действительно, крайне прост}{function is very simple, indeed}:
+
+\lstinputlisting[caption=\IFRU{Ф-ция дешифровки}{Decrypting function}]
+{examples/dongles/2/decrypting_\IFRU{ru}{en}.lst}
+
+\IFRU{Как видно, не только сама строка поступает на вход, но также и ключ для дешифровки}{As we can see, 
+not just string supplied to the decrypting function, but also the key}:
+
+\begin{lstlisting}
+.text:0000DAF7 error:                                  ; CODE XREF: sync_sys+255j
+.text:0000DAF7                                         ; sync_sys+274j ...
+.text:0000DAF7                 mov     [ebp+var_8], offset encrypted_error_message2
+.text:0000DAFE                 mov     [ebp+var_C], 17h ; decrypting key
+.text:0000DB05                 jmp     decrypt_end_print_message
+
+...
+
+; this name I gave to label:
+.text:0000D9B6 decrypt_end_print_message:              ; CODE XREF: sync_sys+29Dj
+.text:0000D9B6                                         ; sync_sys+2ABj
+.text:0000D9B6                 mov     eax, [ebp+var_18]
+.text:0000D9B9                 test    eax, eax
+.text:0000D9BB                 jnz     short loc_D9FB
+.text:0000D9BD                 mov     edx, [ebp+var_C] ; key
+.text:0000D9C0                 mov     ecx, [ebp+var_8] ; string
+.text:0000D9C3                 push    edx
+.text:0000D9C4                 push    20h
+.text:0000D9C6                 push    ecx
+.text:0000D9C7                 push    18h
+.text:0000D9C9                 call    err_warn
+\end{lstlisting}
+
+\IFRU{Алгоритм это очень простой}{The algorithm is simple} \gls{xoring}: 
+\IFRU{каждый байт XOR-ится с ключом, но ключ увеличивается на 3 после обработки каждого байта}{each 
+byte is xored with a key, but key is increased by 3 after processing of each byte}.
+
+\IFRU{Я написал небольшой скрипт на Python для проверки своих догадок}{I wrote a simple Python 
+script to check my insights}:
+
+\lstinputlisting[caption=Python 3.x]{examples/dongles/2/decr1.py}
+
+\IFRU{И он выводит}{And it prints}: ``check security device connection''.
+\IFRU{Так что да, это дешифрованное сообщение}{So yes, this is decrypted message}.
+
+\IFRU{Здесь есть так же и другие сообщения, с соответствующими ключами}{There are also 
+other encrypted messages with corresponding keys}.
+\IFRU{Но надо сказать, их можно дешифровать и без ключей}{But needless to say that it is possible 
+to decrypt them without keys}.
+\IFRU{В начале, мы можем заметить что ключ это просто байт}{First, we may observe that key 
+is byte in fact}.
+\IFRU{Это потому что самая важная часть ф-ции дешифровки}{It is because core decrypting instruction}
+(\XOR) \IFRU{оперирует байтами}{works on byte level}. 
+\IFRU{Ключ находится в регистре}{Key is located in} \ESI\IFRU{, но только младшие 8 бит
+(т.е., байт) регистра используются}{ register, but only byte part of \ESI is used}.
+\IFRU{Следовательно, ключ может быть больше}{Hence, key may be greater than} 255, 
+\IFRU{но его значение будет округляться}{but its value will always be rounded}.
+
+\IFRU{И как следствие, мы можем попробовать обычный перебор всех ключей в диапазоне}
+{As a consequence, we can just try brute-force, trying all possible keys in} 0..255\EN{ range}.
+\IFRU{Мы также можем пропускать сообщения содержащие непечатные символы}{We will also skip 
+messages containing unprintable characters}.
+
+\lstinputlisting[caption=Python 3.x]{examples/dongles/2/decr2.py}
+
+\IFRU{И мы получим}{And we getting}:
+
+\lstinputlisting[caption=Results]{examples/dongles/2/decr2_result.txt}
+
+\IFRU{Тут есть какой-то мусор, но мы можем быстро отыскать сообщения на английском языке}{There 
+are some garbage, but we can quickly find English-language messages}!
+
+\IFRU{Кстати, так как алгоритм использует простой \XOR, та же ф-ция может использоваться и для шифрования
+сообщения}{By the way, since algorithm is simple xoring encryption, the very same function can be used
+for encrypting messages}.
+\IFRU{Если нужно, мы можем зашифровать наши собственные сообщения, и пропатчить программу вставив
+их}{If we need, we can encrypt our own messages, and patch the program by inserting them}.
 
