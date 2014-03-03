@@ -1,0 +1,64 @@
+\section{\IFRU{Вручную написанный на ассемблере код}{Handwritten assembly code}}
+
+\subsection{\RU{Тестовый файл} EICAR\EN{ test file}}
+
+\index{MS-DOS}
+\index{EICAR}
+\IFRU{Этот .COM-файл предназначен для тестирования антивирусов, его можно запустить в MS-DOS
+и он выведет такую строку}{This .COM-file is intended for antivirus testing, it is possible to run in
+in MS-DOS and it will print string}: ``EICAR-STANDARD-ANTIVIRUS-TEST-FILE!''
+\footnote{\url{\IFRU{https://ru.wikipedia.org/wiki/EICAR-Test-File}
+{https://en.wikipedia.org/wiki/EICAR_test_file}}}.
+%FIXME -> about .COM files
+
+\IFRU{Он примечателен тем, что он полностью состоит только из печатных ASCII-символов, следовательно, его можно
+набрать в любом текстовом редакторе}{Its important property is that it's entirely consisting of printable 
+ASCII-symbols, which, in turn, makes possible to create it in any text editor}:
+
+\begin{lstlisting}
+X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+\end{lstlisting}
+
+\IFRU{Попробуем его разобрать}{Let's decompile it}:
+
+\lstinputlisting{examples/handcoding/EICAR_\IFRU{ru}{en}.lst}
+
+\IFRU{Я добавил везде комментарии, показывающие состояние регистров и стека после каждой инструкции}{I added 
+comments about registers and stack after each instruction}.
+
+\IFRU{Собственно, все эти инструкции нужны только для того чтобы исполнить следующий код}{Essentially, all these
+instructions are here only to execute this code}:
+
+\begin{lstlisting}
+B4 09     MOV AH, 9
+BA 1C 01  MOV DX, 11Ch
+CD 21     INT 21h
+CD 20     INT 20h
+\end{lstlisting}
+
+\index{x86!\Instructions!INT}
+\TT{INT 21h} \IFRU{с ф-цией 9 (переданной в \TT{AH}) просто выводит строку, адрес которой передан в}{with 9th
+function (passed in \TT{AH}) just prints a string, address of which is passed in} \TT{DS:DX}.
+\IFRU{Кстати, строка должна быть завершена символом '\$'}{By the way, the string should be terminated
+with '\$' sign}.
+\IFRU{Вероятно, это наследие}{Apparently, it's inherited from} \gls{CP/M} 
+\IFRU{и эта ф-ция в DOS осталась для совместимости}{and this function was leaved in DOS for compatibility}.
+\TT{INT 20h} \IFRU{возвращает управление в}{exits to} DOS.
+
+\IFRU{Но, как видно, далеко не все опкоды этих инструкций печатные}{But as we can see, these instruction's
+opcodes are not strictly printable}.
+\IFRU{Так что основная часть EICAR-файла это}{So the main part of EICAR-file is}:
+
+\begin{itemize}
+\item \IFRU{подготовка нужных значений регистров (AH и DX)}{preparing register (AH and DX) values we need};
+\item \IFRU{подготовка в памяти опкодов для INT 21 и INT 20}{preparing INT 21 and INT 20 opcodes in memory};
+\item \IFRU{исполнение}{executing} INT 21 \AndENRU INT 20.
+\end{itemize}
+
+\IFRU{Кстати, подобная техника широко используется для создания шеллкодов, 
+где нужно создать x86-код, который будет нужно передать в виде текстовой строки}
+{By the way, this technique is widely used in shellcode creating, when one need to pass x86-code
+in the string form}.
+
+% FIXME: ->list of x86 instructions...
+
