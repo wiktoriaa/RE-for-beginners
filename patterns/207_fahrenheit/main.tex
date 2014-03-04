@@ -1,0 +1,109 @@
+\section{\IFRU{Конвертирование температуры}{Temperature converting}}
+
+\IFRU{Еще один крайне популярный пример из книг по программированию для начинающих, это простейшая программа
+для конвертирования температуры по Фаренгейту в температуру по Цельсию}{Another very popular example in 
+programming books for beginners, is a small program converting Fahrenheit temperature to Celsius or back}.
+
+\[
+	C=\frac{5 \cdot (F-32)}{9}
+\]
+
+\IFRU{Я также добавил простейшую обработку ошибок}{I also added simple error handling}:
+1) \IFRU{мы должны проверять правильность ввода пользователем}{we should check if user enters correct number};
+2) \IFRU{мы должны проверять результат, не ниже ли он $-273$ по Цельсию (что, как мы можем помнить из школьных
+уроков физики, ниже абсолютного ноля)}{we should check if Celsius temperature is not below $-273$ number 
+(which is below absolute zero, as we may remember from school physics lessons)}.
+
+\RU{Ф-ция }\TT{exit()} \IFRU{заканчивает программу тут же, без возврата в вызывающую ф-цию}{function terminates 
+program instantly, without returning to the \gls{caller} function}.
+
+\subsection{\IFRU{Целочисленные значения}{Integer values}}
+
+\lstinputlisting{patterns/207_fahrenheit/i.c}
+
+\subsubsection{MSVC 2012 x86 /Ox}
+
+\lstinputlisting[caption=MSVC 2012 x86 /Ox]{patterns/207_fahrenheit/i_MSVC_2012_Ox_x86.asm}
+
+\IFRU{Что мы можем сказать об этом}{What we can say about it}:
+
+\begin{itemize}
+\item \IFRU{Адрес ф-ции}{Address of} \printf \IFRU{в начале загружается в регистр}{is first loaded into} 
+\ESI \IFRU{так что последующие вызовы}{register, so the subsequent}
+\printf \IFRU{происходят просто при помощи инструкции}{calls are processed just by} \TT{CALL ESI}\EN{ instruction}.
+\IFRU{Это очень популярная техника компиляторов, может присутствовать, если имеются несколько вызовов
+одной и той же ф-ции в одном месте, и/или имеется свободный регистр для этого}{It's a very popular compiler 
+technique, possible if several consequent calls to the same function are present
+in the code, and/or, if there are free register which can be used for this}.
+
+\item \IFRU{Мы видим инструкцию}{We see} \TT{ADD EAX, -32} \IFRU{в том месте где от значения должно отняться 32}
+{instruction at the place where 32 should be subtracted from the value}.
+$EAX=EAX+(-32)$ \IFRU{эквивалентно}{is equivalent to} $EAX=EAX-32$ \IFRU{и как-то компилятор решил использовать}
+{and somehow, compiler decide to use} \TT{ADD} \IFRU{вместо}{instead of} \TT{SUB}.
+\IFRU{Может быть оно того стоит}{Maybe it's worth it}.
+
+\item \RU{Инструкция }\LEA \IFRU{используются там где нужно умножить значение на}{instruction is used when 
+value should be multiplied by} 5: \TT{lea ecx, DWORD PTR [eax+eax*4]}.
+\IFRU{Да}{Yes}, $i+i*4$ \IFRU{эквивалентно}{is equivalent to} $i*5$ \AndENRU \LEA \IFRU{работает быстрее чем}
+{works faster then} \TT{IMUL}.
+\IFRU{Кстати, пара инструкций}{By the way,} \TT{SHL EAX, 2 / ADD EAX, EAX} \IFRU{может быть использована здесь
+вместо \LEA --- некоторые компиляторы так и делают}{instructions pair could be also used here instead---
+some compilers do it in this way}.
+
+\item \IFRU{Деление через умножение}{Division by multiplication trick} (\ref{sec:divisionbynine}) 
+\IFRU{также используется здесь}{is also used here}.
+
+\item \RU{Ф-ция }\main \IFRU{возвращает}{function returns} 0 \IFRU{хотя}{while we haven't} \TT{return 0} 
+\IFRU{в конце ф-ции отсутствует}{at its end}.
+\IFRU{В стандарте C99}{C99 standard tells us} \cite[5.1.2.2.3]{C99TC3} \IFRU{указано что}{that} \main 
+\IFRU{будет возвращать}{will return} $0$ \IFRU{в случае отсутствия выражения}{in case of} 
+\TT{return}\EN{ statement absence}.
+\IFRU{Это правило работает только для ф-ции \main}{This rule works only for \main function}.
+\IFRU{И хотя, MSVC не поддерживает C99, может быть частично и поддерживает}{Though, MSVC doesn't support C99, 
+but maybe partly it does}?
+\end{itemize}
+
+\subsubsection{MSVC 2012 x64 /Ox}
+
+\IFRU{Код почти такой же, хотя я заметил инструкцию}{The code is almost the same, but I've found} 
+\TT{INT 3} \IFRU{после каждого вызова}{instructions after each} \TT{exit()}\EN{ call}:
+
+\begin{lstlisting}
+	xor	ecx, ecx
+	call	QWORD PTR __imp_exit
+	int	3
+\end{lstlisting}
+
+\TT{INT 3} \IFRU{это брякпоинт для отладчика}{is a debugger breakpoint}.
+
+\IFRU{Известно что ф-ция}{It is known that} \TT{exit()} \IFRU{из тех, что никогда не возвращают
+управление}{is one of functions which never can return}
+\footnote{\IFRU{еще одна популярная из того же ряда это}{another popular one is} \TT{longjmp()}},
+\IFRU{так что если управление все же возвращается, значит происходит что-то крайне странное, и пришло
+время запускать отладчик}{so if it does, something really odd happens and it's time to load debugger}.
+
+\subsection{\IFRU{Числа с плавающей запятой}{Float point values}}
+
+\lstinputlisting{patterns/207_fahrenheit/f.c}
+
+MSVC 2010 x86 \IFRU{использует инструкции}{use} \ac{FPU}\EN{ instructions}...
+
+\lstinputlisting[caption=MSVC 2010 x86 /Ox]{patterns/207_fahrenheit/f_MSVC_2010_x86_Ox.asm}
+
+... \IFRU{но}{but} MSVC \IFRU{от года}{from year} 2012 \IFRU{использует инструкции}{use} \ac{SIMD} 
+\IFRU{вместо этого}{instructions instead}:
+
+\lstinputlisting[caption=MSVC 2010 x86 /Ox]{patterns/207_fahrenheit/f_MSVC_2012_x86_Ox.asm}
+
+\IFRU{Конечно}{Of course}, \ac{SIMD}\IFRU{-инструкции доступны и в x86-режиме, включая те что работают
+с числами с плавающей запятой}{ instructions are available in x86 mode, 
+including those working with floating point numbers}.
+\IFRU{Их использовать в каком-то смысле проще, так что новый компилятор от Microsoft теперь применяет их}
+{It's somewhat easier to use them for calculations, so the new Microsoft compiler use them}.
+
+\IFRU{Мы можем также заметить что значение}{We may also notice that} $-273$ \IFRU{загружается в регистр}{value 
+is loaded into} \TT{XMM0} \IFRU{слишком рано}{register too early}.
+\IFRU{И это нормально, потому что компилятор может генерировать инструкции далеко не в том порядке, в котором
+они появляются в исходном коде}{And that's OK, because, compiler may emit instructions not in 
+the order they are in source code}.
+
