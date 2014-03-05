@@ -3,9 +3,9 @@
 \IFRU{В ARM традиционно принята такая схема передачи аргументов в функцию: 
 4 первых аргумента через регистры \Reg{0}-\Reg{3},
 а остальные ~--- через стек}
-{Traditionally, ARM arguments passing scheme (calling convention) is as follows:
-the 4 first arguments are passed in the \Reg{0}-\Reg{3} registers and remaining arguments~---via stack}.
-\IFRU{Это немного похоже на то, как аргументы передаются в}{This resembling arguments passing scheme in} 
+{Traditionally, ARM's scheme for passing arguments (calling convention) is as follows:
+the first 4 arguments are passed in the \Reg{0}-\Reg{3} registers and the remaining arguments are via the stack}.
+\IFRU{Это немного похоже на то, как аргументы передаются в}{This resembles the arguments passing scheme in} 
 fastcall~(\ref{fastcall}) \OrENRU win64~(\ref{sec:callingconventions_win64}).
 
 \subsubsection{\NonOptimizingKeil + \ARMMode}
@@ -24,10 +24,10 @@ fastcall~(\ref{fastcall}) \OrENRU win64~(\ref{sec:callingconventions_win64}).
 \IFRU{Итак, первые 4 аргумента передаются через регистры \Reg{0}-\Reg{3}, по порядку: 
 указатель на формат-строку для \printf
 в \Reg{0}, затем $1$ в R1, $2$ в R2 и $3$ в R3}
-{So, the first 4 arguments are passing via \Reg{0}-\Reg{0} arguments in this order:
-pointer to the \printf format string in the \Reg{0}, then $1$ in R1, $2$ in R2 and $3$ in R3}.
+{So, the first 4 arguments are passed via the \Reg{0}-\Reg{3} registers in this order:
+a pointer to the \printf format string in \Reg{0}, then $1$ in R1, $2$ in R2 and $3$ in R3}.
 
-\IFRU{Пока что здесь нет ничего необычного}{Nothing unusual so far}.
+\IFRU{Пока что здесь нет ничего необычного}{There is nothing unusual so far}.
 
 \subsubsection{\OptimizingKeil + \ARMMode}
 \label{ARM_B_to_printf}
@@ -47,35 +47,35 @@ pointer to the \printf format string in the \Reg{0}, then $1$ in R1, $2$ in R2 a
 \index{Function epilogue}
 \IFRU{Это соптимизированная версия (\Othree) для режима ARM, и здесь мы видим последнюю инструкцию: 
 \TT{B} вместо привычной нам \TT{BL}}{This is optimized (\Othree) version for ARM mode and here we see \TT{B} as
-the last instruction instead of familiar \TT{BL}}.
+the last instruction instead of the familiar \TT{BL}}.
 \IFRU{Отличия между этой соптимизированной версией и предыдущей, скомпилированной без оптимизации, 
 еще и в том, 
 что здесь нет пролога и эпилога функции (инструкций, сохраняющих состояние регистров \TT{\Reg{0}} и \LR)}
-{Another difference between this optimized version and previous one (compiled without optimization)
+{Another difference between this optimized version and the previous one (compiled without optimization)
 is also in the
-fact that there are no function prologue and epilogue (instructions which are saving \TT{\Reg{0}} and \LR registers values)}.
+fact that there is no function prologue and epilogue (instructions which save \TT{\Reg{0}} and \LR registers values)}.
 \index{x86!\Instructions!JMP}
 \IFRU{Инструкция \TT{B} просто переходит на другой адрес, без манипуляций с регистром \LR, то есть
 это аналог \JMP в x86}
-{\TT{B} instruction just jumping to another address, without any manipulation of the \LR register,
-that is, it is \JMP analogue in x86}.
+{The \TT{B} instruction just jumps to another address, without any manipulation of the \LR register,
+that is, it is analogous to \JMP in x86}.
 \IFRU{Почему это работает нормально? Потому что этот код эквивалентен предыдущему.}
-{Why it works fine? Because this code is in fact effectively equivalent to the previous.}
+{Why does it work? Because this code is, in fact, effectively equivalent to the previous.}
 \IFRU{Основных причин две: 1) стек не модифицируется, как и \glslink{stack pointer}{указатель стека} \SP; 2) вызов функции \printf последний, 
-после него ничего не происходит}{There are two main reasons: 1) stack is not modified, as well as \SP \gls{stack pointer};
-2) \printf call is the last one, there is nothing going on after it}.
-\IFRU{Функция \printf, отработав, просто вернет управление по адресу, записанному в \LR}{After finishing, \printf
-function will just return control to the address stored in the \LR}.
+после него ничего не происходит}{There are two main reasons: 1) neither the stack nor \SP, the \gls{stack pointer}, is modified;
+2) the call to \printf is the last instruction, there is nothing going on after it}.
+\IFRU{Функция \printf, отработав, просто вернет управление по адресу, записанному в \LR}{After finishing, the \printf
+function will just return control to the address stored in \LR}.
 \IFRU{Но в \LR находится адрес места, откуда была вызвана наша функция}
 {But the address of the point from where our function
-was called is now in the \LR}!
+was called is now in \LR}!
 \IFRU{А следовательно, управление из \printf вернется сразу туда}
-{And consequently, control from \printf will returned to the point}.
+{Consequently, control from \printf will be returned to that point}.
 \IFRU{Следовательно, нет нужды сохранять \LR, потому что нет нужны модифицировать \LR}
-{As a consequent, we do not need to save \LR since we do not need to modify \LR}.
+{As a consequence, we do not need to save \LR since we do not need to modify \LR}.
 \IFRU{А нет нужды модифицировать \LR, потому что нет иных вызовов функций, кроме \printf, к тому же, после этого вызова не нужно ничего здесь больше делать}
-{And we do not need to modify \LR since there are no other functions calls except \printf, furthermore,
-after this call we are not planning to do anything}!
+{We do not need to modify \LR since there are no other functions calls except \printf. Furthermore,
+after this call we do not to do anything}!
 \IFRU{Поэтому такая оптимизация возможна}
 {That's why this optimization is possible}.
 
@@ -97,6 +97,6 @@ after this call we are not planning to do anything}!
 \end{lstlisting}
 
 \IFRU{Здесь нет особых отличий от неоптимизированного варианта для режима ARM}
-{There is no significant difference from non-optimized code for ARM mode}.
+{There is no significant difference from the non-optimized code for ARM mode}.
 
 
