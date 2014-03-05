@@ -1,0 +1,200 @@
+\section{\IFRU{Текстовые строки}{Text strings}}
+
+\label{C_strings}
+\IFRU{Обычные строки в Си заканчиваются нулем}{Usual C-strings are zero-terminated} 
+(\ac{ASCIIZ}-\IFRU{строки}{strings}).
+
+\IFRU{Причина, почему формат строки в Си именно такой (оканчивающийся нулем) вероятно историческая}
+{The reason why C string format is as it is (zero-terminating) is apparently hisorical}.
+\IFRU{В}{In} \cite{Ritchie79} \IFRU{мы можем прочитать}{we can read}:
+
+\begin{framed}
+\begin{quotation}
+A minor difference was that the unit of I/O was the word, not the byte, because the PDP-7 was a word-addressed
+machine. In practice this meant merely that all programs dealing with character streams ignored null
+characters, because null was used to pad a file to an even number of characters.
+\end{quotation}
+\end{framed}
+
+\index{Hiew}
+\IFRU{Строки выглядят в Hiew или FAR Manager точно так же}{In Hiew or FAR Manager these strings looks like
+as it is}:
+
+\begin{lstlisting}
+int main()
+{
+	printf ("Hello, world!\n");
+};
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{other/strings/C-string.png}
+\caption{Hiew}
+\end{figure}
+
+\index{Pascal}
+\index{Delphi}
+\IFRU{Когда кодируются строки в Pascal и Delphi, сама строка предваряется 8-битным или 32-битным значением,
+в котором закодирована длина строки}{The string is preceeded by 8-bit or 32-bit string length value}.
+
+\IFRU{Например}{For example}:
+
+\begin{lstlisting}[caption=Delphi]
+CODE:00518AC8                 dd 19h
+CODE:00518ACC aLoading___Plea db 'Loading... , please wait.',0
+
+...
+
+CODE:00518AFC                 dd 10h
+CODE:00518B00 aPreparingRun__ db 'Preparing run...',0
+\end{lstlisting}
+
+\subsection{Unicode}
+
+\index{Unicode}
+\IFRU{Нередко уникодом называют все способы передачи символов, когда символ занимает 2 байта или 16 бит}
+{Often, what is called by Unicode is a methods of strings encoding when each character occupies 2 bytes or 16 bits}.
+\IFRU{Это распространенная терминологическая ошибка}{This is common terminological mistake}.
+\IFRU{Уникод --- это стандарт, присваивающий номер каждому символу многих письменностей мира, но не описывающий
+способ кодирования}{Unicode is a standard assigning a number to each character of many writing systems of the 
+world, but not describing encoding method}.
+
+\index{UTF-8}
+\index{UTF-16LE}
+\IFRU{Наиболее популярные способы кодирования}{Most popular encoding methods are}: 
+UTF-8 (\IFRU{наиболее часто используется в Интернете и *NIX-системах}{often used in Internet and *NIX systems})
+\AndENRU UTF-16LE (\IFRU{используется в}{used in} Windows).
+
+\subsubsection{UTF-8}
+
+\index{UTF-8}
+UTF-8 \IFRU{это один из очень удачных способов кодирования символов}{is one of the most successful methods of
+character encoding}.
+\IFRU{Все символы латинницы кодируются так же, как и в ASCII-кодировке, а символы выходящие за пределы
+ASCII-7-таблицы, кодируются несколькими байтами}{All Latin symbols are encoded just like in an ASCII-encoding,
+and symbols beyond ASCII-table are encoded by several bytes}.
+\IFRU{$0$ кодируется, как и прежде, нулевыми байтом, так что все стандартные
+ф-ции Си продолжают работать с UTF-8-строками так же как и с обычными строками}{$0$ is encoded as it was
+before, so all standard C string functions works with UTF-8-strings just like any other string}.
+
+\IFRU{Посмотрим как символы из разных языков кодируются в UTF-8 и как это выглядит в FAR, в кодировке 437}
+{Let's see how symbols in various languages are encoded in UTF-8 and how it looks like in FAR in 437 codepage}
+\footnote{\IFRU{Я взял пример и переводы на разные языки здесь}{I've got example and translations from there}: 
+\url{http://www.columbia.edu/~fdc/utf8/}}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{other/strings/multilang_sampler.png}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{other/strings/multilang_sampler_UTF8.png}
+\caption{FAR: UTF-8}
+\end{figure}
+
+\IFRU{Видно что строка на английском языке выглядит точно так же как и в ASCII-кодировке}
+{As it seems, English language string looks like as it is in ASCII-encoding}.
+\IFRU{В венгерском языке используются латинница плюс латинские буквы с диакритическими знаками}
+{Hungarian language uses Latin symbols plus symbols with diacritic marks}.
+\IFRU{Здесь видно что эти буквы кодируются несколькими байтами, я подчеркнул их красным}
+{These symbols are encoded by several bytes, I underscored them by red}.
+\IFRU{То же самое с исландским и польским языками}{The same story with Icelandic and Polish languages}.
+\IFRU{В самом начале я также применил символ валюты ``Евро'', который кодируется тремя байтами}
+{I also used ``Euro'' currency symbol at the begin, which is encoded by 3 bytes}.
+\IFRU{Остальные системы письма здесь никак не связаны с латинницей}
+{All the rest writing systems here have no connection with Latin}.
+\IFRU{По крайней мере о русском, арабском, иврите и хинди мы можем сказать что здесь видны повторяющиеся
+байты, что не удивительно, ведь, обычно буквы из одной и той же системы письменности расположены в одной
+или нескольких таблицах уникода, поэтому часто их коды начинаются с одних и тех же цифр}
+{At least about Russian, Arabic, Hebrew and Hindi we could see recurring bytes, and that is not surprise:
+all symbols from the writing system is usually located in the same Unicode table, so their code begins with
+the same numbers}.
+
+\IFRU{В самом начале, перед строкой ``How much?'', видны три байта, которые на самом деле \ac{BOM}}
+{At the very beginning, before ``How much?'' string we see 3 bytes, which is \ac{BOM} in fact}.
+\ac{BOM} \IFRU{показывает, какой способ кодирования будет сейчас использоваться}{defines encoding system to be
+used now}.
+
+\subsubsection{UTF-16LE}
+
+\index{UTF-16LE}
+\index{Win32}
+\IFRU{Многие ф-ции win32 в Windows имееют суффикс}{Many win32 functions in Windows has a suffix} \TT{-A} 
+\AndENRU \TT{-W}.
+\IFRU{Первые ф-ции работают с обычными строками, вторые с UTF-16LE-строками}{The first functions works
+with usual strings, the next with UTF-16LE-strings} (\IT{wide}).
+\IFRU{Во втором случае, каждый символ обычно хранится в 16-битной переменной типа \IT{short}}
+{As in the second case, each symbol is usually stored in 16-bit value of \IT{short} type}.
+
+\IFRU{Cтроки с латинскими буквами выглядят в Hiew или FAR как перемежающиеся с нулевыми байтами}
+{Latin symbols in UTF-16 strings looks in Hiew or FAR as interleaved with zero byte}:
+
+\begin{lstlisting}
+int wmain()
+{
+	wprintf (L"Hello, world!\n");
+};
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{other/strings/UTF16-string.png}
+\caption{Hiew}
+\end{figure}
+
+\IFRU{Подобное можно часто увидеть в системных файлах \gls{Windows NT}}{We may often see this in \gls{Windows NT} 
+system files}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{other/strings/ntoskrnl_UTF16.png}
+\caption{Hiew}
+\end{figure}
+
+\index{IDA}
+\IFRU{В \IDA, уникодом называется именно строки с символами занимающими 2 байта}{String with characters
+occupying exactly 2 bytes are called by ``Unicode'' in \IDA}:
+
+\begin{lstlisting}
+.data:0040E000 aHelloWorld:
+.data:0040E000                 unicode 0, <Hello, world!>
+.data:0040E000                 dw 0Ah, 0
+\end{lstlisting}
+
+\IFRU{Вот как может выглядеть строка на русском языке}{Here is how Russian language 
+string}\RU{ (``И снова здравствуйте!'')} \IFRU{закодированная в UTF-16LE}{encoded in UTF-16LE may looks like}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{other/strings/russian_UTF16.png}
+\caption{Hiew: UTF-16LE}
+\end{figure}
+
+\IFRU{То что бросается в глаза --- это то что символы перемежаются ромбиками (который имеет код 4)}
+{What we can easily spot---is that symbols are interleaved by diamond character (which has code of 4)}.
+\IFRU{Действительно, в уникоде кирилличные символы находятся в четвертом блоке}{Indeed, Cyrillic symbols
+are located in the fourth Unicode plane}
+\footnote{\url{https://en.wikipedia.org/wiki/Cyrillic_(Unicode_block)}}.
+\IFRU{Таким образом, все кирилличные символы в UTF-16LE находятся в диапазоне}{Hence, all
+Cyrillic symbols in UTF-16LE are located in} \TT{0x400-0x4FF}\EN{ range}.
+
+\IFRU{Вернемся к примеру, где одна и та же строка написана разными языками}{Let's back to the example with the
+string written in multiple languages}.
+\IFRU{Здесь посмотрим в кодировке UTF-16LE}{Here we can see it in UTF-16LE encoding}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{other/strings/multilang_sampler_UTF16.png}
+\caption{FAR: UTF-16LE}
+\end{figure}
+
+\IFRU{Здесь мы так же видим \ac{BOM} в самом начале}{Here we can also see \ac{BOM} in the very beginning}.
+\IFRU{Все латинские буквы перемежаются с нулевыми байтом}{All Latin characters are interleaved with zero byte}.
+\IFRU{Некоторые буквы с диакритическими знаками (венгерский и исландский языки) также подчеркнуты красным}
+{I also underscored by red some characters with diacritic marks (Hungarian and Icelandic languages)}.
+
+% \subsection{}
+% TODO: strings *NIX utility. procmonitor also shows strings...
+
