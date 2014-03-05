@@ -2,10 +2,10 @@
 \label{alloca}
 \index{\CStandardLibrary!alloca()}
 \IFRU{Интересен случай с функцией \TT{alloca()}}
-{It is worth noting \TT{alloca()} function.}\footnote{
+{It is worth noting the \TT{alloca()} function.}\footnote{
 \IFRU
 {В MSVC, реализацию функции можно посмотреть в файлах}
-{As of MSVC, function implementation can be found in} 
+{In MSVC, the function implementation can be found in} 
   \TT{alloca16.asm} 
   \AndENRU 
   \TT{chkstk.asm} 
@@ -17,17 +17,17 @@
 
 \IFRU{Память освобождать через \TT{free()} не нужно, так как эпилог функции~(\ref{sec:prologepilog})
 вернет \ESP назад в изначальное состояние и выделенная память просто аннулируется.}
-{Allocated memory chunk is not needed to be freed via \TT{free()} function call since 
-function epilogue~(\ref{sec:prologepilog}) shall return value of the \ESP back to initial state and 
-allocated memory will be just annulled.} 
+{The allocated memory chunk does not need to be freed via a \TT{free()} function call since the 
+function epilogue~(\ref{sec:prologepilog}) will return \ESP back to its initial state and 
+the allocated memory will be just annulled.} 
 
 \IFRU{Интересна реализация функции \TT{alloca()}.}
-{It is worth noting how \TT{alloca()} implemented.}
+{It is worth noting how \TT{alloca()} is implemented.}
 
 \IFRU{Эта функция, если упрощенно, просто сдвигает \ESP вглубь стека 
 на столько байт, сколько вам нужно и возвращает \ESP в качестве указателя на выделенный блок.}
-{This function, if to simplify, just shifting \ESP deeply to stack bottom so much bytes you 
-need and set \ESP as a pointer to the \IT{allocated} block.}
+{This function, if to simplify, just shifts \ESP downwards toward the stack bottom by the number of bytes you 
+need and sets \ESP as a pointer to the \IT{allocated} block.}
 \IFRU{Попробуем:}{Let's try:}
 
 \lstinputlisting{patterns/02_stack/2_1.c}
@@ -36,8 +36,8 @@ need and set \ESP as a pointer to the \IT{allocated} block.}
 stdout (т.е., на терминал или в консоль),
 записывает его в буфер \TT{buf}. \puts выдает содержимое буфера \TT{buf} в stdout. Конечно, можно было бы
 заменить оба этих вызова на один \printf, но мне нужно проиллюстрировать использование небольшого буфера.)}
-{(\TT{\_snprintf()} function works just like \printf, but instead dumping result into stdout (e.g., to terminal or 
-console), write it to the \TT{buf} buffer. \puts copies \TT{buf} contents to stdout. Of course, these two
+{(\TT{\_snprintf()} function works just like \printf, but instead of dumping the result into stdout (e.g., to terminal or 
+console), it writes to the \TT{buf} buffer. \puts copies \TT{buf} contents to stdout. Of course, these two
 function calls might be replaced by one \printf call, but I would like to illustrate small buffer usage.)}
 
 \paragraph{MSVC}
@@ -63,8 +63,8 @@ physical memory to this \ac{VM} region.}
 }.
 \IFRU{После вызова \TT{alloca()}, \ESP теперь указывает на блок в 600 байт, который 
 мы можем использовать под \TT{buf}.}
-{After \TT{alloca()} call, \ESP is now pointing to the block of 600 bytes and we can 
-use it as memory for \TT{buf} array.}
+{After the \TT{alloca()} call, \ESP points to the block of 600 bytes and we can 
+use it as memory for the \TT{buf} array.}
 
 \paragraph{GCC + \IntelSyntax}
 
@@ -80,7 +80,7 @@ use it as memory for \TT{buf} array.}
 \lstinputlisting[caption=GCC 4.7.3]{patterns/02_stack/2_1_gcc_ATT_O3.s}
 
 \index{\ATTSyntax}
-\IFRU{Всё то же самое, что и в прошлом листинге.}{The same code as in previos listing.}
+\IFRU{Всё то же самое, что и в прошлом листинге.}{The code is the same as in the previous listing.}
 
 N.B. \IFRU{Например,}{E.g.} \TT{movl \$3, 20(\%esp)} 
 \IFRU{ ~--- это аналог}{is analogous to} \TT{mov DWORD PTR [esp+20], 3} \IFRU{в Intel-синтаксисе:}
