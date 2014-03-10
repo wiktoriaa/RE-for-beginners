@@ -62,6 +62,134 @@ call ...
 add esp, 24
 \end{lstlisting}
 
+\subsubsection{MSVC \AndENRU \olly}
+\index{\olly}
+
+\IFRU{Попробуем этот же пример в}{Now let's try to load this example in} \olly.
+\IFRU{Это один из наиболее популярных win32-отладчиков user-режима}{It is one of the most 
+popular user-land win32 debugger}.
+\IFRU{Мы можем компилировать наш пример в}{We can try to compile our example in} MSVC 2012 
+\IFRU{с опцией}{with} \TT{/MD} \IFRU{что означает, линковать с библиотекой}{option, meaning, to link 
+against} \TT{MSVCR*.DLL},
+\IFRU{чтобы импортируемые ф-ции были хорошо видны в отладчике}{so we will able to see imported 
+functions clearly in debugger}.
+
+\IFRU{Затем загружаем исполняемый файл в}{Then load executable in} \olly.
+\IFRU{Самый первый брякпойнт в}{The very first breakpoint is in} \TT{ntdll.dll}, \IFRU{нажмите}{press} 
+F9 (\IFRU{запустить}{run}).
+\IFRU{Второй брякпойнт в}{The second breakpoint is in} \ac{CRT}-\IFRU{коде}{code}.
+\IFRU{Теперь мы должны найти ф-цию}{Now we should find} \main\EN{ function}.
+
+\IFRU{Найдите этот код скроллируя окно кода до самого верха (MSVC располагает ф-цию \main в самом начале
+секции кода)}{Find this code by scrolling the code to the very bottom (MSVC allocates \main function at
+the very beginning of the code section)}: 
+\figname \ref{fig:printf3_olly_1}.
+
+\IFRU{Кликните на инструкции}{Click on} \TT{PUSH EBP}\IFRU{, нажмите}{ instruction, press} F2 
+(\IFRU{установка брякпойнта}{set breakpoint}) \IFRU{и нажмите}{and press} F9 (\IFRU{запустить}{run}).
+\IFRU{Нам нужно произвести все эти манипуляции, чтобы пропустить \ac{CRT}-код, потому что нам он пока
+не интересен}{We need to do these manupulations in order to skip \ac{CRT}-code, because, we don't really 
+interesting in it yet}.
+
+\IFRU{Нажмите}{Press} F8 (\stepover) 6 \IFRU{раз, т.е., пропустить
+6 инструкций}{times, i.e., skip 6 instructions}: \figname \ref{fig:printf3_olly_2}.
+
+\IFRU{Теперь}{Now the} \PC \IFRU{указывает на инструкцию}{points to the}
+\TT{CALL printf}\EN{ instruction}.
+\olly, \IFRU{как и другие отладчики, подсвечивает регистры со значениями, которые изменились}
+{like other debuggers, highlights value of registers which were changed}.
+\IFRU{Так что, каждый раз, когда мы нажимаем}{So each time you press F8}, \EIP 
+\IFRU{изменяется и его значение подсвечивается красным}{is changing and its value looking red}.
+\ESP \IFRU{также меняется, потому что значения заталкиваются в стек}{is changing as well, 
+because values are pushed into the stack}.
+
+\IFRU{Где находятся эти значения в стеке}{Where are the values in the stack}?
+\IFRU{Посмотрите на правое/нижнее окно в отладчике}{Take a look into right/bottom window of debugger}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/03_printf/olly3_stack.png}
+\caption{\olly: \IFRU{стек, после того как значения там сохранены}{stack after values pushed}
+(\IFRU{я сделал здесь округлую красную пометку в графическом редакторе}{I made round red mark 
+here in graphics editor})}
+\end{figure}
+
+\IFRU{Так что здесь видно 3 столбца: адрес в стеке, значение в стеке и еще дополнительный комментарий
+от \olly}{So we can see there 3 columns: address in the stack, 
+value in the stack and some additional \olly comments}. 
+\olly \IFRU{понимает}{understands} \printf\IFRU{-строки}{-like strings}, 
+\IFRU{так что он показывает здесь и строку и 3 значения \IT{привязанных} к ней}{so it reports the 
+string here and 3 values \IT{attached} to it}.
+
+\IFRU{Нажмите}{Press} F8 (\stepover).
+
+\IFRU{В коносил мы видим вывод}{In the console we'll see the output}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/03_printf/olly3_console.png}
+\caption{\RU{Ф-ция }\printf \IFRU{исполнилась}{function executed}}
+\end{figure}
+
+\IFRU{Посмотрим, как изменились регистры и состояние стека}{Let's see how registers and stack state 
+are changed}: \figname \ref{fig:printf3_olly_3}.
+
+\RU{Регистр }\EAX \IFRU{теперь содержит}{register now contains} \TT{0xD} (13).
+That's correct, \printf returns number of characters printed.
+\RU{Значение }\EIP \IFRU{изменилось: действительно, теперь здесь адрес инструкции после}
+{value is changed: indeed, now there is address of the instruction after} \TT{CALL printf}.
+\RU{Значения регистров }\ECX \AndENRU \EDX \IFRU{также изменились}{values are changed as well}.
+\IFRU{Очевидно, внутренности ф-ции \printf используют их для каких-то своих нужд}{Apparently, 
+\printf function's hidden machinery used them for its own needs}.
+
+\IFRU{Очень важный момент в том что значение \ESP не изменилось. И состояние стека также!}
+{A very important thing is that \ESP value is not changed. And stack state too!}
+\IFRU{Мы ясно видим здесь и строку формата и соответствующие ей 3 значения, они все еще здесь}
+{We clearly see that format string and corresponding 3 values are still there}.
+\IFRU{Действительно, по соглашению вызовов \IT{cdecl}, вызывающая ф-ция не очищает аргументы из стека}
+{Indeed, that's \IT{cdecl} calling convention, calling function doesn't clear arguments in stack}.
+\IFRU{Это должна делать вызывающая ф-ция}{It's caller's duty to do so}.
+
+\IFRU{Нажмите}{Press} F8 \IFRU{снова, чтобы исполнилась инструкция}{again to execute} 
+\TT{ADD ESP, 10}\EN{ instruction}: \figname \ref{fig:printf3_olly_4}.
+
+\ESP \IFRU{изменился, но значения все еще в стеке}{is changed, but values are still in the stack}!
+\IFRU{Конечно, никому не нужно заполнять эти значения нулями или что-то в этом роде}{Yes, 
+of course, no one needs to fill these values by zero or something like that}.
+\IFRU{Потому что всё что выше указателя стека}{Because, everything above stack pointer} (\SP) 
+\IFRU{это}{is} \IT{\IFRU{шум}{noise}} \OrENRU \IT{\IFRU{мусор}{garbage}}, \IFRU{это всё не имеет
+особой ценности}{it has no value at all}.
+\IFRU{Было бы очень затратно по времени очищать ненужные элементы стека, к тому же, никому это и не 
+нужно}{It would be time consuming to clear unused stack entries, besides, no one really needs to}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/03_printf/olly3_1.png}
+\caption{\olly: \IFRU{самое начало ф-ции}{the very start of the} \main\EN{ function}}
+\label{fig:printf3_olly_1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/03_printf/olly3_2.png}
+\caption{\olly: \IFRU{перед исполнением}{before} \printf\EN{ execution}}
+\label{fig:printf3_olly_2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/03_printf/olly3_3.png}
+\caption{\olly: \IFRU{после исполнения}{after} \printf\EN{ execution}}
+\label{fig:printf3_olly_3}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/03_printf/olly3_4.png}
+\caption{\olly: \IFRU{после исполнения инструкции}{after} \TT{ADD ESP, 10}\EN{ instruction execution}}
+\label{fig:printf3_olly_4}
+\end{figure}
+
 \subsubsection{GCC}
 
 \IFRU{Скомпилируем то же самое в Linux при помощи GCC 4.4.1 и посмотрим в \IDA что вышло:}
