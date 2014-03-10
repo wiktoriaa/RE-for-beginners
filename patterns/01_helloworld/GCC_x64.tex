@@ -30,20 +30,20 @@ Options $\rightarrow$ Disassembly $\rightarrow$ Number of opcode bytes}:
 \lstinputlisting[caption=GCC 4.4.6 x64]{patterns/01_helloworld/GCC_x64.lst}
 
 \label{hw_EDI_instead_of_RDI}
-\IFRU{Как видно, инструкция записывающая в \EDI по адресу \TT{0x4004D4} занимает 5 байт}
+\IFRU{Как видно, инструкция, записывающая в \EDI по адресу \TT{0x4004D4}, занимает 5 байт}
 {As we can see, the instruction writing into \EDI at \TT{0x4004D4} occupies 5 bytes}.
-\IFRU{Та же инструкция, записывающая 32-битное значение в \RDI будет занимать 7 байт}
+\IFRU{Та же инструкция, записывающая 32-битное значение в \RDI, будет занимать 7 байт}
 {The same instruction, writing 32-bit value into \RDI will occupy 7 bytes}.
 \IFRU{Возможно, GCC решил немного сэкономить}
 {Apparently, GCC tries to save some space}. 
-\IFRU{К тому же, вероятно он уверен что сегмент данных где хранится строка,
+\IFRU{К тому же, вероятно, он уверен что сегмент данных где хранится строка,
 никогда не будет расположен в адресах выше 4\gls{GiB}}{Besides, it can be sure that the data segment containing
 the string will not be allocated at the addresses higher than 4\gls{GiB}}.
 
 \label{SysVABI_input_EAX}
 \IFRU{Здесь мы также видим обнуление регистра \EAX перед вызовом \printf}{We also see \EAX register
 clearance before \printf function call}.
-\IFRU{Это делается потому что по стандарту передачи аргументов в *NIX для x86-64, 
+\IFRU{Это делается потому, что по стандарту передачи аргументов в *NIX для x86-64 
 в \EAX передается количество задействованных векторных регистров}{This is done because a number of
 used vector registers is passed in \EAX by standard}:
 ``with variable arguments passes information about the number of vector registers used''\cite{SysVABI}.
