@@ -47,31 +47,31 @@ void printf_main2()
 \index{ARM!\Instructions!STR}
 \IFRU{Самая первая инструкция}{The very first} \TT{``STR LR, [SP,\#var\_4]!''} 
 \IFRU{сохраняет в стеке \LR, ведь нам придется использовать этот регистр для вызова \printf}
-{instruction saves the \LR on the stack, because we will use this register for \printf call}.
+{instruction saves \LR on the stack, because we will use this register for the \printf call}.
 
 \index{ARM!\Instructions!SUB}
 \IFRU{Вторая инструкция}{The second} \TT{``SUB SP, SP, \#0x14''}
 \IFRU{уменьшает \glslink{stack pointer}{указатель стека} \SP, но, на самом деле, эта процедура нужна для выделения в локальном стеке места размером \TT{0x14} ($20$) байт}
-{instruction decreasing
-\SP \gls{stack pointer}, but in fact, 
-this procedure is needed for allocating a space of size \TT{0x14} ($20$) bytes in the stack}.
+{instruction decreases
+\SP, the \gls{stack pointer}, in order to 
+allocate \TT{0x14} ($20$) bytes on the stack}.
 \IFRU{Действительно, нам нужно передать 5 32-битных значений через стек в \printf, каждое значение занимает 4 байта, а $5*4=20$ ~--- как раз}
-{Indeed, we need to pass 5 32-bit values via stack to the \printf function, and each one occupy 4 bytes, that is $5*4=20$~---exactly}.
-\IFRU{Остальные 4 32-битных значения будут переданы через регистры}{Other 4 32-bit values will be passed in
+{Indeed, we need to pass 5 32-bit values via the stack to the \printf function, and each one occupies 4 bytes, that is $5*4=20$~---exactly}.
+\IFRU{Остальные 4 32-битных значения будут переданы через регистры}{The other 4 32-bit values will be passed in
 registers}.
 
 \item \IFRU{Передача 5, 6, 7 и 8 через стек}{Passing 5, 6, 7 and 8 via stack}:
 
 \IFRU{Затем значения 5, 6, 7 и 8 записываются в регистры \Reg{0}, \Reg{1}, \Reg{2} и \Reg{3} соответственно}
-{Then values 5, 6, 7 and 8
+{Then, the values 5, 6, 7 and 8
 are written to the \Reg{0}, \Reg{1}, \Reg{2} and \Reg{3} registers respectively}.
-\IFRU{Затем инструкция}{Then} \TT{``ADD R12, SP, \#0x18+var\_14''} 
+\IFRU{Затем инструкция}{Then, the} \TT{``ADD R12, SP, \#0x18+var\_14''} 
 \IFRU{записывает в регистр \TT{R12} адрес места в стеке, куда будут помещены эти 4 значения}
 {instruction writes an address of the point in the stack, where these 4 variables will be written, into the \TT{R12} register}.
 \index{IDA!var\_?}
 \IT{var\_14} \IFRU{~--- это макрос ассемблера}{is an assembly macro}, \IFRU{равный}{equal to} $-0x14$, 
 \IFRU{такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку}
-{such macros are created by \IDA in order to demonstrate simply how code accessing stack}.
+{such macros are created by \IDA in order to denote code accessing the stack}.
 \IFRU{Макросы \IT{var\_?}, создаваемые \IDA, отражают локальные переменные в стеке}{\IT{var\_?} macros created
 by \IDA reflecting local variables in the stack}.
 \IFRU{Так что в \TT{R12} будет записано $SP+4$}{So, $SP+4$ will be written into the \TT{R12} register}.
@@ -82,42 +82,42 @@ by \IDA reflecting local variables in the stack}.
 writes \Reg{0}-\Reg{3} registers contents at the point in memory to which \TT{R12} pointing}.
 \IFRU{Инструкция }\TT{STMIA} \IFRU{означает}{instruction meaning} \IT{Store Multiple Increment After}. 
 \IT{Increment After} \IFRU{означает, что \TT{R12} будет увеличиваться на 4 после записи каждого значения регистра}
-{meaning the \TT{R12} will be increasing by $4$ after each register value write}.
+{means that \TT{R12} will be increased by $4$ after each register value is written}.
 
 \item \IFRU{Передача $4$ через стек}{Passing $4$ via stack}:
-\IFRU{$4$ записывается в \Reg{0}, затем это значение при помощи инструкции}{$4$ is stored in the \Reg{0} and then,
+\IFRU{$4$ записывается в \Reg{0}, затем это значение при помощи инструкции}{$4$ is stored in \Reg{0} and then,
 this value, with the help of} \TT{``STR R0, [SP,\#0x18+var\_18]''} \IFRU{попадает в стек}{instruction, is saved
 on the stack}.
 \IT{var\_18} \IFRU{равен}{is} $-0x18$, \IFRU{смещение будет $0$}{offset will be $0$}, 
 \IFRU{так что, значение из регистра \Reg{0} ($4$) запишется туда, куда указывает \SP}
-{so, value from the \Reg{0} register ($4$) will be written to a point the \SP pointing to}.
+{so, the value from the \Reg{0} register ($4$) will be written to the point where \SP is pointing to}.
 
 \item \IFRU{Передача 1, 2 и 3 через регистры}{Passing 1, 2 and 3 via registers}:
 
 \IFRU{Значения для первых трех чисел (a, b, c) (1, 2, 3 соответственно) передаются в регистрах R1, R2 и R3 перед самим вызовом \printf}
-{Values of first 3 numbers (a, b, c) (1, 2, 3 respectively) are passing in R1, R2 and R3
-registers right before \printf call}, \IFRU{а остальные 5 значений передаются через стек, и вот как}{and other
-5 values are passed via stack and this is how}:
+{Values of first 3 numbers (a, b, c) (1, 2, 3 respectively) are passed in the R1, R2 and R3
+registers right before the \printf call}, \IFRU{а остальные 5 значений передаются через стек, и вот как}{and the other
+5 values are passed via the stack}:
 
 \item \IFRU{Вызов \printf}{\printf call}:
 
 \index{Function epilogue}
 \item \IFRU{Эпилог функции}{Function epilogue}:
 
-\RU{Инструкция }\TT{``ADD SP, SP, \#0x14''} \IFRU{возвращает \SP на прежнее место, 
+\EN{The} \RU{Инструкция }\TT{``ADD SP, SP, \#0x14''} \IFRU{возвращает \SP на прежнее место, 
 аннулируя таким образом всё, что было записано в стеке}
-{instruction returns the \SP pointer back to former point,
-thus annulling what was written to stack}.
+{instruction returns the \SP pointer back to its former point,
+thus cleaning the stack}.
 \IFRU{Конечно, то что было записано в стек, там пока и останется, но всё это будет многократно 
 перезаписано во время исполнения последующих функций}
 {Of course, what was written on the stack will stay there, but it all will be
-rewritten while execution of following functions}.
+rewritten with the execution of subsequent functions}.
 
 \index{ARM!\Instructions!LDR}
-\RU{Инструкция }\TT{``LDR PC, [SP+4+var\_4],\#4''} \IFRU{загружает в \PC сохраненное значение \LR из стека,
+\EN{The} \RU{Инструкция }\TT{``LDR PC, [SP+4+var\_4],\#4''} \IFRU{загружает в \PC сохраненное значение \LR из стека,
 обеспечивая таким образом выход из функции}
-{instruction loads saved \LR value from the stack into the \PC register, providing
-exit from the function}.
+{instruction loads the saved \LR value from the stack into the \PC register, thus causing
+the function to exit}.
 
 \end{itemize}
 
