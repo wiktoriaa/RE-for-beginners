@@ -1,10 +1,9 @@
 \subsection{ARM: \IFRU{3 аргумента}{3 arguments}}
 
 \IFRU{В ARM традиционно принята такая схема передачи аргументов в функцию: 
-4 первых аргумента через регистры \Reg{0}-\Reg{3},
-а остальные ~--- через стек}
+4 первых аргумента через регистры \Reg{0}-\Reg{3}; а остальные ~--- через стек}
 {Traditionally, ARM's scheme for passing arguments (calling convention) is as follows:
-the first 4 arguments are passed in the \Reg{0}-\Reg{3} registers and the remaining arguments are via the stack}.
+the first 4 arguments are passed in the \Reg{0}-\Reg{3} registers; the remaining arguments, via the stack}.
 \IFRU{Это немного похоже на то, как аргументы передаются в}{This resembles the arguments passing scheme in} 
 fastcall~(\ref{fastcall}) \OrENRU win64~(\ref{sec:callingconventions_win64}).
 
@@ -54,7 +53,7 @@ the last instruction instead of the familiar \TT{BL}}.
 что здесь нет пролога и эпилога функции (инструкций, сохраняющих состояние регистров \TT{\Reg{0}} и \LR)}
 {Another difference between this optimized version and the previous one (compiled without optimization)
 is also in the
-fact that there is no function prologue and epilogue (instructions which save \TT{\Reg{0}} and \LR registers values)}.
+fact that there is no function prologue and epilogue (instructions that save \TT{\Reg{0}} and \LR registers values)}.
 \index{x86!\Instructions!JMP}
 \IFRU{Инструкция \TT{B} просто переходит на другой адрес, без манипуляций с регистром \LR, то есть
 это аналог \JMP в x86}
@@ -64,7 +63,7 @@ that is, it is analogous to \JMP in x86}.
 {Why does it work? Because this code is, in fact, effectively equivalent to the previous.}
 \IFRU{Основных причин две: 1) стек не модифицируется, как и \glslink{stack pointer}{указатель стека} \SP; 2) вызов функции \printf последний, 
 после него ничего не происходит}{There are two main reasons: 1) neither the stack nor \SP, the \gls{stack pointer}, is modified;
-2) the call to \printf is the last instruction, there is nothing going on after it}.
+2) the call to \printf is the last instruction, so there is nothing going on after it}.
 \IFRU{Функция \printf, отработав, просто вернет управление по адресу, записанному в \LR}{After finishing, the \printf
 function will just return control to the address stored in \LR}.
 \IFRU{Но в \LR находится адрес места, откуда была вызвана наша функция}
@@ -75,7 +74,7 @@ was called is now in \LR}!
 \IFRU{Следовательно, нет нужды сохранять \LR, потому что нет нужны модифицировать \LR}
 {As a consequence, we do not need to save \LR since we do not need to modify \LR}.
 \IFRU{А нет нужды модифицировать \LR, потому что нет иных вызовов функций, кроме \printf, к тому же, после этого вызова не нужно ничего здесь больше делать}
-{We do not need to modify \LR since there are no other functions calls except \printf. Furthermore,
+{We do not need to modify \LR since there are no other function calls except \printf. Furthermore,
 after this call we do not to do anything}!
 \IFRU{Поэтому такая оптимизация возможна}
 {That's why this optimization is possible}.
