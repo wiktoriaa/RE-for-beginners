@@ -5,8 +5,7 @@
 \IFRU{Для того, чтобы посмотреть, как остальные аргументы будут передаваться через стек, 
 изменим пример еще раз, 
 увеличив количество передаваемых аргументов до 9 (строка формата \printf и 8 переменных типа \Tint)}
-{To see,
-how other arguments will be passed via stack, let's change our example again by increasing number of arguments
+{To see how other arguments will be passed via the stack, let's change our example again by increasing the number of arguments
 to be passed to 9 (\printf format string + 8 \Tint variables)}:
 
 \lstinputlisting{patterns/03_printf/2.c}
@@ -15,26 +14,26 @@ to be passed to 9 (\printf format string + 8 \Tint variables)}:
 
 \IFRU{Как уже было сказано раннее, первые 4 аргумента в Win64 передаются в регистрах}
 {As we saw before, the first 4 arguments are passed in the} \RCX, \RDX, \Reg{8}, \Reg{9}
-\IFRU{, а остальные --- через стек}{ registers in Win64, while all the rest---via stack}.
+\IFRU{, а остальные --- через стек}{ registers in Win64, while all the rest---via the stack}.
 \IFRU{Здесь мы это и видим}{That is what we see here}.
 \IFRU{Впрочем, инструкция \PUSH не используется, вместо нее, при помощи \MOV, значения сразу записываются в стек}
-{However, \MOV instruction used here for stack preparing instead of \PUSH, so the values are written
-to the stack straightforwardly}.
+{However, the \MOV instruction is used for preparing the stack instead of \PUSH, so the values are written
+to the stack in a straightforward manner}.
 
 \lstinputlisting[caption=MSVC 2012 x64]{patterns/03_printf/2_MSVC_x64.asm}
 
 \subsubsection{GCC}
 
 \IFRU{В *NIX-системах для x86-64 ситуация похожая, вот только первые 6 аргументов передаются через}
-{The very same story for the *NIX OS-es for x86-64, but first 6 arguments are passed in the} \RDI, \RSI,
+{In *NIX OS-es, it's the same story for x86-64, except that the first 6 arguments are passed in the} \RDI, \RSI,
 \RDX, \RCX, \Reg{8}, \Reg{9}\EN{ registers}.
-\IFRU{Остальные --- через стек}{All the rest---via stack}.
+\IFRU{Остальные --- через стек}{All the rest---via the stack}.
 \IFRU{GCC генерирует код записывающий указатель на строку в \EDI вместо \RDI --- 
 это мы уже рассмотрели чуть раньше}{GCC generates the code writing string pointer into \EDI instead if \RDI{}---we
-saw this thing shortly before}: \ref{hw_EDI_instead_of_RDI}.
+saw this thing before}: \ref{hw_EDI_instead_of_RDI}.
 
 \IFRU{Почему перед вызовом \printf очищается регистр \EAX, мы уже рассмотрели раннее}
-{Why \EAX register is cleared before \printf call, we saw before}: \ref{SysVABI_input_EAX}.
+{We also saw before the \EAX register being cleared before a \printf call}: \ref{SysVABI_input_EAX}.
 
 \lstinputlisting[caption=GCC 4.4.6 -O3 x64]{patterns/03_printf/2_GCC_x64_\IFRU{ru}{en}.s}
 
