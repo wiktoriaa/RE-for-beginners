@@ -19,13 +19,13 @@ $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 \end{lstlisting}
 
 \IFRU{Все почти то же, за исключением того, что теперь видно, что аргументы для \printf заталкиваются в стек в обратном порядке: самый первый аргумент заталкивается последним.}
-{Almost the same, but now we can see the \printf arguments are pushing into stack in reverse order: and the first argument is pushing in as the last one.}
+{Almost the same, but now we can see the \printf arguments are pushed onto the stack in reverse order. The first argument is pushed last.}
 
 \IFRU{Кстати, вспомним что переменные типа \Tint в 32-битной системе, как известно, имеет ширину 32 бита, это 4 байта}
-{By the way, variables of \Tint type in 32-bit environment has 32-bit width that is 4 bytes}.
+{By the way, variables of \Tint type in 32-bit environment have 32-bit width, that is 4 bytes}.
 
 \IFRU{Итак, у нас всего 4 аргумента. $4*4 = 16$ ~--- именно 16 байт занимают в стеке указатель на строку плюс еще 3 числа типа \Tint.}
-{So, we got here 4 arguments. $4*4 = 16$~---they occupy exactly 16 bytes in the stack: 32-bit pointer to string and 3 number of \Tint type.}
+{So, we have here 4 arguments. $4*4 = 16$~---they occupy exactly 16 bytes in the stack: a 32-bit pointer to a string and 3 numbers of type \Tint.}
 
 \index{x86!\Instructions!ADD}
 \index{x86!\Registers!ESP}
@@ -33,19 +33,19 @@ $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 \IFRU{Когда при помощи инструкции \TT{``ADD ESP, X''} корректируется \glslink{stack pointer}{указатель стека} \ESP 
 после вызова какой-либо функции, зачастую можно сделать вывод о том, сколько аргументов 
 у вызываемой функции было, разделив X на 4.}
-{When \gls{stack pointer} (the \ESP register) is corrected by \TT{``ADD ESP, X''}
+{When the \gls{stack pointer} (\ESP register) is corrected by \TT{``ADD ESP, X''}
 instruction after a function 
-call, often, the number of function arguments could be deduced here: just divide X by 4.}
+call, often, the number of function arguments can be deduced here: just divide X by 4.}
 
 \IFRU{Конечно, это относится только к cdecl-методу передачи аргументов через стек.}
 {Of course, this is related only to \IT{cdecl} calling convention.}
 
 \IFRU{См. также в соответствующем разделе о способах передачи аргументов через стек}
-{See also section about calling conventions}~(\ref{sec:callingconventions}).
+{See also the section about calling conventions}~(\ref{sec:callingconventions}).
 
 \IFRU{Иногда бывает так, что подряд идут несколько вызовов разных функций, 
 но стек корректируется только один раз, после последнего вызова:}
-{It is also possible for compiler to merge several \TT{``ADD ESP, X''} instructions into one, after last call:}
+{It is also possible for the compiler to merge several \TT{``ADD ESP, X''} instructions into one, after last call:}
 
 \begin{lstlisting}
 push a1
@@ -205,7 +205,7 @@ of course, no one needs to fill these values by zero or something like that}.
 \subsubsection{GCC}
 
 \IFRU{Скомпилируем то же самое в Linux при помощи GCC 4.4.1 и посмотрим в \IDA что вышло:}
-{Now let's compile the same in Linux by GCC 4.4.1 and take a look in \IDA what we got:}
+{Now let's compile the same program in Linux using GCC 4.4.1 and take a look in \IDA what we got:}
 
 \begin{lstlisting}
 main            proc near
@@ -234,8 +234,8 @@ main            endp
 \IFRU{Можно сказать, что этот короткий код, созданный GCC, отличается от кода MSVC только способом помещения 
 значений в стек.
 Здесь GCC снова работает со стеком напрямую без \PUSH/\POP.}
-{It can be said, the difference between code by MSVC and GCC is only in method of placing arguments on the stack.
-Here GCC working directly with stack without \PUSH/\POP.}
+{It can be said that the difference between code from MSVC and code from GCC is only in the method of placing arguments on the stack.
+Here GCC is working directly with the stack without \PUSH/\POP.}
 
 \subsubsection{GCC \AndENRU GDB}
 \index{GDB}
@@ -453,4 +453,3 @@ fs             0x0	0
 gs             0x33	51
 (gdb) 
 \end{lstlisting}
-
