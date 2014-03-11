@@ -240,7 +240,7 @@ Here GCC working directly with stack without \PUSH/\POP.}
 \subsubsection{GCC \AndENRU GDB}
 \index{GDB}
 
-\IFRU{Попробуем также этот пример и в GDB в Linux}{Let's try this example also in GDB in Linux}.
+\IFRU{Попробуем также этот пример и в \ac{GDB} в Linux}{Let's try this example also in \ac{GDB} in Linux}.
 
 \TT{-g} \IFRU{означает генерировать отладочную информацию в выходном исполняемом файле}{mean produce 
 debug information into executable file}.
@@ -270,8 +270,8 @@ Breakpoint 1 at 0x80482f0
 
 \IFRU{Запукаем}{Run}.
 \IFRU{Здесь у нас нет исходного кода ф-ции}{There are no} \printf 
-\IFRU{так что GDB не может показать его исходный код, но могла бы}{function source code here, 
-so GDB can't show its source, but may do so}.
+\IFRU{так что \ac{GDB} не может показать его исходный код, но могла бы}{function source code here, 
+so \ac{GDB} can't show its source, but may do so}.
 
 \begin{lstlisting}
 (gdb) run
@@ -335,9 +335,22 @@ main () at 1.c:6
 Value returned is $2 = 13
 \end{lstlisting}
 
-GDB \IFRU{показывает, что вернула}{shows what} \printf \IFRU{в}{returned in} \EAX (13).
+\ac{GDB} \IFRU{показывает, что вернула}{shows what} \printf \IFRU{в}{returned in} \EAX (13).
 \IFRU{Это, так же как и в примере с \olly, количество напечатанных символов}
 {This is number of characters printed, just like in the example with \olly}.
+
+\IFRU{А еще мы видим}{We also see} ``return 0;'' \IFRU{и что это выражение находится в файле 
+\TT{1.c} в строке 6}{and the information that this expression is in the \TT{1.c} file at the line 6}.
+\IFRU{Действительно, файл \TT{1.c} лежит в текущем директории и \ac{GDB} находит там эту строку}
+{Indeed, the \TT{1.c} file is located in the current directory, and \ac{GDB} finds the string there}.
+\IFRU{Как \ac{GDB} знает, какая строка Си-кода сейчас исполняется}{How \ac{GDB} knows, which C-code line
+is being executed now}?
+\IFRU{Это связано с тем фактом, что компилятор, генерируя отладочную информацию,
+также сохраняет информацию о 
+соответствии строк в исходном коде и адресов инструкций}{This is related to the fact that compiler,
+while generating debugging information, also saves a table of relations between source code line
+numbers and instruction addresses}.
+GDB \IFRU{это всё-таки отладчик уровня исходных текстов}{is source-level debugger, after all}.
 
 \IFRU{Посмотрим регистры}{Let's examine registers}.
 13 \InENRU \EAX:
@@ -384,7 +397,7 @@ Dump of assembler code for function main:
 End of assembler dump.
 \end{lstlisting}
 
-GDB \IFRU{показывает дизассемблированный листинг в формате}{shows disassembly in} AT\&T 
+\ac{GDB} \IFRU{показывает дизассемблированный листинг в формате}{shows disassembly in} AT\&T 
 \IFRU{по умолчанию}{syntax by default}.
 \IFRU{Но можно также переключиться в формат Intel}{It's possible to switch to Intel syntax}:
 
@@ -408,7 +421,7 @@ End of assembler dump.
 \end{lstlisting}
 
 \IFRU{Исполняем следующую инструкцию}{Execute next instruction}.
-GDB \IFRU{покажет закрывающуюся скобку, означая, что это конец блока в ф-ции}{shows ending bracket, 
+\ac{GDB} \IFRU{покажет закрывающуюся скобку, означая, что это конец блока в ф-ции}{shows ending bracket, 
 meaning, this is ending block of function}.
 
 \begin{lstlisting}
