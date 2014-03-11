@@ -121,9 +121,21 @@ value in the stack and some additional \olly comments}.
 \IFRU{так что он показывает здесь и строку и 3 значения \IT{привязанных} к ней}{so it reports the 
 string here and 3 values \IT{attached} to it}.
 
+\IFRU{Можно кликнуть правой кнопкой мыши на строке формата, кликнуть на ``Follow in dump''
+и строка формата появится в окне слева внизу, где всегда виден какой-либо участок памяти}
+{It is possible to right-click on the format string, click on ``Follow in dump'',
+and the format string will appear in the window at the left-bottom part, where some memory part
+is always seen}.
+\IFRU{Эти значения в памяти можно редактировать}{These memory values can be edited}.
+\IFRU{Можно изменить саму строку формата, и тогда результат работы нашего примера будет другой}
+{It is possible to change the format string, and then the result of our example will be different}.
+\IFRU{В данном случае, пользы от этого немного, но для упражнения это полезно,
+чтобы начать чувствовать как тут всё работает}{It is probably not very useful now, but it's very
+good idea for doing it as exercise, to get feeling how everything is works here}.
+
 \IFRU{Нажмите}{Press} F8 (\stepover).
 
-\IFRU{В коносил мы видим вывод}{In the console we'll see the output}:
+\IFRU{В консоли мы видим вывод}{In the console we'll see the output}:
 
 \begin{figure}[H]
 \centering
@@ -224,3 +236,208 @@ main            endp
 Здесь GCC снова работает со стеком напрямую без \PUSH/\POP.}
 {It can be said, the difference between code by MSVC and GCC is only in method of placing arguments on the stack.
 Here GCC working directly with stack without \PUSH/\POP.}
+
+\subsubsection{GCC \AndENRU GDB}
+\index{GDB}
+
+\IFRU{Попробуем также этот пример и в GDB в Linux}{Let's try this example also in GDB in Linux}.
+
+\TT{-g} \IFRU{означает генерировать отладочную информацию в выходном исполняемом файле}{mean produce 
+debug information into executable file}.
+
+\begin{lstlisting}
+$ gcc 1.c -g -o 1
+\end{lstlisting}
+
+\begin{lstlisting}
+$ gdb 1
+GNU gdb (GDB) 7.6.1-ubuntu
+Copyright (C) 2013 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "i686-linux-gnu".
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>...
+Reading symbols from /home/dennis/polygon/1...done.
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\IFRU{установим брякпойнт на}{let's set breakpoint on} \printf]
+(gdb) b printf
+Breakpoint 1 at 0x80482f0
+\end{lstlisting}
+
+\IFRU{Запукаем}{Run}.
+\IFRU{Здесь у нас нет исходного кода ф-ции}{There are no} \printf 
+\IFRU{так что GDB не может показать его исходный код, но могла бы}{function source code here, 
+so GDB can't show its source, but may do so}.
+
+\begin{lstlisting}
+(gdb) run
+Starting program: /home/dennis/polygon/1 
+
+Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
+29	printf.c: No such file or directory.
+\end{lstlisting}
+
+\IFRU{Выдать 10 элементов стека. Левый столбец это адрес в стеке.}
+{Print 10 stack elements. Left column is an address in stack.}
+
+\begin{lstlisting}
+(gdb) x/10w $esp
+0xbffff11c:	0x0804844a	0x080484f0	0x00000001	0x00000002
+0xbffff12c:	0x00000003	0x08048460	0x00000000	0x00000000
+0xbffff13c:	0xb7e29905	0x00000001
+\end{lstlisting}
+
+\IFRU{Самый первый элемент это}{The very first element is} \ac{RA} (\TT{0x0804844a}).
+\IFRU{Мы можем удостовериться в этом, дизассемблируя память по этому адресу}{We can be sure 
+in it by disassembling the memory at this address}:
+
+\begin{lstlisting}
+(gdb) x/5i 0x0804844a
+   0x804844a <main+45>:	mov    $0x0,%eax
+   0x804844f <main+50>:	leave  
+   0x8048450 <main+51>:	ret    
+   0x8048451:	xchg   %ax,%ax
+   0x8048453:	xchg   %ax,%ax
+\end{lstlisting}
+
+\IFRU{Две инструкции}{Two} \TT{XCHG} 
+\IFRU{это, вероятно, какой-то случайный мусор, который мы пока что можем игнорировать}
+{instructions, apparently, is some random garbage, which we can ignore so far}.
+
+\IFRU{Второй элемент}{The second element} (\TT{0x080484f0}) \IFRU{это адрес
+строки формата}{is an address of format string}:
+
+\begin{lstlisting}
+(gdb) x/s 0x080484f0
+0x80484f0:	"a=%d; b=%d; c=%d"
+\end{lstlisting}
+
+\IFRU{Остальные 3 элемента}{Other 3 elements} (1, 2, 3) \IFRU{это аргументы ф-ции}{are} 
+\printf\EN{ arguments}.
+\IFRU{Остальные элементы это может быть и мусор в стеке, но могут быть и значения
+от других ф-ций, их локальные переменные, итд}{Other elements may be just ``garbage'' present in stack,
+but also may be values from other functions, their local variables, etc}.
+\IFRU{Пока что мы можем игнорировать их}{We can ignore it yet}.
+
+\IFRU{Исполняем}{Execute} ``finish''. 
+\IFRU{Это значит, исполнять до конца ф-ции}{This mean, execute till function end}. 
+\IFRU{Здесь это означает: исполнять до завершения}{Here it means: execute till the finish of} \printf.
+
+\begin{lstlisting}
+(gdb) finish
+Run till exit from #0  __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
+main () at 1.c:6
+6		return 0;
+Value returned is $2 = 13
+\end{lstlisting}
+
+GDB \IFRU{показывает, что вернула}{shows what} \printf \IFRU{в}{returned in} \EAX (13).
+\IFRU{Это, так же как и в примере с \olly, количество напечатанных символов}
+{This is number of characters printed, just like in the example with \olly}.
+
+\IFRU{Посмотрим регистры}{Let's examine registers}.
+13 \InENRU \EAX:
+
+\begin{lstlisting}
+(gdb) info registers
+eax            0xd	13
+ecx            0x0	0
+edx            0x0	0
+ebx            0xb7fc0000	-1208221696
+esp            0xbffff120	0xbffff120
+ebp            0xbffff138	0xbffff138
+esi            0x0	0
+edi            0x0	0
+eip            0x804844a	0x804844a <main+45>
+eflags         0x286	[ PF SF IF ]
+cs             0x73	115
+ss             0x7b	123
+ds             0x7b	123
+es             0x7b	123
+fs             0x0	0
+gs             0x33	51
+\end{lstlisting}
+
+\IFRU{Попробуем дизассемблировать текущие инструкции}{Let's disassemble current instructions}.
+\IFRU{Стрелка указывает на инструкцию, которая будет исполнена следующей}{Arrow points to the 
+instruction being executed next}.
+
+\begin{lstlisting}
+(gdb) disas
+Dump of assembler code for function main:
+   0x0804841d <+0>:	push   %ebp
+   0x0804841e <+1>:	mov    %esp,%ebp
+   0x08048420 <+3>:	and    $0xfffffff0,%esp
+   0x08048423 <+6>:	sub    $0x10,%esp
+   0x08048426 <+9>:	movl   $0x3,0xc(%esp)
+   0x0804842e <+17>:	movl   $0x2,0x8(%esp)
+   0x08048436 <+25>:	movl   $0x1,0x4(%esp)
+   0x0804843e <+33>:	movl   $0x80484f0,(%esp)
+   0x08048445 <+40>:	call   0x80482f0 <printf@plt>
+=> 0x0804844a <+45>:	mov    $0x0,%eax
+   0x0804844f <+50>:	leave  
+   0x08048450 <+51>:	ret    
+End of assembler dump.
+\end{lstlisting}
+
+GDB \IFRU{показывает дизассемблированный листинг в формате}{shows disassembly in} AT\&T 
+\IFRU{по умолчанию}{syntax by default}.
+\IFRU{Но можно также переключиться в формат Intel}{It's possible to switch to Intel syntax}:
+
+\begin{lstlisting}
+(gdb) set disassembly-flavor intel
+(gdb) disas
+Dump of assembler code for function main:
+   0x0804841d <+0>:	push   ebp
+   0x0804841e <+1>:	mov    ebp,esp
+   0x08048420 <+3>:	and    esp,0xfffffff0
+   0x08048423 <+6>:	sub    esp,0x10
+   0x08048426 <+9>:	mov    DWORD PTR [esp+0xc],0x3
+   0x0804842e <+17>:	mov    DWORD PTR [esp+0x8],0x2
+   0x08048436 <+25>:	mov    DWORD PTR [esp+0x4],0x1
+   0x0804843e <+33>:	mov    DWORD PTR [esp],0x80484f0
+   0x08048445 <+40>:	call   0x80482f0 <printf@plt>
+=> 0x0804844a <+45>:	mov    eax,0x0
+   0x0804844f <+50>:	leave  
+   0x08048450 <+51>:	ret    
+End of assembler dump.
+\end{lstlisting}
+
+\IFRU{Исполняем следующую инструкцию}{Execute next instruction}.
+GDB \IFRU{покажет закрывающуюся скобку, означая, что это конец блока в ф-ции}{shows ending bracket, 
+meaning, this is ending block of function}.
+
+\begin{lstlisting}
+(gdb) step
+7	};
+\end{lstlisting}
+
+\IFRU{Посмотрим регистры после исполнения инструкции}{Let's see registers after} 
+\TT{MOV EAX, 0}\EN{ instruction execution}.
+\EAX \IFRU{здесь уже действительно ноль}{here is zero indeed}.
+
+\begin{lstlisting}
+(gdb) info registers
+eax            0x0	0
+ecx            0x0	0
+edx            0x0	0
+ebx            0xb7fc0000	-1208221696
+esp            0xbffff120	0xbffff120
+ebp            0xbffff138	0xbffff138
+esi            0x0	0
+edi            0x0	0
+eip            0x804844f	0x804844f <main+50>
+eflags         0x286	[ PF SF IF ]
+cs             0x73	115
+ss             0x7b	123
+ds             0x7b	123
+es             0x7b	123
+fs             0x0	0
+gs             0x33	51
+(gdb) 
+\end{lstlisting}
+
