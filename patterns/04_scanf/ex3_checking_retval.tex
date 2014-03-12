@@ -1,0 +1,39 @@
+\subsection{\IFRU{Проверка результата scanf()}{scanf() result checking}}
+
+\IFRU {Как я уже упоминал, использовать \scanf в наше время это слегка старомодно. 
+Но если уж жизнь заставила этим заниматься, нужно хотя бы проверять, сработал ли \scanf 
+правильно или пользователь ввел вместо числа что-то другое, что \scanf не смог трактовать как число.}
+{As I noticed before, it is slightly old-fashioned to use \scanf today. 
+But if we have to, we need at least check if \scanf finished correctly without error.}
+
+\lstinputlisting{patterns/04_scanf/ex3.c}
+
+\IFRU{По стандарту}{By standard}, \scanf\footnote{\href{http://msdn.microsoft.com/en-us/library/9y6s16x1(VS.71).aspx}{MSDN: scanf, wscanf}} 
+\IFRU{возвращает количество успешно полученных значений.}{function returns number of fields it successfully read.}
+
+\IFRU{В нашем случае, если все успешно и пользователь ввел таки некое число, \scanf вернет 1. 
+А если нет, то 0 или EOF.} 
+{In our case, if everything went fine and user entered a number, 
+\scanf will return 1 or 0 or EOF in case of error.}
+
+\IFRU{Я добавил код проверяющий результат \scanf и в случае ошибки, он сообщает пользователю что-то другое.}
+{I added C code for \scanf result checking and printing error message in case of error.}
+
+\IFRU{Это работает предсказуемо}{This works predictably}:
+
+\begin{lstlisting}
+C:\...>ex3.exe
+Enter X:
+123
+You entered 123...
+
+C:\...>ex3.exe
+Enter X:
+ouch
+What you entered? Huh?
+\end{lstlisting}
+
+\input{patterns/04_scanf/ex3_checking_retval_x86}
+\input{patterns/04_scanf/ex3_checking_retval_x64}
+\input{patterns/04_scanf/ex3_checking_retval_ARM}
+
