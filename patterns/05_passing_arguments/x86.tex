@@ -1,5 +1,7 @@
 \subsection{x86}
 
+\subsubsection{MSVC}
+
 \IFRU{Имеем в итоге}{What we have after compilation} (MSVC 2010 Express):
 
 \lstinputlisting[caption=MSVC 2010 Express]{patterns/05_passing_arguments/msvc.asm}
@@ -12,12 +14,12 @@ is called then.}
 \IFRU{Внутри \TT{f()}, доступ к аргументам, также как и к локальным переменным, происходит через макросы: 
 \TT{\_a\$ = 8}, но разница в том, что эти смещения со знаком \IT{плюс}, 
 таким образом если прибавить макрос \TT{\_a\$} к указателю на \EBP, то адресуется \IT{внешняя} 
-часть стека относительно \EBP.}
+часть \glslink{stack frame}{фрейма} стека относительно \EBP.}
 {Argument access inside \TT{f()} is organized with the help of macros like: \TT{\_a\$ = 8}, 
 in the same way as local variables accessed,
 but the difference in that these offsets are positive 
 (addressed with \IT{plus} sign).
-So, adding \TT{\_a\$} macro to the value in the \EBP register, \IT{outer} side of stack frame is addressed.}
+So, adding \TT{\_a\$} macro to the value in the \EBP register, \IT{outer} side of \gls{stack frame} is addressed.}
 
 \index{x86!\Instructions!IMUL}
 \index{x86!\Instructions!ADD}
@@ -34,6 +36,30 @@ summing value in \EAX and what is stored in \TT{\_c}.}
 функции ~--- она возьмет значение из \EAX и отправит его в \printf.}
 {Value in the \EAX is not needed to be moved: it is already in place it must be.
 Now return to \gls{caller}~---it will take value from the \EAX and used it as \printf argument.}
+
+\subsubsection{MSVC + \olly}
+
+\IFRU{Проиллюстрируем всё это в}{Let's illustrate this in} \olly.
+\IFRU{Когда мы протрассируем до первой инструкции в \TT{f()}, которая использует какой-то из аргументов
+(первый), мы увидим что \EBP указывает на \glslink{stack frame}{фрейм стека}, 
+я отметил его начало красной стрелкой}{When 
+we trace until the very first instruction in \TT{f()} that uses one of the arguments (first one),
+we see that \EBP is pointing to the \gls{stack frame}, I marked its begin with red arrow}.
+\IFRU{Самый первый элемент \glslink{stack frame}{фрейма стека} это сохраненное значение \EBP, 
+затем \ac{RA}, третий элемент это
+первый аргумент ф-ции, затем второй аргумент и третий}{The first element of \gls{stack frame} is saved \EBP value, 
+second is \ac{RA}, third is first function argument, then second argument and third one}.
+\IFRU{Для доступа к первому аргументу ф-ции, нужно прибавить к \EBP аккурат 8 (2 32-битных слова)}
+{To access the first function argument, one need to add exactly 8 (2 32-bit words) to \EBP}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/05_passing_arguments/olly.png}
+\caption{\olly: \IFRU{внутри ф-ции}{inside of} f()\EN{ function}}
+\label{fig:passing_arguments_olly}
+\end{figure}
+
+\subsubsection{GCC}
 
 \IFRU{Скомпилируем то же в GCC 4.4.1 и посмотрим результат в \IDA:}
 {Let's compile the same in GCC 4.4.1 and let's see results in \IDA:}
