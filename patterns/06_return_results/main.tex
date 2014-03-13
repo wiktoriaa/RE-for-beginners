@@ -49,6 +49,65 @@ the sole exit() function argument.}
 \IFRU{Так что, код завершения программы будет псевдослучайным.}
 {So, exit code of program will be pseudorandom.} \\
 
+\IFRU{Я могу это проиллюстрировать}{I can illustrate this fact}. 
+\IFRU{Заметьте что у ф-ции}{Please notice, the} \main \IFRU{тип возвращаемого значения именно}{function 
+has} \TT{void}\EN{ type}:
+
+\begin{lstlisting}
+#include <stdio.h>
+
+void main()
+{
+	printf ("Hello, world!\n");
+};
+\end{lstlisting}
+
+\IFRU{Скомпилируем в}{Let's compile it in} Linux.
+
+\index{puts() \IFRU{вместо}{instead of} printf()}
+GCC 4.8.1 \IFRU{заменила}{replaced} \printf \IFRU{на}{to} \puts 
+(\IFRU{мы видели это прежде}{we saw this before}: \ref{puts}), 
+\IFRU{но это нормально, потому что}{but that's OK, since} \puts \IFRU{возвращает количество
+выведенных символов, так же как и}{returns number of characters printed, just like} \printf.
+\IFRU{Обратите внимание на то что}{Please notice that} \EAX \IFRU{не обнуляется перед выходом их}{is not 
+zeroed before} \main\EN{ finish}.
+\IFRU{Это значит}{This means}, \EAX \IFRU{перед выходом из}{value at the} \main 
+\IFRU{будет содержать то, что}{finish will contain what} \puts \IFRU{оставит там}{leaved there}.
+
+\begin{lstlisting}[caption=GCC 4.8.1]
+.LC0:
+	.string	"Hello, world!"
+main:
+	push	ebp
+	mov	ebp, esp
+	and	esp, -16
+	sub	esp, 16
+	mov	DWORD PTR [esp], OFFSET FLAT:.LC0
+	call	puts
+	leave
+	ret
+\end{lstlisting}
+
+\index{bash}
+\IFRU{Напишем небольшой скрипт на bash, показывающий статус возврата (``exit status'' или ``exit code'')}
+{Let' s write bash script, showing exit status}:
+
+\begin{lstlisting}[caption=tst.sh]
+#!/bin/sh
+./hello_world
+echo $?
+\end{lstlisting}
+
+\IFRU{И запустим}{And run it}:
+
+\begin{lstlisting}
+$ tst.sh 
+Hello, world!
+14
+\end{lstlisting}
+
+$14$ \IFRU{это как раз количество выведенных символов}{is a number of characters printed}. \\
+\\
 \index{\CLanguageElements!return}
 \IFRU{Вернемся к тому факту, что возвращаемое значение остается в регистре \EAX}
 {Let's back to the fact the returning value is leaved in the \EAX register}.
