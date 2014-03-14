@@ -50,8 +50,32 @@ function:
 ret 12
 \end{lstlisting}
 
-\IFRU{Этот способ используется почти везде в системных библиотеках win32, но не в win64 (о win64 смотрите ниже).}
-{The method is ubiquitous in win32 standard libraries, but not in win64 (see below about win64).}
+\IFRU{Этот способ используется почти везде в системных библиотеках win32, 
+но не в win64 (о win64 смотрите ниже).}
+{The method is ubiquitous in win32 standard libraries, but not in win64 (see below about win64).} \\
+\\
+\IFRU{Например, мы можем взять ф-цию из}{For example, we may take the function from} 
+\ref{src:passing_arguments_ex} \IFRU{и изменить её немного добавив модификатор}{and change it
+slightly by adding} \TT{\_\_stdcall}\EN{ modifier}:
+
+\begin{lstlisting}
+int __stdcall f2 (int a, int b, int c)
+{
+	return a*b+c;
+};
+\end{lstlisting}
+
+\IFRU{Он будет скомпилирован почти так же как и}{It will be compiled in almost the same way as} 
+\ref{src:passing_arguments_ex_MSVC_cdecl},
+\IFRU{но вы увидите}{but you will see} \TT{RET 12} \IFRU{вместо}{instead of} \TT{RET}. 
+\ac{SP} \IFRU{не будет корректироваться в \glslink{caller}{вызывающей ф-ции}}
+{is not aligned in \gls{caller}}.
+
+\IFRU{Как следствие, количество аргументов ф-ции легко узнать из инструкции}{As a consequence, 
+number of function arguments can be easily deduced from} \TT{RETN n} \IFRU{просто разделите
+$n$ на 4}{instruction: just divide $n$ by 4}.
+
+\lstinputlisting[caption=MSVC 2010]{calling_conventions/stdcall_ex.asm}
 
 \subsubsection{\IFRU{Функции с переменным количеством аргументов}{Variable arguments number functions}}
 
@@ -96,10 +120,8 @@ It will not help to gain performance on modern much complex CPUs, however.}
 Well known caveat: if you have two DLLs, one uses another, and they are built by different compilers with 
 different \IT{fastcall} calling conventions.}
 
-\IFRU{MSVC и GCC передает первый и второй аргумент через \ECX и \EDX а остальные аргументы через стек. 
-Вызываемая функция возвращает \glslink{stack pointer}{указатель стека} в первоначальное состояние.}
-{Both MSVC and GCC passing first and second argument via \ECX and \EDX and other arguments via stack.
-\Gls{caller} must restore \gls{stack pointer} into initial state.}
+\IFRU{MSVC и GCC передает первый и второй аргумент через \ECX и \EDX а остальные аргументы через стек.}
+{Both MSVC and GCC passing first and second argument via \ECX and \EDX and other arguments via stack.}
 
 \IFRU{\glslink{stack pointer}{Указатель стека} должен быть возвращен в первоначальное состояние вызываемой функцией, 
 как в случае \IT{stdcall}.}
@@ -115,6 +137,27 @@ function:
 .. do something ..
 ret 4
 \end{lstlisting}
+
+\IFRU{Например, мы можем взять ф-цию из}{For example, we may take the function from} 
+\ref{src:passing_arguments_ex} \IFRU{и изменить её немного добавив модификатор}{and change it
+slightly by adding} \TT{\_\_fastcall}\EN{ modifier}:
+
+\begin{lstlisting}
+int __fastcall f3 (int a, int b, int c)
+{
+	return a*b+c;
+};
+\end{lstlisting}
+
+\IFRU{Вот как он будет скомпилирован}{Here is how it will be compiled}:
+
+\lstinputlisting[caption=MSVC 2010 /Ox /Ob0]{calling_conventions/fastcall_ex.asm}
+
+\IFRU{Видно что \glslink{callee}{вызываемая ф-ция} сама возвращает}
+{We see that a \gls{callee} returns} \ac{SP} 
+\IFRU{при помощи инструкции}{by} \TT{RETN} \IFRU{с операндом}{instruction with operand}.
+\IFRU{Так что и здесь можно легко вычислять количество аргументов}{Which means, number of arguments
+can be deduced easily here as well}.
 
 \subsubsection{GCC regparm}
 
