@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 void f_signed (int a, int b)
 {
     if (a>b)

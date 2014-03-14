@@ -4,13 +4,13 @@
 
 \IFRU{Имеем в итоге функцию \TT{f\_signed()}:}{What we have in the \TT{f\_signed()} function:}
 
-\lstinputlisting[caption=MSVC]{patterns/07_jcc/7_2.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2010]{patterns/07_jcc/signed_MSVC.asm}
 
 \index{x86!\Instructions!JLE}
-\IFRU
-{Первая инструкция \JLE значит \IT{Jump if Less or Equal}. То есть, если второй операнд больше первого или 
+\IFRU{Первая инструкция}{First instruction} \JLE \IFRU{значит}{means} \IT{Jump if Less or Equal}. 
+\IFRU{То есть, если второй операнд больше первого или 
 равен ему, произойдет переход туда, где будет следующая проверка.}
-{First instruction \JLE means \IT{Jump if Less or Equal}. In other words, if second operand is 
+{In other words, if second operand is 
 larger than first or equal, control flow will be passed to address or label mentioned in instruction.}
 \IFRU
 {А если это условие не срабатывает, то есть второй операнд меньше первого, то перехода не будет, 
@@ -18,46 +18,37 @@ larger than first or equal, control flow will be passed to address or label ment
 {But if this condition will not trigger (second operand less than first), control flow will 
 not be altered and first \printf will be called.}
 \index{x86!\Instructions!JNE}
-\IFRU {Вторая проверка это \JNE: \IT{Jump if Not Equal}. Переход не произойдет, если операнды равны.}
-{The second check is \JNE: \IT{Jump if Not Equal}. Control flow will not altered if operands are 
-equals to each other.}
+\IFRU{Вторая проверка это}{The second check is} \JNE: \IT{Jump if Not Equal}.
+\IFRU{Переход не произойдет, если операнды равны}{Control flow will not altered if operands are 
+equals to each other}.
 \index{x86!\Instructions!JGE}
-\IFRU {Третья проверка \JGE: \IT{Jump if Greater or Equal} ~--- переход если первый операнд больше 
-второго или равен ему.}
-{The third check is \JGE: \IT{Jump if Greater or Equal}~---jump if the first operand is larger 
-than the second or if they are equals to each other.}
-\IFRU {Кстати, если все три условных перехода сработают, ни один \printf не вызовется. 
+\IFRU{Третья проверка}{The third check is} \JGE: \IT{Jump if Greater or Equal}\EMDASH{}\IFRU{переход 
+если первый операнд больше второго или равен ему}{jump if the first operand is larger than 
+the second or if they are equals to each other}.
+\IFRU{Кстати, если все три условных перехода сработают, ни один \printf не вызовется. 
 Но, без внешнего вмешательства, это, пожалуй, невозможно.}
 {By the way, if all three conditional jumps are triggered, no \printf will be called whatsoever. 
 But, without special intervention, it is nearly impossible.}
 
 \RU{Функция }\TT{f\_unsigned()} \IFRU{точно такая же, за тем исключением, что используются инструкции 
-\JBE и \JAE вместо \JLE и \JGE, об этом читайте ниже:}
+\JBE и \JAE вместо \JLE и \JGE, об этом читайте ниже}
 {function is likewise, with the exception the \JBE and \JAE instructions
 are used here instead of 
-\JLE and \JGE, see below about it:}
+\JLE and \JGE, see below about it}:
 
-\subsubsection{GCC}
+\IFRU{Далее функция \TT{f\_unsigned()}}
+{Now let's take a look to the \TT{f\_unsigned()} function}
 
-\index{puts() \IFRU{вместо}{instead of} printf()}
-GCC 4.4.1 \IFRU{производит почти такой же код, за исключением}
-{produce almost the same code, but with} \puts~(\ref{puts}) \IFRU{вместо}{instead of} \printf.
-
-\IFRU{Далее функция \TT{f\_unsigned()} скомпилированная GCC:}
-{Now let's take a look to the \TT{f\_unsigned()} function produced by GCC:}
-
-\lstinputlisting[caption=GCC]{patterns/07_jcc/7_3_gcc.asm}
+\lstinputlisting[caption=GCC]{patterns/07_jcc/unsigned_MSVC.asm}
 
 \index{x86!\Instructions!JBE}
 \index{x86!\Instructions!JAE}
-\IFRU{Здесь все то же самое, только инструкции условных переходов немного другие: 
-\JBE ~--- \IT{Jump if Below or Equal} и \JAE ~--- \IT{Jump if Above or Equal}.}
-{Almost the same, with exception of instructions: \JBE~---\IT{Jump if Below or Equal} 
-and \JAE~---\IT{Jump if Above or Equal}.}
-\IFRU{Эти инструкции (\JA/\JAE/\JB/\JBE) отличаются от \JG/\JGE/\JL/\JLE тем, 
-что работают с беззнаковыми переменными.}
-{These instructions (\JA/\JAE/\JB/\JBE) are distinct from \JG/\JGE/\JL/\JLE in that way, 
-they works with unsigned numbers.}
+\IFRU{Здесь все то же самое, только инструкции условных переходов немного другие}
+{Almost the same, with exception of instructions}:
+\JBE\EMDASH{}\IT{Jump if Below or Equal} \AndENRU \JAE\EMDASH{}\IT{Jump if Above or Equal}.
+\IFRU{Эти инструкции}{These instructions} (\JA/\JAE/\JB/\JBE) 
+\IFRU{отличаются от}{are distinct from} \JG/\JGE/\JL/\JLE \IFRU{тем}{in that way}, 
+\IFRU{что работают с беззнаковыми переменными}{they works with unsigned numbers}.
 
 \index{x86!\Instructions!JA}
 \index{x86!\Instructions!JB}
@@ -72,7 +63,197 @@ they works with unsigned numbers.}
 {So, where we see usage of \JG/\JL instead of \JA/\JB or otherwise, 
 we can almost be sure about signed or unsigned type of variable.}
 
-\IFRU{Далее функция \main, где ничего нового для нас нет:}
-{Here is also \main function, where nothing new to us:}
+\IFRU{Далее функция \main, где ничего нового для нас нет}
+{Here is also \main function, where nothing much new to us}:
 
-\lstinputlisting[caption=\main]{patterns/07_jcc/7_4.asm}
+\lstinputlisting[caption=\main]{patterns/07_jcc/main_MSVC.asm}
+
+\subsubsection{x86 + MSVC + \olly}
+\index{\olly}
+
+\IFRU{Если попробовать этот пример в \olly, можно увидеть как выставляются флаги}{We
+can see how flags are set by running this example in \olly}.
+\IFRU{Начнем с ф-ции}{Let's begin with} \TT{f\_unsigned()}\IFRU{, которая работает с беззнаковыми числами}
+{ function, which works with unsigned number}.
+\IFRU{В целом, в каждой ф-ции, \CMP исполняется три раза, но для одних и тех же аргументов, так что
+флаги будут три раза одни и те же каждый раз}{\CMP executed thrice here, but for the same arguments, so
+flags will be the same each time}.
+
+\IFRU{Результат первого сравнения}{First comparison results}: \figname \ref{fig:jcc_olly_unsigned_1}.
+\IFRU{Итак, флаги}{So, the flags are}: C=1, P=1, A=1, Z=0, S=1, T=0, D=0, O=0.
+\IFRU{Для краткости, в \olly флаги называются только одной буквой}
+{Flags are named by one characters in \olly for brevity}.
+
+\olly \IFRU{подсказывает, что первый переход}{gives a hint that} (\JBE) \IFRU{сработает}{jump will be triggered}.
+\IFRU{Действительно, если заглянуть в}{Indeed, if to take a look into} \cite{Intel}, 
+\IFRU{прочитаем там, что}{we will read there that} \JBE \IFRU{срабатывает в случаях если}{will trigger if} 
+CF=1 \OrENRU ZF=1.
+\IFRU{Условие здесь выполняется, так что переход срабатывает}{Condition is true here, so jump is triggered}.
+
+\IFRU{Следующий переход}{The next conditional jump}:\figname \ref{fig:jcc_olly_unsigned_2}.
+\olly \IFRU{подсказывает, что}{gives a hint that} \JNZ \IFRU{сработает}{will trigger}.
+\IFRU{Действительно}{Indeed}, \JNZ \IFRU{срабатывает если}{will trigger if} ZF=0 (zero flag).
+
+\IFRU{Третий переход}{The third conditional jump} \JNB: \figname \ref{fig:jcc_olly_unsigned_3}.
+\IFRU{В}{In} \cite{Intel} \IFRU{мы можем найти что}{we may find that} \JNB \IFRU{срабатывает если}
+{will trigger if} CF=0 (carry flag).
+\IFRU{В нашем случае это не так, так что переход не срабатывает, и исполняется третий по счету}
+{It's not true in our case, so the third} \printf\EN{ will execute}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/07_jcc/olly_unsigned1.png}
+\caption{\olly: \TT{f\_unsigned()}: \IFRU{первый условный переход}{first conditional jump}}
+\label{fig:jcc_olly_unsigned_1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/07_jcc/olly_unsigned2.png}
+\caption{\olly: \TT{f\_unsigned()}: \IFRU{второй условный переход}{second conditional jump}}
+\label{fig:jcc_olly_unsigned_2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/07_jcc/olly_unsigned3.png}
+\caption{\olly: \TT{f\_unsigned()}: \IFRU{третий условный переход}{third conditional jump}}
+\label{fig:jcc_olly_unsigned_3}
+\end{figure}
+
+\IFRU{Теперь можно попробовать в \olly ф-цию}{Now we can try in \olly the} \TT{f\_signed()} 
+\IFRU{работающую с знаковыми величинами}{function working with signed values}.
+
+\IFRU{Флаги выставляются точно так же}{Flags are set in the same way}: 
+C=1, P=1, A=1, Z=0, S=1, T=0, D=0, O=0.
+
+\IFRU{Первый переход}{The first conditional jump} \JLE \IFRU{сработает}{will trigger}. 
+\figname \ref{fig:jcc_olly_signed_1}.
+\IFRU{В}{In} \cite{Intel} \IFRU{мы можем прочитать что эта инструкция срабатывает если}{we may find
+that this instruction is triggering if} 
+ZF=1 \OrENRU SF$\neq$OF.
+\RU{В нашем случае, }SF$\neq$OF\IFRU{, так что переход срабатывает}{ in our case, so jump is triggering}.
+
+\IFRU{Второй переход}{The next} \JNZ \IFRU{сработает}{conditional jump will trigger}: 
+\IFRU{он срабатывает если}{it does if} ZF=0 (zero flag): \figname \ref{fig:jcc_olly_signed_2}.
+
+\IFRU{Третий переход}{The third conditional jump} \JGE 
+\IFRU{не сработает, потому что он срабатывает только если}{will not trigger because it will only if} SF=OF, 
+\IFRU{что в нашем случае не так}{and that is not true in our case}: \figname \ref{fig:jcc_olly_signed_3}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/07_jcc/olly_signed1.png}
+\caption{\olly: \TT{f\_unsigned()}: \IFRU{первый условный переход}{first conditional jump}}
+\label{fig:jcc_olly_signed_1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/07_jcc/olly_signed2.png}
+\caption{\olly: \TT{f\_unsigned()}: \IFRU{второй условный переход}{second conditional jump}}
+\label{fig:jcc_olly_signed_2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/07_jcc/olly_signed3.png}
+\caption{\olly: \TT{f\_unsigned()}: \IFRU{третий условный переход}{third conditional jump}}
+\label{fig:jcc_olly_signed_3}
+\end{figure}
+
+\subsubsection{x86 + MSVC + Hiew}
+\index{Hiew}
+
+\IFRU{Можем попробовать модифицировать исполняемый файл так}{We can try patch executable file in that way}, 
+\IFRU{чтобы ф-ция}{that} \TT{f\_unsigned()} \IFRU{всегда показывала}{function will always print} ``a==b'', 
+\IFRU{при любых входящих значениях}{for any input values}.
+
+\IFRU{Вот как она выглядит в}{Here is how it looks in} Hiew: \figname \ref{fig:jcc_hiew_1}.
+
+\IFRU{Собственно, задаче три}{Essentially, we've got three tasks}:
+\begin{itemize}
+\item \IFRU{заставить первый переход срабатывать всегда}{force first jump to be always triggered};
+\item \IFRU{заставить второй переход не срабатывать никогда}{force second jump to be never triggered};
+\item \IFRU{заставить третий переход срабатывать всегда}{force third jump to be always triggered}.
+\end{itemize}
+
+\IFRU{Так мы направим путь исполнения кода (code flow) во второй}{Thus we can point code flow
+into the second} \printf,
+\IFRU{и он всегда будет срабатывать и выводить на консоль}{and it always print} ``a==b''.
+
+\IFRU{Для этого нужно пропатчить три инструкции (или байта)}{Three instructions (or bytes) should be patched}:
+
+\begin{itemize}
+\item \IFRU{Первый переход теперь будет}{The first jump will now be} \JMP, \IFRU{но смещение перехода 
+(\gls{jump offset}) останется прежним}{but \gls{jump offset} will be same}.
+
+\item \IFRU{Второй переход может быть и будет срабатывать иногда, но в любом случае он будет совершать переход
+только на следующую инструкцию, потому что мы выставляем смещение перехода (\gls{jump offset}) в 0}
+{The second jump may be triggered sometimes, but in any case it will jump to the next
+instruction, because, we set \gls{jump offset} to 0}.
+\IFRU{В этих инструкциях, смещение перехода просто прибавляется к адресу следующей инструкции}
+{\Gls{jump offset} is just to be added to the address of the next instruction in these instructions}.
+\IFRU{И когда смещение 0, то тогда и переход будет на следующую инструкцию}{So if offset is 0,
+jump will be done to the next instruction}.
+
+\item \IFRU{Третий переход конвертируем в \JMP точно так же как и первый, он будет срабатывать всегда}
+{The third jump we convert into \JMP just as the first one, so it will be triggered always}.
+\end{itemize}
+
+\IFRU{Что и делаем}{That's what we do}: \figname \ref{fig:jcc_hiew_2}.
+
+\IFRU{Если забыть про какой-то из переходов, то тогда будет срабатывать несколько вызовов \printf, 
+а нам ведь нужно чтобы исполнялся только один}{If we could forget about any of these jumps, then several
+\printf calls may execute, but this behaviour is not we're need}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/07_jcc/hiew_unsigned1.png}
+\caption{Hiew: \RU{функция }\TT{f\_unsigned()}\EN{ function}}
+\label{fig:jcc_hiew_1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/07_jcc/hiew_unsigned2.png}
+\caption{Hiew: \IFRU{модифицируем функцию}{let's modify} \TT{f\_unsigned()}\EN{ function}}
+\label{fig:jcc_hiew_2}
+\end{figure}
+
+\subsubsection{\NonOptimizing GCC}
+
+\index{puts() \IFRU{вместо}{instead of} printf()}
+\NonOptimizing GCC 4.4.1 \IFRU{производит почти такой же код, за исключением}
+{produce almost the same code, but with} \puts~(\ref{puts}) \IFRU{вместо}{instead of} \printf.
+
+\subsubsection{\Optimizing GCC}
+
+\IFRU{Наблюдательный читатель может спросить, зачем исполнять \CMP так много раз,
+если флаги всегда одни и те же}{Observant reader may ask, why to execute \CMP so many times, 
+if flags are same all the time}?
+\IFRU{По видимому, оптимизирующий MSVC не может этого делать, но GCC 4.8.1 делает больше оптимизаций}{Perhaps, 
+optimizing MSVC can't do this, but optimizing GCC 4.8.1 can do deep optimization}:
+
+\lstinputlisting[caption=GCC 4.8.1 f\_signed()]{patterns/07_jcc/GCC_O3_signed.asm}
+
+% should be here instead of 'switch' section?
+\IFRU{Мы здесь также видим}{We also see} \TT{JMP puts} \IFRU{вместо}{here instead of} \TT{CALL puts / RETN}.
+\IFRU{Этот прием будет описан немного позже}{This kind of trick will be described later}: \ref{JMP_instead_of_RET}.
+
+\IFRU{Нужно сказать что x86-код такого типа редок}{Needless to say, that type of x86 code is rare}.
+MSVC 2012, \IFRU{как видно, не может этого делать}{as it seems, can't do that}.
+\IFRU{С другой стороны, программисты на ассемблере прекрасно осведомлены о том, что инструкции}{On the other case, 
+assembly language programmers are fully aware of the fact that} \TT{Jcc} \IFRU{можно располагать последовательно}
+{instructions can be stacked}.
+\IFRU{Так что если вы видите это где-то, имеется немалая вероятность, что этот фрагмент кода был написан вручную}
+{So if you see it somewhere, it may be a good probability that the code is hand-written}.
+
+\RU{Ф-ция }\TT{f\_unsigned()} \IFRU{получилась не настолько эстетически короткой}{function is not that 
+\ae{}sthetically short}:
+
+\lstinputlisting[caption=GCC 4.8.1 f\_unsigned()]{patterns/07_jcc/GCC_O3_unsigned_\LANG.asm}
+
+\IFRU{Так что, алгоритмы оптимизации}{So, optimization algorithms of} GCC 4.8.1 
+\IFRU{наверное, еще пока не идеальны}{are probably not always perfect yet}.
+
