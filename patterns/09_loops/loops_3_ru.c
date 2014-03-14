@@ -1,2 +1,2 @@
-for (i; i<total_entries_to_process; i++)
+for (i=0; i<total_entries_to_process; i++)
     тело_цикла;

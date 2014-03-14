@@ -1,3 +1,10 @@
+#include <stdio.h>
+
+void f(int i)
+{
+	printf ("f(%d)\n", i);
+};
+
 int main()
 {
 	int i;
