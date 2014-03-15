@@ -1,0 +1,28 @@
+\subsection{Windows x64}
+
+\label{SEH_win64}
+\IFRU{Как видно, это не самая быстрая штука, устанавливать SEH-структуры в каждом прологе функции}
+{As you might think, it is not very fast thing to set up SEH frame at each function prologue}.
+\IFRU{Еще одна проблема производительности это менять переменную}{Another performance problem is to change} 
+\IT{previous try level} \IFRU{много раз в течении исполнении ф-ции}{value many times while function execution}.
+\IFRU{Так что в x64 всё сильно изменилось, теперь все указатели на \TT{try}-блоки, ф-ции фильтров и обработчиков,
+теперь записаны в другом PE-сегменте}
+{So things are changed completely in x64: now all pointers to \TT{try} blocks, filter and handler functions are stored
+in another PE-segment} \TT{.pdata}, \IFRU{откуда обработчик исключений OS берет всю информацию}
+{that is where OS exception handler takes all the information}.
+
+\IFRU{Вот два примера из предыдущей секции, скомпилированных для}
+{These are two examples from the previous section compiled for} x64:
+
+\lstinputlisting[caption=MSVC 2012]{OS/SEH/3/2_x64.asm}
+
+\lstinputlisting[caption=MSVC 2012]{OS/SEH/3/3_x64.asm}
+
+\IFRU{Смотрите}{Read} \cite{IgorSkochinsky} \IFRU{для более детального описания}{for more detailed information about this}.
+
+\IFRU{Помимо информации об исключениях, секция}{Aside from exception information,} \TT{.pdata} 
+\IFRU{также содержит начала и концы почти всех ф-ций, так что эту информацию можно использовать в каких-либо
+утилитах предназначенных для автоматизации анализа}{is a section containing addresses of almost all function starts and ends,
+hence it may be useful for a tools targetting automated analysis}.
+
+

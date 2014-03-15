@@ -1,8 +1,8 @@
-\subsection{std::string}
+\section{std::string}
 \index{\Cpp!STL!std::string}
 \label{std_string}
 
-\subsubsection{\IFRU{Как устроена структура}{Internals}}
+\subsection{\IFRU{Как устроена структура}{Internals}}
 
 \IFRU{Многие строковые библиотеки (\cite[2.2]{CBook}) обеспечивают структуру содержащую ссылку 
 на буфер собственно со строкой, переменная всегда содержащую длину строки 
@@ -31,7 +31,7 @@ this is done in order to support various character types: at least char and wcha
 в MSVC и GCC можно и без этого}
 {There are no assembly listings, because std::string internals in MSVC and GCC can be illustrated without them}.
 
-\paragraph{MSVC}
+\subsubsection{MSVC}
 
 \IFRU{В реализации MSVC, вместо ссылки на буфер может содержаться сам буфер (если строка короче 16-и символов).}
 {MSVC implementation may store buffer in place instead of pointer to buffer 
@@ -81,7 +81,7 @@ array of characters, hence it works}.
 \IFRU{Это может надолго остаться незамеченным: до тех пока там не появится строка короче 16-и символов, тогда процесс упадет}
 {This may left unnoticed for a long span of time: until a longer string will appear there, then a process will crash}.
 
-\paragraph{GCC}
+\subsubsection{GCC}
 
 \IFRU{В реализации GCC в структуре есть еще одна переменная --- reference count}
 {GCC implementation of a structure has one more variable---reference count}.
@@ -113,7 +113,7 @@ beginning of the structure, but to the pointer to buffer}.
 {A trickery should be also used to imitate mistake I already wrote above because GCC
 has stronger type checking, nevertheless, printf() works here without c\_str() as well}.
 
-\subsubsection{\IFRU{Чуть более сложный пример}{More complex example}}
+\subsection{\IFRU{Чуть более сложный пример}{More complex example}}
 
 \lstinputlisting{cpp/STL/string/3.cpp}
 
@@ -159,7 +159,7 @@ shorter string right in the structure)}:
 {It can be seen that not a pointer to object is passed to destructors, but rather a place 12 bytes (or 3 words)
 before, i.e., pointer to the real start of the structure}.
 
-\subsubsection{std::string \IFRU{как глобальная переменная}{as a global variable}}
+\subsection{std::string \IFRU{как глобальная переменная}{as a global variable}}
 \label{sec:std_string_as_global_variable}
 
 \IFRU{Опытные программисты на Си++ могут возразить: глобальные переменные \ac{STL}-типов вполне

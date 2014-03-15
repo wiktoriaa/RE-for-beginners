@@ -1,4 +1,4 @@
-\subsection{\IFRU{Регистры общего пользования}{General purpose registers}}
+\section{\IFRU{Регистры общего пользования}{General purpose registers}}
 
 \IFRU{Ко многим регистрам можно обращаться как к частям размером в байт или 16-битное слово}
 {It is possible to access many registers by byte or 16-bit word parts}.
@@ -22,17 +22,17 @@ N.B.: \IFRU{В документации от Intel, для обращения к
 {In the Intel manuals byte parts of these registers are prefixed by \IT{L}, e.g.: \IT{R8L}, but \ac{IDA}
 names these registers by adding \IT{B} suffix, e.g.: \IT{R8B}}.
 
-\subsubsection{RAX/EAX/AX/AL}
+\subsection{RAX/EAX/AX/AL}
 \RegTableOne{RAX}{EAX}{AX}{AH}{AL}
 
 \ac{AKA} \IFRU{аккумулятор}{accumulator}.
 \IFRU{Результат ф-ции обычно возвращается через этот регистр}
 {The result of function if usually returned via this register}.
 
-\subsubsection{RBX/EBX/BX/BL}
+\subsection{RBX/EBX/BX/BL}
 \RegTableOne{RBX}{EBX}{BX}{BH}{BL}
 
-\subsubsection{RCX/ECX/CX/CL}
+\subsection{RCX/ECX/CX/CL}
 \RegTableOne{RCX}{ECX}{CX}{CH}{CL}
 
 \ac{AKA} \IFRU{счетчик}{counter}: 
@@ -40,59 +40,59 @@ names these registers by adding \IT{B} suffix, e.g.: \IT{R8B}}.
 {in this role it is used in REP prefixed instructions and also in shift instructions}
 (SHL/SHR/RxL/RxR).
 
-\subsubsection{RDX/EDX/DX/DL}
+\subsection{RDX/EDX/DX/DL}
 \RegTableOne{RDX}{EDX}{DX}{DH}{DL}
 
-\subsubsection{RSI/ESI/SI/SIL}
+\subsection{RSI/ESI/SI/SIL}
 \RegTableTwo{RSI}{ESI}{SI}{SIL}
 
 \ac{AKA} ``source''. \IFRU{Используется как источник в инструкциях}{Used as source in the instructions} 
 REP MOVSx, REP CMPSx.
 
-\subsubsection{RDI/EDI/DI/DIL}
+\subsection{RDI/EDI/DI/DIL}
 \RegTableTwo{RDI}{EDI}{DI}{DIL}
 
 \ac{AKA} ``destination''. \IFRU{Используется как указатель на место назначения в инструкции}
 {Used as a pointer to destination place in the instructions} REP MOVSx, REP STOSx.
 
-\subsubsection{R8/R8D/R8W/R8L}
+\subsection{R8/R8D/R8W/R8L}
 \RegTableThree{R8}{R8D}{R8W}{R8L}
 
-\subsubsection{R9/R9D/R9W/R9L}
+\subsection{R9/R9D/R9W/R9L}
 \RegTableThree{R9}{R9D}{R9W}{R9L}
 
-\subsubsection{R10/R10D/R10W/R10L}
+\subsection{R10/R10D/R10W/R10L}
 \RegTableThree{R10}{R10D}{R10W}{R10L}
 
-\subsubsection{R11/R11D/R11W/R11L}
+\subsection{R11/R11D/R11W/R11L}
 \RegTableThree{R11}{R11D}{R11W}{R11L}
 
-\subsubsection{R12/R12D/R12W/R12L}
+\subsection{R12/R12D/R12W/R12L}
 \RegTableThree{R12}{R12D}{R12W}{R12L}
 
-\subsubsection{R13/R13D/R13W/R13L}
+\subsection{R13/R13D/R13W/R13L}
 \RegTableThree{R13}{R13D}{R13W}{R13L}
 
-\subsubsection{R14/R14D/R14W/R14L}
+\subsection{R14/R14D/R14W/R14L}
 \RegTableThree{R14}{R14D}{R14W}{R14L}
 
-\subsubsection{R15/R15D/R15W/R15L}
+\subsection{R15/R15D/R15W/R15L}
 \RegTableThree{R15}{R15D}{R15W}{R15L}
 
-\subsubsection{RSP/ESP/SP/SPL}
+\subsection{RSP/ESP/SP/SPL}
 \RegTableTwo{RSP}{ESP}{SP}{SPL}
 
 \ac{AKA} \gls{stack pointer}. \IFRU{Обычно всегда указывает на текущий стек, кроме тех случаев,
 когда он не инициализирован}{Usually points to the current stack except those cases when it is not yet initialized}.
 
-\subsubsection{RBP/EBP/BP/BPL}
+\subsection{RBP/EBP/BP/BPL}
 \RegTableTwo{RBP}{EBP}{BP}{BPL}
 
 \ac{AKA} frame pointer. \IFRU{Обычно используется для доступа к локальным переменным ф-ции и аргументам,
 Больше о нем}
 {Usually used for local variables and arguments of function accessing. More about it}: (\ref{stack_frame}).
 
-\subsubsection{RIP/EIP/IP}
+\subsection{RIP/EIP/IP}
 
 \begin{center}
 \begin{tabular}{ | l | l | l | l | l | l | l | l | l |}
@@ -127,7 +127,7 @@ push val
 ret
 \end{lstlisting}
 
-\subsubsection{CS/DS/ES/SS/FS/GS}
+\subsection{CS/DS/ES/SS/FS/GS}
 
 \IFRU{16-битные регистры, содержащие селектор кода}{16-bit registers containing code selector} (CS), 
 \IFRU{данных}{data selector} (DS), \IFRU{стека}{stack selector} (SS).\\
@@ -142,7 +142,7 @@ FS \InENRU win32 \IFRU{указывает на}{points to} \ac{TLS}, \IFRU{а в
 \IFRU{В прошлом эти регистры использовались как сегментные регистры}
 {In the past, these registers were used as segment registers} (\ref{8086_memory_model}).
 
-\subsubsection{\IFRU{Регистр флагов}{Flags register}}
+\subsection{\IFRU{Регистр флагов}{Flags register}}
 
 \label{EFLAGS}
 \ac{AKA} EFLAGS.
@@ -205,7 +205,7 @@ FS \InENRU win32 \IFRU{указывает на}{points to} \ac{TLS}, \IFRU{а в
 
 \IFRU{Остальные флаги зарезервированы}{All the rest flags are reserved}.
 
-\subsection{FPU-\IFRU{регистры}{registers}}
+\section{FPU-\IFRU{регистры}{registers}}
 
 \index{x86!FPU}
 8 80-\IFRU{битных регистров работающих как стек}{bit registers working as a stack}: ST(0)-ST(7).
@@ -249,7 +249,7 @@ N.B.: \ac{IDA} \IFRU{называет}{calls} ST(0) \IFRU{просто}{as just}
 \end{center}
 
 \label{FPU_control_word}
-\subsubsection{\IFRU{Регистр управления}{Control Word}}
+\subsection{\IFRU{Регистр управления}{Control Word}}
 
 \IFRU{Регистр, при помощи которого можно задавать поведение}{Register controlling behaviour of the}
 \ac{FPU}.
@@ -297,7 +297,7 @@ N.B.: \ac{IDA} \IFRU{называет}{calls} ST(0) \IFRU{просто}{as just}
 \IFRU{задается, генерировать ли исключения в случае соответствующих ошибок}
 {flags are defining if to generate exception in case of corresponding errors}.
 
-\subsubsection{\IFRU{Регистр статуса}{Status Word}}
+\subsection{\IFRU{Регистр статуса}{Status Word}}
 
 \label{FPU_status_word}
 \IFRU{Регистр только для чтения}{Read-only register}.
@@ -351,7 +351,7 @@ N.B.: \IFRU{когда используется регистр ST(x), FPU при
 внутреннего регистра}{When ST(x) is used, FPU adds $x$ to TOP (by modulo 8) and that is how it gets 
 internal register's number}.
 
-\subsubsection{Tag Word}
+\subsection{Tag Word}
 
 \IFRU{Этот регистр отражает текущее содержимое регистров чисел}
 {The register has current information about number's registers usage}.
@@ -394,13 +394,13 @@ internal register's number}.
 11 ~--- \IFRU{Регистр пуст}{The register is empty}
 \end{itemize}
 
-\subsection{SIMD-\IFRU{регистры}{registers}}
+\section{SIMD-\IFRU{регистры}{registers}}
 
-\subsubsection{MMX-\IFRU{регистры}{registers}}
+\subsection{MMX-\IFRU{регистры}{registers}}
 
 8 64-\IFRU{битных регистров}{bit registers}: MM0..MM7.
 
-\subsubsection{SSE \AndENRU AVX-\IFRU{регистры}{registers}}
+\subsection{SSE \AndENRU AVX-\IFRU{регистры}{registers}}
 
 \index{x86-64}
 SSE: 8 128-\IFRU{битных регистров}{bit registers}: XMM0..XMM7.

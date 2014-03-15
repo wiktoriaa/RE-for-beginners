@@ -1,0 +1,42 @@
+\chapter{Thread Local Storage}
+\label{TLS}
+\index{TLS}
+
+\IFRU{Это область данных, отдельная для каждого треда. Каждый тред может хранить там то, что ему нужно}
+{It is a data area, specific to each thread. Every thread can store there what it needs}.
+\IFRU{Один из известных примеров, это стандартная глобальная переменная в Си}{One famous example
+is C standard global variable} \IT{errno}. 
+\IFRU{Несколько тредов одновременно могут вызывать функции
+возвращающие код ошибки в \IT{errno}, поэтому глобальная переменная здесь не будет работать корректно, 
+для мультитредовых программ \IT{errno} нужно хранить в в \ac{TLS}.}
+{Multiple threads may simultaneously call a functions
+which returns error code in the \IT{errno}, so global variable will not work correctly here, for multi-thread programs,
+\IT{errno} must be stored in the \ac{TLS}.} \\
+\\
+\index{\Cpp!C++11}
+\IFRU{В}{In the} C++11 \IFRU{ввели модификатор}{standard, a new} \IT{thread\_local} 
+\IFRU{, показывающий что каждый тред будет иметь свою версию этой переменной}
+{modifier was added, showing that each thread will have its own version of the variable},
+\IFRU{и её можно инициализировать, и она расположена в}{it can be initialized, and it is located in the} \ac{TLS}
+\footnote{
+\index{C11}
+\IFRU{В C11 также есть поддержка тредов, хотя и опциональная}
+{C11 also has thread support, optional though}}:
+
+\begin{lstlisting}[caption=C++11]
+#include <iostream>
+#include <thread>
+
+thread_local int tmp=3;
+
+int main()
+{
+	std::cout << tmp << std::endl;
+};
+\end{lstlisting}
+\footnote{\IFRU{Компилируется в}{Compiled in} MinGW GCC 4.8.1, \IFRU{но не в}{but not in} MSVC 2012}
+
+\IFRU{Если говорить о PE-файлах, то в исполняемом файле значение}
+{If to say about PE-files, in the resulting executable file, the} \IT{tmp} 
+\IFRU{будет именно в секции отведенной}{variable will be stored in the section devoted to}
+\ac{TLS}.
