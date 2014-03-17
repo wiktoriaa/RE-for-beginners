@@ -4,7 +4,7 @@
 \newcommand{\TDWNC}{TDW\_NOCOMPRESS\xspace}
 
 \IFRU{(Трассировка связи между переменной окружения \TDWNC{} SAPGUI\footnote{GUI-клиент от SAP}
-до ``надоедливого всплывающего окна'' и самой функции сжатия данных.)}
+до ``назойливого всплывающего окна'' и самой функции сжатия данных.)}
 {(Tracing connection between \TDWNC{} SAPGUI\footnote{SAP GUI client} environment variable to 
 the pesky nagging pop-up window and actual data compression routine.)}
 
@@ -30,7 +30,7 @@ the pesky nagging pop-up window and actual data compression routine.)}
 \IFRU{Но в начале давайте посмотрим, что мы уже знаем}{But before this, let's see what we already know}.
 \IFRU{Первое: мы знаем, что переменна окружения \IT{\TDWNC} проверяется где-то внутри клиента SAPGUI.}
 {First: we know the environment variable \IT{\TDWNC} is checked somewhere inside of SAPGUI client.}
-\IFRU{Второе: строка вроде ``data compression switched off'' так же должна где-то присутствовать.}
+\IFRU{Второе: строка вроде ``data compression switched off'' также должна где-то присутствовать.}
 {Second: string like ``data compression switched off'' must be present somewhere too.}
 \IFRU{При помощи файлового менеджера FAR я нашел обе эти строки в файле SAPguilib.dll.}
 {With the help of FAR file manager I found that both of these strings are stored in the SAPguilib.dll file.}
@@ -79,7 +79,7 @@ Yes, it is present and there is only one reference to it.}
 \TT{atoi()}\footnote{standard C library function, coverting number in string into number} is called. 
 After that, numerical value is stored to \TT{edi+15h}}.
 
-\IFRU{Обратите так же внимание на функцию \TT{chk\_env} (это я так назвал её)}
+\IFRU{Обратите также внимание на функцию \TT{chk\_env} (это я так назвал её)}
 {Also take a look onto \TT{chk\_env()} function (I gave a name to it)}:
 
 \begin{lstlisting}
@@ -174,11 +174,11 @@ After that, numerical value is stored to \TT{edi+15h}}.
 \IFRU{это \IT{безопасная} версия функции \TT{getenv()}\footnote{Стандартная функция Си, возвращающая значение переменной окружения} в MSVC}
 {function is Microsoft security-enhanced version of \TT{getenv()}\footnote{Standard C library returning environment variable}}.
 
-\IFRU{Тут так же имеются манипуляции со строками при помощи функций из MFC}
+\IFRU{Тут также имеются манипуляции со строками при помощи функций из MFC}
 {There is also a MFC string manipulations}.
 
 \IFRU{Множество других переменных окружения также проверяются. Здесь список всех переменных проверяемых SAPGUI 
-а так же сообщение записываемое им в лог-файл, если переменная включена}{Lots of other environment variables are checked as well. 
+а также сообщение записываемое им в лог-файл, если переменная включена}{Lots of other environment variables are checked as well. 
 Here is a list of all variables being checked and what SAPGUI could write to trace log when logging is turned on}:
 
 \begin{center}
@@ -252,7 +252,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 
 \IFRU{Они \textbf{очень} полезны}{It is \textbf{very} useful}.
 
-\IFRU{Посмотрим содержимое функции ``надоедливого всплывающего окна''}
+\IFRU{Посмотрим содержимое функции ``назойливого всплывающего окна''}
 {So let's see contents of the pesky nagging pop-up window function}:
 
 \begin{lstlisting}
@@ -537,7 +537,7 @@ Depends of option turned on in the object, specific message part will be concate
 
 \lstinputlisting{\IFRU{examples/sapgui/2ru.lst}{examples/sapgui/2en.lst}}
 
-\dots \IFRU{заменим просто на \JMP и получим SAPGUI работающим без этого надоедливого всплывающего окна!}
+\dots \IFRU{заменим просто на \JMP и получим SAPGUI работающим без этого назойливого всплывающего окна!}
 {replace it with just \JMP, and get SAPGUI working without the pesky nagging pop-up window appearing!}
 
 \IFRU{Копнем немного глубже и проследим связь между смещением 0x15 в \TT{load\_command\_line()}
@@ -603,7 +603,7 @@ For a small programs like SAPGUI, it sometimes works. Here is the first occurren
 {Finally, we understand: array filled in the \TT{load\_command\_line()} function is actually placed in the \IT{CDwsGui} class 
 but on \TT{this+0x28} address. 0x15 + 0x28 is exactly 0x3D. OK, we found the point where the value is copied to.}
 
-\IFRU{Посмотрим так же и другие места, где используется смещение 0x3D.
+\IFRU{Посмотрим также и другие места, где используется смещение 0x3D.
 Одно из таких мест находится в функции \IT{CDwsGui::SapguiRun} (и снова спасибо отладочным вызовам):}
 {Let's also find other places where 0x3D offset is used. 
 Here is one of them in the \IT{CDwsGui::SapguiRun} function (again, thanks to debugging calls):}
@@ -631,7 +631,7 @@ Here is one of them in the \IT{CDwsGui::SapguiRun} function (again, thanks to de
 \end{lstlisting}
 
 \IFRU{Проверим нашу идею. Заменяем \TT{setz al} здесь на \TT{xor eax, eax / nop}, убираем переменную окружения 
-\TDWNC и запускаем SAPGUI. Wow! Надоедливого окна больше нет (как и ожидалось: ведь переменной окружении так же
+\TDWNC и запускаем SAPGUI. Wow! Назойливого окна больше нет (как и ожидалось: ведь переменной окружении также
 нет), но в Wireshark мы видим, что сетевые пакеты больше не сжимаются!
 Очевидно, это то самое место где флаг отражающий сжатие пакетов выставляется в объекте \TT{CConnectionContext}.}
 {Let's check our findings. Replace the \TT{setz al} here to the \TT{xor eax, eax / nop} instructions,
