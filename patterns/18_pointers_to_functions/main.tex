@@ -94,6 +94,7 @@ big problem~---big problem is to determine a reason of crashing~---because compi
 silent about potential trouble while compiling.}
 
 \section{MSVC + \olly}
+\index{\olly}
 
 \IFRU{Загрузим наш пример в \olly и установим брякпойнт на ф-ции \comp}
 {Let's load our example into \olly and set breakpoint on \comp function}.
@@ -136,6 +137,86 @@ second call of} \comp\EMDASH{}\IFRU{теперь сравниваемые зна
 \caption{\olly: \IFRU{второй вызов}{second call of} \comp}
 \label{fig:qsort_olly3}
 \end{figure}
+
+\section{MSVC + tracer}
+
+\IFRU{Посмотрим, какие пары сравниваются}{Let's also see, which pairs are compared}.
+\IFRU{Эти 10 чисел будут сортироваться}{These 10 numbers are being sorted}: 
+1892, 45, 200, -98, 4087, 5, -12345, 1087, 88, -100000.
+
+\IFRU{Я нашел адрес первой инструкции}{I found the address of the first} \CMP 
+\IFRU{в}{instruction in} \comp, \IFRU{и это}{it is} \TT{0x0040100C} 
+\IFRU{и я ставлю брякпойнт на нем}{and I'm setting breakpoint on it}:
+
+\begin{lstlisting}
+tracer.exe -l:17_1.exe bpx=17_1.exe!0x0040100C
+\end{lstlisting}
+
+\IFRU{Получаю информацию о регистрах на брякпойнте}
+{I'm getting information about registers at breakpoint}:
+
+\begin{lstlisting}
+PID=4336|New process 17_1.exe
+(0) 17_1.exe!0x40100c
+EAX=0x00000764 EBX=0x0051f7c8 ECX=0x00000005 EDX=0x00000000
+ESI=0x0051f7d8 EDI=0x0051f7b4 EBP=0x0051f794 ESP=0x0051f67c
+EIP=0x0028100c
+FLAGS=IF
+(0) 17_1.exe!0x40100c
+EAX=0x00000005 EBX=0x0051f7c8 ECX=0xfffe7960 EDX=0x00000000
+ESI=0x0051f7d8 EDI=0x0051f7b4 EBP=0x0051f794 ESP=0x0051f67c
+EIP=0x0028100c
+FLAGS=PF ZF IF
+(0) 17_1.exe!0x40100c
+EAX=0x00000764 EBX=0x0051f7c8 ECX=0x00000005 EDX=0x00000000
+ESI=0x0051f7d8 EDI=0x0051f7b4 EBP=0x0051f794 ESP=0x0051f67c
+EIP=0x0028100c
+FLAGS=CF PF ZF IF
+...
+\end{lstlisting}
+
+\IFRU{Я отфильтровал}{I filtered out} \TT{EAX} \AndENRU \TT{ECX} \IFRU{и получил}{and got}:
+
+\begin{lstlisting}
+EAX=0x00000764 ECX=0x00000005
+EAX=0x00000005 ECX=0xfffe7960
+EAX=0x00000764 ECX=0x00000005
+EAX=0x0000002d ECX=0x00000005
+EAX=0x00000058 ECX=0x00000005
+EAX=0x0000043f ECX=0x00000005
+EAX=0xffffcfc7 ECX=0x00000005
+EAX=0x000000c8 ECX=0x00000005
+EAX=0xffffff9e ECX=0x00000005
+EAX=0x00000ff7 ECX=0x00000005
+EAX=0x00000ff7 ECX=0x00000005
+EAX=0xffffff9e ECX=0x00000005
+EAX=0xffffff9e ECX=0x00000005
+EAX=0xffffcfc7 ECX=0xfffe7960
+EAX=0x00000005 ECX=0xffffcfc7
+EAX=0xffffff9e ECX=0x00000005
+EAX=0xffffcfc7 ECX=0xfffe7960
+EAX=0xffffff9e ECX=0xffffcfc7
+EAX=0xffffcfc7 ECX=0xfffe7960
+EAX=0x000000c8 ECX=0x00000ff7
+EAX=0x0000002d ECX=0x00000ff7
+EAX=0x0000043f ECX=0x00000ff7
+EAX=0x00000058 ECX=0x00000ff7
+EAX=0x00000764 ECX=0x00000ff7
+EAX=0x000000c8 ECX=0x00000764
+EAX=0x0000002d ECX=0x00000764
+EAX=0x0000043f ECX=0x00000764
+EAX=0x00000058 ECX=0x00000764
+EAX=0x000000c8 ECX=0x00000058
+EAX=0x0000002d ECX=0x000000c8
+EAX=0x0000043f ECX=0x000000c8
+EAX=0x000000c8 ECX=0x00000058
+EAX=0x0000002d ECX=0x000000c8
+EAX=0x0000002d ECX=0x00000058
+\end{lstlisting}
+
+\IFRU{Это}{That's} 34 \IFRU{пары}{pairs}.
+\IFRU{Следовательно, алгоритму быстрой сортировки нужно 34 операции сравнения для сортировки этих
+10-и чисел}{Therefore, quick sort algorithm needs 34 comparison operations for sorting these 10 numbers}.
 
 \section{GCC}
 
