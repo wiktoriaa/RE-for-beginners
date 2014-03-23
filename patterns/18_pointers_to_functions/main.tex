@@ -1,3 +1,4 @@
+\newcommand{\comp}{\TT{comp()}\xspace}
 \chapter{\IFRU{Указатели на функции}{Pointers to functions}}
 \label{sec:pointerstofunctions}
 
@@ -45,16 +46,18 @@ int (*compare)(const void *, const void *)
 
 \lstinputlisting{patterns/18_pointers_to_functions/17_1.c}
 
+\section{MSVC}
+
 \IFRU{Компилируем в MSVC 2010 (я убрал некоторые части для краткости) с опцией \Ox}
 {Let's compile it in MSVC 2010 (I omitted some parts for the sake of brevity) with \Ox option}:
 
-\lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/18_pointers_to_functions/17_2_msvc_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010: /Ox /GS- /MD]{patterns/18_pointers_to_functions/17_2_msvc_Ox.asm}
 
 \IFRU{Ничего особо удивительного здесь мы не видим. В качестве четвертого аргумента, 
-в \qsort просто передается адрес метки \TT{\_comp}, где собственно и располагается функция \TT{comp()}.}
+в \qsort просто передается адрес метки \TT{\_comp}, где собственно и располагается функция \comp.}
 {Nothing surprising so far.
 As a fourth argument, an address of label \TT{\_comp} is passed, that is just a place
-where function \TT{comp()} located.}
+where function \comp located.}
 
 \IFRU{Как \qsort вызывает её?}{How \qsort calling it?}
 
@@ -64,12 +67,13 @@ where function \TT{comp()} located.}
 
 \lstinputlisting[caption=MSVCR80.DLL]{patterns/18_pointers_to_functions/17_3_MSVCR.lst}
 
-\IFRU{\TT{comp} ~--- это четвертый аргумент функции. 
+\TT{comp}\EMDASH{}\IFRU{это четвертый аргумент функции. 
 Здесь просто передается управление по адресу указанному в \TT{comp}. 
-Перед этим подготавливается два аргумента для функции \TT{comp()}. Далее, проверяется результат её выполнения.}
-{\TT{comp}~---is fourth function argument.
+Перед этим подготавливается два аргумента для функции \comp. 
+Далее, проверяется результат её выполнения.}
+{is fourth function argument.
 Here the control is just passed to the address in the \TT{comp} argument.
-Before it, two arguments prepared for \TT{comp()}. Its result is checked after its execution.}
+Before it, two arguments prepared for \comp. Its result is checked after its execution.}
 
 \IFRU{Вот почему использование указателей на функции ~--- это опасно. 
 Во-первых, если вызвать \qsort с неправильным указателем на функцию, 
@@ -88,6 +92,50 @@ to incorrect point, a process may crash and this bug will be hard to find.}
 with wrong arguments of wrong types may lead to serious problems, however, process crashing is not a 
 big problem~---big problem is to determine a reason of crashing~---because compiler may be 
 silent about potential trouble while compiling.}
+
+\section{MSVC + \olly}
+
+\IFRU{Загрузим наш пример в \olly и установим брякпойнт на ф-ции \comp}
+{Let's load our example into \olly and set breakpoint on \comp function}.
+
+\IFRU{Как значения сравниваются, мы можем увидеть во время самого первого вызова \comp}
+{How values are compared we can see at the very first \comp call}: \figname \ref{fig:qsort_olly1}.
+\RU{Для удобства, }\olly \IFRU{показывает сравниваемые значения в окне под окном кода}
+{shows compared values in the window under code window, for convenience}.
+\IFRU{Мы можем так же увидеть что}{We can also see that the} \ac{SP} \IFRU{указывает на}{pointing to} 
+\ac{RA} \IFRU{где находится место в ф-ции}{where the place in} 
+\qsort \EN{function is }(\IFRU{на самом деле, находится в}{actually located in} \TT{MSVCR100.DLL}).
+
+\IFRU{Трассируя}{By tracing} (F8) \IFRU{до инструкции}{until} \TT{RETN} 
+\IFRU{и нажав F8 еще один раз, мы возвращаемся в ф-цию}{instruction, and pressing F8 one more time, 
+we returning into} \qsort\EN{ function}: \figname \ref{fig:qsort_olly2}.
+\IFRU{Это был вызов ф-ции сравнения}{That was a call to comparison function}.
+
+\IFRU{Вот также скриншот момента второго вызова ф-ции}{Here is also screenshot of the moment of the 
+second call of} \comp\EMDASH{}\IFRU{теперь сравниваемые значения другие}
+{now values to be compared are different}:
+\figname \ref{fig:qsort_olly3}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/18_pointers_to_functions/olly1.png}
+\caption{\olly: \IFRU{первый вызов}{first call of} \comp}
+\label{fig:qsort_olly1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/18_pointers_to_functions/olly2.png}
+\caption{\olly: \IFRU{код в}{the code in} \qsort \IFRU{сразу после вызова}{right after} \comp\EN{ call}}
+\label{fig:qsort_olly2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/18_pointers_to_functions/olly3.png}
+\caption{\olly: \IFRU{второй вызов}{second call of} \comp}
+\label{fig:qsort_olly3}
+\end{figure}
 
 \section{GCC}
 
@@ -112,7 +160,7 @@ silent about potential trouble while compiling.}
                 call    _qsort
 \end{lstlisting}
 
-\IFRU{Функция \TT{comp()}}{\TT{comp()} function}:
+\IFRU{Функция \comp}{\comp function}:
 
 \begin{lstlisting}
                 public comp
@@ -152,7 +200,7 @@ comp            endp
 
 
 \begin{lstlisting}[caption=
-\IFRU{(файл libc.so.6, версия glibc ~--- 2.10.1)}{(File libc.so.6, glibc version~---2.10.1)}]
+(\IFRU{файл libc.so.6, версия glibc}{file libc.so.6, glibc version}\EMDASH{}2.10.1)]
 
 .text:0002DDF6                 mov     edx, [ebp+arg_10]
 .text:0002DDF9                 mov     [esp+4], esi
