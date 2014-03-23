@@ -44,7 +44,7 @@ int (*compare)(const void *, const void *)
 {Let's use slightly modified example I found} \href{http://cplus.about.com/od/learningc/ss/pointers2_8.htm}
 {\IFRU{здесь}{here}}:
 
-\lstinputlisting{patterns/18_pointers_to_functions/17_1.c}
+\lstinputlisting[numbers=left,label=qsort_c_src]{patterns/18_pointers_to_functions/17_1.c}
 
 \section{MSVC}
 
@@ -93,7 +93,7 @@ with wrong arguments of wrong types may lead to serious problems, however, proce
 big problem~---big problem is to determine a reason of crashing~---because compiler may be 
 silent about potential trouble while compiling.}
 
-\section{MSVC + \olly}
+\subsection{MSVC + \olly}
 \index{\olly}
 
 \IFRU{Загрузим наш пример в \olly и установим брякпойнт на ф-ции \comp}
@@ -138,7 +138,8 @@ second call of} \comp\EMDASH{}\IFRU{теперь сравниваемые зна
 \label{fig:qsort_olly3}
 \end{figure}
 
-\section{MSVC + tracer}
+\subsection{MSVC + tracer}
+\index{tracer}
 
 \IFRU{Посмотрим, какие пары сравниваются}{Let's also see, which pairs are compared}.
 \IFRU{Эти 10 чисел будут сортироваться}{These 10 numbers are being sorted}: 
@@ -218,9 +219,48 @@ EAX=0x0000002d ECX=0x00000058
 \IFRU{Следовательно, алгоритму быстрой сортировки нужно 34 операции сравнения для сортировки этих
 10-и чисел}{Therefore, quick sort algorithm needs 34 comparison operations for sorting these 10 numbers}.
 
+\subsection{MSVC + tracer (code coverage)}
+\index{tracer}
+
+\IFRU{Но можно также и воспользоваться возможностью tracer накапливать все возможные состояния регистров
+и показать их в \IDA}{We can also use tracer's feature to collect all possible register's values
+and show them in \IDA}.
+
+\IFRU{Трассируем все инструкции в ф-ции \comp}{Let's trace all instructions in \comp function}:
+
+\begin{lstlisting}
+tracer.exe -l:17_1.exe bpf=17_1.exe!0x00401000,trace:cc
+\end{lstlisting}
+
+\IFRU{Получем .idc-скрипт для загрузки в \IDA и загружаем его}
+{We getting .idc-script for loading into \IDA and load it}: \figname \ref{fig:qsort_tracer_cc}.
+
+\IFRU{Имя этой ф-ции (PtFuncCompare) дала \IDA}{\IDA gave the function name (PtFuncCompare)}
+\EMDASH{}\IFRU{видимо, потому что видит что указатель на эту ф-цию передается в \qsort}{it seems,
+because \IDA sees that pointer to this function is passed into \qsort}.
+
+\IFRU{Мы видим что указатели $a$ и $b$ указывают на разные места внутри массива, 
+но шаг между указателями --- 4, что логично, ведь в массиве хранятся 32-битные значения}
+{We see that $a$ and $b$ pointers are points to various places in array, but step between
+points is 4---indeed, 32-bit values are stored in the array}.
+
+\IFRU{Видно что инструкции по адресам}{We see that the instructions at} \TT{0x401010} \AndENRU 
+\TT{0x401012} \IFRU{никогда не исполнялись}{was never executed} 
+(\IFRU{они и остались белыми}{so they leaved as white}): 
+\IFRU{действительно, ф-ция}{indeed,} \comp \IFRU{никогда не возвращала 0,
+потому что в массиве нет одинаковых элементов}{was never returned 0, because there no equal elements}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/18_pointers_to_functions/tracer_cc.png}
+\caption{tracer \AndENRU IDA. N.B.: 
+\IFRU{некоторые значения обрезаны справа}{some values are cutted at right}}
+\label{fig:qsort_tracer_cc}
+\end{figure}
+
 \section{GCC}
 
-\IFRU{Не слишком большая разница:}{Not a big difference:}
+\IFRU{Не слишком большая разница}{Not a big difference}:
 
 \begin{lstlisting}[caption=GCC]
                 lea     eax, [esp+40h+var_28]
@@ -290,3 +330,46 @@ comp            endp
 .text:0002DE04                 call    [ebp+arg_C]
 ...
 \end{lstlisting}
+
+\subsection{GCC + GDB (\IFRU{с исходными кодами}{with source code})}
+\index{GDB}
+
+\IFRU{Очевидно, у нас есть исходный код нашего примера на Си (\ref{qsort_c_src}), 
+так что мы можем установить брякпойнт (\TT{b}) на
+номере строки}{Obviously, we have a C-source code of our example (\ref{qsort_c_src}), 
+so we can set breakpoint (\TT{b}) on line number}
+(\IFRU{11-й --- это номер строки где происходит первое сравнение}{11th---the line where 
+first comparison is occurred}).
+\IFRU{Нам также нужно скомпилировать наш пример с ключом \TT{-g}, чтобы в исполняемом файле была
+полная отладочная информация}{We also need to compile example with debugging information 
+included (\TT{-g}), so the table
+with addresses and corresponding line numbers is present}.
+\IFRU{Мы можем так же выводить значения используя имена переменных}
+{We can also print values by variable name} (\TT{p}):
+\IFRU{отладочная информация также содержит информацию о том, в каком регистре и/или элементе локального
+стека находится какая переменная}{debugging information also has information about which register and/or 
+local stack element contain which variable}.
+
+\index{Glibc}
+\IFRU{Мы можем также увидеть стек}{We can also see stack} (\TT{bt}) 
+\IFRU{и обнаружить что в Glibc используется какая-то вспомогательная ф-ция с именем}
+{and find out that there are some intermediate function} 
+\TT{msort\_with\_tmp()}\EN{ used in Glibc}.
+
+\lstinputlisting[caption=GDB\IFRU{-сессия}{ session}]{patterns/18_pointers_to_functions/GDB_source.txt}
+
+\subsection{GCC + GDB (\IFRU{без исходных кодов}{no source code})}
+\index{GDB}
+
+\IFRU{Но часто никаких исходных кодов нет вообще, так что мы можем дизассемблировать ф-цию \comp}
+{But often there are no source code at all, so we can disassemble \comp function} (\TT{disas}), 
+\IFRU{найти самую первую инструкцию \CMP и установить брякпойнт}{find the very first
+\CMP instruction and set breakpoint} (\TT{b}) \IFRU{по этому адресу}{at that address}.
+\IFRU{На каждом брякпойнте мы будем видеть содержимое регистров}
+{At each breakpoint, we will dump all register contents} (\TT{info registers}).
+\IFRU{Информация из стека так же доступна}{Stack information is also available} (\TT{bt}), 
+\IFRU{но частичная: здесь нет номеров строк для ф-ции \comp}
+{but partial: there are no line number information for \comp function}.
+
+\lstinputlisting[caption=GDB\IFRU{-сессия}{ session}]{patterns/18_pointers_to_functions/GDB_no_source.txt}
+
