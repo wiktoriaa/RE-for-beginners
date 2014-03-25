@@ -8,53 +8,11 @@
 \IFRU{Старая бесплатная версия доступна для скачивания}{Older freeware version is available for downloading}
 \footnote{\url{http://www.hex-rays.com/idapro/idadownfreeware.htm}}.
 
-\IFRU{Краткий справочник хот-кеев}{Short hot-keys cheatsheet}:
-
-\begin{center}
-\begin{tabular}{ | l | l | }
-\cellcolor{blue!25} \IFRU{клавиша}{key} & \cellcolor{blue!25} \IFRU{значение}{meaning} \\
-Space 	& \IFRU{переключать между листингом и просмотром кода в виде графа}{switch listing and graph view} \\
-C 	& \IFRU{конвертировать в код}{convert to code} \\
-D 	& \IFRU{конвертировать в данные}{convert to data} \\
-A 	& \IFRU{конвертировать в строку}{convert to string} \\
-* 	& \IFRU{конвертировать в массив}{convert to array} \\
-U 	& \IFRU{сделать неопределенным}{undefine} \\
-O 	& \IFRU{сделать смещение из операнда}{make offset of operand} \\
-H 	& \IFRU{сделать десятичное число}{make decimal number} \\
-R 	& \IFRU{сделать символ}{make char} \\
-B 	& \IFRU{сделать двоичное число}{make binary number} \\
-Q 	& \IFRU{сделать шестнадцатеричное число}{make hexadecimal number} \\
-N 	& \IFRU{переменовать идентификатор}{rename identificator} \\
-? 	& \IFRU{калькулятор}{calculator} \\
-G 	& \IFRU{переход на адрес}{jump to address} \\
-: 	& \IFRU{добавить комментарий}{add comment} \\
-Ctrl-X 	& \IFRU{показать ссылки на текущую ф-цию, метку, переменную (в т.ч., в стеке)}
-		{show refernces to the current function, label, variable (incl. in local stack)} \\
-X 	& \IFRU{показать ссылки на ф-цию, метку, переменную, итд}
-		{show references to the function, label, variable, etc} \\
-Alt-I 	& \IFRU{искать константу}{search for constant} \\
-Ctrl-I 	& \IFRU{искать следующее вхождение константы}{search for the next occurrence of constant} \\
-Alt-B 	& \IFRU{искать последовательность байт}{search for byte sequence} \\
-Ctrl-B 	& \IFRU{искать следующее вхождение последовательности байт}
-		{search for the next occurrence of byte sequence} \\
-Alt-T 	& \IFRU{искать текст (включая инструкции, итд)}{search for text (including instructions, etc)} \\
-Ctrl-T 	& \IFRU{искать следующее вхождение текста}{search for the next occurrence of text} \\
-Alt-P 	& \IFRU{редактировать текущую функцию}{edit current function} \\
-Enter 	& \IFRU{перейти к ф-ции, переменной, итд}{jump to function, variable, etc} \\
-Esc 	& \IFRU{вернуться назад}{get back} \\
-Num -   & \IFRU{свернуть ф-цию или отмеченную область}{fold function or selected area} \\
-Num + 	& \IFRU{снова показать ф-цию или область}{unhide function or area}\\
-\end{tabular}
-\end{center}
-
-\IFRU{Сворачивание ф-ции или области может быть удобно чтобы прятать те части ф-ции,
-чья функция вам стала уже ясна}
-{Function/area folding may be useful for hiding function parts when you realize what they do}.
-\IFRU{это используется в моем скрипте\footnote{\url{\YurichevIDAIDCScripts}}}{this is used in my}
-\IFRU{для сворачивания некоторых очень часто используемых фрагментов inline-кода}
-{script\footnote{\url{\YurichevIDAIDCScripts}} for hiding some often used patterns of inline code}.
+\ShortHotKeyCheatsheet: \ref{sec:IDA_cheatsheet}
 
 \chapter{\IFRU{Отладчик}{Debugger}}
+
+\section{tracer}
 
 \index{tracer}
 \label{tracer}
@@ -78,6 +36,21 @@ set breakpoints at arbitrary places, spot registers' state, modify it, etc.}
 {However, as for learning purposes, it is highly advisable to trace code in debugger manually, watch how register's state
 changing (e.g. classic SoftICE, OllyDbg, WinDbg highlighting changed registers), flags, data, change them
 manually, watch reaction, etc.}
+
+\section{\olly}
+\index{\olly}
+
+\IFRU{Очень популярный отладчик пользовательской среды win32}{Very popular user-mode win32 debugger}:\\
+\url{http://www.ollydbg.de/}.
+
+\ShortHotKeyCheatsheet: \label{sec:Olly_cheatsheet}
+
+\section{GDB}
+\index{GDB}
+
+\IFRU{Не очень популярный отладчик у реверсеров, тем не менее, крайне удобный}{Not very popular
+debugger among reverse engineers, but very comfortable nevertheless}.
+\IFRU{Некоторые команды}{Some commands}: \ref{sec:GDB_cheatsheet}.
 
 \chapter{\IFRU{Трассировка системных вызовов}{System calls tracing}}
 
@@ -112,6 +85,14 @@ mmap2(NULL, 1780508, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb
 {The Cygwin also has strace, but if I understood correctly, it works only for .exe-files
 compiled for cygwin environment itself}.
 
+\chapter{\IFRU{Декомпиляторы}{Decompilers}}
+
+\IFRU{Пока существует только один, публично доступный, декомпилятор в Си высокого качества}
+{There are only one known, publically available, high-quality decompiler to C code}: Hex-Rays:\\
+\url{https://www.hex-rays.com/products/decompiler/}
+
+% TODO Java, .NET, VB, etc
+
 \chapter{\IFRU{Прочие инструменты}{Other tools}}
 
 \begin{itemize}
@@ -119,6 +100,7 @@ compiled for cygwin environment itself}.
 Microsoft Visual Studio Express\footnote{\url{http://www.microsoft.com/express/Downloads/}}:
 \IFRU{Усеченная бесплатная версия Visual Studio, пригодная для простых экспериментов}
 {Stripped-down free Visual Studio version, convenient for simple experiments}.
+Some useful options: \ref{sec:MSVC_options}.
 
 \item
 \label{Hiew}
