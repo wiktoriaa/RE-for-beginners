@@ -1,5 +1,7 @@
 \section{x86}
 
+\subsection{\NonOptimizing MSVC}
+
 \IFRU{Итак, компилируем:}{Let's compile:}
 
 \lstinputlisting{patterns/10_strlen/10_1_msvc_\LANG.asm}
@@ -54,6 +56,8 @@ we need to identify its sign and extend it. That is what \MOVSX does.}
 About \TEST instruction, read more in section about bit fields~(\ref{sec:bitfields}).
 But here, this instruction just checking value in the \EDX, if it is equals to $0$.}
 
+\subsection{\NonOptimizing GCC}
+
 \IFRU{Попробуем}{Let's try} GCC 4.4.1:
 
 \lstinputlisting{patterns/10_strlen/10_3_gcc.asm}
@@ -94,10 +98,12 @@ will set $0$ to the \ZF flag, but \SETNZ, if \TT{ZF==0} (\IT{NZ} means \IT{not z
 Speaking in natural language, \IT{if \AL is not zero, let's jump to loc\_80483F0}. 
 Compiler emitted slightly redundant code, but let's not forget the optimization is turned off.}
 
-\IFRU{Теперь скомпилируем все то же самое в MSVC 2010, но с включенной оптимизацией (\Ox)}
-{Now let's compile all this in MSVC 2010, with optimization turned on (\Ox)}:
+\subsection{\Optimizing MSVC}
 
-\lstinputlisting{patterns/10_strlen/10_2_\LANG.asm}
+\IFRU{Теперь скомпилируем все то же самое в MSVC 2012, но с включенной оптимизацией (\Ox)}
+{Now let's compile all this in MSVC 2012, with optimization turned on (\Ox)}:
+
+\lstinputlisting[caption=MSVC 2012 /Ox /Ob0]{patterns/10_strlen/10_2_\LANG.asm}
 
 \IFRU{Здесь все попроще стало. Но следует отметить, что компилятор обычно может так хорошо использовать регистры 
 только на не очень больших функциях с не очень большим количеством локальных переменных.}
@@ -110,6 +116,78 @@ only in small functions with small number of local variables.}
 \INC/\DEC\EMDASH\IFRU{это инструкции \glslink{increment}{инкремента}-\glslink{decrement}{декремента}, попросту говоря: 
 увеличить на единицу или уменьшить.}
 {are \gls{increment}/\gls{decrement} instruction, in other words: add 1 to variable or subtract.}
+
+\subsection{\Optimizing MSVC + \olly}
+
+\IFRU{Можем попробовать этот (соптимизированный) пример в}
+{We may try this (optimized) example in} \olly.
+\IFRU{Вот самая первая итерация}{Here is a very first iteration}: \figname \ref{fig:strlen_olly_1}.
+\IFRU{Видно что \olly обнаружил цикл и, для удобства, \IT{свернула} инструкции тела цикла в скобке}
+{We see that \olly found a loop and, for convenience, \IT{wrapped} its instructions in bracket}.
+\IFRU{Нажав правой кнопкой на}{By clicking right button on} \EAX, \IFRU{можно выбрать}{we can choose} 
+``Follow in Dump'' \IFRU{и позиция в окне памяти будет как раз там где надо}
+{and the memory window position will scroll to the right place}.
+\IFRU{Здесь мы видим в памяти строку}{We can see here a string} ``hello!''\EN{ in memory}.
+\IFRU{После нее имеется как минимум 1 нулевой байт, затем случайный мусор}{There are at least
+once zero byte after it and then random garbage}.
+\IFRU{Если \olly видит что в регистре содержится адрес указывающий на строку, он показывает эту строку}
+{If \olly sees that a register has an address pointing to a string, it will show it}.\\
+\\
+\IFRU{Нажем}{Let's press} F8 (\stepover) \IFRU{столько раз, чтобы текущий адрес снова был 
+в начале тела цикла}{enough time so the current address will be at the loop body begin again}:
+\figname \ref{fig:strlen_olly_2}.
+\IFRU{Видно что}{We see that} \EAX \IFRU{уже содержит адрес второго символа в строке}
+{contain address of the second character in the string}.\\
+\\
+\IFRU{Будем нажимать F8 достаточное количество раз, чтобы выйти из цикла}{We will press F8 enough
+times in order to escape from the loop}:
+\figname \ref{fig:strlen_olly_3}.
+\IFRU{Увидим что \EAX теперь содержит адрес нулевого байта, следующего сразу за строкой}
+{We will see that \EAX now contain address of zeroth byte, placed right after the string}.
+\IFRU{А \EDX так и не менялся, он всё еще указывает на начало строки}{Meanwhile, \EDX wasn't changed,
+so it still pointing to the string begin}.
+\IFRU{Здесь сейчас будет вычисляться разница между этими двумя адресами}
+{Difference between these two addresses will be calculated now}.\\
+\\
+\IFRU{Инструкция \SUB исполнилась}{\SUB instruction was just executed}:
+\figname \ref{fig:strlen_olly_4}.
+\IFRU{Разница в \EAX --- 7}{Difference in the \EAX---7}. 
+\IFRU{Действительно, длина строки}{Indeed, the} ``hello!''\EN{ string length}\EMDASH{}6, 
+\IFRU{но вместе с нулевым байтом}{but with zeroth byte included}\EMDASH{}7.
+\IFRU{Но}{But the} \TT{strlen()} \IFRU{должна возвращать количество ненулевых символов в строке}
+{must return non-zero characters in the string}.
+\IFRU{Так что сейчас будет исполняться декремент и выход из ф-ции}{So the decrement will processed
+now and then return from the function}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/10_strlen/olly1.png}
+\caption{\olly: \IFRU{начало первой итерации}{first iteration begin}}
+\label{fig:strlen_olly_1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/10_strlen/olly2.png}
+\caption{\olly: \IFRU{начало второй итерации}{second iteration begin}}
+\label{fig:strlen_olly_2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/10_strlen/olly3.png}
+\caption{\olly: \IFRU{сейчас будет вычисление разницы указателей}{pointers difference to be calculated now}}
+\label{fig:strlen_olly_3}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/10_strlen/olly4.png}
+\caption{\olly: \IFRU{сейчас будет декремент \EAX}{\EAX to be decremented now}}
+\label{fig:strlen_olly_4}
+\end{figure}
+
+\subsection{\Optimizing GCC}
 
 \IFRU{Попробуем GCC 4.4.1 с включенной оптимизацией (ключ \Othree:}
 {Let's check GCC 4.4.1 with optimization turned on (\Othree key):}
