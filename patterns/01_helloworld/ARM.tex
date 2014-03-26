@@ -103,11 +103,12 @@ actually shows the} \TT{``PUSH \{r4,lr\}''}\EN{ instruction}.
 {But it is not quite correct. \PUSH instruction are only available in thumb mode.
 So, to make things less messy, I offered to work in \IDA}.
 
-\IFRU{Итак, эта инструкция записывает значения регистров \Reg{4} и \LR по адресу в памяти, на который указывает регистр \SPwithfootnote, затем уменьшает \TT{SP}, 
-чтобы он указывал на место в стеке, доступное для новых записей}
-{This instruction writes the values of the \Reg{4} and \LR registers at the address in memory to which 
-\SPwithfootnote is pointing, then it \glspl{decrement} \SP so it will point to the place in the stack that 
-is free for new entries}.
+\IFRU{Итак, эта инструкция уменьшает \TT{SP}, чтобы он указывал на место в стеке, свободное для записи
+новых значений, затем записывает значения регистров \Reg{4} и \LR 
+по адресу в памяти, на который указывает измененный регистр \SP}
+{This instruction first \glspl{decrement} \SP so it will point to the place in the stack
+that is free for new entries, then it writes the values of the \Reg{4} and \LR registers at the address
+in changed \SP}.
 
 \IFRU{Эта инструкция, как и инструкция \PUSH в режиме thumb, может сохранить в стеке одновременно несколько значений регистров, что может быть очень удобно}
 {This instruction (like the \PUSH instruction in thumb mode) is able to save several register values at once and this may be useful}. 
