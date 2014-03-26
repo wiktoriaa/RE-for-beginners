@@ -38,13 +38,13 @@
 \IFRU{сдвиг влево на 2 бита это как раз эквивалентно его умножению на $4$.}
 {shift left by 2 bits is just equivalently to multiplying by $4$.}
 
-\IFRU{Затем полученное}{Then,} $R0*4$ \IFRU{прибавляется к текущему значению \PC}{value we got, is added to
-current value in the \PC}, 
+\IFRU{Затем полученное}{Then,} $R0*4$ \IFRU{прибавляется к текущему значению \ac{PC}}{value we got, is added to
+current value in the \ac{PC}}, 
 \IFRU{совершая, таким образом, переход на одну из расположенных ниже инструкций \TT{B} (\IT{Branch}).}
 {thus jumping to one of \TT{B} (\IT{Branch}) instructions located below.}
 
 \IFRU{На момент исполнения}{At the moment of} \TT{ADDCC}\IFRU{,}{ execution,}
-\IFRU{содержимое \PC на 8 байт больше}{value in the \PC is 8 bytes ahead} (\TT{0x180}) 
+\IFRU{содержимое \ac{PC} на 8 байт больше}{value in the \ac{PC} is 8 bytes ahead} (\TT{0x180}) 
 \IFRU{чем адрес по которому расположена сама инструкция} 
 {than address at which} \TT{ADDCC}\EN{ instruction is located} (\TT{0x178}), 
 \IFRU{либо, говоря иным языком, на 2 инструкции больше.}
@@ -53,27 +53,27 @@ current value in the \PC},
 \index{ARM!\IFRU{Конвейер}{Pipeline}}
 \IFRU{Это связано с работой конвейера процессора ARM:
 пока исполняется инструкция \TT{ADDCC}, процессор уже начинает обрабатывать инструкцию после следующей, 
-поэтому \PC указывает туда.}
+поэтому \ac{PC} указывает туда.}
 {This is how ARM processor pipeline works: when \TT{ADDCC} instruction is executed,
 the processor at the moment
 is beginning to process instruction after the next one,
-so that is why \PC pointing there.}
+so that is why \ac{PC} pointing there.}
 
-\IFRU{В случае, если $a=0$, тогда к \PC ничего не будет прибавлено, 
-в \PC запишется актуальный на тот момент \PC (который больше на 8) 
+\IFRU{В случае, если $a=0$, тогда к \ac{PC} ничего не будет прибавлено, 
+в \ac{PC} запишется актуальный на тот момент \ac{PC} (который больше на 8) 
 и произойдет переход на метку \IT{loc\_180}, 
 это на 8 байт дальше от места где находится инструкция \TT{ADDCC}.}
-{If $a=0$, then nothing will be added to the value in the \PC,
-and actual value in the \PC is to be written into the \PC (which is 8 bytes ahead)
+{If $a=0$, then nothing will be added to the value in the \ac{PC},
+and actual value in the \ac{PC} is to be written into the \ac{PC} (which is 8 bytes ahead)
 and jump to the label \IT{loc\_180} will happen,
 this is 8 bytes ahead of the point where \TT{ADDCC} instruction is.}
 
-\IFRU{В случае, если}{In case of} $a=1$, \IFRU{тогда в \PC запишется}{then} 
-$PC+8+a*4 = PC+8+1*4 = PC+16 = 0x184$\IFRU{, это адрес метки \IT{loc\_184}}{will be written to the \PC,
+\IFRU{В случае, если}{In case of} $a=1$, \IFRU{тогда в \ac{PC} запишется}{then} 
+$PC+8+a*4 = PC+8+1*4 = PC+16 = 0x184$\IFRU{, это адрес метки \IT{loc\_184}}{will be written to the \ac{PC},
 this is the address of the \IT{loc\_184} label}.
 
-\IFRU{При каждой добавленной к $a$ единице, итоговый \PC увеличивается на $4$.}
-{With every $1$ added to $a$, resulting \PC increasing by $4$.}
+\IFRU{При каждой добавленной к $a$ единице, итоговый \ac{PC} увеличивается на $4$.}
+{With every $1$ added to $a$, resulting \ac{PC} increasing by $4$.}
 \IFRU{$4$ это как раз длина инструкции  в режиме ARM и одновременно с этим, 
 длина каждой инструкции \TT{B}, их здесь следует 5 в ряд.}
 {$4$ is also instruction length in ARM mode and also, length of each \TT{B} instruction length,
@@ -121,10 +121,10 @@ corresponding case.}
 %TODO дописать когда-то?
 
 \index{ARM!\Registers!Link Register}
-\IFRU{Но можно отметить, что эта функция использует регистр \LR как указатель на таблицу.}
-{But it is interesting to note the function uses \LR register as a pointer to the table.}
-\IFRU{Действительно, после вызова этой функции, в \LR был записан
-адрес после инструкции}{Indeed, after this function calling, \LR will contain address after} \\ 
+\IFRU{Но можно отметить, что эта функция использует регистр \ac{LR} как указатель на таблицу.}
+{But it is interesting to note the function uses \ac{LR} register as a pointer to the table.}
+\IFRU{Действительно, после вызова этой функции, в \ac{LR} был записан
+адрес после инструкции}{Indeed, after this function calling, \ac{LR} will contain address after} \\ 
 \TT{``BL \_\_ARM\_common\_switch8\_thumb''}\IFRU{, а там как раз и начинается таблица.}
 { instruction, and the table is beginning right there.}
 
