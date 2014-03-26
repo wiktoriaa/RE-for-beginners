@@ -6,32 +6,32 @@
 \lstinputlisting[caption=MSVC 2012 x64]{patterns/01_helloworld/MSVC_x64.asm}
 
 \IFRU{В x86-64 все регистры были расширены до 64-х бит и теперь имеют префикс \TT{R-}}
-{As of x86-64, all registers were extended to 64-bit and now have \TT{R-} prefix}.
+{As of x86-64, all registers were extended to 64-bit and now have a \TT{R-} prefix}.
 \index{fastcall}
 \IFRU{Чтобы поменьше задействовать стек (иными словами, поменьше обращаться к внешней памяти), уже давно имелся
 довольно популярный метод передачи аргументов ф-ции через регистры}
-{In order to use stack not that often (in other words, to access external memory not that often), there exist
+{In order to use the stack less often (in other words, to access external memory less often), there exists
 a popular way to pass function arguments via registers} (fastcall: \ref{fastcall}).
 \IFRU{Т.е., часть аргументов ф-ции передается через регистры и часть}{I.e., one part
 of function arguments are passed in registers, other part}\EMDASH{}\IFRU{через стек}{via stack}.
 \IFRU{В Win64 первые 4 аргумента ф-ции передаются через регистры}{In Win64, 4 function arguments
 are passed in} \RCX, \RDX, \Reg{8}, \Reg{9}\EN{ registers}.
 \IFRU{Это мы здесь и видим: указатель на строку в \printf теперь передается не через стек, а через регистр \RCX}
-{That is what we see here: a pointer to the string for \printf is now passed not in stack, but in \RCX register}.
+{That is what we see here: a pointer to the string for \printf is now passed not in stack, but in the \RCX register}.
 
 \IFRU{Указатели теперь 64-битные, так что они передаются через 64-битные части регистров (имеющие префикс \TT{R-})}
-{Pointers are 64-bit now, so they are passed in 64-bit part of registers (which have \TT{R-} prefix)}.
+{Pointers are 64-bit now, so they are passed in the 64-bit part of registers (which have the \TT{R-} prefix)}.
 \IFRU{Но для обратной совместимости, к регистрам можно обращаться и к 32-битным частям, используя префикс \TT{E-}}
-{But for the backward compatibility, it is still possible to access 32-bit parts, using \TT{E-} prefix}.
+{But for backward compatibility, it is still possible to access 32-bit parts, using the \TT{E-} prefix}.
 
-\IFRU{Вот, например, как выглядит регистр}{That is how} \RAX/\EAX/\AX/\AL 
+\IFRU{Вот, например, как выглядит регистр}{This is how} \RAX/\EAX/\AX/\AL 
 \IFRU{в 64-битных x86-совместимых \ac{CPU}}{looks like in 64-bit x86-compatible \ac{CPU}s}:
 
 \RegTableOne{RAX}{EAX}{AX}{AH}{AL}
 
 \IFRU{Ф-ция \main возвращает значение типа \Tint, который, в Си, вероятно для лучшей совместимости и портабельности,
 оставили 32-битным, вот почему в конце ф-ции \main обнуляется не \RAX а \EAX, т.е., 32-битная часть регистра}
-{\main function returns \Tint{}-typed value, which is, in C \ac{PL}, for the better backward compatibility
-and portability, is still 32-bit, so that is why \EAX register is cleared at the function end (i.e., 32-bit
+{The \main function returns an \Tint{}-typed value, which is, in the C \ac{PL}, for better backward compatibility
+and portability, still 32-bit, so that is why the \EAX register is cleared at the function end (i.e., 32-bit
 part of register) instead of \RAX{}}.
 
