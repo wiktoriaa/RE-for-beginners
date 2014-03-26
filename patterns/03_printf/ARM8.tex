@@ -46,14 +46,14 @@ void printf_main2()
 
 \index{ARM!\Instructions!STR}
 \IFRU{Самая первая инструкция}{The very first} \TT{``STR LR, [SP,\#var\_4]!''} 
-\IFRU{сохраняет в стеке \LR, ведь нам придется использовать этот регистр для вызова \printf}
-{instruction saves \LR on the stack, because we will use this register for the \printf call}.
+\IFRU{сохраняет в стеке \ac{LR}, ведь нам придется использовать этот регистр для вызова \printf}
+{instruction saves \ac{LR} on the stack, because we will use this register for the \printf call}.
 
 \index{ARM!\Instructions!SUB}
 \IFRU{Вторая инструкция}{The second} \TT{``SUB SP, SP, \#0x14''}
-\IFRU{уменьшает \glslink{stack pointer}{указатель стека} \SP, но, на самом деле, эта процедура нужна для выделения в локальном стеке места размером \TT{0x14} ($20$) байт}
+\IFRU{уменьшает \glslink{stack pointer}{указатель стека} \ac{SP}, но, на самом деле, эта процедура нужна для выделения в локальном стеке места размером \TT{0x14} ($20$) байт}
 {instruction decreases
-\SP, the \gls{stack pointer}, in order to 
+\ac{SP}, the \gls{stack pointer}, in order to 
 allocate \TT{0x14} ($20$) bytes on the stack}.
 \IFRU{Действительно, нам нужно передать 5 32-битных значений через стек в \printf, каждое значение занимает 4 байта, а $5*4=20$ ~--- как раз}
 {Indeed, we need to pass 5 32-bit values via the stack to the \printf function, and each one occupies 4 bytes, that is $5*4=20$~---exactly}.
@@ -89,8 +89,8 @@ writes \Reg{0}-\Reg{3} registers contents at the point in memory to which \TT{R1
 this value, with the help of} \TT{``STR R0, [SP,\#0x18+var\_18]''} \IFRU{попадает в стек}{instruction, is saved
 on the stack}.
 \IT{var\_18} \IFRU{равен}{is} $-0x18$, \IFRU{смещение будет $0$}{offset will be $0$}, 
-\IFRU{так что, значение из регистра \Reg{0} ($4$) запишется туда, куда указывает \SP}
-{so, the value from the \Reg{0} register ($4$) will be written to the point where \SP is pointing to}.
+\IFRU{так что, значение из регистра \Reg{0} ($4$) запишется туда, куда указывает \ac{SP}}
+{so, the value from the \Reg{0} register ($4$) will be written to the point where \ac{SP} is pointing to}.
 
 \item \IFRU{Передача 1, 2 и 3 через регистры}{Passing 1, 2 and 3 via registers}:
 
@@ -106,9 +106,9 @@ registers right before the \printf call}, \IFRU{а остальные 5 знач
 \index{Function epilogue}
 \item \IFRU{Эпилог функции}{Function epilogue}:
 
-\IFRU{Инструкция}{The} \TT{``ADD SP, SP, \#0x14''} \IFRU{возвращает \SP на прежнее место, 
+\IFRU{Инструкция}{The} \TT{``ADD SP, SP, \#0x14''} \IFRU{возвращает \ac{SP} на прежнее место, 
 аннулируя таким образом всё, что было записано в стеке}
-{instruction returns the \SP pointer back to its former point,
+{instruction returns the \ac{SP} pointer back to its former point,
 thus cleaning the stack}.
 \IFRU{Конечно, то что было записано в стек, там пока и останется, но всё это будет многократно 
 перезаписано во время исполнения последующих функций}
@@ -116,9 +116,9 @@ thus cleaning the stack}.
 rewritten during the execution of subsequent functions}.
 
 \index{ARM!\Instructions!LDR}
-\IFRU{Инструкция}{The} \TT{``LDR PC, [SP+4+var\_4],\#4''} \IFRU{загружает в \PC сохраненное значение \LR из стека,
+\IFRU{Инструкция}{The} \TT{``LDR PC, [SP+4+var\_4],\#4''} \IFRU{загружает в \ac{PC} сохраненное значение \ac{LR} из стека,
 обеспечивая таким образом выход из функции}
-{instruction loads the saved \LR value from the stack into the \PC register, thus causing
+{instruction loads the saved \ac{LR} value from the stack into the \ac{PC} register, thus causing
 the function to exit}.
 
 \end{itemize}
@@ -197,9 +197,9 @@ __text:00002958 80 80 BD E8                 LDMFD           SP!, {R7,PC}
 exception of} \TT{STMFA} (Store Multiple Full Ascending) 
 \IFRU{~--- это синоним инструкции}{instruction, it is synonym to} 
 \TT{STMIB} (Store Multiple Increment Before) \EN{instruction}. 
-\IFRU{Эта инструкция увеличивает \SP и только затем записывает в память значение очередного регистра, 
+\IFRU{Эта инструкция увеличивает \ac{SP} и только затем записывает в память значение очередного регистра, 
 но не наоборот}{This
-instruction increasing value in the \SP register and only then writing next register value into memory, but not vice versa}.
+instruction increasing value in the \ac{SP} register and only then writing next register value into memory, but not vice versa}.
 
 \IFRU{Второе, что бросается в глаза, это то, что инструкции как будто бы расположены случайно}{Another thing
 we easily spot is the instructions are ostensibly located randomly}.
