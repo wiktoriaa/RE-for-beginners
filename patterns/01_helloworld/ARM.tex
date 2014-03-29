@@ -71,8 +71,8 @@ instruction's address without effort. This feature will be discussed in switch()
 only 8 registers are accessible and one needs several thumb instructions for doing some operations when you only need one in ARM mode}.
 
 \IFRU{Начиная с ARMv7, имеется также поддержка инструкций thumb-2. Это thumb, расширенный до поддержки куда большего числа инструкций}
-{Starting at ARMv7 the thumb-2 instruction set is also present. 
-This is an extended thumb which supports a much larger instruction set}.
+{Starting from ARMv7 the thumb-2 instruction set is also available. 
+This is an extended thumb mode that supports a much larger instruction set}.
 \IFRU{Распространено заблуждение, что thumb-2 ~--- это смесь ARM и thumb. Это не верно. Просто thumb-2 был дополнен до
 более полной поддержки возможностей процессора, что теперь может легко конкурировать с режимом ARM.}
 {There is a common misconception that thumb-2 is a mix of ARM and thumb. This is not correct. 
@@ -100,8 +100,8 @@ compete with ARM mode.}
 actually shows the} \TT{``PUSH \{r4,lr\}''}\EN{ instruction}.
 \IFRU{Но это не совсем точно, инструкция \PUSH доступна только в режиме thumb, поэтому,
 во избежание путаницы, я предложил работать в \IDA}
-{But it is not quite correct. \PUSH instruction are only available in thumb mode.
-So, to make things less messy, I offered to work in \IDA}.
+{But it is not quite correct. The \PUSH instruction is only available in thumb mode.
+So, to make things less messy, that is why I suggested working in \IDA}.
 
 \IFRU{Итак, эта инструкция уменьшает \ac{SP}, чтобы он указывал на место в стеке, свободное для записи
 новых значений, затем записывает значения регистров \Reg{4} и \ac{LR} 
@@ -207,7 +207,7 @@ or something like that}.
 \index{ARM!DCB}
 \TT{DCB}\IFRU{ ~--- директива ассемблера, описывающая массивы байт или ASCII-строк, аналог директивы DB в 
 x86-ассемблере}
-{~---assembly language directive defining an array of bytes or ASCII strings, akin to the DB directive 
+{~is an assembly language directive defining an array of bytes or ASCII strings, akin to the DB directive 
 in x86-assembly language}.
 
 \subsection{\NonOptimizingKeil: \ThumbMode}
@@ -245,11 +245,11 @@ the lower 11 bits of the offset}.
 \IFRU{Как я уже упоминал, все инструкции в thumb-режиме имеют длину 2 байта (или 16 бит)}
 {As I mentioned, all instructions in thumb mode have a size of 2 bytes (or 16 bits)}.
 \IFRU{Поэтому невозможна такая ситуация, когда thumb-инструкция начинается по нечетному адресу}
-{This mean it is impossible for a thumb-instruction to be at an odd address whatsoever}.
+{This means it is impossible for a thumb-instruction to be at an odd address whatsoever}.
 \IFRU{Учитывая сказанное, последний бит адреса можно не кодировать}
 {Given the above, the last address bit may be omitted while encoding instructions}.
 \IFRU{Таким образом, в итоге, в thumb-инструкции \TT{BL} кодируется смещение}
-{Summarizing, in the \TT{BL} thumb-instruction} $\pm{}\approx{}2M$ 
+{In summary, in the \TT{BL} thumb-instruction} $\pm{}\approx{}2M$ 
 \IFRU{от текущего адреса}{can be encoded as the offset from the current address}.
 
 \IFRU{Остальные инструкции в функции: \PUSH и \POP работают почти так же, как и описанные \TT{STMFD}/\TT{LDMFD}, только регистр \ac{SP} здесь не указывается явно}
@@ -387,12 +387,12 @@ then the second and finally the first (due to different \gls{endianness})}.
 {~---it writes a 16-bit value into the lower part of the \Reg{0} register}.
 
 \IFRU{Еще}{Also,} \TT{``MOVT.W R0, \#0''}\IFRU{ ~--- эта инструкция работает так же, как и}
-{~---this instruction works just like} 
+{~works just like} 
 \TT{MOVT} \IFRU{из предыдущего примера, но она работает в}{from the previous example but it works in} thumb-2.
 
 \index{ARM!\IFRU{переключение режимов}{mode switching}}
 \index{ARM!\Instructions!BLX}
-\IFRU{Помимо прочих отличий, здесь используется инструкция}{Among other differences, here} \TT{BLX} \IFRU{вместо}{instruction is used instead of} \TT{BL}.
+\IFRU{Помимо прочих отличий, здесь используется инструкция}{Among other differences, here the} \TT{BLX} \IFRU{вместо}{instruction is used instead of} \TT{BL}.
 \IFRU{Отличие в том, что помимо сохранения адреса возврата в регистре \ac{LR} и передаче управления в функцию \puts, происходит смена режима процессора с thumb на ARM, либо наоборот}
 {The difference is that, besides saving the \ac{RA} in the \ac{LR} register and passing control to the \puts function, the processor is also switching from thumb mode to ARM (or back)}.
 \IFRU{Здесь это нужно потому, что инструкция, куда ведет переход, выглядит так (она закодирована в режиме ARM)}{This instruction is placed here since the instruction to which control is passed looks like (it is encoded in ARM mode)}:
@@ -404,7 +404,7 @@ __symbolstub1:00003FEC 44 F0 9F E5     LDR  PC, =__imp__puts
 
 \IFRU{Итак, внимательный читатель может задать справедливый вопрос: почему бы не вызывать \puts сразу в 
 том же месте кода, где он нужен?}
-{So, the observant reader may ask: why not call \puts right at the point in the code where it needed?}
+{So, the observant reader may ask: why not call \puts right at the point in the code where it is needed?}
 
 \IFRU{Но это не очень выгодно (в плане экономия места) и вот почему}
 {Because it is not very space-efficient}.
@@ -413,7 +413,7 @@ __symbolstub1:00003FEC 44 F0 9F E5     LDR  PC, =__imp__puts
 \IFRU{Практически любая программа использует внешние динамические библиотеки (будь то DLL в Windows, .so в *NIX 
 либо .dylib в Mac OS X)}{Almost any program uses external dynamic libraries (like DLL in Windows, .so in *NIX or .dylib in Mac OS X)}.
 \IFRU{В динамических библиотеках находятся часто используемые библиотечные функции, в том числе стандартная функция Си \puts}
-{Often used library functions are stored in dynamic libraries, including the standard C-function \puts}.
+{Often-used library functions are stored in dynamic libraries, including the standard C-function \puts}.
 
 \index{Relocation}
 \IFRU{В исполняемом бинарном файле}{In an executable binary file} 
