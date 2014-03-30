@@ -25,7 +25,7 @@ add esp, 12 ; returns ESP
 \end{lstlisting}
 
 \section{stdcall}
-\label{stdcall}
+\label{sec:stdcall}
 \index{stdcall}
 
 \newcommand{\SIZEOFINT}{\IFRU{Размер переменной типа \Tint ~--- 4 в x86-системах и 8 в x64-системах}
@@ -75,7 +75,7 @@ int __stdcall f2 (int a, int b, int c)
 number of function arguments can be easily deduced from} \TT{RETN n} \IFRU{просто разделите
 $n$ на 4}{instruction: just divide $n$ by 4}.
 
-\lstinputlisting[caption=MSVC 2010]{calling_conventions/stdcall_ex.asm}
+\lstinputlisting[caption=MSVC 2010]{OS/calling_conventions/stdcall_ex.asm}
 
 \subsection{\IFRU{Функции с переменным количеством аргументов}{Variable arguments number functions}}
 
@@ -151,7 +151,7 @@ int __fastcall f3 (int a, int b, int c)
 
 \IFRU{Вот как он будет скомпилирован}{Here is how it will be compiled}:
 
-\lstinputlisting[caption=MSVC 2010 /Ox /Ob0]{calling_conventions/fastcall_ex.asm}
+\lstinputlisting[caption=MSVC 2010 /Ox /Ob0]{OS/calling_conventions/fastcall_ex.asm}
 
 \IFRU{Видно что \glslink{callee}{вызываемая ф-ция} сама возвращает}
 {We see that a \gls{callee} returns} \ac{SP} 
@@ -238,9 +238,9 @@ but larger may save its values for further use.}
 
 \IFRU{Пример}{Example}:
 
-\lstinputlisting{calling_conventions/x64.c}
+\lstinputlisting{OS/calling_conventions/x64.c}
 
-\lstinputlisting[caption=MSVC 2012 /0b]{calling_conventions/x64_MSVC_Ob.asm}
+\lstinputlisting[caption=MSVC 2012 /0b]{OS/calling_conventions/x64_MSVC_Ob.asm}
 
 \index{Scratch space}
 \IFRU{Здесь мы легко видим как 7 аргументов передаются: 4 через регистры и остальные 3 через стек}
@@ -256,7 +256,7 @@ which will otherwise be occupied by arguments until function execution end}.
 \IFRU{Выделение ``scratch space'' в стеке лежит на ответственности вызывающей ф-ции}
 {The ``scratch space'' allocation in the stack is on the caller's shoulders}.
 
-\lstinputlisting[caption=MSVC 2012 /Ox /0b]{calling_conventions/x64_MSVC_Ox_Ob.asm}
+\lstinputlisting[caption=MSVC 2012 /Ox /0b]{OS/calling_conventions/x64_MSVC_Ox_Ob.asm}
 
 \IFRU{Если компилировать этот пример с оптимизацией, то выйдет почти то же самое, только ``scratch space''
 не используется, потому что незачем}
@@ -286,7 +286,7 @@ used instead of 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}) and there are no ``
 but \gls{callee}
 may save register values in the stack, if it needs to}.
 
-\lstinputlisting[caption=GCC 4.7.3 -O3]{calling_conventions/x64_linux_O3.s}
+\lstinputlisting[caption=GCC 4.7.3 -O3]{OS/calling_conventions/x64_linux_O3.s}
 
 \IFRU{N.B.: здесь значения записываются в 32-битные части регистров (например EAX) а не в весь 64-битный
 регистр (RAX).
@@ -320,9 +320,9 @@ may ask, what will happen if to modify arguments?}
 ни разу).}
 {Calling functions are not use them after \gls{callee} exit (I have not seen any opposite case in my practice).}
 
-\lstinputlisting{calling_conventions/change_arguments.c}
+\lstinputlisting{OS/calling_conventions/change_arguments.c}
 
-\lstinputlisting[caption=MSVC 2012]{calling_conventions/change_arguments.asm}
+\lstinputlisting[caption=MSVC 2012]{OS/calling_conventions/change_arguments.asm}
 
 \IFRU{Следовательно, модифицировать аргументы ф-ции можно запросто.}{So yes, one may modify arguments easily.}
 \IFRU{Разумеется, если это не}{Of course, if it is not} \IT{references} \InENRU \Cpp{} (\ref{cpp_references}),
