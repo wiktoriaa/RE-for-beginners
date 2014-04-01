@@ -1,0 +1,87 @@
+\chapter{\IFRU{Модификация исполняемых файлов}{Executable files patching}}
+
+\section{\IFRU{Текстовые строки}{Text strings}}
+
+\IFRU{Сишные строки проще всего модифицировать (если они не зашифрованы) в любом шестнадцатеричном редакторе}
+{C strings are most easily patched (unless they are encrypted) in any hex editor}.
+\IFRU{Эта техника доступна даже для тех, кто вовсе не разбирается в машинном коде и форматах исполняемых
+файлов}{This technique available even for those who are not aware of machine code and executabe file formats}.
+\IFRU{Новая строка не должна быть длиннее старой, потому что имеется риск затереть какую-то другую переменную
+или код}{New string should not be bigger than old, because it's a risk to overwrite some other value or code
+there}.
+\index{MS-DOS}
+\IFRU{Используя этот метод, очень много ПО было \IT{локализовано} во времена MS-DOS, как минимум,
+в странах бывшего СССР, в 80-х и 90-х}
+{Using this method, a lot of software was \IT{localized} in MS-DOS era, at least in ex-USSR countries in 80's
+and 90's}.
+\IFRU{Отсюда наличие очень странных аббревиатур и сокращений в \IT{локализованном} ПО: 
+там просто не было места для более
+длинных строк}{It was a reason why so weird abbreviations was present in \IT{localized} software: it was no room for
+longer strings}.
+
+\index{Borland Delphi}
+\IFRU{В строках в Delphi, длина строки также должна быть поправлена, если нужно}
+{As of Delphi strings, a string size should also be corrected, if needed}.
+
+\section{x86\IFRU{-код}{ code}}
+
+\IFRU{Часто необходимые задачи}{Frequent patching tasks are}:
+
+\begin{itemize}
+
+\item \IFRU{Часто нужно просто запретить исполнение какой-либо инструкции}
+{One of the most frequently job is to disable some instruction}.
+\IFRU{И чаще всего, это можно сделать заполняя её байтом}{It is often done by filling it by byte} 
+\TT{0x90} (\ac{NOP}).
+
+\item \IFRU{Условные переходы, имеющие опкод вроде}{Conditional jumps, which have opcode like} \TT{74 xx} (\JZ), 
+\IFRU{так же могут быть заполнены двумя \ac{NOP}-ами}{may also be filled by two \ac{NOP}s}.
+\IFRU{Также возможно запретить исполнение условного перехода записав 0 во второй байт}
+{It is also possible to disable conditional jump by writing 0 at the second byte} (\IT{jump offset}).
+
+\item \IFRU{Еще одна часто необходимая задача это сделать условный переход всегда срабатывающим}
+{Another frequent job is to make conditional jump to trigger always}: 
+\IFRU{это возможно при помощи записи}{this can be done by writing} \TT{0xEB} \IFRU{вместо опкода, это значит}
+{instead of opcode, it mean} \JMP.
+
+\index{stdcall}
+\item \IFRU{Исполнение ф-ции может быть запрещено, если записать}{A function execution can be disabled by writing}
+\RETN (0xC3) \IFRU{в её начале}{at its beginning}.
+\IFRU{Это справедливо для всех ф-ций кроме}{This is true for all functions excluding} \TT{stdcall} 
+(\ref{sec:stdcall}).
+\IFRU{При модификации ф-ций}{While patching} \TT{stdcall}\IFRU{, нужно в начале определить количество аргументов 
+(например, отыскав \RETN в этой ф-ции),
+и использовать}{ functions, one should determine number of arguments (for example, 
+by finding \RETN in this function), 
+and use} \RETN \IFRU{с 16-битным аргументом}{with 16-bit argument} (0xC2).
+
+\item \IFRU{Иногда, запрещенная ф-ция должна возвращать}{Sometimes, a disabled functions should return} 0 \OrENRU 1.
+\IFRU{Это можно сделать при помощи}{This can be done by} \TT{MOV EAX, 0} \OrENRU \TT{MOV EAX, 1}, 
+\IFRU{но это слишком многословно}{but it's slightly verbose}.
+\IFRU{Способ получше это}{Better way is} \TT{XOR EAX, EAX} (2 \IFRU{байта}{bytes}) \OrENRU 
+\TT{XOR EAX, EAX / INC EAX} (3 \IFRU{байта}{bytes}).
+
+\end{itemize}
+
+\IFRU{ПО может быть защищено от модификаций}{A software may be protected against modifications}.
+\IFRU{Эта защита чаще всего реализуется путем чтения кода и вычисления контрольной суммы}
+{This protection is often done by reading executable code and doing some checksumming}.
+\IFRU{Следовательно, код должен быть прочитан перед тем как защита сработает}{Therefore, 
+the code should be read before protection will be triggered}.
+\IFRU{Это можно определить установив брякпойнт на чтение памяти}
+{This can be determined by setting breakpoint on reading memory}.
+
+\index{tracer}
+\IFRU{В \tracer имеется опция BPM для этого}{\tracer has BPM option for this}.
+
+\IFRU{Релоки в исполняемых PE-файлах}{PE executable file relocs} (\ref{subsec:relocs}) 
+\IFRU{не должны быть тронуты, потому что загрузчик Windows перезапишет ваш новый код}
+{should not be touched while patching, 
+because Windows loader will overwrite a new code}.
+\index{Hiew}
+(\IFRU{Они выделяются серым в Hiew, например}{They are grayed in Hiew, for example}:
+\figname \ref{fig:scanf_ex3_hiew_1}).
+\IFRU{В качестве последней меры, можно записать \JMP для обхода релока, либо же придется модифицировать таблицу
+релоков}{As a last resort, it is possible to write jumps circumventing relocs, 
+or one will need to edit relocs table}.
+
