@@ -37,6 +37,7 @@
 \usepackage{fancyvrb}
 \usepackage{xspace}
 \usepackage{float}
+\usepackage{tabularx}
 \usepackage{framed}
 \usepackage{ccicons}
 \usepackage[nottoc]{tocbibind}
@@ -131,8 +132,8 @@
 \frontmatter
 
 \begin{titlepage}
-%\input{cover}
-%\newpage
+\input{cover}
+\newpage
 
 \begin{center}
 \vspace*{\fill}
@@ -200,20 +201,21 @@ To view a copy of this license, visit} \url{http://creativecommons.org/licenses/
 
 \include{acronyms}
 
+\part*{\IFRU{Прочее}{Other}} % FIXME
+\addcontentsline{toc}{part}{\IFRU{Прочее}{Other}}
+
 %\bibliographystyle{alpha}
 \bibliographystyle{plain} % FIXME
-\IFRU{
-	\bibliography{C_book_RU,books,articles,usenet,misc}
-}
-{
-	\bibliography{C_book_EN,books,articles,usenet,misc}
-}
+\phantomsection
+\bibliography{C_book_\LANG,books,articles,usenet,misc}
 
 \clearpage
-\addcontentsline{toc}{part}{\IFRU{Глоссарий}{Glossary}}
+\phantomsection
+\addcontentsline{toc}{chapter}{\IFRU{Глоссарий}{Glossary}}
 \printglossaries
 
 \clearpage
+\phantomsection
 \printindex
 
 \end{document}
