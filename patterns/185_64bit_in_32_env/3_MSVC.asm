@@ -1,4 +1,4 @@
-_a$ = 8							; size = 8
+_a$ = 8		; size = 8
 _f6	PROC
 	mov	eax, DWORD PTR _a$[esp-4]
 	mov	edx, DWORD PTR _a$[esp]

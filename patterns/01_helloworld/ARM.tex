@@ -37,13 +37,13 @@ armcc.exe --arm --c90 -O0 1.c
 
 \begin{lstlisting}[caption=\NonOptimizingKeil + \ARMMode + \IDA]
 .text:00000000             main
-.text:00000000 10 40 2D E9                 STMFD   SP!, {R4,LR}
-.text:00000004 1E 0E 8F E2                 ADR     R0, aHelloWorld ; "hello, world"
-.text:00000008 15 19 00 EB                 BL      __2printf
-.text:0000000C 00 00 A0 E3                 MOV     R0, #0
-.text:00000010 10 80 BD E8                 LDMFD   SP!, {R4,PC}
+.text:00000000 10 40 2D E9    STMFD   SP!, {R4,LR}
+.text:00000004 1E 0E 8F E2    ADR     R0, aHelloWorld ; "hello, world"
+.text:00000008 15 19 00 EB    BL      __2printf
+.text:0000000C 00 00 A0 E3    MOV     R0, #0
+.text:00000010 10 80 BD E8    LDMFD   SP!, {R4,PC}
 
-.text:000001EC 68 65 6C 6C+aHelloWorld     DCB "hello, world",0    ; DATA XREF: main+4
+.text:000001EC 68 65 6C 6C+aHelloWorld  DCB "hello, world",0    ; DATA XREF: main+4
 \end{lstlisting}
 
 \index{ARM!\ARMMode}
@@ -222,13 +222,13 @@ armcc.exe --thumb --c90 -O0 1.c
 
 \begin{lstlisting}[caption=\NonOptimizingKeil + \ThumbMode + \IDA]
 .text:00000000             main
-.text:00000000 10 B5                       PUSH    {R4,LR}
-.text:00000002 C0 A0                       ADR     R0, aHelloWorld ; "hello, world"
-.text:00000004 06 F0 2E F9                 BL      __2printf
-.text:00000008 00 20                       MOVS    R0, #0
-.text:0000000A 10 BD                       POP     {R4,PC}
+.text:00000000 10 B5          PUSH    {R4,LR}
+.text:00000002 C0 A0          ADR     R0, aHelloWorld ; "hello, world"
+.text:00000004 06 F0 2E F9    BL      __2printf
+.text:00000008 00 20          MOVS    R0, #0
+.text:0000000A 10 BD          POP     {R4,PC}
 
-.text:00000304 68 65 6C 6C+aHelloWorld     DCB "hello, world",0    ; DATA XREF: main+2
+.text:00000304 68 65 6C 6C+aHelloWorld  DCB "hello, world",0    ; DATA XREF: main+2
 \end{lstlisting}
 
 \IFRU{Сразу бросаются в глаза двухбайтные (16-битные) опкоды ~--- это, как я уже упоминал, thumb}
@@ -265,16 +265,16 @@ Xcode 4.6.3 \IFRU{без включенной оптимизации выдае�
 
 \begin{lstlisting}[caption=\OptimizingXcode + \ARMMode]
 __text:000028C4             _hello_world
-__text:000028C4 80 40 2D E9                 STMFD           SP!, {R7,LR}
-__text:000028C8 86 06 01 E3                 MOV             R0, #0x1686
-__text:000028CC 0D 70 A0 E1                 MOV             R7, SP
-__text:000028D0 00 00 40 E3                 MOVT            R0, #0
-__text:000028D4 00 00 8F E0                 ADD             R0, PC, R0
-__text:000028D8 C3 05 00 EB                 BL              _puts
-__text:000028DC 00 00 A0 E3                 MOV             R0, #0
-__text:000028E0 80 80 BD E8                 LDMFD           SP!, {R7,PC}
+__text:000028C4 80 40 2D E9   STMFD           SP!, {R7,LR}
+__text:000028C8 86 06 01 E3   MOV             R0, #0x1686
+__text:000028CC 0D 70 A0 E1   MOV             R7, SP
+__text:000028D0 00 00 40 E3   MOVT            R0, #0
+__text:000028D4 00 00 8F E0   ADD             R0, PC, R0
+__text:000028D8 C3 05 00 EB   BL              _puts
+__text:000028DC 00 00 A0 E3   MOV             R0, #0
+__text:000028E0 80 80 BD E8   LDMFD           SP!, {R7,PC}
 
-__cstring:00003F62 48 65 6C 6C+aHelloWorld_0   DCB "Hello world!",0
+__cstring:00003F62 48 65 6C 6C+aHelloWorld_0  DCB "Hello world!",0
 \end{lstlisting}
 
 \IFRU{Инструкции}{The instructions} \TT{STMFD} \AndENRU \TT{LDMFD} \IFRU{нам уже знакомы}{are familiar to us}.
@@ -343,18 +343,18 @@ at the end of a string, so we do not see it here.}}.
 
 \begin{lstlisting}[caption=\OptimizingXcode + \ThumbTwoMode]
 __text:00002B6C                   _hello_world
-__text:00002B6C 80 B5                             PUSH            {R7,LR}
-__text:00002B6E 41 F2 D8 30                       MOVW            R0, #0x13D8
-__text:00002B72 6F 46                             MOV             R7, SP
-__text:00002B74 C0 F2 00 00                       MOVT.W          R0, #0
-__text:00002B78 78 44                             ADD             R0, PC
-__text:00002B7A 01 F0 38 EA                       BLX             _puts
-__text:00002B7E 00 20                             MOVS            R0, #0
-__text:00002B80 80 BD                             POP             {R7,PC}
+__text:00002B6C 80 B5          PUSH            {R7,LR}
+__text:00002B6E 41 F2 D8 30    MOVW            R0, #0x13D8
+__text:00002B72 6F 46          MOV             R7, SP
+__text:00002B74 C0 F2 00 00    MOVT.W          R0, #0
+__text:00002B78 78 44          ADD             R0, PC
+__text:00002B7A 01 F0 38 EA    BLX             _puts
+__text:00002B7E 00 20          MOVS            R0, #0
+__text:00002B80 80 BD          POP             {R7,PC}
 
 ...
 
-__cstring:00003E70 48 65 6C 6C 6F 20+aHelloWorld     DCB "Hello world!",0xA,0
+__cstring:00003E70 48 65 6C 6C 6F 20+aHelloWorld  DCB "Hello world!",0xA,0
 \end{lstlisting}
 
 \index{ThumbTwoMode}

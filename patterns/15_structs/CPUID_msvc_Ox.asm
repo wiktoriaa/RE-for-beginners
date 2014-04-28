@@ -1,6 +1,6 @@
-_b$ = -16           ; size = 16
+_b$ = -16  ; size = 16
 _main    PROC
-    sub    esp, 16                    ; 00000010H
+    sub    esp, 16
     push   ebx
 
     xor    ecx, ecx
@@ -15,50 +15,50 @@ _main    PROC
 
     mov    esi, DWORD PTR _b$[esp+24]
     mov    eax, esi
-    and    eax, 15                    ; 0000000fH
+    and    eax, 15
     push   eax
     push   OFFSET $SG15435 ; 'stepping=%d', 0aH, 00H
     call   _printf
 
     mov    ecx, esi
     shr    ecx, 4
-    and    ecx, 15                    ; 0000000fH
+    and    ecx, 15
     push   ecx
     push   OFFSET $SG15436 ; 'model=%d', 0aH, 00H
     call   _printf
 
     mov    edx, esi
     shr    edx, 8
-    and    edx, 15                    ; 0000000fH
+    and    edx, 15
     push   edx
     push   OFFSET $SG15437 ; 'family_id=%d', 0aH, 00H
     call   _printf
 
     mov    eax, esi
-    shr    eax, 12                    ; 0000000cH
+    shr    eax, 12
     and    eax, 3
     push   eax
     push   OFFSET $SG15438 ; 'processor_type=%d', 0aH, 00H
     call   _printf
 
     mov    ecx, esi
-    shr    ecx, 16                    ; 00000010H
-    and    ecx, 15                    ; 0000000fH
+    shr    ecx, 16
+    and    ecx, 15
     push   ecx
     push   OFFSET $SG15439 ; 'extended_model_id=%d', 0aH, 00H
     call   _printf
 
-    shr    esi, 20                    ; 00000014H
-    and    esi, 255                ; 000000ffH
+    shr    esi, 20
+    and    esi, 255
     push   esi
     push   OFFSET $SG15440 ; 'extended_family_id=%d', 0aH, 00H
     call   _printf
-    add    esp, 48                    ; 00000030H
+    add    esp, 48
     pop    esi
 
     xor    eax, eax
     pop    ebx
 
-    add    esp, 16                    ; 00000010H
+    add    esp, 16
     ret    0
 _main    ENDP

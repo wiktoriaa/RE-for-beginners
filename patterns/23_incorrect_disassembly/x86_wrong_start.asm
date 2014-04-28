@@ -3,9 +3,7 @@
  dec     dword ptr [ebp-2CF7Bh]
  inc     dword ptr [ebx-7A76F33Ch]
  fdiv    st(4), st
-;-------------------------------------------------------------
  db 0FFh
-;-------------------------------------------------------------
  dec     dword ptr [ecx-21F7Bh]
  dec     dword ptr [ecx-22373h]
  dec     dword ptr [ecx-2276Bh]
@@ -13,14 +11,11 @@
  dec     dword ptr [ecx-22F4Bh]
  dec     dword ptr [ecx-23343h]
  jmp     dword ptr [esi-74h]
-;-------------------------------------------------------------
  xchg    eax, ebp
  clc
  std
-;-------------------------------------------------------------
  db 0FFh
  db 0FFh
-;-------------------------------------------------------------
  mov     word ptr [ebp-214h], cs
  mov     word ptr [ebp-238h], ds
  mov     word ptr [ebp-23Ch], es

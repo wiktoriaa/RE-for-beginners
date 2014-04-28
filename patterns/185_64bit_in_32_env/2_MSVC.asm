@@ -1,5 +1,5 @@
-_a$ = 8							; size = 8
-_b$ = 16						; size = 8
+_a$ = 8		; size = 8
+_b$ = 16	; size = 8
 _f3	PROC
 	push	DWORD PTR _b$[esp]
 	push	DWORD PTR _b$[esp]
@@ -9,8 +9,8 @@ _f3	PROC
 	ret	0
 _f3	ENDP
 
-_a$ = 8							; size = 8
-_b$ = 16						; size = 8
+_a$ = 8		; size = 8
+_b$ = 16	; size = 8
 _f4	PROC
 	push	DWORD PTR _b$[esp]
 	push	DWORD PTR _b$[esp]
@@ -20,8 +20,8 @@ _f4	PROC
 	ret	0
 _f4	ENDP
 
-_a$ = 8							; size = 8
-_b$ = 16						; size = 8
+_a$ = 8		; size = 8
+_b$ = 16	; size = 8
 _f5	PROC
 	push	DWORD PTR _b$[esp]
 	push	DWORD PTR _b$[esp]

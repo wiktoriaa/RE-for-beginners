@@ -1,5 +1,5 @@
-_s$ = 8               ; size = 16
-?f@@YAXUs@@@Z PROC    ; f
+_s$ = 8 ; size = 16
+?f@@YAXUs@@@Z PROC ; f
     push   ebp
     mov    ebp, esp
     mov    eax, DWORD PTR _s$[ebp+12]
@@ -12,8 +12,8 @@ _s$ = 8               ; size = 16
     push   eax
     push   OFFSET $SG3842
     call   _printf
-    add    esp, 20    ; 00000014H
+    add    esp, 20
     pop    ebp
     ret    0
-?f@@YAXUs@@@Z ENDP    ; f
+?f@@YAXUs@@@Z ENDP ; f
 _TEXT    ENDS

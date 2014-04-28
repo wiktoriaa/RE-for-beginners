@@ -130,7 +130,6 @@ loc_80484F6:                            ; CODE XREF: f+ED
                 add     edi, [ebp+var_134]
                 lea     ebx, [esi+eax]
                 jmp     short loc_8048513
-; ---------------------------------------------------------------------------
 
 loc_804850D:                            ; CODE XREF: f+17B
                 add     ebx, [ebp+var_120]
@@ -148,7 +147,6 @@ loc_8048513:                            ; CODE XREF: f+157
                 test    eax, eax
                 jns     short loc_8048537
                 jmp     short loc_804850D
-; ---------------------------------------------------------------------------
 
 loc_8048531:                            ; CODE XREF: f+19D
                 add     edi, [ebp+var_134]
@@ -182,7 +180,6 @@ loc_804855F:                            ; CODE XREF: f+1BE
                 jnz     short loc_8048582
                 mov     edx, edi
                 jmp     short loc_8048588
-; ---------------------------------------------------------------------------
 
 loc_8048582:                            ; CODE XREF: f+1C8
                 cmp     edx, edi
@@ -194,7 +191,6 @@ loc_8048588:                            ; CODE XREF: f+1CC
                 add     ebx, [ebp+var_120]
                 add     edi, [ebp+var_134]
                 jmp     short loc_80485AB
-; ---------------------------------------------------------------------------
 
 loc_8048596:                            ; CODE XREF: f+1A1
                 jnz     short loc_80485AB
@@ -203,7 +199,6 @@ loc_8048596:                            ; CODE XREF: f+1A1
                 lea     edi, [ebx+ecx]
                 add     ebx, eax
                 jmp     short loc_80485B3
-; ---------------------------------------------------------------------------
 
 loc_80485AB:                            ; CODE XREF: f+1E0
                                         ; f:loc_8048596
@@ -226,7 +221,6 @@ loc_80485B3:                            ; CODE XREF: f+1F5
                 mov     esi, [edx]
                 mov     [ebp+var_124], ecx
                 jmp     short loc_8048634
-; ---------------------------------------------------------------------------
 
 loc_80485EB:                            ; CODE XREF: f+209
                 mov     edx, [ebp+var_124]
@@ -242,7 +236,6 @@ loc_80485EB:                            ; CODE XREF: f+209
                 mov     [edx+4], edi
                 mov     [ebp+var_11C], eax
                 jmp     short loc_8048634
-; ---------------------------------------------------------------------------
 
 loc_8048617:                            ; CODE XREF: f+252
                 mov     ecx, [ebp+var_11C]
@@ -279,7 +272,6 @@ loc_804866B:                            ; CODE XREF: f+2B3
                 add     esi, ebx
                 mov     edx, esi
                 jmp     short loc_80486A3
-; ---------------------------------------------------------------------------
 
 loc_8048677:                            ; CODE XREF: f+2F1
                 push    eax
@@ -317,12 +309,10 @@ loc_80486B2:                            ; CODE XREF: f+313
                 cmp     ebx, eax
                 jnz     short loc_80486B2
                 jmp     loc_8048762
-; ---------------------------------------------------------------------------
 
 loc_80486CE:                            ; CODE XREF: f+3C3
                 lea     edx, [esi+edi]
                 jmp     short loc_80486D5
-; ---------------------------------------------------------------------------
 
 loc_80486D3:                            ; CODE XREF: f+33B
                 add     edx, edi
@@ -347,7 +337,6 @@ loc_80486D5:                            ; CODE XREF: f+31D
                 add     edx, eax
                 mov     [ebp+var_11C], edx
                 jmp     short loc_804875B
-; ---------------------------------------------------------------------------
 
 loc_8048710:                            ; CODE XREF: f+3AA
                 mov     cl, [eax]
@@ -356,7 +345,6 @@ loc_8048710:                            ; CODE XREF: f+3AA
                 mov     byte ptr [ebp+var_130], cl
                 mov     ecx, eax
                 jmp     short loc_8048733
-; ---------------------------------------------------------------------------
 
 loc_8048728:                            ; CODE XREF: f+391
                 mov     al, [edx+ebx]
@@ -380,7 +368,6 @@ loc_804875B:                            ; CODE XREF: f+35A
                 cmp     eax, esi
                 jnb     short loc_8048710
                 jmp     short loc_804876F
-; ---------------------------------------------------------------------------
 
 loc_8048762:                            ; CODE XREF: f+2F6
                                         ; f+315

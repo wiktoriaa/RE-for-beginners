@@ -1,5 +1,5 @@
 _TEXT    SEGMENT
-_s$ = 8               ; size = 10
+_s$ = 8 ; size = 10
 ?f@@YAXUs@@@Z PROC    ; f
     push   ebp
     mov    ebp, esp
@@ -13,7 +13,7 @@ _s$ = 8               ; size = 10
     push   eax
     push   OFFSET $SG3842
     call   _printf
-    add    esp, 20    ; 00000014H
+    add    esp, 20
     pop    ebp
     ret    0
 ?f@@YAXUs@@@Z ENDP    ; f

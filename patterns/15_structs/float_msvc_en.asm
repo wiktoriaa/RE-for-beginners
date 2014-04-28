@@ -1,7 +1,7 @@
-_t$ = -8           ; size = 4
-_f$ = -4           ; size = 4
-__in$ = 8          ; size = 4
-?f@@YAMM@Z PROC    ; f
+_t$ = -8   ; size = 4
+_f$ = -4   ; size = 4
+__in$ = 8  ; size = 4
+?f@@YAMM@Z PROC ; f
     push   ebp
     mov    ebp, esp
     sub    esp, 8
@@ -15,7 +15,7 @@ __in$ = 8          ; size = 4
     lea    ecx, DWORD PTR _t$[ebp]
     push   ecx
     call   _memcpy
-    add    esp, 12          ; 0000000cH
+    add    esp, 12
 
     mov    edx, DWORD PTR _t$[ebp]
     or     edx, -2147483648 ; 80000000H - set minus sign
@@ -38,11 +38,11 @@ __in$ = 8          ; size = 4
     lea    eax, DWORD PTR _f$[ebp]
     push   eax
     call   _memcpy
-    add    esp, 12          ; 0000000cH
+    add    esp, 12
 
     fld    DWORD PTR _f$[ebp]
 
     mov    esp, ebp
     pop    ebp
     ret    0
-?f@@YAMM@Z ENDP             ; f
+?f@@YAMM@Z ENDP   ; f

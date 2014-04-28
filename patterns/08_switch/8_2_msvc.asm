@@ -1,5 +1,5 @@
-tv64 = -4                        ; size = 4
-_a$ = 8                            ; size = 4
+tv64 = -4 ; size = 4
+_a$ = 8   ; size = 4
 _f    PROC
     push   ebp
     mov    ebp, esp

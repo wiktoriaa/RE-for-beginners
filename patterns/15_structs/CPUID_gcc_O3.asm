@@ -1,4 +1,4 @@
-main            proc near               ; DATA XREF: _start+17
+main            proc near ; DATA XREF: _start+17
     push    ebp
     mov     ebp, esp
     and     esp, 0FFFFFFF0h

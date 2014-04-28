@@ -25,11 +25,11 @@ _f7:
 
 _f7_main:
 	sub	esp, 28
-	mov	DWORD PTR [esp+16], 12345		; 00003039H
-	mov	DWORD PTR [esp+8], 1972608889		; 75939f79H
-	mov	DWORD PTR [esp+12], 5461		; 00001555H
-	mov	DWORD PTR [esp], 1942892530		; 73ce2ff2H
-	mov	DWORD PTR [esp+4], 2874			; 00000b3aH
+	mov	DWORD PTR [esp+16], 12345	; 00003039H
+	mov	DWORD PTR [esp+8], 1972608889	; 75939f79H
+	mov	DWORD PTR [esp+12], 5461	; 00001555H
+	mov	DWORD PTR [esp], 1942892530	; 73ce2ff2H
+	mov	DWORD PTR [esp+4], 2874		; 00000b3aH
 	call	_f7
 	add	esp, 28
 	ret

@@ -1,6 +1,6 @@
 _main      PROC
     push   esi
-    push   16                    ; 00000010H
+    push   16
     call   _malloc
     add    esp, 4
     mov    esi, eax
@@ -22,7 +22,7 @@ _main      PROC
     call   _printf
     push   esi
     call   _free
-    add    esp, 32                    ; 00000020H
+    add    esp, 32
     xor    eax, eax
     pop    esi
     ret    0

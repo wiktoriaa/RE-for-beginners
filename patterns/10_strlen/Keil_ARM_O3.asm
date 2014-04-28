@@ -1,7 +1,7 @@
 _strlen
                 MOV     R1, R0
 
-loc_2C8                                 ; CODE XREF: _strlen+14
+loc_2C8 ; CODE XREF: _strlen+14
                 LDRB    R2, [R1],#1
                 CMP     R2, #0
                 SUBEQ   R0, R1, R0

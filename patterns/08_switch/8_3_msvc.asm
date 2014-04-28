@@ -1,4 +1,4 @@
-_a$ = 8                            ; size = 4
+_a$ = 8 ; size = 4
 _f    PROC
     mov    eax, DWORD PTR _a$[esp-4]
     sub    eax, 0

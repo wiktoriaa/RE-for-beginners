@@ -1,5 +1,5 @@
-_s$ = 8              ; size = 24
-_f    PROC
+_s$ = 8 ; size = 24
+_f  PROC
     push   ebp
     mov    ebp, esp
     mov    eax, DWORD PTR _s$[ebp+20] ; e
@@ -16,7 +16,7 @@ _f    PROC
     push   edx
     push   OFFSET $SG2466
     call   _printf
-    add    esp, 28   ; 0000001cH
+    add    esp, 28
     pop    ebp
     ret    0
-_f    ENDP
+_f  ENDP

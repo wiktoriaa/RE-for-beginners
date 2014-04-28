@@ -11,13 +11,13 @@ fastcall~(\ref{fastcall}) \OrENRU win64~(\ref{sec:callingconventions_win64}).
 
 \begin{lstlisting}[caption=\NonOptimizingKeil + \ARMMode]
 .text:00000014             printf_main1
-.text:00000014 10 40 2D E9                 STMFD   SP!, {R4,LR}
-.text:00000018 03 30 A0 E3                 MOV     R3, #3
-.text:0000001C 02 20 A0 E3                 MOV     R2, #2
-.text:00000020 01 10 A0 E3                 MOV     R1, #1
-.text:00000024 1D 0E 8F E2                 ADR     R0, aADBDCD     ; "a=%d; b=%d; c=%d\n"
-.text:00000028 0D 19 00 EB                 BL      __2printf
-.text:0000002C 10 80 BD E8                 LDMFD   SP!, {R4,PC}
+.text:00000014 10 40 2D E9   STMFD   SP!, {R4,LR}
+.text:00000018 03 30 A0 E3   MOV     R3, #3
+.text:0000001C 02 20 A0 E3   MOV     R2, #2
+.text:00000020 01 10 A0 E3   MOV     R1, #1
+.text:00000024 1D 0E 8F E2   ADR     R0, aADBDCD     ; "a=%d; b=%d; c=%d\n"
+.text:00000028 0D 19 00 EB   BL      __2printf
+.text:0000002C 10 80 BD E8   LDMFD   SP!, {R4,PC}
 \end{lstlisting}
 
 \IFRU{Итак, первые 4 аргумента передаются через регистры \Reg{0}-\Reg{3}, по порядку: 
@@ -33,13 +33,13 @@ a pointer to the \printf format string in
 \label{ARM_B_to_printf}
 
 \begin{lstlisting}[caption=\OptimizingKeil + \ARMMode]
-.text:00000014                             EXPORT printf_main1
+.text:00000014               EXPORT printf_main1
 .text:00000014             printf_main1
-.text:00000014 03 30 A0 E3                 MOV     R3, #3
-.text:00000018 02 20 A0 E3                 MOV     R2, #2
-.text:0000001C 01 10 A0 E3                 MOV     R1, #1
-.text:00000020 1E 0E 8F E2                 ADR     R0, aADBDCD     ; "a=%d; b=%d; c=%d\n"
-.text:00000024 CB 18 00 EA                 B       __2printf
+.text:00000014 03 30 A0 E3   MOV     R3, #3
+.text:00000018 02 20 A0 E3   MOV     R2, #2
+.text:0000001C 01 10 A0 E3   MOV     R1, #1
+.text:00000020 1E 0E 8F E2   ADR     R0, aADBDCD     ; "a=%d; b=%d; c=%d\n"
+.text:00000024 CB 18 00 EA   B       __2printf
 \end{lstlisting}
 
 \index{ARM!\Registers!Link Register}
@@ -87,13 +87,13 @@ after this call we do not to do anything}!
 
 \begin{lstlisting}[caption=\OptimizingKeil + \ThumbMode]
 .text:0000000C             printf_main1
-.text:0000000C 10 B5                       PUSH    {R4,LR}
-.text:0000000E 03 23                       MOVS    R3, #3
-.text:00000010 02 22                       MOVS    R2, #2
-.text:00000012 01 21                       MOVS    R1, #1
-.text:00000014 A4 A0                       ADR     R0, aADBDCD     ; "a=%d; b=%d; c=%d\n"
-.text:00000016 06 F0 EB F8                 BL      __2printf
-.text:0000001A 10 BD                       POP     {R4,PC}
+.text:0000000C 10 B5         PUSH    {R4,LR}
+.text:0000000E 03 23         MOVS    R3, #3
+.text:00000010 02 22         MOVS    R2, #2
+.text:00000012 01 21         MOVS    R1, #1
+.text:00000014 A4 A0         ADR     R0, aADBDCD     ; "a=%d; b=%d; c=%d\n"
+.text:00000016 06 F0 EB F8   BL      __2printf
+.text:0000001A 10 BD         POP     {R4,PC}
 \end{lstlisting}
 
 \IFRU{Здесь нет особых отличий от неоптимизированного варианта для режима ARM}
