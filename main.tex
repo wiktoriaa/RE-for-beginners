@@ -1,5 +1,10 @@
+\ifdefined\ebook
+\documentclass[a5paper,oneside]{book}
+\newcommand{\FigScale}{0.4}
+\else
 \documentclass[a4paper,oneside]{book} % oneside: do not put blank page after each chapter. a4paper?
-%\documentclass[a5paper,oneside]{book}
+\newcommand{\FigScale}{0.666}
+\fi
 
 \usepackage{cmap}
 \usepackage{fancyhdr}
@@ -54,6 +59,9 @@
 \usepackage{bytefield}
 \usepackage{MnSymbol}
 \usetikzlibrary{calc,positioning,chains,arrows}
+\ifdefined\ebook
+\usepackage[margin=0.5in]{geometry}
+\fi
 
 \ifdefined\RUSSIAN
 \renewcommand\lstlistingname{Листинг}
@@ -125,8 +133,11 @@
 \frontmatter
 
 \begin{titlepage}
+\ifdefined\ebook % FIXME
+\else
 \input{cover}
 \newpage
+\fi
 
 \begin{center}
 \vspace*{\fill}
@@ -153,7 +164,15 @@ To view a copy of this license, visit} \url{http://creativecommons.org/licenses/
 \IFRU{Версия этого текста}{Text version} ({\large \today}).
 
 \IFRU{Возможно, более новая версии текста, а также англоязычная версия, также доступна по ссылке}
-{There is probably a newer version of this text, and also Russian language version also accessible at} \url{http://yurichev.com/RE-book.html}
+{There is probably a newer version of this text, and also Russian language version also accessible at} 
+\url{http://yurichev.com/RE-book.html}.
+\ifdefined\ebook
+\IFRU{Версия формата A4 так же доступна по ссылке}
+{A4-format version is also available on the page}.
+\else
+\IFRU{Версия для электронных читалок так же доступна по ссылке}
+{E-book reader version is also available on the page}.
+\fi
 
 \IFRU{Вы также можете подписаться на мой twitter для получения информации о новых версиях этого текста, 
 и т.д: \TT{@yurichev\_ru}\footnote{\url{https://twitter.com/yurichev_ru}}, 
