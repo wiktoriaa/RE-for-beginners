@@ -1,4 +1,4 @@
-\section{\IFRU{Инкапсуляция}{Encapsulation}}
+\subsection{\IFRU{Инкапсуляция}{Encapsulation}}
 
 \IFRU{Инкапсуляция ~--- это сокрытие данных в \IT{private} секциях класса, например, чтобы разрешить доступ к ним только 
 для методов этого класса, но не более.}{Encapsulation is data hiding in the \IT{private} sections of class, 
@@ -13,12 +13,12 @@ some other~---not?}
 
 \IFRU{Попробуем простой пример:}{Let's try simple example:}
 
-\lstinputlisting{cpp/classes/classes2_0.cpp}
+\lstinputlisting{patterns/cpp/classes/classes2_0.cpp}
 
 \IFRU{Снова скомпилируем в MSVC 2008 с опциями \Ox и \Obzero и посмотрим код метода \TT{box::dump()}:}
 {Let's compile it again in MSVC 2008 with \Ox and \Obzero options and let's see \TT{box::dump()} method code:}
 
-\lstinputlisting{cpp/classes/classes2_1.asm}
+\lstinputlisting{patterns/cpp/classes/classes2_1.asm}
 
 \IFRU{Разметка полей в классе выходит такой:}{Here is a memory layout of the class:}
 
@@ -46,25 +46,25 @@ functions, but, knowing this layout, can we create a code modifying these fields
 то просто не скомпилируется:}{So I added \TT{hack\_oop\_encapsulation()} function, which, if has the body
 as follows, will not compile:}
 
-\lstinputlisting{cpp/classes/classes2_2.cpp}
+\lstinputlisting{patterns/cpp/classes/classes2_2.cpp}
 
 \IFRU{Тем не менее, если преобразовать тип \IT{box} к типу \IT{указатель на массив int}, 
 и если модифицировать полученный массив \Tint{}-ов, тогда всё получится.}
 {Nevertheless, if to cast \IT{box} type to \IT{pointer to int array},
 and if to modify array of the \Tint{}-s we got, then we have success.}
 
-\lstinputlisting{cpp/classes/classes2_3.cpp}
+\lstinputlisting{patterns/cpp/classes/classes2_3.cpp}
 
 \IFRU{Код этой функции довольно прост ~--- можно сказать, функция берет на вход указатель на массив \Tint{}-ов и 
 записывает \IT{123} во второй \Tint{}:}
 {This functions' code is very simple~---it can be said, the function taking pointer to array of the \Tint{}-s on input
 and writing \IT{123} to the second \Tint{}:}
 
-\lstinputlisting{cpp/classes/classes2_5.asm}
+\lstinputlisting{patterns/cpp/classes/classes2_5.asm}
 
 \IFRU{Проверим, как это работает:}{Let's check, how it works:}
 
-\lstinputlisting{cpp/classes/classes2_4.cpp}
+\lstinputlisting{patterns/cpp/classes/classes2_4.cpp}
 
 \IFRU{Запускаем:}{Let's run:}
 

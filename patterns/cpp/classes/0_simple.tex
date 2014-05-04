@@ -1,4 +1,4 @@
-\section{\IFRU{Простой пример}{Simple example}}
+\subsection{\IFRU{Простой пример}{Simple example}}
 
 \IFRU{Внутреннее представление классов в \Cpp почти такое же, как и представление структур.}
 {Internally, \Cpp classes representation is almost the same as structures representation.}
@@ -6,14 +6,14 @@
 \IFRU{Давайте попробуем простой пример с двумя переменными, двумя конструкторами и одним методом:}
 {Let's try an example with two variables, two constructors and one method:}
 
-\lstinputlisting{cpp/classes/simple.cpp}
+\lstinputlisting{patterns/cpp/classes/simple.cpp}
 
-\subsection{MSVC\EMDASH{}x86}
+\subsubsection{MSVC\EMDASH{}x86}
 
 \IFRU{Вот как выглядит \main на ассемблере:}{Here is how \main function looks like translated 
 into assembly language:}
 
-\lstinputlisting[caption=MSVC]{cpp/classes/simple_1_msvc.asm}
+\lstinputlisting[caption=MSVC]{patterns/cpp/classes/simple_1_msvc.asm}
 
 \IFRU{Вот что происходит. 
 Под каждый экземпляр класса \IT{c} выделяется по 8 байт, столько же, сколько нужно 
@@ -69,7 +69,7 @@ DLL exports as well) knows nothing about \Cpp or \ac{OOP}.}
 
 \IFRU{Теперь смотрим на код в конструкторах:}{Now let's see constructors' code:}
 
-\lstinputlisting[caption=MSVC]{cpp/classes/simple_2_msvc.asm}
+\lstinputlisting[caption=MSVC]{patterns/cpp/classes/simple_2_msvc.asm}
 
 \IFRU{Конструкторы ~--- это просто функции, они используют указатель на структуру в \ECX, 
 перекладывают его себе в локальную переменную, хотя это и не обязательно.}
@@ -84,7 +84,7 @@ any values}.
 
 \IFRU{И еще метод \TT{dump()}:}{Now \TT{dump()} method:}
 
-\lstinputlisting[caption=MSVC]{cpp/classes/simple_3_msvc.asm}
+\lstinputlisting[caption=MSVC]{patterns/cpp/classes/simple_3_msvc.asm}
 
 \IFRU{Все очень просто, \TT{dump()} берет указатель на структуру состоящую из двух \Tint через \ECX, 
 выдергивает оттуда две переменные и передает их в \printf.}
@@ -94,7 +94,7 @@ takes two values from it and passing it into \printf.}
 \IFRU{А если скомпилировать с оптимизацией (\Ox), то кода будет намного меньше:}
 {The code is much shorter if compiled with optimization (\Ox):}
 
-\lstinputlisting[caption=MSVC]{cpp/classes/simple_4_msvc_Ox.asm}
+\lstinputlisting[caption=MSVC]{patterns/cpp/classes/simple_4_msvc_Ox.asm}
 
 \index{x86!\Instructions!RET}
 \IFRU{Вот и все. Единственное о чем еще нужно сказать, это о том что в функции \main, 
@@ -121,7 +121,7 @@ rather then to \gls{caller}.
 {It is also should be noted the compiler deciding when to call constructor and 
 destructor~---but that is we already know from \Cpp language basics.}
 
-\subsection{MSVC\EMDASH{}x86-64}
+\subsubsection{MSVC\EMDASH{}x86-64}
 \label{simple_CPP_MSVC_x64}
 
 \IFRU{Как мы уже знаем, в x86-84 первые 4 аргумента ф-ции передаются через регистры \RCX, \RDX, \Reg{8}, 
@@ -134,7 +134,7 @@ in \RCX, first method argument\EMDASH{}in \EDX, etc}.
 \IFRU{Здесь это видно во внутренностях метода}{We can see this in the} 
 \TT{c(int a, int b)}\EN{ method internals}:
 
-\lstinputlisting[caption=MSVC 2012 x64 /Ox]{cpp/classes/simple_MSVC_x64.asm}
+\lstinputlisting[caption=MSVC 2012 x64 /Ox]{patterns/cpp/classes/simple_MSVC_x64.asm}
 
 \IFRU{Тип \Tint в x64 остается 32-битным
 \footnote{Вероятно, так решили для упрощения портирования \CCpp{}-кода на x64}, 
@@ -147,12 +147,12 @@ so that is why 32-bit register's parts are used here}.
 {We also see \TT{JMP printf} instead of \RET in the \TT{dump()} method, that \IT{hack} we already saw
 earlier}: \ref{JMP_instead_of_RET}.
 
-\subsection{GCC\EMDASH{}x86}
+\subsubsection{GCC\EMDASH{}x86}
 
 \IFRU{В GCC 4.4.1 всё почти так же, за исключением некоторых различий.}
 {It is almost the same situation in GCC 4.4.1, with a few exceptions.}
 
-\lstinputlisting[caption=GCC 4.4.1]{cpp/classes/simple_GCC.asm}
+\lstinputlisting[caption=GCC 4.4.1]{patterns/cpp/classes/simple_GCC.asm}
 
 \IFRU{Здесь мы видим, что применяется иной \IT{name mangling} характерный для стандартов GNU
 \footnote{Еще о name mangling разных компиляторов: \cite{AgnerFogCC}.}
@@ -260,7 +260,7 @@ used as pointer to the object (\ITthis).}
 is style of function names encoding (\IT{name mangling}) and passing pointer to object
 (via the \ECX register or via the first argument).}
 
-\subsection{GCC\EMDASH{}x86-64}
+\subsubsection{GCC\EMDASH{}x86-64}
 
 \IFRU{Первые 6 аргументов, как мы уже знаем, передаются через 6 регистров}
 {The first 6 arguments, as we already know, are passed in the} \RDI, \RSI, \RDX, \RCX, \Reg{8}, 
@@ -270,5 +270,5 @@ and the pointer to \ITthis via first one (\RDI) and that is what we see here}.
 \IFRU{\IT{Хак} с \JMP вместо \RET используется и здесь}
 {\JMP instead of \RET \IT{hack} is also used here}.
 
-\lstinputlisting[caption=GCC 4.4.6 x64]{cpp/classes/simple_GCC_x64.s}
+\lstinputlisting[caption=GCC 4.4.6 x64]{patterns/cpp/classes/simple_GCC_x64.s}
 

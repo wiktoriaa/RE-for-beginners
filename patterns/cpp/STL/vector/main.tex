@@ -1,4 +1,4 @@
-\section{std::vector}
+\subsection{std::vector}
 \index{\Cpp!STL!std::vector}
 
 \IFRU{Я бы назвал}{I would call} \TT{std::vector} ``\IFRU{безопасной оболочкой (wrapper)}{safe wrapper}'' \EN{of }\ac{PODT} \IFRU{массива в Си}{C array}.
@@ -20,11 +20,11 @@ code working for both compilters}.
 \IFRU{И снова здесь Си-подобный код для вывода структуры}{Here is again a 
 C-like code for dumping} \TT{std::vector}\EN{ structure}:
 
-\lstinputlisting{cpp/STL/vector/2.cpp}
+\lstinputlisting{patterns/cpp/STL/vector/2.cpp}
 
 \IFRU{Примерный вывод программы скомпилированной в}{Here is a sample output if compiled in} MSVC:
 
-\lstinputlisting{cpp/STL/vector/MSVC.txt}
+\lstinputlisting{patterns/cpp/STL/vector/MSVC.txt}
 
 \IFRU{Как можно заметить, выделенного буфера в самом начале ф-ции \main пока нет}
 {As it can be seen, there is no allocated buffer at the \main function start yet}.
@@ -46,7 +46,7 @@ throw} \TT{std::out\_of\_range} \IFRU{в случае ошибки}{exception in
 
 \IFRU{Давайте посмотрим код}{Let's see the code}:
 
-\lstinputlisting[caption=MSVC 2012 /GS- /Ob1]{cpp/STL/vector/MSVC.asm}
+\lstinputlisting[caption=MSVC 2012 /GS- /Ob1]{patterns/cpp/STL/vector/MSVC.asm}
 
 \IFRU{Мы видим как метод}{We see how} \TT{.at()} \IFRU{проверяет границы и подкидывает исключение в случае ошибки}
 {method check bounds and throw exception in case of error}.
@@ -62,7 +62,7 @@ throw} \TT{std::out\_of\_range} \IFRU{в случае ошибки}{exception in
 \IFRU{Код генерируемый GCC почти такой же, в целом, но метод}
 {The code GCC generates is almost the same on the whole, but} \TT{.at()} \IFRU{вставлен прямо в код}{method is inlined}:
 
-\lstinputlisting[caption=GCC 4.8.1 -fno-inline-small-functions -O1]{cpp/STL/vector/GCC.asm}
+\lstinputlisting[caption=GCC 4.8.1 -fno-inline-small-functions -O1]{patterns/cpp/STL/vector/GCC.asm}
 
 \RU{Метод }\TT{.reserve()} \IFRU{точно так же вставлен прямо в код \main}{method is inlined as well}.
 \IFRU{Он вызывает}{It calls} \TT{new()} \IFRU{если буфер слишком мал для нового массива}
@@ -73,7 +73,7 @@ throw} \TT{std::out\_of\_range} \IFRU{в случае ошибки}{exception in
 \IFRU{Посмотрим, что выводит программа будучи скомпилированная GCC}
 {Let's also see what the compiled program outputs if compiled by GCC}:
 
-\lstinputlisting{cpp/STL/vector/GCC.txt}
+\lstinputlisting{patterns/cpp/STL/vector/GCC.txt}
 
 \IFRU{Мы можем заметить, что буфер растет иначе чем в}{We can spot that buffer size grows in different way that in} MSVC.
 

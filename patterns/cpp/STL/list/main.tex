@@ -1,4 +1,4 @@
-\section{std::list}
+\subsection{std::list}
 \index{\Cpp!STL!std::list}
 \label{std_list}
 
@@ -28,9 +28,9 @@ MSVC и GCC прямолинейны и похожи друг на друга, �
 MSVC and GCC implementations are straightforward and similar to each other, so here is only one
 source code for both}:
 
-\lstinputlisting{cpp/STL/list/2.cpp}
+\lstinputlisting{patterns/cpp/STL/list/2.cpp}
 
-\subsection{GCC}
+\subsubsection{GCC}
 
 \IFRU{Начнем с}{Let's start with} GCC.
 
@@ -48,7 +48,7 @@ ptr=0x0028fe90 _Next=0x0028fe90 _Prev=0x0028fe90 x=3 y=0
 \IFRU{Оба указателя}{Both} ``next'' \AndENRU ``prev'' \IFRU{указывают на себя}
 {pointers are pointing to the self node}:
 
-\input{cpp/STL/list/empty_list}
+\input{patterns/cpp/STL/list/empty_list}
 
 \IFRU{Это тот момент, когда итераторы .begin и .end равны друг другу}
 {That's is the moment when .begin and .end iterators are equal to each other}.
@@ -73,7 +73,7 @@ ptr=0x0028fe90 _Next=0x000349a0 _Prev=0x00034b40 x=5 y=6
 
 \IFRU{Вот как эти 3 элемента хранятся в памяти}{Here is how 3 elements will be stored in memory}:
 
-\input{cpp/STL/list/GCC_internals}
+\input{patterns/cpp/STL/list/GCC_internals}
 
 \IFRU{Переменная}{The variable} $l$ \IFRU{всегда указывает на первый элемент}{is always points to the first node}.
 
@@ -138,11 +138,11 @@ it should traverse the whole list counting elements, because it doesn't have any
 \IFRU{Это означает что эта операция $O(n)$, т.е., она работает тем медленнее, чем больше элементов в списке}
 {This mean this operation is $O(n)$, i.e., it is as slow, as how many elements present in the list}.
 
-\lstinputlisting[caption=GCC 4.8.1 -O3 -fno-inline-small-functions]{cpp/STL/list/GCC.asm}
+\lstinputlisting[caption=GCC 4.8.1 -O3 -fno-inline-small-functions]{patterns/cpp/STL/list/GCC.asm}
 
-\lstinputlisting[caption=\IFRU{Весь вывод}{The whole output}]{cpp/STL/list/GCC.txt}
+\lstinputlisting[caption=\IFRU{Весь вывод}{The whole output}]{patterns/cpp/STL/list/GCC.txt}
 
-\subsection{MSVC}
+\subsubsection{MSVC}
 \label{MSVC_std_list}
 
 \IFRU{Реализация MSVC (2012) точно такая же, только еще и сохраняет текущий размер списка}
@@ -155,12 +155,12 @@ it should traverse the whole list counting elements, because it doesn't have any
 \IFRU{Реализация MSVC также немного отлична в смысле расстановки элементов}
 {MSVC implementation is also slightly different in a way it arrange nodes}:
 
-\input{cpp/STL/list/MSVC_internals}
+\input{patterns/cpp/STL/list/MSVC_internals}
 
 \IFRU{У GCC его элемент с ``мусором'' в самом конце списка, а у MSVC в самом начале}
 {GCC has its ``garbage'' element at the end of the list, while MSVC at the beginning of it}.
 
-\lstinputlisting[caption=MSVC 2012 /Fa2.asm /Ox /GS- /Ob1]{cpp/STL/list/MSVC.asm}
+\lstinputlisting[caption=MSVC 2012 /Fa2.asm /Ox /GS- /Ob1]{patterns/cpp/STL/list/MSVC.asm}
 
 \IFRU{В отличие от GCC, код MSVC выделяет элемент с ``мусором'' в самом начале ф-ции при помощи
 ф-ции ``Buynode'', она также используется и во время выделения остальных элементов}
@@ -168,9 +168,9 @@ it should traverse the whole list counting elements, because it doesn't have any
 it is also used for the rest nodes allocations} (\IFRU{код GCC выделяет самый первый элемент в локальном стеке}
 {GCC code allocates the very first element in the local stack}).
 
-\lstinputlisting[caption=\IFRU{Весь вывод}{The whole output}]{cpp/STL/list/MSVC.txt}
+\lstinputlisting[caption=\IFRU{Весь вывод}{The whole output}]{patterns/cpp/STL/list/MSVC.txt}
 
-\subsection{C++11 std::forward\_list}
+\subsubsection{C++11 std::forward\_list}
 \index{\Cpp!STL!std::forward\_list}
 
 \IFRU{Это то же самое что и std::list, но только односвязный список, т.е., имеющий только поле ``next'' в каждом

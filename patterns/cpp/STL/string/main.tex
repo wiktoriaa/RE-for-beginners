@@ -1,8 +1,8 @@
-\section{std::string}
+\subsection{std::string}
 \index{\Cpp!STL!std::string}
 \label{std_string}
 
-\subsection{\IFRU{Как устроена структура}{Internals}}
+\subsubsection{\IFRU{Как устроена структура}{Internals}}
 
 \IFRU{Многие строковые библиотеки (\cite[2.2]{CBook}) обеспечивают структуру содержащую ссылку 
 на буфер собственно со строкой, переменная всегда содержащую длину строки 
@@ -31,7 +31,7 @@ this is done in order to support various character types: at least char and wcha
 в MSVC и GCC можно и без этого}
 {There are no assembly listings, because std::string internals in MSVC and GCC can be illustrated without them}.
 
-\subsubsection{MSVC}
+\paragraph{MSVC}
 
 \IFRU{В реализации MSVC, вместо ссылки на буфер может содержаться сам буфер (если строка короче 16-и символов).}
 {MSVC implementation may store buffer in place instead of pointer to buffer 
@@ -43,7 +43,7 @@ that short string will occupy at least} $16 + 4 + 4 = 24$
 \IFRU{байта в 64-битной, а если строка длиннее 16-и символов, то прибавьте еще длину самой строки}
 {bytes in 64-bit, and if the string is longer than 16 characters, add also length of the string itself}.
 
-\lstinputlisting[caption=\IFRU{пример для}{example for} MSVC]{cpp/STL/string/MSVC.cpp}
+\lstinputlisting[caption=\IFRU{пример для}{example for} MSVC]{patterns/cpp/STL/string/MSVC.cpp}
 
 \IFRU{Собственно, из этого исходника почти всё ясно.}{Almost everything is clear from the source code.}
 
@@ -81,7 +81,7 @@ array of characters, hence it works}.
 \IFRU{Это может надолго остаться незамеченным: до тех пока там не появится строка короче 16-и символов, тогда процесс упадет}
 {This may left unnoticed for a long span of time: until a longer string will appear there, then a process will crash}.
 
-\subsubsection{GCC}
+\paragraph{GCC}
 
 \IFRU{В реализации GCC в структуре есть еще одна переменная --- reference count}
 {GCC implementation of a structure has one more variable---reference count}.
@@ -106,18 +106,18 @@ beginning of the structure, but to the pointer to buffer}.
 
 \IFRU{В моем примере я учитываю это}{I considering this in my example}:
 
-\lstinputlisting[caption=\IFRU{пример для}{example for} GCC]{cpp/STL/string/GCC.cpp}
+\lstinputlisting[caption=\IFRU{пример для}{example for} GCC]{patterns/cpp/STL/string/GCC.cpp}
 
 \IFRU{Нужны еще небольшие хаки чтобы сымитировать типичную ошибку, о которой я уже написал, из-за
 более ужесточенной проверки типов в GCC, тем не менее, printf() работает и здесь без c\_str()}
 {A trickery should be also used to imitate mistake I already wrote above because GCC
 has stronger type checking, nevertheless, printf() works here without c\_str() as well}.
 
-\subsection{\IFRU{Чуть более сложный пример}{More complex example}}
+\subsubsection{\IFRU{Чуть более сложный пример}{More complex example}}
 
-\lstinputlisting{cpp/STL/string/3.cpp}
+\lstinputlisting{patterns/cpp/STL/string/3.cpp}
 
-\lstinputlisting[caption=MSVC 2012]{cpp/STL/string/3_MSVC.asm}
+\lstinputlisting[caption=MSVC 2012]{patterns/cpp/STL/string/3_MSVC.asm}
 
 \IFRU{Собственно, компилятор не конструирует строки статически: да в общем-то и как
 это возможно, если буфер с ней нужно хранить в \glslink{heap}{куче}?}
@@ -152,14 +152,14 @@ are stored in the stack, they are freed automatically, upon function finish}.
 shorter string right in the structure)}:
 
 % TODO comment each function meaning
-\lstinputlisting[caption=GCC 4.8.1]{cpp/STL/string/3_GCC.s}
+\lstinputlisting[caption=GCC 4.8.1]{patterns/cpp/STL/string/3_GCC.s}
 
 \IFRU{Можно заметить, что в деструкторы передается не указатель на объект,
 а указатель на место за 12 байт (или 3 слова) перед ним, то есть, на настоящее начало структуры}
 {It can be seen that not a pointer to object is passed to destructors, but rather a place 12 bytes (or 3 words)
 before, i.e., pointer to the real start of the structure}.
 
-\subsection{std::string \IFRU{как глобальная переменная}{as a global variable}}
+\subsubsection{std::string \IFRU{как глобальная переменная}{as a global variable}}
 \label{sec:std_string_as_global_variable}
 
 \IFRU{Опытные программисты на Си++ могут возразить: глобальные переменные \ac{STL}-типов вполне
@@ -168,9 +168,9 @@ variables of \ac{STL} types are in fact can be defined}.
 
 \IFRU{Да, действительно}{Yes, indeed}:
 
-\lstinputlisting{cpp/STL/string/5.cpp}
+\lstinputlisting{patterns/cpp/STL/string/5.cpp}
 
-\lstinputlisting[caption=MSVC 2012]{cpp/STL/string/5_MSVC.asm}
+\lstinputlisting[caption=MSVC 2012]{patterns/cpp/STL/string/5_MSVC.asm}
 
 \index{\CStandardLibrary!atexit()}
 \IFRU{В реальности, из \ac{CRT}, еще до вызова main(), вызывается специальная ф-ция,
@@ -184,7 +184,7 @@ of such variables}.
 
 GCC \IFRU{работает похожим образом}{works likewise}:
 
-\lstinputlisting[caption=GCC 4.8.1]{cpp/STL/string/5_GCC.s}
+\lstinputlisting[caption=GCC 4.8.1]{patterns/cpp/STL/string/5_GCC.s}
 
 \IFRU{Он даже не выделяет отдельной ф-ции в которой будут собраны деструкторы: 
 каждый деструктор передается в atexit() по одному}{It even not creates separated functions for this, each
