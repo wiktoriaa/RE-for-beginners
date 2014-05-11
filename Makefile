@@ -1,37 +1,23 @@
 all:    russian english russian-A5 english-A5
 
-russian:
+define compile
 	rm -f *.fls
 	rm -f *.bbl
 	rm -f *.aux
 	latexmk -c
-	latexmk -pdf RE_for_beginners-ru.tex
-	makeglossaries RE_for_beginners-ru
-	latexmk -pdf RE_for_beginners-ru.tex
+	latexmk -pdf $1.tex
+	makeglossaries $1
+	latexmk -pdf $1.tex
+endef
+
+russian:
+	$(call compile,RE_for_beginners-ru)
 
 english:
-	rm -f *.fls
-	rm -f *.bbl
-	rm -f *.aux
-	latexmk -c
-	latexmk -pdf RE_for_beginners-en.tex
-	makeglossaries RE_for_beginners-en
-	latexmk -pdf RE_for_beginners-en.tex
+	$(call compile,RE_for_beginners-en)
 
 russian-A5:
-	rm -f *.fls
-	rm -f *.bbl
-	rm -f *.aux
-	latexmk -c
-	latexmk -pdf RE_for_beginners-ru-A5.tex
-	makeglossaries RE_for_beginners-ru-A5
-	latexmk -pdf RE_for_beginners-ru-A5.tex
+	$(call compile,RE_for_beginners-ru-A5)
 
 english-A5:
-	rm -f *.fls
-	rm -f *.bbl
-	rm -f *.aux
-	latexmk -c
-	latexmk -pdf RE_for_beginners-en-A5.tex
-	makeglossaries RE_for_beginners-en-A5
-	latexmk -pdf RE_for_beginners-en-A5.tex
+	$(call compile,RE_for_beginners-en-A5)
