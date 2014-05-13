@@ -11,39 +11,24 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/obfuscation/2.asm.ru patterns/obfuscation/2.asm.en \
 	patterns/obfuscation/3.asm.ru patterns/obfuscation/3.asm.en \
 
-russian: listings
+define compile
 	rm -f *.fls
 	rm -f *.bbl
 	rm -f *.aux
 	latexmk -c
-	latexmk -pdf RE_for_beginners-ru.tex
-	makeglossaries RE_for_beginners-ru
-	latexmk -pdf RE_for_beginners-ru.tex
+	latexmk -pdf $1.tex
+	makeglossaries $1
+	latexmk -pdf $1.tex
+endef
+
+russian: listings
+	$(call compile,RE_for_beginners-ru)
 
 english: listings
-	rm -f *.fls
-	rm -f *.bbl
-	rm -f *.aux
-	latexmk -c
-	latexmk -pdf RE_for_beginners-en.tex
-	makeglossaries RE_for_beginners-en
-	latexmk -pdf RE_for_beginners-en.tex
+	$(call compile,RE_for_beginners-en)
 
 russian-A5: listings
-	rm -f *.fls
-	rm -f *.bbl
-	rm -f *.aux
-	latexmk -c
-	latexmk -pdf RE_for_beginners-ru-A5.tex
-	makeglossaries RE_for_beginners-ru-A5
-	latexmk -pdf RE_for_beginners-ru-A5.tex
+	$(call compile,RE_for_beginners-ru-A5)
 
 english-A5: listings
-	rm -f *.fls
-	rm -f *.bbl
-	rm -f *.aux
-	latexmk -c
-	latexmk -pdf RE_for_beginners-en-A5.tex
-	makeglossaries RE_for_beginners-en-A5
-	latexmk -pdf RE_for_beginners-en-A5.tex
-
+	$(call compile,RE_for_beginners-en-A5)
