@@ -2,14 +2,14 @@
 
 \lstinputlisting{patterns/04_scanf/ex2_MSVC.asm}
 
-\IFRU{Ничего особенного, в целом. Теперь \TT{x} объявлена в сегменте \TT{\_DATA}. 
+\RU{Ничего особенного, в целом. Теперь \TT{x} объявлена в сегменте \TT{\_DATA}. 
 Память для нее в стеке более не выделяется.
 Все обращения к ней происходит не через стек, а уже напрямую. 
 Неинициализированные глобальные переменные не занимают места в исполняемом файле
 (и действительно, зачем в исполняемом файле
 нужно выделять место под изначально нулевые переменные?), но тогда, когда к этому месту в памяти
 кто-то обратится, \ac{OS} подставит туда блок состоящий из нулей\footnote{Так работает \ac{VM}}.}
-{Now \TT{x} variable is defined in the \TT{\_DATA} segment. 
+\EN{Now \TT{x} variable is defined in the \TT{\_DATA} segment. 
 Memory in local stack is not allocated anymore. 
 All accesses to it are not via stack but directly to process memory. 
 Not initialized global variables takes no place in the executable file
@@ -17,14 +17,14 @@ Not initialized global variables takes no place in the executable file
 in the executable file for initially zeroed variables?), but when someone will access this place
 in memory, \ac{OS} will allocate a block of zeroes there\footnote{That is how \ac{VM} behaves}.}
 
-\IFRU{Попробуем изменить объявление этой переменной:}
-{Now let's assign value to variable explicitly:}
+\RU{Попробуем изменить объявление этой переменной:}
+\EN{Now let's assign value to variable explicitly:}
 
 \begin{lstlisting}
 int x=10; // default value
 \end{lstlisting}
 
-\IFRU{Выйдет в итоге:}{We got:}
+\RU{Выйдет в итоге:}\EN{We got:}
 
 \begin{lstlisting}
 _DATA	SEGMENT
@@ -33,17 +33,17 @@ _x	DD	0aH
 ...
 \end{lstlisting}
 
-\IFRU{Здесь уже по месту этой переменной записано \TT{0xA} с типом DD (dword = 32 бита).}
-{Here we see value \TT{0xA} of DWORD type (DD meaning DWORD = 32 bit).}
+\RU{Здесь уже по месту этой переменной записано \TT{0xA} с типом DD (dword = 32 бита).}
+\EN{Here we see value \TT{0xA} of DWORD type (DD meaning DWORD = 32 bit).}
 
-\IFRU{Если вы откроете скомпилированный .exe-файл в \IDA, то увидите что \IT{x} 
+\RU{Если вы откроете скомпилированный .exe-файл в \IDA, то увидите что \IT{x} 
 находится аккурат в начале сегмента \TT{\_DATA}, после этой переменной будут текстовые строки.}
-{If you will open compiled .exe in \IDA, you will see the \IT{x} variable placed at the beginning of 
+\EN{If you will open compiled .exe in \IDA, you will see the \IT{x} variable placed at the beginning of 
 the \TT{\_DATA} segment, and after you'll see text strings.}
 
-\IFRU{А вот если вы откроете в \IDA, .exe скомпилированный в прошлом примере, 
+\RU{А вот если вы откроете в \IDA, .exe скомпилированный в прошлом примере, 
 где значение \IT{x} не определено, то в IDA вы увидите:}
-{If you will open compiled .exe in \IDA from previous example where \IT{x} value is not defined, 
+\EN{If you will open compiled .exe in \IDA from previous example where \IT{x} value is not defined, 
 you'll see something like this:}
 
 \begin{lstlisting}
@@ -61,10 +61,10 @@ you'll see something like this:}
 .data:0040FA94 dword_40FA94    dd ?                    ; DATA XREF: ___sbh_free_block+2FE
 \end{lstlisting}
 
-\IFRU{\TT{\_x} обозначен как \TT{?}, наряду с другими переменными не требующими инициализации. 
+\RU{\TT{\_x} обозначен как \TT{?}, наряду с другими переменными не требующими инициализации. 
 Это означает, что при загрузке .exe в память, место под все это выделено будет. 
 Но в самом .exe ничего этого нет. Неинициализированные переменные не занимают места в исполняемых файлах. Удобно для больших массивов, например.}
-{\TT{\_x} marked as \TT{?} among other variables not required to be initialized. 
+\EN{\TT{\_x} marked as \TT{?} among other variables not required to be initialized. 
 This means that after loading .exe to memory, a space for all these variables will be 
 allocated and a random garbage will be here. 
 But in an .exe file these not initialized variables are not occupy anything. 
@@ -73,57 +73,57 @@ E.g. it is suitable for large arrays.}
 \subsection{MSVC: x86 + \olly}
 \index{\olly}
 
-\IFRU{Тут даже проще}{Things are even simpler here}: \figname \ref{fig:scanf_ex2_olly_1}.
-\IFRU{Переменная хранится в сегменте данных}{Variable is located in the data segment}.
-\IFRU{Кстати, после исполнения инструкции \PUSH, заталкивающей адрес $x$, адрес появится в стеке, и на этом
-элементе можно нажать правой кнопкой, выбрать ``Follow in dump''}{By the way, after 
+\RU{Тут даже проще}\EN{Things are even simpler here}: \figname \ref{fig:scanf_ex2_olly_1}.
+\RU{Переменная хранится в сегменте данных}\EN{Variable is located in the data segment}.
+\RU{Кстати, после исполнения инструкции \PUSH, заталкивающей адрес $x$, адрес появится в стеке, и на этом
+элементе можно нажать правой кнопкой, выбрать ``Follow in dump''}\EN{By the way, after 
 \PUSH instruction, pushing $x$ address, is executed, the address
 will appear in stack, and it is possible to right-click on that element and select ``Follow in dump''}.
-\IFRU{И в окне памяти слева появится эта переменная}{And the variable will appear in the memory window
+\RU{И в окне памяти слева появится эта переменная}\EN{And the variable will appear in the memory window
 at left}.
 
-\IFRU{После того как в консоли введем 123, здесь появится}{After we enter 123 in the console,} 
+\RU{После того как в консоли введем 123, здесь появится}\EN{After we enter 123 in the console,} 
 \TT{0x7B}\EN{ will appear here}.
 
-\IFRU{Почему самый первый байт это}{But why the very first byte is} \TT{7B}?
-\IFRU{По логике вещей, здесь должно было бы быть}{Thinking logically, a} \TT{00 00 00 7B}\EN{ should be
+\RU{Почему самый первый байт это}\EN{But why the very first byte is} \TT{7B}?
+\RU{По логике вещей, здесь должно было бы быть}\EN{Thinking logically, a} \TT{00 00 00 7B}\EN{ should be
 there}.
-\IFRU{Это называется}{This is what called} \gls{endianness}, \IFRU{и в x86 принят формат}{and} 
+\RU{Это называется}\EN{This is what called} \gls{endianness}, \RU{и в x86 принят формат}\EN{and} 
 \IT{little-endian}\EN{ is used in x86}.
-\IFRU{Это означает что в начале записывается самый младший байт, а заканчивается самым старшим байтом}
-{This mean that lowest byte is written first, and highest written last}.
-\IFRU{Больше об этом}{More about it}: \ref{sec:endianness}.
+\RU{Это означает что в начале записывается самый младший байт, а заканчивается самым старшим байтом}
+\EN{This mean that lowest byte is written first, and highest written last}.
+\RU{Больше об этом}\EN{More about it}: \ref{sec:endianness}.
 
-\IFRU{Позже, из этого места в памяти, 32-битное значение загружается в \EAX и передается в}
-{Some time after, 32-bit value from this place of memory is loaded into \EAX and passed into} \printf.
+\RU{Позже, из этого места в памяти, 32-битное значение загружается в \EAX и передается в}
+\EN{Some time after, 32-bit value from this place of memory is loaded into \EAX and passed into} \printf.
 
-\IFRU{Адрес переменной $x$ в памяти}{$x$ variable address in the memory is} \TT{0xDC3390}.
-\IFRU{В \olly{} мы можем посмотреть карту памяти процесса (Alt-M) и увидим что этот адрес
-внутри PE-сегмента \TT{.data} нашей программы}{In \olly we can see process memory map (Alt-M)
+\RU{Адрес переменной $x$ в памяти}\EN{$x$ variable address in the memory is} \TT{0xDC3390}.
+\RU{В \olly{} мы можем посмотреть карту памяти процесса (Alt-M) и увидим что этот адрес
+внутри PE-сегмента \TT{.data} нашей программы}\EN{In \olly we can see process memory map (Alt-M)
 and we will see that this address is inside of \TT{.data} PE-segment of our program}:
 \figname \ref{fig:scanf_ex2_olly_2}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/04_scanf/ex2_olly_1.png}
-\caption{\olly: \IFRU{после исполнения \scanf}{after \scanf execution}}
+\caption{\olly: \RU{после исполнения \scanf}\EN{after \scanf execution}}
 \label{fig:scanf_ex2_olly_1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/04_scanf/ex2_olly_2.png}
-\caption{\olly: \IFRU{карта памяти процесса}{process memory map}}
+\caption{\olly: \RU{карта памяти процесса}\EN{process memory map}}
 \label{fig:scanf_ex2_olly_2}
 \end{figure}
 
 \subsection{GCC: x86}
 
 \index{ELF}
-\IFRU{В Linux все также почти. За исключением того, что если значение \TT{x} не определено, 
+\RU{В Linux все также почти. За исключением того, что если значение \TT{x} не определено, 
 то эта переменная будет находится в сегменте \TT{\_bss}.
 В \ac{ELF} этот сегмент имеет такие атрибуты:}
-{It is almost the same in Linux, except segment names and properties: 
+\EN{It is almost the same in Linux, except segment names and properties: 
 not initialized variables are located in the \TT{\_bss} segment. 
 In \ac{ELF} file format this segment has such attributes:}
 
@@ -132,11 +132,11 @@ In \ac{ELF} file format this segment has such attributes:}
 ; Segment permissions: Read/Write
 \end{lstlisting}
 
-\IFRU{Ну а если сделать статическое присвоение этой переменной какого-либо
+\RU{Ну а если сделать статическое присвоение этой переменной какого-либо
 значения, например, $10$, то она будет находится 
 в сегменте \TT{\_data},
 это сегмент с такими атрибутами:}
-{If to statically assign a value to variable, e.g. $10$, it will be placed in the \TT{\_data} segment, 
+\EN{If to statically assign a value to variable, e.g. $10$, it will be placed in the \TT{\_data} segment, 
 this is segment with the following attributes:}
 
 \begin{lstlisting}
@@ -148,14 +148,14 @@ this is segment with the following attributes:}
 
 \lstinputlisting[caption=MSVC 2012 x64]{patterns/04_scanf/ex2_MSVC_x64.asm}
 
-\IFRU{Почти такой же код как и в}{Almost the same code as in} x86.
-\IFRU{Обратите внимание что для \TT{scanf()} адрес переменной $x$ передается
+\RU{Почти такой же код как и в}\EN{Almost the same code as in} x86.
+\RU{Обратите внимание что для \TT{scanf()} адрес переменной $x$ передается
 при помощи инструкции \LEA, а во второй \printf передается само значение переменной при помощи \MOV}
-{Take a notice that $x$ variable address is passed to \TT{scanf()} using \LEA instruction,
+\EN{Take a notice that $x$ variable address is passed to \TT{scanf()} using \LEA instruction,
 while the value of variable is passed to the second \printf using \MOV instruction}.
-\TT{``DWORD PTR''}\EMDASH{}\IFRU{это часть языка ассемблера (не имеющая отношения к машинным кодам) 
+\TT{``DWORD PTR''}\EMDASH{}\RU{это часть языка ассемблера (не имеющая отношения к машинным кодам) 
 показывающая, что тип переменной в памяти\EMDASH{}именно 32-битный, 
-и инструкция \MOV должна быть здесь закодирована соответственно}{is a part of assembly language 
+и инструкция \MOV должна быть здесь закодирована соответственно}\EN{is a part of assembly language 
 (no related to machine codes), showing that the variable data type is 32-bit and the \MOV instruction
 should be encoded accordingly}.
 

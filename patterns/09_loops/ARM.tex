@@ -4,41 +4,41 @@
 
 \lstinputlisting{patterns/09_loops/Keil_ARM_O0.asm}
 
-\IFRU{Счетчик итераций \TT{i} будет храниться в регистре \Reg{4}.}
-{Iteration counter \TT{i} is to be stored in the \Reg{4} register.}
+\RU{Счетчик итераций \TT{i} будет храниться в регистре \Reg{4}.}
+\EN{Iteration counter \TT{i} is to be stored in the \Reg{4} register.}
 
-\RU{Инструкция }\TT{``MOV R4, \#2''} \IFRU{просто инициализирует}{instruction just initializing} \IT{i}.
+\RU{Инструкция }\TT{``MOV R4, \#2''} \RU{просто инициализирует}\EN{instruction just initializing} \IT{i}.
 
-\RU{Инструкции }\TT{``MOV R0, R4''} \AndENRU \TT{``BL f''} \IFRU{составляют тело цикла}{instructions are
+\RU{Инструкции }\TT{``MOV R0, R4''} \AndENRU \TT{``BL f''} \RU{составляют тело цикла}\EN{instructions are
 compose loop body}, 
-\IFRU{первая инструкция готовит аргумент для функции \TT{f()} и вторая собственно вызывает её.}
-{the first instruction preparing argument for \TT{f()} function and the second is calling it.}
+\RU{первая инструкция готовит аргумент для функции \TT{f()} и вторая собственно вызывает её.}
+\EN{the first instruction preparing argument for \TT{f()} function and the second is calling it.}
 
 \index{ARM!\Instructions!ADD}
-\RU{Инструкция }\TT{``ADD R4, R4, \#1''} \IFRU{прибавляет единицу к \IT{i} при каждой итерации.}
-{instruction is just adding $1$ to the \IT{i} variable during each iteration.}
+\RU{Инструкция }\TT{``ADD R4, R4, \#1''} \RU{прибавляет единицу к \IT{i} при каждой итерации.}
+\EN{instruction is just adding $1$ to the \IT{i} variable during each iteration.}
 
 \index{ARM!\Instructions!CMP}
 \index{ARM!\Instructions!BLT}
-\TT{``CMP R4, \#0xA''} \IFRU{сравнивает}{comparing} \TT{i} \IFRU{с}{with} \TT{0xA} ($10$). 
-\IFRU{Следующая за ней инструкция}{Next instruction} \TT{BLT} (\IT{Branch Less Than}) 
-\IFRU{совершит переход, если}{will jump if} \IT{i} \IFRU{меньше чем}{is less than} $10$.
+\TT{``CMP R4, \#0xA''} \RU{сравнивает}\EN{comparing} \TT{i} \RU{с}\EN{with} \TT{0xA} ($10$). 
+\RU{Следующая за ней инструкция}\EN{Next instruction} \TT{BLT} (\IT{Branch Less Than}) 
+\RU{совершит переход, если}\EN{will jump if} \IT{i} \RU{меньше чем}\EN{is less than} $10$.
 
-\IFRU{В противном случае}{Otherwise}, \IFRU{в \Reg{0} запишется $0$}{$0$ will be written into \Reg{0}} 
-(\IFRU{потому что наша функция возвращает}{since our function returns} $0$) 
-\IFRU{и произойдет выход из функции}{and function execution ended}.
+\RU{В противном случае}\EN{Otherwise}, \RU{в \Reg{0} запишется $0$}\EN{$0$ will be written into \Reg{0}} 
+(\RU{потому что наша функция возвращает}\EN{since our function returns} $0$) 
+\RU{и произойдет выход из функции}\EN{and function execution ended}.
 
 \subsection{\OptimizingKeil + \ThumbMode}
 
 \lstinputlisting{patterns/09_loops/Keil_thumb_O3.asm}
 
-\IFRU{Практически, всё то же самое.}{Practically, the same.}
+\RU{Практически, всё то же самое.}\EN{Practically, the same.}
 
 \subsection{\OptimizingXcode + \ThumbTwoMode}
 
 \lstinputlisting{patterns/09_loops/xcode_thumb_O3.asm}
 
-\IFRU{На самом деле, в моей функции \TT{f()} было такое:}{In fact, this was in my \TT{f()} function:}
+\RU{На самом деле, в моей функции \TT{f()} было такое:}\EN{In fact, this was in my \TT{f()} function:}
 
 \begin{lstlisting}
 void f(int i)
@@ -50,11 +50,11 @@ void f(int i)
 
 \index{Unrolled loop}
 \index{Inline code}
-\IFRU{Так что}{So}, LLVM \IFRU{не только \IT{развернул} цикл}{not just \IT{unrolled} the loop}, 
-\IFRU{но также и представил мою очень простую функцию \TT{f()} как \IT{inline-вую}}{but also represented my 
+\RU{Так что}\EN{So}, LLVM \RU{не только \IT{развернул} цикл}\EN{not just \IT{unrolled} the loop}, 
+\RU{но также и представил мою очень простую функцию \TT{f()} как \IT{inline-вую}}\EN{but also represented my 
 very simple function \TT{f()} as \IT{inlined}},
-\IFRU{и вставил её тело вместо цикла 8 раз}{and inserted its body 8 times instead of loop}. 
-\IFRU{Это возможно, когда функция очень простая, как та что у меня, и когда
+\RU{и вставил её тело вместо цикла 8 раз}\EN{and inserted its body 8 times instead of loop}. 
+\RU{Это возможно, когда функция очень простая, как та что у меня, и когда
 она вызывается не очень много раз, как здесь.}
-{This is possible when function is so primitive (like mine) and when it is called not many times (like here).}
+\EN{This is possible when function is so primitive (like mine) and when it is called not many times (like here).}
 

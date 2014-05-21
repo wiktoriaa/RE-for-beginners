@@ -1,11 +1,11 @@
-\chapter{\IFRU{Пролог и эпилог в функции}{Function prologue and epilogue}}
+\chapter{\RU{Пролог и эпилог в функции}\EN{Function prologue and epilogue}}
 \label{sec:prologepilog}
 \index{Function epilogue}
 \index{Function prologue}
 
-\IFRU{Пролог функции ~--- это инструкции в самом начале функции. Как правило это что-то вроде такого
+\RU{Пролог функции ~--- это инструкции в самом начале функции. Как правило это что-то вроде такого
 фрагмента кода:}
-{A function prologue is a sequence of instructions at the start of a function. It often looks something like the following
+\EN{A function prologue is a sequence of instructions at the start of a function. It often looks something like the following
 code fragment:}
 
 \begin{lstlisting}
@@ -14,23 +14,22 @@ code fragment:}
     sub     esp, X
 \end{lstlisting}
 
-\IFRU
-{Эти инструкции делают следующее: сохраняют значение регистра \EBP на будущее, выставляют \EBP равным \ESP, 
+\RU{Эти инструкции делают следующее: сохраняют значение регистра \EBP на будущее, выставляют \EBP равным \ESP, 
 затем подготавливают место в стеке для хранения локальных переменных.}
-{What these instruction do: saves the value in the \EBP register,
+\EN{What these instruction do: saves the value in the \EBP register,
 sets the value of the \EBP register to the value of the \ESP and then allocates space on the stack 
 for local variables.}
 
-\IFRU{\EBP сохраняет свое значение на протяжении всей функции, он будет использоваться здесь для доступа 
+\RU{\EBP сохраняет свое значение на протяжении всей функции, он будет использоваться здесь для доступа 
 к локальным переменным и аргументам. Можно было бы использовать и \ESP, но он постоянно меняется и 
 это не очень удобно.}
-{The value in the \EBP is fixed over a period of function execution and it is to be used for local variables and 
+\EN{The value in the \EBP is fixed over a period of function execution and it is to be used for local variables and 
 arguments access. 
 One can use \ESP, but it is changing over time and it is not convenient.}
 
-\IFRU{Эпилог функции аннулирует выделенное место в стеке, возвращает значение \EBP на то что было и возвращает 
+\RU{Эпилог функции аннулирует выделенное место в стеке, возвращает значение \EBP на то что было и возвращает 
 управление в вызывающую функцию:}
-{The function epilogue frees allocated space in the stack, returns the value in the \EBP register back to initial state 
+\EN{The function epilogue frees allocated space in the stack, returns the value in the \EBP register back to initial state 
 and returns the control flow to \gls{callee}:}
 
 \begin{lstlisting}
@@ -39,25 +38,25 @@ and returns the control flow to \gls{callee}:}
     ret    0
 \end{lstlisting}
 
-\IFRU{Пролог и эпилог ф-ции обычно находятся в в дизассемблерах для размежевания ф-ций 
-друг от друга}{Function prologues and epilogues are usually detected in disassemblers for function
+\RU{Пролог и эпилог ф-ции обычно находятся в в дизассемблерах для размежевания ф-ций 
+друг от друга}\EN{Function prologues and epilogues are usually detected in disassemblers for function
 delimitation from each other}.
 
 \section{\Recursion}
 
 \index{\Recursion}
-\IFRU{Наличие эпилога и пролога может несколько ухудшить эффективность рекурсии.}
-{Epilogues and prologues can make recursion performance worse.}
+\RU{Наличие эпилога и пролога может несколько ухудшить эффективность рекурсии.}
+\EN{Epilogues and prologues can make recursion performance worse.}
 
-\IFRU{Например, однажды я написал функцию для поиска нужного узла в двоичном дереве. 
+\RU{Например, однажды я написал функцию для поиска нужного узла в двоичном дереве. 
 Рекурсивно она выглядела очень красиво, но из-за того, что при каждом вызове тратилось время на эпилог и пролог, 
 все это работало в несколько раз медленнее чем та же функция, но без рекурсии.}
-{For example, once upon a time I wrote a function to seek the correct node in a binary tree. 
+\EN{For example, once upon a time I wrote a function to seek the correct node in a binary tree. 
 As a recursive function it would look stylish but since additional time
 is to be spend at each function call
 for the prologue/epilogue, it was working a couple of times slower than an iterative (recursion-free)
 implementation.}
 
 \index{\Recursion!Tail recursion}
-\IFRU{Кстати, поэтому есть такая вещь как \glslink{tail call}{хвостовая рекурсия}}
-{By the way, that is the reason compilers use \gls{tail call}}.
+\RU{Кстати, поэтому есть такая вещь как \glslink{tail call}{хвостовая рекурсия}}
+\EN{By the way, that is the reason compilers use \gls{tail call}}.

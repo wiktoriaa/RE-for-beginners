@@ -1,8 +1,8 @@
-\section{\IFRU{Таблица \TT{V\$TIMER} в}{\TT{V\$TIMER} table in} \oracle}
+\section{\RU{Таблица \TT{V\$TIMER} в}\EN{\TT{V\$TIMER} table in} \oracle}
 \index{\oracle}
 
-\TT{V\$TIMER} \IFRU{это еще один служебный \IT{fixed view}, отражающий какое-то часто меняющееся значение:}
-{is another \IT{fixed view}, reflecting a rapidly changing value:}
+\TT{V\$TIMER} \RU{это еще один служебный \IT{fixed view}, отражающий какое-то часто меняющееся значение:}
+\EN{is another \IT{fixed view}, reflecting a rapidly changing value:}
 
 \begin{framed}
 \begin{quotation}
@@ -10,15 +10,15 @@ V\$TIMER displays the elapsed time in hundredths of a second. Time is measured s
 which is operating system specific, and wraps around to 0 again whenever the value overflows four bytes 
 (roughly 497 days).
 \end{quotation}
-\end{framed}(\IFRU{Из документации \oracle}{From \oracle documentation}
+\end{framed}(\RU{Из документации \oracle}\EN{From \oracle documentation}
 \footnote{\url{http://docs.oracle.com/cd/B28359_01/server.111/b28320/dynviews_3104.htm}})
 
-\IFRU{Интересно что периоды разные в Oracle для Win32 и для Linux. Сможем ли мы найти функцию, отвечающую 
+\RU{Интересно что периоды разные в Oracle для Win32 и для Linux. Сможем ли мы найти функцию, отвечающую 
 за генерирование этого значения?}
-{It is interesting the periods are different for Oracle for win32 and for Linux. 
+\EN{It is interesting the periods are different for Oracle for win32 and for Linux. 
 Will we able to find a function generating this value?}
 
-\IFRU{Как видно, эта информация, в итоге, берется из системной таблицы \TT{X\$KSUTM}.}{As we can see, 
+\RU{Как видно, эта информация, в итоге, берется из системной таблицы \TT{X\$KSUTM}.}\EN{As we can see, 
 this information is finally taken from \TT{X\$KSUTM} table.}
 
 \begin{lstlisting}
@@ -43,12 +43,12 @@ GV$TIMER
 select inst_id,ksutmtim from x$ksutm
 \end{lstlisting}
 
-\IFRU{Здесь мы упираемся в небольшую проблему, в таблицах \TT{kqftab}/\TT{kqftap} нет указателей на функцию, 
+\RU{Здесь мы упираемся в небольшую проблему, в таблицах \TT{kqftab}/\TT{kqftap} нет указателей на функцию, 
 которая бы генерировала значение}
-{Now we stuck in a small problem, there are no references to value generating function(s) 
+\EN{Now we stuck in a small problem, there are no references to value generating function(s) 
 in the tables \TT{kqftab}/\TT{kqftap}}:
 
-\begin{lstlisting}[caption=\IFRU{Результат работы}{Result of} \OracleTablesName]
+\begin{lstlisting}[caption=\RU{Результат работы}\EN{Result of} \OracleTablesName]
 kqftab_element.name: [X$KSUTM] ?: [ksutm] 0x1 0x4 0x4 0x0 0xffffc09b 0x3
 kqftap_param.name=[ADDR] ?: 0x10917 0x0 0x0 0x0 0x4 0x0 0x0
 kqftap_param.name=[INDX] ?: 0x20b02 0x0 0x0 0x0 0x4 0x0 0x0
@@ -58,8 +58,8 @@ kqftap_element.fn1=NULL
 kqftap_element.fn2=NULL
 \end{lstlisting}
 
-\IFRU{Попробуем в таком случае просто поискать строку \TT{KSUTMTIM}, и находим ссылку на нее в такой функции:}
-{Let's try to find a string \TT{KSUTMTIM}, and we find it in this function:}
+\RU{Попробуем в таком случае просто поискать строку \TT{KSUTMTIM}, и находим ссылку на нее в такой функции:}
+\EN{Let's try to find a string \TT{KSUTMTIM}, and we find it in this function:}
 
 \begin{lstlisting}
 kqfd_DRN_ksutm_c proc near              ; DATA XREF: .rodata:0805B4E8
@@ -83,8 +83,8 @@ arg_C           = dword ptr  14h
 kqfd_DRN_ksutm_c endp
 \end{lstlisting}
 
-\IFRU{Сама ф-ция}{The function} \TT{kqfd\_DRN\_ksutm\_c()} \IFRU{упоминается в таблице}{is mentioned in} 
-\TT{kqfd\_tab\_registry\_0} \IFRU{вот так}{table}:
+\RU{Сама ф-ция}\EN{The function} \TT{kqfd\_DRN\_ksutm\_c()} \RU{упоминается в таблице}\EN{is mentioned in} 
+\TT{kqfd\_tab\_registry\_0} \RU{вот так}\EN{table}:
 
 \begin{lstlisting}
 dd offset _2__STRING_62_0 ; "X$KSUTM"
@@ -95,9 +95,8 @@ dd 0
 dd offset kqfd_DRN_ksutm_c
 \end{lstlisting}
 
-\IFRU{Упоминается также некая ф-ция \TT{ksugtm()}}
-{There are is a function \TT{ksugtm()} referenced here}.
-\IFRU{Посмотрим, что там (в Linux x86)}{Let's see what's in it (Linux x86)}:
+\RU{Упоминается также некая ф-ция \TT{ksugtm()}}\EN{There are is a function \TT{ksugtm()} referenced here}.
+\RU{Посмотрим, что там (в Linux x86)}\EN{Let's see what's in it (Linux x86)}:
 
 \begin{lstlisting}[caption=ksu.o]
 ksugtm          proc near
@@ -121,16 +120,16 @@ arg_4           = dword ptr  0Ch
 ksugtm          endp
 \end{lstlisting}
 
-\IFRU{В win32-версии тоже самое}{Almost the same code in win32-version}.
+\RU{В win32-версии тоже самое}\EN{Almost the same code in win32-version}.
 
-\IFRU{Искомая ли эта функция? Попробуем узнать}{Is this the function we are looking for? Let's see}:
+\RU{Искомая ли эта функция? Попробуем узнать}\EN{Is this the function we are looking for? Let's see}:
 \index{tracer}
 
 \begin{lstlisting}
 tracer -a:oracle.exe bpf=oracle.exe!_ksugtm,args:2,dump_args:0x4
 \end{lstlisting}
 
-\IFRU{Пробуем несколько раз}{Let's try again}:
+\RU{Пробуем несколько раз}\EN{Let's try again}:
 
 \begin{lstlisting}
 SQL> select * from V$TIMER;
@@ -152,7 +151,7 @@ SQL> select * from V$TIMER;
   27295167
 \end{lstlisting}
 
-\begin{lstlisting}[caption=\IFRU{вывод \tracer}{\tracer output}]
+\begin{lstlisting}[caption=\RU{вывод \tracer}\EN{\tracer output}]
 TID=2428|(0) oracle.exe!_ksugtm (0x0, 0xd76c5f0) (called from oracle.exe!__VInfreq__qerfxFetch+0xfad (0x56bb6d5))
 Argument 2/2
 0D76C5F0: 38 C9                                           "8.              "
@@ -173,10 +172,10 @@ Argument 2/2 difference
 00000000: BF 7D A0 01                                     ".}..            "
 \end{lstlisting}
 
-\IFRU{Действительно ~--- значение то, что мы видим в SQL*Plus, и оно возвращается через второй аргумент}
-{Indeed~---the value is the same we see in SQL*Plus and it is returning via second argument}.
+\RU{Действительно ~--- значение то, что мы видим в SQL*Plus, и оно возвращается через второй аргумент}
+\EN{Indeed~---the value is the same we see in SQL*Plus and it is returning via second argument}.
 
-\IFRU{Посмотрим, что в ф-ции}{Let's see what is in} \TT{slgcs()} (Linux x86):
+\RU{Посмотрим, что в ф-ции}\EN{Let's see what is in} \TT{slgcs()} (Linux x86):
 
 \begin{lstlisting}
 slgcs           proc near
@@ -208,10 +207,10 @@ arg_0           = dword ptr  8
 slgcs           endp
 \end{lstlisting}
 
-(\IFRU{это просто вызов}{it is just a call to} \TT{sltrgatime64()} \IFRU{и деление его результата на}
-{and division of its result by} 10~(\ref{sec:divisionbynine}))
+(\RU{это просто вызов}\EN{it is just a call to} \TT{sltrgatime64()} \RU{и деление его результата на}
+\EN{and division of its result by} 10~(\ref{sec:divisionbynine}))
 
-\IFRU{И в win32-версии}{And win32-version}:
+\RU{И в win32-версии}\EN{And win32-version}:
 
 \begin{lstlisting}
 _slgcs          proc near               ; CODE XREF: _dbgefgHtElResetCount+15
@@ -234,27 +233,27 @@ _slgcs          proc near               ; CODE XREF: _dbgefgHtElResetCount+15
 _slgcs          endp
 \end{lstlisting}
 
-\IFRU{Это просто результат}{It is just result of} \TT{GetTickCount()
+\RU{Это просто результат}\EN{It is just result of} \TT{GetTickCount()
 \footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms724408(v=vs.85).aspx}}} 
-\IFRU{поделенный на}{divided by} 10~(\ref{sec:divisionbynine}).
+\RU{поделенный на}\EN{divided by} 10~(\ref{sec:divisionbynine}).
 
-\IFRU{Вуаля! Вот почему в win32-версии и версии Linux x86 разные результаты, потому что они получаются разными 
-системными ф-циями \ac{OS}.}{Voilà! That's why win32-version and Linux x86 version show different results, 
+\RU{Вуаля! Вот почему в win32-версии и версии Linux x86 разные результаты, потому что они получаются разными 
+системными ф-циями \ac{OS}.}\EN{Voilà! That's why win32-version and Linux x86 version show different results, 
 just because they are generated by different \ac{OS} functions.}
 
-\IFRU{\IT{Drain} по-английски дренаж, отток, водосток. Таким образом, возможно имеется ввиду \IT{подключение} 
-определенного столбца системной таблице к функции.}{\IT{Drain} apparently means \IT{connecting} specific 
+\RU{\IT{Drain} по-английски дренаж, отток, водосток. Таким образом, возможно имеется ввиду \IT{подключение} 
+определенного столбца системной таблице к функции.}\EN{\IT{Drain} apparently means \IT{connecting} specific 
 table column to specific function.}
 
-\IFRU{Я добавил поддержку таблицы}{I added the table} \TT{kqfd\_tab\_registry\_0} \IFRU{в}{to} \oracletables, 
-\IFRU{теперь мы можем видеть, при помощи каких ф-ций, столбцы в системных таблицах \IT{подключаются} к значениям, 
-например}{now we can see, how table column's variables are \IT{connected} to specific functions}:
+\RU{Я добавил поддержку таблицы}\EN{I added the table} \TT{kqfd\_tab\_registry\_0} \RU{в}\EN{to} \oracletables, 
+\RU{теперь мы можем видеть, при помощи каких ф-ций, столбцы в системных таблицах \IT{подключаются} к значениям, 
+например}\EN{now we can see, how table column's variables are \IT{connected} to specific functions}:
 
 \begin{lstlisting}
 [X$KSUTM] [kqfd_OPN_ksutm_c] [kqfd_tabl_fetch] [NULL] [NULL] [kqfd_DRN_ksutm_c]
 [X$KSUSGIF] [kqfd_OPN_ksusg_c] [kqfd_tabl_fetch] [NULL] [NULL] [kqfd_DRN_ksusg_c]
 \end{lstlisting}
 
-\IT{OPN}, \IFRU{возможно}{apparently}, \IT{open}, \IFRU{а}{and} \IT{DRN}, \IFRU{вероятно, означает}
-{apparently, meaning} \IT{drain}.
+\IT{OPN}, \RU{возможно}\EN{apparently}, \IT{open}, \RU{а}\EN{and} \IT{DRN}, \RU{вероятно, означает}
+\EN{apparently, meaning} \IT{drain}.
 

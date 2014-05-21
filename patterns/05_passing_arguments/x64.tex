@@ -1,8 +1,8 @@
 \section{x64}
 
 \index{x86-64}
-\IFRU{В x86-64 всё немного иначе, здесь аргументы ф-ции (4 или 6) передаются через регистры, 
-а \gls{callee} из регистров их и читает, вместо того чтобы обращаться к стеку}{The story is a bit different
+\RU{В x86-64 всё немного иначе, здесь аргументы ф-ции (4 или 6) передаются через регистры, 
+а \gls{callee} из регистров их и читает, вместо того чтобы обращаться к стеку}\EN{The story is a bit different
 in x86-64, function arguments (4 or 6) are passed in registers, and a \gls{callee} reading them from there
 instead of stack accessing}.
 
@@ -12,46 +12,46 @@ instead of stack accessing}.
 
 \lstinputlisting[caption=MSVC 2012 /Ox x64]{patterns/05_passing_arguments/x64_MSVC_Ox.asm}
 
-\IFRU{Как видно, очень компактная ф-ция \TT{f()}, берет аргументы прямо из регистров}
-{As we can see, very compact \TT{f()} function takes arguments right from the registers}.
-\IFRU{Инструкция \LEA используется здесь для сложения чисел, 
+\RU{Как видно, очень компактная ф-ция \TT{f()}, берет аргументы прямо из регистров}
+\EN{As we can see, very compact \TT{f()} function takes arguments right from the registers}.
+\RU{Инструкция \LEA используется здесь для сложения чисел, 
 должно быть компилятор посчитал что так будет эффективнее нежели использование \TT{ADD}}
-{\LEA instruction is used here for addition,
+\EN{\LEA instruction is used here for addition,
 apparently, compiler considered this instruction here faster then \TT{ADD}}.
 \index{x86!\Instructions!LEA}
-\IFRU{А в самой \main{} \LEA{} также используется для подготовки первого и третьего аргумента: должно быть,
+\RU{А в самой \main{} \LEA{} также используется для подготовки первого и третьего аргумента: должно быть,
 компилятор решил, что \LEA{} будет работать здесь быстрее, чем загрузка значения в регистр при помощи \MOV}
-{\LEA is also used in \main for the first and third arguments preparing, apparently, compiler
+\EN{\LEA is also used in \main for the first and third arguments preparing, apparently, compiler
 thinks that it will work faster than usual value loading to the register using \MOV instruction}.
 
-\IFRU{Попробуем посмотреть вывод неоптимизирующего MSVC}{Let's try to take a look on output of
+\RU{Попробуем посмотреть вывод неоптимизирующего MSVC}\EN{Let's try to take a look on output of
 non-optimizing MSVC}:
 
 \lstinputlisting[caption=MSVC 2012 x64]{patterns/05_passing_arguments/x64_MSVC_IDA.asm}
 
-\IFRU{Немного путаннее: все 3 аргумента из регистров зачем-то сохраняются в стеке}
-{Somewhat puzzling: all 3 arguments from registers are saved to the stack for some reason}.
+\RU{Немного путаннее: все 3 аргумента из регистров зачем-то сохраняются в стеке}
+\EN{Somewhat puzzling: all 3 arguments from registers are saved to the stack for some reason}.
 \index{Shadow space}
 \label{shadow_space}
-\IFRU{Это называется}{This is called} ``shadow space''
+\RU{Это называется}\EN{This is called} ``shadow space''
 \footnote{\url{http://msdn.microsoft.com/en-us/library/zthk2dkh(v=vs.80).aspx}}: 
-\IFRU{каждая ф-ция в Win64 может (хотя и не обязана) сохранять значения 4-х регистров там}
-{every Win64 may (but not required to) save all 4 register values there}.
-\IFRU{Это делается по крайней мере из-за двух причин}{This is done by two reasons}: 
-1) \IFRU{в большой ф-ции отвести целый регистр (а тем более 4 регистра) для входного аргумента, 
+\RU{каждая ф-ция в Win64 может (хотя и не обязана) сохранять значения 4-х регистров там}
+\EN{every Win64 may (but not required to) save all 4 register values there}.
+\RU{Это делается по крайней мере из-за двух причин}\EN{This is done by two reasons}: 
+1) \RU{в большой ф-ции отвести целый регистр (а тем более 4 регистра) для входного аргумента, 
 это слишком расточительно, так что к нему будет обращение через стек}
-{it is too lavish to allocate the whole register (or even 4 registers) for the input argument,
+\EN{it is too lavish to allocate the whole register (or even 4 registers) for the input argument,
 so it will be accessed via stack};
-2) \IFRU{отладчик всегда знает где найти аргументы ф-ции в момент останова}{debugger is always
+2) \RU{отладчик всегда знает где найти аргументы ф-ции в момент останова}\EN{debugger is always
 aware where to find function arguments at a break}
 \footnote{\url{http://msdn.microsoft.com/en-us/library/ew5tede7(v=VS.90).aspx}}.
 
-\IFRU{Место в стеке для ``shadow space'' выделяет именно \gls{caller}}{It is duty
+\RU{Место в стеке для ``shadow space'' выделяет именно \gls{caller}}\EN{It is duty
 of \gls{caller} to allocate ``shadow space'' in stack}.
 
 \subsection{GCC}
 
-\Optimizing GCC \IFRU{также делает понятный код}{does more or less understanable code}:
+\Optimizing GCC \RU{также делает понятный код}\EN{does more or less understanable code}:
 
 \lstinputlisting[caption=GCC 4.4.6 -O3 x64]{patterns/05_passing_arguments/x64_GCC_O3.s}
 
@@ -60,24 +60,24 @@ of \gls{caller} to allocate ``shadow space'' in stack}.
 \lstinputlisting[caption=GCC 4.4.6 x64]{patterns/05_passing_arguments/x64_GCC.s}
 
 \index{Shadow space}
-\IFRU{В соглашении о вызовах System V *NIX\cite{SysVABI} нет ``shadow space'', но \gls{callee} тоже иногда
+\RU{В соглашении о вызовах System V *NIX\cite{SysVABI} нет ``shadow space'', но \gls{callee} тоже иногда
 должен сохранять где-то аргументы, потому что, опять же, регистров может и не хватить на все действия.
 Что мы здесь и видим}
-{There are no ``shadow space'' requirement in System V *NIX\cite{SysVABI}, but \gls{callee} may need to save
+\EN{There are no ``shadow space'' requirement in System V *NIX\cite{SysVABI}, but \gls{callee} may need to save
 arguments somewhere, because, again, it may be regsiters shortage}.
 
-\subsection{GCC: uint64\_t \IFRU{вместо}{instead} int}
+\subsection{GCC: uint64\_t \RU{вместо}\EN{instead} int}
 
-\IFRU{Наш пример работал с 32-битным \Tint, поэтому использовались 32-битные части регистров с префиксом \TT{E-}}
-{Our example worked with 32-bit \Tint, that is why 32-bit register parts were used (prefixed by \TT{E-})}.
+\RU{Наш пример работал с 32-битным \Tint, поэтому использовались 32-битные части регистров с префиксом \TT{E-}}
+\EN{Our example worked with 32-bit \Tint, that is why 32-bit register parts were used (prefixed by \TT{E-})}.
 
-\IFRU{Его можно немного переделать, чтобы он заработал с 64-битными значениями}{It can be altered slightly
+\RU{Его можно немного переделать, чтобы он заработал с 64-битными значениями}\EN{It can be altered slightly
 in order to use 64-bit values}:
 
 \lstinputlisting{patterns/05_passing_arguments/ex64.c}
 
 \lstinputlisting[caption=GCC 4.4.6 -O3 x64]{patterns/05_passing_arguments/ex64_GCC_O3_IDA.asm}
 
-\IFRU{Собствено, всё то же самое, только используются регистры \IT{целиком}, с префиксом \TT{R-}}
-{The code is very same, but registers (prefixed by \TT{R-}) are \IT{used as a whole}}.
+\RU{Собствено, всё то же самое, только используются регистры \IT{целиком}, с префиксом \TT{R-}}
+\EN{The code is very same, but registers (prefixed by \TT{R-}) are \IT{used as a whole}}.
 

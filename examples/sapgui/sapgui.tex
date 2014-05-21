@@ -1,50 +1,50 @@
-\section{\IFRU{Касательно сжимания сетевого траффика в клиенте SAP}{About SAP client network traffic compression}}
+\section{\RU{Касательно сжимания сетевого траффика в клиенте SAP}\EN{About SAP client network traffic compression}}
 \label{sec:SAPGUI}
 
 \newcommand{\TDWNC}{TDW\_NOCOMPRESS\xspace}
 
-\IFRU{(Трассировка связи между переменной окружения \TDWNC{} SAPGUI\footnote{GUI-клиент от SAP}
+\RU{(Трассировка связи между переменной окружения \TDWNC{} SAPGUI\footnote{GUI-клиент от SAP}
 до ``назойливого всплывающего окна'' и самой функции сжатия данных.)}
-{(Tracing connection between \TDWNC{} SAPGUI\footnote{SAP GUI client} environment variable to 
+\EN{(Tracing connection between \TDWNC{} SAPGUI\footnote{SAP GUI client} environment variable to 
 the pesky nagging pop-up window and actual data compression routine.)}
 
-\IFRU{Известно, что сетевой траффик между SAPGUI и SAP по умолчанию не шифруется а сжимается} 
-{It is known that network traffic between SAPGUI and SAP is not crypted by default, it is rather compressed}
-(\IFRU{читайте}{read} \IFRU{здесь}{here}\footnote{\url{http://blog.yurichev.com/node/44}} 
+\RU{Известно, что сетевой траффик между SAPGUI и SAP по умолчанию не шифруется а сжимается} 
+\EN{It is known that network traffic between SAPGUI and SAP is not crypted by default, it is rather compressed}
+(\RU{читайте}\EN{read} \RU{здесь}\EN{here}\footnote{\url{http://blog.yurichev.com/node/44}} 
 \AndENRU 
-\IFRU{здесь}{here}\footnote{\url{http://blog.yurichev.com/node/47}}). 
+\RU{здесь}\EN{here}\footnote{\url{http://blog.yurichev.com/node/47}}). 
 
-\IFRU{Известно также что если установить переменную окружения \IT{\TDWNC} в 1, можно выключить сжатие сетевых пакетов.}
-{It is also known that by setting environment variable \IT{\TDWNC} to 1, it is possible to turn network packets compression off.}
+\RU{Известно также что если установить переменную окружения \IT{\TDWNC} в 1, можно выключить сжатие сетевых пакетов.}
+\EN{It is also known that by setting environment variable \IT{\TDWNC} to 1, it is possible to turn network packets compression off.}
 
-\IFRU{Но вы увидите окно, которое нельзя будет закрыть}
-{But you will see a nagging pop-up window cannot be closed}:
+\RU{Но вы увидите окно, которое нельзя будет закрыть}
+\EN{But you will see a nagging pop-up window cannot be closed}:
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{examples/sapgui/sapgui720.png}
-\caption{\IFRU{Скриншот}{Screenshot}}
+\caption{\RU{Скриншот}\EN{Screenshot}}
 \end{figure}
 
-\IFRU{Посмотрим, сможем ли мы как-то убрать это окно}
-{Let's see, if we can remove the window somehow}.
+\RU{Посмотрим, сможем ли мы как-то убрать это окно}
+\EN{Let's see, if we can remove the window somehow}.
 
-\IFRU{Но в начале давайте посмотрим, что мы уже знаем}{But before this, let's see what we already know}.
-\IFRU{Первое: мы знаем, что переменна окружения \IT{\TDWNC} проверяется где-то внутри клиента SAPGUI.}
-{First: we know the environment variable \IT{\TDWNC} is checked somewhere inside of SAPGUI client.}
-\IFRU{Второе: строка вроде ``data compression switched off'' также должна где-то присутствовать.}
-{Second: string like ``data compression switched off'' must be present somewhere too.}
-\IFRU{При помощи файлового менеджера FAR я нашел обе эти строки в файле SAPguilib.dll.}
-{With the help of FAR file manager I found that both of these strings are stored in the SAPguilib.dll file.}
+\RU{Но в начале давайте посмотрим, что мы уже знаем}\EN{But before this, let's see what we already know}.
+\RU{Первое: мы знаем, что переменна окружения \IT{\TDWNC} проверяется где-то внутри клиента SAPGUI.}
+\EN{First: we know the environment variable \IT{\TDWNC} is checked somewhere inside of SAPGUI client.}
+\RU{Второе: строка вроде ``data compression switched off'' также должна где-то присутствовать.}
+\EN{Second: string like ``data compression switched off'' must be present somewhere too.}
+\RU{При помощи файлового менеджера FAR я нашел обе эти строки в файле SAPguilib.dll.}
+\EN{With the help of FAR file manager I found that both of these strings are stored in the SAPguilib.dll file.}
 
-\IFRU{Так что давайте откроем файл SAPguilib.dll в \IDA и поищем там строку \IT{``\TDWNC''}.
+\RU{Так что давайте откроем файл SAPguilib.dll в \IDA и поищем там строку \IT{``\TDWNC''}.
 Да, она присутствует и имеется только одна ссылка на эту строку.}
-{So let's open SAPguilib.dll in \IDA and search for \IT{``\TDWNC''} string. 
+\EN{So let's open SAPguilib.dll in \IDA and search for \IT{``\TDWNC''} string. 
 Yes, it is present and there is only one reference to it.}
 
-\IFRU{Мы увидим такой фрагмент кода
+\RU{Мы увидим такой фрагмент кода
 (все смещения верны для версии SAPGUI 720 win32, SAPguilib.dll версия файла 7200,1,0,9009)}
-{We see the following fragment of code 
+\EN{We see the following fragment of code 
 (all file offsets are valid for SAPGUI 720 win32, SAPguilib.dll file version 7200,1,0,9009)}:
 
 \begin{lstlisting}
@@ -74,15 +74,15 @@ Yes, it is present and there is only one reference to it.}
 .text:6440D557                 mov     [edi+15h], al
 \end{lstlisting}
 
-\IFRU{Строка возвращаемая функцией \TT{chk\_env()} через второй аргумент, обрабатывается далее строковыми
+\RU{Строка возвращаемая функцией \TT{chk\_env()} через второй аргумент, обрабатывается далее строковыми
 функциями MFC, затем вызывается \TT{atoi()}\footnote{Стандартная функция Си, конвертирующая число в строке в число}.
 После этого, число сохраняется в \TT{edi+15h}}
-{String returned by \TT{chk\_env()} via second argument is then handled by MFC string functions and then 
+\EN{String returned by \TT{chk\_env()} via second argument is then handled by MFC string functions and then 
 \TT{atoi()}\footnote{standard C library function, coverting number in string into number} is called. 
 After that, numerical value is stored to \TT{edi+15h}}.
 
-\IFRU{Обратите также внимание на функцию \TT{chk\_env} (это я так назвал её)}
-{Also take a look onto \TT{chk\_env()} function (I gave a name to it)}:
+\RU{Обратите также внимание на функцию \TT{chk\_env} (это я так назвал её)}
+\EN{Also take a look onto \TT{chk\_env()} function (I gave a name to it)}:
 
 \begin{lstlisting}
 .text:64413F20 ; int __cdecl chk_env(char *VarName, int)
@@ -169,15 +169,15 @@ After that, numerical value is stored to \TT{edi+15h}}.
 .text:64413FBF chk_env         endp
 \end{lstlisting}
 
-\IFRU{Да}{Yes}. \IFRU{Функция}{} \TT{getenv\_s()}\footnote{\url{http://msdn.microsoft.com/en-us/library/tb2sfw2z(VS.80).aspx}} 
-\IFRU{это \IT{безопасная} версия функции \TT{getenv()}\footnote{Стандартная функция Си, возвращающая значение переменной окружения} в MSVC}
-{function is Microsoft security-enhanced version of \TT{getenv()}\footnote{Standard C library returning environment variable}}.
+\RU{Да}\EN{Yes}. \RU{Функция}\EN{} \TT{getenv\_s()}\footnote{\url{http://msdn.microsoft.com/en-us/library/tb2sfw2z(VS.80).aspx}} 
+\RU{это \IT{безопасная} версия функции \TT{getenv()}\footnote{Стандартная функция Си, возвращающая значение переменной окружения} в MSVC}
+\EN{function is Microsoft security-enhanced version of \TT{getenv()}\footnote{Standard C library returning environment variable}}.
 
-\IFRU{Тут также имеются манипуляции со строками при помощи функций из MFC}
-{There is also a MFC string manipulations}.
+\RU{Тут также имеются манипуляции со строками при помощи функций из MFC}
+\EN{There is also a MFC string manipulations}.
 
-\IFRU{Множество других переменных окружения также проверяются. Здесь список всех переменных проверяемых SAPGUI 
-а также сообщение записываемое им в лог-файл, если переменная включена}{Lots of other environment variables are checked as well. 
+\RU{Множество других переменных окружения также проверяются. Здесь список всех переменных проверяемых SAPGUI 
+а также сообщение записываемое им в лог-файл, если переменная включена}\EN{Lots of other environment variables are checked as well. 
 Here is a list of all variables being checked and what SAPGUI could write to trace log when logging is turned on}:
 
 \begin{center}
@@ -208,8 +208,8 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 \end{tabular}
 \end{center}
 
-\IFRU{Настройки для каждой переменной записываются в массив через указатель в регистре \EDI. \EDI выставляется перед вызовом функции}
-{Settings for each variable are written to the array via pointer in the \EDI register.
+\RU{Настройки для каждой переменной записываются в массив через указатель в регистре \EDI. \EDI выставляется перед вызовом функции}
+\EN{Settings for each variable are written to the array via pointer in the \EDI register.
 \EDI is being set before the function call}:
 
 \begin{lstlisting}
@@ -226,10 +226,10 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 .text:6440EE1F                 call    FEWTraceError
 \end{lstlisting}
 
-\IFRU{А теперь, можем ли мы найти строку \IT{``data record mode switched on''}?}{Now, can we find \IT{``data record mode switched on''} string?}
-\IFRU{Да, и есть только одна ссылка на эту строку в функции}{Yes, and here is the only reference in function} \TT{CDwsGui::PrepareInfoWindow()}.
-\IFRU{Откуда я узнал имена классов/методов? Здесь много специальных отладочных вызовов, пишущих в лог-файл вроде}
-{How do I know class/method names? There is a lot of special debugging calls writing to log-files like}:
+\RU{А теперь, можем ли мы найти строку \IT{``data record mode switched on''}?}\EN{Now, can we find \IT{``data record mode switched on''} string?}
+\RU{Да, и есть только одна ссылка на эту строку в функции}\EN{Yes, and here is the only reference in function} \TT{CDwsGui::PrepareInfoWindow()}.
+\RU{Откуда я узнал имена классов/методов? Здесь много специальных отладочных вызовов, пишущих в лог-файл вроде}
+\EN{How do I know class/method names? There is a lot of special debugging calls writing to log-files like}:
 
 \begin{lstlisting}
 .text:64405160                 push    dword ptr [esi+2854h]
@@ -249,10 +249,10 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 .text:64402388                 add     esp, 0Ch
 \end{lstlisting}
 
-\IFRU{Они \textbf{очень} полезны}{It is \textbf{very} useful}.
+\RU{Они \textbf{очень} полезны}\EN{It is \textbf{very} useful}.
 
-\IFRU{Посмотрим содержимое функции ``назойливого всплывающего окна''}
-{So let's see contents of the pesky nagging pop-up window function}:
+\RU{Посмотрим содержимое функции ``назойливого всплывающего окна''}
+\EN{So let's see contents of the pesky nagging pop-up window function}:
 
 \begin{lstlisting}
 .text:64404F4F CDwsGui__PrepareInfoWindow proc near
@@ -499,15 +499,15 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 .text:6440519A CDwsGui__PrepareInfoWindow endp
 \end{lstlisting}
 
-\IFRU{\ECX в начале функции содержит в себе указатель на объект (потому что это тип функции thiscall~(\ref{thiscall})).
+\RU{\ECX в начале функции содержит в себе указатель на объект (потому что это тип функции thiscall~(\ref{thiscall})).
 В нашем случае, класс имеет тип, очевидно, \IT{CDwsGui}. В зависимости от включенных опций в объекте, 
 разные сообщения добавляются к итоговому сообщению.}
-{\ECX at function start gets pointer to object (since it is thiscall~(\ref{thiscall})-type of function).
+\EN{\ECX at function start gets pointer to object (since it is thiscall~(\ref{thiscall})-type of function).
 In our case, the object obviously has class type \IT{CDwsGui}. 
 Depends of option turned on in the object, specific message part will be concatenated to resulting message.}
 
-\IFRU{Если переменная по адресу \TT{this+0x3D} не ноль, компрессия сетевых пакетов будет выключена}
-{If value at \TT{this+0x3D} address is not zero, compression is off}:
+\RU{Если переменная по адресу \TT{this+0x3D} не ноль, компрессия сетевых пакетов будет выключена}
+\EN{If value at \TT{this+0x3D} address is not zero, compression is off}:
 
 \begin{lstlisting}
 .text:64405007 loc_64405007:
@@ -523,30 +523,30 @@ Depends of option turned on in the object, specific message part will be concate
 .text:6440501D bypass:
 \end{lstlisting}
 
-\IFRU{Интересно, что в итоге, состояние переменной \IT{var\_10} определяет, будет ли показано сообщение вообще}
-{It is interesting, that finally, \IT{var\_10} variable state defines whether the message is to be shown at all}:
+\RU{Интересно, что в итоге, состояние переменной \IT{var\_10} определяет, будет ли показано сообщение вообще}
+\EN{It is interesting, that finally, \IT{var\_10} variable state defines whether the message is to be shown at all}:
 
-\lstinputlisting{\IFRU{examples/sapgui/1ru.lst}{examples/sapgui/1en.lst}}
+\lstinputlisting{\RU{examples/sapgui/1ru.lst}\EN{examples/sapgui/1en.lst}}
 
-\IFRU{Давайте проверим нашу теорию на практике}{Let's check our theory on practice}.
+\RU{Давайте проверим нашу теорию на практике}\EN{Let's check our theory on practice}.
 
-\JNZ \IFRU{в этой строке}{at this line} \dots
+\JNZ \RU{в этой строке}\EN{at this line} \dots
 
-\lstinputlisting{\IFRU{examples/sapgui/2ru.lst}{examples/sapgui/2en.lst}}
+\lstinputlisting{\RU{examples/sapgui/2ru.lst}\EN{examples/sapgui/2en.lst}}
 
-\dots \IFRU{заменим просто на \JMP и получим SAPGUI работающим без этого назойливого всплывающего окна!}
-{replace it with just \JMP, and get SAPGUI working without the pesky nagging pop-up window appearing!}
+\dots \RU{заменим просто на \JMP и получим SAPGUI работающим без этого назойливого всплывающего окна!}
+\EN{replace it with just \JMP, and get SAPGUI working without the pesky nagging pop-up window appearing!}
 
-\IFRU{Копнем немного глубже и проследим связь между смещением 0x15 в \TT{load\_command\_line()}
+\RU{Копнем немного глубже и проследим связь между смещением 0x15 в \TT{load\_command\_line()}
 (Это я дал имя этой функции) и переменной \TT{this+0x3D} в \IT{CDwsGui::PrepareInfoWindow}. 
 Уверены ли мы что это одна и та же переменная?}
-{Now let's dig deeper and find connection between 0x15 offset in the \TT{load\_command\_line()} 
+\EN{Now let's dig deeper and find connection between 0x15 offset in the \TT{load\_command\_line()} 
 (I gave the name to the function) function and \TT{this+0x3D} variable in the \IT{CDwsGui::PrepareInfoWindow}. 
 Are we sure the value is the same?}
 
-\IFRU{Начинаю искать все места где в коде используется константа \TT{0x15}.
+\RU{Начинаю искать все места где в коде используется константа \TT{0x15}.
 Для таких небольших программ как SAPGUI, это иногда срабатывает. Вот первое что я нашел:}
-{I'm starting to search for all occurrences of \TT{0x15} value in code. 
+\EN{I'm starting to search for all occurrences of \TT{0x15} value in code. 
 For a small programs like SAPGUI, it sometimes works. Here is the first occurrence I got:}
 
 \begin{lstlisting}
@@ -580,10 +580,10 @@ For a small programs like SAPGUI, it sometimes works. Here is the first occurren
 .text:64404C4F                 mov     [esi+15h], al ; to 0x15 offset in CDwsGui object
 \end{lstlisting}
 
-\IFRU{Эта функция вызывается из функции с названием \IT{CDwsGui::CopyOptions}! И снова спасибо отладочной информации.}
-{The function was called from the function named \IT{CDwsGui::CopyOptions}! And thanks again for debugging information.}
+\RU{Эта функция вызывается из функции с названием \IT{CDwsGui::CopyOptions}! И снова спасибо отладочной информации.}
+\EN{The function was called from the function named \IT{CDwsGui::CopyOptions}! And thanks again for debugging information.}
 
-\IFRU{Но настоящий ответ находится в функции}{But the real answer in the function} \IT{CDwsGui::Init()}:
+\RU{Но настоящий ответ находится в функции}\EN{But the real answer in the function} \IT{CDwsGui::Init()}:
 
 \begin{lstlisting}
 .text:6440B0BF loc_6440B0BF:
@@ -595,14 +595,14 @@ For a small programs like SAPGUI, it sometimes works. Here is the first occurren
 .text:6440B0CF                 call    CDwsGui__CopyOptions
 \end{lstlisting}
 
-\IFRU{Теперь ясно: массив заполняемый в \TT{load\_command\_line()} на самом деле расположен в классе \IT{CDwsGui} но по адресу
+\RU{Теперь ясно: массив заполняемый в \TT{load\_command\_line()} на самом деле расположен в классе \IT{CDwsGui} но по адресу
 \TT{this+0x28}. 0x15 + 0x28 это 0x3D. ОК, мы нашли место, куда наша переменная копируется.}
-{Finally, we understand: array filled in the \TT{load\_command\_line()} function is actually placed in the \IT{CDwsGui} class 
+\EN{Finally, we understand: array filled in the \TT{load\_command\_line()} function is actually placed in the \IT{CDwsGui} class 
 but on \TT{this+0x28} address. 0x15 + 0x28 is exactly 0x3D. OK, we found the point where the value is copied to.}
 
-\IFRU{Посмотрим также и другие места, где используется смещение 0x3D.
+\RU{Посмотрим также и другие места, где используется смещение 0x3D.
 Одно из таких мест находится в функции \IT{CDwsGui::SapguiRun} (и снова спасибо отладочным вызовам):}
-{Let's also find other places where 0x3D offset is used. 
+\EN{Let's also find other places where 0x3D offset is used. 
 Here is one of them in the \IT{CDwsGui::SapguiRun} function (again, thanks to debugging calls):}
 
 \begin{lstlisting}
@@ -627,19 +627,19 @@ Here is one of them in the \IT{CDwsGui::SapguiRun} function (again, thanks to de
 .text:64409D80                 call    CConnectionContext__CreateNetwork
 \end{lstlisting}
 
-\IFRU{Проверим нашу идею. Заменяем \TT{setz al} здесь на \TT{xor eax, eax / nop}, убираем переменную окружения 
+\RU{Проверим нашу идею. Заменяем \TT{setz al} здесь на \TT{xor eax, eax / nop}, убираем переменную окружения 
 \TDWNC и запускаем SAPGUI. Wow! Назойливого окна больше нет (как и ожидалось: ведь переменной окружении также
 нет), но в Wireshark мы видим, что сетевые пакеты больше не сжимаются!
 Очевидно, это то самое место где флаг отражающий сжатие пакетов выставляется в объекте \TT{CConnectionContext}.}
-{Let's check our findings. Replace the \TT{setz al} here to the \TT{xor eax, eax / nop} instructions,
+\EN{Let's check our findings. Replace the \TT{setz al} here to the \TT{xor eax, eax / nop} instructions,
 clear \TDWNC 
 environment variable and run SAPGUI. Wow! There is no more pesky nagging window (just as expected, 
 because variable is not set) but in Wireshark we can see the network packets are not compressed anymore! 
 Obviously, this is the point where compression flag is to be set in the \IT{CConnectionContext} object.}
 
-\IFRU{Так что, флаг сжатия передается в пятом аргументе функции \IT{CConnectionContext::CreateNetwork}. 
+\RU{Так что, флаг сжатия передается в пятом аргументе функции \IT{CConnectionContext::CreateNetwork}. 
 Внутри этой функции, вызывается еще одна:}
-{So, compression flag is passed in the 5th argument of function \IT{CConnectionContext::CreateNetwork}. 
+\EN{So, compression flag is passed in the 5th argument of function \IT{CConnectionContext::CreateNetwork}. 
 Inside the function, another one is called:}
 
 \begin{lstlisting}
@@ -652,12 +652,12 @@ Inside the function, another one is called:}
 .text:64403485                 call    CNetwork__CNetwork
 \end{lstlisting}
 
-\IFRU{Флаг отвечающий за сжатие здесь передается в пятом аргументе для конструктора \IT{CNetwork::CNetwork}.}
-{Compression flag is passing here in the 5th argument to the \IT{CNetwork::CNetwork} constructor.}
+\RU{Флаг отвечающий за сжатие здесь передается в пятом аргументе для конструктора \IT{CNetwork::CNetwork}.}
+\EN{Compression flag is passing here in the 5th argument to the \IT{CNetwork::CNetwork} constructor.}
 
-\IFRU{И вот как конструктор \IT{CNetwork} выставляет некоторые флаги в объекте \IT{CNetwork} в соответствии с пятым аргументом \textbf{и}
+\RU{И вот как конструктор \IT{CNetwork} выставляет некоторые флаги в объекте \IT{CNetwork} в соответствии с пятым аргументом \textbf{и}
 еще какую-то переменную, возможно, также отвечающую за сжатие сетевых пакетов.}
-{And here is how \IT{CNetwork} constructor sets a flag in the \IT{CNetwork} object according to the 5th argument \textbf{and}
+\EN{And here is how \IT{CNetwork} constructor sets a flag in the \IT{CNetwork} object according to the 5th argument \textbf{and}
 an another variable which probably could affect network packets compression too.}
 
 \begin{lstlisting}
@@ -682,12 +682,12 @@ an another variable which probably could affect network packets compression too.
 .text:64411E0B                 mov     [ebx+3A4h], eax ; EBX is pointer to CNetwork object
 \end{lstlisting}
 
-\IFRU{Теперь мы знаем, что флаг отражающий сжатие данных сохраняется в классе \IT{CNetwork} по адресу \IT{this+0x3A4}.}
-{At this point we know the compression flag is stored in the \IT{CNetwork} class at \IT{this+0x3A4} address.}
+\RU{Теперь мы знаем, что флаг отражающий сжатие данных сохраняется в классе \IT{CNetwork} по адресу \IT{this+0x3A4}.}
+\EN{At this point we know the compression flag is stored in the \IT{CNetwork} class at \IT{this+0x3A4} address.}
 
-\IFRU{Поищем теперь значение \TT{0x3A4} в SAPguilib.dll. Находим второе упоминание этого значения в функции
+\RU{Поищем теперь значение \TT{0x3A4} в SAPguilib.dll. Находим второе упоминание этого значения в функции
 \IT{CDwsGui::OnClientMessageWrite} (бесконечная благодарность отладочной информации):}
-{Now let's dig across SAPguilib.dll for \TT{0x3A4} value. And here is the second occurrence in 
+\EN{Now let's dig across SAPguilib.dll for \TT{0x3A4} value. And here is the second occurrence in 
 the \IT{CDwsGui::OnClientMessageWrite} (endless thanks for debugging information):}
 
 \begin{lstlisting}
@@ -728,13 +728,13 @@ the \IT{CDwsGui::OnClientMessageWrite} (endless thanks for debugging information
 .text:64406FE0                 call    SapPcTxtRead
 \end{lstlisting}
 
-\IFRU{Заглянем в функцию \IT{sub\_644055C5}. Всё что в ней мы находим это вызов memcpy() и еще какую-то функцию, названную
+\RU{Заглянем в функцию \IT{sub\_644055C5}. Всё что в ней мы находим это вызов memcpy() и еще какую-то функцию, названную
 \IDA \IT{sub\_64417440}.}
-{Let's take a look into \IT{sub\_644055C5}. In it we can only see call to memcpy() and an other function named 
+\EN{Let's take a look into \IT{sub\_644055C5}. In it we can only see call to memcpy() and an other function named 
 (by \IDA) \IT{sub\_64417440}.}
 
-\IFRU{И теперь заглянем в \IT{sub\_64417440}. Увидим там:}
-{And, let's take a look inside \IT{sub\_64417440}. What we see is:}
+\RU{И теперь заглянем в \IT{sub\_64417440}. Увидим там:}
+\EN{And, let's take a look inside \IT{sub\_64417440}. What we see is:}
 
 \begin{lstlisting}
 .text:6441747C                 push    offset aErrorCsrcompre ; "\nERROR: CsRCompress: invalid handle"
@@ -742,29 +742,28 @@ the \IT{CDwsGui::OnClientMessageWrite} (endless thanks for debugging information
 .text:64417483                 add     esp, 4
 \end{lstlisting}
 
-Voilà! \IFRU{Мы находим функцию которая собственно и сжимает сетевые пакеты.}{We've found the function which actually compresses data.}
-\IFRU{Как я уже разобрался}
-{As I revealed in past}
+Voilà! \RU{Мы находим функцию которая собственно и сжимает сетевые пакеты.}\EN{We've found the function which actually compresses data.}
+\RU{Как я уже разобрался}\EN{As I revealed in past}
 \footnote{\url{http://conus.info/utils/SAP_pkt_decompr.txt}},
-\IFRU{эта функция используется в SAP и в опен-сорсном проекте MaxDB.
+\RU{эта функция используется в SAP и в опен-сорсном проекте MaxDB.
 Так что эта функция доступна в виде исходников.}
-{this function is used in SAP and also open-source MaxDB project. 
+\EN{this function is used in SAP and also open-source MaxDB project. 
 So it is available in sources.}
 
-\IFRU{Последняя проверка:}{Doing last check here:}
+\RU{Последняя проверка:}\EN{Doing last check here:}
 
 \begin{lstlisting}
 .text:64406F79                 cmp     dword ptr [ecx+3A4h], 1
 .text:64406F80                 jnz     compression_flag_is_zero
 \end{lstlisting}
 
-\IFRU{Заменим \JNZ на безусловный переход \JMP. Уберем переменную окружения \TDWNC.}
-{Replace \JNZ here for unconditional \JMP. Remove environment variable \TDWNC.} Voilà! 
-\IFRU{В Wireshark мы видим, что сетевые пакеты, исходящие от клиента, не сжаты. Ответы сервера, впрочем, сжаты.}
-{In Wireshark we see the client messages are not compressed. Server responses, however, are compressed.}
+\RU{Заменим \JNZ на безусловный переход \JMP. Уберем переменную окружения \TDWNC.}
+\EN{Replace \JNZ here for unconditional \JMP. Remove environment variable \TDWNC.} Voilà! 
+\RU{В Wireshark мы видим, что сетевые пакеты, исходящие от клиента, не сжаты. Ответы сервера, впрочем, сжаты.}
+\EN{In Wireshark we see the client messages are not compressed. Server responses, however, are compressed.}
 
-\IFRU{Так что мы нашли связь между переменной окружения и местом где функция сжатия данных вызывается, а также
+\RU{Так что мы нашли связь между переменной окружения и местом где функция сжатия данных вызывается, а также
 может быть отключена.}
-{So we found exact connection between environment variable and the point where data compression 
+\EN{So we found exact connection between environment variable and the point where data compression 
 routine may be called or may be bypassed.}
 

@@ -1,63 +1,63 @@
-\chapter{\IFRU{Подозрительные паттерны кода}{Suspicious code patterns}}
+\chapter{\RU{Подозрительные паттерны кода}\EN{Suspicious code patterns}}
 
-\section{\IFRU{Инструкции XOR}{XOR instructions}}
+\section{\RU{Инструкции XOR}\EN{XOR instructions}}
 \index{x86!\Instructions!XOR}
 
-\IFRU{Инструкции вроде}{instructions like} \TT{XOR op, op} (\IFRU{например}{for example}, \TT{XOR EAX, EAX}) 
-\IFRU{обычно используются для обнуления регистра,
-однако, если операнды разные, то применяется операция именно}{are usually used for setting register value
-to zero, but if operands are different,} \IT{\IFRU{исключающего или}{exclusive or}}\EN{ operation
+\RU{Инструкции вроде}\EN{instructions like} \TT{XOR op, op} (\RU{например}\EN{for example}, \TT{XOR EAX, EAX}) 
+\RU{обычно используются для обнуления регистра,
+однако, если операнды разные, то применяется операция именно}\EN{are usually used for setting register value
+to zero, but if operands are different,} \IT{\RU{исключающего или}\EN{exclusive or}}\EN{ operation
 is executed}.
-\IFRU{Эта операция очень редко применяется в обычном программировании, но применяется очень часто в криптографии,
-включая любительскую}{This operation is rare in common programming, but used often in cryptography,
+\RU{Эта операция очень редко применяется в обычном программировании, но применяется очень часто в криптографии,
+включая любительскую}\EN{This operation is rare in common programming, but used often in cryptography,
 including amateur}.
-\IFRU{Особенно подозрительно, если второй операнд это большое число}{Especially suspicious case if the
+\RU{Особенно подозрительно, если второй операнд это большое число}\EN{Especially suspicious case if the
 second operand is big number}.
-\IFRU{Это может указывать на шифрование, вычисление контрольной суммы, итд}
-{This may points to encrypting/decrypting, checksum computing, etc}.\\
+\RU{Это может указывать на шифрование, вычисление контрольной суммы, итд}
+\EN{This may points to encrypting/decrypting, checksum computing, etc}.\\
 \\
-\IFRU{Одно из исключений из этого наблюдения о котором стоит сказать, то, что генерация и проверка значения ``канарейки''
+\RU{Одно из исключений из этого наблюдения о котором стоит сказать, то, что генерация и проверка значения ``канарейки''
 (\ref{subsec:BO_protection}) часто происходит используя инструкцию \XOR}
-{One exception to this observation worth to note is ``canary'' (\ref{subsec:BO_protection}) generation and checking is often done using \XOR
+\EN{One exception to this observation worth to note is ``canary'' (\ref{subsec:BO_protection}) generation and checking is often done using \XOR
 instruction}. \\
 \\
 \index{AWK}
-\IFRU{Этот AWK-скрипт можно использовать для обработки листингов (.lst) созданных \IDA{}}
-{This AWK script can be used for processing \IDA{} listing (.lst) files}:
+\RU{Этот AWK-скрипт можно использовать для обработки листингов (.lst) созданных \IDA{}}
+\EN{This AWK script can be used for processing \IDA{} listing (.lst) files}:
 
 \begin{lstlisting}
 gawk -e '$2=="xor" { tmp=substr($3, 0, length($3)-1); if (tmp!=$4) if($4!="esp") if ($4!="ebp") { print $1, $2, tmp, ",", $4 } }' filename.lst
 \end{lstlisting}
 
-\IFRU{Нельзя также забывать,
+\RU{Нельзя также забывать,
 что если использовать подобный скрипт, то, возможно, он захватит и неверно дизассемблированный
-код}{It is also worth to note that such script may also capture incorrectly disassembled code} 
+код}\EN{It is also worth to note that such script may also capture incorrectly disassembled code} 
 (\ref{sec:incorrectly_disasmed_code}).
 
-\section{\IFRU{Вручную написанный код на ассемблере}{Hand-written assembly code}}
+\section{\RU{Вручную написанный код на ассемблере}\EN{Hand-written assembly code}}
 
 \index{Function prologue}
 \index{Function epilogue}
 \index{x86!\Instructions!LOOP}
 \index{x86!\Instructions!RCL}
-\IFRU{Современные компиляторы не генерируют инструкции \TT{LOOP} и \TT{RCL}. 
+\RU{Современные компиляторы не генерируют инструкции \TT{LOOP} и \TT{RCL}. 
 С другой стороны, эти инструкции хорошо знакомы кодерам, предпочитающим писать прямо на ассемблере. 
 Подобные инструкции отмечены как (M) в списке инструкций в приложении: \ref{sec:x86_instructions}.
 Если такие инструкции встретились, можно сказать с какой-то вероятностью, что этот фрагмент кода написан вручную.}
-{Modern compilers do not emit \TT{LOOP} and \TT{RCL} instructions.
+\EN{Modern compilers do not emit \TT{LOOP} and \TT{RCL} instructions.
 On the other hand, these instructions are well-known to coders who like to code in straight assembly language.
 If you spot these, it can be said, with a high probability, this fragment of code is hand-written.
 Such instructions are marked as (M) in the instructions list in appendix: \ref{sec:x86_instructions}.}\\
 \\
-\IFRU{Также, пролог/эпилог функции обычно не встречается в ассемблерном коде, написанном вручную.}
-{Also function prologue/epilogue is not commonly present in hand-written assembly copy.}\\
+\RU{Также, пролог/эпилог функции обычно не встречается в ассемблерном коде, написанном вручную.}
+\EN{Also function prologue/epilogue is not commonly present in hand-written assembly copy.}\\
 \\
-\IFRU{Как правило, в вручную написанном коде, нет никакого четкого метода передачи аргументов в 
+\RU{Как правило, в вручную написанном коде, нет никакого четкого метода передачи аргументов в 
 функцию}
-{Commonly there is no fixed system in passing arguments into functions in the hand-written
+\EN{Commonly there is no fixed system in passing arguments into functions in the hand-written
 code}.\\
 \\
-\IFRU{Пример из ядра}{Example from} Windows 2003\EN{ kernel} 
+\RU{Пример из ядра}\EN{Example from} Windows 2003\EN{ kernel} 
 (\RU{файл }ntoskrnl.exe\EN{ file}):
 
 \begin{lstlisting}
@@ -91,7 +91,7 @@ locret_62057F:                       ; CODE XREF: Multiply+10
 Multiply     endp
 \end{lstlisting}
 
-\IFRU{Действительно, если заглянуть в исходные коды}{Indeed, if we look into} 
-\ac{WRK} v1.2\IFRU{, данный код можно найти в файле}{ source code, this code
+\RU{Действительно, если заглянуть в исходные коды}\EN{Indeed, if we look into} 
+\ac{WRK} v1.2\RU{, данный код можно найти в файле}\EN{ source code, this code
 can be found easily in the file} 
 \IT{WRK-v1.2\textbackslash{}base\textbackslash{}ntos\textbackslash{}ke\textbackslash{}i386\textbackslash{}cpu.asm}.

@@ -1,44 +1,44 @@
 \section{\StructurePackingSectionName}
 
-\IFRU{Достаточно немаловажный момент, это упаковка полей в структурах\footnote{См. также: \URLWPDA}.}
-{One important thing is fields packing in structures\footnote{See also: \URLWPDA}.}
+\RU{Достаточно немаловажный момент, это упаковка полей в структурах\footnote{См. также: \URLWPDA}.}
+\EN{One important thing is fields packing in structures\footnote{See also: \URLWPDA}.}
 
-\IFRU{Возьмем простой пример:}{Let's take a simple example:}
+\RU{Возьмем простой пример:}\EN{Let's take a simple example:}
 
 \lstinputlisting{patterns/15_structs/packing.c}
 
-\IFRU{Как видно, мы имеем два поля \Tchar (занимающий один байт) и еще два ~--- \Tint (по 4 байта).}
-{As we see, we have two \Tchar fields (each is exactly one byte) and two more~---\Tint (each - 4 bytes).}
+\RU{Как видно, мы имеем два поля \Tchar (занимающий один байт) и еще два ~--- \Tint (по 4 байта).}
+\EN{As we see, we have two \Tchar fields (each is exactly one byte) and two more~---\Tint (each - 4 bytes).}
 
 \subsection{x86}
 
-\IFRU{Компилируется это все в:}{That's all compiling into:}
+\RU{Компилируется это все в:}\EN{That's all compiling into:}
 
 \lstinputlisting{patterns/15_structs/packing.asm}
 
-\IFRU{Мы видим здесь что адрес каждого поля в структуре выравнивается по 4-байтной границе. 
+\RU{Мы видим здесь что адрес каждого поля в структуре выравнивается по 4-байтной границе. 
 Так что каждый \Tchar здесь занимает те же 4 байта что и \Tint. Зачем? 
 Затем что процессору удобнее обращаться по таким адресам и кэшировать данные из памяти.}
-{As we can see, each field's address is aligned on a 4-bytes border.
+\EN{As we can see, each field's address is aligned on a 4-bytes border.
 That's why each \Tchar occupies 4 bytes here (like \Tint). Why?
 Thus it is easier for CPU to access memory at aligned addresses and to cache data from it.}
 
-\IFRU{Но это не экономично по размеру данных.}{However, it is not very economical in size sense.}
+\RU{Но это не экономично по размеру данных.}\EN{However, it is not very economical in size sense.}
 
-\IFRU{Попробуем скомпилировать тот же исходник с опцией}{Let's try to compile it with option} (\TT{/Zp1}) 
+\RU{Попробуем скомпилировать тот же исходник с опцией}\EN{Let's try to compile it with option} (\TT{/Zp1}) 
 (\IT{/Zp[n] pack structures on n-byte boundary}).
 
 \lstinputlisting[caption=MSVC /Zp1]{patterns/15_structs/packing_msvc_Zp1.asm}
 
-\IFRU{Теперь структура занимает 10 байт и все \Tchar занимают по байту. Что это дает? 
+\RU{Теперь структура занимает 10 байт и все \Tchar занимают по байту. Что это дает? 
 Экономию места. Недостаток ~--- процессор будет обращаться к этим полям не так эффективно 
 по скорости, как мог бы.}
-{Now the structure takes only 10 bytes and each \Tchar value takes 1 byte. What it give to us?
+\EN{Now the structure takes only 10 bytes and each \Tchar value takes 1 byte. What it give to us?
 Size economy. And as drawback~---CPU will access these fields without maximal performance it can.}
 
-\IFRU{Как нетрудно догадаться, если структура используется много в каких исходниках и объектных файлах, 
+\RU{Как нетрудно догадаться, если структура используется много в каких исходниках и объектных файлах, 
 все они должны быть откомпилированы с одним и тем же соглашением об упаковке структур.}
-{As it can be easily guessed, if the structure is used in many source and object files,
+\EN{As it can be easily guessed, if the structure is used in many source and object files,
 all these must be compiled with the same convention about structures packing.}
 
 \newcommand{\FNURLMSDNZP}{\footnote{\href{http://msdn.microsoft.com/en-us/library/ms253935.aspx}
@@ -46,31 +46,31 @@ all these must be compiled with the same convention about structures packing.}
 \newcommand{\FNURLGCCPC}{\footnote{\href{http://gcc.gnu.org/onlinedocs/gcc/Structure_002dPacking-Pragmas.html}
 {Structure-Packing Pragmas}}}
 
-\IFRU{Помимо ключа MSVC \TT{/Zp}, указывающего, по какой границе упаковывать поля структур, есть также 
+\RU{Помимо ключа MSVC \TT{/Zp}, указывающего, по какой границе упаковывать поля структур, есть также 
 опция компилятора \TT{\#pragma pack}, её можно указывать прямо в исходнике. 
 Это справедливо и для MSVC\FNURLMSDNZP и GCC\FNURLGCCPC{}.}
-{Aside from MSVC \TT{/Zp} option which set how to align each structure field, here is also
+\EN{Aside from MSVC \TT{/Zp} option which set how to align each structure field, here is also
 \TT{\#pragma pack} compiler option, it can be defined right in source code.
 It is available in both MSVC\FNURLMSDNZP and GCC\FNURLGCCPC{}.}
 
-\IFRU{Давайте теперь вернемся к \TT{SYSTEMTIME}, которая состоит из 16-битных полей. 
+\RU{Давайте теперь вернемся к \TT{SYSTEMTIME}, которая состоит из 16-битных полей. 
 Откуда наш компилятор знает что их надо паковать по однобайтной границе?}
-{Let's back to the \TT{SYSTEMTIME} structure consisting in 16-bit fields.
+\EN{Let's back to the \TT{SYSTEMTIME} structure consisting in 16-bit fields.
 How our compiler know to pack them on 1-byte alignment boundary?}
 
-\IFRU{В файле \TT{WinNT.h} попадается такое:}{\TT{WinNT.h} file has this:}
+\RU{В файле \TT{WinNT.h} попадается такое:}\EN{\TT{WinNT.h} file has this:}
 
 \begin{lstlisting}[caption=WinNT.h]
 #include "pshpack1.h"
 \end{lstlisting}
 
-\IFRU{И такое:}{And this:}
+\RU{И такое:}\EN{And this:}
 
 \begin{lstlisting}[caption=WinNT.h]
 #include "pshpack4.h"                   // 4 byte packing is the default
 \end{lstlisting}
 
-\IFRU{Сам файл PshPack1.h выглядит так:}{The file PshPack1.h looks like:}
+\RU{Сам файл PshPack1.h выглядит так:}\EN{The file PshPack1.h looks like:}
 
 \begin{lstlisting}[caption=PshPack1.h]
 #if ! (defined(lint) || defined(RC_INVOKED))
@@ -87,44 +87,44 @@ How our compiler know to pack them on 1-byte alignment boundary?}
 #endif /* ! (defined(lint) || defined(RC_INVOKED)) */
 \end{lstlisting}
 
-\IFRU{Собственно, так и задается компилятору, как паковать объявленные после \TT{\#pragma pack} структуры.}
-{That's how compiler will pack structures defined after \TT{\#pragma pack}.}
+\RU{Собственно, так и задается компилятору, как паковать объявленные после \TT{\#pragma pack} структуры.}
+\EN{That's how compiler will pack structures defined after \TT{\#pragma pack}.}
 
 \subsection{ARM + \OptimizingKeil + \ThumbMode}
 
 \lstinputlisting[caption=\OptimizingKeil + \ThumbMode]{patterns/15_structs/packing_Keil_thumb.asm}
 
-\IFRU{Как мы помним, здесь передается не указатель на структуру, а сама структура, а так как в ARM первые 4 аргумента
+\RU{Как мы помним, здесь передается не указатель на структуру, а сама структура, а так как в ARM первые 4 аргумента
 функции передаются через регистры, то поля структуры передаются через}
-{As we may recall, here a structure passed instead of pointer to structure,
+\EN{As we may recall, here a structure passed instead of pointer to structure,
 and since first 4 function arguments in ARM are passed via registers,
 so then structure fields are passed via} \TT{R0-R3}.
 
 \index{ARM!\Instructions!LDRB}
 \index{x86!\Instructions!MOVSX}
-\IFRU{Инструкция }\TT{LDRB} \IFRU{загружает один байт из памяти и расширяет до 32-бит учитывая знак.}
-{loads one byte from memory and extending it to 32-bit, taking into account its sign.}
-\IFRU{Это то же что и инструкция}{This is akin to} \MOVSX \IFRU{в}{instruction in} x86.
-\IFRU{Она здесь применяется для загрузки полей}{Here it is used for loading fields} $a$ \AndENRU $c$ 
-\IFRU{из структуры}{from structure}.
+\RU{Инструкция }\TT{LDRB} \RU{загружает один байт из памяти и расширяет до 32-бит учитывая знак.}
+\EN{loads one byte from memory and extending it to 32-bit, taking into account its sign.}
+\RU{Это то же что и инструкция}\EN{This is akin to} \MOVSX \RU{в}\EN{instruction in} x86.
+\RU{Она здесь применяется для загрузки полей}\EN{Here it is used for loading fields} $a$ \AndENRU $c$ 
+\RU{из структуры}\EN{from structure}.
 
 \index{Function epilogue}
-\IFRU{Еще что бросается в глаза, так это то что вместо эпилога функции, переход на эпилог другой функции!}
-{One more thing we spot easily, instead of function epilogue, here is jump to another function's epilogue!}
-\IFRU{Действительно, то была совсем другая, не относящаяся к этой, функция, однако, она имела точно такой же
-эпилог}{Indeed, that was quite different function, not related in any way to our function, however, it has exactly
+\RU{Еще что бросается в глаза, так это то что вместо эпилога функции, переход на эпилог другой функции!}
+\EN{One more thing we spot easily, instead of function epilogue, here is jump to another function's epilogue!}
+\RU{Действительно, то была совсем другая, не относящаяся к этой, функция, однако, она имела точно такой же
+эпилог}\EN{Indeed, that was quite different function, not related in any way to our function, however, it has exactly
 the same epilogue} 
-(\IFRU{видимо, тоже хранила в стеке 5 локальных переменных}{probably because, it hold 5 local variables too} 
+(\RU{видимо, тоже хранила в стеке 5 локальных переменных}\EN{probably because, it hold 5 local variables too} 
 ($5*4=0x14$)).
-\IFRU{К тому же, она находится рядом (обратите внимание на адреса).}
-{Also it is located nearly (take a look on addresses).}
-\IFRU{Действительно, нет никакой разницы, какой эпилог исполнять, если он работает так же, как нам нужно.}
-{Indeed, there is no difference, which epilogue to execute,
+\RU{К тому же, она находится рядом (обратите внимание на адреса).}
+\EN{Also it is located nearly (take a look on addresses).}
+\RU{Действительно, нет никакой разницы, какой эпилог исполнять, если он работает так же, как нам нужно.}
+\EN{Indeed, there is no difference, which epilogue to execute,
 if it works just as we need.}
-\IFRU{Keil решил использовать часть другой ф-ции, вероятно, из-за экономии.}
-{Apparently, Keil decides to reuse a part of another function by a reason of economy.}
-\IFRU{Эпилог занимает 4 байта, а переход ~--- только 2.}
-{Epilogue takes 4 bytes while jump~---only 2.}
+\RU{Keil решил использовать часть другой ф-ции, вероятно, из-за экономии.}
+\EN{Apparently, Keil decides to reuse a part of another function by a reason of economy.}
+\RU{Эпилог занимает 4 байта, а переход ~--- только 2.}
+\EN{Epilogue takes 4 bytes while jump~---only 2.}
 
 \subsection{ARM + \OptimizingXcode + \ThumbTwoMode}
 
@@ -132,7 +132,7 @@ if it works just as we need.}
 
 \index{ARM!\Instructions!SXTB}
 \index{x86!\Instructions!MOVSX}
-\TT{SXTB} (\IT{Signed Extend Byte}) \IFRU{это также аналог}{is analogous to} \MOVSX \InENRU 
-x86\IFRU{, только работает не с памятью, а с регистром.}{ as well, but works not with memory, but with register.}
-\IFRU{Всё остальное ~--- так же.}{All the rest~---just the same.}
+\TT{SXTB} (\IT{Signed Extend Byte}) \RU{это также аналог}\EN{is analogous to} \MOVSX \InENRU 
+x86\RU{, только работает не с памятью, а с регистром.}\EN{ as well, but works not with memory, but with register.}
+\RU{Всё остальное ~--- так же.}\EN{All the rest~---just the same.}
 

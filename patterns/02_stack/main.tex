@@ -2,39 +2,39 @@
 \label{sec:stack}
 \index{\Stack}
 
-\IFRU{Стек в компьютерных науках ~--- это одна из наиболее фундаментальных вещей}
-{A stack is one of the most fundamental data structures in computer science}
+\RU{Стек в компьютерных науках ~--- это одна из наиболее фундаментальных вещей}
+\EN{A stack is one of the most fundamental data structures in computer science}
 \footnote{\url{http://en.wikipedia.org/wiki/Call_stack}}.
 
-\IFRU{Технически, это просто блок памяти в памяти процесса + регистр \ESP или \RSP в x86 или x64, либо \ac{SP} в ARM, который указывает где-то в пределах этого блока.}
-{Technically, it is just a block of memory in process memory along with the \ESP or \RSP register in x86 or x64, or the \ac{SP} register in ARM, as a pointer within the block.}
+\RU{Технически, это просто блок памяти в памяти процесса + регистр \ESP или \RSP в x86 или x64, либо \ac{SP} в ARM, который указывает где-то в пределах этого блока.}
+\EN{Technically, it is just a block of memory in process memory along with the \ESP or \RSP register in x86 or x64, or the \ac{SP} register in ARM, as a pointer within the block.}
 
 \index{ARM!\Instructions!PUSH}
 \index{ARM!\Instructions!POP}
 \index{x86!\Instructions!PUSH}
 \index{x86!\Instructions!POP}
-\IFRU{Часто используемые инструкции для работы со стеком ~--- это \PUSH и \POP (в x86 и thumb-режиме ARM). 
+\RU{Часто используемые инструкции для работы со стеком ~--- это \PUSH и \POP (в x86 и thumb-режиме ARM). 
 \PUSH уменьшает \ESP/\RSP/\ac{SP} на $4$ в 32-битном режиме (или на $8$ в 64-битном),
 затем записывает по адресу, на который указывает \ESP/\RSP/\ac{SP}, содержимое своего единственного операнда.}
-{The most frequently used stack access instructions are \PUSH and \POP (in both x86 and ARM thumb-mode). 
+\EN{The most frequently used stack access instructions are \PUSH and \POP (in both x86 and ARM thumb-mode). 
 \PUSH subtracts $4$ in 32-bit mode (or $8$ in 64-bit mode) from \ESP/\RSP/\ac{SP} and then writes the contents of its sole operand to the memory address pointed to by \ESP/\RSP/\ac{SP}.} 
 
-\IFRU{\POP это обратная операция ~--- сначала достает из \glslink{stack pointer}{указателя стека} значение и помещает его в операнд 
+\RU{\POP это обратная операция ~--- сначала достает из \glslink{stack pointer}{указателя стека} значение и помещает его в операнд 
 (который очень часто является регистром) и затем увеличивает указатель стека на $4$ (или $8$).}
-{\POP is the reverse operation: get the data from memory pointed to by \ac{SP}, 
+\EN{\POP is the reverse operation: get the data from memory pointed to by \ac{SP}, 
 put it in the operand (often a register) and then add $4$ (or $8$) to the \gls{stack pointer}.}
 
-\IFRU{В самом начале \glslink{stack pointer}{регистр-указатель} указывает на конец стека.}
-{After stack allocation the \gls{stack pointer} points to the end of stack.}
-\IFRU{\PUSH уменьшает \glslink{stack pointer}{регистр-указатель}, а \POP ~--- увеличивает.}
-{\PUSH decreases the \gls{stack pointer} and \POP increases it.}
-\IFRU{Конец стека находится в начале блока памяти, выделенного под стек. Это странно, но это так.}
-{The end of the stack is actually at the beginning of the memory allocated for the stack block. 
+\RU{В самом начале \glslink{stack pointer}{регистр-указатель} указывает на конец стека.}
+\EN{After stack allocation the \gls{stack pointer} points to the end of stack.}
+\RU{\PUSH уменьшает \glslink{stack pointer}{регистр-указатель}, а \POP ~--- увеличивает.}
+\EN{\PUSH decreases the \gls{stack pointer} and \POP increases it.}
+\RU{Конец стека находится в начале блока памяти, выделенного под стек. Это странно, но это так.}
+\EN{The end of the stack is actually at the beginning of the memory allocated for the stack block. 
 It seems strange, but that's the way it is.}
 
-\IFRU{В процессоре ARM, тем не менее, есть поддержка стеков, растущих как в сторону уменьшения, так и в
+\RU{В процессоре ARM, тем не менее, есть поддержка стеков, растущих как в сторону уменьшения, так и в
 сторону увеличения}
-{Nevertheless ARM not only has instructions supporting descending stacks but also ascending stacks}. \\
+\EN{Nevertheless ARM not only has instructions supporting descending stacks but also ascending stacks}. \\
 \index{ARM!\Instructions!STMFD}
 \index{ARM!\Instructions!LDMFD}
 \index{ARM!\Instructions!STMED}
@@ -43,30 +43,30 @@ It seems strange, but that's the way it is.}
 \index{ARM!\Instructions!LDMFA}
 \index{ARM!\Instructions!STMEA}
 \index{ARM!\Instructions!LDMEA}
-\IFRU{Например, инструкции}{For example the} 
+\RU{Например, инструкции}\EN{For example the} 
 STMFD\footnote{\STMFDdesc}/LDMFD\footnote{\LDMFDDESC}, 
 STMED\footnote{\STMEDdesc}/LDMED\footnote{\LDMEDdesc} 
-\IFRU{предназначены для descending-стека, т.е. уменьшающегося}{instructions are intended to deal with 
+\RU{предназначены для descending-стека, т.е. уменьшающегося}\EN{instructions are intended to deal with 
 a descending stack}.
-\IFRU{Инструкции}{The}
+\RU{Инструкции}\EN{The}
 STMFA\footnote{\STMFAdesc}/LMDFA\footnote{\LDMFAdesc}, 
 STMEA\footnote{\STMEAdesc}/LDMEA\footnote{\LDMEAdesc} 
-\IFRU{предназначены для ascending-стека, т.е. увеличивающегося}{instructions are intended to deal with 
+\RU{предназначены для ascending-стека, т.е. увеличивающегося}\EN{instructions are intended to deal with 
 an ascending stack}.
 
-\section{\IFRU{Почему стек растет в обратную сторону?}{Why does the stack grow backward?}}
+\section{\RU{Почему стек растет в обратную сторону?}\EN{Why does the stack grow backward?}}
 
-\IFRU{Интуитивно мы можем подумать, что как и любая другая структура данных, стек мог бы расти вперед, 
-т.е. в сторону увеличения адресов}{Intuitively, we might think that, like any other data structure, 
+\RU{Интуитивно мы можем подумать, что как и любая другая структура данных, стек мог бы расти вперед, 
+т.е. в сторону увеличения адресов}\EN{Intuitively, we might think that, like any other data structure, 
 the stack may grow upward, i.e., towards higher addresses}.
 
-\IFRU{Причина, почему стек растет назад, вероятно, историческая}
-{The reason the stack grows backward is probably historical}.
-\IFRU{Когда компьютеры были большие и занимали целую комнату, было очень легко разделить сегмент на две части,
-для \glslink{heap}{кучи} и стека}{When computers were big and occupied a whole room, 
+\RU{Причина, почему стек растет назад, вероятно, историческая}
+\EN{The reason the stack grows backward is probably historical}.
+\RU{Когда компьютеры были большие и занимали целую комнату, было очень легко разделить сегмент на две части,
+для \glslink{heap}{кучи} и стека}\EN{When computers were big and occupied a whole room, 
 it was easy to divide memory into two parts, one for the \gls{heap} and one for the stack}.
-\IFRU{Конечно, ведь заранее было неизвестно, насколько большой может быть \glslink{heap}{куча} или стек, 
-так что это решение было самым простым}{Of course, 
+\RU{Конечно, ведь заранее было неизвестно, насколько большой может быть \glslink{heap}{куча} или стек, 
+так что это решение было самым простым}\EN{Of course, 
 it was unknown how big the \gls{heap} and the stack would be during program execution, 
 so this solution was the simplest possible}.
 
@@ -84,8 +84,8 @@ so this solution was the simplest possible}.
 	\draw [->] (heap) -- (center1);
 	\draw [->] (stack) -- (center2);
 
-	\node [] [above left=1.1cm and 0.2cm of heap] (t1) {\IFRU{Начало кучи}{Start of heap}};
-	\node [] [above right=1.1cm and 0.2cm of stack] (t2) {\IFRU{Вершина стека}{Start of stack}};
+	\node [] [above left=1.1cm and 0.2cm of heap] (t1) {\RU{Начало кучи}\EN{Start of heap}};
+	\node [] [above right=1.1cm and 0.2cm of stack] (t2) {\RU{Вершина стека}\EN{Start of stack}};
 
 	\draw [->] (t1) -- (memory.west);
 	\draw [->] (t2) -- (memory.east);
@@ -93,7 +93,7 @@ so this solution was the simplest possible}.
 	\end{tikzpicture}
 \end{center}
 
-\IFRU{В}{In} \cite{Ritchie74} \IFRU{можно прочитать}{we can read}:
+\RU{В}\EN{In} \cite{Ritchie74} \RU{можно прочитать}\EN{we can read}:
 
 \begin{framed}
 \begin{quotation}
@@ -101,7 +101,7 @@ The user-core part of an image is divided into three logical segments. The progr
 \end{quotation}
 \end{framed}
 
-\section{\IFRU{Для чего используется стек?}{What is the stack used for?}}
+\section{\RU{Для чего используется стек?}\EN{What is the stack used for?}}
 
 \input{patterns/02_stack/01_saving_ret_addr.tex}
 \input{patterns/02_stack/02_args_passing.tex}
@@ -110,23 +110,23 @@ The user-core part of an image is divided into three logical segments. The progr
 \input{patterns/02_stack/05_SEH.tex}
 \input{patterns/02_stack/06_BO_protection.tex}
 
-\section{\IFRU{Разметка типичного стека}{Typical stack layout}}
+\section{\RU{Разметка типичного стека}\EN{Typical stack layout}}
 
-\IFRU{Разметка типичного стека в 32-битной среде на момент начала ф-ции выглядит так}
-{A very typical stack layout in a 32-bit environment at the start of a function}:
+\RU{Разметка типичного стека в 32-битной среде на момент начала ф-ции выглядит так}
+\EN{A very typical stack layout in a 32-bit environment at the start of a function}:
 
 \begin{center}
 \begin{tabular}{ | l | l | }
 \hline
 \dots & \dots \\
 \hline
-ESP-0xC & \IFRU{локальная переменная}{local variable} \#2, \MarkedInIDAAs{} \TT{var\_8} \\
+ESP-0xC & \RU{локальная переменная}\EN{local variable} \#2, \MarkedInIDAAs{} \TT{var\_8} \\
 \hline
-ESP-8 & \IFRU{локальная переменная}{local variable} \#1, \MarkedInIDAAs{} \TT{var\_4} \\
+ESP-8 & \RU{локальная переменная}\EN{local variable} \#1, \MarkedInIDAAs{} \TT{var\_4} \\
 \hline
-ESP-4 & \IFRU{сохраненное значение}{saved value of} \EBP \\
+ESP-4 & \RU{сохраненное значение}\EN{saved value of} \EBP \\
 \hline
-ESP & \IFRU{адрес возврата}{return address} \\
+ESP & \RU{адрес возврата}\EN{return address} \\
 \hline
 ESP+4 & \argument \#1, \MarkedInIDAAs{} \TT{arg\_0} \\
 \hline

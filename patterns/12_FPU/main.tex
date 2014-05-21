@@ -1,4 +1,4 @@
-\chapter{\IFRU{Работа с FPU}{Working with FPU}}
+\chapter{\RU{Работа с FPU}\EN{Working with FPU}}
 \label{sec:FPU}
 
 \newcommand{\FNURLSTACK}{\footnote{\url{http://en.wikipedia.org/wiki/Stack_machine}}}
@@ -8,79 +8,79 @@
 \newcommand{\FNURLDP}{\footnote{\url{http://en.wikipedia.org/wiki/Double-precision_floating-point_format}}}
 \newcommand{\FNURLEP}{\footnote{\url{http://en.wikipedia.org/wiki/Extended_precision}}}
 
-\ac{FPU}\EMDASH\IFRU{блок в процессоре работающий с числами с плавающей запятой.}
-{is a device within main \ac{CPU} specially designed to deal with floating point numbers.}\\
+\ac{FPU}\EMDASH\RU{блок в процессоре работающий с числами с плавающей запятой.}
+\EN{is a device within main \ac{CPU} specially designed to deal with floating point numbers.}\\
 \\
-\IFRU{Раньше он назывался сопроцессором. Он немного похож на программируемый калькулятор и 
+\RU{Раньше он назывался сопроцессором. Он немного похож на программируемый калькулятор и 
 стоит немного в стороне от \ac{CPU}.}
-{It was called coprocessor in past.
+\EN{It was called coprocessor in past.
 It stay aside of the main \ac{CPU} and looks like programmable calculator
 in some way and.}\\
 \\
-\IFRU{Перед изучением \ac{FPU} полезно ознакомиться с тем как работают стековые машины\FNURLSTACK, 
+\RU{Перед изучением \ac{FPU} полезно ознакомиться с тем как работают стековые машины\FNURLSTACK, 
 или ознакомиться с основами языка Forth\FNURLFORTH.}
-{It is worth to study stack machines\FNURLSTACK{} before \ac{FPU} studying, or learn Forth language basics\FNURLFORTH.}\\
+\EN{It is worth to study stack machines\FNURLSTACK{} before \ac{FPU} studying, or learn Forth language basics\FNURLFORTH.}\\
 \\
 \index{x86!80486}
 \index{x86!FPU}
-\IFRU{Интересен факт, что в свое время (до 80486) сопроцессор был отдельным чипом на материнской плате, 
+\RU{Интересен факт, что в свое время (до 80486) сопроцессор был отдельным чипом на материнской плате, 
 и вследствие его высокой цены, он стоял не всегда. Его можно было докупить отдельно и поставить}
-{It is interesting to know that in past (before 80486 CPU) coprocessor was a separate chip 
+\EN{It is interesting to know that in past (before 80486 CPU) coprocessor was a separate chip 
 and it was not always settled on motherboard. It was possible to buy it separately and install}
-\footnote{\IFRU{Например, Джон Кармак использовал в своей игре Doom числа с фиксированной запятой, хранящиеся
+\footnote{\RU{Например, Джон Кармак использовал в своей игре Doom числа с фиксированной запятой, хранящиеся
 в обычных 32-битных \ac{GPR} (16 бит на целую часть и 16 на дробную),
-чтобы Doom работал на 32-битных компьютерах без FPU, т.е., 80386 и 80486 SX}{
-For example, John Carmack used fixed-point arithmetic values in his Doom video game, stored in 
+чтобы Doom работал на 32-битных компьютерах без FPU, т.е., 80386 и 80486 SX}
+\EN{For example, John Carmack used fixed-point arithmetic values in his Doom video game, stored in 
 32-bit \ac{GPR} registers (16 bit for intergral part and another 16 bit for fractional part), so the Doom
 could work on 32-bit computer without FPU, i.e., 80386 and 80486 SX}}.\\
 \\
-\IFRU{Начиная с процессора 80486 DX, FPU уже всегда входит в его состав.}
-{Starting at 80486 DX CPU, FPU is always present in it.}\\
+\RU{Начиная с процессора 80486 DX, FPU уже всегда входит в его состав.}
+\EN{Starting at 80486 DX CPU, FPU is always present in it.}\\
 \\
 \index{x86!\Instructions!FWAIT}
-\IFRU{Этот факт может напоминать такой рудимент, как наличие инструкции вроде \TT{FWAIT}, 
+\RU{Этот факт может напоминать такой рудимент, как наличие инструкции вроде \TT{FWAIT}, 
 которая заставляет
-\ac{CPU} ожидать, пока \ac{FPU} закончит работу}{\TT{FWAIT} instruction may remind us that fact---it
+\ac{CPU} ожидать, пока \ac{FPU} закончит работу}\EN{\TT{FWAIT} instruction may remind us that fact---it
 switches \ac{CPU} to waiting state, so it can wait until \ac{FPU} finishes its work}.
-\IFRU{Другой рудимент, это тот факт что опкоды \ac{FPU}-инструкций начинаются с т.н. ``escape''-опкодов 
-(\TT{D8..DF}), т.е., опкоды, передающиеся в \ac{FPU}}{Another rudiment is the fact that 
+\RU{Другой рудимент, это тот факт что опкоды \ac{FPU}-инструкций начинаются с т.н. ``escape''-опкодов 
+(\TT{D8..DF}), т.е., опкоды, передающиеся в \ac{FPU}}\EN{Another rudiment is the fact that 
 \ac{FPU}-instruction 
 opcodes are started with so called ``escape''-opcodes (\TT{D8..DF}), i.e., opcodes passed into \ac{FPU}}. \\
 \\
 \index{IEEE 754}
-\IFRU{FPU имеет стек из восьми 80-битных регистров, каждый может содержать число в формате IEEE 754\FNURLIEEE.}
-{FPU has a stack capable to hold 8 80-bit registers, each register can hold a number 
+\RU{FPU имеет стек из восьми 80-битных регистров, каждый может содержать число в формате IEEE 754\FNURLIEEE.}
+\EN{FPU has a stack capable to hold 8 80-bit registers, each register can hold a number 
 in IEEE 754\FNURLIEEE format.}\\
 \\
 \index{float}
 \index{double}
-\IFRU{В \CCpp имеются два типа для работы с числами с плавающей запятой, 
+\RU{В \CCpp имеются два типа для работы с числами с плавающей запятой, 
 это \Tfloat (\IT{число одинарной точности}\FNURLSP, 32 бита)
 \footnote{Формат представления float-чисел затрагивается в разделе 
 \IT{\WorkingWithFloatAsWithStructSubSubSectionName}~(\ref{sec:floatasstruct}).}
 и \Tdouble (\IT{число двойной точности}\FNURLDP, 64 бита).}
-{\CCpp language offer at least two floating number types, \Tfloat (\IT{single-precision}\FNURLSP, 32 bits)
+\EN{\CCpp language offer at least two floating number types, \Tfloat (\IT{single-precision}\FNURLSP, 32 bits)
 \footnote{single precision float numbers format is also addressed in 
 the \IT{\WorkingWithFloatAsWithStructSubSubSectionName}~(\ref{sec:floatasstruct}) section}
 and \Tdouble (\IT{double-precision}\FNURLDP, 64 bits).}\\
 \\
 \index{long double}
-\IFRU{GCC также поддерживает тип \IT{long double} (\IT{extended precision}\FNURLEP, 80 бит), но MSVC ~--- нет.}
-{GCC also supports \IT{long double} type (\IT{extended precision}\FNURLEP, 80 bit) but MSVC is not.}\\
+\RU{GCC также поддерживает тип \IT{long double} (\IT{extended precision}\FNURLEP, 80 бит), но MSVC ~--- нет.}
+\EN{GCC also supports \IT{long double} type (\IT{extended precision}\FNURLEP, 80 bit) but MSVC is not.}\\
 \\
-\IFRU{Не смотря на то что \Tfloat занимает столько же места сколько \Tint на 32-битной архитектуре, 
+\RU{Не смотря на то что \Tfloat занимает столько же места сколько \Tint на 32-битной архитектуре, 
 представление чисел, разумеется, совершенно другое.}
-{\Tfloat type requires the same number of bits as \Tint type in 32-bit environment, 
+\EN{\Tfloat type requires the same number of bits as \Tint type in 32-bit environment, 
 but number representation is completely different.}\\
 \\
-\IFRU{Число с плавающей точкой состоит из знака, мантиссы\footnote{\IT{significand} или \IT{fraction} 
+\RU{Число с плавающей точкой состоит из знака, мантиссы\footnote{\IT{significand} или \IT{fraction} 
 в англоязычной литературе} и экспоненты.}
-{Number consisting of sign, significand (also called \IT{fraction}) and exponent.}\\
+\EN{Number consisting of sign, significand (also called \IT{fraction}) and exponent.}\\
 \\
-\IFRU{Функция, имеющая \Tfloat или \Tdouble среди аргументов, получает эти значения через стек. 
+\RU{Функция, имеющая \Tfloat или \Tdouble среди аргументов, получает эти значения через стек. 
 Если функция возвращает \Tfloat или \Tdouble, она оставляет значение в регистре \STZERO ~--- то есть, 
 на вершине FPU-стека.}
-{Function having \Tfloat or \Tdouble among argument list is getting 
+\EN{Function having \Tfloat or \Tdouble among argument list is getting 
 the value via stack. 
 If function returns \Tfloat or \Tdouble value,
 it leaves the value in the \STZERO
@@ -92,6 +92,6 @@ register~---at top of FPU stack.}
 
 \section{x64}
 
-\IFRU{О том как происходит работа с числами с плавающей запятой в x86-64, читайте здесь: 
+\RU{О том как происходит работа с числами с плавающей запятой в x86-64, читайте здесь: 
 \ref{floating_SIMD}.}
-{Read more here\ref{floating_SIMD} about how float point numbers are processed in x86-64.}
+\EN{Read more here\ref{floating_SIMD} about how float point numbers are processed in x86-64.}

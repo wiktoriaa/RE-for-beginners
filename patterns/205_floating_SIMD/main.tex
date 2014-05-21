@@ -1,162 +1,162 @@
-\chapter{\IFRU{Работа с числами с плавающей запятой в x64 используя SIMD}
-{Working with float point numbers using SIMD in x64}}
+\chapter{\RU{Работа с числами с плавающей запятой в x64 используя SIMD}
+\EN{Working with float point numbers using SIMD in x64}}
 
 \label{floating_SIMD}
 \index{IEEE 754}
 \index{SIMD}
 \index{SSE}
 \index{SSE2}
-\IFRU{Разумеется, FPU остался в x86-совместимых процессорах в то время, когда ввели расширение x64}
-{Of course, \ac{FPU} remained in x86-compatible processors, when x64 extension was added}.
-\IFRU{Но в то время уже везде были \ac{SIMD}-расширения (\ac{SSE}, SSE2, итд), которые, к тому же, тоже умеют работать
-с числами с плавающей запятой}{But at the time, \ac{SIMD}-extensions (\ac{SSE}, SSE2, etc) were already present,
-which can work with float point numbers as well}. \IFRU{Формат чисел остается тот же}{Number format
+\RU{Разумеется, FPU остался в x86-совместимых процессорах в то время, когда ввели расширение x64}
+\EN{Of course, \ac{FPU} remained in x86-compatible processors, when x64 extension was added}.
+\RU{Но в то время уже везде были \ac{SIMD}-расширения (\ac{SSE}, SSE2, итд), которые, к тому же, тоже умеют работать
+с числами с плавающей запятой}\EN{But at the time, \ac{SIMD}-extensions (\ac{SSE}, SSE2, etc) were already present,
+which can work with float point numbers as well}. \RU{Формат чисел остается тот же}\EN{Number format
 remaining the same} (IEEE 754).
 
 \index{x86-64}
-\IFRU{Так что, компиляторы для x86-64 обычно используют \ac{SIMD}-инструкции}{So, x86-64 compilers are usually
+\RU{Так что, компиляторы для x86-64 обычно используют \ac{SIMD}-инструкции}\EN{So, x86-64 compilers are usually
 use \ac{SIMD}-instructions}.
-\IFRU{Это, можно сказать, хорошая новость, потому что работать с ними легче}
-{It can be said, it's a good news, because it's easier to work with them}.
+\RU{Это, можно сказать, хорошая новость, потому что работать с ними легче}
+\EN{It can be said, it's a good news, because it's easier to work with them}.
 
-\IFRU{Примеры будем использовать из секции о FPU}{We will reuse here examples from the FPU section} \ref{sec:FPU}.
+\RU{Примеры будем использовать из секции о FPU}\EN{We will reuse here examples from the FPU section} \ref{sec:FPU}.
 
-\section{\IFRU{Простой пример}{Simple example}}
+\section{\RU{Простой пример}\EN{Simple example}}
 
 \lstinputlisting{patterns/12_FPU/simple.c}
 
 \lstinputlisting[caption=MSVC 2012 x64 /Ox]{patterns/205_floating_SIMD/simple_MSVC_2012_x64_Ox.asm}
 
-\IFRU{Собственно, входные значения с плавающей запятой передаются через регистры \TT{XMM0}-\TT{XMM3}, 
-а остальные --- через стек}{Input floating point values are passed in \TT{XMM0}-\TT{XMM3} registers,
+\RU{Собственно, входные значения с плавающей запятой передаются через регистры \TT{XMM0}-\TT{XMM3}, 
+а остальные --- через стек}\EN{Input floating point values are passed in \TT{XMM0}-\TT{XMM3} registers,
 all the rest---via stack}
 \footnote{\href{http://msdn.microsoft.com/en-us/library/zthk2dkh.aspx}{MSDN: Parameter Passing}}.
 
-$a$ \IFRU{передается через}{is passed in} \TT{XMM0}, $b$\EMDASH{}\IFRU{через}{via} \TT{XMM1}.
-\IFRU{Но XMM-регистры (как мы уже знаем из секции о \ac{SIMD}\ref{SIMD_x86}) 128-битные, 
+$a$ \RU{передается через}\EN{is passed in} \TT{XMM0}, $b$\EMDASH{}\RU{через}\EN{via} \TT{XMM1}.
+\RU{Но XMM-регистры (как мы уже знаем из секции о \ac{SIMD}\ref{SIMD_x86}) 128-битные, 
 а значения типа \Tdouble --- 64-битные,
 так что используется только младшая половина регистра}
-{XMM-registers are 128-bit (as we know from the section about \ac{SIMD}\ref{SIMD_x86}), 
+\EN{XMM-registers are 128-bit (as we know from the section about \ac{SIMD}\ref{SIMD_x86}), 
 but \Tdouble values---64 bit ones, so only lower register half is used}.
 
 \index{x86!\Instructions!DIVSD}
-\TT{DIVSD} \IFRU{это SSE-инструкия, означает}{is SSE-instruction, meaning} 
+\TT{DIVSD} \RU{это SSE-инструкия, означает}\EN{is SSE-instruction, meaning} 
 ``Divide Scalar Double-Precision Floating-Point Values'', 
-\IFRU{и просто делит значение типа \Tdouble на другое, лежащие в младших половинах операндов}{it just divides
+\RU{и просто делит значение типа \Tdouble на другое, лежащие в младших половинах операндов}\EN{it just divides
 one value of \Tdouble type by another, stored in the lower halves of operands}.
 
-\IFRU{Константы закодированы компилятором в формате IEEE 754}{Constants are encoded by compiler in IEEE 754 format}.
+\RU{Константы закодированы компилятором в формате IEEE 754}\EN{Constants are encoded by compiler in IEEE 754 format}.
 
 \index{x86!\Instructions!MULSD}
 \index{x86!\Instructions!ADDSD}
-\TT{MULSD} \AndENRU \TT{ADDSD} \IFRU{работают так же, только производят умножение и сложение}
-{works just as the same, but doing multiplication and addition}.
+\TT{MULSD} \AndENRU \TT{ADDSD} \RU{работают так же, только производят умножение и сложение}
+\EN{works just as the same, but doing multiplication and addition}.
 
-\IFRU{Результат работы ф-ции типа \Tdouble ф-ция оставляет в регистре \TT{XMM0}}
-{The result of \Tdouble type the function leaves in \TT{XMM0} register}.\\
+\RU{Результат работы ф-ции типа \Tdouble ф-ция оставляет в регистре \TT{XMM0}}
+\EN{The result of \Tdouble type the function leaves in \TT{XMM0} register}.\\
 \\
-\IFRU{Как работает неоптимизирующий MSVC}{That is how non-optimizing MSVC works}:
+\RU{Как работает неоптимизирующий MSVC}\EN{That is how non-optimizing MSVC works}:
 
 \lstinputlisting[caption=MSVC 2012 x64]{patterns/205_floating_SIMD/simple_MSVC_2012_x64.asm}
 
 \index{Shadow space}
-\IFRU{Чуть более избыточно}{Slightly redundant}. 
-\IFRU{Входные аргументы сохраняются в}{Input arguments are saved in} ``shadow space'' (\ref{shadow_space}), 
-\IFRU{причем, только младшие половины регистров, т.е., только 64-битные значения типа \Tdouble}
-{but only lower register halves, i.e., only 64-bit values of \Tdouble type}.\\
+\RU{Чуть более избыточно}\EN{Slightly redundant}. 
+\RU{Входные аргументы сохраняются в}\EN{Input arguments are saved in} ``shadow space'' (\ref{shadow_space}), 
+\RU{причем, только младшие половины регистров, т.е., только 64-битные значения типа \Tdouble}
+\EN{but only lower register halves, i.e., only 64-bit values of \Tdouble type}.\\
 \\
-\IFRU{Результат работы компилятора GCC точно такой же}{GCC produces very same code}.
+\RU{Результат работы компилятора GCC точно такой же}\EN{GCC produces very same code}.
 
-\section{\IFRU{Передача чисел с плавающей запятой в аргументах}{Passing floating point number via arguments}}
+\section{\RU{Передача чисел с плавающей запятой в аргументах}\EN{Passing floating point number via arguments}}
 
 \lstinputlisting{patterns/12_FPU/pow.c}
 
-\IFRU{Они передаются в младших половинах регистров}{They are passed in lower halves
+\RU{Они передаются в младших половинах регистров}\EN{They are passed in lower halves
 of the} \TT{XMM0}-\TT{XMM3}\EN{ registers}.
 
 \lstinputlisting[caption=MSVC 2012 x64 /Ox]{patterns/205_floating_SIMD/pow_MSVC_2012_x64_Ox.asm}
 
 \index{x86!\Instructions!MOVSD}
 \index{x86!\Instructions!MOVSDX}
-\IFRU{Инструкции}{There are no} \TT{MOVSDX} \IFRU{нет в документации от}{instruction in} 
+\RU{Инструкции}\EN{There are no} \TT{MOVSDX} \RU{нет в документации от}\EN{instruction in} 
 Intel\cite{Intel} \AndENRU AMD\cite{AMD}\EN{ manuals}, 
-\IFRU{там она называется просто}{it is called there just} \TT{MOVSD}.
-\IFRU{Таким образом, в процессорах x86 две инструкции с одинаковым именем}{So there are two instructions
-sharing the same name in x86} (\IFRU{о второй}{about other}: \ref{REP_MOVSx}).
-\IFRU{Возможно, в Microsoft решили избежать
-путанницы и переименовали инструкцию в}{Apparently, Microsoft developers wanted to get rid of mess,
+\RU{там она называется просто}\EN{it is called there just} \TT{MOVSD}.
+\RU{Таким образом, в процессорах x86 две инструкции с одинаковым именем}\EN{So there are two instructions
+sharing the same name in x86} (\RU{о второй}\EN{about other}: \ref{REP_MOVSx}).
+\RU{Возможно, в Microsoft решили избежать
+путанницы и переименовали инструкцию в}\EN{Apparently, Microsoft developers wanted to get rid of mess,
 so they renamed it into} \TT{MOVSDX}.
-\IFRU{Она просто загружает значение в младшую половину XMM-регистра}{It just loads a value into
+\RU{Она просто загружает значение в младшую половину XMM-регистра}\EN{It just loads a value into
 lower half of XMM-register}.
 
-\RU{Ф-ция }\TT{pow()} \IFRU{берет аргументы из}{takes arguments from} \TT{XMM0} \AndENRU \TT{XMM1}, 
-\IFRU{и возвращает результат в}{and returning result in} \TT{XMM0}.
-\IFRU{Далее он перекладывается в}{It is then moved into} \RDX \ForENRU \printf. 
-\IFRU{Почему}{Why}? 
-\IFRU{Честно говоря, не знаю, может быть, это потому что}{Honestly speaking, I don't know, maybe because} 
-\printf\EMDASH{}\IFRU{ф-ция с переменным количеством аргументов}{is a variable arguments function}?
+\RU{Ф-ция }\TT{pow()} \RU{берет аргументы из}\EN{takes arguments from} \TT{XMM0} \AndENRU \TT{XMM1}, 
+\RU{и возвращает результат в}\EN{and returning result in} \TT{XMM0}.
+\RU{Далее он перекладывается в}\EN{It is then moved into} \RDX \ForENRU \printf. 
+\RU{Почему}\EN{Why}? 
+\RU{Честно говоря, не знаю, может быть, это потому что}\EN{Honestly speaking, I don't know, maybe because} 
+\printf\EMDASH{}\RU{ф-ция с переменным количеством аргументов}\EN{is a variable arguments function}?
 
 \lstinputlisting[caption=GCC 4.4.6 x64 -O3]{patterns/205_floating_SIMD/pow_GCC446_x64_O3_\LANG.s}
 
-GCC \IFRU{работает понятнее}{making more clear result}. 
-\IFRU{Значение для}{Value for} \printf \IFRU{передается в}{is passed in} \TT{XMM0}. 
-\IFRU{Кстати, вот тот случай, когда в}{By the way, here is a case when 1 is written into} \EAX
-\ForENRU \printf \IFRU{записывается 1 --- это значит, что будет передан один аргумент в векторных регистрах, 
-так того требует стандарт}{---this mean that one argument will be passed in vector registers,
+GCC \RU{работает понятнее}\EN{making more clear result}. 
+\RU{Значение для}\EN{Value for} \printf \RU{передается в}\EN{is passed in} \TT{XMM0}. 
+\RU{Кстати, вот тот случай, когда в}\EN{By the way, here is a case when 1 is written into} \EAX
+\ForENRU \printf \RU{записывается 1 --- это значит, что будет передан один аргумент в векторных регистрах, 
+так того требует стандарт}\EN{---this mean that one argument will be passed in vector registers,
 just as the standard requires} \cite{SysVABI}.
 
-\section{\IFRU{Пример с сравнением}{Comparison example}}
+\section{\RU{Пример с сравнением}\EN{Comparison example}}
 
 \lstinputlisting{patterns/12_FPU/d_max.c}
 
 \lstinputlisting[caption=MSVC 2012 x64 /Ox]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64_Ox.asm}
 
-\Optimizing MSVC \IFRU{генерирует очень понятный код}{generates very easy code to understand}.
+\Optimizing MSVC \RU{генерирует очень понятный код}\EN{generates very easy code to understand}.
 
 \index{x86!\Instructions!COMISD}
-\RU{Инструкция }\TT{COMISD} \IFRU{это}{is} ``Compare Scalar Ordered Double-Precision Floating-Point 
-Values and Set EFLAGS''. \IFRU{Собственно, это она и делает}{Essentially, that is what it does}.\\
+\RU{Инструкция }\TT{COMISD} \RU{это}\EN{is} ``Compare Scalar Ordered Double-Precision Floating-Point 
+Values and Set EFLAGS''. \RU{Собственно, это она и делает}\EN{Essentially, that is what it does}.\\
 \\
-\NonOptimizing MSVC \IFRU{генерирует более избыточно, но тоже всё понятно}{generates more redundant code,
+\NonOptimizing MSVC \RU{генерирует более избыточно, но тоже всё понятно}\EN{generates more redundant code,
 but it is still not hard to understand}:
 
 \lstinputlisting[caption=MSVC 2012 x64]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64.asm}
 
 \index{x86!\Instructions!MAXSD}
-\IFRU{А вот}{However,} GCC 4.4.6 \IFRU{дошел в оптимизации дальше и применил инструкцию}
-{did more optimizing and used the} \TT{MAXSD} (``Return Maximum Scalar 
-Double-Precision  Floating-Point Value'')\IFRU{, которая просто выбирает максимальное значение}{ instruction,
+\RU{А вот}\EN{However,} GCC 4.4.6 \RU{дошел в оптимизации дальше и применил инструкцию}
+\EN{did more optimizing and used the} \TT{MAXSD} (``Return Maximum Scalar 
+Double-Precision  Floating-Point Value'')\RU{, которая просто выбирает максимальное значение}\EN{ instruction,
 which just choose maximal value}!
 
 \lstinputlisting[caption=GCC 4.4.6 x64 -O3]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
 
-\section{\IFRU{Краткий итог}{Summary}}
+\section{\RU{Краткий итог}\EN{Summary}}
 
-\IFRU{Во всех приведенных примерах, в XMM-регистрах используется только младшая половина регистра, там
-хранится значение в формате IEEE 754}{Only lower half of XMM-registers are used in all examples here, 
+\RU{Во всех приведенных примерах, в XMM-регистрах используется только младшая половина регистра, там
+хранится значение в формате IEEE 754}\EN{Only lower half of XMM-registers are used in all examples here, 
 a number in IEEE 754 format is stored there}.
 
-\IFRU{Собственно, все инструкции с суффиксом}{Essentially, all instructions prefixed by} 
-\TT{-SD} (``Scalar Double-Precision'')\EMDASH{}\IFRU{это инструкции для работы с числами с плавающей 
+\RU{Собственно, все инструкции с суффиксом}\EN{Essentially, all instructions prefixed by} 
+\TT{-SD} (``Scalar Double-Precision'')\EMDASH{}\RU{это инструкции для работы с числами с плавающей 
 запятой в формате IEEE 754, 
-хранящиеся в младшей 64-битной половине XMM-регистра}{are instructions working with float point numbers
+хранящиеся в младшей 64-битной половине XMM-регистра}\EN{are instructions working with float point numbers
 in IEEE 754 format stored in the lower 64-bit half of XMM-register}.
 
-\IFRU{Всё удобнее чем это было в FPU, видимо, сказывается тот факт что расширения 
+\RU{Всё удобнее чем это было в FPU, видимо, сказывается тот факт что расширения 
 SIMD развивались не так хаотично как FPU в прошлом}
-{And it is easier than FPU, apparently because SIMD extensions were evolved not as chaotic as FPU in the past}.
-\IFRU{Стековая модель регистров не используется}{Stack register model is not used}.
+\EN{And it is easier than FPU, apparently because SIMD extensions were evolved not as chaotic as FPU in the past}.
+\RU{Стековая модель регистров не используется}\EN{Stack register model is not used}.
 
 \index{x86!\Instructions!ADDSS}
 \index{x86!\Instructions!MOVSS}
 \index{x86!\Instructions!COMISS}
-\IFRU{Если вы попробуете заменить в этих примерах}{If you would try to replace} \Tdouble \IFRU{на}{to} \Tfloat
-\IFRU{, то инструкции будут использоваться те же,
-только с суффиксом}{in these examples, the same instructions will be used, but prefixed with} \TT{-SS} 
-(``Scalar Single-Precision''), \IFRU{например}{for example}, \TT{MOVSS}, \TT{COMISS}, \TT{ADDSS}, \IFRU{итд}{etc}.
+\RU{Если вы попробуете заменить в этих примерах}\EN{If you would try to replace} \Tdouble \RU{на}\EN{to} \Tfloat
+\RU{, то инструкции будут использоваться те же,
+только с суффиксом}\EN{in these examples, the same instructions will be used, but prefixed with} \TT{-SS} 
+(``Scalar Single-Precision''), \RU{например}\EN{for example}, \TT{MOVSS}, \TT{COMISS}, \TT{ADDSS}, \RU{итд}\EN{etc}.
 
-``Scalar'' \IFRU{означает что SIMD-регистр будет хранить только одно значение, вместо нескольких}{mean that
+``Scalar'' \RU{означает что SIMD-регистр будет хранить только одно значение, вместо нескольких}\EN{mean that
 SIMD-register will contain only one value instead of several}.
-\IFRU{Инструкции, работающие с несколькими значениями в регистре одновременно, имеют ``Packed'' в названии}
-{Instructions working with several values in a register simultaneously, has ``Packed'' in the name}.
+\RU{Инструкции, работающие с несколькими значениями в регистре одновременно, имеют ``Packed'' в названии}
+\EN{Instructions working with several values in a register simultaneously, has ``Packed'' in the name}.
 

@@ -1,70 +1,69 @@
-\part{\IFRU{Образцы кода}{Code patterns}}
+\part{\RU{Образцы кода}\EN{Code patterns}}
 
 \RU{\epigraph{Всё познается в сравнении}{Автор неизвестен}} % FIXME: english version?
-\IFRU
-{Когда я учил Си, а затем Си++, я просто писал небольшие фрагменты кода, компилировал и смотрел что 
+\RU{Когда я учил Си, а затем Си++, я просто писал небольшие фрагменты кода, компилировал и смотрел что 
 получилось на ассемблере. Так было намного проще понять. Я делал это такое количество раз, 
 что связь между кодом на \CCpp и тем, что генерирует компилятор, вбилась мне в подсознание достаточно 
 глубоко, поэтому я могу, глядя на код на ассемблере, сразу понимать, в общих чертах, что там было написано 
 на Си. Возможно это поможет кому-то ещё, попробую описать некоторые примеры.}
-{When I first learned C and then C++, I wrote small pieces of code, compiled them, 
+\EN{When I first learned C and then C++, I wrote small pieces of code, compiled them, 
 and saw what 
 was produced in the assembly language. This was easy for me. I did it many times and the relation 
 between the \CCpp code and what the compiler produced was imprinted in my mind so deep that 
 I can quickly understand what was in the original C code when I look at produced x86 code. 
 Perhaps this technique may be helpful for someone else so I will try to describe some examples here.}
 
-\IFRU{Здесь много примеров и для x86/x64 и для ARM}{There are a lot of examples for both x86/x64 
+\RU{Здесь много примеров и для x86/x64 и для ARM}\EN{There are a lot of examples for both x86/x64 
 and ARM}. 
-\IFRU{Те, кто уже хорошо знаком с одной из архитектур, могут легко пролистывать страницы}
-{Those who already familiar with one of architectures, may freely skim over pages}.
+\RU{Те, кто уже хорошо знаком с одной из архитектур, могут легко пролистывать страницы}
+\EN{Those who already familiar with one of architectures, may freely skim over pages}.
 
-\chapter{\IFRU{Краткое введенение в CPU}{Short introduction to the CPU}}
+\chapter{\RU{Краткое введенение в CPU}\EN{Short introduction to the CPU}}
 
-\EN{The} \ac{CPU} \IFRU{это собственно устройство исполняющее все программы}{is the unit which executes all of the programs}.
+\EN{The} \ac{CPU} \RU{это собственно устройство исполняющее все программы}\EN{is the unit which executes all of the programs}.
 
-\IFRU{Немного терминологии}{Short glossary}:
+\RU{Немного терминологии}\EN{Short glossary}:
 
 \begin{description}
-\item[\IFRU{Инструкция}{Instruction}]: \IFRU{примитивная команда}{a primitive command to the} \ac{CPU}.
-\IFRU{Простейшие примеры: перемещение между регистрами, работа с памятью, примитивные арифметические операции}
-{Simplest examples: moving data between registers, working with memory, arithmetic primitives}.
-\IFRU{Как правило, каждый}{As a rule, each} \ac{CPU} \IFRU{имеет свой набор инструкций}{has its own instruction set architecture} 
+\item[\RU{Инструкция}\EN{Instruction}]: \RU{примитивная команда}\EN{a primitive command to the} \ac{CPU}.
+\RU{Простейшие примеры: перемещение между регистрами, работа с памятью, примитивные арифметические операции}
+\EN{Simplest examples: moving data between registers, working with memory, arithmetic primitives}.
+\RU{Как правило, каждый}\EN{As a rule, each} \ac{CPU} \RU{имеет свой набор инструкций}\EN{has its own instruction set architecture} 
 (\ac{ISA}).
 
-\item[\IFRU{Машинный код}{Machine code}]: \IFRU{код понимаемый}{code for the} \ac{CPU}. 
-\IFRU{Каждая инструкция обычно кодируется несколькими байтами}{Each instruction is usually encoded by several bytes}.
+\item[\RU{Машинный код}\EN{Machine code}]: \RU{код понимаемый}\EN{code for the} \ac{CPU}. 
+\RU{Каждая инструкция обычно кодируется несколькими байтами}\EN{Each instruction is usually encoded by several bytes}.
 
-\item[\IFRU{Язык ассемблера}{Assembly language}]: 
-\IFRU{машинный код плюс некоторые расширения призванные облегчить труд программиста: макросы, итд}
-{mnemonic code and some extensions like macros which are intended to make a programmer's life easier}.
+\item[\RU{Язык ассемблера}\EN{Assembly language}]: 
+\RU{машинный код плюс некоторые расширения призванные облегчить труд программиста: макросы, итд}
+\EN{mnemonic code and some extensions like macros which are intended to make a programmer's life easier}.
 
-\item[\IFRU{Регистр CPU}{CPU register}]: 
-\IFRU{Каждый}{Each} \ac{CPU} \IFRU{имеет некоторый фиксированный набор регистров общего назначения}{has a fixed set
+\item[\RU{Регистр CPU}\EN{CPU register}]: 
+\RU{Каждый}\EN{Each} \ac{CPU} \RU{имеет некоторый фиксированный набор регистров общего назначения}\EN{has a fixed set
 of general purpose registers} (\ac{GPR}).
 $\approx 8$ \InENRU x86, $\approx 16$ \InENRU x86-64, $\approx 16$ \InENRU ARM.
-\IFRU{Проще всего понимать регистр как временную переменную без типа}
-{The easiest way to understand a register is to think of it as an untyped temporary variable}.
-\IFRU{Можно представить что вы пишете на \ac{PL} высокого уровня и у вас только 8 переменных шириной 32 бита}
-{Imagine you are working with a high-level \ac{PL} and you have only 8 32-bit variables}.
-\IFRU{Можно сделать очень много используя только их}{A lot of things can be done using only these}!
+\RU{Проще всего понимать регистр как временную переменную без типа}
+\EN{The easiest way to understand a register is to think of it as an untyped temporary variable}.
+\RU{Можно представить что вы пишете на \ac{PL} высокого уровня и у вас только 8 переменных шириной 32 бита}
+\EN{Imagine you are working with a high-level \ac{PL} and you have only 8 32-bit variables}.
+\RU{Можно сделать очень много используя только их}\EN{A lot of things can be done using only these}!
 \end{description}
 
-\IFRU{Откуда взялась разница между машинным кодом и \ac{PL} высокого уровня}
-{What is the difference between machine code and a \ac{PL}}?
-\IFRU{Человеку проще писать на \ac{PL} высокого уровня вроде \CCpp, Java, Python, 
+\RU{Откуда взялась разница между машинным кодом и \ac{PL} высокого уровня}
+\EN{What is the difference between machine code and a \ac{PL}}?
+\RU{Человеку проще писать на \ac{PL} высокого уровня вроде \CCpp, Java, Python, 
 а \ac{CPU} проще работать с абстракциями куда более низкого уровня}
-{It is much easier for humans to use a high-level \ac{PL} like \CCpp, Java, Python, etc., 
+\EN{It is much easier for humans to use a high-level \ac{PL} like \CCpp, Java, Python, etc., 
 but it is easier for a \ac{CPU} to use a much lower level of abstraction}.
-\IFRU{Возможно, можно было бы придумать \ac{CPU} исполняющий код \ac{PL} высокого уровня, но он был бы значительно сложнее}
-{Perhaps, it would be possible to invent a \ac{CPU} which can execute high-level \ac{PL} code, but it would be much more complex}.
-\IFRU{И наоборот, человеку очень неудобно писать на ассемблере из-за его низкоуровневости, к тому же, крайне трудно обойтись
+\RU{Возможно, можно было бы придумать \ac{CPU} исполняющий код \ac{PL} высокого уровня, но он был бы значительно сложнее}
+\EN{Perhaps, it would be possible to invent a \ac{CPU} which can execute high-level \ac{PL} code, but it would be much more complex}.
+\RU{И наоборот, человеку очень неудобно писать на ассемблере из-за его низкоуровневости, к тому же, крайне трудно обойтись
 без мелких ошибок}
-{On the contrary, it is very inconvenient for humans to use assembly language due to its low-levelness. Besides, it is very hard
+\EN{On the contrary, it is very inconvenient for humans to use assembly language due to its low-levelness. Besides, it is very hard
 to do it without making a huge amount of annoying mistakes}.
-\IFRU{Программа переводящая код из \ac{PL} высокого уровня в ассемблер называется \IT{компилятором}
+\RU{Программа переводящая код из \ac{PL} высокого уровня в ассемблер называется \IT{компилятором}
 \footnote{В более старой русскоязычной литературе также часто встречается термин ``транслятор''.}}
-{The program which converts high-level \ac{PL} code into assembly is called a \IT{compiler}}.
+\EN{The program which converts high-level \ac{PL} code into assembly is called a \IT{compiler}}.
 
 \input{patterns/01_helloworld/main}
 \input{patterns/015_prolog_epilogue/main}

@@ -1,26 +1,26 @@
-\subsection{\IFRU{Инкапсуляция}{Encapsulation}}
+\subsection{\RU{Инкапсуляция}\EN{Encapsulation}}
 
-\IFRU{Инкапсуляция ~--- это сокрытие данных в \IT{private} секциях класса, например, чтобы разрешить доступ к ним только 
-для методов этого класса, но не более.}{Encapsulation is data hiding in the \IT{private} sections of class, 
+\RU{Инкапсуляция ~--- это сокрытие данных в \IT{private} секциях класса, например, чтобы разрешить доступ к ним только 
+для методов этого класса, но не более.}\EN{Encapsulation is data hiding in the \IT{private} sections of class, 
 e.g. to allow access to them only from this class methods, but no more than.}
 
-\IFRU{Однако, маркируется ли как-нибудь в коде тот факт, что некоторое поле ~--- приватное, 
+\RU{Однако, маркируется ли как-нибудь в коде тот факт, что некоторое поле ~--- приватное, 
 а некоторое другое ~--- нет?}
-{However, are there any marks in code about the fact that some field is private and
+\EN{However, are there any marks in code about the fact that some field is private and
 some other~---not?}
 
-\IFRU{Нет, никак не маркируется.}{No, there are no such marks.}
+\RU{Нет, никак не маркируется.}\EN{No, there are no such marks.}
 
-\IFRU{Попробуем простой пример:}{Let's try simple example:}
+\RU{Попробуем простой пример:}\EN{Let's try simple example:}
 
 \lstinputlisting{patterns/cpp/classes/classes2_0.cpp}
 
-\IFRU{Снова скомпилируем в MSVC 2008 с опциями \Ox и \Obzero и посмотрим код метода \TT{box::dump()}:}
-{Let's compile it again in MSVC 2008 with \Ox and \Obzero options and let's see \TT{box::dump()} method code:}
+\RU{Снова скомпилируем в MSVC 2008 с опциями \Ox и \Obzero и посмотрим код метода \TT{box::dump()}:}
+\EN{Let's compile it again in MSVC 2008 with \Ox and \Obzero options and let's see \TT{box::dump()} method code:}
 
 \lstinputlisting{patterns/cpp/classes/classes2_1.asm}
 
-\IFRU{Разметка полей в классе выходит такой:}{Here is a memory layout of the class:}
+\RU{Разметка полей в классе выходит такой:}\EN{Here is a memory layout of the class:}
 
 \begin{center}
 \begin{tabular}{ | l | l | }
@@ -38,45 +38,45 @@ some other~---not?}
 \end{tabular}
 \end{center}
 
-\IFRU{Все поля приватные и недоступные для модификации из других функций, но, зная эту разметку, 
-сможем ли мы создать код модифицирующий эти поля?}{All fields are private and not allowed to access from any other
+\RU{Все поля приватные и недоступные для модификации из других функций, но, зная эту разметку, 
+сможем ли мы создать код модифицирующий эти поля?}\EN{All fields are private and not allowed to access from any other
 functions, but, knowing this layout, can we create a code modifying these fields?} 
 
-\IFRU{Для этого я добавил функцию \TT{hack\_oop\_encapsulation()}, которая если обладает приведенным ниже телом, 
-то просто не скомпилируется:}{So I added \TT{hack\_oop\_encapsulation()} function, which, if has the body
+\RU{Для этого я добавил функцию \TT{hack\_oop\_encapsulation()}, которая если обладает приведенным ниже телом, 
+то просто не скомпилируется:}\EN{So I added \TT{hack\_oop\_encapsulation()} function, which, if has the body
 as follows, will not compile:}
 
 \lstinputlisting{patterns/cpp/classes/classes2_2.cpp}
 
-\IFRU{Тем не менее, если преобразовать тип \IT{box} к типу \IT{указатель на массив int}, 
+\RU{Тем не менее, если преобразовать тип \IT{box} к типу \IT{указатель на массив int}, 
 и если модифицировать полученный массив \Tint{}-ов, тогда всё получится.}
-{Nevertheless, if to cast \IT{box} type to \IT{pointer to int array},
+\EN{Nevertheless, if to cast \IT{box} type to \IT{pointer to int array},
 and if to modify array of the \Tint{}-s we got, then we have success.}
 
 \lstinputlisting{patterns/cpp/classes/classes2_3.cpp}
 
-\IFRU{Код этой функции довольно прост ~--- можно сказать, функция берет на вход указатель на массив \Tint{}-ов и 
+\RU{Код этой функции довольно прост ~--- можно сказать, функция берет на вход указатель на массив \Tint{}-ов и 
 записывает \IT{123} во второй \Tint{}:}
-{This functions' code is very simple~---it can be said, the function taking pointer to array of the \Tint{}-s on input
+\EN{This functions' code is very simple~---it can be said, the function taking pointer to array of the \Tint{}-s on input
 and writing \IT{123} to the second \Tint{}:}
 
 \lstinputlisting{patterns/cpp/classes/classes2_5.asm}
 
-\IFRU{Проверим, как это работает:}{Let's check, how it works:}
+\RU{Проверим, как это работает:}\EN{Let's check, how it works:}
 
 \lstinputlisting{patterns/cpp/classes/classes2_4.cpp}
 
-\IFRU{Запускаем:}{Let's run:}
+\RU{Запускаем:}\EN{Let's run:}
 
 \begin{lstlisting}
 this is box. color=1, width=10, height=20, depth=30
 this is box. color=1, width=123, height=20, depth=30
 \end{lstlisting}
 
-\IFRU{Выходит, инкапсуляция ~--- это защита полей класса только на стадии компиляции.}{We see, encapsulation is
+\RU{Выходит, инкапсуляция ~--- это защита полей класса только на стадии компиляции.}\EN{We see, encapsulation is
 just class fields protection only on compiling stage.}
-\IFRU{Компилятор Си++ не позволит сгенерировать код прямо
+\RU{Компилятор Си++ не позволит сгенерировать код прямо
 модифицирующий защищенные поля, тем не менее, используя \IT{грязные трюки} ~--- это вполне возможно.}
-{C++ compiler will not allow to generate a code modifying protected fields straightforwardly, nevertheless,
+\EN{C++ compiler will not allow to generate a code modifying protected fields straightforwardly, nevertheless,
 it is possible with the help of \IT{dirty hacks}.}
 

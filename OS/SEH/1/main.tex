@@ -1,37 +1,37 @@
-\subsection{\IFRU{Забудем на время о MSVC}{Let's forget about MSVC}}
+\subsection{\RU{Забудем на время о MSVC}\EN{Let's forget about MSVC}}
 
-\IFRU{\ac{SEH} в Windows предназначен для обработки исключений, тем не менее, с Си++ и \ac{OOP} он никак не связан}
-{In Windows, \ac{SEH} is intended for exceptions handling, nevertheless, it is language-agnostic,
+\RU{\ac{SEH} в Windows предназначен для обработки исключений, тем не менее, с Си++ и \ac{OOP} он никак не связан}
+\EN{In Windows, \ac{SEH} is intended for exceptions handling, nevertheless, it is language-agnostic,
 it is not connected to the C++ or \ac{OOP} in any way}.
-\IFRU{Здесь мы рассмотрим \ac{SEH} изолированно от Си++ и расширений MSVC}
-{Here we will take a look on \ac{SEH} in isolated (from C++ and MSVC extensions) form}.
+\RU{Здесь мы рассмотрим \ac{SEH} изолированно от Си++ и расширений MSVC}
+\EN{Here we will take a look on \ac{SEH} in isolated (from C++ and MSVC extensions) form}.
 
 \index{Windows!TIB}
 \index{Win32!RaiseException()}
-\IFRU{Каждый процесс имеет цепочку \ac{SEH}-обработчиков, и адрес последнего записан в \ac{TIB}}
-{Each running process has a chain of \ac{SEH}-handlers, \ac{TIB} has address of the last handler}.
-\IFRU{Когда происходит исключение (деление на ноль, обращение по неверному адресу в памяти, 
+\RU{Каждый процесс имеет цепочку \ac{SEH}-обработчиков, и адрес последнего записан в \ac{TIB}}
+\EN{Each running process has a chain of \ac{SEH}-handlers, \ac{TIB} has address of the last handler}.
+\RU{Когда происходит исключение (деление на ноль, обращение по неверному адресу в памяти, 
 пользовательское исключение, поднятое при помощи \TT{RaiseException()}),
 \ac{OS} находит последний обработчик в \ac{TIB} и вызывает его, 
 передав ему информацию о состоянии \ac{CPU} в момент исключения
 (все значения регистров, и т.д.)}
-{When exception occurred (division by zero, incorrect address access, user exception triggered by
+\EN{When exception occurred (division by zero, incorrect address access, user exception triggered by
 calling to \TT{RaiseException()} function), \ac{OS} will find the last handler in \ac{TIB}, and will call it
 with passing all information about \ac{CPU} state (register values, etc) at the moment of exception}.
-\IFRU{Обработчик выясняет, то ли это исключение, для которого он создавался}{Exception handler will
+\RU{Обработчик выясняет, то ли это исключение, для которого он создавался}\EN{Exception handler will
 consider exception, was it made for it}?
-\IFRU{Если да, то он обрабатывает исключение}{If so, it will handle exception}.
-\IFRU{Если нет, то показывает \ac{OS} что он не может его обработать и \ac{OS} вызывает следующий обработчик
+\RU{Если да, то он обрабатывает исключение}\EN{If so, it will handle exception}.
+\RU{Если нет, то показывает \ac{OS} что он не может его обработать и \ac{OS} вызывает следующий обработчик
 в цепочке, и так до тех пор, пока не найдется обработчик способный обработать исключение}
-{If no, it will signal to \ac{OS} that it
+\EN{If no, it will signal to \ac{OS} that it
 cannot handle it and \ac{OS} will call next handler in chain,
 until a handler which is able to handle the exception will be found}.
 
-\IFRU{В самом конце цепочки находится стандартный обработчик, показывающий всем очень известное окно, 
+\RU{В самом конце цепочки находится стандартный обработчик, показывающий всем очень известное окно, 
 сообщающее что процесс упал, 
 сообщает также состояние \ac{CPU} в момент падения и позволяет собрать и отправить информацию обработчикам 
 в Microsoft}
-{At the very end of the chain, there a standard handler, showing well-known dialog box, informing a
+\EN{At the very end of the chain, there a standard handler, showing well-known dialog box, informing a
 process crash, some technical information about \ac{CPU} state at the crash,
 and offering to collect all information and send it to developers in Microsoft}. 
 
@@ -59,43 +59,43 @@ and offering to collect all information and send it to developers in Microsoft}.
 \caption{Windows 8.1}
 \end{figure}
 
-\IFRU{Раньше этот обработчик назывался Dr. Watson}{This handler was also called Dr. Watson earlier}
+\RU{Раньше этот обработчик назывался Dr. Watson}\EN{This handler was also called Dr. Watson earlier}
 \footnote{\url{https://en.wikipedia.org/wiki/Dr._Watson_(debugger)}}.
 
-\IFRU{Кстати, некоторые разработчики делают свой собственный обработчик,
+\RU{Кстати, некоторые разработчики делают свой собственный обработчик,
 отправляющий информацию о падении программы им самим}
-{By the way, some developers made their own handler, sending information about program crash to themselves}.
+\EN{By the way, some developers made their own handler, sending information about program crash to themselves}.
 \index{Win32!SetUnhandledExceptionFilter()}
-\IFRU{Он регистрируется при помощи ф-ции}{It is registered with the help of} \TT{SetUnhandledExceptionFilter()} 
-\IFRU{и будет вызван если \ac{OS} не знает как иначе обработать исключение}{and will be called if
+\RU{Он регистрируется при помощи ф-ции}\EN{It is registered with the help of} \TT{SetUnhandledExceptionFilter()} 
+\RU{и будет вызван если \ac{OS} не знает как иначе обработать исключение}\EN{and will be called if
 \ac{OS} do not have any other way to handle exception}.
 \index{\oracle}
-\IFRU{А, например,}{Other example is} \oracle \IFRU{в этом случае генерирует огромные дампы, 
+\RU{А, например,}\EN{Other example is} \oracle \RU{в этом случае генерирует огромные дампы, 
 содержащие всю возможную информацию и состоянии \ac{CPU} и памяти}
-{it saves huge dumps containing all possible information about \ac{CPU} and memory state}.
+\EN{it saves huge dumps containing all possible information about \ac{CPU} and memory state}.
 
-\IFRU{Попробуем написать свой примитивный обработчик исключений}
-{Let's write our own primitive exception handler}
+\RU{Попробуем написать свой примитивный обработчик исключений}
+\EN{Let's write our own primitive exception handler}
 \footnote{
-	\IFRU{Пример основан на примере из}{The example is based on the example from} \cite{PietrekSEH}
+	\RU{Пример основан на примере из}\EN{The example is based on the example from} \cite{PietrekSEH}
 
-	\IFRU{Он должен компилироваться с опцией}{It is compiled with the} SAFESEH\EN{ option}: 
+	\RU{Он должен компилироваться с опцией}\EN{It is compiled with the} SAFESEH\EN{ option}: 
 	\TT{cl seh1.cpp /link /safeseh:no}
 
-	\IFRU{Подробнее об опции}{More about} SAFESEH \IFRU{здесь}{here}: \\
+	\RU{Подробнее об опции}\EN{More about} SAFESEH \RU{здесь}\EN{here}: \\
 	\url{http://msdn.microsoft.com/en-us/library/9a89h429.aspx}
 }:
 	
 \lstinputlisting{OS/SEH/1/1.cpp}
 
-\IFRU{Сегментный регистр FS: в win32 указывает на \ac{TIB}}
-{FS: segment register is pointing to the \ac{TIB} in win32}.
-\IFRU{Самый первый элемент \ac{TIB} это указатель на последний обработчик в цепочке}
-{The very first element in \ac{TIB} is a pointer to the last handler in chain}.
-\IFRU{Мы сохраняем его в стеке и записываем туда адрес своего обработчика}{We saving it in the stack and store
+\RU{Сегментный регистр FS: в win32 указывает на \ac{TIB}}
+\EN{FS: segment register is pointing to the \ac{TIB} in win32}.
+\RU{Самый первый элемент \ac{TIB} это указатель на последний обработчик в цепочке}
+\EN{The very first element in \ac{TIB} is a pointer to the last handler in chain}.
+\RU{Мы сохраняем его в стеке и записываем туда адрес своего обработчика}\EN{We saving it in the stack and store
 an address of our handler there}.
-\IFRU{Эта структура называется}{The structure is named} \TT{\_EXCEPTION\_REGISTRATION}, 
-\IFRU{это простейший односвязный список, и эти элементы хранятся прямо в стеке}{it is a simplest singly-linked
+\RU{Эта структура называется}\EN{The structure is named} \TT{\_EXCEPTION\_REGISTRATION}, 
+\RU{это простейший односвязный список, и эти элементы хранятся прямо в стеке}\EN{it is a simplest singly-linked
 list and its elements are stored right in the stack}.
 
 \begin{lstlisting}[caption=MSVC/VC/crt/src/exsup.inc]
@@ -105,43 +105,43 @@ list and its elements are stored right in the stack}.
 \_EXCEPTION\_REGISTRATION ends
 \end{lstlisting}
 
-\IFRU{Так что каждое поле}{So each} ``handler'' \IFRU{указывает на обработчик,
-а каждое поле}{field points to handler and an each} ``prev'' \IFRU{указывает на предыдущую структуру
-в стеке}{field points to previous record in the stack}.
-\IFRU{Самая последняя структура имеет}{The last record has} \TT{0xFFFFFFFF} (-1) \IFRU{в поле}{in} 
+\RU{Так что каждое поле}\EN{So each} ``handler'' \RU{указывает на обработчик,
+а каждое поле}\EN{field points to handler and an each} ``prev'' \RU{указывает на предыдущую структуру
+в стеке}\EN{field points to previous record in the stack}.
+\RU{Самая последняя структура имеет}\EN{The last record has} \TT{0xFFFFFFFF} (-1) \RU{в поле}\EN{in} 
 ``prev''\EN{ field}.
 
 \input{OS/SEH/1/tikz}
 
-\IFRU{После инсталляции своего обработчика, вызываем}{When our handler is installed, let's call}
+\RU{После инсталляции своего обработчика, вызываем}\EN{When our handler is installed, let's call}
 \TT{RaiseException()}
 \footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms680552(v=vs.85).aspx}}.
-\IFRU{Это пользовательские исключения}{This is user exception}. \IFRU{Обработчик проверяет код}{Handler will check
+\RU{Это пользовательские исключения}\EN{This is user exception}. \RU{Обработчик проверяет код}\EN{Handler will check
 the code}.
-\IFRU{Если код}{If the code is} \TT{0xE1223344}, \IFRU{то он возвращает}{it will return} 
+\RU{Если код}\EN{If the code is} \TT{0xE1223344}, \RU{то он возвращает}\EN{it will return} 
 \TT{ExceptionContinueExecution},
-\IFRU{что сигнализирует системе что обработчик изменил состояние CPU (обычно это EIP/ESP) и что OS может
+\RU{что сигнализирует системе что обработчик изменил состояние CPU (обычно это EIP/ESP) и что OS может
 возобновить исполнение треда}
-{which means that handler fixes CPU state (it is usually EIP/ESP) and the OS can resume thread execution}.
-\IFRU{Если вы немного измените код так что обработчик будет возвращать}{If to alter the code slightly
+\EN{which means that handler fixes CPU state (it is usually EIP/ESP) and the OS can resume thread execution}.
+\RU{Если вы немного измените код так что обработчик будет возвращать}\EN{If to alter the code slightly
 so the handler will return} \TT{ExceptionContinueSearch},
-\IFRU{то \ac{OS} будет вызывать остальные
+\RU{то \ac{OS} будет вызывать остальные
 обработчики в цепочке, и врядли найдется тот, кто обработает ваше исключение,
 ведь информации о нем (вернее, его коде) ни у кого нет}
-{then \ac{OS} will call other handlers, and very unlikely the one who can handle it will be founded, since
+\EN{then \ac{OS} will call other handlers, and very unlikely the one who can handle it will be founded, since
 no one have information about it (rather about its code)}.
-\IFRU{Вы увидите стандартное окно Windows о падении процесса}{You will see the standard Windows dialog about
+\RU{Вы увидите стандартное окно Windows о падении процесса}\EN{You will see the standard Windows dialog about
 process crash}.
 
-\IFRU{Какова разница между системными исключениями и пользовательскими}{What is the difference between
-system exceptions and user}? \IFRU{Вот системные}{Here is a system ones}:
+\RU{Какова разница между системными исключениями и пользовательскими}\EN{What is the difference between
+system exceptions and user}? \RU{Вот системные}\EN{Here is a system ones}:
 
 \begin{center}
 \begin{tabular}{ | l | l | l | }
 \hline
-\cellcolor{blue!25} \IFRU{как определен в}{as defined in} WinBase.h & 
-\cellcolor{blue!25} \IFRU{как определен в}{as defined in} ntstatus.h & 
-\cellcolor{blue!25} \IFRU{численное значение}{numerical value} \\
+\cellcolor{blue!25} \RU{как определен в}\EN{as defined in} WinBase.h & 
+\cellcolor{blue!25} \RU{как определен в}\EN{as defined in} ntstatus.h & 
+\cellcolor{blue!25} \RU{численное значение}\EN{numerical value} \\
 \hline
 EXCEPTION\_ACCESS\_VIOLATION          & STATUS\_ACCESS\_VIOLATION           & 0xC0000005 \\
 \hline
@@ -194,7 +194,7 @@ CONTROL\_C\_EXIT                      & STATUS\_CONTROL\_C\_EXIT             & 0
 \end{tabular}
 \end{center}
 
-\IFRU{Так определяется код}{That is how code is defined}:
+\RU{Так определяется код}\EN{That is how code is defined}:
 
 \begin{center}
 \begin{bytefield}{32}
@@ -207,70 +207,70 @@ CONTROL\_C\_EXIT                      & STATUS\_CONTROL\_C\_EXIT             & 0
 \end{bytefield}
 \end{center}
 
-S \IFRU{это код статуса}{is a basic status code}: 
-11\EMDASH{}\IFRU{ошибка}{error};
-10\EMDASH{}\IFRU{предупреждение}{warning};
-01\EMDASH{}\IFRU{информация}{informational};
-00\EMDASH{}\IFRU{успех}{success}.
-U\EMDASH\IFRU{является ли этот код пользовательским, а не системным}{whether the code is user code}.
+S \RU{это код статуса}\EN{is a basic status code}: 
+11\EMDASH{}\RU{ошибка}\EN{error};
+10\EMDASH{}\RU{предупреждение}\EN{warning};
+01\EMDASH{}\RU{информация}\EN{informational};
+00\EMDASH{}\RU{успех}\EN{success}.
+U\EMDASH\RU{является ли этот код пользовательским, а не системным}\EN{whether the code is user code}.
 
-\IFRU{Вот почему я выбрал}{That is why I chose} 0xE1223344\EMDASH{}
+\RU{Вот почему я выбрал}\EN{That is why I chose} 0xE1223344\EMDASH{}
 %E\textsubscript{16} (1110\textsubscript{2}) 
 0xE (1110b) 
-\IFRU{означает что это 1) пользовательское исключение; 2) ошибка}{mean this is 1) user exception; 2) error}.
-\IFRU{Хотя, если быть честным, этот пример нормально работает и без этих старших бит}
-{But to be honest, this example works finely without these high bits}.
+\RU{означает что это 1) пользовательское исключение; 2) ошибка}\EN{mean this is 1) user exception; 2) error}.
+\RU{Хотя, если быть честным, этот пример нормально работает и без этих старших бит}
+\EN{But to be honest, this example works finely without these high bits}.
 
-\IFRU{Далее мы пытаемся прочитать значение из памяти по адресу 0}{Then we try to read a value from memory
+\RU{Далее мы пытаемся прочитать значение из памяти по адресу 0}\EN{Then we try to read a value from memory
 at the 0th address}.
-\IFRU{Конечно, в win32 по этому адресу обычно ничего нет, и сработает исключение}
-{Of course, there are nothing at this address in win32, so exception is raised}.
-\IFRU{Однако, первый обработчик, который будет заниматься этим делом ~--- ваш, и он узнает об этом
+\RU{Конечно, в win32 по этому адресу обычно ничего нет, и сработает исключение}
+\EN{Of course, there are nothing at this address in win32, so exception is raised}.
+\RU{Однако, первый обработчик, который будет заниматься этим делом ~--- ваш, и он узнает об этом
 первым, проверяя код на соответствие с константной \TT{EXCEPTION\_ACCESS\_VIOLATION}}
-{However, the very first handler will be called --- yours, it will be notified first, checking
+\EN{However, the very first handler will be called --- yours, it will be notified first, checking
 the code on equality to the \TT{EXCEPTION\_ACCESS\_VIOLATION} constant}.
 
-\IFRU{А если заглянуть в то что получилось на ассемблере,
-то можно увидеть что код читающий из памяти по адресу 0, выглядит так}{The code reading from memory at
+\RU{А если заглянуть в то что получилось на ассемблере,
+то можно увидеть что код читающий из памяти по адресу 0, выглядит так}\EN{The code reading from memory at
 0th address is looks like}:
 
 \lstinputlisting[caption=MSVC 2010]{OS/SEH/1/1_fragment.asm}
 
-\IFRU{Возможно ли ``на лету'' исправить ошибку и предложить программе исполняться далее}
-{Will it be possible to fix error ``on fly'' and to continue program execution}?
-\IFRU{Да, наш обработчик может изменить значение в \EAX и предложить \ac{OS} исполнить эту же инструкцию еще раз}
-{Yes, our exception handler can fix \EAX value and now let \ac{OS} will execute this instruction once again}.
-\IFRU{Что мы и делаем}{So that is what we do}. \printf \IFRU{напечатает}{will print} 1234,
-\IFRU{потому что после работы нашего обработчика}{because, after execution of our handler},
-\EAX \IFRU{будет не}{will not be} 0,
-\IFRU{а будет содержать адрес глобальной переменной}{it will contain address of global variable} \TT{new\_value}.
-\IFRU{Программа будет исполняться далее}{Execution will be resumed}.
+\RU{Возможно ли ``на лету'' исправить ошибку и предложить программе исполняться далее}
+\EN{Will it be possible to fix error ``on fly'' and to continue program execution}?
+\RU{Да, наш обработчик может изменить значение в \EAX и предложить \ac{OS} исполнить эту же инструкцию еще раз}
+\EN{Yes, our exception handler can fix \EAX value and now let \ac{OS} will execute this instruction once again}.
+\RU{Что мы и делаем}\EN{So that is what we do}. \printf \RU{напечатает}\EN{will print} 1234,
+\RU{потому что после работы нашего обработчика}\EN{because, after execution of our handler},
+\EAX \RU{будет не}\EN{will not be} 0,
+\RU{а будет содержать адрес глобальной переменной}\EN{it will contain address of global variable} \TT{new\_value}.
+\RU{Программа будет исполняться далее}\EN{Execution will be resumed}.
 
-\IFRU{Собственно, вот что происходит}{That is what is going on}: 
-\IFRU{срабатывает защита менеджера памяти в \ac{CPU}}{memory manager in \ac{CPU} signaling about error}, 
-\IFRU{он останавливает работу треда}{the \ac{CPU} suspends the thread},
-\IFRU{отыскивает в ядре Windows обработчик исключений}{it finds exception handler in the Windows kernel}, 
-\IFRU{тот, в свою очередь, начинает вызывать обработчики из цепочки \ac{SEH}, по одному}
-{latter, in turn, is starting to call all handlers in \ac{SEH} chain, one by one}.
+\RU{Собственно, вот что происходит}\EN{That is what is going on}: 
+\RU{срабатывает защита менеджера памяти в \ac{CPU}}\EN{memory manager in \ac{CPU} signaling about error}, 
+\RU{он останавливает работу треда}\EN{the \ac{CPU} suspends the thread},
+\RU{отыскивает в ядре Windows обработчик исключений}\EN{it finds exception handler in the Windows kernel}, 
+\RU{тот, в свою очередь, начинает вызывать обработчики из цепочки \ac{SEH}, по одному}
+\EN{latter, in turn, is starting to call all handlers in \ac{SEH} chain, one by one}.
 
-\IFRU{Я компилирую это всё в MSVC 2010, но конечно же, нет никакой гарантии 
-что для указателя будет использован именно регистр \EAX}{I use MSVC 2010 now, but of course,
+\RU{Я компилирую это всё в MSVC 2010, но конечно же, нет никакой гарантии 
+что для указателя будет использован именно регистр \EAX}\EN{I use MSVC 2010 now, but of course,
 there are no any guarantee that \EAX will be used for pointer}.
 
-\IFRU{Этот трюк с подменой адреса эффектно выглядит, 
+\RU{Этот трюк с подменой адреса эффектно выглядит, 
 и я его привожу здесь для наглядной иллюстрации работы \ac{SEH}}
-{This address replacement trick is looks showingly, and I offer it here for \ac{SEH} internals illustration}.
-\IFRU{Тем не менее, я затрудняюсь
+\EN{This address replacement trick is looks showingly, and I offer it here for \ac{SEH} internals illustration}.
+\RU{Тем не менее, я затрудняюсь
 припомнить, применяется ли где-то подобное на практике для исправления ошибок ``на лету''}
-{Nevertheless, I cannot recall
+\EN{Nevertheless, I cannot recall
 where it is used for ``on-fly'' error fixing in practice}.
 
-\IFRU{Почему SEH-записи хранятся именно в стеке а не в каком-то другом месте}
-{Why SEH-related records are stored right in the stack instead of some other place}?
-\IFRU{Вероятно, потому что тогда \ac{OS} не будет заботиться об освобождении этой информации, эти записи
+\RU{Почему SEH-записи хранятся именно в стеке а не в каком-то другом месте}
+\EN{Why SEH-related records are stored right in the stack instead of some other place}?
+\RU{Вероятно, потому что тогда \ac{OS} не будет заботиться об освобождении этой информации, эти записи
 пропадают как ненужные когда ф-ция заканчивает работу}
-{Supposedly because then \ac{OS} will not need to care about freeing this information, these records
+\EN{Supposedly because then \ac{OS} will not need to care about freeing this information, these records
 will be disposed when function finishing its execution}.
-\IFRU{Но я не уверен на}{But I'm not} 100\%\IFRU{ и могу ошибаться}{-sure and can be wrong}.
-\IFRU{Это чем-то похоже на}{This is somewhat like} alloca(): (\ref{alloca}).
+\RU{Но я не уверен на}\EN{But I'm not} 100\%\RU{ и могу ошибаться}\EN{-sure and can be wrong}.
+\RU{Это чем-то похоже на}\EN{This is somewhat like} alloca(): (\ref{alloca}).
 

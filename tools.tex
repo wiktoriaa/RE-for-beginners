@@ -1,46 +1,46 @@
-\part{\IFRU{Инструменты}{Tools}}
+\part{\RU{Инструменты}\EN{Tools}}
 
-\chapter{\IFRU{Дизассемблер}{Disassembler}}
+\chapter{\RU{Дизассемблер}\EN{Disassembler}}
 
 \section{IDA}
 
 \label{IDA}
-\IFRU{Старая бесплатная версия доступна для скачивания}{Older freeware version is available for downloading}
+\RU{Старая бесплатная версия доступна для скачивания}\EN{Older freeware version is available for downloading}
 \footnote{\url{http://www.hex-rays.com/idapro/idadownfreeware.htm}}.
 
 \ShortHotKeyCheatsheet: \ref{sec:IDA_cheatsheet}
 
-\chapter{\IFRU{Отладчик}{Debugger}}
+\chapter{\RU{Отладчик}\EN{Debugger}}
 
 \section{tracer}
 
 \index{tracer}
 \label{tracer}
-\IFRU{Я использую}{I use} \IT{tracer}\footnote{\url{http://yurichev.com/tracer-\LANG.html}}
-\IFRU{вместо отладчика}{instead of debugger}.
+\RU{Я использую}\EN{I use} \IT{tracer}\footnote{\url{http://yurichev.com/tracer-\LANG.html}}
+\RU{вместо отладчика}\EN{instead of debugger}.
 
-\IFRU{Со временем я отказался использовать отладчик, потому что все что мне нужно от него: это иногда подсмотреть 
+\RU{Со временем я отказался использовать отладчик, потому что все что мне нужно от него: это иногда подсмотреть 
 какие-либо аргументы какой-либо функции во время исполнения или состояние регистров в определенном месте. 
 Каждый раз загружать отладчик для этого это слишком, поэтому я написал очень простую утилиту \IT{tracer}. 
 Она консольная, запускается из командной строки, позволяет перехватывать исполнение функций, 
 ставить брякпойнты на произвольные места, смотреть состояние регистров, модифицировать их, и так далее.}
-{I stopped to use debugger eventually, since all I need from it is to spot a function's arguments while
+\EN{I stopped to use debugger eventually, since all I need from it is to spot a function's arguments while
 execution, or registers' state at some point.
 To load debugger each time is too much, so I wrote a small utility \IT{tracer}.
 It has console-interface, working from command-line, enable us to intercept function execution,
 set breakpoints at arbitrary places, spot registers' state, modify it, etc.}
 
-\IFRU{Но для учебы, очень полезно трассировать код руками в отладчике, наблюдать как меняются значения регистров 
+\RU{Но для учебы, очень полезно трассировать код руками в отладчике, наблюдать как меняются значения регистров 
 (например, как минимум классический SoftICE, OllyDbg, WinDbg подсвечивают измененные регистры), 
 флагов, данные, менять их самому, смотреть реакцию, и т.д.}
-{However, as for learning purposes, it is highly advisable to trace code in debugger manually, watch how register's state
+\EN{However, as for learning purposes, it is highly advisable to trace code in debugger manually, watch how register's state
 changing (e.g. classic SoftICE, OllyDbg, WinDbg highlighting changed registers), flags, data, change them
 manually, watch reaction, etc.}
 
 \section{\olly}
 \index{\olly}
 
-\IFRU{Очень популярный отладчик пользовательской среды win32}{Very popular user-mode win32 debugger}:\\
+\RU{Очень популярный отладчик пользовательской среды win32}\EN{Very popular user-mode win32 debugger}:\\
 \url{http://www.ollydbg.de/}.
 
 \ShortHotKeyCheatsheet: \label{sec:Olly_cheatsheet}
@@ -48,11 +48,11 @@ manually, watch reaction, etc.}
 \section{GDB}
 \index{GDB}
 
-\IFRU{Не очень популярный отладчик у реверсеров, тем не менее, крайне удобный}{Not very popular
+\RU{Не очень популярный отладчик у реверсеров, тем не менее, крайне удобный}\EN{Not very popular
 debugger among reverse engineers, but very comfortable nevertheless}.
-\IFRU{Некоторые команды}{Some commands}: \ref{sec:GDB_cheatsheet}.
+\RU{Некоторые команды}\EN{Some commands}: \ref{sec:GDB_cheatsheet}.
 
-\chapter{\IFRU{Трассировка системных вызовов}{System calls tracing}}
+\chapter{\RU{Трассировка системных вызовов}\EN{System calls tracing}}
 
 \label{strace}
 \index{strace}
@@ -60,9 +60,9 @@ debugger among reverse engineers, but very comfortable nevertheless}.
 \subsection{strace / dtruss}
 
 \index{syscalls}
-\IFRU{Позволяет показать, какие системные вызовы (syscalls(\ref{syscalls})) прямо сейчас вызывает процесс}
-{Will show which system calls (syscalls(\ref{syscalls})) are called by process right now}.
-\IFRU{Например}{For example}:
+\RU{Позволяет показать, какие системные вызовы (syscalls(\ref{syscalls})) прямо сейчас вызывает процесс}
+\EN{Will show which system calls (syscalls(\ref{syscalls})) are called by process right now}.
+\RU{Например}\EN{For example}:
 
 \begin{lstlisting}
 # strace df -h
@@ -77,41 +77,41 @@ mmap2(NULL, 1780508, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb
 \end{lstlisting}
 
 \index{\MacOSX}
-\IFRU{В \MacOSX для этого же имеется dtruss}{\MacOSX has dtruss for the same aim}.
+\RU{В \MacOSX для этого же имеется dtruss}\EN{\MacOSX has dtruss for the same aim}.
 
 \index{cygwin}
-\IFRU{В Cygwin также есть strace, впрочем, если я верно понял, 
+\RU{В Cygwin также есть strace, впрочем, если я верно понял, 
 он показывает результаты только для .exe-файлов скомпилированных для среды самого cygwin}
-{The Cygwin also has strace, but if I understood correctly, it works only for .exe-files
+\EN{The Cygwin also has strace, but if I understood correctly, it works only for .exe-files
 compiled for cygwin environment itself}.
 
-\chapter{\IFRU{Декомпиляторы}{Decompilers}}
+\chapter{\RU{Декомпиляторы}\EN{Decompilers}}
 
-\IFRU{Пока существует только один, публично доступный, декомпилятор в Си высокого качества}
-{There are only one known, publically available, high-quality decompiler to C code}: Hex-Rays:\\
+\RU{Пока существует только один, публично доступный, декомпилятор в Си высокого качества}
+\EN{There are only one known, publically available, high-quality decompiler to C code}: Hex-Rays:\\
 \url{https://www.hex-rays.com/products/decompiler/}
 
 % TODO Java, .NET, VB, etc
 
-\chapter{\IFRU{Прочие инструменты}{Other tools}}
+\chapter{\RU{Прочие инструменты}\EN{Other tools}}
 
 \begin{itemize}
 \item
 Microsoft Visual Studio Express\footnote{\url{http://www.microsoft.com/express/Downloads/}}:
-\IFRU{Усеченная бесплатная версия Visual Studio, пригодная для простых экспериментов}
-{Stripped-down free Visual Studio version, convenient for simple experiments}.
+\RU{Усеченная бесплатная версия Visual Studio, пригодная для простых экспериментов}
+\EN{Stripped-down free Visual Studio version, convenient for simple experiments}.
 Some useful options: \ref{sec:MSVC_options}.
 
 \item
 \label{Hiew}
-Hiew\footnote{\url{http://www.hiew.ru/}} \IFRU{для мелкой модификации кода в исполняемых файлах}
-{for small modifications of code in binary files}.
+Hiew\footnote{\url{http://www.hiew.ru/}} \RU{для мелкой модификации кода в исполняемых файлах}
+\EN{for small modifications of code in binary files}.
 
 \item
 \index{binary grep}
-binary grep: \IFRU{небольшая утилита для поиска констант (либо просто последовательности байт)
+binary grep: \RU{небольшая утилита для поиска констант (либо просто последовательности байт)
 в большом  кол-ве файлов, включая неисполняемые: \BGREPURL.}
-{the small utility for constants searching (or just any byte sequence) in a big pile of files, 
+\EN{the small utility for constants searching (or just any byte sequence) in a big pile of files, 
 including non-executable: \BGREPURL.}
 \end{itemize}
 

@@ -1,20 +1,20 @@
-\section{\IFRU{Переполнение буфера}{Buffer overflow}}
+\section{\RU{Переполнение буфера}\EN{Buffer overflow}}
 \label{subsec:bufferoverflow}
 \index{\BufferOverflow}
 
-\IFRU{Итак, индексация массива ~--- это просто \IT{массив\lbrack{}индекс\rbrack}.  % TODO как-то плохо отображаются []
+\RU{Итак, индексация массива ~--- это просто \IT{массив\lbrack{}индекс\rbrack}.  % TODO как-то плохо отображаются []
 Если вы присмотритесь к коду, в цикле печати значений массива через \printf вы 
 не увидите проверок индекса, \IT{меньше ли он двадцати?} 
 А что будет если он будет больше двадцати? 
 Эта одна из особенностей \CCpp, за которую их, собственно, и ругают.}
-{So, array indexing is just \IT{array\lbrack{}index\rbrack}.
+\EN{So, array indexing is just \IT{array\lbrack{}index\rbrack}.
 If you study generated code closely, you'll probably note missing index bounds checking,
 which could check index, \IT{if it is less than 20}.
 What if index will be greater than 20?
 That's the one \CCpp feature it is often blamed for.}
 
-\IFRU{Вот код который и компилируется и работает:}
-{Here is a code successfully compiling and working:}
+\RU{Вот код который и компилируется и работает:}
+\EN{Here is a code successfully compiling and working:}
 
 \begin{lstlisting}
 #include <stdio.h>
@@ -33,32 +33,32 @@ int main()
 };
 \end{lstlisting}
 
-\IFRU{Вот в это}{Compilation results} (MSVC 2010):
+\RU{Вот в это}\EN{Compilation results} (MSVC 2010):
 
 \lstinputlisting{patterns/13_arrays/BO2_msvc.asm}
 
-\IFRU{У меня оно при запуске выдало вот это:}{I'm running it, and I got:}
+\RU{У меня оно при запуске выдало вот это:}\EN{I'm running it, and I got:}
 
 \begin{lstlisting}
 a[100]=760826203
 \end{lstlisting}
 
-\IFRU{Это просто \IT{что-то}, что волею случая лежало в стеке рядом с массивом, 
+\RU{Это просто \IT{что-то}, что волею случая лежало в стеке рядом с массивом, 
 через 400 байт от его первого элемента.}
-{It is just \IT{something}, occasionally lying in the stack near to array, 400 bytes from its first element.}
+\EN{It is just \IT{something}, occasionally lying in the stack near to array, 400 bytes from its first element.}
 
-\IFRU{Действительно, а как могло бы быть иначе? Компилятор мог бы встроить какой-то код, 
+\RU{Действительно, а как могло бы быть иначе? Компилятор мог бы встроить какой-то код, 
 каждый раз проверяющий индекс на соответствие пределам массива, как в языках программирования 
 более высокого уровня\footnote{Java, Python, и т.д.}, что делало бы запускаемый код медленнее.}
-{Indeed, how it could be done differently?
+\EN{Indeed, how it could be done differently?
 Compiler may generate some additional code for checking index value to be always
 in array's bound (like in higher-level programming languages\footnote{Java, Python, etc})
 but this makes running code slower.}
 
-\IFRU{Итак, мы прочитали какое-то число из стека явно \IT{нелегально}, а что если мы запишем?}
-{OK, we read some values from the stack \IT{illegally} but what if we could write something to it?}
+\RU{Итак, мы прочитали какое-то число из стека явно \IT{нелегально}, а что если мы запишем?}
+\EN{OK, we read some values from the stack \IT{illegally} but what if we could write something to it?}
 
-\IFRU{Вот что мы пишем:}{Here is what we will write:}
+\RU{Вот что мы пишем:}\EN{Here is what we will write:}
 
 \begin{lstlisting}
 #include <stdio.h>
@@ -75,25 +75,25 @@ int main()
 };
 \end{lstlisting}
 
-\IFRU{И вот что имеем на ассемблере:}{And what we've got:}
+\RU{И вот что имеем на ассемблере:}\EN{And what we've got:}
 
 \lstinputlisting{patterns/13_arrays/BO_\LANG.asm}
 
-\IFRU{Запускаете скомпилированную программу, и она падает. Немудрено. Но давайте теперь узнаем, где именно.}
-{Run compiled program and its crashing. No wonder. Let's see, where exactly it is crashing.}
+\RU{Запускаете скомпилированную программу, и она падает. Немудрено. Но давайте теперь узнаем, где именно.}
+\EN{Run compiled program and its crashing. No wonder. Let's see, where exactly it is crashing.}
 
 \index{tracer}
-\IFRU{Отладчик я уже давно не использую, так как надоело для всяких мелких задач вроде подсмотреть состояние 
+\RU{Отладчик я уже давно не использую, так как надоело для всяких мелких задач вроде подсмотреть состояние 
 регистров, запускать что-то, двигать мышью, и т.д. 
 Поэтому я написал очень минималистическую утилиту для себя, \tracer, коей обхожусь.}
-{I'm not using debugger anymore since I tried to run it each time, move mouse, etc, when I need just to
+\EN{I'm not using debugger anymore since I tried to run it each time, move mouse, etc, when I need just to
 spot a register's state at the specific point.
 That's why I wrote very minimalistic tool for myself, \tracer, which is enough for my tasks.}
 
-\IFRU{Помимо всего прочего, я могу использовать мою утилиту просто чтобы посмотреть 
+\RU{Помимо всего прочего, я могу использовать мою утилиту просто чтобы посмотреть 
 где и какое исключение произошло. 
 Итак, пробую:}
-{I can also use it just to see, where \gls{debuggee} is crashed.
+\EN{I can also use it just to see, where \gls{debuggee} is crashed.
 So let's see:}
 
 \begin{lstlisting}
@@ -108,95 +108,95 @@ FLAGS=PF ZF IF RF
 PID=7988|Process exit, return code -1073740791
 \end{lstlisting}
 
-\IFRU{Итак, следите внимательно за регистрами.}
-{Now please keep your eyes on registers.}
+\RU{Итак, следите внимательно за регистрами.}
+\EN{Now please keep your eyes on registers.}
 
-\IFRU{Исключение произошло по адресу 0x15. Это явно нелегальный адрес для кода ~--- по крайней мере, win32-кода! 
+\RU{Исключение произошло по адресу 0x15. Это явно нелегальный адрес для кода ~--- по крайней мере, win32-кода! 
 Мы там как-то очутились, причем, сами того не хотели. Интересен также тот факт, что в \EBP хранится 0x14, 
 а в \ECX и \EDX ~--- 0x1D.}
-{Exception occurred at address 0x15. It is not legal address for code~---at least for win32 code!
+\EN{Exception occurred at address 0x15. It is not legal address for code~---at least for win32 code!
 We trapped there somehow against our will.
 It is also interesting fact the \EBP register contain 0x14,
 \ECX and \EDX{}~---0x1D.}
 
-\IFRU{И еще немного изучим разметку стека.}{Let's study stack layout more.}
+\RU{И еще немного изучим разметку стека.}\EN{Let's study stack layout more.}
 
-\IFRU{После того как управление передалось в \main, в стек было сохранено значение \EBP. 
+\RU{После того как управление передалось в \main, в стек было сохранено значение \EBP. 
 Затем, для массива + переменной \IT{i} было выделено $84$ байта. Это \TT{(20+1)*sizeof(int)}. 
 \ESP сейчас указывает на переменную \TT{\_i} в локальном стеке и при исполнении следующего \TT{PUSH что-либо}, 
 \IT{что-либо} появится рядом с \TT{\_i}.}
-{After control flow was passed into \TT{\main}, the value in the \EBP register was saved on the stack.
+\EN{After control flow was passed into \TT{\main}, the value in the \EBP register was saved on the stack.
 Then, $84$ bytes was allocated for array and \IT{i} variable.
 That's \TT{(20+1)*sizeof(int)}.
 The \ESP pointing now to the \TT{\_i} variable in the local stack and after execution of next \TT{PUSH something},
 \IT{something} will be appeared next to \TT{\_i}.}
 
-\IFRU{Вот так выглядит разметка стека пока управление находится внутри}
-{That's stack layout while control is inside} \main:
+\RU{Вот так выглядит разметка стека пока управление находится внутри}
+\EN{That's stack layout while control is inside} \main:
 
 \begin{center}
 \begin{tabular}{ | l | l | }
 \hline
-  \TT{ESP}    & \IFRU{4 байта для \IT{i}}{4 bytes for \IT{i}} \\
-  \TT{ESP+4}  & \IFRU{80 байт для массива \TT{a[20]}}{80 bytes for \TT{a[20]} array} \\
-  \TT{ESP+84} & \IFRU{сохраненное значение \EBP}{saved \EBP value} \\
-  \TT{ESP+88} & \IFRU{адрес возврата}{returning address} \\
+  \TT{ESP}    & \RU{4 байта для \IT{i}}\EN{4 bytes for \IT{i}} \\
+  \TT{ESP+4}  & \RU{80 байт для массива \TT{a[20]}}\EN{80 bytes for \TT{a[20]} array} \\
+  \TT{ESP+84} & \RU{сохраненное значение \EBP}\EN{saved \EBP value} \\
+  \TT{ESP+88} & \RU{адрес возврата}\EN{returning address} \\
 \hline
 \end{tabular}
 \end{center}
 
-\IFRU{Команда \TT{a[19]=чего\_нибудь} записывает последний \Tint в пределах массива (пока что в пределах!)}
-{Instruction \TT{a[19]=something} writes last \Tint in array bounds (in bounds so far!)}
+\RU{Команда \TT{a[19]=чего\_нибудь} записывает последний \Tint в пределах массива (пока что в пределах!)}
+\EN{Instruction \TT{a[19]=something} writes last \Tint in array bounds (in bounds so far!)}
 
-\IFRU{Команда \TT{a[20]=чего\_нибудь} записывает \IT{чего\_нибудь} на место где сохранено значение \EBP.}
-{Instruction \TT{a[20]=something} writes \IT{something} to the place where value from the \EBP is saved.}
+\RU{Команда \TT{a[20]=чего\_нибудь} записывает \IT{чего\_нибудь} на место где сохранено значение \EBP.}
+\EN{Instruction \TT{a[20]=something} writes \IT{something} to the place where value from the \EBP is saved.}
 
-\IFRU{Обратите внимание на состояние регистров на момент падения процесса. В нашем случае, 
+\RU{Обратите внимание на состояние регистров на момент падения процесса. В нашем случае, 
 в 20-й элемент записалось значение 20. 
 И вот все дело в том, что заканчиваясь, эпилог функции восстанавливал значение \EBP. 
 (20 в десятичной системе это как раз 0x14 в шестнадцатеричной). 
 Далее выполнилась инструкция \RET, которая на самом деле эквивалентна \TT{POP EIP}.}
-{Please take a look at registers state at the crash moment. In our case,
+\EN{Please take a look at registers state at the crash moment. In our case,
 number 20 was written to 20th element. 
 By the function ending, function epilogue restores original \EBP value.
 (20 in decimal system is 0x14 in hexadecimal).
 Then, \RET instruction was executed, which is effectively equivalent to \TT{POP EIP} instruction.}
 
-\IFRU{Инструкция \RET вытащила из стека адрес возврата (это адрес где-то внутри \ac{CRT}), 
+\RU{Инструкция \RET вытащила из стека адрес возврата (это адрес где-то внутри \ac{CRT}), 
 которая вызвала \main), 
 а там было записано 21 в десятичной системе, то есть 0x15 в шестнадцатеричной. 
 И вот процессор оказался по адресу 0x15, но исполняемого кода там нет, так что случилось исключение.}
-{\RET instruction taking returning address from the stack (that is the address inside of \ac{CRT}),
+\EN{\RET instruction taking returning address from the stack (that is the address inside of \ac{CRT}),
 which was called \main),
 and 21 was stored there (0x15 in hexadecimal).
 The CPU trapped at the address 0x15,
 but there is no executable code, so exception was raised.}
 
-\index{\IFRU{Переполнение буфера}{Buffer overflow}}
-\IFRU{Добро пожаловать! Это называется}
-{Welcome! It is called} \IT{buffer overflow}\footnote{\url{http://en.wikipedia.org/wiki/Stack_buffer_overflow}}.
+\index{\RU{Переполнение буфера}\EN{Buffer overflow}}
+\RU{Добро пожаловать! Это называется}
+\EN{Welcome! It is called} \IT{buffer overflow}\footnote{\url{http://en.wikipedia.org/wiki/Stack_buffer_overflow}}.
 
-\IFRU{Замените массив \Tint на строку (массив \Tchar), нарочно создайте слишком длинную строку, 
+\RU{Замените массив \Tint на строку (массив \Tchar), нарочно создайте слишком длинную строку, 
 просуньте её в ту программу, 
 в ту функцию, которая не проверяя длину строки скопирует её в слишком короткий буфер, 
 и вы сможете указать программе, по какому именно адресу перейти. 
 Не все так просто в реальности, конечно, но началось все с этого
 \footnote{Классическая статья об этом: \cite{Phrack4914}}.}
-{Replace \Tint array by string (\Tchar array), create a long string deliberately,
+\EN{Replace \Tint array by string (\Tchar array), create a long string deliberately,
 and pass it to the program, to the function which is not checking string length and copies it to short buffer,
 and you'll able to point to a program an address to which it must jump.
 Not that simple in reality, but that is how it was emerged
 \footnote{Classic article about it: \cite{Phrack4914}.}}
 
-\IFRU{Попробуем то же самое в GCC 4.4.1. У нас выходит такое:}{Let's try the same code in GCC 4.4.1. We got:}
+\RU{Попробуем то же самое в GCC 4.4.1. У нас выходит такое:}\EN{Let's try the same code in GCC 4.4.1. We got:}
 
 \lstinputlisting{patterns/13_arrays/BO2_gcc.asm}
 
-\IFRU{Запуск этого в Linux выдаст:}{Running this in Linux will produce:} \TT{Segmentation fault}.
+\RU{Запуск этого в Linux выдаст:}\EN{Running this in Linux will produce:} \TT{Segmentation fault}.
 
 \index{GDB}
-\IFRU{Если запустить полученное в отладчике GDB, получим:}
-{If we run this in GDB debugger, we getting this:}
+\RU{Если запустить полученное в отладчике GDB, получим:}
+\EN{If we run this in GDB debugger, we getting this:}
 
 \begin{lstlisting}
 (gdb) r
@@ -224,6 +224,6 @@ gs             0x33	51
 (gdb) 
 \end{lstlisting}
 
-\IFRU{Значения регистров немного другие чем в примере win32, это потому что разметка стека чуть другая.}
-{Register values are slightly different then in win32 example
+\RU{Значения регистров немного другие чем в примере win32, это потому что разметка стека чуть другая.}
+\EN{Register values are slightly different then in win32 example
 since stack layout is slightly different too.}

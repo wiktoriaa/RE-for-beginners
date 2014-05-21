@@ -1,9 +1,9 @@
-\section{x86: \IFRU{3 аргумента}{3 arguments}}
+\section{x86: \RU{3 аргумента}\EN{3 arguments}}
 
 \subsection{MSVC}
 
-\IFRU{Компилируем при помощи MSVC 2010 Express, и в итоге получим:}
-{Let's compile it by MSVC 2010 Express and we got:}
+\RU{Компилируем при помощи MSVC 2010 Express, и в итоге получим:}
+\EN{Let's compile it by MSVC 2010 Express and we got:}
 
 \begin{lstlisting}
 $SG3830	DB	'a=%d; b=%d; c=%d', 00H
@@ -18,34 +18,34 @@ $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 	add	esp, 16					; 00000010H
 \end{lstlisting}
 
-\IFRU{Все почти то же, за исключением того, что теперь видно, что аргументы для \printf заталкиваются в стек в обратном порядке: самый первый аргумент заталкивается последним.}
-{Almost the same, but now we can see the \printf arguments are pushed onto the stack in reverse order. The first argument is pushed last.}
+\RU{Все почти то же, за исключением того, что теперь видно, что аргументы для \printf заталкиваются в стек в обратном порядке: самый первый аргумент заталкивается последним.}
+\EN{Almost the same, but now we can see the \printf arguments are pushed onto the stack in reverse order. The first argument is pushed last.}
 
-\IFRU{Кстати, вспомним что переменные типа \Tint в 32-битной системе, как известно, имеет ширину 32 бита, это 4 байта}
-{By the way, variables of \Tint type in 32-bit environment have 32-bit width, that is 4 bytes}.
+\RU{Кстати, вспомним что переменные типа \Tint в 32-битной системе, как известно, имеет ширину 32 бита, это 4 байта}
+\EN{By the way, variables of \Tint type in 32-bit environment have 32-bit width, that is 4 bytes}.
 
-\IFRU{Итак, у нас всего 4 аргумента. $4*4 = 16$ ~--- именно 16 байт занимают в стеке указатель на строку плюс еще 3 числа типа \Tint.}
-{So, we have here 4 arguments. $4*4 = 16$~---they occupy exactly 16 bytes in the stack: a 32-bit pointer to a string and 3 numbers of type \Tint.}
+\RU{Итак, у нас всего 4 аргумента. $4*4 = 16$ ~--- именно 16 байт занимают в стеке указатель на строку плюс еще 3 числа типа \Tint.}
+\EN{So, we have here 4 arguments. $4*4 = 16$~---they occupy exactly 16 bytes in the stack: a 32-bit pointer to a string and 3 numbers of type \Tint.}
 
 \index{x86!\Instructions!ADD}
 \index{x86!\Registers!ESP}
 \index{cdecl}
-\IFRU{Когда при помощи инструкции \TT{``ADD ESP, X''} корректируется \glslink{stack pointer}{указатель стека} \ESP 
+\RU{Когда при помощи инструкции \TT{``ADD ESP, X''} корректируется \glslink{stack pointer}{указатель стека} \ESP 
 после вызова какой-либо функции, зачастую можно сделать вывод о том, сколько аргументов 
 у вызываемой функции было, разделив X на 4.}
-{When the \gls{stack pointer} (\ESP register) is corrected by \TT{``ADD ESP, X''}
+\EN{When the \gls{stack pointer} (\ESP register) is corrected by \TT{``ADD ESP, X''}
 instruction after a function 
 call, often, the number of function arguments can be deduced here: just divide X by 4.}
 
-\IFRU{Конечно, это относится только к cdecl-методу передачи аргументов через стек.}
-{Of course, this is related only to \IT{cdecl} calling convention.}
+\RU{Конечно, это относится только к cdecl-методу передачи аргументов через стек.}
+\EN{Of course, this is related only to \IT{cdecl} calling convention.}
 
-\IFRU{См. также в соответствующем разделе о способах передачи аргументов через стек}
-{See also the section about calling conventions}~(\ref{sec:callingconventions}).
+\RU{См. также в соответствующем разделе о способах передачи аргументов через стек}
+\EN{See also the section about calling conventions}~(\ref{sec:callingconventions}).
 
-\IFRU{Иногда бывает так, что подряд идут несколько вызовов разных функций, 
+\RU{Иногда бывает так, что подряд идут несколько вызовов разных функций, 
 но стек корректируется только один раз, после последнего вызова:}
-{It is also possible for the compiler to merge several \TT{``ADD ESP, X''} instructions into one, after the last call:}
+\EN{It is also possible for the compiler to merge several \TT{``ADD ESP, X''} instructions into one, after the last call:}
 
 \begin{lstlisting}
 push a1
@@ -65,147 +65,147 @@ add esp, 24
 \subsection{MSVC \AndENRU \olly}
 \index{\olly}
 
-\IFRU{Попробуем этот же пример в}{Now let's try to load this example in} \olly.
-\IFRU{Это один из наиболее популярных win32-отладчиков user-режима}{It is one of the most 
+\RU{Попробуем этот же пример в}\EN{Now let's try to load this example in} \olly.
+\RU{Это один из наиболее популярных win32-отладчиков user-режима}\EN{It is one of the most 
 popular user-land win32 debugger}.
-\IFRU{Мы можем компилировать наш пример в}{We can try to compile our example in} MSVC 2012 
-\IFRU{с опцией}{with} \TT{/MD} \IFRU{что означает, линковать с библиотекой}{option, meaning, to link 
+\RU{Мы можем компилировать наш пример в}\EN{We can try to compile our example in} MSVC 2012 
+\RU{с опцией}\EN{with} \TT{/MD} \RU{что означает, линковать с библиотекой}\EN{option, meaning, to link 
 against} \TT{MSVCR*.DLL},
-\IFRU{чтобы импортируемые ф-ции были хорошо видны в отладчике}{so we will able to see imported 
+\RU{чтобы импортируемые ф-ции были хорошо видны в отладчике}\EN{so we will able to see imported 
 functions clearly in debugger}.
 
-\IFRU{Затем загружаем исполняемый файл в}{Then load executable in} \olly.
-\IFRU{Самый первый брякпойнт в}{The very first breakpoint is in} \TT{ntdll.dll}, \IFRU{нажмите}{press} 
-F9 (\IFRU{запустить}{run}).
-\IFRU{Второй брякпойнт в}{The second breakpoint is in} \ac{CRT}-\IFRU{коде}{code}.
-\IFRU{Теперь мы должны найти ф-цию}{Now we should find} \main\EN{ function}.
+\RU{Затем загружаем исполняемый файл в}\EN{Then load executable in} \olly.
+\RU{Самый первый брякпойнт в}\EN{The very first breakpoint is in} \TT{ntdll.dll}, \RU{нажмите}\EN{press} 
+F9 (\RU{запустить}\EN{run}).
+\RU{Второй брякпойнт в}\EN{The second breakpoint is in} \ac{CRT}-\RU{коде}\EN{code}.
+\RU{Теперь мы должны найти ф-цию}\EN{Now we should find} \main\EN{ function}.
 
-\IFRU{Найдите этот код скроллируя окно кода до самого верха (MSVC располагает ф-цию \main в самом начале
-секции кода)}{Find this code by scrolling the code to the very bottom (MSVC allocates \main function at
+\RU{Найдите этот код скроллируя окно кода до самого верха (MSVC располагает ф-цию \main в самом начале
+секции кода)}\EN{Find this code by scrolling the code to the very bottom (MSVC allocates \main function at
 the very beginning of the code section)}: 
 \figname \ref{fig:printf3_olly_1}.\\
 \\
-\IFRU{Кликните на инструкции}{Click on} \TT{PUSH EBP}\IFRU{, нажмите}{ instruction, press} F2 
-(\IFRU{установка брякпойнта}{set breakpoint}) \IFRU{и нажмите}{and press} F9 (\IFRU{запустить}{run}).
-\IFRU{Нам нужно произвести все эти манипуляции, чтобы пропустить \ac{CRT}-код, потому что нам он пока
-не интересен}{We need to do these manupulations in order to skip \ac{CRT}-code, because, we don't really 
+\RU{Кликните на инструкции}\EN{Click on} \TT{PUSH EBP}\RU{, нажмите}\EN{ instruction, press} F2 
+(\RU{установка брякпойнта}\EN{set breakpoint}) \RU{и нажмите}\EN{and press} F9 (\RU{запустить}\EN{run}).
+\RU{Нам нужно произвести все эти манипуляции, чтобы пропустить \ac{CRT}-код, потому что нам он пока
+не интересен}\EN{We need to do these manupulations in order to skip \ac{CRT}-code, because, we don't really 
 interesting in it yet}.\\
 \\
-\IFRU{Нажмите}{Press} F8 (\stepover) 6 \IFRU{раз, т.е., пропустить
-6 инструкций}{times, i.e., skip 6 instructions}: \figname \ref{fig:printf3_olly_2}.\\
+\RU{Нажмите}\EN{Press} F8 (\stepover) 6 \RU{раз, т.е., пропустить
+6 инструкций}\EN{times, i.e., skip 6 instructions}: \figname \ref{fig:printf3_olly_2}.\\
 \\
-\IFRU{Теперь}{Now the} \ac{PC} \IFRU{указывает на инструкцию}{points to the}
+\RU{Теперь}\EN{Now the} \ac{PC} \RU{указывает на инструкцию}\EN{points to the}
 \TT{CALL printf}\EN{ instruction}.
-\olly, \IFRU{как и другие отладчики, подсвечивает регистры со значениями, которые изменились}
-{like other debuggers, highlights value of registers which were changed}.
-\IFRU{Так что, каждый раз, когда мы нажимаем}{So each time you press F8}, \EIP 
-\IFRU{изменяется и его значение подсвечивается красным}{is changing and its value looking red}.
-\ESP \IFRU{также меняется, потому что значения заталкиваются в стек}{is changing as well, 
+\olly, \RU{как и другие отладчики, подсвечивает регистры со значениями, которые изменились}
+\EN{like other debuggers, highlights value of registers which were changed}.
+\RU{Так что, каждый раз, когда мы нажимаем}\EN{So each time you press F8}, \EIP 
+\RU{изменяется и его значение подсвечивается красным}\EN{is changing and its value looking red}.
+\ESP \RU{также меняется, потому что значения заталкиваются в стек}\EN{is changing as well, 
 because values are pushed into the stack}.\\
 \\
-\IFRU{Где находятся эти значения в стеке}{Where are the values in the stack}?
-\IFRU{Посмотрите на правое/нижнее окно в отладчике}{Take a look into right/bottom window of debugger}:
+\RU{Где находятся эти значения в стеке}\EN{Where are the values in the stack}?
+\RU{Посмотрите на правое/нижнее окно в отладчике}\EN{Take a look into right/bottom window of debugger}:
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.66]{patterns/03_printf/olly3_stack.png}
-\caption{\olly: \IFRU{стек, после того как значения там сохранены}{stack after values pushed}
-(\IFRU{я сделал здесь округлую красную пометку в графическом редакторе}{I made round red mark 
+\caption{\olly: \RU{стек, после того как значения там сохранены}\EN{stack after values pushed}
+(\RU{я сделал здесь округлую красную пометку в графическом редакторе}\EN{I made round red mark 
 here in graphics editor})}
 \end{figure}
 
-\IFRU{Так что здесь видно 3 столбца: адрес в стеке, значение в стеке и еще дополнительный комментарий
-от \olly}{So we can see there 3 columns: address in the stack, 
+\RU{Так что здесь видно 3 столбца: адрес в стеке, значение в стеке и еще дополнительный комментарий
+от \olly}\EN{So we can see there 3 columns: address in the stack, 
 value in the stack and some additional \olly comments}. 
-\olly \IFRU{понимает}{understands} \printf\IFRU{-строки}{-like strings}, 
-\IFRU{так что он показывает здесь и строку и 3 значения \IT{привязанных} к ней}{so it reports the 
+\olly \RU{понимает}\EN{understands} \printf\RU{-строки}\EN{-like strings}, 
+\RU{так что он показывает здесь и строку и 3 значения \IT{привязанных} к ней}\EN{so it reports the 
 string here and 3 values \IT{attached} to it}.
 
-\IFRU{Можно кликнуть правой кнопкой мыши на строке формата, кликнуть на ``Follow in dump''
+\RU{Можно кликнуть правой кнопкой мыши на строке формата, кликнуть на ``Follow in dump''
 и строка формата появится в окне слева внизу, где всегда виден какой-либо участок памяти}
-{It is possible to right-click on the format string, click on ``Follow in dump'',
+\EN{It is possible to right-click on the format string, click on ``Follow in dump'',
 and the format string will appear in the window at the left-bottom part, where some memory part
 is always seen}.
-\IFRU{Эти значения в памяти можно редактировать}{These memory values can be edited}.
-\IFRU{Можно изменить саму строку формата, и тогда результат работы нашего примера будет другой}
-{It is possible to change the format string, and then the result of our example will be different}.
-\IFRU{В данном случае, пользы от этого немного, но для упражнения это полезно,
-чтобы начать чувствовать как тут всё работает}{It is probably not very useful now, but it's very
+\RU{Эти значения в памяти можно редактировать}\EN{These memory values can be edited}.
+\RU{Можно изменить саму строку формата, и тогда результат работы нашего примера будет другой}
+\EN{It is possible to change the format string, and then the result of our example will be different}.
+\RU{В данном случае, пользы от этого немного, но для упражнения это полезно,
+чтобы начать чувствовать как тут всё работает}\EN{It is probably not very useful now, but it's very
 good idea for doing it as exercise, to get feeling how everything is works here}.
 
-\IFRU{Нажмите}{Press} F8 (\stepover).
+\RU{Нажмите}\EN{Press} F8 (\stepover).
 
-\IFRU{В консоли мы видим вывод}{In the console we'll see the output}:
+\RU{В консоли мы видим вывод}\EN{In the console we'll see the output}:
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.66]{patterns/03_printf/olly3_console.png}
-\caption{\RU{Ф-ция }\printf \IFRU{исполнилась}{function executed}}
+\caption{\RU{Ф-ция }\printf \RU{исполнилась}\EN{function executed}}
 \end{figure}
 
-\IFRU{Посмотрим, как изменились регистры и состояние стека}{Let's see how registers and stack state 
+\RU{Посмотрим, как изменились регистры и состояние стека}\EN{Let's see how registers and stack state 
 are changed}: \figname \ref{fig:printf3_olly_3}.
 
-\RU{Регистр }\EAX \IFRU{теперь содержит}{register now contains} \TT{0xD} (13).
+\RU{Регистр }\EAX \RU{теперь содержит}\EN{register now contains} \TT{0xD} (13).
 That's correct, \printf returns number of characters printed.
-\RU{Значение }\EIP \IFRU{изменилось: действительно, теперь здесь адрес инструкции после}
-{value is changed: indeed, now there is address of the instruction after} \TT{CALL printf}.
-\RU{Значения регистров }\ECX \AndENRU \EDX \IFRU{также изменились}{values are changed as well}.
-\IFRU{Очевидно, внутренности ф-ции \printf используют их для каких-то своих нужд}{Apparently, 
+\RU{Значение }\EIP \RU{изменилось: действительно, теперь здесь адрес инструкции после}
+\EN{value is changed: indeed, now there is address of the instruction after} \TT{CALL printf}.
+\RU{Значения регистров }\ECX \AndENRU \EDX \RU{также изменились}\EN{values are changed as well}.
+\RU{Очевидно, внутренности ф-ции \printf используют их для каких-то своих нужд}\EN{Apparently, 
 \printf function's hidden machinery used them for its own needs}.
 
-\IFRU{Очень важный момент в том что значение \ESP не изменилось. И состояние стека также!}
-{A very important thing is that \ESP value is not changed. And stack state too!}
-\IFRU{Мы ясно видим здесь и строку формата и соответствующие ей 3 значения, они все еще здесь}
-{We clearly see that format string and corresponding 3 values are still there}.
-\IFRU{Действительно, по соглашению вызовов \IT{cdecl}, вызывающая ф-ция не очищает аргументы из стека}
-{Indeed, that's \IT{cdecl} calling convention, calling function doesn't clear arguments in stack}.
-\IFRU{Это должна делать вызывающая ф-ция}{It's caller's duty to do so}.
+\RU{Очень важный момент в том что значение \ESP не изменилось. И состояние стека также!}
+\EN{A very important thing is that \ESP value is not changed. And stack state too!}
+\RU{Мы ясно видим здесь и строку формата и соответствующие ей 3 значения, они все еще здесь}
+\EN{We clearly see that format string and corresponding 3 values are still there}.
+\RU{Действительно, по соглашению вызовов \IT{cdecl}, вызывающая ф-ция не очищает аргументы из стека}
+\EN{Indeed, that's \IT{cdecl} calling convention, calling function doesn't clear arguments in stack}.
+\RU{Это должна делать вызывающая ф-ция}\EN{It's caller's duty to do so}.
 
-\IFRU{Нажмите}{Press} F8 \IFRU{снова, чтобы исполнилась инструкция}{again to execute} 
+\RU{Нажмите}\EN{Press} F8 \RU{снова, чтобы исполнилась инструкция}\EN{again to execute} 
 \TT{ADD ESP, 10}\EN{ instruction}: \figname \ref{fig:printf3_olly_4}.
 
-\ESP \IFRU{изменился, но значения все еще в стеке}{is changed, but values are still in the stack}!
-\IFRU{Конечно, никому не нужно заполнять эти значения нулями или что-то в этом роде}{Yes, 
+\ESP \RU{изменился, но значения все еще в стеке}\EN{is changed, but values are still in the stack}!
+\RU{Конечно, никому не нужно заполнять эти значения нулями или что-то в этом роде}\EN{Yes, 
 of course, no one needs to fill these values by zero or something like that}.
-\IFRU{Потому что всё что выше указателя стека}{Because, everything above stack pointer} (\ac{SP}) 
-\IFRU{это}{is} \IT{\IFRU{шум}{noise}} \OrENRU \IT{\IFRU{мусор}{garbage}}, \IFRU{это всё не имеет
-особой ценности}{it has no value at all}.
-\IFRU{Было бы очень затратно по времени очищать ненужные элементы стека, к тому же, никому это и не 
-нужно}{It would be time consuming to clear unused stack entries, besides, no one really needs to}.
+\RU{Потому что всё что выше указателя стека}\EN{Because, everything above stack pointer} (\ac{SP}) 
+\RU{это}\EN{is} \IT{\RU{шум}\EN{noise}} \OrENRU \IT{\RU{мусор}\EN{garbage}}, \RU{это всё не имеет
+особой ценности}\EN{it has no value at all}.
+\RU{Было бы очень затратно по времени очищать ненужные элементы стека, к тому же, никому это и не 
+нужно}\EN{It would be time consuming to clear unused stack entries, besides, no one really needs to}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/03_printf/olly3_1.png}
-\caption{\olly: \IFRU{самое начало ф-ции}{the very start of the} \main\EN{ function}}
+\caption{\olly: \RU{самое начало ф-ции}\EN{the very start of the} \main\EN{ function}}
 \label{fig:printf3_olly_1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/03_printf/olly3_2.png}
-\caption{\olly: \IFRU{перед исполнением}{before} \printf\EN{ execution}}
+\caption{\olly: \RU{перед исполнением}\EN{before} \printf\EN{ execution}}
 \label{fig:printf3_olly_2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/03_printf/olly3_3.png}
-\caption{\olly: \IFRU{после исполнения}{after} \printf\EN{ execution}}
+\caption{\olly: \RU{после исполнения}\EN{after} \printf\EN{ execution}}
 \label{fig:printf3_olly_3}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/03_printf/olly3_4.png}
-\caption{\olly: \IFRU{после исполнения инструкции}{after} \TT{ADD ESP, 10}\EN{ instruction execution}}
+\caption{\olly: \RU{после исполнения инструкции}\EN{after} \TT{ADD ESP, 10}\EN{ instruction execution}}
 \label{fig:printf3_olly_4}
 \end{figure}
 
 \subsection{GCC}
 
-\IFRU{Скомпилируем то же самое в Linux при помощи GCC 4.4.1 и посмотрим в \IDA что вышло:}
-{Now let's compile the same program in Linux using GCC 4.4.1 and take a look in \IDA what we got:}
+\RU{Скомпилируем то же самое в Linux при помощи GCC 4.4.1 и посмотрим в \IDA что вышло:}
+\EN{Now let's compile the same program in Linux using GCC 4.4.1 and take a look in \IDA what we got:}
 
 \begin{lstlisting}
 main            proc near
@@ -231,18 +231,18 @@ var_4           = dword ptr -4
 main            endp
 \end{lstlisting}
 
-\IFRU{Можно сказать, что этот короткий код, созданный GCC, отличается от кода MSVC только способом помещения 
+\RU{Можно сказать, что этот короткий код, созданный GCC, отличается от кода MSVC только способом помещения 
 значений в стек.
 Здесь GCC снова работает со стеком напрямую без \PUSH/\POP.}
-{It can be said that the difference between code from MSVC and code from GCC is only in the method of placing arguments on the stack.
+\EN{It can be said that the difference between code from MSVC and code from GCC is only in the method of placing arguments on the stack.
 Here GCC is working directly with the stack without \PUSH/\POP.}
 
 \subsection{GCC \AndENRU GDB}
 \index{GDB}
 
-\IFRU{Попробуем также этот пример и в \ac{GDB} в Linux}{Let's try this example also in \ac{GDB} in Linux}.
+\RU{Попробуем также этот пример и в \ac{GDB} в Linux}\EN{Let's try this example also in \ac{GDB} in Linux}.
 
-\TT{-g} \IFRU{означает генерировать отладочную информацию в выходном исполняемом файле}{mean produce 
+\TT{-g} \RU{означает генерировать отладочную информацию в выходном исполняемом файле}\EN{mean produce 
 debug information into executable file}.
 
 \begin{lstlisting}
@@ -263,14 +263,14 @@ For bug reporting instructions, please see:
 Reading symbols from /home/dennis/polygon/1...done.
 \end{lstlisting}
 
-\begin{lstlisting}[caption=\IFRU{установим брякпойнт на}{let's set breakpoint on} \printf]
+\begin{lstlisting}[caption=\RU{установим брякпойнт на}\EN{let's set breakpoint on} \printf]
 (gdb) b printf
 Breakpoint 1 at 0x80482f0
 \end{lstlisting}
 
-\IFRU{Запукаем}{Run}.
-\IFRU{Здесь у нас нет исходного кода ф-ции}{There are no} \printf 
-\IFRU{так что \ac{GDB} не может показать его исходный код, но могла бы}{function source code here, 
+\RU{Запукаем}\EN{Run}.
+\RU{Здесь у нас нет исходного кода ф-ции}\EN{There are no} \printf 
+\RU{так что \ac{GDB} не может показать его исходный код, но могла бы}\EN{function source code here, 
 so \ac{GDB} can't show its source, but may do so}.
 
 \begin{lstlisting}
@@ -281,8 +281,8 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
 29	printf.c: No such file or directory.
 \end{lstlisting}
 
-\IFRU{Выдать 10 элементов стека. Левый столбец это адрес в стеке.}
-{Print 10 stack elements. Left column is an address in stack.}
+\RU{Выдать 10 элементов стека. Левый столбец это адрес в стеке.}
+\EN{Print 10 stack elements. Left column is an address in stack.}
 
 \begin{lstlisting}
 (gdb) x/10w $esp
@@ -291,8 +291,8 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
 0xbffff13c:	0xb7e29905	0x00000001
 \end{lstlisting}
 
-\IFRU{Самый первый элемент это}{The very first element is} \ac{RA} (\TT{0x0804844a}).
-\IFRU{Мы можем удостовериться в этом, дизассемблируя память по этому адресу}{We can be sure 
+\RU{Самый первый элемент это}\EN{The very first element is} \ac{RA} (\TT{0x0804844a}).
+\RU{Мы можем удостовериться в этом, дизассемблируя память по этому адресу}\EN{We can be sure 
 in it by disassembling the memory at this address}:
 
 \begin{lstlisting}
@@ -304,28 +304,28 @@ in it by disassembling the memory at this address}:
    0x8048453:	xchg   %ax,%ax
 \end{lstlisting}
 
-\IFRU{Две инструкции}{Two} \TT{XCHG} 
-\IFRU{это, вероятно, какой-то случайный мусор, который мы пока что можем игнорировать}
-{instructions, apparently, is some random garbage, which we can ignore so far}.
+\RU{Две инструкции}\EN{Two} \TT{XCHG} 
+\RU{это, вероятно, какой-то случайный мусор, который мы пока что можем игнорировать}
+\EN{instructions, apparently, is some random garbage, which we can ignore so far}.
 
-\IFRU{Второй элемент}{The second element} (\TT{0x080484f0}) \IFRU{это адрес
-строки формата}{is an address of format string}:
+\RU{Второй элемент}\EN{The second element} (\TT{0x080484f0}) \RU{это адрес
+строки формата}\EN{is an address of format string}:
 
 \begin{lstlisting}
 (gdb) x/s 0x080484f0
 0x80484f0:	"a=%d; b=%d; c=%d"
 \end{lstlisting}
 
-\IFRU{Остальные 3 элемента}{Other 3 elements} (1, 2, 3) \IFRU{это аргументы ф-ции}{are} 
+\RU{Остальные 3 элемента}\EN{Other 3 elements} (1, 2, 3) \RU{это аргументы ф-ции}\EN{are} 
 \printf\EN{ arguments}.
-\IFRU{Остальные элементы это может быть и мусор в стеке, но могут быть и значения
-от других ф-ций, их локальные переменные, итд}{Other elements may be just ``garbage'' present in stack,
+\RU{Остальные элементы это может быть и мусор в стеке, но могут быть и значения
+от других ф-ций, их локальные переменные, итд}\EN{Other elements may be just ``garbage'' present in stack,
 but also may be values from other functions, their local variables, etc}.
-\IFRU{Пока что мы можем игнорировать их}{We can ignore it yet}.
+\RU{Пока что мы можем игнорировать их}\EN{We can ignore it yet}.
 
-\IFRU{Исполняем}{Execute} ``finish''. 
-\IFRU{Это значит, исполнять до конца ф-ции}{This mean, execute till function end}. 
-\IFRU{Здесь это означает: исполнять до завершения}{Here it means: execute till the finish of} \printf.
+\RU{Исполняем}\EN{Execute} ``finish''. 
+\RU{Это значит, исполнять до конца ф-ции}\EN{This mean, execute till function end}. 
+\RU{Здесь это означает: исполнять до завершения}\EN{Here it means: execute till the finish of} \printf.
 
 \begin{lstlisting}
 (gdb) finish
@@ -335,24 +335,24 @@ main () at 1.c:6
 Value returned is $2 = 13
 \end{lstlisting}
 
-\ac{GDB} \IFRU{показывает, что вернула}{shows what} \printf \IFRU{в}{returned in} \EAX (13).
-\IFRU{Это, так же как и в примере с \olly, количество напечатанных символов}
-{This is number of characters printed, just like in the example with \olly}.
+\ac{GDB} \RU{показывает, что вернула}\EN{shows what} \printf \RU{в}\EN{returned in} \EAX (13).
+\RU{Это, так же как и в примере с \olly, количество напечатанных символов}
+\EN{This is number of characters printed, just like in the example with \olly}.
 
-\IFRU{А еще мы видим}{We also see} ``return 0;'' \IFRU{и что это выражение находится в файле 
-\TT{1.c} в строке 6}{and the information that this expression is in the \TT{1.c} file at the line 6}.
-\IFRU{Действительно, файл \TT{1.c} лежит в текущем директории и \ac{GDB} находит там эту строку}
-{Indeed, the \TT{1.c} file is located in the current directory, and \ac{GDB} finds the string there}.
-\IFRU{Как \ac{GDB} знает, какая строка Си-кода сейчас исполняется}{How \ac{GDB} knows, which C-code line
+\RU{А еще мы видим}\EN{We also see} ``return 0;'' \RU{и что это выражение находится в файле 
+\TT{1.c} в строке 6}\EN{and the information that this expression is in the \TT{1.c} file at the line 6}.
+\RU{Действительно, файл \TT{1.c} лежит в текущем директории и \ac{GDB} находит там эту строку}
+\EN{Indeed, the \TT{1.c} file is located in the current directory, and \ac{GDB} finds the string there}.
+\RU{Как \ac{GDB} знает, какая строка Си-кода сейчас исполняется}\EN{How \ac{GDB} knows, which C-code line
 is being executed now}?
-\IFRU{Это связано с тем фактом, что компилятор, генерируя отладочную информацию,
+\RU{Это связано с тем фактом, что компилятор, генерируя отладочную информацию,
 также сохраняет информацию о 
-соответствии строк в исходном коде и адресов инструкций}{This is related to the fact that compiler,
+соответствии строк в исходном коде и адресов инструкций}\EN{This is related to the fact that compiler,
 while generating debugging information, also saves a table of relations between source code line
 numbers and instruction addresses}.
-GDB \IFRU{это всё-таки отладчик уровня исходных текстов}{is source-level debugger, after all}.
+GDB \RU{это всё-таки отладчик уровня исходных текстов}\EN{is source-level debugger, after all}.
 
-\IFRU{Посмотрим регистры}{Let's examine registers}.
+\RU{Посмотрим регистры}\EN{Let's examine registers}.
 13 \InENRU \EAX:
 
 \begin{lstlisting}
@@ -369,8 +369,8 @@ eip            0x804844a	0x804844a <main+45>
 ...
 \end{lstlisting}
 
-\IFRU{Попробуем дизассемблировать текущие инструкции}{Let's disassemble current instructions}.
-\IFRU{Стрелка указывает на инструкцию, которая будет исполнена следующей}{Arrow points to the 
+\RU{Попробуем дизассемблировать текущие инструкции}\EN{Let's disassemble current instructions}.
+\RU{Стрелка указывает на инструкцию, которая будет исполнена следующей}\EN{Arrow points to the 
 instruction being executed next}.
 
 \begin{lstlisting}
@@ -391,9 +391,9 @@ Dump of assembler code for function main:
 End of assembler dump.
 \end{lstlisting}
 
-\ac{GDB} \IFRU{показывает дизассемблированный листинг в формате}{shows disassembly in} AT\&T 
-\IFRU{по умолчанию}{syntax by default}.
-\IFRU{Но можно также переключиться в формат Intel}{It's possible to switch to Intel syntax}:
+\ac{GDB} \RU{показывает дизассемблированный листинг в формате}\EN{shows disassembly in} AT\&T 
+\RU{по умолчанию}\EN{syntax by default}.
+\RU{Но можно также переключиться в формат Intel}\EN{It's possible to switch to Intel syntax}:
 
 \begin{lstlisting}
 (gdb) set disassembly-flavor intel
@@ -414,8 +414,8 @@ Dump of assembler code for function main:
 End of assembler dump.
 \end{lstlisting}
 
-\IFRU{Исполняем следующую инструкцию}{Execute next instruction}.
-\ac{GDB} \IFRU{покажет закрывающуюся скобку, означая, что это конец блока в ф-ции}{shows ending bracket, 
+\RU{Исполняем следующую инструкцию}\EN{Execute next instruction}.
+\ac{GDB} \RU{покажет закрывающуюся скобку, означая, что это конец блока в ф-ции}\EN{shows ending bracket, 
 meaning, this is ending block of function}.
 
 \begin{lstlisting}
@@ -423,9 +423,9 @@ meaning, this is ending block of function}.
 7	};
 \end{lstlisting}
 
-\IFRU{Посмотрим регистры после исполнения инструкции}{Let's see registers after} 
+\RU{Посмотрим регистры после исполнения инструкции}\EN{Let's see registers after} 
 \TT{MOV EAX, 0}\EN{ instruction execution}.
-\EAX \IFRU{здесь уже действительно ноль}{here is zero indeed}.
+\EAX \RU{здесь уже действительно ноль}\EN{here is zero indeed}.
 
 \begin{lstlisting}
 (gdb) info registers

@@ -1,25 +1,25 @@
-\chapter{\IFRU{``QR9'': Любительская криптосистема, вдохновленная кубиком Рубика}
-{``QR9'': Rubik's cube inspired amateur crypto-algorithm}}
+\chapter{\RU{``QR9'': Любительская криптосистема, вдохновленная кубиком Рубика}
+\EN{``QR9'': Rubik's cube inspired amateur crypto-algorithm}}
 
-\IFRU{Любительские криптосистемы иногда встречаются довольно странные.}
-{Sometimes amateur cryptosystems appear to be pretty bizarre.}
+\RU{Любительские криптосистемы иногда встречаются довольно странные.}
+\EN{Sometimes amateur cryptosystems appear to be pretty bizarre.}
 
-\IFRU{Однажды меня попросили разобраться с одним таким любительским криптоалгоритмом встроенным в 
+\RU{Однажды меня попросили разобраться с одним таким любительским криптоалгоритмом встроенным в 
 утилиту для шифрования, исходный код которой был утерян\footnote{Я также получил разрешение от 
 клиента на публикацию деталей алгоритма}.}
-{I was asked to reverse engineer an amateur cryptoalgorithm of some data crypting utility, 
+\EN{I was asked to reverse engineer an amateur cryptoalgorithm of some data crypting utility, 
 source code of which was lost\footnote{I also got permit from customer to publish the algorithm details}.}
 
-\IFRU{Вот листинг этой утилиты для шифрования, полученный при помощи \IDA}
-{Here is also \IDA exported listing from original crypting utility}:
+\RU{Вот листинг этой утилиты для шифрования, полученный при помощи \IDA}
+\EN{Here is also \IDA exported listing from original crypting utility}:
 
 \lstinputlisting{examples/qr9/qr9_original.lst}
 
-\IFRU{Все имена функций и меток даны мною в процессе анализа.}
-{All function and label names are given by me while analysis.}
+\RU{Все имена функций и меток даны мною в процессе анализа.}
+\EN{All function and label names are given by me while analysis.}
 
-\IFRU{Я начал с самого верха. Вот функция, берущая на вход два имени файла и пароль.}
-{I started from top. Here is a function taking two file names and password.}
+\RU{Я начал с самого верха. Вот функция, берущая на вход два имени файла и пароль.}
+\EN{I started from top. Here is a function taking two file names and password.}
 
 \begin{lstlisting}
 .text:00541320 ; int __cdecl crypt_file(int Str, char *Filename, int password)
@@ -31,7 +31,7 @@ source code of which was lost\footnote{I also got permit from customer to publis
 .text:00541320
 \end{lstlisting}
 
-\IFRU{Открыть файл и сообщить об ошибке в случае ошибки:}{Open file and report error in case of error:}
+\RU{Открыть файл и сообщить об ошибке в случае ошибки:}\EN{Open file and report error in case of error:}
 
 \begin{lstlisting}
 .text:00541320                 mov     eax, [esp+Str]
@@ -52,26 +52,26 @@ source code of which was lost\footnote{I also got permit from customer to publis
 .text:00541348 loc_541348:
 \end{lstlisting}
 
-\IFRU{Узнать размер файла используя}{Get file size via} \TT{fseek()}/\TT{ftell()}:
+\RU{Узнать размер файла используя}\EN{Get file size via} \TT{fseek()}/\TT{ftell()}:
 
-\lstinputlisting{\IFRU{examples/qr9/1ru.asm}{examples/qr9/1en.asm}}
+\lstinputlisting{\RU{examples/qr9/1ru.asm}\EN{examples/qr9/1en.asm}}
 
-\IFRU{Этот фрагмент кода вычисляет длину файла, выровненную по 64-байтной границе.
+\RU{Этот фрагмент кода вычисляет длину файла, выровненную по 64-байтной границе.
 Это потому что этот алгоритм шифрования работает только с блоками размерами 64 байта.
 Работает очень просто: разделить длину файла на 64, забыть об остатке, прибавить 1,
 умножить на 64.
 Следующий код удаляет остаток от деления, как если бы это значение уже было разделено 
 на 64 и добавляет 64. Это почти то же самое.}
-{This fragment of code calculates file size aligned on a 64-byte boundary. 
+\EN{This fragment of code calculates file size aligned on a 64-byte boundary. 
 This is because this cryptoalgorithm works with only 64-byte blocks. 
 Its operation is pretty straightforward: divide file size by 64, forget about remainder and add 1, 
 then multiple by 64. 
 The following code removes remainder as if value was already divided by 64 and adds 64. 
 It is almost the same.}
 
-\lstinputlisting{\IFRU{examples/qr9/2ru.asm}{examples/qr9/2en.asm}}
+\lstinputlisting{\RU{examples/qr9/2ru.asm}\EN{examples/qr9/2en.asm}}
 
-\IFRU{Выделить буфер с выровненным размером:}{Allocate buffer with aligned size:}
+\RU{Выделить буфер с выровненным размером:}\EN{Allocate buffer with aligned size:}
 
 \begin{lstlisting}
 .text:00541373                 push    esi             ; Size
@@ -79,13 +79,13 @@ It is almost the same.}
 \end{lstlisting}
 
 \index{\CStandardLibrary!calloc()}
-\IFRU{Вызвать memset(), т.е., очистить выделенный буфер\footnote{malloc() + memset() можно было бы 
-заменить на calloc()}.}{Call memset(), e.g., clears allocated buffer\footnote{malloc() + memset() could 
+\RU{Вызвать memset(), т.е., очистить выделенный буфер\footnote{malloc() + memset() можно было бы 
+заменить на calloc()}.}\EN{Call memset(), e.g., clears allocated buffer\footnote{malloc() + memset() could 
 be replaced by calloc()}.}
 
-\lstinputlisting{\IFRU{examples/qr9/3ru.asm}{examples/qr9/3en.asm}}
+\lstinputlisting{\RU{examples/qr9/3ru.asm}\EN{examples/qr9/3en.asm}}
 
-\IFRU{Чтение файла используя стандартную функцию Си}{Read file via standard C function} \TT{fread()}.
+\RU{Чтение файла используя стандартную функцию Си}\EN{Read file via standard C function} \TT{fread()}.
 
 \begin{lstlisting}
 .text:00541392                 mov     eax, [esp+38h+Str]
@@ -96,8 +96,8 @@ be replaced by calloc()}.}
 .text:0054139E                 call    _fclose
 \end{lstlisting}
 
-\IFRU{Вызов \TT{crypt()}. Эта функция берет на вход буфер, длину буфера (выровненную) и строку пароля.}
-{Call \TT{crypt()}. This function takes buffer, buffer size (aligned) and password string.}
+\RU{Вызов \TT{crypt()}. Эта функция берет на вход буфер, длину буфера (выровненную) и строку пароля.}
+\EN{Call \TT{crypt()}. This function takes buffer, buffer size (aligned) and password string.}
 
 \begin{lstlisting}
 .text:005413A3                 mov     ecx, [esp+44h+password]
@@ -107,9 +107,9 @@ be replaced by calloc()}.}
 .text:005413AA                 call    crypt           ; do crypt
 \end{lstlisting}
 
-\IFRU{Создать выходной файл. Кстати, разработчик забыл вставить проверку, создался ли файл успешно!
+\RU{Создать выходной файл. Кстати, разработчик забыл вставить проверку, создался ли файл успешно!
 Результат открытия файла, впрочем, проверяется.}
-{Create output file. By the way, developer forgot to check if it is was created correctly! 
+\EN{Create output file. By the way, developer forgot to check if it is was created correctly! 
 File opening result is being checked though.}
 
 \begin{lstlisting}
@@ -121,8 +121,8 @@ File opening result is being checked though.}
 .text:005413C1                 mov     edi, eax
 \end{lstlisting}
 
-\IFRU{Теперь хэндл созданного файла в регистре \EDI. Записываем сигнатуру ``QR9''.}
-{Newly created file handle is in the \EDI register now. Write signature ``QR9''.}
+\RU{Теперь хэндл созданного файла в регистре \EDI. Записываем сигнатуру ``QR9''.}
+\EN{Newly created file handle is in the \EDI register now. Write signature ``QR9''.}
 
 \begin{lstlisting}
 .text:005413C3                 push    edi             ; File
@@ -132,7 +132,7 @@ File opening result is being checked though.}
 .text:005413CD                 call    _fwrite         ; write file signature
 \end{lstlisting}
 
-\IFRU{Записываем настоящую длину файла (не выровненную)}{Write actual file size (not aligned)}:
+\RU{Записываем настоящую длину файла (не выровненную)}\EN{Write actual file size (not aligned)}:
 
 \begin{lstlisting}
 .text:005413D2                 push    edi             ; File
@@ -143,7 +143,7 @@ File opening result is being checked though.}
 .text:005413DC                 call    _fwrite         ; write original file size
 \end{lstlisting}
 
-\IFRU{Записываем шифрованный буфер}{Write crypted buffer}:
+\RU{Записываем шифрованный буфер}\EN{Write crypted buffer}:
 
 \begin{lstlisting}
 .text:005413E1                 push    edi             ; File
@@ -153,7 +153,7 @@ File opening result is being checked though.}
 .text:005413E6                 call    _fwrite         ; write encrypted file
 \end{lstlisting}
 
-\IFRU{Закрыть файл и освободить выделенный буфер}{Close file and free allocated buffer}:
+\RU{Закрыть файл и освободить выделенный буфер}\EN{Close file and free allocated buffer}:
 
 \begin{lstlisting}
 .text:005413EB                 push    edi             ; File
@@ -169,7 +169,7 @@ File opening result is being checked though.}
 .text:005413FE crypt_file      endp
 \end{lstlisting}
 
-\IFRU{Переписанный на Си код}{Here is reconstructed C-code}:
+\RU{Переписанный на Си код}\EN{Here is reconstructed C-code}:
 
 \begin{lstlisting}
 void crypt_file(char *fin, char* fout, char *pw)
@@ -213,7 +213,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 };
 \end{lstlisting}
 
-\IFRU{Процедура дешифрования почти такая же}{Decrypting procedure is almost the same}:
+\RU{Процедура дешифрования почти такая же}\EN{Decrypting procedure is almost the same}:
 
 \begin{lstlisting}
 .text:00541400 ; int __cdecl decrypt_file(char *Filename, int, void *Src)
@@ -268,7 +268,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 .text:0054145D                 call    _fclose
 \end{lstlisting}
 
-\IFRU{Проверяем сигнатуру (первые 3 байта)}{Check signature (first 3 bytes)}:
+\RU{Проверяем сигнатуру (первые 3 байта)}\EN{Check signature (first 3 bytes)}:
 
 \begin{lstlisting}
 .text:00541462                 add     esp, 34h
@@ -280,7 +280,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 .text:00541475                 jz      short loc_541489
 \end{lstlisting}
 
-\IFRU{Сообщить об ошибке если сигнатура отсутствует}{Report an error if signature is absent}:
+\RU{Сообщить об ошибке если сигнатура отсутствует}\EN{Report an error if signature is absent}:
 
 \begin{lstlisting}
 .text:00541477                 push    offset aFileIsNotCrypt ; "File is not crypted!\n"
@@ -295,7 +295,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 .text:00541489 loc_541489:
 \end{lstlisting}
 
-\IFRU{Вызвать}{Call} \TT{decrypt()}.
+\RU{Вызвать}\EN{Call} \TT{decrypt()}.
 
 \begin{lstlisting}
 .text:00541489                 mov     eax, [esp+10h+Src]
@@ -329,7 +329,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 .text:005414CC decrypt_file    endp
 \end{lstlisting}
 
-\IFRU{Переписанный на Си код}{Here is reconstructed C-code}:
+\RU{Переписанный на Си код}\EN{Here is reconstructed C-code}:
 
 \begin{lstlisting}
 void decrypt_file(char *fin, char* fout, char *pw)
@@ -376,9 +376,9 @@ void decrypt_file(char *fin, char* fout, char *pw)
 };
 \end{lstlisting}
 
-\IFRU{OK, посмотрим глубже}{OK, now let's go deeper}.
+\RU{OK, посмотрим глубже}\EN{OK, now let's go deeper}.
 
-\IFRU{Функция}{Function} \TT{crypt()}:
+\RU{Функция}\EN{Function} \TT{crypt()}:
 
 \begin{lstlisting}
 .text:00541260 crypt           proc near
@@ -398,10 +398,10 @@ void decrypt_file(char *fin, char* fout, char *pw)
 \end{lstlisting}
 
 \index{x86!\Instructions!MOVSD}
-\IFRU{Этот фрагмент кода копирует часть входного буфера во внутренний буфер, который я позже назвал ``cube64''.}
-{This fragment of code copies part of input buffer to internal array I named later ``cube64''.}
-\IFRU{Длина в регистре \ECX. \TT{MOVSD} означает \IT{скопировать 32-битное слово}, так что, 16 32-битных слов
-это как раз 64 байта.}{The size is in the \ECX register. \TT{MOVSD} means \IT{move 32-bit dword}, so, 
+\RU{Этот фрагмент кода копирует часть входного буфера во внутренний буфер, который я позже назвал ``cube64''.}
+\EN{This fragment of code copies part of input buffer to internal array I named later ``cube64''.}
+\RU{Длина в регистре \ECX. \TT{MOVSD} означает \IT{скопировать 32-битное слово}, так что, 16 32-битных слов
+это как раз 64 байта.}\EN{The size is in the \ECX register. \TT{MOVSD} means \IT{move 32-bit dword}, so, 
 16 of 32-bit dwords are exactly 64 bytes.}
 
 \begin{lstlisting}
@@ -414,14 +414,14 @@ void decrypt_file(char *fin, char* fout, char *pw)
 .text:0054127D                 rep movsd
 \end{lstlisting}
 
-\IFRU{Вызвать}{Call} \TT{rotate\_all\_with\_password()}:
+\RU{Вызвать}\EN{Call} \TT{rotate\_all\_with\_password()}:
 
 \begin{lstlisting}
 .text:0054127F                 call    rotate_all_with_password
 \end{lstlisting}
 
-\IFRU{Скопировать зашифрованное содержимое из ``cube64'' назад в буфер}
-{Copy crypted contents back from ``cube64'' to buffer}:
+\RU{Скопировать зашифрованное содержимое из ``cube64'' назад в буфер}
+\EN{Copy crypted contents back from ``cube64'' to buffer}:
 
 \begin{lstlisting}
 .text:00541284                 mov     eax, [esp+18h+arg_4]
@@ -435,8 +435,8 @@ void decrypt_file(char *fin, char* fout, char *pw)
 .text:0054129F                 rep movsd
 \end{lstlisting}
 
-\IFRU{Если \EBP не больше чем длина во входном аргументе, тогда переходим к следующему блоку.}
-{If \EBP is not bigger that input argument size, then continue to next block.}
+\RU{Если \EBP не больше чем длина во входном аргументе, тогда переходим к следующему блоку.}
+\EN{If \EBP is not bigger that input argument size, then continue to next block.}
 
 \begin{lstlisting}
 .text:005412A1                 jl      short loc_54126A
@@ -448,7 +448,7 @@ void decrypt_file(char *fin, char* fout, char *pw)
 .text:005412A7 crypt           endp
 \end{lstlisting}
 
-\IFRU{Реконструированная функция \TT{crypt()}}{Reconstructed \TT{crypt()} function}:
+\RU{Реконструированная функция \TT{crypt()}}\EN{Reconstructed \TT{crypt()} function}:
 
 \begin{lstlisting}
 void crypt (BYTE *buf, int sz, char *pw)
@@ -466,12 +466,12 @@ void crypt (BYTE *buf, int sz, char *pw)
 };
 \end{lstlisting}
 
-\IFRU{OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. Она берет на вход два аргумента: 
-строку пароля и число.}{OK, now let's go deeper into function \TT{rotate\_all\_with\_password()}. 
+\RU{OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. Она берет на вход два аргумента: 
+строку пароля и число.}\EN{OK, now let's go deeper into function \TT{rotate\_all\_with\_password()}. 
 It takes two arguments: password string and number.}
-\IFRU{В функции \TT{crypt()}, число 1 используется и в \TT{decrypt()} (где \TT{rotate\_all\_with\_password()}
+\RU{В функции \TT{crypt()}, число 1 используется и в \TT{decrypt()} (где \TT{rotate\_all\_with\_password()}
 функция вызывается также), число 3.}
-{In \TT{crypt()}, number 1 is used, and in the \TT{decrypt()} function (where \TT{rotate\_all\_with\_password()} function 
+\EN{In \TT{crypt()}, number 1 is used, and in the \TT{decrypt()} function (where \TT{rotate\_all\_with\_password()} function 
 is called too), number is 3.}
 
 \begin{lstlisting}
@@ -485,7 +485,7 @@ is called too), number is 3.}
 .text:005411B5                 mov     ebp, eax
 \end{lstlisting}
 
-\IFRU{Проверяем символы в пароле. Если это ноль, выходим:}{Check for character in password. If it is zero, exit:}
+\RU{Проверяем символы в пароле. Если это ноль, выходим:}\EN{Check for character in password. If it is zero, exit:}
 
 \begin{lstlisting}
 .text:005411B7                 cmp     byte ptr [eax], 0
@@ -499,7 +499,7 @@ is called too), number is 3.}
 \end{lstlisting}
 
 \index{\CStandardLibrary!tolower()}
-\IFRU{Вызываем \TT{tolower()}, стандартную функцию Си.}{Call \TT{tolower()}, standard C function.}
+\RU{Вызываем \TT{tolower()}, стандартную функцию Си.}\EN{Call \TT{tolower()}, standard C function.}
 
 \begin{lstlisting}
 .text:005411C7                 movsx   eax, byte ptr [ebp+0]
@@ -508,10 +508,10 @@ is called too), number is 3.}
 .text:005411D1                 add     esp, 4
 \end{lstlisting}
 
-\IFRU{Хмм, если пароль содержит символ не из латинского алфавита, он пропускается!
+\RU{Хмм, если пароль содержит символ не из латинского алфавита, он пропускается!
 Действительно, если мы запускаем утилиту для шифрования используя символы не латинского алфавита, 
 похоже, они просто игнорируются.}
-{Hmm, if password contains non-alphabetical latin character, it is skipped! 
+\EN{Hmm, if password contains non-alphabetical latin character, it is skipped! 
 Indeed, if we run crypting utility and try non-alphabetical latin characters in password, 
 they seem to be ignored.}
 
@@ -523,14 +523,14 @@ they seem to be ignored.}
 .text:005411DC                 movsx   ecx, al
 \end{lstlisting}
 
-\IFRU{Отнимем значение ``a'' (97) от символа.}{Subtract ``a'' value (97) from character.}
+\RU{Отнимем значение ``a'' (97) от символа.}\EN{Subtract ``a'' value (97) from character.}
 
 \begin{lstlisting}
 .text:005411DF                 sub     ecx, 'a'  ; 97
 \end{lstlisting}
 
-\IFRU{После вычитания, тут будет 0 для ``a'', 1 для ``b'', и так далее. И 25 для ``z''.}
-{After subtracting, we'll get 0 for ``a'' here, 1 for ``b'', etc. And 25 for ``z''.}
+\RU{После вычитания, тут будет 0 для ``a'', 1 для ``b'', и так далее. И 25 для ``z''.}
+\EN{After subtracting, we'll get 0 for ``a'' here, 1 for ``b'', etc. And 25 for ``z''.}
 
 \begin{lstlisting}
 .text:005411E2                 cmp     ecx, 24
@@ -538,10 +538,10 @@ they seem to be ignored.}
 .text:005411E7                 sub     ecx, 24
 \end{lstlisting}
 
-\IFRU{Похоже, символы ``y'' и ``z'' также исключительные.
+\RU{Похоже, символы ``y'' и ``z'' также исключительные.
 После этого фрагмента кода, ``y'' становится 0, а ``z'' ~--- 1.
 Это значит, что 26 латинских букв становятся значениями в интервале 0..23, (всего 24).}
-{It seems, ``y'' and ``z'' are exceptional characters too. 
+\EN{It seems, ``y'' and ``z'' are exceptional characters too. 
 After that fragment of code, ``y'' becomes 0 and ``z''~---1. 
 This means, 26 Latin alphabet symbols will become values in range 0..23, (24 in total).}
 
@@ -550,13 +550,13 @@ This means, 26 Latin alphabet symbols will become values in range 0..23, (24 in 
 .text:005411EA skip_subtracting:                       ; CODE XREF: rotate_all_with_password+35
 \end{lstlisting}
 
-\IFRU{Это, на самом деле, деление через умножение.
+\RU{Это, на самом деле, деление через умножение.
 Читайте об этом больше в секции ``\DivisionByNineSectionName''~(\ref{sec:divisionbynine}).}
-{This is actually division via multiplication. 
+\EN{This is actually division via multiplication. 
 Read more about it in the ``\DivisionByNineSectionName'' section~(\ref{sec:divisionbynine}).}
 
-\IFRU{Это код, на самом деле, делит значение символа пароля на 3.}
-{The code actually divides password character value by 3.}
+\RU{Это код, на самом деле, делит значение символа пароля на 3.}
+\EN{The code actually divides password character value by 3.}
 
 \begin{lstlisting}
 .text:005411EA                 mov     eax, 55555556h
@@ -571,16 +571,16 @@ Read more about it in the ``\DivisionByNineSectionName'' section~(\ref{sec:divis
 .text:00541202                 idiv    ecx
 \end{lstlisting}
 
-\IFRU{\EDX ~--- остаток от деления.}{\EDX is the remainder of division.}
+\RU{\EDX ~--- остаток от деления.}\EN{\EDX is the remainder of division.}
 
-\lstinputlisting{\IFRU{examples/qr9/4ru.asm}{examples/qr9/4en.asm}}
+\lstinputlisting{\RU{examples/qr9/4ru.asm}\EN{examples/qr9/4en.asm}}
 
-\IFRU{Если остаток 2, вызываем \TT{rotate3()}. 
+\RU{Если остаток 2, вызываем \TT{rotate3()}. 
 \EDX это второй аргумент функции \TT{rotate\_all\_with\_password()}. 
 Как я уже писал, 1 это для шифрования, 3 для дешифрования.
 Так что здесь цикл, функции rotate1/2/3 будут вызываться столько же раз, сколько значение переменной
 в первом аргументе.}
-{If remainder is 2, call \TT{rotate3()}. 
+\EN{If remainder is 2, call \TT{rotate3()}. 
 The \EDI is a second argument of the \TT{rotate\_all\_with\_password()} function.
 As I already wrote, 1 is for crypting operations and 3 is for decrypting. 
 So, here is a loop. When crypting, rotate1/2/3 will be called the same number of times as 
@@ -622,14 +622,14 @@ given in the first argument.}
 .text:00541249
 \end{lstlisting}
 
-\IFRU{Достать следующий символ из строки пароля.}{Fetch next character from password string.}
+\RU{Достать следующий символ из строки пароля.}\EN{Fetch next character from password string.}
 
 \begin{lstlisting}
 .text:00541249 next_character_in_password:
 .text:00541249                 mov     al, [ebp+1]
 \end{lstlisting}
 
-\IFRU{\glslink{increment}{Инкремент} указателя на символ в строке пароля:}{\Gls{increment} character pointer within password string:}
+\RU{\glslink{increment}{Инкремент} указателя на символ в строке пароля:}\EN{\Gls{increment} character pointer within password string:}
 
 \begin{lstlisting}
 .text:0054124C                 inc     ebp
@@ -645,7 +645,7 @@ given in the first argument.}
 .text:00541259 rotate_all_with_password endp
 \end{lstlisting}
 
-\IFRU{Реконструированный код на Си:}{Here is reconstructed C code:}
+\RU{Реконструированный код на Си:}\EN{Here is reconstructed C code:}
 
 \begin{lstlisting}
 void rotate_all (char *pwd, int v)
@@ -681,14 +681,14 @@ void rotate_all (char *pwd, int v)
 };
 \end{lstlisting}
 
-\IFRU{Углубимся еще дальше и исследуем функции rotate1/2/3.
+\RU{Углубимся еще дальше и исследуем функции rotate1/2/3.
 Каждая функция вызывает еще две.
 В итоге я назвал их \TT{set\_bit()} и \TT{get\_bit()}.}
-{Now let's go deeper and investigate rotate1/2/3 functions. 
+\EN{Now let's go deeper and investigate rotate1/2/3 functions. 
 Each function calls two another functions. 
 I eventually gave them names \TT{set\_bit()} and \TT{get\_bit()}.}
 
-\IFRU{Начнем с \TT{get\_bit()}:}{Let's start with \TT{get\_bit()}:}
+\RU{Начнем с \TT{get\_bit()}:}\EN{Let's start with \TT{get\_bit()}:}
 
 \begin{lstlisting}
 .text:00541050 get_bit         proc near
@@ -707,13 +707,13 @@ I eventually gave them names \TT{set\_bit()} and \TT{get\_bit()}.}
 .text:00541067 get_bit         endp
 \end{lstlisting}
 
-\IFRU{\dots иными словами: подсчитать индекс в массиве cube64}{\dots in other words: calculate an index in 
+\RU{\dots иными словами: подсчитать индекс в массиве cube64}\EN{\dots in other words: calculate an index in 
 the array cube64}: \IT{arg\_4 + arg\_0 * 8}.
-\IFRU{Затем сдвинуть байт из массива вправо на количество бит заданных в arg\_8. 
-Изолировать самый младший бит и вернуть его}{Then shift a byte from an array by arg\_8 bits right. 
+\RU{Затем сдвинуть байт из массива вправо на количество бит заданных в arg\_8. 
+Изолировать самый младший бит и вернуть его}\EN{Then shift a byte from an array by arg\_8 bits right. 
 Isolate lowest bit and return it.}
 
-\IFRU{Посмотрим другую функцию}{Let's see another function}, \TT{set\_bit()}:
+\RU{Посмотрим другую функцию}\EN{Let's see another function}, \TT{set\_bit()}:
 
 \begin{lstlisting}
 .text:00541000 set_bit         proc near
@@ -733,9 +733,9 @@ Isolate lowest bit and return it.}
 .text:00541015                 jz      short loc_54102B
 \end{lstlisting}
 
-\IFRU{\TT{DL} тут равно 1. Сдвигаем эту единицу на количество указанное в arg\_8. Например, если в arg\_8 число 4,
+\RU{\TT{DL} тут равно 1. Сдвигаем эту единицу на количество указанное в arg\_8. Например, если в arg\_8 число 4,
 тогда значение в \TT{DL} станет 0x10 или 1000 в двоичной системе счисления.}
-{Value in the \TT{DL} is 1 here. Shift left it by arg\_8.
+\EN{Value in the \TT{DL} is 1 here. Shift left it by arg\_8.
 For example, if arg\_8 is 4, value in the \TT{DL} register became 
 0x10 or 1000 in binary form.}
 
@@ -744,13 +744,13 @@ For example, if arg\_8 is 4, value in the \TT{DL} register became
 .text:00541019                 mov     cl, cube64[eax+esi*8]
 \end{lstlisting}
 
-\IFRU{Вытащить бит из массива и явно выставить его.}{Get bit from array and explicitly set one.} % TODO: rewrite
+\RU{Вытащить бит из массива и явно выставить его.}\EN{Get bit from array and explicitly set one.} % TODO: rewrite
 
 \begin{lstlisting}
 .text:00541020                 or      cl, dl
 \end{lstlisting}
 
-\IFRU{Сохранить его назад:}{Store it back:} % TODO: rewrite
+\RU{Сохранить его назад:}\EN{Store it back:} % TODO: rewrite
 
 \begin{lstlisting}
 .text:00541022                 mov     cube64[eax+esi*8], cl
@@ -761,26 +761,26 @@ For example, if arg\_8 is 4, value in the \TT{DL} register became
 .text:0054102B                 shl     dl, cl
 \end{lstlisting}
 
-\IFRU{Если arg\_C не ноль\dots}{If arg\_C is not zero\dots}
+\RU{Если arg\_C не ноль\dots}\EN{If arg\_C is not zero\dots}
 
 \begin{lstlisting}
 .text:0054102D                 mov     cl, cube64[eax+esi*8]
 \end{lstlisting}
 
 \index{x86!\Instructions!NOT}
-\IFRU{\dots инвертировать DL. Например, если состояние DL после сдвига 0x10 или 1000 в двоичной системе,
+\RU{\dots инвертировать DL. Например, если состояние DL после сдвига 0x10 или 1000 в двоичной системе,
 здесь будет 0xEF после инструкции \NOT или 11101111 в двоичной системе.}
-{\dots invert DL. For example, if DL state after shift was 0x10 or 1000 in binary form, 
+\EN{\dots invert DL. For example, if DL state after shift was 0x10 or 1000 in binary form, 
 there will be 0xEF after \NOT instruction or 11101111 in binary form.}
 
 \begin{lstlisting}
 .text:00541034                 not     dl
 \end{lstlisting}
 
-\IFRU{Эта инструкция сбрасывает бит, иными словами, она сохраняет все биты в \TT{CL} которые также
+\RU{Эта инструкция сбрасывает бит, иными словами, она сохраняет все биты в \TT{CL} которые также
 выставлены в \TT{DL} кроме тех в \TT{DL}, что были сброшены. Это значит, что если в \TT{DL}, например,
 $11101111$ в двоичной системе, все биты будут сохранены кроме пятого (считая с младшего бита).}
-{This instruction clears bit, in other words, it saves all bits in \TT{CL} which are also set in 
+\EN{This instruction clears bit, in other words, it saves all bits in \TT{CL} which are also set in 
 \TT{DL} except those in \TT{DL} which are cleared.
 This means that if \TT{DL} is e.g. $11101111$ in binary form,
 all bits will be saved except 5th (counting from lowest bit).}
@@ -789,7 +789,7 @@ all bits will be saved except 5th (counting from lowest bit).}
 .text:00541036                 and     cl, dl
 \end{lstlisting}
 
-\IFRU{Сохранить его назад}{Store it back:}
+\RU{Сохранить его назад}\EN{Store it back:}
 
 \begin{lstlisting}
 .text:00541038                 mov     cube64[eax+esi*8], cl
@@ -798,17 +798,17 @@ all bits will be saved except 5th (counting from lowest bit).}
 .text:00541040 set_bit         endp
 \end{lstlisting}
 
-\IFRU{Это почти то же самое что и \TT{get\_bit()}, кроме того, что если arg\_C ноль, тогда функция сбрасывает
+\RU{Это почти то же самое что и \TT{get\_bit()}, кроме того, что если arg\_C ноль, тогда функция сбрасывает
 указанный бит в массиве, либо же, в противном случае, выставляет его в 1.}
-{It is almost the same as \TT{get\_bit()}, except, if arg\_C is zero, the function clears specific bit in array, 
+\EN{It is almost the same as \TT{get\_bit()}, except, if arg\_C is zero, the function clears specific bit in array, 
 or sets it otherwise.}
 
-\IFRU{Мы также знаем что размер массива 64. Первые два аргумента и у \TT{set\_bit()} и у \TT{get\_bit()}
+\RU{Мы также знаем что размер массива 64. Первые два аргумента и у \TT{set\_bit()} и у \TT{get\_bit()}
 могут быть представлены как двумерные координаты. Таким образом, массив ~--- это матрица 8*8.}
-{We also know the array size is 64. First two arguments both in the \TT{set\_bit()} and \TT{get\_bit()} functions
+\EN{We also know the array size is 64. First two arguments both in the \TT{set\_bit()} and \TT{get\_bit()} functions
 could be seen as 2D coordinates. Then array will be 8*8 matrix.}
 
-\IFRU{Представление на Си всего того, что мы уже знаем:}{Here is C representation of what we already know:}
+\RU{Представление на Си всего того, что мы уже знаем:}\EN{Here is C representation of what we already know:}
 
 \begin{lstlisting}
 #define IS_SET(flag, bit)       ((flag) & (bit))
@@ -833,15 +833,15 @@ int get_bit (int x, int y, int shift)
 };
 \end{lstlisting}
 
-\IFRU{Теперь вернемся к функциям rotate1/2/3.}{Now let's get back to rotate1/2/3 functions.}
+\RU{Теперь вернемся к функциям rotate1/2/3.}\EN{Now let's get back to rotate1/2/3 functions.}
 
 \begin{lstlisting}
 .text:00541070 rotate1         proc near
 .text:00541070
 \end{lstlisting}
 
-\IFRU{Выделение внутреннего массива размером 64 байта в локальном стеке:}
-{Internal array allocation in local stack, its size 64 bytes:}
+\RU{Выделение внутреннего массива размером 64 байта в локальном стеке:}
+\EN{Internal array allocation in local stack, its size 64 bytes:}
 
 \begin{lstlisting}
 .text:00541070 internal_array_64= byte ptr -40h
@@ -856,38 +856,38 @@ int get_bit (int x, int y, int shift)
 .text:0054107B                 xor     edi, edi        ; EDI is loop1 counter
 \end{lstlisting}
 
-\EBX \IFRU{указывает на внутренний массив}{is a pointer to internal array:}
+\EBX \RU{указывает на внутренний массив}\EN{is a pointer to internal array:}
 
 \begin{lstlisting}
 .text:0054107D                 lea     ebx, [esp+50h+internal_array_64]
 .text:00541081
 \end{lstlisting}
 
-\IFRU{Здесь два вложенных цикла:}{Two nested loops are here:}
+\RU{Здесь два вложенных цикла:}\EN{Two nested loops are here:}
 
-\lstinputlisting{\IFRU{examples/qr9/5ru.asm}{examples/qr9/5en.asm}}
+\lstinputlisting{\RU{examples/qr9/5ru.asm}\EN{examples/qr9/5en.asm}}
 
-\IFRU{Мы видим, что оба счетчика циклов в интервале 0..7. 
+\RU{Мы видим, что оба счетчика циклов в интервале 0..7. 
 Также, они используются как первый и второй аргумент \TT{get\_bit()}.
 Третий аргумент \TT{get\_bit()} это единственный аргумент \TT{rotate1()}. 
 То что возвращает \TT{get\_bit()} будет сохранено во внутреннем массиве.}
-{\dots we see that both loop counters are in range 0..7. 
+\EN{\dots we see that both loop counters are in range 0..7. 
 Also they are used as the first and the second arguments of the \TT{get\_bit()} function.
 Third argument of the \TT{get\_bit()} is the only argument of \TT{rotate1()}. 
 What \TT{get\_bit()} returns, is being placed into internal array.}
 
-\IFRU{Снова приготовить указатель на внутренний массив:}{Prepare pointer to internal array again:}
+\RU{Снова приготовить указатель на внутренний массив:}\EN{Prepare pointer to internal array again:}
 
-\lstinputlisting{\IFRU{examples/qr9/6ru.asm}{examples/qr9/6en.asm}}
+\lstinputlisting{\RU{examples/qr9/6ru.asm}\EN{examples/qr9/6en.asm}}
 
-\IFRU{\dots этот код помещает содержимое из внутреннего массива в глобальный массив cube используя функцию 
+\RU{\dots этот код помещает содержимое из внутреннего массива в глобальный массив cube используя функцию 
 \TT{set\_bit()}, \IT{но}, в обратном порядке!
 Теперь счетчик первого цикла в интервале 7 до 0, уменьшается на 1 на каждой итерации!}
-{\dots this code is placing contents from internal array to cube global array via \TT{set\_bit()} function, 
+\EN{\dots this code is placing contents from internal array to cube global array via \TT{set\_bit()} function, 
 \IT{but}, in different order!
 Now loop 1 counter is in range 7 to 0, \glslink{decrement}{decrementing} at each iteration!}
 
-\IFRU{Представление кода на Си выглядит так:}{C code representation looks like:}
+\RU{Представление кода на Си выглядит так:}\EN{C code representation looks like:}
 
 \begin{lstlisting}
 void rotate1 (int v)
@@ -905,14 +905,14 @@ void rotate1 (int v)
 };
 \end{lstlisting}
 
-\IFRU{Не очень понятно, но если мы посмотрим в функцию \TT{rotate2()}:}
-{Not very understandable, but if we will take a look at \TT{rotate2()} function:}
+\RU{Не очень понятно, но если мы посмотрим в функцию \TT{rotate2()}:}
+\EN{Not very understandable, but if we will take a look at \TT{rotate2()} function:}
 
-\lstinputlisting{\IFRU{examples/qr9/7ru.asm}{examples/qr9/7en.asm}}
+\lstinputlisting{\RU{examples/qr9/7ru.asm}\EN{examples/qr9/7en.asm}}
 
-\IFRU{\IT{Почти} то же самое, за исключением иного порядка аргументов в \TT{get\_bit()} и \TT{set\_bit()}.
+\RU{\IT{Почти} то же самое, за исключением иного порядка аргументов в \TT{get\_bit()} и \TT{set\_bit()}.
 Перепишем это на Си-подобный код:}
-{It is \IT{almost} the same, except of different order of arguments of the \TT{get\_bit()} and \TT{set\_bit()}. 
+\EN{It is \IT{almost} the same, except of different order of arguments of the \TT{get\_bit()} and \TT{set\_bit()}. 
 Let's rewrite it in C-like code:}
 
 \begin{lstlisting}
@@ -931,7 +931,7 @@ void rotate2 (int v)
 };
 \end{lstlisting}
 
-\IFRU{Перепишем так же функцию \TT{rotate3()}:}{Let's also rewrite \TT{rotate3()} function:}
+\RU{Перепишем так же функцию \TT{rotate3()}:}\EN{Let's also rewrite \TT{rotate3()} function:}
 
 \begin{lstlisting}
 void rotate3 (int v)
@@ -949,24 +949,24 @@ void rotate3 (int v)
 };
 \end{lstlisting}
 
-\IFRU{Теперь всё проще. Если мы представим cube64 как трехмерный куб 8*8*8, где каждый элемент это бит,
+\RU{Теперь всё проще. Если мы представим cube64 как трехмерный куб 8*8*8, где каждый элемент это бит,
 то \TT{get\_bit()} и \TT{set\_bit()} просто берут на вход координаты бита.}
-{Well, now things are simpler. If we consider cube64 as 3D cube 8*8*8, where each element is bit, 
+\EN{Well, now things are simpler. If we consider cube64 as 3D cube 8*8*8, where each element is bit, 
 \TT{get\_bit()} and \TT{set\_bit()} take just coordinates of bit on input.}
 
-\IFRU{Функции rotate1/2/3 просто поворачивают все биты на определенной плоскости.
+\RU{Функции rotate1/2/3 просто поворачивают все биты на определенной плоскости.
 Три функции, каждая на каждую сторону куба и аргумент \TT{v} выставляет плоскость в интервале 0..7}
-{rotate1/2/3 functions are in fact rotating all bits in specific plane. 
+\EN{rotate1/2/3 functions are in fact rotating all bits in specific plane. 
 Three functions are each for each cube side and \TT{v} argument is setting plane in range 0..7.}
 
 
-\IFRU{Может быть, автор алгоритма думал о кубике Рубика 8*8*8}
-{Maybe, algorithm's author was thinking of 8*8*8 Rubik's cube}
+\RU{Может быть, автор алгоритма думал о кубике Рубика 8*8*8}
+\EN{Maybe, algorithm's author was thinking of 8*8*8 Rubik's cube}
 \footnote{\url{http://en.wikipedia.org/wiki/Rubik's_Cube}}?!
 
-\IFRU{Да, действительно.}{Yes, indeed.}
+\RU{Да, действительно.}\EN{Yes, indeed.}
 
-\IFRU{Рассмотрим функцию \TT{decrypt()}, я переписал её:}{Let's get closer into \TT{decrypt()} function, 
+\RU{Рассмотрим функцию \TT{decrypt()}, я переписал её:}\EN{Let's get closer into \TT{decrypt()} function, 
 I rewrote it here:}
 
 \begin{lstlisting}
@@ -990,32 +990,32 @@ void decrypt (BYTE *buf, int sz, char *pw)
 \end{lstlisting}
 
 
-\IFRU{Почти то же самое что и crypt(), \IT{но} строка пароля разворачивается стандартной функцией Си}
-{It is almost the same except of \TT{crypt()}, \IT{but} password string is reversed by}
+\RU{Почти то же самое что и crypt(), \IT{но} строка пароля разворачивается стандартной функцией Си}
+\EN{It is almost the same except of \TT{crypt()}, \IT{but} password string is reversed by}
 strrev() \footnote{\url{http://msdn.microsoft.com/en-us/library/9hby7w40(VS.80).aspx}}
-\IFRU{и \TT{rotate\_all()} вызывается с аргументом 3.}
-{standard C function and \TT{rotate\_all()} is called with argument 3.} 
+\RU{и \TT{rotate\_all()} вызывается с аргументом 3.}
+\EN{standard C function and \TT{rotate\_all()} is called with argument 3.} 
 
-\IFRU{Это значит, что, в случае дешифровки, rotate1/2/3 будут вызываться трижды.}
-{This means, in case of decryption, each corresponding rotate1/2/3 call will be performed thrice.}
+\RU{Это значит, что, в случае дешифровки, rotate1/2/3 будут вызываться трижды.}
+\EN{This means, in case of decryption, each corresponding rotate1/2/3 call will be performed thrice.}
 
-\IFRU{Это почти кубик Рубика!
+\RU{Это почти кубик Рубика!
 Если вы хотите вернуть его состояние назад, делайте то же самое в обратном порядке и направлении!
 Чтобы вернуть эффект от поворота плоскости по часовой стрелке, нужно повернуть её же против 
 часовой стрелки трижды.}
-{This is almost as in Rubik'c cube! 
+\EN{This is almost as in Rubik'c cube! 
 If you want to get back, do the same in reverse order and direction! 
 If you need to undo effect of rotating one place in clockwise direction, rotate it thrice
 in counter-clockwise direction.}
 
-\IFRU{\TT{rotate1()}, вероятно, поворот ``лицевой'' плоскости. 
+\RU{\TT{rotate1()}, вероятно, поворот ``лицевой'' плоскости. 
 \TT{rotate2()}, вероятно, поворот ``верхней'' плоскости.
 \TT{rotate3()}, вероятно, поворот ``левой'' плоскости.}
-{\TT{rotate1()} is apparently for rotating ``front'' plane. 
+\EN{\TT{rotate1()} is apparently for rotating ``front'' plane. 
 \TT{rotate2()} is apparently for rotating ``top'' plane. 
 \TT{rotate3()} is apparently for rotating ``left'' plane.}
 
-\IFRU{Вернемся к ядру функции \TT{rotate\_all()}}{Let's get back to the core of \TT{rotate\_all()} function:}
+\RU{Вернемся к ядру функции \TT{rotate\_all()}}\EN{Let's get back to the core of \TT{rotate\_all()} function:}
 
 \begin{lstlisting}
 q=c-'a';
@@ -1033,20 +1033,20 @@ switch (remainder)
 };
 \end{lstlisting}
 
-\IFRU{Так понять проще: каждый символ пароля определяет сторону (одну из трех) и плоскость (одну из восьми).
+\RU{Так понять проще: каждый символ пароля определяет сторону (одну из трех) и плоскость (одну из восьми).
 3*8 = 24, вот почему два последних символа латинского алфавита переопределяются так чтобы алфавит состоял
 из 24-х элементов.}
-{Now it is much simpler to understand: each password character defines side (one of three) and plane (one of 8). 
+\EN{Now it is much simpler to understand: each password character defines side (one of three) and plane (one of 8). 
 3*8 = 24, that is why two last characters of Latin alphabet are remapped to fit an alphabet of exactly 
 24 elements.}
 
-\IFRU{Алгоритм очевидно слаб: в случае коротких паролей, в бинарном редакторе файлов можно будет увидеть, 
+\RU{Алгоритм очевидно слаб: в случае коротких паролей, в бинарном редакторе файлов можно будет увидеть, 
 что в зашифрованных файлах остались незашифрованные символы.}
-{The algorithm is clearly weak: in case of short passwords, one can see,
+\EN{The algorithm is clearly weak: in case of short passwords, one can see,
 that in crypted file there are 
 an original bytes of the original file in binary files editor.}
 
-\IFRU{Весь исходный код в реконструированном виде:}{Here is reconstructed whole source code:}
+\RU{Весь исходный код в реконструированном виде:}\EN{Here is reconstructed whole source code:}
 
 \lstinputlisting{examples/qr9/qr9.cpp}
 

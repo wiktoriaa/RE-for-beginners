@@ -1,94 +1,94 @@
 \newcommand{\comp}{\TT{comp()}\xspace}
-\chapter{\IFRU{Указатели на функции}{Pointers to functions}}
+\chapter{\RU{Указатели на функции}\EN{Pointers to functions}}
 \label{sec:pointerstofunctions}
 
 \index{\CLanguageElements!\Pointers}
-\IFRU{Указатель на функцию, в целом, как и любой другой указатель, просто адрес указывающий на начало функции 
+\RU{Указатель на функцию, в целом, как и любой другой указатель, просто адрес указывающий на начало функции 
 в сегменте кода.}
-{Pointer to function, as any other pointer, is just an address of function beginning in its code segment.}
+\EN{Pointer to function, as any other pointer, is just an address of function beginning in its code segment.}
 
 \index{Callbacks}
-\IFRU{Это применяется часто в т.н. callback-ах}{It is often used in callbacks}
+\RU{Это применяется часто в т.н. callback-ах}\EN{It is often used in callbacks}
 \footnote{\url{http://en.wikipedia.org/wiki/Callback_(computer_science)}}.
 
-\IFRU{Известные примеры:}{Well-known examples are:}
+\RU{Известные примеры:}\EN{Well-known examples are:}
 
 \begin{itemize}
 \item
 \qsort\footnote{\url{http://en.wikipedia.org/wiki/Qsort_(C_standard_library)}},
-{\TT{atexit()}}\footnote{\url{http://www.opengroup.org/onlinepubs/009695399/functions/atexit.html}} \IFRU{из стандартной библиотеки Си}{from the standard C library}; 
+{\TT{atexit()}}\footnote{\url{http://www.opengroup.org/onlinepubs/009695399/functions/atexit.html}} \RU{из стандартной библиотеки Си}\EN{from the standard C library}; 
 \item
-\IFRU{сигналы в *NIX ОС}{signals in *NIX OS}\footnote{\url{http://en.wikipedia.org/wiki/Signal.h}};
+\RU{сигналы в *NIX ОС}\EN{signals in *NIX OS}\footnote{\url{http://en.wikipedia.org/wiki/Signal.h}};
 \item
-\IFRU{запуск тредов}{thread starting}: \TT{CreateThread()} (win32), \TT{pthread\_create()} (POSIX);
+\RU{запуск тредов}\EN{thread starting}: \TT{CreateThread()} (win32), \TT{pthread\_create()} (POSIX);
 \item
-\IFRU{множество функций win32, например}{a lot of win32 functions, e.g.} \TT{EnumChildWindows()}\footnote{\url{http://msdn.microsoft.com/en-us/library/ms633494(VS.85).aspx}}.
+\RU{множество функций win32, например}\EN{a lot of win32 functions, e.g.} \TT{EnumChildWindows()}\footnote{\url{http://msdn.microsoft.com/en-us/library/ms633494(VS.85).aspx}}.
 \end{itemize}
 
 \index{\CStandardLibrary!qsort()}
-\IFRU{Итак, функция \qsort это реализация алгоритма ``быстрой сортировки''. 
+\RU{Итак, функция \qsort это реализация алгоритма ``быстрой сортировки''. 
 Функция может сортировать что угодно, 
 любые типы данных, но при условии, что вы имеете функцию сравнения двух элементов данных и 
 \qsort может вызывать её.}
-{So, \qsort function is a \CCpp standard library quicksort implementation. The functions is able to sort
+\EN{So, \qsort function is a \CCpp standard library quicksort implementation. The functions is able to sort
 anything, any types of data, if you have a function for two elements comparison and \qsort is able
 to call it.}
 
-\IFRU{Эта функция сравнения может определяться так:}{The comparison function can be defined as:}
+\RU{Эта функция сравнения может определяться так:}\EN{The comparison function can be defined as:}
 
 \begin{lstlisting}
 int (*compare)(const void *, const void *)
 \end{lstlisting}
 
-\IFRU{Воспользуемся немного модифицированным примером, который я нашел вот}
-{Let's use slightly modified example I found} \href{http://cplus.about.com/od/learningc/ss/pointers2_8.htm}
-{\IFRU{здесь}{here}}:
+\RU{Воспользуемся немного модифицированным примером, который я нашел вот}
+\EN{Let's use slightly modified example I found} \href{http://cplus.about.com/od/learningc/ss/pointers2_8.htm}
+{\RU{здесь}\EN{here}}:
 
 \lstinputlisting[numbers=left,label=qsort_c_src]{patterns/18_pointers_to_functions/17_1.c}
 
 \section{MSVC}
 
-\IFRU{Компилируем в MSVC 2010 (я убрал некоторые части для краткости) с опцией \Ox}
-{Let's compile it in MSVC 2010 (I omitted some parts for the sake of brevity) with \Ox option}:
+\RU{Компилируем в MSVC 2010 (я убрал некоторые части для краткости) с опцией \Ox}
+\EN{Let's compile it in MSVC 2010 (I omitted some parts for the sake of brevity) with \Ox option}:
 
 \lstinputlisting[caption=\Optimizing MSVC 2010: /Ox /GS- /MD]{patterns/18_pointers_to_functions/17_2_msvc_Ox.asm}
 
-\IFRU{Ничего особо удивительного здесь мы не видим. В качестве четвертого аргумента, 
+\RU{Ничего особо удивительного здесь мы не видим. В качестве четвертого аргумента, 
 в \qsort просто передается адрес метки \TT{\_comp}, где собственно и располагается функция \comp.}
-{Nothing surprising so far.
+\EN{Nothing surprising so far.
 As a fourth argument, an address of label \TT{\_comp} is passed, that is just a place
 where function \comp located.}
 
-\IFRU{Как \qsort вызывает её?}{How \qsort calling it?}
+\RU{Как \qsort вызывает её?}\EN{How \qsort calling it?}
 
 \index{Windows!MSVCR80.DLL}
-\IFRU{Посмотрим в MSVCR80.DLL (эта DLL куда в MSVC вынесены функции из стандартных библиотек Си):}
-{Let's take a look into this function located in MSVCR80.DLL (a MSVC DLL module with C standard library functions):}
+\RU{Посмотрим в MSVCR80.DLL (эта DLL куда в MSVC вынесены функции из стандартных библиотек Си):}
+\EN{Let's take a look into this function located in MSVCR80.DLL (a MSVC DLL module with C standard library functions):}
 
 \lstinputlisting[caption=MSVCR80.DLL]{patterns/18_pointers_to_functions/17_3_MSVCR.lst}
 
-\TT{comp}\EMDASH{}\IFRU{это четвертый аргумент функции. 
+\TT{comp}\EMDASH{}\RU{это четвертый аргумент функции. 
 Здесь просто передается управление по адресу указанному в \TT{comp}. 
 Перед этим подготавливается два аргумента для функции \comp. 
 Далее, проверяется результат её выполнения.}
-{is fourth function argument.
+\EN{is fourth function argument.
 Here the control is just passed to the address in the \TT{comp} argument.
 Before it, two arguments prepared for \comp. Its result is checked after its execution.}
 
-\IFRU{Вот почему использование указателей на функции ~--- это опасно. 
+\RU{Вот почему использование указателей на функции ~--- это опасно. 
 Во-первых, если вызвать \qsort с неправильным указателем на функцию, 
 то \qsort, дойдя до этого вызова, может передать управление неизвестно куда, 
 процесс упадет, и эту ошибку можно будет найти не сразу.}
-{That's why it is dangerous to use pointers to functions.
+\EN{That's why it is dangerous to use pointers to functions.
 First of all, if you call \qsort with incorrect pointer to function, \qsort may pass control
 to incorrect point, a process may crash and this bug will be hard to find.}
 
-\IFRU{Во-вторых, типизация callback-функции должна строго соблюдаться, 
+\RU{Во-вторых, типизация callback-функции должна строго соблюдаться, 
 вызов не той функции с не теми аргументами не того типа, 
 может привести к плачевным результатам, 
 хотя падение процесса это и не проблема, проблема ~--- это найти ошибку, ведь компилятор 
 на стадии компиляции может вас и не предупредить о потенциальных неприятностях.}
-{Second reason is the callback function types must comply strictly, calling wrong function
+\EN{Second reason is the callback function types must comply strictly, calling wrong function
 with wrong arguments of wrong types may lead to serious problems, however, process crashing is not a 
 big problem~---big problem is to determine a reason of crashing~---because compiler may be 
 silent about potential trouble while compiling.}
@@ -96,65 +96,65 @@ silent about potential trouble while compiling.}
 \subsection{MSVC + \olly}
 \index{\olly}
 
-\IFRU{Загрузим наш пример в \olly и установим брякпойнт на ф-ции \comp}
-{Let's load our example into \olly and set breakpoint on \comp function}.
+\RU{Загрузим наш пример в \olly и установим брякпойнт на ф-ции \comp}
+\EN{Let's load our example into \olly and set breakpoint on \comp function}.
 
-\IFRU{Как значения сравниваются, мы можем увидеть во время самого первого вызова \comp}
-{How values are compared we can see at the very first \comp call}: \figname \ref{fig:qsort_olly1}.
-\RU{Для удобства, }\olly \IFRU{показывает сравниваемые значения в окне под окном кода}
-{shows compared values in the window under code window, for convenience}.
-\IFRU{Мы можем так же увидеть что}{We can also see that the} \ac{SP} \IFRU{указывает на}{pointing to} 
-\ac{RA} \IFRU{где находится место в ф-ции}{where the place in} 
-\qsort \EN{function is }(\IFRU{на самом деле, находится в}{actually located in} \TT{MSVCR100.DLL}).
+\RU{Как значения сравниваются, мы можем увидеть во время самого первого вызова \comp}
+\EN{How values are compared we can see at the very first \comp call}: \figname \ref{fig:qsort_olly1}.
+\RU{Для удобства, }\olly \RU{показывает сравниваемые значения в окне под окном кода}
+\EN{shows compared values in the window under code window, for convenience}.
+\RU{Мы можем так же увидеть что}\EN{We can also see that the} \ac{SP} \RU{указывает на}\EN{pointing to} 
+\ac{RA} \RU{где находится место в ф-ции}\EN{where the place in} 
+\qsort \EN{function is }(\RU{на самом деле, находится в}\EN{actually located in} \TT{MSVCR100.DLL}).
 
-\IFRU{Трассируя}{By tracing} (F8) \IFRU{до инструкции}{until} \TT{RETN} 
-\IFRU{и нажав F8 еще один раз, мы возвращаемся в ф-цию}{instruction, and pressing F8 one more time, 
+\RU{Трассируя}\EN{By tracing} (F8) \RU{до инструкции}\EN{until} \TT{RETN} 
+\RU{и нажав F8 еще один раз, мы возвращаемся в ф-цию}\EN{instruction, and pressing F8 one more time, 
 we returning into} \qsort\EN{ function}: \figname \ref{fig:qsort_olly2}.
-\IFRU{Это был вызов ф-ции сравнения}{That was a call to comparison function}.
+\RU{Это был вызов ф-ции сравнения}\EN{That was a call to comparison function}.
 
-\IFRU{Вот также скриншот момента второго вызова ф-ции}{Here is also screenshot of the moment of the 
-second call of} \comp\EMDASH{}\IFRU{теперь сравниваемые значения другие}
-{now values to be compared are different}:
+\RU{Вот также скриншот момента второго вызова ф-ции}\EN{Here is also screenshot of the moment of the 
+second call of} \comp\EMDASH{}\RU{теперь сравниваемые значения другие}
+\EN{now values to be compared are different}:
 \figname \ref{fig:qsort_olly3}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/18_pointers_to_functions/olly1.png}
-\caption{\olly: \IFRU{первый вызов}{first call of} \comp}
+\caption{\olly: \RU{первый вызов}\EN{first call of} \comp}
 \label{fig:qsort_olly1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/18_pointers_to_functions/olly2.png}
-\caption{\olly: \IFRU{код в}{the code in} \qsort \IFRU{сразу после вызова}{right after} \comp\EN{ call}}
+\caption{\olly: \RU{код в}\EN{the code in} \qsort \RU{сразу после вызова}\EN{right after} \comp\EN{ call}}
 \label{fig:qsort_olly2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/18_pointers_to_functions/olly3.png}
-\caption{\olly: \IFRU{второй вызов}{second call of} \comp}
+\caption{\olly: \RU{второй вызов}\EN{second call of} \comp}
 \label{fig:qsort_olly3}
 \end{figure}
 
 \subsection{MSVC + tracer}
 \index{tracer}
 
-\IFRU{Посмотрим, какие пары сравниваются}{Let's also see, which pairs are compared}.
-\IFRU{Эти 10 чисел будут сортироваться}{These 10 numbers are being sorted}: 
+\RU{Посмотрим, какие пары сравниваются}\EN{Let's also see, which pairs are compared}.
+\RU{Эти 10 чисел будут сортироваться}\EN{These 10 numbers are being sorted}: 
 1892, 45, 200, -98, 4087, 5, -12345, 1087, 88, -100000.
 
-\IFRU{Я нашел адрес первой инструкции}{I found the address of the first} \CMP 
-\IFRU{в}{instruction in} \comp, \IFRU{и это}{it is} \TT{0x0040100C} 
-\IFRU{и я ставлю брякпойнт на нем}{and I'm setting breakpoint on it}:
+\RU{Я нашел адрес первой инструкции}\EN{I found the address of the first} \CMP 
+\RU{в}\EN{instruction in} \comp, \RU{и это}\EN{it is} \TT{0x0040100C} 
+\RU{и я ставлю брякпойнт на нем}\EN{and I'm setting breakpoint on it}:
 
 \begin{lstlisting}
 tracer.exe -l:17_1.exe bpx=17_1.exe!0x0040100C
 \end{lstlisting}
 
-\IFRU{Получаю информацию о регистрах на брякпойнте}
-{I'm getting information about registers at breakpoint}:
+\RU{Получаю информацию о регистрах на брякпойнте}
+\EN{I'm getting information about registers at breakpoint}:
 
 \begin{lstlisting}
 PID=4336|New process 17_1.exe
@@ -176,7 +176,7 @@ FLAGS=CF PF ZF IF
 ...
 \end{lstlisting}
 
-\IFRU{Я отфильтровал}{I filtered out} \TT{EAX} \AndENRU \TT{ECX} \IFRU{и получил}{and got}:
+\RU{Я отфильтровал}\EN{I filtered out} \TT{EAX} \AndENRU \TT{ECX} \RU{и получил}\EN{and got}:
 
 \begin{lstlisting}
 EAX=0x00000764 ECX=0x00000005
@@ -215,52 +215,52 @@ EAX=0x0000002d ECX=0x000000c8
 EAX=0x0000002d ECX=0x00000058
 \end{lstlisting}
 
-\IFRU{Это}{That's} 34 \IFRU{пары}{pairs}.
-\IFRU{Следовательно, алгоритму быстрой сортировки нужно 34 операции сравнения для сортировки этих
-10-и чисел}{Therefore, quick sort algorithm needs 34 comparison operations for sorting these 10 numbers}.
+\RU{Это}\EN{That's} 34 \RU{пары}\EN{pairs}.
+\RU{Следовательно, алгоритму быстрой сортировки нужно 34 операции сравнения для сортировки этих
+10-и чисел}\EN{Therefore, quick sort algorithm needs 34 comparison operations for sorting these 10 numbers}.
 
 \subsection{MSVC + tracer (code coverage)}
 \index{tracer}
 
-\IFRU{Но можно также и воспользоваться возможностью tracer накапливать все возможные состояния регистров
-и показать их в \IDA}{We can also use tracer's feature to collect all possible register's values
+\RU{Но можно также и воспользоваться возможностью tracer накапливать все возможные состояния регистров
+и показать их в \IDA}\EN{We can also use tracer's feature to collect all possible register's values
 and show them in \IDA}.
 
-\IFRU{Трассируем все инструкции в ф-ции \comp}{Let's trace all instructions in \comp function}:
+\RU{Трассируем все инструкции в ф-ции \comp}\EN{Let's trace all instructions in \comp function}:
 
 \begin{lstlisting}
 tracer.exe -l:17_1.exe bpf=17_1.exe!0x00401000,trace:cc
 \end{lstlisting}
 
-\IFRU{Получем .idc-скрипт для загрузки в \IDA и загружаем его}
-{We getting .idc-script for loading into \IDA and load it}: \figname \ref{fig:qsort_tracer_cc}.
+\RU{Получем .idc-скрипт для загрузки в \IDA и загружаем его}
+\EN{We getting .idc-script for loading into \IDA and load it}: \figname \ref{fig:qsort_tracer_cc}.
 
-\IFRU{Имя этой ф-ции (PtFuncCompare) дала \IDA}{\IDA gave the function name (PtFuncCompare)}
-\EMDASH{}\IFRU{видимо, потому что видит что указатель на эту ф-цию передается в \qsort}{it seems,
+\RU{Имя этой ф-ции (PtFuncCompare) дала \IDA}\EN{\IDA gave the function name (PtFuncCompare)}
+\EMDASH{}\RU{видимо, потому что видит что указатель на эту ф-цию передается в \qsort}\EN{it seems,
 because \IDA sees that pointer to this function is passed into \qsort}.
 
-\IFRU{Мы видим что указатели $a$ и $b$ указывают на разные места внутри массива, 
+\RU{Мы видим что указатели $a$ и $b$ указывают на разные места внутри массива, 
 но шаг между указателями --- 4, что логично, ведь в массиве хранятся 32-битные значения}
-{We see that $a$ and $b$ pointers are points to various places in array, but step between
+\EN{We see that $a$ and $b$ pointers are points to various places in array, but step between
 points is 4---indeed, 32-bit values are stored in the array}.
 
-\IFRU{Видно что инструкции по адресам}{We see that the instructions at} \TT{0x401010} \AndENRU 
-\TT{0x401012} \IFRU{никогда не исполнялись}{was never executed} 
-(\IFRU{они и остались белыми}{so they leaved as white}): 
-\IFRU{действительно, ф-ция}{indeed,} \comp \IFRU{никогда не возвращала 0,
-потому что в массиве нет одинаковых элементов}{was never returned 0, because there no equal elements}.
+\RU{Видно что инструкции по адресам}\EN{We see that the instructions at} \TT{0x401010} \AndENRU 
+\TT{0x401012} \RU{никогда не исполнялись}\EN{was never executed} 
+(\RU{они и остались белыми}\EN{so they leaved as white}): 
+\RU{действительно, ф-ция}\EN{indeed,} \comp \RU{никогда не возвращала 0,
+потому что в массиве нет одинаковых элементов}\EN{was never returned 0, because there no equal elements}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/18_pointers_to_functions/tracer_cc.png}
 \caption{tracer \AndENRU IDA. N.B.: 
-\IFRU{некоторые значения обрезаны справа}{some values are cutted at right}}
+\RU{некоторые значения обрезаны справа}\EN{some values are cutted at right}}
 \label{fig:qsort_tracer_cc}
 \end{figure}
 
 \section{GCC}
 
-\IFRU{Не слишком большая разница}{Not a big difference}:
+\RU{Не слишком большая разница}\EN{Not a big difference}:
 
 \begin{lstlisting}[caption=GCC]
                 lea     eax, [esp+40h+var_28]
@@ -281,7 +281,7 @@ points is 4---indeed, 32-bit values are stored in the array}.
                 call    _qsort
 \end{lstlisting}
 
-\IFRU{Функция \comp}{\comp function}:
+\RU{Функция \comp}\EN{\comp function}:
 
 \begin{lstlisting}
                 public comp
@@ -310,18 +310,18 @@ comp            endp
 \end{lstlisting}
 
 \index{Linux!libc.so.6}
-\IFRU{Реализация \qsort находится в \TT{libc.so.6}, и представляет собой просто wrapper
+\RU{Реализация \qsort находится в \TT{libc.so.6}, и представляет собой просто wrapper
 \footnote{понятие близкое к \gls{thunk function}} для \TT{qsort\_r()}.}
-{\qsort implementation is located in the \TT{libc.so.6} and it is in fact just a wrapper
+\EN{\qsort implementation is located in the \TT{libc.so.6} and it is in fact just a wrapper
 \footnote{a concept like \gls{thunk function}} for \TT{qsort\_r()}.}
 
-\IFRU{Она, в свою очередь, вызывает \TT{quicksort()}, где есть вызовы определенной нами функции через 
+\RU{Она, в свою очередь, вызывает \TT{quicksort()}, где есть вызовы определенной нами функции через 
 переданный указатель:}
-{It will call then \TT{quicksort()}, where our defined function will be called via passed pointer:}
+\EN{It will call then \TT{quicksort()}, where our defined function will be called via passed pointer:}
 
 
 \begin{lstlisting}[caption=
-(\IFRU{файл libc.so.6, версия glibc}{file libc.so.6, glibc version}\EMDASH{}2.10.1)]
+(\RU{файл libc.so.6, версия glibc}\EN{file libc.so.6, glibc version}\EMDASH{}2.10.1)]
 
 .text:0002DDF6                 mov     edx, [ebp+arg_10]
 .text:0002DDF9                 mov     [esp+4], esi
@@ -331,45 +331,45 @@ comp            endp
 ...
 \end{lstlisting}
 
-\subsection{GCC + GDB (\IFRU{с исходными кодами}{with source code})}
+\subsection{GCC + GDB (\RU{с исходными кодами}\EN{with source code})}
 \index{GDB}
 
-\IFRU{Очевидно, у нас есть исходный код нашего примера на Си (\ref{qsort_c_src}), 
+\RU{Очевидно, у нас есть исходный код нашего примера на Си (\ref{qsort_c_src}), 
 так что мы можем установить брякпойнт (\TT{b}) на
-номере строки}{Obviously, we have a C-source code of our example (\ref{qsort_c_src}), 
+номере строки}\EN{Obviously, we have a C-source code of our example (\ref{qsort_c_src}), 
 so we can set breakpoint (\TT{b}) on line number}
-(\IFRU{11-й --- это номер строки где происходит первое сравнение}{11th---the line where 
+(\RU{11-й --- это номер строки где происходит первое сравнение}\EN{11th---the line where 
 first comparison is occurred}).
-\IFRU{Нам также нужно скомпилировать наш пример с ключом \TT{-g}, чтобы в исполняемом файле была
-полная отладочная информация}{We also need to compile example with debugging information 
+\RU{Нам также нужно скомпилировать наш пример с ключом \TT{-g}, чтобы в исполняемом файле была
+полная отладочная информация}\EN{We also need to compile example with debugging information 
 included (\TT{-g}), so the table
 with addresses and corresponding line numbers is present}.
-\IFRU{Мы можем так же выводить значения используя имена переменных}
-{We can also print values by variable name} (\TT{p}):
-\IFRU{отладочная информация также содержит информацию о том, в каком регистре и/или элементе локального
-стека находится какая переменная}{debugging information also has information about which register and/or 
+\RU{Мы можем так же выводить значения используя имена переменных}
+\EN{We can also print values by variable name} (\TT{p}):
+\RU{отладочная информация также содержит информацию о том, в каком регистре и/или элементе локального
+стека находится какая переменная}\EN{debugging information also has information about which register and/or 
 local stack element contain which variable}.
 
 \index{Glibc}
-\IFRU{Мы можем также увидеть стек}{We can also see stack} (\TT{bt}) 
-\IFRU{и обнаружить что в Glibc используется какая-то вспомогательная ф-ция с именем}
-{and find out that there are some intermediate function} 
+\RU{Мы можем также увидеть стек}\EN{We can also see stack} (\TT{bt}) 
+\RU{и обнаружить что в Glibc используется какая-то вспомогательная ф-ция с именем}
+\EN{and find out that there are some intermediate function} 
 \TT{msort\_with\_tmp()}\EN{ used in Glibc}.
 
-\lstinputlisting[caption=GDB\IFRU{-сессия}{ session}]{patterns/18_pointers_to_functions/GDB_source.txt}
+\lstinputlisting[caption=GDB\RU{-сессия}\EN{ session}]{patterns/18_pointers_to_functions/GDB_source.txt}
 
-\subsection{GCC + GDB (\IFRU{без исходных кодов}{no source code})}
+\subsection{GCC + GDB (\RU{без исходных кодов}\EN{no source code})}
 \index{GDB}
 
-\IFRU{Но часто никаких исходных кодов нет вообще, так что мы можем дизассемблировать ф-цию \comp}
-{But often there are no source code at all, so we can disassemble \comp function} (\TT{disas}), 
-\IFRU{найти самую первую инструкцию \CMP и установить брякпойнт}{find the very first
-\CMP instruction and set breakpoint} (\TT{b}) \IFRU{по этому адресу}{at that address}.
-\IFRU{На каждом брякпойнте мы будем видеть содержимое регистров}
-{At each breakpoint, we will dump all register contents} (\TT{info registers}).
-\IFRU{Информация из стека так же доступна}{Stack information is also available} (\TT{bt}), 
-\IFRU{но частичная: здесь нет номеров строк для ф-ции \comp}
-{but partial: there are no line number information for \comp function}.
+\RU{Но часто никаких исходных кодов нет вообще, так что мы можем дизассемблировать ф-цию \comp}
+\EN{But often there are no source code at all, so we can disassemble \comp function} (\TT{disas}), 
+\RU{найти самую первую инструкцию \CMP и установить брякпойнт}\EN{find the very first
+\CMP instruction and set breakpoint} (\TT{b}) \RU{по этому адресу}\EN{at that address}.
+\RU{На каждом брякпойнте мы будем видеть содержимое регистров}
+\EN{At each breakpoint, we will dump all register contents} (\TT{info registers}).
+\RU{Информация из стека так же доступна}\EN{Stack information is also available} (\TT{bt}), 
+\RU{но частичная: здесь нет номеров строк для ф-ции \comp}
+\EN{but partial: there are no line number information for \comp function}.
 
-\lstinputlisting[caption=GDB\IFRU{-сессия}{ session}]{patterns/18_pointers_to_functions/GDB_no_source.txt}
+\lstinputlisting[caption=GDB\RU{-сессия}\EN{ session}]{patterns/18_pointers_to_functions/GDB_no_source.txt}
 

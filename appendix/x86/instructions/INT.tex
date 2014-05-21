@@ -1,59 +1,59 @@
 \index{x86!\Instructions!INT}
 
 \index{MS-DOS}
-\item[INT] (M): \TT{INT x} \IFRU{аналогична}{is analogous to} \TT{PUSHF; CALL dword ptr [x*4]} 
-\IFRU{в 16-битной среде}{in 16-bit environment}.
-  \IFRU{Она активно использовалась в MS-DOS, работая как сисколл. Аргументы записывались в регистры
+\item[INT] (M): \TT{INT x} \RU{аналогична}\EN{is analogous to} \TT{PUSHF; CALL dword ptr [x*4]} 
+\RU{в 16-битной среде}\EN{in 16-bit environment}.
+  \RU{Она активно использовалась в MS-DOS, работая как сисколл. Аргументы записывались в регистры
   AX/BX/CX/DX/SI/DI и затем происходил переход на таблицу векторов прерываний (расположенную в самом
   начале адресного пространства)}
-  {It was widely used in MS-DOS, functioning as syscalls. Registers AX/BX/CX/DX/SI/DI were filled
+  \EN{It was widely used in MS-DOS, functioning as syscalls. Registers AX/BX/CX/DX/SI/DI were filled
   by arguments and jump to the address in the Interrupt Vector Table 
   (located at the address space beginning)
   will be occurred}.
-  \IFRU{Она была очень популярна потому что имела короткий опкод (2 байта) и программе использующая
+  \RU{Она была очень популярна потому что имела короткий опкод (2 байта) и программе использующая
   сервисы MS-DOS не нужно было заморачиваться узнавая адреса всех ф-ций этих сервисов}
-  {It was popular because INT has short opcode (2 bytes) and the program which needs
+  \EN{It was popular because INT has short opcode (2 bytes) and the program which needs
   some MS-DOS services is not bothering by determining service's entry point address}.
 \index{x86!\Instructions!IRET}
-  \IFRU{Обработчик прерываний возвращал управление назад при помощи инструкции IRET}
-  {Interrupt handler return control flow to called using IRET instruction}.
+  \RU{Обработчик прерываний возвращал управление назад при помощи инструкции IRET}
+  \EN{Interrupt handler return control flow to called using IRET instruction}.
 
-  \IFRU{Самое используемое прерывание в MS-DOS было 0x21, там была основная часть его \ac{API}}
-  {Most busy MS-DOS interrupt number was 0x21, serving a huge amount of its \ac{API}}.
-  \IFRU{См. также}{See also}: \cite{RalfBrown} 
-  \IFRU{самый крупный список всех известных прерываний и вообще там много информации о MS-DOS}
-  {for the most comprehensive interrupt lists and other MS-DOS information}.
+  \RU{Самое используемое прерывание в MS-DOS было 0x21, там была основная часть его \ac{API}}
+  \EN{Most busy MS-DOS interrupt number was 0x21, serving a huge amount of its \ac{API}}.
+  \RU{См. также}\EN{See also}: \cite{RalfBrown} 
+  \RU{самый крупный список всех известных прерываний и вообще там много информации о MS-DOS}
+  \EN{for the most comprehensive interrupt lists and other MS-DOS information}.
 
 \index{x86!\Instructions!SYSENTER}
 \index{x86!\Instructions!SYSCALL}
-  \IFRU{Во времена после MS-DOS, эта инструкция все еще использовалась как сискол, и в Linux
+  \RU{Во времена после MS-DOS, эта инструкция все еще использовалась как сискол, и в Linux
   и в Windows (\ref{syscalls}), но позже была заменена инструкцией SYSENTER или SYSCALL}
-  {In post-MS-DOS era, this instruction was still used as syscall both in Linux and 
+  \EN{In post-MS-DOS era, this instruction was still used as syscall both in Linux and 
   Windows (\ref{syscalls}), but later replaced by SYSENTER or SYSCALL instruction}.
 
-\item[INT 3] (M): \IFRU{эта инструкция стоит немного в стороне от}{this instruction is somewhat standing aside of} 
-\TT{INT}, \IFRU{она имеет собственный 1-байтный опкод}{it has its own 1-byte opcode} (\TT{0xCC}), 
-\IFRU{и активно используется в отладке}{and actively used while debugging}.
-\IFRU{Часто, отладчик просто записывает байт}{Often, debuggers just write} \TT{0xCC} 
-\IFRU{по адресу в памяти где устанавливается брякпойнт, и когда исключение поднимается, оригинальный байт
-будет восстановлен и оригинальная инструкция по этому адресу исполнена заново}{byte at the address of 
+\item[INT 3] (M): \RU{эта инструкция стоит немного в стороне от}\EN{this instruction is somewhat standing aside of} 
+\TT{INT}, \RU{она имеет собственный 1-байтный опкод}\EN{it has its own 1-byte opcode} (\TT{0xCC}), 
+\RU{и активно используется в отладке}\EN{and actively used while debugging}.
+\RU{Часто, отладчик просто записывает байт}\EN{Often, debuggers just write} \TT{0xCC} 
+\RU{по адресу в памяти где устанавливается брякпойнт, и когда исключение поднимается, оригинальный байт
+будет восстановлен и оригинальная инструкция по этому адресу исполнена заново}\EN{byte at the address of 
 breakpoint to be set, and when exception is raised,
 original byte will be restored and original instruction at this address will be re-executed}. \\
-\IFRU{В}{As of} \gls{Windows NT}, \IFRU{исключение}{an} \TT{EXCEPTION\_BREAKPOINT} \IFRU{поднимается,
-когда \ac{CPU} исполняет эту инструкцию}{exception will be raised when \ac{CPU} executes this instruction}.
-\IFRU{Это отладочное событие может быть перехвачено и обработано отладчиком, если он загружен}
-{This debugging event may be intercepted and handled by a host debugger, if loaded}.
-\IFRU{Если он не загружен, Windows предложит запустить один из зарегистрированных в системе отладчиков}
-{If it is not loaded, Windows will offer to run one of the registered in the system debuggers}.
-\IFRU{Если}{If} \ac{MSVS} \IFRU{установлена, его отладчик может быть загружен и подключен к процессу}{is installed, 
+\RU{В}\EN{As of} \gls{Windows NT}, \RU{исключение}\EN{an} \TT{EXCEPTION\_BREAKPOINT} \RU{поднимается,
+когда \ac{CPU} исполняет эту инструкцию}\EN{exception will be raised when \ac{CPU} executes this instruction}.
+\RU{Это отладочное событие может быть перехвачено и обработано отладчиком, если он загружен}
+\EN{This debugging event may be intercepted and handled by a host debugger, if loaded}.
+\RU{Если он не загружен, Windows предложит запустить один из зарегистрированных в системе отладчиков}
+\EN{If it is not loaded, Windows will offer to run one of the registered in the system debuggers}.
+\RU{Если}\EN{If} \ac{MSVS} \RU{установлена, его отладчик может быть загружен и подключен к процессу}\EN{is installed, 
 its debugger may be loaded and connected to the process}.
-\IFRU{В целях защиты от}{In order to protect from} \gls{reverse engineering}, \IFRU{множество анти-отладочных методов
-проверяют целостность загруженного кода}{a lot of anti-debugging methods are checking integrity of the code loaded}.
+\RU{В целях защиты от}\EN{In order to protect from} \gls{reverse engineering}, \RU{множество анти-отладочных методов
+проверяют целостность загруженного кода}\EN{a lot of anti-debugging methods are checking integrity of the code loaded}.
 
-\RU{В }\ac{MSVC} \IFRU{есть}{has} \gls{compiler intrinsic} \IFRU{для этой инструкции}{for the instruction}:
+\RU{В }\ac{MSVC} \RU{есть}\EN{has} \gls{compiler intrinsic} \RU{для этой инструкции}\EN{for the instruction}:
 \TT{\_\_debugbreak()}\footnote{\url{http://msdn.microsoft.com/en-us/library/f408b4et.aspx}}.
 
-\IFRU{В win32 также имеется ф-ция в}{There are also a win32 function in} kernel32.dll \IFRU{с названием}{named}
+\RU{В win32 также имеется ф-ция в}\EN{There are also a win32 function in} kernel32.dll \RU{с названием}\EN{named}
 \TT{DebugBreak()}\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms679297(v=vs.85).aspx}},
-\IFRU{которая также исполняет}{which also executes} \TT{INT 3}.
+\RU{которая также исполняет}\EN{which also executes} \TT{INT 3}.
 

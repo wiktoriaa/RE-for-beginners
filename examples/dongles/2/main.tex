@@ -1,19 +1,19 @@
-\section{\IFRU{Пример}{Example} \#2: SCO OpenServer}
+\section{\RU{Пример}\EN{Example} \#2: SCO OpenServer}
 
 \label{examples_SCO}
 \index{SCO OpenServer}
-\IFRU{Древняя программа для}{An ancient software for} SCO OpenServer \IFRU{от}{from} 1997 
-\IFRU{разработанная давно исчезнувшей компанией}{developed
+\RU{Древняя программа для}\EN{An ancient software for} SCO OpenServer \RU{от}\EN{from} 1997 
+\RU{разработанная давно исчезнувшей компанией}\EN{developed
 by a company disappeared long time ago}.
 
-\IFRU{Специальный драйвер донглы инсталлируется в системе, он содержит такие текстовые строки}
-{There is a special dongle driver to be installed in the system, containing text strings}:
+\RU{Специальный драйвер донглы инсталлируется в системе, он содержит такие текстовые строки}
+\EN{There is a special dongle driver to be installed in the system, containing text strings}:
 ``Copyright 1989, Rainbow Technologies, Inc., Irvine, CA''
 \AndENRU
 ``Sentinel Integrated Driver Ver. 3.0 ''.
 
-\IFRU{После инсталляции драйвера, в /dev появляются такие устройства}
-{After driver installation in SCO OpenServer, these device files are appeared in /dev filesystem}:
+\RU{После инсталляции драйвера, в /dev появляются такие устройства}
+\EN{After driver installation in SCO OpenServer, these device files are appeared in /dev filesystem}:
 
 \begin{lstlisting}
 /dev/rbsl8
@@ -21,138 +21,138 @@ by a company disappeared long time ago}.
 /dev/rbsl10
 \end{lstlisting}
 
-\IFRU{Без подключенной донглы, программа сообщает об ошибке, но сообщение об ошибке не удается
+\RU{Без подключенной донглы, программа сообщает об ошибке, но сообщение об ошибке не удается
 найти в исполняемых файлах}
-{The program without dongle connected reports error, but the error string cannot be found in the executables}.
+\EN{The program without dongle connected reports error, but the error string cannot be found in the executables}.
 
 \index{COFF}
-\IFRU{Еще раз спасибо \ac{IDA}, она легко загружает исполняемые файлы формата COFF использующиеся в}
-{Thanks to \ac{IDA}, it does its job perfectly working out COFF executable used in} SCO OpenServer.
+\RU{Еще раз спасибо \ac{IDA}, она легко загружает исполняемые файлы формата COFF использующиеся в}
+\EN{Thanks to \ac{IDA}, it does its job perfectly working out COFF executable used in} SCO OpenServer.
 
-\IFRU{Я попробовал также поискать строку}{I've tried to find} ``rbsl'' 
-\IFRU{, и действительно, её можно найти в таком фрагменте кода}
-{and indeed, found it in this code fragment}:
+\RU{Я попробовал также поискать строку}\EN{I've tried to find} ``rbsl'' 
+\RU{, и действительно, её можно найти в таком фрагменте кода}
+\EN{and indeed, found it in this code fragment}:
 
 \lstinputlisting{examples/dongles/2/1.lst}
 
-\IFRU{Действительно, должна же как-то программа обмениваться информацией с драйвером}
-{Yes, indeed, the program should communicate with driver somehow and that is how it is}.
+\RU{Действительно, должна же как-то программа обмениваться информацией с драйвером}
+\EN{Yes, indeed, the program should communicate with driver somehow and that is how it is}.
 
-\index{thunk-\IFRU{функции}{functions}}
-\IFRU{Единственное место где вызывается ф-ция}{The only place} \TT{SSQC()}
-\IFRU{это}{function called is the} \gls{thunk function}:
+\index{thunk-\RU{функции}\EN{functions}}
+\RU{Единственное место где вызывается ф-ция}\EN{The only place} \TT{SSQC()}
+\RU{это}\EN{function called is the} \gls{thunk function}:
 
 \lstinputlisting{examples/dongles/2/2.lst}
 
-\RU{А вот }SSQ() \IFRU{вызывается по крайней мере из двух разных ф-ций}
-{is called at least from 2 functions}.
+\RU{А вот }SSQ() \RU{вызывается по крайней мере из двух разных ф-ций}
+\EN{is called at least from 2 functions}.
 
-\IFRU{Одна из них}{One of these is}:
+\RU{Одна из них}\EN{One of these is}:
 
 \lstinputlisting{examples/dongles/2/check1.lst}
 
-``\TT{3C}'' \AndENRU ``\TT{3E}'' \IFRU{~--- это звучит знакомо: когда-то была донгла}
-{are sounds familiar: there was a} Sentinel Pro \IFRU{от Rainbow без памяти,
-предоставляющая только одну секретную крипто-хеширующую ф-цию}{dongle by Rainbow with no memory,
+``\TT{3C}'' \AndENRU ``\TT{3E}'' \RU{~--- это звучит знакомо: когда-то была донгла}
+\EN{are sounds familiar: there was a} Sentinel Pro \RU{от Rainbow без памяти,
+предоставляющая только одну секретную крипто-хеширующую ф-цию}\EN{dongle by Rainbow with no memory,
 providing only one crypto-hashing secret function}.
 
-\IFRU{О том, что такое хэш-функция, было описано здесь}{A short description
+\RU{О том, что такое хэш-функция, было описано здесь}\EN{A short description
 about what hash function is, read here}: \ref{hash_func}.
 
-\IFRU{Но вернемся к нашей программе}{But let's back to the program}.
-\IFRU{Так что программа может только проверить подключена ли донгла или нет}
-{So the program can only check the presence or absence dongle connected}.
-\IFRU{Никакой больше информации в такую донглу без памяти записать нельзя}
-{No other information can be written to such dongle with no memory}.
-\IFRU{Двухсимвольные коды ~--- это команды}{Two-character codes are commands}
-(\IFRU{можно увидеть как они обрабатываются в ф-ции}{we can see how commands are handled in} 
+\RU{Но вернемся к нашей программе}\EN{But let's back to the program}.
+\RU{Так что программа может только проверить подключена ли донгла или нет}
+\EN{So the program can only check the presence or absence dongle connected}.
+\RU{Никакой больше информации в такую донглу без памяти записать нельзя}
+\EN{No other information can be written to such dongle with no memory}.
+\RU{Двухсимвольные коды ~--- это команды}\EN{Two-character codes are commands}
+(\RU{можно увидеть как они обрабатываются в ф-ции}\EN{we can see how commands are handled in} 
 \TT{SSQC()}\EN{ function}) 
-\IFRU{а все остальные строки хешируются внутри донглы превращаясь в 16-битное число}
-{and all other strings are hashed inside the dongle transforming into 16-bit number}.
-\IFRU{Алгоритм был секретный, так что нельзя было написать замену драйверу или сделать
-электронную копию донглы идеально эмулирующую алгоритм}{The algorithm was secret,
+\RU{а все остальные строки хешируются внутри донглы превращаясь в 16-битное число}
+\EN{and all other strings are hashed inside the dongle transforming into 16-bit number}.
+\RU{Алгоритм был секретный, так что нельзя было написать замену драйверу или сделать
+электронную копию донглы идеально эмулирующую алгоритм}\EN{The algorithm was secret,
 so it was not possible to write driver replacement or to remake dongle hardware emulating it perfectly}.
-\IFRU{С другой стороны, всегда можно было перехватить все обращения к ней и найти те константы, с которыми
+\RU{С другой стороны, всегда можно было перехватить все обращения к ней и найти те константы, с которыми
 сравнивается результат хеширования}
-{However, it was always possible to intercept all accesses to it and to find what constants
+\EN{However, it was always possible to intercept all accesses to it and to find what constants
 the hash function results compared to}.
-\IFRU{Но надо сказать, вполне возможно создать устойчивую защиту от копирования базирующуюся
+\RU{Но надо сказать, вполне возможно создать устойчивую защиту от копирования базирующуюся
 на секретной хеш-функции: пусть она шифрует все файлы с которыми ваша программа работает}
-{Needless to say it is possible to build a robust software copy protection scheme based on secret
+\EN{Needless to say it is possible to build a robust software copy protection scheme based on secret
 cryptographical hash-function: let it to encrypt/decrypt data files your software dealing with}.
 
-\IFRU{Но вернемся к нашему коду}{But let's back to the code}.
+\RU{Но вернемся к нашему коду}\EN{But let's back to the code}.
 
-\IFRU{Коды}{Codes} 51/52/53 \IFRU{используются для выбора номера принтеровского LPT-порта}
-{are used for LPT printer port selection}.
-3x/4x \IFRU{используются для выбора}{is for} ``family'' \IFRU{так донглы Sentinel Pro
+\RU{Коды}\EN{Codes} 51/52/53 \RU{используются для выбора номера принтеровского LPT-порта}
+\EN{are used for LPT printer port selection}.
+3x/4x \RU{используются для выбора}\EN{is for} ``family'' \RU{так донглы Sentinel Pro
 можно отличать друг от друга: ведь более одной донглы может быть подключено к LPT-порту}
-{selection (that's how Sentinel Pro dongles are differentiated from each other: more than one
+\EN{selection (that's how Sentinel Pro dongles are differentiated from each other: more than one
 dongle can be connected to LPT port)}.
 
-\IFRU{Единственная строка, передающаяся в хеш-функцию это}
-{The only non-2-character string passed to the hashing function is} "0123456789".
-\IFRU{Затем результат сравнивается с несколькими правильными значениями}
-{Then, the result is compared against the set of valid results}.
-\IFRU{Если результат правилен}{If it is correct},
-0xC \OrENRU 0xB \IFRU{будет записано в глобальную переменную}
-{is to be written into global variable} \TT{ctl\_model}.
+\RU{Единственная строка, передающаяся в хеш-функцию это}
+\EN{The only non-2-character string passed to the hashing function is} "0123456789".
+\RU{Затем результат сравнивается с несколькими правильными значениями}
+\EN{Then, the result is compared against the set of valid results}.
+\RU{Если результат правилен}\EN{If it is correct},
+0xC \OrENRU 0xB \RU{будет записано в глобальную переменную}
+\EN{is to be written into global variable} \TT{ctl\_model}.
 
-\IFRU{Еще одна строка для хеширования:}{Another text string to be passed is}
-"PRESS ANY KEY TO CONTINUE: ", \IFRU{но результат не проверяется}{but the result is not checked}.
-\IFRU{Не знаю зачем это, может быть по ошибке}{I don't know why, probably by mistake}.
-(\IFRU{Это очень странное чувство: находить ошибки в столь древнем ПО}
-{What a strange feeling: to reveal bugs in such ancient software}.)
+\RU{Еще одна строка для хеширования:}\EN{Another text string to be passed is}
+"PRESS ANY KEY TO CONTINUE: ", \RU{но результат не проверяется}\EN{but the result is not checked}.
+\RU{Не знаю зачем это, может быть по ошибке}\EN{I don't know why, probably by mistake}.
+(\RU{Это очень странное чувство: находить ошибки в столь древнем ПО}
+\EN{What a strange feeling: to reveal bugs in such ancient software}.)
 
-\IFRU{Давайте посмотрим, где проверяется значение глобальной переменной}
-{Let's see where the value from the global variable} \TT{ctl\_mode}\EN{ is used}.
+\RU{Давайте посмотрим, где проверяется значение глобальной переменной}
+\EN{Let's see where the value from the global variable} \TT{ctl\_mode}\EN{ is used}.
 
-\IFRU{Одно из таких мест}{One of such places is}:
+\RU{Одно из таких мест}\EN{One of such places is}:
 
 \lstinputlisting{examples/dongles/2/4.lst}
 
-\IFRU{Если оно 0, шифрованное сообщение об ошибке будет передано в ф-цию дешифрования, и оно будет 
-показано}{If it is 0, an encrypted error message is passed into decryption routine and printed}.
+\RU{Если оно 0, шифрованное сообщение об ошибке будет передано в ф-цию дешифрования, и оно будет 
+показано}\EN{If it is 0, an encrypted error message is passed into decryption routine and printed}.
 
 \index{x86!\Instructions!XOR}
-\IFRU{Ф-ция дешифровки сообщений об ошибке похоже применяет простой \gls{xoring}}
-{Error strings decryption routine is seems simple \gls{xoring}}:
+\RU{Ф-ция дешифровки сообщений об ошибке похоже применяет простой \gls{xoring}}
+\EN{Error strings decryption routine is seems simple \gls{xoring}}:
 
 \lstinputlisting{examples/dongles/2/err_warn.lst}
 
-\IFRU{Вот почему не получилось найти сообщение об ошибке в исполняемых файлах, потому что оно было
+\RU{Вот почему не получилось найти сообщение об ошибке в исполняемых файлах, потому что оно было
 зашифровано, это очень популярная практика}
-{That's why I was unable to find error messages in the executable files, because they are encrypted,
+\EN{That's why I was unable to find error messages in the executable files, because they are encrypted,
 this is popular practice}.
 
-\IFRU{Еще один вызов хеширующей ф-ции передает строку}{Another call to \TT{SSQ()} hashing function passes}
-``offln'' \IFRU{и сравнивает результат с константами}{string to it and comparing result with}
+\RU{Еще один вызов хеширующей ф-ции передает строку}\EN{Another call to \TT{SSQ()} hashing function passes}
+``offln'' \RU{и сравнивает результат с константами}\EN{string to it and comparing result with}
 \TT{0xFE81} \AndENRU \TT{0x12A9}.
-\IFRU{Если результат не сходится, происходит работа с какой-то ф-цией}
-{If it not so, it deals with some} \TT{timer()} 
-\IFRU{(может быть для ожидания плохо подключенной донглы и нового запроса?), затем дешифрует
-еще одно сообщение об ошибке и выводит его}{function (maybe waiting for poorly
+\RU{Если результат не сходится, происходит работа с какой-то ф-цией}
+\EN{If it not so, it deals with some} \TT{timer()} 
+\RU{(может быть для ожидания плохо подключенной донглы и нового запроса?), затем дешифрует
+еще одно сообщение об ошибке и выводит его}\EN{function (maybe waiting for poorly
 connected dongle to be reconnected and check again?) and then decrypt another error message to dump}.
 
 \lstinputlisting{examples/dongles/2/check2.lst}
 
-\IFRU{Заставить работать программу без донглы довольно просто: просто пропатчить все места после инструкций
-\CMP где происходят соответствующие сравнения}{Dongle bypassing is pretty straightforward: just patch all jumps after \CMP the relevant instructions}.
+\RU{Заставить работать программу без донглы довольно просто: просто пропатчить все места после инструкций
+\CMP где происходят соответствующие сравнения}\EN{Dongle bypassing is pretty straightforward: just patch all jumps after \CMP the relevant instructions}.
 
-\IFRU{Еще одна возможность ~--- это написать свой драйвер для SCO OpenServer}
-{Another option is to write our own SCO OpenServer driver}.
+\RU{Еще одна возможность ~--- это написать свой драйвер для SCO OpenServer}
+\EN{Another option is to write our own SCO OpenServer driver}.
 
-\subsection{\IFRU{Дешифровка сообщений об ошибке}{Decrypting error messages}}
+\subsection{\RU{Дешифровка сообщений об ошибке}\EN{Decrypting error messages}}
 
-\IFRU{Кстати, мы также можем дешифровать все сообщения об ошибке}{By the way, we can also 
+\RU{Кстати, мы также можем дешифровать все сообщения об ошибке}\EN{By the way, we can also 
 try to decrypt all error messages}.
-\IFRU{Алкгоритм, находящийся в ф-ции}{The algorithm, locating in} \TT{err\_warn()} 
-\IFRU{действительно, крайне прост}{function is very simple, indeed}:
+\RU{Алкгоритм, находящийся в ф-ции}\EN{The algorithm, locating in} \TT{err\_warn()} 
+\RU{действительно, крайне прост}\EN{function is very simple, indeed}:
 
-\lstinputlisting[caption=\IFRU{Ф-ция дешифровки}{Decrypting function}]
+\lstinputlisting[caption=\RU{Ф-ция дешифровки}\EN{Decrypting function}]
 {examples/dongles/2/decrypting_\LANG.lst}
 
-\IFRU{Как видно, не только сама строка поступает на вход, но также и ключ для дешифровки}{As we can see, 
+\RU{Как видно, не только сама строка поступает на вход, но также и ключ для дешифровки}\EN{As we can see, 
 not just string supplied to the decrypting function, but also the key}:
 
 \begin{lstlisting}
@@ -179,48 +179,48 @@ not just string supplied to the decrypting function, but also the key}:
 .text:0000D9C9                 call    err_warn
 \end{lstlisting}
 
-\IFRU{Алгоритм это очень простой}{The algorithm is simple} \gls{xoring}: 
-\IFRU{каждый байт XOR-ится с ключом, но ключ увеличивается на 3 после обработки каждого байта}{each 
+\RU{Алгоритм это очень простой}\EN{The algorithm is simple} \gls{xoring}: 
+\RU{каждый байт XOR-ится с ключом, но ключ увеличивается на 3 после обработки каждого байта}\EN{each 
 byte is xored with a key, but key is increased by 3 after processing of each byte}.
 
-\IFRU{Я написал небольшой скрипт на Python для проверки своих догадок}{I wrote a simple Python 
+\RU{Я написал небольшой скрипт на Python для проверки своих догадок}\EN{I wrote a simple Python 
 script to check my insights}:
 
 \lstinputlisting[caption=Python 3.x]{examples/dongles/2/decr1.py}
 
-\IFRU{И он выводит}{And it prints}: ``check security device connection''.
-\IFRU{Так что да, это дешифрованное сообщение}{So yes, this is decrypted message}.
+\RU{И он выводит}\EN{And it prints}: ``check security device connection''.
+\RU{Так что да, это дешифрованное сообщение}\EN{So yes, this is decrypted message}.
 
-\IFRU{Здесь есть также и другие сообщения, с соответствующими ключами}{There are also 
+\RU{Здесь есть также и другие сообщения, с соответствующими ключами}\EN{There are also 
 other encrypted messages with corresponding keys}.
-\IFRU{Но надо сказать, их можно дешифровать и без ключей}{But needless to say that it is possible 
+\RU{Но надо сказать, их можно дешифровать и без ключей}\EN{But needless to say that it is possible 
 to decrypt them without keys}.
-\IFRU{В начале, мы можем заметить что ключ это просто байт}{First, we may observe that key 
+\RU{В начале, мы можем заметить что ключ это просто байт}\EN{First, we may observe that key 
 is byte in fact}.
-\IFRU{Это потому что самая важная часть ф-ции дешифровки}{It is because core decrypting instruction}
-(\XOR) \IFRU{оперирует байтами}{works on byte level}. 
-\IFRU{Ключ находится в регистре}{Key is located in} \ESI\IFRU{, но только младшие 8 бит
-(т.е., байт) регистра используются}{ register, but only byte part of \ESI is used}.
-\IFRU{Следовательно, ключ может быть больше}{Hence, key may be greater than} 255, 
-\IFRU{но его значение будет округляться}{but its value will always be rounded}.
+\RU{Это потому что самая важная часть ф-ции дешифровки}\EN{It is because core decrypting instruction}
+(\XOR) \RU{оперирует байтами}\EN{works on byte level}. 
+\RU{Ключ находится в регистре}\EN{Key is located in} \ESI\RU{, но только младшие 8 бит
+(т.е., байт) регистра используются}\EN{ register, but only byte part of \ESI is used}.
+\RU{Следовательно, ключ может быть больше}\EN{Hence, key may be greater than} 255, 
+\RU{но его значение будет округляться}\EN{but its value will always be rounded}.
 
-\IFRU{И как следствие, мы можем попробовать обычный перебор всех ключей в диапазоне}
-{As a consequence, we can just try brute-force, trying all possible keys in} 0..255\EN{ range}.
-\IFRU{Мы также можем пропускать сообщения содержащие непечатные символы}{We will also skip 
+\RU{И как следствие, мы можем попробовать обычный перебор всех ключей в диапазоне}
+\EN{As a consequence, we can just try brute-force, trying all possible keys in} 0..255\EN{ range}.
+\RU{Мы также можем пропускать сообщения содержащие непечатные символы}\EN{We will also skip 
 messages containing unprintable characters}.
 
 \lstinputlisting[caption=Python 3.x]{examples/dongles/2/decr2.py}
 
-\IFRU{И мы получим}{And we getting}:
+\RU{И мы получим}\EN{And we getting}:
 
 \lstinputlisting[caption=Results]{examples/dongles/2/decr2_result.txt}
 
-\IFRU{Тут есть какой-то мусор, но мы можем быстро отыскать сообщения на английском языке}{There 
+\RU{Тут есть какой-то мусор, но мы можем быстро отыскать сообщения на английском языке}\EN{There 
 are some garbage, but we can quickly find English-language messages}!
 
-\IFRU{Кстати, так как алгоритм использует простой \XOR, та же ф-ция может использоваться и для шифрования
-сообщения}{By the way, since algorithm is simple xoring encryption, the very same function can be used
+\RU{Кстати, так как алгоритм использует простой \XOR, та же ф-ция может использоваться и для шифрования
+сообщения}\EN{By the way, since algorithm is simple xoring encryption, the very same function can be used
 for encrypting messages}.
-\IFRU{Если нужно, мы можем зашифровать наши собственные сообщения, и пропатчить программу вставив
-их}{If we need, we can encrypt our own messages, and patch the program by inserting them}.
+\RU{Если нужно, мы можем зашифровать наши собственные сообщения, и пропатчить программу вставив
+их}\EN{If we need, we can encrypt our own messages, and patch the program by inserting them}.
 

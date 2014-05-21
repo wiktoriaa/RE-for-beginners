@@ -21,51 +21,51 @@
 .text:000000D8 10 80 BD E8                 LDMFD   SP!, {R4,PC}
 \end{lstlisting}
 
-\IFRU{В функции \main просто вызываются две функции, в первую (\TT{f}) передается три значения.}
-{In \main function, two other functions are simply called, and three values are passed to the 
+\RU{В функции \main просто вызываются две функции, в первую (\TT{f}) передается три значения.}
+\EN{In \main function, two other functions are simply called, and three values are passed to the 
 first one (\TT{f}).}
 
-\IFRU{Как я уже упоминал, первые 4 значения, в ARM обычно передаются в первых 4-х регистрах}
-{As I mentioned before, in ARM, first 4 values are usually passed in first 4 registers} (\Reg{0}-\Reg{3}).
+\RU{Как я уже упоминал, первые 4 значения, в ARM обычно передаются в первых 4-х регистрах}
+\EN{As I mentioned before, in ARM, first 4 values are usually passed in first 4 registers} (\Reg{0}-\Reg{3}).
 
-\RU{Функция }\TT{f}\IFRU{, как видно, использует три первых регистра (\Reg{0}-\Reg{2}) как аргументы.}
-{function, as it seems, use first 3 registers (\Reg{0}-\Reg{2}) as arguments.}
+\RU{Функция }\TT{f}\RU{, как видно, использует три первых регистра (\Reg{0}-\Reg{2}) как аргументы.}
+\EN{function, as it seems, use first 3 registers (\Reg{0}-\Reg{2}) as arguments.}
 
 \index{ARM!\Instructions!MLA}
-\RU{Инструкция }\TT{MLA} (\IT{Multiply Accumulate}) \IFRU{перемножает два первых операнда (\Reg{3} и \Reg{1}), 
+\RU{Инструкция }\TT{MLA} (\IT{Multiply Accumulate}) \RU{перемножает два первых операнда (\Reg{3} и \Reg{1}), 
 прибавляет к произведению
 третий операнд (\Reg{2}) и помещает результат в нулевой операнд (\Reg{0}), через который, по стандарту, 
 возвращаются значения функций.}
-{instruction multiplicates two first operands (\Reg{3} and \Reg{1}), adds third operand (\Reg{2}) to product and places
+\EN{instruction multiplicates two first operands (\Reg{3} and \Reg{1}), adds third operand (\Reg{2}) to product and places
 result into zeroth operand (\Reg{0}), via which, by standard, values are returned from functions.}
 
 \index{Fused multiply–add}
-\IFRU{Умножение и сложение одновременно}{Multiplication and addition at once}\footnote{\WPMAO} 
-(\IT{Fused multiply–add}) \IFRU{это много где применяемая операция, кстати, аналогичной
-инструкции в x86 нет}{is very useful operation, by the way, there is no such instruction in x86}, 
-\IFRU{если не считать новых FMA-инструкций}{if not to count new FMA-instruction}\footnote{\url{https://en.wikipedia.org/wiki/FMA_instruction_set}} \InENRU SIMD.
+\RU{Умножение и сложение одновременно}\EN{Multiplication and addition at once}\footnote{\WPMAO} 
+(\IT{Fused multiply–add}) \RU{это много где применяемая операция, кстати, аналогичной
+инструкции в x86 нет}\EN{is very useful operation, by the way, there is no such instruction in x86}, 
+\RU{если не считать новых FMA-инструкций}\EN{if not to count new FMA-instruction}\footnote{\url{https://en.wikipedia.org/wiki/FMA_instruction_set}} \InENRU SIMD.
 
-\IFRU{Самая первая инструкция}{The very first} \TT{MOV R3, R0}, \IFRU{по-видимому, избыточна (можно было бы обойтись только одной инструкцией \TT{MLA})}
-{instruction, apparently, redundant (single \TT{MLA} instruction could be used here instead)}, 
-\IFRU{компилятор не оптимизировал её, ведь, это компиляция без оптимизации}{compiler was not optimized it,
+\RU{Самая первая инструкция}\EN{The very first} \TT{MOV R3, R0}, \RU{по-видимому, избыточна (можно было бы обойтись только одной инструкцией \TT{MLA})}
+\EN{instruction, apparently, redundant (single \TT{MLA} instruction could be used here instead)}, 
+\RU{компилятор не оптимизировал её, ведь, это компиляция без оптимизации}\EN{compiler was not optimized it,
 since this is non-optimizing compilation}.
 
-\index{ARM!\IFRU{Переключение режимов}{Mode switching}}
+\index{ARM!\RU{Переключение режимов}\EN{Mode switching}}
 \index{ARM!\Instructions!BX}
-\IFRU{Инструкция \TT{BX} возвращает управление по адресу записанному в \ac{LR} и, если нужно, 
+\RU{Инструкция \TT{BX} возвращает управление по адресу записанному в \ac{LR} и, если нужно, 
 переключает режимы процессора с thumb на ARM или наоборот.}
-{\TT{BX} instruction returns control to the address stored in the \ac{LR} register and, if it is necessary, 
+\EN{\TT{BX} instruction returns control to the address stored in the \ac{LR} register and, if it is necessary, 
 switches processor mode from thumb to ARM or vice versa.}
-\IFRU{Это может быть необходимым потому, что, как мы видим, 
+\RU{Это может быть необходимым потому, что, как мы видим, 
 функции \TT{f} неизвестно, из какого кода она будет вызываться, из ARM или thumb.}
-{This can be necessary since, as we can see, \TT{f} function is not aware, from which code it may be
+\EN{This can be necessary since, as we can see, \TT{f} function is not aware, from which code it may be
 called, from ARM or thumb.}
-\IFRU{Поэтому, если она будет вызываться из кода thumb, \TT{BX} не только вернет
+\RU{Поэтому, если она будет вызываться из кода thumb, \TT{BX} не только вернет
 управление в вызывающую функцию, но также переключит процессор в режим thumb.}
-{This, if it will be called from thumb code, \TT{BX} will not only return control to the calling function,
+\EN{This, if it will be called from thumb code, \TT{BX} will not only return control to the calling function,
 but also will switch processor mode to thumb mode.}
-\IFRU{Либо не переключит, если функция вызывалась из кода для режима ARM.}
-{Or not switch, if the function was called from ARM code.}
+\RU{Либо не переключит, если функция вызывалась из кода для режима ARM.}
+\EN{Or not switch, if the function was called from ARM code.}
 
 \subsection{\OptimizingKeil + \ARMMode}
 
@@ -75,11 +75,11 @@ but also will switch processor mode to thumb mode.}
 .text:0000009C 1E FF 2F E1                 BX      LR
 \end{lstlisting}
 
-\IFRU{А вот и функция \TT{f} скомпилированная компилятором Keil в режиме полной оптимизации}
-{And here is \TT{f} function compiled by Keil compiler in full optimization mode} (\Othree).
-\IFRU{Инструкция \MOV была соптимизирована и теперь \TT{MLA} использует все входящие регистры 
+\RU{А вот и функция \TT{f} скомпилированная компилятором Keil в режиме полной оптимизации}
+\EN{And here is \TT{f} function compiled by Keil compiler in full optimization mode} (\Othree).
+\RU{Инструкция \MOV была соптимизирована и теперь \TT{MLA} использует все входящие регистры 
 и помещает результат в \Reg{0}, как раз, где вызываемая функция будет его читать и использовать.}
-{\MOV instruction was optimized (or reduced) and now \TT{MLA} uses all 
+\EN{\MOV instruction was optimized (or reduced) and now \TT{MLA} uses all 
 input registers and also places result right into \Reg{0},
 exactly where calling function will read it and use.}
 
@@ -91,14 +91,14 @@ exactly where calling function will read it and use.}
 .text:00000062 70 47                       BX      LR
 \end{lstlisting}
 
-\IFRU{В режиме thumb, инструкция \TT{MLA} недоступна, так что компилятору пришлось сгенерировать код, 
+\RU{В режиме thumb, инструкция \TT{MLA} недоступна, так что компилятору пришлось сгенерировать код, 
 делающий обе операции по отдельности.}
-{\TT{MLA} instruction is not available in thumb mode, so, compiler generates the code doing these two 
+\EN{\TT{MLA} instruction is not available in thumb mode, so, compiler generates the code doing these two 
 operations separately.}
 \index{ARM!\Instructions!MULS}
 \index{ARM!\Instructions!ADDS}
-\IFRU{Первая инструкция \TT{MULS} умножает \Reg{0} на \Reg{1} оставляя результат в \Reg{1}.}
-{First \TT{MULS} instruction multiply \Reg{0} by \Reg{1} leaving result in the \Reg{1} register.}
-\IFRU{Вторая (\TT{ADDS}) складывает результат и \Reg{2}, оставляя результат в \Reg{0}.}
-{Second (\TT{ADDS}) instruction adds result and \Reg{2} leaving result in the \Reg{0} register.}
+\RU{Первая инструкция \TT{MULS} умножает \Reg{0} на \Reg{1} оставляя результат в \Reg{1}.}
+\EN{First \TT{MULS} instruction multiply \Reg{0} by \Reg{1} leaving result in the \Reg{1} register.}
+\RU{Вторая (\TT{ADDS}) складывает результат и \Reg{2}, оставляя результат в \Reg{0}.}
+\EN{Second (\TT{ADDS}) instruction adds result and \Reg{2} leaving result in the \Reg{0} register.}
 

@@ -1,12 +1,12 @@
-\section{\IFRU{Защита от переполнения буфера}{Buffer overflow protection methods}}
+\section{\RU{Защита от переполнения буфера}\EN{Buffer overflow protection methods}}
 \label{subsec:BO_protection}
 
-\IFRU{В наше время пытаются бороться с этой напастью, не взирая на халатность программистов на \CCpp. 
+\RU{В наше время пытаются бороться с этой напастью, не взирая на халатность программистов на \CCpp. 
 В MSVC есть опции вроде}
-{There are several methods to protect against it, regardless of \CCpp programmers' negligence.
+\EN{There are several methods to protect against it, regardless of \CCpp programmers' negligence.
 MSVC has options like}\footnote{
-Wikipedia: \IFRU{описания защит, которые компилятор может вставлять в код}
-{compiler-side buffer overflow protection methods}:\\
+Wikipedia: \RU{описания защит, которые компилятор может вставлять в код}
+\EN{compiler-side buffer overflow protection methods}:\\
 \url{http://en.wikipedia.org/wiki/Buffer_overflow_protection}}:
 
 \begin{lstlisting}
@@ -17,60 +17,60 @@ Wikipedia: \IFRU{описания защит, которые компилято�
 \index{x86!\Instructions!RET}
 \index{Function prologue}
 \index{Security cookie}
-\IFRU{Один из методов, это в прологе функции вставлять в область локальных переменных 
+\RU{Один из методов, это в прологе функции вставлять в область локальных переменных 
 некоторое случайное значение 
 и в эпилоге функции, перед выходом, это число проверять. 
 И если проверка не прошла, то не выполнять инструкцию \RET а остановиться (или зависнуть). 
 Процесс зависнет, но это лучше, чем удаленная атака на ваш хост.}
-{One of the methods is to write random value among local variables to stack at function prologue 
+\EN{One of the methods is to write random value among local variables to stack at function prologue 
 and to check it in function epilogue before function exiting.
 And if value is not the same, do not execute last instruction \RET, but halt (or hang).
 Process will hang, but that is much better then remote attack to your host.}
     
 \newcommand{\CANARYURL}
 {
-    \IFRU
+    \RU
     {
         \url{http://miningwiki.ru/wiki/\%D0\%9A\%D0\%B0\%D0\%BD\%D0\%B0\%D1\%80\%D0\%B5\%D0\%B9\%D0\%BA\%D0\%B0_\%D0\%B2_\%D1\%88\%D0\%B0\%D1\%85\%D1\%82\%D0\%B5}
     }
-    {
+    \EN{
         \url{http://en.wikipedia.org/wiki/Domestic\_Canary\#Miner.27s\_canary}
     }
 }
 
 \index{Canary}
-\IFRU{Это случайное значение иногда называют ``канарейкой''
+\RU{Это случайное значение иногда называют ``канарейкой''
 \footnote{``canary'' в англоязычной литературе}, 
 по аналогии с шахтной канарейкой\footnote{\CANARYURL},
 их использовали шахтеры в свое время, чтобы определять, есть ли в шахте опасный газ.
 }
-{This random value is called ``canary'' sometimes, it is related to miner's canary\footnote{\CANARYURL},
+\EN{This random value is called ``canary'' sometimes, it is related to miner's canary\footnote{\CANARYURL},
 they were used by miners in these days, in order to detect poisonous gases quickly.}
-\IFRU{Канарейки очень к нему чувствительны и либо проявляли сильное беспокойство, либо гибли от газа.}
-{Canaries are very sensetive to mine gases, they become very agitated in case of danger, or even dead.}
+\RU{Канарейки очень к нему чувствительны и либо проявляли сильное беспокойство, либо гибли от газа.}
+\EN{Canaries are very sensetive to mine gases, they become very agitated in case of danger, or even dead.}
 
-\IFRU{Если скомпилировать наш простейший пример работы с массивом}
-{If to compile our very simple array example}~(\ref{arrays_simple}) \InENRU \ac{MSVC} 
-\IFRU{с опцией RTC1 или RTCs}{with RTC1 and RTCs option}, \IFRU{в конце функции будет вызов 
-функции}{you will see call to} \TT{@\_RTC\_CheckStackVars@8}\IFRU{, проверяющей корректность ``канарейки''.}
-{ function at the function end, checking ``canary'' correctness.}
+\RU{Если скомпилировать наш простейший пример работы с массивом}
+\EN{If to compile our very simple array example}~(\ref{arrays_simple}) \InENRU \ac{MSVC} 
+\RU{с опцией RTC1 или RTCs}\EN{with RTC1 and RTCs option}, \RU{в конце функции будет вызов 
+функции}\EN{you will see call to} \TT{@\_RTC\_CheckStackVars@8}\RU{, проверяющей корректность ``канарейки''.}
+\EN{ function at the function end, checking ``canary'' correctness.}
 
-\IFRU{Посмотрим, как дела обстоят в GCC}{Let's see how GCC handles this}. 
-\IFRU{Возьмем пример из секции про}{Let's take} \TT{alloca()}~(\ref{alloca})\EN{ example}:
+\RU{Посмотрим, как дела обстоят в GCC}\EN{Let's see how GCC handles this}. 
+\RU{Возьмем пример из секции про}\EN{Let's take} \TT{alloca()}~(\ref{alloca})\EN{ example}:
 
 \lstinputlisting{patterns/02_stack/2_1.c}
 
-\IFRU{По умолчанию, без дополнительных ключей, GCC 4.7.3 вставит в код проверку ``канарейки''}
-{By default, without any additional options, GCC 4.7.3 will insert ``canary'' check into code}:
+\RU{По умолчанию, без дополнительных ключей, GCC 4.7.3 вставит в код проверку ``канарейки''}
+\EN{By default, without any additional options, GCC 4.7.3 will insert ``canary'' check into code}:
 
 \lstinputlisting[caption=GCC 4.7.3]{patterns/13_arrays/gcc_canary.asm}
 
-\IFRU{Случайное значение находится в}{Random value is located in} \TT{gs:20}. 
-\IFRU{Оно записывается в стек, затем, в конце функции, значение в стеке
-сравнивается с корректной ``канарейкой'' в}{It is to be written on the stack and then, at the function end,
+\RU{Случайное значение находится в}\EN{Random value is located in} \TT{gs:20}. 
+\RU{Оно записывается в стек, затем, в конце функции, значение в стеке
+сравнивается с корректной ``канарейкой'' в}\EN{It is to be written on the stack and then, at the function end,
 value in the stack is compared with correct ``canary'' in} \TT{gs:20}. 
-\IFRU{Если значения не равны, будет вызвана функция}{If values are not equal to each other, } 
-\TT{\_\_stack\_chk\_fail}\IFRU{ и в консоли мы увидим что-то вроде такого}{ function will be called and we will see
+\RU{Если значения не равны, будет вызвана функция}\EN{If values are not equal to each other, } 
+\TT{\_\_stack\_chk\_fail}\RU{ и в консоли мы увидим что-то вроде такого}\EN{ function will be called and we will see
 something like that in console} (Ubuntu 13.04 x86):
 
 \begin{lstlisting}
@@ -108,25 +108,25 @@ Aborted (core dumped)
 \end{lstlisting}
 
 \index{MS-DOS}
-gs\EMDASH\IFRU{это так называемый сегментный регистр, эти регистры широко использовались во времена MS-DOS 
-и DOS-экстендеров.}{is so-called segment register, these registers were used widely in MS-DOS and DOS-extenders
+gs\EMDASH\RU{это так называемый сегментный регистр, эти регистры широко использовались во времена MS-DOS 
+и DOS-экстендеров.}\EN{is so-called segment register, these registers were used widely in MS-DOS and DOS-extenders
 times.}
-\IFRU{Сейчас их функция немного изменилась.}{Today, its function is different.}
+\RU{Сейчас их функция немного изменилась.}\EN{Today, its function is different.}
 \index{TLS}
 \index{Windows!TIB}
-\IFRU{Если говорить коротко, в Linux \TT{gs} всегда указывает на \ac{TLS}~(\ref{TLS}) ~--- там находится различная 
+\RU{Если говорить коротко, в Linux \TT{gs} всегда указывает на \ac{TLS}~(\ref{TLS}) ~--- там находится различная 
 информация, специфичная для выполняющегося треда}
-{If to say briefly, the \TT{gs} register in Linux is always pointing to the
+\EN{If to say briefly, the \TT{gs} register in Linux is always pointing to the
 \ac{TLS}~(\ref{TLS})~---various information specific to thread is stored there}
-(\IFRU{кстати, в win32 эту же роль играет сегментный регистр \TT{fs},
-он всегда указывает на}{by the way, in win32 environment,
+(\RU{кстати, в win32 эту же роль играет сегментный регистр \TT{fs},
+он всегда указывает на}\EN{by the way, in win32 environment,
 the \TT{fs} register plays the same role, it pointing to}
 \ac{TIB} \footnote{\url{https://en.wikipedia.org/wiki/Win32_Thread_Information_Block}}). 
 
-\IFRU{Больше информации можно почерпнуть из исходных кодов Linux (по крайней мере, в версии 3.11): 
-в файле}{More information can be found in Linux source codes (at least in 3.11 version), in}
-\IT{arch/x86/include/asm/stackprotector.h}\IFRU{ в комментариях описывается эта переменная}
-{ file this variable is described in comments}.
+\RU{Больше информации можно почерпнуть из исходных кодов Linux (по крайней мере, в версии 3.11): 
+в файле}\EN{More information can be found in Linux source codes (at least in 3.11 version), in}
+\IT{arch/x86/include/asm/stackprotector.h}\RU{ в комментариях описывается эта переменная}
+\EN{ file this variable is described in comments}.
 
 \input{patterns/13_arrays/BO_protection_ARM.tex}
 

@@ -1,7 +1,7 @@
-\subsection{\IFRU{Передача параметров для функции}{Passing function arguments}}
+\subsection{\RU{Передача параметров для функции}\EN{Passing function arguments}}
 
-\IFRU{Самый распространенный способ передачи параметров в x86 называется}
-{The most popular way to pass parameters in x86 is called} ``cdecl'':
+\RU{Самый распространенный способ передачи параметров в x86 называется}
+\EN{The most popular way to pass parameters in x86 is called} ``cdecl'':
 
 \begin{lstlisting}
 push arg3
@@ -11,18 +11,18 @@ call f
 add esp, 4*3
 \end{lstlisting}
 
-\IFRU{Вызываемая функция получает свои параметры также через указатель стека.}
-{\Gls{callee} functions get their arguments via the stack pointer.}
+\RU{Вызываемая функция получает свои параметры также через указатель стека.}
+\EN{\Gls{callee} functions get their arguments via the stack pointer.}
 
-\IFRU{Следовательно, так будут расположены значения в стеке перед исполнением самой первой инструкции
+\RU{Следовательно, так будут расположены значения в стеке перед исполнением самой первой инструкции
 ф-ции f():}
-{Consequently, this is how values will be located in the stack before execution
+\EN{Consequently, this is how values will be located in the stack before execution
 of the very first instruction of the f() function:}
 
 \begin{center}
 \begin{tabular}{ | l | l | }
 \hline
-ESP & \IFRU{адрес возврата}{return address} \\
+ESP & \RU{адрес возврата}\EN{return address} \\
 \hline
 ESP+4 & \argument \#1, \MarkedInIDAAs{} \TT{arg\_0} \\
 \hline
@@ -35,51 +35,51 @@ ESP+0xC & \argument \#3, \MarkedInIDAAs{} \TT{arg\_8} \\
 \end{tabular}
 \end{center}
 
-\IFRU{См. также в соответствующем разделе о других способах передачи аргументов через стек}
-{See also the section about other calling conventions}~(\ref{sec:callingconventions}).
-\IFRU{Важно отметить, что, в общем, никто не заставляет программистов передавать параметры именно через стек,
+\RU{См. также в соответствующем разделе о других способах передачи аргументов через стек}
+\EN{See also the section about other calling conventions}~(\ref{sec:callingconventions}).
+\RU{Важно отметить, что, в общем, никто не заставляет программистов передавать параметры именно через стек,
 это не является требованием к исполняемому коду.}
-{It is worth noting that nothing obliges programmers to pass arguments through the stack. It is not a requirement.}
-\IFRU{Вы можете делать это совершенно иначе, не используя стек вообще.}
-{One could implement any other method without using the stack at all.}
+\EN{It is worth noting that nothing obliges programmers to pass arguments through the stack. It is not a requirement.}
+\RU{Вы можете делать это совершенно иначе, не используя стек вообще.}
+\EN{One could implement any other method without using the stack at all.}
 
-\IFRU{К примеру, можно выделять в \glslink{heap}{куче} место для аргументов, 
+\RU{К примеру, можно выделять в \glslink{heap}{куче} место для аргументов, 
 заполнять их и передавать в функцию указатель на это место через \EAX. И это вполне будет работать}
-{For example, it is possible to allocate a space for arguments in the \gls{heap}, fill it and pass it to a function 
+\EN{For example, it is possible to allocate a space for arguments in the \gls{heap}, fill it and pass it to a function 
 via a pointer to this block in the \EAX register. This will work.}
-\footnote{\IFRU{Например, в книге Дональда Кнута ``Искусство программирования'', в разделе 1.4.1 
+\footnote{\RU{Например, в книге Дональда Кнута ``Искусство программирования'', в разделе 1.4.1 
 посвященном подпрограммам\cite[раздел 1.4.1]{Knuth:1998:ACP:521463}, 
 мы можем прочитать о возможности располагать параметры для вызываемой подпрограммы после инструкции \JMP,
 передающей управление подпрограмме. Кнут описывает что это было особенно удобно для компьютеров System/360.}
-{For example, in the ``The Art of Computer Programming'' book by Donald Knuth, 
+\EN{For example, in the ``The Art of Computer Programming'' book by Donald Knuth, 
 in section 1.4.1 dedicated to subroutines\cite[section 1.4.1]{Knuth:1998:ACP:521463},
 we can read about one way to supply arguments to a subroutine is simply to list them after the \JMP instruction
 passing control to subroutine. Knuth writes this method was particularly convenient on System/360.}}.
-\IFRU{Однако, так традиционно сложилось, что в x86 и ARM передача аргументов происходит именно через стек.}
-{However, it is a convenient custom in x86 and ARM to use the stack for this.} \\
+\RU{Однако, так традиционно сложилось, что в x86 и ARM передача аргументов происходит именно через стек.}
+\EN{However, it is a convenient custom in x86 and ARM to use the stack for this.} \\
 \\
-\IFRU{Кстати, вызываемая ф-ция не имеет информации, сколько аргументов было ей было передано.}
-{By the way, the \gls{callee} function does not have any information about how many arguments were passed.}
-\IFRU{Функции Си с переменным количеством аргументов (как \printf) определяют их количество по 
+\RU{Кстати, вызываемая ф-ция не имеет информации, сколько аргументов было ей было передано.}
+\EN{By the way, the \gls{callee} function does not have any information about how many arguments were passed.}
+\RU{Функции Си с переменным количеством аргументов (как \printf) определяют их количество по 
 спецификатором строки формата (начинающиеся со знака \%).}
-{Functions with a variable number of arguments (like \printf) determine the number by specifiers
+\EN{Functions with a variable number of arguments (like \printf) determine the number by specifiers
 (which begin with a \% sign) in the format string.}
-\IFRU{Если написать что-то вроде}{If we write something like} 
+\RU{Если написать что-то вроде}\EN{If we write something like} 
 
 \begin{lstlisting}
 printf("%d %d %d", 1234);
 \end{lstlisting}
 
-\printf \IFRU{выведет 1234, затем еще два случайных числа, которые волею случая оказались в стеке рядом.}
-{will dump 1234, and then also two random numbers, which were laying near it in the stack, by chance.}
+\printf \RU{выведет 1234, затем еще два случайных числа, которые волею случая оказались в стеке рядом.}
+\EN{will dump 1234, and then also two random numbers, which were laying near it in the stack, by chance.}
 \\
-\IFRU{Вот почему не так уж и важно, как объявлять ф-цию \main}
-{That's why it is not very important how we declare the \main function}: \IFRU{как}{as} \main, 
+\RU{Вот почему не так уж и важно, как объявлять ф-цию \main}
+\EN{That's why it is not very important how we declare the \main function}: \RU{как}\EN{as} \main, 
 \TT{main(int argc, char *argv[])} 
-\IFRU{либо}{or} \TT{main(int argc, char *argv[], char *envp[])}.
+\RU{либо}\EN{or} \TT{main(int argc, char *argv[], char *envp[])}.
 
-\IFRU{В реальности, \ac{CRT}-код вызывает \main примерно так:}
-{In fact, \ac{CRT}-code is calling \main roughly as:}
+\RU{В реальности, \ac{CRT}-код вызывает \main примерно так:}
+\EN{In fact, \ac{CRT}-code is calling \main roughly as:}
 
 \begin{lstlisting}
 push envp
@@ -89,12 +89,12 @@ call main
 ...
 \end{lstlisting}
 
-\IFRU{Если вы объявляете \main как \main без аргументов, они, тем не менее, присутствуют в стеке, но не используются.}
-{If you declare \main as \main without arguments, they are, nevertheless, still present in the stack, but
+\RU{Если вы объявляете \main как \main без аргументов, они, тем не менее, присутствуют в стеке, но не используются.}
+\EN{If you declare \main as \main without arguments, they are, nevertheless, still present in the stack, but
 not used.}
-\IFRU{Если вы объявите \main как}{If you declare \main as} \TT{main(int argc, char *argv[])}, 
-\IFRU{вы будете использовать два аргумента, а третий останется для вашей ф-ции ``невидимым''.}
-{you will use two arguments, and third will remain ``invisible'' for your function.}
-\IFRU{Более того, можно даже объявить}{Even more than that, it is possible to declare} \TT{main(int argc)}, 
-\IFRU{и это будет работать}{and it will work}.
+\RU{Если вы объявите \main как}\EN{If you declare \main as} \TT{main(int argc, char *argv[])}, 
+\RU{вы будете использовать два аргумента, а третий останется для вашей ф-ции ``невидимым''.}
+\EN{you will use two arguments, and third will remain ``invisible'' for your function.}
+\RU{Более того, можно даже объявить}\EN{Even more than that, it is possible to declare} \TT{main(int argc)}, 
+\RU{и это будет работать}\EN{and it will work}.
 

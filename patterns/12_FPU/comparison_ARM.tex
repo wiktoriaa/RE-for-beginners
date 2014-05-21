@@ -12,43 +12,43 @@ BX              LR
 
 \index{ARM!\Registers!APSR}
 \index{ARM!\Registers!FPSCR}
-\IFRU{Очень простой случай.}{A very simple case.}
-\IFRU{Входные величины помещаются в}{Input values are placed into the} \TT{D17} \AndENRU \TT{D16} 
-\IFRU{и сравниваются при помощи инструкции}{registers and then compared with the help of} 
+\RU{Очень простой случай.}\EN{A very simple case.}
+\RU{Входные величины помещаются в}\EN{Input values are placed into the} \TT{D17} \AndENRU \TT{D16} 
+\RU{и сравниваются при помощи инструкции}\EN{registers and then compared with the help of} 
 \TT{VCMPE}\EN{ instruction}.
-\IFRU{Как и в сопроцессорах x86, сопроцессор в ARM имеет свой собственный регистр статуса и флагов}
-{Just like in x86 coprocessor, ARM coprocessor has its own status and flags register}, (\TT{FPSCR}),
-\IFRU{потому как есть необходимость хранить специфичные для его работы флаги.}
-{since there is a need to store coprocessor-specific flags.}
+\RU{Как и в сопроцессорах x86, сопроцессор в ARM имеет свой собственный регистр статуса и флагов}
+\EN{Just like in x86 coprocessor, ARM coprocessor has its own status and flags register}, (\TT{FPSCR}),
+\RU{потому как есть необходимость хранить специфичные для его работы флаги.}
+\EN{since there is a need to store coprocessor-specific flags.}
 
 \index{ARM!\Instructions!VMRS}
-\IFRU{И так же, как и в x86}{And just like in x86}, 
-\IFRU{в ARM нет инструкций условного перехода}
-{there are no conditional jump instruction in ARM}, 
-\IFRU{проверяющих биты в регистре статуса сопроцессора}{checking bits in coprocessor status register}, 
-\IFRU{так что имеется инструкция}{so there is} \TT{VMRS}
-\IFRU{, копирующая 4 бита}{ instruction, copying 4 bits} (N, Z, C, V) 
-\IFRU{из статуса сопроцессора в биты \IT{общего} статуса (регистр \TT{APSR}).}
-{from the coprocessor status word into bits of \IT{general} status (\TT{APSR} register).}
+\RU{И так же, как и в x86}\EN{And just like in x86}, 
+\RU{в ARM нет инструкций условного перехода}
+\EN{there are no conditional jump instruction in ARM}, 
+\RU{проверяющих биты в регистре статуса сопроцессора}\EN{checking bits in coprocessor status register}, 
+\RU{так что имеется инструкция}\EN{so there is} \TT{VMRS}
+\RU{, копирующая 4 бита}\EN{ instruction, copying 4 bits} (N, Z, C, V) 
+\RU{из статуса сопроцессора в биты \IT{общего} статуса (регистр \TT{APSR}).}
+\EN{from the coprocessor status word into bits of \IT{general} status (\TT{APSR} register).}
 
 \index{ARM!\Instructions!VMOVGT}
-\TT{VMOVGT} \IFRU{это аналог}{is analogue of} \TT{MOVGT}, 
-\IFRU{инструкция, сработающая если при сравнении один операнд был больше чем второй}
-{instruction, to be executed if one operand is greater than other while comparing} 
+\TT{VMOVGT} \RU{это аналог}\EN{is analogue of} \TT{MOVGT}, 
+\RU{инструкция, сработающая если при сравнении один операнд был больше чем второй}
+\EN{instruction, to be executed if one operand is greater than other while comparing} 
 (\IT{GT\EMDASH{}Greater Than}). 
 
-\IFRU{Если она сработает}{If it will be executed}, 
-\IFRU{в \TT{D16} запишется значение $b$}{$b$ value will be written into \TT{D16}}, 
-\IFRU{лежащее в тот момент в}{stored at the moment in} \TT{D17}.
+\RU{Если она сработает}\EN{If it will be executed}, 
+\RU{в \TT{D16} запишется значение $b$}\EN{$b$ value will be written into \TT{D16}}, 
+\RU{лежащее в тот момент в}\EN{stored at the moment in} \TT{D17}.
 
-\IFRU{А если не сработает}{And if it will not be triggered}, 
-\IFRU{то в \TT{D16} останется лежать значение $a$.}
-{then $a$ value will stay in the \TT{D16} register.}
+\RU{А если не сработает}\EN{And if it will not be triggered}, 
+\RU{то в \TT{D16} останется лежать значение $a$.}
+\EN{then $a$ value will stay in the \TT{D16} register.}
 
 \index{ARM!\Instructions!VMOV}
-\IFRU{Предпоследняя инструкция \TT{VMOV} подготовит то что было в \TT{D16} для возврата через 
+\RU{Предпоследняя инструкция \TT{VMOV} подготовит то что было в \TT{D16} для возврата через 
 пару регистров \Reg{0} и \Reg{1}.}
-{Penultimate instruction \TT{VMOV} will prepare value in the \TT{D16} register for returning via \Reg{0} and \Reg{1}
+\EN{Penultimate instruction \TT{VMOV} will prepare value in the \TT{D16} register for returning via \Reg{0} and \Reg{1}
 registers pair.}
 
 \subsection{ARM + \OptimizingXcode + \ThumbTwoMode}
@@ -64,47 +64,47 @@ VMOV            R0, R1, D16
 BX              LR
 \end{lstlisting}
 
-\IFRU{Почти то же самое что и в предыдущем примере, за парой отличий.}
-{Almost the same as in previous example, howeverm slightly different.}
-\IFRU{Дело в том, многие инструкции в режиме ARM
+\RU{Почти то же самое что и в предыдущем примере, за парой отличий.}
+\EN{Almost the same as in previous example, howeverm slightly different.}
+\RU{Дело в том, многие инструкции в режиме ARM
 можно дополнять условием, которое если справедливо, то инструкция выполнится.}
-{As a matter of fact, many instructions in ARM mode can be supplied by condition predicate,
+\EN{As a matter of fact, many instructions in ARM mode can be supplied by condition predicate,
 and the instruction is to be executed if condition is true.}
 
-\IFRU{Но в режиме thumb такого нет}
-{But there is no such thing in thumb mode}. 
-\IFRU{В 16-битных инструкций просто нет места для лишних 4 битов, при помощи
+\RU{Но в режиме thumb такого нет}
+\EN{But there is no such thing in thumb mode}. 
+\RU{В 16-битных инструкций просто нет места для лишних 4 битов, при помощи
 которых можно было бы закодировать условие выполнения.}
-{There is no place in 16-bit instructions for spare 4 bits where condition can be encoded.}
+\EN{There is no place in 16-bit instructions for spare 4 bits where condition can be encoded.}
 
 \index{ARM!\ThumbTwoMode}
-\IFRU{Поэтому в thumb-2 добавили возможность дополнять thumb-инструкции условиями.}
-{However, thumb-2 was extended to make possible to specify predicates to old thumb instructions.}
+\RU{Поэтому в thumb-2 добавили возможность дополнять thumb-инструкции условиями.}
+\EN{However, thumb-2 was extended to make possible to specify predicates to old thumb instructions.}
 
-\IFRU{Здесь, в листинге сгенерированном при помощи \IDA, мы видим инструкцию \TT{VMOVGT}, 
+\RU{Здесь, в листинге сгенерированном при помощи \IDA, мы видим инструкцию \TT{VMOVGT}, 
 такую же как и в предыдущем примере.}
-{Here, is the \IDA-generated listing, we see \TT{VMOVGT} instruction, the same as in previous example.}
+\EN{Here, is the \IDA-generated listing, we see \TT{VMOVGT} instruction, the same as in previous example.}
 
-\IFRU{Но в реальности}{But in fact}, 
-\IFRU{там закодирована обычная инструкция \TT{VMOV}}
-{usual \TT{VMOV} is encoded there}, 
-\IFRU{просто \IDA добавила суффикс \TT{-GT} к ней}
-{but \IDA added \TT{-GT} suffix to it}, 
-\IFRU{потому что перед этой инструкцией стоит \TT{``IT GT''}}
-{since there is \TT{``IT GT''} instruction placed right before}.
+\RU{Но в реальности}\EN{But in fact}, 
+\RU{там закодирована обычная инструкция \TT{VMOV}}
+\EN{usual \TT{VMOV} is encoded there}, 
+\RU{просто \IDA добавила суффикс \TT{-GT} к ней}
+\EN{but \IDA added \TT{-GT} suffix to it}, 
+\RU{потому что перед этой инструкцией стоит \TT{``IT GT''}}
+\EN{since there is \TT{``IT GT''} instruction placed right before}.
 
 \index{ARM!\Instructions!IT}
 \index{ARM!if-then block}
-\IFRU{Инструкция }\TT{IT} \IFRU{определяет так называемый}{instruction defines so-called} \IT{if-then block}. 
-\IFRU{После этой инструкции, можно указывать до четырех инструкций, к которым будет добавлен суффикс условия.}
-{After the instruction, it is possible to place up to 4 instructions, to which predicate suffix will be added.}
-\IFRU{В нашем примере}{In our example}, \TT{``IT GT''} \IFRU{означает}{meaning},
-\IFRU{что следующая за ней инструкция будет исполнена}{the next instruction will be executed}, 
-\IFRU{если условие}{if} \IT{GT} (\IT{Greater Than}) \IFRU{справедливо}{condition is true}.
+\RU{Инструкция }\TT{IT} \RU{определяет так называемый}\EN{instruction defines so-called} \IT{if-then block}. 
+\RU{После этой инструкции, можно указывать до четырех инструкций, к которым будет добавлен суффикс условия.}
+\EN{After the instruction, it is possible to place up to 4 instructions, to which predicate suffix will be added.}
+\RU{В нашем примере}\EN{In our example}, \TT{``IT GT''} \RU{означает}\EN{meaning},
+\RU{что следующая за ней инструкция будет исполнена}\EN{the next instruction will be executed}, 
+\RU{если условие}\EN{if} \IT{GT} (\IT{Greater Than}) \RU{справедливо}\EN{condition is true}.
 
 \index{Angry Birds}
-\IFRU{Теперь более сложный пример, кстати, из}{Now more complex code fragment, by the way, from} 
-``Angry Birds'' (\IFRU{для}{for} iOS):
+\RU{Теперь более сложный пример, кстати, из}\EN{Now more complex code fragment, by the way, from} 
+``Angry Birds'' (\RU{для}\EN{for} iOS):
 
 \begin{lstlisting}[caption=Angry Birds Classic]
 ITE NE
@@ -112,18 +112,18 @@ VMOVNE          R2, R3, D16
 VMOVEQ          R2, R3, D17
 \end{lstlisting}
 
-\TT{ITE} \IFRU{означает}{meaning} \IT{if-then-else} 
-\IFRU{и кодирует суффиксы для двух следующих за ней инструкций.}
-{and it encode suffixes for two next instructions.}
-\IFRU{Первая из них исполнится, если условие, закодированное в}
-{First instruction will execute if condition encoded in} \TT{ITE} (\IT{NE, not equal}) 
-\IFRU{будет в тот момент справедливо}{will be true at the moment},
-\IFRU{а вторая ~--- если это условие не сработает}{and the 
+\TT{ITE} \RU{означает}\EN{meaning} \IT{if-then-else} 
+\RU{и кодирует суффиксы для двух следующих за ней инструкций.}
+\EN{and it encode suffixes for two next instructions.}
+\RU{Первая из них исполнится, если условие, закодированное в}
+\EN{First instruction will execute if condition encoded in} \TT{ITE} (\IT{NE, not equal}) 
+\RU{будет в тот момент справедливо}\EN{will be true at the moment},
+\RU{а вторая ~--- если это условие не сработает}\EN{and the 
 second~---if the condition will not be true}.
-(\IFRU{Обратное условие от}{Inverse condition of} \TT{NE} \IFRU{это}{is} \TT{EQ} (\IT{equal})).
+(\RU{Обратное условие от}\EN{Inverse condition of} \TT{NE} \RU{это}\EN{is} \TT{EQ} (\IT{equal})).
 
 \index{Angry Birds}
-\IFRU{Еще чуть сложнее}{Slightly harder}, \IFRU{и снова этот фрагмент из}{and this fragment from} 
+\RU{Еще чуть сложнее}\EN{Slightly harder}, \RU{и снова этот фрагмент из}\EN{and this fragment from} 
 ``Angry Birds''\EN{ as well}:
 
 \begin{lstlisting}[caption=Angry Birds Classic]
@@ -134,17 +134,17 @@ POPEQ.W         {R8,R10}
 POPEQ           {R4-R7,PC}
 \end{lstlisting}
 
-\IFRU{4 символа ``T'' в инструкции означают что 4 следующие инструкции будут исполнены если условие соблюдается.}
-{4 ``T'' symbols in instruction mnemonic means 
+\RU{4 символа ``T'' в инструкции означают что 4 следующие инструкции будут исполнены если условие соблюдается.}
+\EN{4 ``T'' symbols in instruction mnemonic means 
 the 4 next instructions will be executed if condition is true.}
-\IFRU{Поэтому \IDA добавила ко всем четырем инструкциям суффикс}
-{That's why \IDA added} \TT{-EQ}\EN{ suffix
+\RU{Поэтому \IDA добавила ко всем четырем инструкциям суффикс}
+\EN{That's why \IDA added} \TT{-EQ}\EN{ suffix
 to each 4 instructions}. 
 
-\IFRU{А если бы здесь было, например,}{And if there will be e.g.}
+\RU{А если бы здесь было, например,}\EN{And if there will be e.g.}
 \TT{ITEEE EQ} (\IT{if-then-else-else-else}), 
-\IFRU{тогда суффиксы для следующих четырех инструкций были бы расставлены так:}
-{then suffixes will be set as follows:}
+\RU{тогда суффиксы для следующих четырех инструкций были бы расставлены так:}
+\EN{then suffixes will be set as follows:}
 
 \begin{lstlisting}
 -EQ
@@ -154,7 +154,7 @@ to each 4 instructions}.
 \end{lstlisting}
 
 \index{Angry Birds}
-\IFRU{Еще фрагмент из}{Another fragment from} ``Angry Birds'':
+\RU{Еще фрагмент из}\EN{Another fragment from} ``Angry Birds'':
 
 \begin{lstlisting}[caption=Angry Birds Classic]
 CMP.W           R0, #0xFFFFFFFF
@@ -164,27 +164,27 @@ NEGLE           R0, R0
 MOVGT           R10, R0
 \end{lstlisting}
 
-\TT{ITTE} (\IT{if-then-then-else}) \IFRU{означает что первая и вторая инструкции исполнятся}
-{means the 1st and 2nd instructions will be executed}, 
-\IFRU{если условие}{if} \TT{LE} (\IT{Less or Equal}) \IFRU{справедливо}{condition is true},
-\IFRU{а третья}{and 3rd}\EMDASH\IFRU{если справедливо обратное условие}{if inverse condition} 
+\TT{ITTE} (\IT{if-then-then-else}) \RU{означает что первая и вторая инструкции исполнятся}
+\EN{means the 1st and 2nd instructions will be executed}, 
+\RU{если условие}\EN{if} \TT{LE} (\IT{Less or Equal}) \RU{справедливо}\EN{condition is true},
+\RU{а третья}\EN{and 3rd}\EMDASH\RU{если справедливо обратное условие}\EN{if inverse condition} 
 (\TT{GT}\EMDASH\IT{Greater Than})\EN{ is true}.
 
-\IFRU{Компиляторы способны генерировать далеко не все варианты.}
-{Compilers usually are not generating all possible combinations.}
+\RU{Компиляторы способны генерировать далеко не все варианты.}
+\EN{Compilers usually are not generating all possible combinations.}
 \index{Angry Birds}
-\IFRU{Например, в вышеупомянутой игре ``Angry Birds'' (версия \IT{classic} для iOS)}
-{For example, it mentioned ``Angry Birds'' game (\IT{classic} version for iOS)}
-\IFRU{встречаются только такие варианты инструкции \TT{IT}}{only these cases of \TT{IT} instruction are used}: 
+\RU{Например, в вышеупомянутой игре ``Angry Birds'' (версия \IT{classic} для iOS)}
+\EN{For example, it mentioned ``Angry Birds'' game (\IT{classic} version for iOS)}
+\RU{встречаются только такие варианты инструкции \TT{IT}}\EN{only these cases of \TT{IT} instruction are used}: 
 \TT{IT}, \TT{ITE}, \TT{ITT}, \TT{ITTE}, \TT{ITTT}, \TT{ITTTT}.
 \index{\GrepUsage}
-\IFRU{Как я это узнал?}{How I learnt this?}
-\IFRU{В \IDA можно сгенерировать листинг, так я и сделал, только в опциях я установил так 
+\RU{Как я это узнал?}\EN{How I learnt this?}
+\RU{В \IDA можно сгенерировать листинг, так я и сделал, только в опциях я установил так 
 чтобы показывались 4 байта для каждого опкода.}
-{In \IDA it is possible to produce listing files, so I did it, but I also set in options 
+\EN{In \IDA it is possible to produce listing files, so I did it, but I also set in options 
 to show 4 bytes of each opcodes .}
-\IFRU{Затем, зная, что старшая часть 16-битного опкода \TT{IT} это \TT{0xBF}, я сделал при помощи \TT{grep} это:}
-{Then, knowing the high part of 16-bit opcode \TT{IT} is \TT{0xBF},
+\RU{Затем, зная, что старшая часть 16-битного опкода \TT{IT} это \TT{0xBF}, я сделал при помощи \TT{grep} это:}
+\EN{Then, knowing the high part of 16-bit opcode \TT{IT} is \TT{0xBF},
 I did this with \TT{grep}:}
 
 \begin{lstlisting}
@@ -192,10 +192,10 @@ cat AngryBirdsClassic.lst | grep " BF" | grep "IT" > results.lst
 \end{lstlisting}
 
 \index{ARM!\ThumbTwoMode}
-\IFRU{Кстати, если писать на ассемблере для режима thumb-2 вручную, и дополнять инструкции суффиксами
+\RU{Кстати, если писать на ассемблере для режима thumb-2 вручную, и дополнять инструкции суффиксами
 условия, то ассемблер автоматически будет добавлять инструкцию \TT{IT} с соответствующими флагами, там,
 где надо.}
-{By the way, if to program in ARM assembly language manually for thumb-2 mode, 
+\EN{By the way, if to program in ARM assembly language manually for thumb-2 mode, 
 with adding conditional suffixes,
 assembler will add \TT{IT} instructions automatically, with respectable flags, where it is necessary.}
 
@@ -236,10 +236,10 @@ loc_2E10
                 BX              LR
 \end{lstlisting}
 
-\IFRU{Почти то же самое что мы уже видели}{Almost the same we already saw}, 
-\IFRU{но много избыточного кода из-за хранения $a$ и $b$, 
+\RU{Почти то же самое что мы уже видели}\EN{Almost the same we already saw}, 
+\RU{но много избыточного кода из-за хранения $a$ и $b$, 
 а также выходного значения, в локальном стеке.}
-{but too much redundant code because of $a$ and $b$ variables storage in local stack, as well
+\EN{but too much redundant code because of $a$ and $b$ variables storage in local stack, as well
 as returning value.}
 
 \subsection{ARM + \OptimizingKeil + \ThumbMode}
@@ -262,18 +262,18 @@ loc_1C0
                 POP     {R3-R7,PC}
 \end{lstlisting}
 
-\IFRU{Keil не генерирует специальную инструкцию для сравнения чисел с плавающей запятой, потому что не 
+\RU{Keil не генерирует специальную инструкцию для сравнения чисел с плавающей запятой, потому что не 
 рассчитывает на то что она будет поддерживаться, а простым сравнением побитово здесь не обойтись.}
-{Keil not generates special instruction for float numbers comparing since it cannot rely it will
+\EN{Keil not generates special instruction for float numbers comparing since it cannot rely it will
 be supported on the target CPU, and it cannot be done by straightforward bitwise comparing.}
 %TODO: why?
-\IFRU{Для сравнения вызывается библиотечная функция}{So there is called external library
+\RU{Для сравнения вызывается библиотечная функция}\EN{So there is called external library
 function for comparing:} \TT{\_\_aeabi\_cdrcmple}. 
 \index{ARM!\Instructions!BCS}
-N.B. \IFRU{Результат
+N.B. \RU{Результат
 сравнения эта функция оставляет в флагах, чтобы следующая за вызовом инструкция}
-{Comparison result is to be leaved in flags, so the following}
+\EN{Comparison result is to be leaved in flags, so the following}
 \TT{BCS} (\IT{Carry set - Greater than or equal})
-\IFRU{могла работать без дополнительного кода.}{instruction may work without any additional code.}
+\RU{могла работать без дополнительного кода.}\EN{instruction may work without any additional code.}
 
  

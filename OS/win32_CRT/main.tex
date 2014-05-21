@@ -2,25 +2,25 @@
 \label{sec:CRT}
 \index{CRT}
 
-\IFRU{Начинается ли исполнение программы прямо с ф-ции \main{}}
-{Does program execution starts right at the \main{} function}?
-\IFRU{Нет, не начинается}{No, it is not}.
-\IFRU{Если открыть любой исполняемый файл в \IDA или Hiew, то \ac{OEP} указывает на совсем другой код}
-{If to open any executable file in \IDA or HIEW, we will see \ac{OEP} pointing to another code}.
-\IFRU{Это код, который делает некоторые приготовления перед тем как запустить ваш код}
-{This is a code doing some maintenance and preparations before passing control flow to our code}.
-\IFRU{Он называется стартап-код или CRT-код (C RunTime)}{It is called startup-code or CRT-code (C RunTime)}. \\
+\RU{Начинается ли исполнение программы прямо с ф-ции \main{}}
+\EN{Does program execution starts right at the \main{} function}?
+\RU{Нет, не начинается}\EN{No, it is not}.
+\RU{Если открыть любой исполняемый файл в \IDA или Hiew, то \ac{OEP} указывает на совсем другой код}
+\EN{If to open any executable file in \IDA or HIEW, we will see \ac{OEP} pointing to another code}.
+\RU{Это код, который делает некоторые приготовления перед тем как запустить ваш код}
+\EN{This is a code doing some maintenance and preparations before passing control flow to our code}.
+\RU{Он называется стартап-код или CRT-код (C RunTime)}\EN{It is called startup-code or CRT-code (C RunTime)}. \\
 \\
-\IFRU{Ф-ция \main{} принимает на вход массив из параметров, переданных в командной строке, а также
-переменные окружения}{\main{} fucntion takes an array of arguments passed in the command line, and also
+\RU{Ф-ция \main{} принимает на вход массив из параметров, переданных в командной строке, а также
+переменные окружения}\EN{\main{} fucntion takes an array of arguments passed in the command line, and also
 environment variables}.
-\IFRU{Но в реальности в программу передается командная строка в виде простой строки, это именно
-CRT-код находит там пробелы и разрезает строку на части}{But in fact, a generic string is passed to the program,
+\RU{Но в реальности в программу передается командная строка в виде простой строки, это именно
+CRT-код находит там пробелы и разрезает строку на части}\EN{But in fact, a generic string is passed to the program,
 CRT-code will find spaces in it and cut by parts}.
-\IFRU{CRT-код также готовит массив переменных окружения \TT{envp}}{CRT-code is also prepares environment
+\RU{CRT-код также готовит массив переменных окружения \TT{envp}}\EN{CRT-code is also prepares environment
 variables array \TT{envp}}.
-\IFRU{В \ac{GUI}-приложениях win32, вместо \main{} имеется ф-ция \TT{WinMain} со своими аргументами}
-{As of \ac{GUI} win32 applications, \TT{WinMain} is used instead of \main{}, having their own arguments}:
+\RU{В \ac{GUI}-приложениях win32, вместо \main{} имеется ф-ция \TT{WinMain} со своими аргументами}
+\EN{As of \ac{GUI} win32 applications, \TT{WinMain} is used instead of \main{}, having their own arguments}:
 
 \begin{lstlisting}
 int CALLBACK WinMain(
@@ -31,52 +31,52 @@ int CALLBACK WinMain(
 );
 \end{lstlisting}
 
-\IFRU{CRT-код готовит и их}{CRT-code prepares them as well}.
+\RU{CRT-код готовит и их}\EN{CRT-code prepares them as well}.
 
-\IFRU{А также, число, возвращаемое ф-цией \main{}, это код ошибки возвращаемый программой}
-{Also, the number returned by \main{} function is an exit code}.
-\IFRU{В CRT это значение передается в \TT{ExitProcess()}, принимающей в качестве аргумента код ошибки}
-{It may be passed in CRT to the \TT{ExitProcess()} function, taking exit code as argument}. \\
+\RU{А также, число, возвращаемое ф-цией \main{}, это код ошибки возвращаемый программой}
+\EN{Also, the number returned by \main{} function is an exit code}.
+\RU{В CRT это значение передается в \TT{ExitProcess()}, принимающей в качестве аргумента код ошибки}
+\EN{It may be passed in CRT to the \TT{ExitProcess()} function, taking exit code as argument}. \\
 \\
-\IFRU{Как правило, каждый компилятор имеет свой CRT-код}{Usually, each compiler has its own CRT-code}. \\
+\RU{Как правило, каждый компилятор имеет свой CRT-код}\EN{Usually, each compiler has its own CRT-code}. \\
 \\
-\IFRU{Вот типичный для MSVC 2008 CRT-код}{Here is a typical CRT-code for MSVC 2008}.
+\RU{Вот типичный для MSVC 2008 CRT-код}\EN{Here is a typical CRT-code for MSVC 2008}.
 
 \lstinputlisting{OS/win32_CRT/crt_msvc_2008.asm}
 
-\IFRU{Здесь можно увидеть по крайней мере вызов
-ф-ции}{Here we may see calls to} \TT{GetCommandLineA()}, \IFRU{затем}{then to} \TT{setargv()} \AndENRU 
+\RU{Здесь можно увидеть по крайней мере вызов
+ф-ции}\EN{Here we may see calls to} \TT{GetCommandLineA()}, \RU{затем}\EN{then to} \TT{setargv()} \AndENRU 
 \TT{setenvp()},
-\IFRU{которые, видимо, заполняют глобальные переменные-указатели}{which are, apparently, fills global variables}
+\RU{которые, видимо, заполняют глобальные переменные-указатели}\EN{which are, apparently, fills global variables}
 \TT{argc}, \TT{argv}, \TT{envp}.
 
-\IFRU{В итоге, вызывается \main{} с этими аргументами}{Finally, \main{} is called with these arguments}.
+\RU{В итоге, вызывается \main{} с этими аргументами}\EN{Finally, \main{} is called with these arguments}.
 
-\IFRU{Также имеются вызовы ф-ций с говорящими именами вроде}{There are also calls to the functions
+\RU{Также имеются вызовы ф-ций с говорящими именами вроде}\EN{There are also calls to the functions
 having self-describing names like} \TT{heap\_init()}, \TT{ioinit()}.
 
-\IFRU{\glslink{heap}{Куча} действительно инициализируется в \ac{CRT}}
-{\glslink{heap}{Heap} is indeed initialized in \ac{CRT}}: 
-\IFRU{если вы попытаетесь использовать}{if you will try to use} \TT{malloc()}, 
-\IFRU{программа упадет с такой ошибкой}{the program exiting abnormally with the error}:
+\RU{\glslink{heap}{Куча} действительно инициализируется в \ac{CRT}}
+\EN{\glslink{heap}{Heap} is indeed initialized in \ac{CRT}}: 
+\RU{если вы попытаетесь использовать}\EN{if you will try to use} \TT{malloc()}, 
+\RU{программа упадет с такой ошибкой}\EN{the program exiting abnormally with the error}:
 
 \begin{lstlisting}
 runtime error R6030
 - CRT not initialized
 \end{lstlisting}
 
-\IFRU{Инициализация глобальных объектов в Си++ происходит до вызова \main{}, именно в \ac{CRT}}
-{Global objects initializations in C++ is also occurred in the \ac{CRT} before \main{}}: 
+\RU{Инициализация глобальных объектов в Си++ происходит до вызова \main{}, именно в \ac{CRT}}
+\EN{Global objects initializations in C++ is also occurred in the \ac{CRT} before \main{}}: 
 \ref{sec:std_string_as_global_variable}.
 
-\IFRU{Значение, возвращаемое из}{A variable} \main{} \IFRU{передается или в}{returns is passed to} \TT{cexit()}, 
-\IFRU{или же в}{or to} \TT{\$LN32}, \IFRU{которая далее вызывает}{which in turn calling} \TT{doexit()}.
+\RU{Значение, возвращаемое из}\EN{A variable} \main{} \RU{передается или в}\EN{returns is passed to} \TT{cexit()}, 
+\RU{или же в}\EN{or to} \TT{\$LN32}, \RU{которая далее вызывает}\EN{which in turn calling} \TT{doexit()}.
 
-\IFRU{Можно ли обойтись без \ac{CRT}? Можно, если вы знаете что делаете.}{Is it possible to get rid of \ac{CRT}?
+\RU{Можно ли обойтись без \ac{CRT}? Можно, если вы знаете что делаете.}\EN{Is it possible to get rid of \ac{CRT}?
 Yes, if you know what you do.}
 
-\IFRU{В линкере от \ac{MSVC} точка входа задается опцией \TT{/ENTRY}}
-{\ac{MSVC} linker has \TT{/ENTRY} option for setting entry point}.
+\RU{В линкере от \ac{MSVC} точка входа задается опцией \TT{/ENTRY}}
+\EN{\ac{MSVC} linker has \TT{/ENTRY} option for setting entry point}.
 
 \begin{lstlisting}
 #include <windows.h>
@@ -87,43 +87,43 @@ int main()
 };
 \end{lstlisting}
 
-\IFRU{Компилируем в}{Let's compile it in} MSVC 2008.
+\RU{Компилируем в}\EN{Let's compile it in} MSVC 2008.
 
 \begin{lstlisting}
 cl no_crt.c user32.lib /link /entry:main
 \end{lstlisting}
 
-\IFRU{Получаем вполне работающий .exe размером 2560 байт, внутри которого есть только PE-заголовок, инструкции, 
+\RU{Получаем вполне работающий .exe размером 2560 байт, внутри которого есть только PE-заголовок, инструкции, 
 вызывающие \TT{MessageBox},
 две строки в сегменте данных, импортируемая из \TT{user32.dll} ф-ция \TT{MessageBox}, и более ничего}
-{We will get a runnable .exe with size 2560 bytes, there are PE-header inside, instructions calling
+\EN{We will get a runnable .exe with size 2560 bytes, there are PE-header inside, instructions calling
 \TT{MessageBox}, two strings in the data segment,
 \TT{MessageBox} function imported from \TT{user32.dll} and nothing else}.
 
-\IFRU{Это работает, но вы уже не сможете вместо \main{} написать \TT{WinMain} с его четырьмя аргументами}
-{This works, but you will not be able to write \TT{WinMain} with its 4 arguments instead of \main{}}.
-\IFRU{Вернее, написать-то сможете, но доступа к этим аргументам не будет, 
-потому что они не будут подготовлены на момент исполнения}{To be correct, you will be able to write so,
+\RU{Это работает, но вы уже не сможете вместо \main{} написать \TT{WinMain} с его четырьмя аргументами}
+\EN{This works, but you will not be able to write \TT{WinMain} with its 4 arguments instead of \main{}}.
+\RU{Вернее, написать-то сможете, но доступа к этим аргументам не будет, 
+потому что они не будут подготовлены на момент исполнения}\EN{To be correct, you will be able to write so,
 but arguments will not be prepared at the moment of execution}.
 
-\IFRU{Кстати, можно еще короче сделать .exe если уменьшить 
-выравнивание \ac{PE}-секций (которое, по умолчанию, 4096 байт)}{By the way, it is possible to make .exe even
+\RU{Кстати, можно еще короче сделать .exe если уменьшить 
+выравнивание \ac{PE}-секций (которое, по умолчанию, 4096 байт)}\EN{By the way, it is possible to make .exe even
 shorter by doing \ac{PE}-section aligning less than default 4096 bytes}.
 
 \begin{lstlisting}
 cl no_crt.c user32.lib /link /entry:main /align:16
 \end{lstlisting}
 
-\IFRU{Линкер скажет}{Linker will say}:
+\RU{Линкер скажет}\EN{Linker will say}:
 
 \begin{lstlisting}
 LINK : warning LNK4108: /ALIGN specified without /DRIVER; image may not run
 \end{lstlisting}
 
-\IFRU{Получим .exe размером 720 байт}{We getting .exe of 720 bytes size}.
-\IFRU{Он запускается в}{It running in} Windows 7 x86, \IFRU{но не}{but not in} x64 
-(\IFRU{там выдает ошибку при загрузке}{the error message will be showed when trying to execute}).
-\IFRU{При желании, размер можно еще сильнее ужать, но, как видно, 
-возникают проблемы с совместимостью с разными версиями Windows}{By applying even more efforts, it is possible
+\RU{Получим .exe размером 720 байт}\EN{We getting .exe of 720 bytes size}.
+\RU{Он запускается в}\EN{It running in} Windows 7 x86, \RU{но не}\EN{but not in} x64 
+(\RU{там выдает ошибку при загрузке}\EN{the error message will be showed when trying to execute}).
+\RU{При желании, размер можно еще сильнее ужать, но, как видно, 
+возникают проблемы с совместимостью с разными версиями Windows}\EN{By applying even more efforts, it is possible
 to make executable even shorter, but as you can see, compatibility problems may arise quickly}.
 

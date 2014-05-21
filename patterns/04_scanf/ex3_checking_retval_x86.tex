@@ -1,88 +1,84 @@
 \subsection{MSVC: x86}
 
-\IFRU{Вот, что выходит на ассемблере}{What we got in assembly language} (MSVC 2010):
+\RU{Вот, что выходит на ассемблере}\EN{What we got in assembly language} (MSVC 2010):
 
 \lstinputlisting{patterns/04_scanf/ex3_MSVC_x86.asm}
 
 \index{x86!\Registers!EAX}
-\IFRU{Для того чтобы вызывающая функция имела доступ к результату вызываемой функции, 
+\RU{Для того чтобы вызывающая функция имела доступ к результату вызываемой функции, 
 вызываемая функция (в нашем случае \scanf) оставляет это значение в регистре \EAX.}
-{\Gls{caller} function (\main) must have access to the result of \gls{callee} function (\scanf), 
+\EN{\Gls{caller} function (\main) must have access to the result of \gls{callee} function (\scanf), 
 so \gls{callee} leaves this value in the \EAX register.}
 
 \index{x86!\Instructions!CMP}
-\IFRU{Мы проверяем его инструкцией \TT{CMP EAX, 1} (\IT{CoMPare}), то есть, 
+\RU{Мы проверяем его инструкцией \TT{CMP EAX, 1} (\IT{CoMPare}), то есть, 
 сравниваем значение в \EAX с 1.}
-{After, we check it with the help of instruction \TT{CMP EAX, 1} (\IT{CoMPare}),
+\EN{After, we check it with the help of instruction \TT{CMP EAX, 1} (\IT{CoMPare}),
 in other words, we compare value in the \EAX register with $1$.} 
 
 \index{x86!\Instructions!JNE}
-\IFRU{Следующий за инструкцией \CMP: условный переход \JNE. 
+\RU{Следующий за инструкцией \CMP: условный переход \JNE. 
 Это означает \IT{Jump if Not Equal}, то есть, условный переход \IT{если не равно}.}
-{\JNE conditional jump follows \CMP instruction. \JNE means \IT{Jump if Not Equal}.}
+\EN{\JNE conditional jump follows \CMP instruction. \JNE means \IT{Jump if Not Equal}.}
 
-\IFRU{Итак, если \EAX не равен 1, то \JNE заставит перейти процессор 
+\RU{Итак, если \EAX не равен 1, то \JNE заставит перейти процессор 
 по адресу указанном в операнде \JNE, у нас это \TT{\$LN2@main}.}
-{So, if value in the \EAX register not equals to $1$, then the processor will pass execution to the 
+\EN{So, if value in the \EAX register not equals to $1$, then the processor will pass execution to the 
 address mentioned in operand of \JNE, in our case it is \TT{\$LN2@main}.}
-\IFRU
-{Передав управление по этому адресу, \ac{CPU} как раз начнет исполнять вызов \printf с 
+\RU{Передав управление по этому адресу, \ac{CPU} как раз начнет исполнять вызов \printf с 
 аргументом \TT{``What you entered? Huh?''}.}
-{Passing control to this address, \ac{CPU} will execute function \printf 
+\EN{Passing control to this address, \ac{CPU} will execute function \printf 
 with argument \TT{``What you entered? Huh?''}.}
-\IFRU
-{Но если все нормально, перехода не случится, и исполнится другой \printf с двумя аргументами: 
+\RU{Но если все нормально, перехода не случится, и исполнится другой \printf с двумя аргументами: 
 \TT{'You entered \%d...'} и значением переменной \TT{x}.}
-{But if everything is fine, conditional jump will not be taken, and another \printf call 
+\EN{But if everything is fine, conditional jump will not be taken, and another \printf call 
 will be executed, with two arguments: \TT{'You entered \%d...'} and value of variable \TT{x}. }
 
 \index{x86!\Instructions!XOR}
 \index{\CLanguageElements!return}
-\IFRU {А для того чтобы после этого вызова не исполнился сразу второй вызов \printf, 
+\RU{А для того чтобы после этого вызова не исполнился сразу второй вызов \printf, 
 после него имеется инструкция \JMP, безусловный переход, он отправит процессор на место аккурат 
 после второго \printf и перед инструкцией \TT{XOR EAX, EAX}, которая собственно \TT{return 0}.}
-{Since second subsequent \printf not needed to be executed, there is \JMP after (unconditional jump),
+\EN{Since second subsequent \printf not needed to be executed, there is \JMP after (unconditional jump),
 it will pass control to the point after second \printf and before \TT{XOR EAX, EAX} instruction, 
 which implement \TT{return 0}.}
 
 \index{x86!\Registers!\Flags}
-\IFRU{Итак, можно сказать, что в подавляющих случаях сравнение какой-либо переменной с чем-то другим 
+\RU{Итак, можно сказать, что в подавляющих случаях сравнение какой-либо переменной с чем-то другим 
 происходит при помощи пары инструкций \CMP и \Jcc, где \IT{cc} это \IT{condition code}.}
-{So, it can be said that comparing a value with another is \IT{usually} implemented
+\EN{So, it can be said that comparing a value with another is \IT{usually} implemented
 by \CMP/\Jcc instructions pair, where \IT{cc} is \IT{condition code}.}
-\IFRU{\CMP сравнивает два значения и выставляет 
+\RU{\CMP сравнивает два значения и выставляет 
 флаги процессора\footnote{См. также о флагах x86-процессора: \url{http://en.wikipedia.org/wiki/FLAGS_register_(computing)}.}.}
-{\CMP comparing two values and set 
+\EN{\CMP comparing two values and set 
 processor flags\footnote{About x86 flags, see also: \url{http://en.wikipedia.org/wiki/FLAGS_register_(computing)}.}.}
-\IFRU
-{\Jcc проверяет нужные ему флаги и выполняет переход по указанному адресу (или не выполняет).}
-{\Jcc check flags needed to be checked and pass control to mentioned address (or not pass).}
+\RU{\Jcc проверяет нужные ему флаги и выполняет переход по указанному адресу (или не выполняет).}
+\EN{\Jcc check flags needed to be checked and pass control to mentioned address (or not pass).}
 
 \index{x86!\Instructions!CMP}
 \index{x86!\Instructions!SUB}
 \label{CMPandSUB}
-\IFRU{Но на самом деле, как это не парадоксально поначалу звучит, \CMP это почти то же самое что и 
+\RU{Но на самом деле, как это не парадоксально поначалу звучит, \CMP это почти то же самое что и 
 инструкция \SUB, которая отнимает числа одно от другого.}
-{But in fact, this could be perceived paradoxical, but \CMP instruction is in fact \SUB (subtract).}
-\IFRU{Все арифметические инструкции также выставляют флаги в соответствии с результатом, не только \CMP.}
-{All arithmetic instructions set processor flags too, not only \CMP.}
-\IFRU{Если мы сравним 1 и 1, от единицы отнимется единица, получится $0$, и выставится флаг 
+\EN{But in fact, this could be perceived paradoxical, but \CMP instruction is in fact \SUB (subtract).}
+\RU{Все арифметические инструкции также выставляют флаги в соответствии с результатом, не только \CMP.}
+\EN{All arithmetic instructions set processor flags too, not only \CMP.}
+\RU{Если мы сравним 1 и 1, от единицы отнимется единица, получится $0$, и выставится флаг 
 \ZF (\IT{zero flag}), означающий что последний полученный результат был $0$.}
-{If we compare 1 and 1, $1-1$ will be $0$ in result, \ZF flag will be set (meaning the last result was $0$).}
-\IFRU{Ни при каких других значениях \EAX, флаг \ZF выставлен не будет, кроме тех, когда операнды равны друг другу.}
-{There is no any other circumstances when it is possible except when operands are equal.}
+\EN{If we compare 1 and 1, $1-1$ will be $0$ in result, \ZF flag will be set (meaning the last result was $0$).}
+\RU{Ни при каких других значениях \EAX, флаг \ZF выставлен не будет, кроме тех, когда операнды равны друг другу.}
+\EN{There is no any other circumstances when it is possible except when operands are equal.}
 \index{x86!\Instructions!JNE}
 \index{x86!\Registers!ZF}
-\IFRU{Инструкция \JNE проверяет только флаг \ZF, и совершает переход только если флаг не поднят. 
+\RU{Инструкция \JNE проверяет только флаг \ZF, и совершает переход только если флаг не поднят. 
 Фактически, \JNE это синоним инструкции \JNZ (\IT{Jump if Not Zero}).}
-{\JNE checks only \ZF flag and jumping only if it is not set. 
+\EN{\JNE checks only \ZF flag and jumping only if it is not set. 
 \JNE is in fact a synonym of \JNZ (\IT{Jump if Not Zero}) instruction.}
-\IFRU{Ассемблер транслирует обе инструкции в один и тот же опкод.}
-{Assembler translating both \JNE and \JNZ instructions into one single opcode.}
-\IFRU
-{Таким образом, можно \CMP заменить на \SUB и все будет работать также, но разница в том, что \SUB 
+\RU{Ассемблер транслирует обе инструкции в один и тот же опкод.}
+\EN{Assembler translating both \JNE and \JNZ instructions into one single opcode.}
+\RU{Таким образом, можно \CMP заменить на \SUB и все будет работать также, но разница в том, что \SUB 
 все-таки испортит значение в первом операнде. \CMP это \IT{SUB без сохранения результата}.}
-{So, \CMP instruction can be replaced to \SUB instruction and almost everything will be fine,
+\EN{So, \CMP instruction can be replaced to \SUB instruction and almost everything will be fine,
 but the difference is in 
 the \SUB alter the value of the first operand.
 \CMP is \IT{``SUB without saving result''}.}
@@ -90,172 +86,172 @@ the \SUB alter the value of the first operand.
 \subsection{MSVC: x86: IDA}
 
 \index{IDA}
-\IFRU{Наверное, уже пора делать первые попытки анализа кода в \IDA}
-{It's time to run \IDA and try to do something in it}.
-\IFRU{Кстати, для начинающих, полезно компилировать в MSVC с ключом \TT{/MD}, что означает что все эти стандартные
+\RU{Наверное, уже пора делать первые попытки анализа кода в \IDA}
+\EN{It's time to run \IDA and try to do something in it}.
+\RU{Кстати, для начинающих, полезно компилировать в MSVC с ключом \TT{/MD}, что означает что все эти стандартные
 ф-ции не будут скомпонованы с исполняемым файлу, а будут импортироваться из файла \TT{MSVCR*.DLL}}
-{By the way, it is good idea to use \TT{/MD} option in MSVC for beginners: this mean that all these
+\EN{By the way, it is good idea to use \TT{/MD} option in MSVC for beginners: this mean that all these
 standard functions will not be linked with executable file, but will be imported from the \TT{MSVCR*.DLL}
 file instead}.
-\IFRU{Так будет легче увидеть, где какая стандартная ф-ция используется}{Thus it will be easier to see
+\RU{Так будет легче увидеть, где какая стандартная ф-ция используется}\EN{Thus it will be easier to see
 which standard function used and where}.
 
-\IFRU{Анализируя код в \IDA, очень полезно делать пометки для себя (и других)}
-{While analysing code in \IDA, it is very advisable to do notes for oneself (and others)}.
-\IFRU{Например, разбирая этот пример, мы сразу видим что \TT{JNZ} срабатывает в случае ошибки}
-{For example, analysing this example, we see that \TT{JNZ} will be triggered in case of error}.
-\IFRU{Можно навести курсор на эту метку, нажать ``n'' и переименовать метку в ``error''}
-{So it's possible to move cursor to the label, press ``n'' and rename it to ``error''}.
-\IFRU{Еще одну метку}{Another label}\EMDASH{}\IFRU{в}{into} ``exit''.
-\IFRU{Вот как у меня получилось в итоге}{What I've got}:
+\RU{Анализируя код в \IDA, очень полезно делать пометки для себя (и других)}
+\EN{While analysing code in \IDA, it is very advisable to do notes for oneself (and others)}.
+\RU{Например, разбирая этот пример, мы сразу видим что \TT{JNZ} срабатывает в случае ошибки}
+\EN{For example, analysing this example, we see that \TT{JNZ} will be triggered in case of error}.
+\RU{Можно навести курсор на эту метку, нажать ``n'' и переименовать метку в ``error''}
+\EN{So it's possible to move cursor to the label, press ``n'' and rename it to ``error''}.
+\RU{Еще одну метку}\EN{Another label}\EMDASH{}\RU{в}\EN{into} ``exit''.
+\RU{Вот как у меня получилось в итоге}\EN{What I've got}:
 
 \lstinputlisting{patterns/04_scanf/ex3.lst}
 
-\IFRU{Так понимать код становится чуть легче}{Now it's slightly easier to understand the code}.
-\IFRU{Впрочем, меру нужно знать во всем и комментировать каждую инструкцию не стоит}
-{However, it's not good idea to comment every instruction excessively}.
+\RU{Так понимать код становится чуть легче}\EN{Now it's slightly easier to understand the code}.
+\RU{Впрочем, меру нужно знать во всем и комментировать каждую инструкцию не стоит}
+\EN{However, it's not good idea to comment every instruction excessively}.
 
-\IFRU{В \IDA также можно скрывать части ф-ций: нужно отметить часть, нажать ``-'' на цифровой клавиатуре и ввести
-текст}{A part of function can also be hidden in \IDA: a block should be marked, then ``-'' on numerical pad
+\RU{В \IDA также можно скрывать части ф-ций: нужно отметить часть, нажать ``-'' на цифровой клавиатуре и ввести
+текст}\EN{A part of function can also be hidden in \IDA: a block should be marked, then ``-'' on numerical pad
 is pressed and text to be entered}.
 
-\IFRU{Я скрыл две части и придумал им названия}{I've hide two parts and gave names to them}:
+\RU{Я скрыл две части и придумал им названия}\EN{I've hide two parts and gave names to them}:
 
 \lstinputlisting{patterns/04_scanf/ex3_2.lst}
 
-\IFRU{Раскрывать скрытые части ф-ций можно при помощи ``+'' на цифровой клавиатуре}
-{To unhide these parts, ``+'' on numerical pad can be used}.
+\RU{Раскрывать скрытые части ф-ций можно при помощи ``+'' на цифровой клавиатуре}
+\EN{To unhide these parts, ``+'' on numerical pad can be used}.
 
-\IFRU{Нажав ``пробел'', мы увидим как \IDA может представить ф-цию в виде графа}{By pressing ``space'',
+\RU{Нажав ``пробел'', мы увидим как \IDA может представить ф-цию в виде графа}\EN{By pressing ``space'',
 we can see how \IDA can represent a function as a graph}: \figname{} \ref{fig:ex3_IDA_1}.
-\IFRU{После каждого условного перехода видны две стрелки: зеленая и красная}{There are two arrows
+\RU{После каждого условного перехода видны две стрелки: зеленая и красная}\EN{There are two arrows
 after each conditional jump: green and red}.
-\IFRU{Зеленая ведет к тому блоку, который исполнится если переход сработал, а красная --- если не сработал}
-{Green arrow pointing to the block which will be executed if jump is triggered, and red if otherwise}.
+\RU{Зеленая ведет к тому блоку, который исполнится если переход сработал, а красная --- если не сработал}
+\EN{Green arrow pointing to the block which will be executed if jump is triggered, and red if otherwise}.
 
-\IFRU{В этом режиме также можно сворачивать узлы и давать им названия}
-{It is possible to fold nodes is this mode and give them names as well} (``group nodes'').
-\IFRU{Я сделал это для трех блоков}{I did it for 3 blocks}: \figname{} \ref{fig:ex3_IDA_2}.
+\RU{В этом режиме также можно сворачивать узлы и давать им названия}
+\EN{It is possible to fold nodes is this mode and give them names as well} (``group nodes'').
+\RU{Я сделал это для трех блоков}\EN{I did it for 3 blocks}: \figname{} \ref{fig:ex3_IDA_2}.
 
-\IFRU{Всё это очень полезно делать}{It's very useful}.
-\IFRU{Вообще, очень важная часть работы реверсера состоит в том, чтобы уменьшать количество имеющейся информации}
-{It can be said, a very important part of reverse engineer's job is to reduce information he/she have}.
+\RU{Всё это очень полезно делать}\EN{It's very useful}.
+\RU{Вообще, очень важная часть работы реверсера состоит в том, чтобы уменьшать количество имеющейся информации}
+\EN{It can be said, a very important part of reverse engineer's job is to reduce information he/she have}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_IDA.png}
-\caption{\IFRU{Отображение в IDA в виде графа}{Graph mode in IDA}}
+\caption{\RU{Отображение в IDA в виде графа}\EN{Graph mode in IDA}}
 \label{fig:ex3_IDA_1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_2_IDA.png}
-\caption{\IFRU{Отображение в IDA в виде графа с тремя свернутыми блоками}{Graph mode in IDA with 3 nodes folded}}
+\caption{\RU{Отображение в IDA в виде графа с тремя свернутыми блоками}\EN{Graph mode in IDA with 3 nodes folded}}
 \label{fig:ex3_IDA_2}
 \end{figure}
 
 \subsection{MSVC: x86 + \olly}
 
-\IFRU{Попробуем в \olly немного хакнуть программу, и сделать вид что \scanf срабатывает всегда без ошибок}
-{Let's try to hack our program in \olly, forcing it to think \scanf working always without error}.
+\RU{Попробуем в \olly немного хакнуть программу, и сделать вид что \scanf срабатывает всегда без ошибок}
+\EN{Let's try to hack our program in \olly, forcing it to think \scanf working always without error}.
 
-\IFRU{Когда в \scanf передается адрес локальной перемейнной, изначальное, в данном случае, 
+\RU{Когда в \scanf передается адрес локальной перемейнной, изначальное, в данном случае, 
 у нас в этой переменной
-находится некий мусор, а это}{When address of local variable is passed into \scanf,
+находится некий мусор, а это}\EN{When address of local variable is passed into \scanf,
 initially this variable contain some random garbage, that is} \TT{0x4CD478}\EN{ in case}:
 \figname \ref{fig:scanf_ex3_olly_1}.
 
-\IFRU{Когда}{When} \scanf \IFRU{запускается, я ввожу в консоли что-то непохожее на число, например}
-{is executing, I enter in the console something definitely not a number, like} ``asdasd''.
-\scanf \IFRU{заканчивается с 0 в}{finishing with 0 in} \EAX, \IFRU{что означает, что произошла ошибка}
-{which mean, an error occurred}: \figname \ref{fig:scanf_ex3_olly_2}.
+\RU{Когда}\EN{When} \scanf \RU{запускается, я ввожу в консоли что-то непохожее на число, например}
+\EN{is executing, I enter in the console something definitely not a number, like} ``asdasd''.
+\scanf \RU{заканчивается с 0 в}\EN{finishing with 0 in} \EAX, \RU{что означает, что произошла ошибка}
+\EN{which mean, an error occurred}: \figname \ref{fig:scanf_ex3_olly_2}.
 
-\IFRU{Вместе с этим, мы можем посмотреть на локальную переменную в стеке, она не изменилась}
-{We can also see to the local variable in the stack and notice that it's not changed}.
-\IFRU{Действительно, ведь что туда записала бы ф-ция \scanf}{Indeed, what \scanf would write there}?
-\IFRU{Она просто ничего не делала кроме возвращения нуля}{It just did nothing except returning zero}.
+\RU{Вместе с этим, мы можем посмотреть на локальную переменную в стеке, она не изменилась}
+\EN{We can also see to the local variable in the stack and notice that it's not changed}.
+\RU{Действительно, ведь что туда записала бы ф-ция \scanf}\EN{Indeed, what \scanf would write there}?
+\RU{Она просто ничего не делала кроме возвращения нуля}\EN{It just did nothing except returning zero}.
 
-\IFRU{Теперь попробуем немного ``хакнуть'' нашу программу}{Now let's try to ``hack'' our program}.
-\IFRU{Кликнем правой кнопкой на}{Let's right-click on} \EAX, \IFRU{там, в числе опций, будет также}
-{there will also be} ``Set to 1''\EN{ among other options}.
-\IFRU{Это то что нам нужно}{This is what we need}.
+\RU{Теперь попробуем немного ``хакнуть'' нашу программу}\EN{Now let's try to ``hack'' our program}.
+\RU{Кликнем правой кнопкой на}\EN{Let's right-click on} \EAX, \RU{там, в числе опций, будет также}
+\EN{there will also be} ``Set to 1''\EN{ among other options}.
+\RU{Это то что нам нужно}\EN{This is what we need}.
 
-\IFRU{В \EAX теперь 1, последующая проверка пройдет как надо, и \printf выведет значение переменной
-из стека}{1 now in \EAX, so the following check will executed as we need, and \printf will print
+\RU{В \EAX теперь 1, последующая проверка пройдет как надо, и \printf выведет значение переменной
+из стека}\EN{1 now in \EAX, so the following check will executed as we need, and \printf will print
 value of variable in the stack}.
 
-\IFRU{Запускаем}{Let's run} (F9) \IFRU{и видим в консоли следующее}{and we will see this in 
+\RU{Запускаем}\EN{Let's run} (F9) \RU{и видим в консоли следующее}\EN{and we will see this in 
 console window}:
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_olly_3.png}
-\caption{\IFRU{консоль}{console window}}
+\caption{\RU{консоль}\EN{console window}}
 \end{figure}
 
-\IFRU{Действительно}{Indeed}, $5035128$ \IFRU{это десятичное представление числа в стеке}
-{is a decimal representation of the number in stack} (\TT{0x4CD478})!
+\RU{Действительно}\EN{Indeed}, $5035128$ \RU{это десятичное представление числа в стеке}
+\EN{is a decimal representation of the number in stack} (\TT{0x4CD478})!
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_olly_1.png}
-\caption{\olly: \IFRU{передача адреса переменной в}{passing variable address into} \scanf}
+\caption{\olly: \RU{передача адреса переменной в}\EN{passing variable address into} \scanf}
 \label{fig:scanf_ex3_olly_1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_olly_2.png}
-\caption{\olly: \scanf \IFRU{закончился с ошибкой}{returning error}}
+\caption{\olly: \scanf \RU{закончился с ошибкой}\EN{returning error}}
 \label{fig:scanf_ex3_olly_2}
 \end{figure}
 
 \subsection{MSVC: x86 + Hiew}
 \index{Hiew}
 
-\IFRU{Это еще и может быть простым примером патчинга исполняемого файла}{This can be 
+\RU{Это еще и может быть простым примером патчинга исполняемого файла}\EN{This can be 
 also a simple example of executable file patching}.
-\IFRU{Мы можем попробовать пропатчить его таким образом, что программа всегда будет выводить числа,
-вне зависимости от того, что мы вводим}{We may try to patch executable, so the program will always 
+\RU{Мы можем попробовать пропатчить его таким образом, что программа всегда будет выводить числа,
+вне зависимости от того, что мы вводим}\EN{We may try to patch executable, so the program will always 
 print numbers, no matter what we entered}.
 
-\IFRU{Учитывая, что исполняемый файл скомпилирован с учетом импортирования ф-ций из}{Assuming the 
-executable compiled against external} \TT{MSVCR*.DLL} (\IFRU{т.е., с опцией}{i.e., with} 
-\TT{/MD}\EN{ option})\footnote{\IFRU{то, что еще называют}{that's what also called} ``dynamic linking''}, 
-\IFRU{мы можем отыскать ф-цию}{we may find} \main \IFRU{в самом начале секции}{function at the 
+\RU{Учитывая, что исполняемый файл скомпилирован с учетом импортирования ф-ций из}\EN{Assuming the 
+executable compiled against external} \TT{MSVCR*.DLL} (\RU{т.е., с опцией}\EN{i.e., with} 
+\TT{/MD}\EN{ option})\footnote{\RU{то, что еще называют}\EN{that's what also called} ``dynamic linking''}, 
+\RU{мы можем отыскать ф-цию}\EN{we may find} \main \RU{в самом начале секции}\EN{function at the 
 very beginning of} \TT{.text}\EN{ section}.
-\IFRU{Откроем исполняемый файл в Hiew, найдем самое начало секции}{Let's open executable in Hiew, 
+\RU{Откроем исполняемый файл в Hiew, найдем самое начало секции}\EN{Let's open executable in Hiew, 
 find the very beginning of} \TT{.text}\EN{ section} (Enter, F8, F6, Enter, Enter).
 
-\IFRU{Мы увидим следующее}{We will see this}: \figname \ref{fig:scanf_ex3_hiew_1}.
+\RU{Мы увидим следующее}\EN{We will see this}: \figname \ref{fig:scanf_ex3_hiew_1}.
 
-Hiew \IFRU{находит}{finds} \ac{ASCIIZ}\IFRU{-строки и показывает их, также как и имена импортируемых 
-ф-ций}{ strings and displays them, as well as imported function names}.
+Hiew \RU{находит}\EN{finds} \ac{ASCIIZ}\RU{-строки и показывает их, также как и имена импортируемых 
+ф-ций}\EN{ strings and displays them, as well as imported function names}.
 
-\IFRU{Переведите курсор на адрес}{Move cursor to the address} \TT{.00401027} 
-(\IFRU{с инструкцией}{with the} \TT{JNZ}\IFRU{, которую мы хотим заблокировать}{ instruction we 
-should bypass}), \IFRU{нажмите}{press} F3,
-\IFRU{затем наберите}{and then type} ``9090'' (\IFRU{что означает}{meaning two} \ac{NOP}-\IFRU{а}{s}): 
+\RU{Переведите курсор на адрес}\EN{Move cursor to the address} \TT{.00401027} 
+(\RU{с инструкцией}\EN{with the} \TT{JNZ}\RU{, которую мы хотим заблокировать}\EN{ instruction we 
+should bypass}), \RU{нажмите}\EN{press} F3,
+\RU{затем наберите}\EN{and then type} ``9090'' (\RU{что означает}\EN{meaning two} \ac{NOP}-\RU{а}\EN{s}): 
 \figname \ref{fig:scanf_ex3_hiew_2}.
 
-\IFRU{Затем}{Then} F9 (update). \IFRU{Теперь исполняемый файл записан на диск. Он будет вести себя
-так, как нам надо.}{Now the executable saved to disk. It will behave as we wanted.}
+\RU{Затем}\EN{Then} F9 (update). \RU{Теперь исполняемый файл записан на диск. Он будет вести себя
+так, как нам надо.}\EN{Now the executable saved to disk. It will behave as we wanted.}
 
-\IFRU{Два}{Two} \ac{NOP}-\IFRU{а}{s} \IFRU{возможно, не так эстетично, как могло бы быть}{are probably 
+\RU{Два}\EN{Two} \ac{NOP}-\RU{а}\EN{s} \RU{возможно, не так эстетично, как могло бы быть}\EN{are probably 
 not quite \ae{}sthetically as it could be}.
-\IFRU{Другой способ пропатчить инструкцию, это записать 0 во второй байт опкода (смещение перехода),
-так что}{Other way to patch this instruction is to write just 0 to the second opcode byte (\gls{jump offset}), 
-so that} \TT{JNZ} \IFRU{всегда будет переходить на следующую инструкцию}{will always jump to 
+\RU{Другой способ пропатчить инструкцию, это записать 0 во второй байт опкода (смещение перехода),
+так что}\EN{Other way to patch this instruction is to write just 0 to the second opcode byte (\gls{jump offset}), 
+so that} \TT{JNZ} \RU{всегда будет переходить на следующую инструкцию}\EN{will always jump to 
 the next instruction}.
 
-\IFRU{Можно пропатчить и наоборот: первый байт заменить на \TT{EB}, второй байт (смещение перехода) 
+\RU{Можно пропатчить и наоборот: первый байт заменить на \TT{EB}, второй байт (смещение перехода) 
 не трогать}
-{We can do the opposite: replace first byte to \TT{EB} while not touching the second byte (\gls{jump offset})}.
-\IFRU{Получится всегда срабатывающий безусловный переход}{We'll got here always triggered unconditional
+\EN{We can do the opposite: replace first byte to \TT{EB} while not touching the second byte (\gls{jump offset})}.
+\RU{Получится всегда срабатывающий безусловный переход}\EN{We'll got here always triggered unconditional
 jump}.
-\IFRU{Теперь сообщение об ошибке будет выдаваться всегда, даже если мы ввели число}
-{The error message will be printed always, no matter what number was entered}.
+\RU{Теперь сообщение об ошибке будет выдаваться всегда, даже если мы ввели число}
+\EN{The error message will be printed always, no matter what number was entered}.
 
 \begin{figure}[H]
 \centering
@@ -267,12 +263,12 @@ jump}.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_hiew_2.png}
-\caption{Hiew: \IFRU{замена}{replacing} \TT{JNZ} \IFRU{на два}{by two} \ac{NOP}-\IFRU{а}{s}}
+\caption{Hiew: \RU{замена}\EN{replacing} \TT{JNZ} \RU{на два}\EN{by two} \ac{NOP}-\RU{а}\EN{s}}
 \label{fig:scanf_ex3_hiew_2}
 \end{figure}
 
 \subsection{GCC: x86}
 
-\IFRU{Код созданный при помощи GCC 4.4.1 в Linux практически такой же, если не считать мелких отличий, 
+\RU{Код созданный при помощи GCC 4.4.1 в Linux практически такой же, если не считать мелких отличий, 
 которые мы уже рассмотрели раннее.}
-{Code generated by GCC 4.4.1 in Linux is almost the same, except differences we already considered.}
+\EN{Code generated by GCC 4.4.1 in Linux is almost the same, except differences we already considered.}

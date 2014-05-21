@@ -1,15 +1,15 @@
-\subsection{\IFRU{Множественное наследование}{Multiple inheritance}}
+\subsection{\RU{Множественное наследование}\EN{Multiple inheritance}}
 
-\IFRU{Множественное наследование ~--- это создание класса наследующего поля и методы от двух или более классов.}
-{Multiple inheritance is a class creation which inherits fields and methods from two or more classes.}
+\RU{Множественное наследование ~--- это создание класса наследующего поля и методы от двух или более классов.}
+\EN{Multiple inheritance is a class creation which inherits fields and methods from two or more classes.}
 
-\IFRU{Снова напишем простой пример:}{Let's write simple example again:}
+\RU{Снова напишем простой пример:}\EN{Let's write simple example again:}
 
 \lstinputlisting{patterns/cpp/classes/classes3_multiple.cpp}
 
-\IFRU{Снова скомпилируем в MSVC 2008 с опциями \Ox и \Obzero и посмотрим код методов \TT{box::dump()}, 
+\RU{Снова скомпилируем в MSVC 2008 с опциями \Ox и \Obzero и посмотрим код методов \TT{box::dump()}, 
 \TT{solid\_object::dump()}, \TT{solid\_box::dump()}:}
-{Let's compile it in MSVC 2008 with \Ox and \Obzero options and let's see \TT{box::dump()}, 
+\EN{Let's compile it in MSVC 2008 with \Ox and \Obzero options and let's see \TT{box::dump()}, 
 \TT{solid\_object::dump()} and \TT{solid\_box::dump()} methods code:}
 
 \lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{patterns/cpp/classes/classes3_1.asm}
@@ -18,10 +18,10 @@
 
 \lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{patterns/cpp/classes/classes3_3.asm}
 
-\IFRU{Выходит, имеем такую разметку в памяти для всех трех классов:}
-{So, the memory layout for all three classes is:}
+\RU{Выходит, имеем такую разметку в памяти для всех трех классов:}
+\EN{So, the memory layout for all three classes is:}
 
-\IFRU{класс \IT{box}}{\IT{box} class}:
+\RU{класс \IT{box}}\EN{\IT{box} class}:
 
 \begin{center}
 \begin{tabular}{ | l | l | }
@@ -37,7 +37,7 @@
 \end{tabular}
 \end{center}
 
-\IFRU{класс \IT{solid\_object}}{\IT{solid\_object} class}:
+\RU{класс \IT{solid\_object}}\EN{\IT{solid\_object} class}:
 
 \begin{center}
 \begin{tabular}{ | l | l | }
@@ -49,10 +49,10 @@
 \end{tabular}
 \end{center}
 
-\IFRU{Можно сказать, что разметка класса \IT{solid\_box} будет \IT{объединённой}:}
-{It can be said, \IT{solid\_box} class memory layout will be \IT{united}:}
+\RU{Можно сказать, что разметка класса \IT{solid\_box} будет \IT{объединённой}:}
+\EN{It can be said, \IT{solid\_box} class memory layout will be \IT{united}:}
 
-\IFRU{класс \IT{solid\_box}}{\IT{solid\_box} class}:
+\RU{класс \IT{solid\_box}}\EN{\IT{solid\_box} class}:
 
 \begin{center}
 \begin{tabular}{ | l | l | }
@@ -70,35 +70,35 @@
 \end{tabular}
 \end{center}
 
-\IFRU{Код методов \TT{box::get\_volume()} и \TT{solid\_object::get\_density()} тривиален:}
-{The code of the \TT{box::get\_volume()} and \TT{solid\_object::get\_density()} methods is trivial:}
+\RU{Код методов \TT{box::get\_volume()} и \TT{solid\_object::get\_density()} тривиален:}
+\EN{The code of the \TT{box::get\_volume()} and \TT{solid\_object::get\_density()} methods is trivial:}
 
 \lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{patterns/cpp/classes/classes3_4.asm}
 
 \lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{patterns/cpp/classes/classes3_5.asm}
 
-\IFRU{А вот код метода \TT{solid\_box::get\_weight()} куда интереснее:}
-{But the code of the \TT{solid\_box::get\_weight()} method is much more interesting:}
+\RU{А вот код метода \TT{solid\_box::get\_weight()} куда интереснее:}
+\EN{But the code of the \TT{solid\_box::get\_weight()} method is much more interesting:}
 
 \lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0]{patterns/cpp/classes/classes3_6.asm}
 
-\IFRU{\TT{get\_weight()} просто вызывает два метода, но для \TT{get\_volume()} он передает просто указатель на \TT{this}, а для \TT{get\_density()}, он передает указатель на \TT{this} сдвинутый на $12$ байт (либо \TT{0xC} байт), а там, 
+\RU{\TT{get\_weight()} просто вызывает два метода, но для \TT{get\_volume()} он передает просто указатель на \TT{this}, а для \TT{get\_density()}, он передает указатель на \TT{this} сдвинутый на $12$ байт (либо \TT{0xC} байт), а там, 
 в разметке класса \TT{solid\_box}, как раз начинаются поля класса \TT{solid\_object}.}
-{\TT{get\_weight()} just calling two methods, but for \TT{get\_volume()} it just passing pointer to \TT{this},
+\EN{\TT{get\_weight()} just calling two methods, but for \TT{get\_volume()} it just passing pointer to \TT{this},
 and for \TT{get\_density()} it passing pointer to \TT{this} shifted by $12$ (or \TT{0xC}) bytes, and there,
 in the \TT{solid\_box}
 class memory layout, fields of the \TT{solid\_object} class are beginning.}
 
-\IFRU{Так, метод \TT{solid\_object::get\_density()} будет полагать что работает с обычным
+\RU{Так, метод \TT{solid\_object::get\_density()} будет полагать что работает с обычным
 классом \TT{solid\_object}, а метод \TT{box::get\_volume()} будет работать только со своими тремя полями, полагая, 
 что работает с обычным экземпляром класса \TT{box}.}
-{Thus, \TT{solid\_object::get\_density()} method will believe it is dealing with usual \TT{solid\_object} class,
+\EN{Thus, \TT{solid\_object::get\_density()} method will believe it is dealing with usual \TT{solid\_object} class,
 and \TT{box::get\_volume()} method will work with its three fields, believing this is usual object of the \TT{box} class.}
 
-\IFRU{Таким образом, можно сказать, что экземпляр класса-наследника нескольких классов представляет в памяти просто 
+\RU{Таким образом, можно сказать, что экземпляр класса-наследника нескольких классов представляет в памяти просто 
 \IT{объединённый} класс, содержащий все унаследованные поля. А каждый унаследованный метод вызывается с передачей
 ему указателя на соответствующую часть структуры.}
-{Thus, we can say, an object of a class,
+\EN{Thus, we can say, an object of a class,
 inheriting from several other classes, representing in memory \IT{united} class, containing all inherited fields.
 And each inherited method called with a pointer to 
 corresponding structure's part passed.}

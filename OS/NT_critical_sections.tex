@@ -1,16 +1,16 @@
-\section{Windows NT: \IFRU{Критические секции}{Critical section}}
+\section{Windows NT: \RU{Критические секции}\EN{Critical section}}
 
 \label{critical_sections}
 
-\IFRU{Критические секции в любой \ac{OS} очень важны в мультитредовой среде, используются в основном
+\RU{Критические секции в любой \ac{OS} очень важны в мультитредовой среде, используются в основном
 для обеспечения гарантии что только один тред будет иметь доступ к данным,
 блокируя остальные треды и прерывания}
-{Critical sections in any \ac{OS} are very important in multithreaded environment,
+\EN{Critical sections in any \ac{OS} are very important in multithreaded environment,
 mostly used for issuing a guarantee
 that only one thread will access some data, while blocking other threads and interrupts}. \\
 \\
-\IFRU{Вот как объявлена структура}{That is how} \TT{CRITICAL\_SECTION} 
-\IFRU{объявлена в линейке OS}{structure is declared in} \gls{Windows NT}\EN{ line OS}:
+\RU{Вот как объявлена структура}\EN{That is how} \TT{CRITICAL\_SECTION} 
+\RU{объявлена в линейке OS}\EN{structure is declared in} \gls{Windows NT}\EN{ line OS}:
 
 \begin{lstlisting}[caption=(Windows Research Kernel v1.2) public/sdk/inc/nturtl.h]
 typedef struct _RTL_CRITICAL_SECTION {
@@ -29,7 +29,7 @@ typedef struct _RTL_CRITICAL_SECTION {
 } RTL_CRITICAL_SECTION, *PRTL_CRITICAL_SECTION;
 \end{lstlisting}
 
-\IFRU{Вот как работает ф-ция}{That's is how} EnterCriticalSection()\EN{ function works}:
+\RU{Вот как работает ф-ция}\EN{That's is how} EnterCriticalSection()\EN{ function works}:
 
 \index{x86!\Instructions!LOCK}
 \begin{lstlisting}[caption=Windows 2008/ntdll.dll/x86 (begin)]
@@ -68,24 +68,24 @@ loc_7DE922DD:
 \end{lstlisting}
 
 \index{x86!\Instructions!BTR}
-\IFRU{Самая важная инструкция в этом фрагменте кода это}
-{The most important instruction in this code fragment is} \TT{BTR} 
-(\IFRU{с префиксом}{prefixed with} \TT{LOCK}): 
-\IFRU{нулевой бит сохраняется в флаге CF и очищается в памяти}
-{the zeroth bit is stored in CF flag and cleared in memory}.
-\IFRU{Это \glslink{atomic operation}{атомарная операция}}{This is \gls{atomic operation}}, 
-\IFRU{блокирующая доступ всех остальных процессоров
+\RU{Самая важная инструкция в этом фрагменте кода это}
+\EN{The most important instruction in this code fragment is} \TT{BTR} 
+(\RU{с префиксом}\EN{prefixed with} \TT{LOCK}): 
+\RU{нулевой бит сохраняется в флаге CF и очищается в памяти}
+\EN{the zeroth bit is stored in CF flag and cleared in memory}.
+\RU{Это \glslink{atomic operation}{атомарная операция}}\EN{This is \gls{atomic operation}}, 
+\RU{блокирующая доступ всех остальных процессоров
 к этому значению в памяти (обратите внимание на префикс \TT{LOCK} перед инструкцией \TT{BTR}.}
-{blocking all other CPUs to access this piece of memory 
+\EN{blocking all other CPUs to access this piece of memory 
 (take a notice of \TT{LOCK} prefix before \TT{BTR} instruction).}
-\IFRU{Если бит в}{If the bit at} \TT{LockCount} \IFRU{был}{was} 1, 
-\IFRU{хорошо, сбросить его и вернуться из ф-ции: мы в критической секции}
-{fine, reset it and return from the function: we are in critical section}.
-\IFRU{Если нет ~--- критическая секция уже занята другим тредом, тогда ждем}
-{If not~---critical section is already occupied by other thread, then wait}. \\
-\IFRU{Ожидание там сделано через вызов}{Wait is done there using} WaitForSingleObject(). \\
+\RU{Если бит в}\EN{If the bit at} \TT{LockCount} \RU{был}\EN{was} 1, 
+\RU{хорошо, сбросить его и вернуться из ф-ции: мы в критической секции}
+\EN{fine, reset it and return from the function: we are in critical section}.
+\RU{Если нет ~--- критическая секция уже занята другим тредом, тогда ждем}
+\EN{If not~---critical section is already occupied by other thread, then wait}. \\
+\RU{Ожидание там сделано через вызов}\EN{Wait is done there using} WaitForSingleObject(). \\
 \\
-\IFRU{А вот как работает ф-ция}{And here is how} LeaveCriticalSection()\EN{ function works}:
+\RU{А вот как работает ф-ция}\EN{And here is how} LeaveCriticalSection()\EN{ function works}:
 
 \begin{lstlisting}[caption=Windows 2008/ntdll.dll/x86 (begin)]
 _RtlLeaveCriticalSection@4 proc near
@@ -124,21 +124,21 @@ loc_7DE922B2:
 \end{lstlisting}
 
 \index{x86!\Instructions!XADD}
-\TT{XADD} \IFRU{это ``обменять и прибавить''}{is ``exchange and add''}. 
-\IFRU{В данном случае, это значит прибавить 1 к значению в \TT{LockCount}, сохранить результат
+\TT{XADD} \RU{это ``обменять и прибавить''}\EN{is ``exchange and add''}. 
+\RU{В данном случае, это значит прибавить 1 к значению в \TT{LockCount}, сохранить результат
 в регистре \TT{EBX}, и в то же время 1 записывается в \TT{LockCount}}
-{In this case, it summing \TT{LockCount} value and 1 and stores result in \TT{EBX} register, 
+\EN{In this case, it summing \TT{LockCount} value and 1 and stores result in \TT{EBX} register, 
 and at the same time 1 goes to \TT{LockCount}}.
-\IFRU{Эта операция также атомарная, потому что также имеет префикс \TT{LOCK}, что означает что другие CPU
+\RU{Эта операция также атомарная, потому что также имеет префикс \TT{LOCK}, что означает что другие CPU
 или ядра CPU в системе не будут иметь доступа к этой ячейке памяти}
-{This operation is atomic since it is prefixed by \TT{LOCK} as well,
+\EN{This operation is atomic since it is prefixed by \TT{LOCK} as well,
 meaning that all other CPUs or CPU cores in system are blocked from accessing this point of memory}.
 
-\RU{Префикс }\TT{LOCK} \IFRU{очень важен}{prefix is very important}: 
-\IFRU{два треда, каждый из которых работает на разных CPU или ядрах CPU, могут попытаться одновременно
+\RU{Префикс }\TT{LOCK} \RU{очень важен}\EN{prefix is very important}: 
+\RU{два треда, каждый из которых работает на разных CPU или ядрах CPU, могут попытаться одновременно
 войти в критическую секцию, одновременно модифицируя значение в памяти, и это может привести к
 непредсказуемым результатам}
-{two threads, each of which working on separate CPUs or CPU cores may try to
+\EN{two threads, each of which working on separate CPUs or CPU cores may try to
 enter critical section and to modify the value in memory simultaneously,
 this will result in unpredictable behaviour}.
 
