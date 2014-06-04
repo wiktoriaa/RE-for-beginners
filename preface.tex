@@ -41,61 +41,40 @@ C++ STL (\ref{cpp_STL}),
 OpenMP (\ref{openmp}),
 SEH (\label{sec:SEH}).
 
-\subsection*{\RU{Мини-}\EN{Mini-}\ac{FAQ}}
+\subsection*{\RU{Еще кое-что}\EN{Couple of things}}
 
 \newcommand{\FNURLREDDIT}{\footnote{\url{http://www.reddit.com/r/ReverseEngineering/}}}
 
-\begin{itemize}
-\item
-Q: \RU{Нужно ли учиться понимать язык ассемблера в наше время?}
-\EN{Should one learn to understand assembly language these days?} \\
-A: \RU{Да: ради того чтобы понимать лучше внутреннее устройство, отлаживать код лучше и быстрее.}
-\EN{Yes: in order to have deeper understanding of the internals and to debug your software better and faster.}
-
-\item
-Q: \RU{Нужно ли учиться писать на языке ассемблера в наше время?}
-\EN{Should one learn to write in assembly language these days?} \\
-A: \RU{Пожалуй, нет, если только не писать низкоуровневый код для \ac{OS}.}
-\EN{Unless one writes low-level \ac{OS} code, probably no.}
-
-\item
-Q: \RU{Но для написания очень оптимизированных процедур?}
-\EN{But what about writing highly optimized routines?} \\
-A: \RU{Нет, современные компиляторы \CCpp делают это лучше.}
-\EN{No, modern \CCpp compilers do this job better.}
-
-\item
-Q: \RU{Нужно ли знать внутреннее устройство микропроцессоров}
-\EN{Should I learn microprocessor internals}? \\
-A: \RU{Современные}\EN{Modern} \ac{CPU}\RU{ очень сложные}\EN{-s are very complex}.
-\RU{Если вы не собираетесь писать очень оптимизированный код
-или не работаете над кодегенератором компилятора,
-тогда устройство CPU можно изучать только в общих чертах}
-\EN{If you do not plan to write highly optimized code or if you do not work on compiler's code generator
-then you may still learn internals in bare outlines.}
+\EN{Why one should learn assembly language these days?}
+\RU{Зачем в наше время нужно изучать язык ассемблера?}
+\EN{Unless you are OS developer, you probably don't need write in assembly: 
+modern compiler do optimizations much better than humans}
+\RU{Если вы не разработчик OS, вам наверное не нужно писать на ассемблере:
+современные компиляторы оптимизируют код намного лучше человека}
 \footnote{\RU{Очень хороший текст на эту тему}\EN{Very good text about it}: \cite{AgnerFog}}.
-\RU{В то же время для понимания и анализа кода
-достаточно только знать \ac{ISA}, назначения регистров, т.е., ``внешнюю'' часть \ac{CPU}, доступную
-для прикладного программиста}
-\EN{At the same time, in order to understand and analyze compiled code it is enough to know
-only \ac{ISA}, register's descriptions, i.e., the ``outside'' part of a \ac{CPU} that is available to
-an application programmer}.
+\EN{Modern \ac{CPU}s are very complex devices as well, and assembly knowledge would 
+not help one to understand its internals.}
+\RU{Современные \ac{CPU} это также крайне сложные устройства, и знание ассемблера врядли
+поможет узнать его внутренности.}
+\EN{But there are still at least two areas where good assembly understanding may help:
+1) security/malware research; 2) better understanding of your compiled code while debugging.}
+\RU{Но все-таки остается по крайней мере две области, где знание ассемблера может хорошо
+помочь:
+1) исследование malware (\IT{зловредов}) в целях security research; 2) лучшее понимание
+вашего скомпилированного кода в процессе отладки.}
 
-\item
-Q: \RU{И всё-таки, зачем мне учить ассемблер}\EN{So why should I learn assembly language anyway}? \\
-A: \RU{В основном для лучшего понимания происходящего во время отладки и для исследования
-программ без наличия исходных кодов, включая зловреды (или вредоносы)
-\footnote{современные (2013) русскоязычные термины для malware}}
-\EN{Mostly to better understand what is going on while debugging and for \gls{reverse engineering} without source code, including, but not limited to, malware}.
+\EN{Hence, this book is intended to those who wants to understand assembly language rather 
+than to write in it, and that's why here a lot of examples connected to compilers output.}
+\RU{Таким образом, эта книга предназначена для тех, кто хочет скорее понимать ассемблер,
+нежели писать на нем, и вот почему здесь масса примеров связанных с результатами
+работы компиляторов.}
 
-\item
-Q: \RU{Как можно найти работу reverse engineer-а}\EN{How would I search for a reverse engineering job}? \\
-A: \RU{На reddit, посвященному RE\FNURLREDDIT, время от времени бывают hiring thread}
+\RU{Как можно найти работу reverse engineer-а}\EN{How would one search for a reverse engineering job}? \\
+\RU{На reddit, посвященному RE\FNURLREDDIT, время от времени бывают hiring thread}
 \EN{There are hiring threads that appear from time to time on reddit devoted to RE\FNURLREDDIT}
 (\href{http://www.reddit.com/r/ReverseEngineering/comments/1hywvr/rreverseengineerings_q3_2013_hiring_thread/}{2013 Q3}, 
 \href{http://www.reddit.com/r/ReverseEngineering/comments/1vui22/rreverseengineerings_2014_hiring_thread/}{2014}).
 \RU{Посмотрите там}\EN{Try to take a look there}.
-\end{itemize}
 
 \subsection*{\RU{Об авторе}\EN{About the author}}
 
@@ -115,13 +94,26 @@ His CV is available on his website}\footnote{\url{http://yurichev.com/Dennis_Yur
 
 \subsection*{\RU{Благодарности}\EN{Thanks}}
 
-\HERMIT, \RU{Слава ''Avid'' Казаков, Станислав ''Beaver'' Бобрицкий, Александр Лысенко, 
-Александр ''Lstar'' Черненький, Андрей Зубинский, Владимир Ботов}
-\EN{Slava ''Avid'' Kazakov, Stanislav ''Beaver'' Bobrytskyy, Alexander Lysenko, 
-Alexander ''Lstar'' Chernenkiy, Andrew Zubinski, Vladimir Botov}, \RU{Марк}\EN{Mark} ``Logxen'' \RU{Купер}\EN{Cooper},
-Shell Rocket, Yuan Jochen Kang, Arnaud Patard (rtp \RU{на}\EN{on} \#debian-arm IRC), 
-\RU{и всем тем на github.com кто присылал замечания и коррективы}\EN{and all the folks on github.com
-who have contributed notes and corrections}.
+\RU{Тем, кто много помогал мне отвечая на массу вопросов}\EN{To those who answered all my
+questions patiently}:
+\HERMIT, \RU{Слава ''Avid'' Казаков}\EN{Slava ''Avid'' Kazakov}.
+
+\RU{Тем, кто прислал много замечаний}\EN{To those who had sent me a lot of notes}:
+\RU{Станислав ''Beaver'' Бобрицкий, Александр Лысенко}
+\EN{Stanislav ''Beaver'' Bobrytskyy, Alexander Lysenko}, Shell Rocket.
+
+\RU{Просто помогали разными способами}\EN{To those who just helped me in other ways}:
+\RU{Андрей Зубинский}\EN{Andrew Zubinski}, 
+Arnaud Patard (rtp \RU{на}\EN{on} \#debian-arm IRC).
+
+\RU{Корректорам}\EN{To proofreaders}:
+\RU{Александр ''Lstar'' Черненький}\EN{Alexander ''Lstar'' Chernenkiy},
+\RU{Владимир Ботов}\EN{Vladimir Botov},
+\RU{Марк}\EN{Mark} ``Logxen'' \RU{Купер}\EN{Cooper},
+Yuan Jochen Kang.
+
+\RU{И еще всем тем на github.com кто присылал замечания и коррективы}
+\EN{And all the folks on github.com who have contributed notes and corrections}.
 
 \RU{Было использовано множество пакетов \LaTeX{}: их авторов я также хотел бы поблагодарить}
 \EN{A lot of \LaTeX{} packages were used: I would thank their authors as well}.
