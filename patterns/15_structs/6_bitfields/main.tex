@@ -45,7 +45,7 @@ This instruction returning information about current CPU and its features.}
 \EN{MSVC 2010 has \CPUID macro, but GCC 4.4.1~---has not.
 So let's make this function by yourself for GCC with the help of its built-in assembler\FNGCCAS.}
 
-\lstinputlisting{patterns/15_structs/CPUID.c}
+\lstinputlisting{patterns/15_structs/6_bitfields/CPUID.c}
 
 \RU{После того как \CPUID заполнит \EAX/\EBX/\ECX/\EDX, у нас они отразятся в массиве \TT{b[]}. 
 Затем, мы имеем указатель на структуру \TT{CPUID\_1\_EAX}, и мы указываем его на значение 
@@ -60,7 +60,7 @@ Then, we have a pointer to the \TT{CPUID\_1\_EAX} structure and we point it to t
 
 \RU{Компилируем в MSVC 2008 с опцией \Ox}\EN{Let's compile it in MSVC 2008 with \Ox option}:
 
-\lstinputlisting[caption=\Optimizing MSVC 2008]{patterns/15_structs/CPUID_msvc_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008]{patterns/15_structs/6_bitfields/CPUID_msvc_Ox.asm}
 
 \index{x86!\Instructions!SHR}
 \RU{Инструкция \TT{SHR} сдвигает значение из \EAX на то количество бит, 
@@ -76,7 +76,7 @@ leaves only those bits in the \EAX register we need now.}
 
 \RU{Попробуем GCC 4.4.1 с опцией \Othree.}\EN{Let's try GCC 4.4.1 with \Othree option.}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.1]{patterns/15_structs/CPUID_gcc_O3.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.4.1]{patterns/15_structs/6_bitfields/CPUID_gcc_O3.asm}
 
 \RU{Практически, то же самое. Единственное что стоит отметить это то, что GCC решил зачем-то объединить 
 вычисление \TT{extended\_model\_id} и \TT{extended\_family\_id} в один блок, 
@@ -111,7 +111,7 @@ But will we able to work with these fields directly? Let's try with \Tfloat.}
 ( S\EMDASH{}\RU{знак}\EN{sign} )
 \end{center}
 
-\lstinputlisting{patterns/15_structs/float_en.c}
+\lstinputlisting{patterns/15_structs/6_bitfields/float_en.c}
 
 \RU{Структура \TT{float\_as\_struct} занимает в памяти столько же места сколько и \Tfloat, 
 то есть 4 байта или 32 бита.}
@@ -125,7 +125,7 @@ the whole number by \TT{$2^2$}, e.g., by 4.}
 
 \RU{Компилируем в MSVC 2008 без оптимизации:}\EN{Let's compile in MSVC 2008 without optimization:}
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2008]{patterns/15_structs/float_msvc_\LANG.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2008]{patterns/15_structs/6_bitfields/float_msvc_\LANG.asm}
 
 \RU{Слегка избыточно. В версии скомпилированной с флагом \Ox нет вызовов \TT{memcpy()}, 
 там работа происходит сразу с переменной f. Но по неоптимизированной версии будет проще понять.}
@@ -136,7 +136,7 @@ But it is easier to understand it all considering unoptimized version.}
 
 \RU{А что сделает GCC 4.4.1 с опцией \Othree?}\EN{What GCC 4.4.1 with \Othree will do?}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.1]{patterns/15_structs/float_gcc_O3_\LANG.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.4.1]{patterns/15_structs/6_bitfields/float_gcc_O3_\LANG.asm}
 
 \RU{Да, функция \TT{f()} в целом понятна. Однако, что интересно, еще при компиляции, 
 не взирая на мешанину с полями структуры, GCC умудрился вычислить результат функции \TT{f(1.234)} и 

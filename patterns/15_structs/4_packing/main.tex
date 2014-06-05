@@ -5,7 +5,7 @@
 
 \RU{Возьмем простой пример:}\EN{Let's take a simple example:}
 
-\lstinputlisting{patterns/15_structs/packing.c}
+\lstinputlisting{patterns/15_structs/4_packing/packing.c}
 
 \RU{Как видно, мы имеем два поля \Tchar (занимающий один байт) и еще два ~--- \Tint (по 4 байта).}
 \EN{As we see, we have two \Tchar fields (each is exactly one byte) and two more~---\Tint (each - 4 bytes).}
@@ -14,7 +14,7 @@
 
 \RU{Компилируется это все в:}\EN{That's all compiling into:}
 
-\lstinputlisting{patterns/15_structs/packing.asm}
+\lstinputlisting{patterns/15_structs/4_packing/packing.asm}
 
 \RU{Мы видим здесь что адрес каждого поля в структуре выравнивается по 4-байтной границе. 
 Так что каждый \Tchar здесь занимает те же 4 байта что и \Tint. Зачем? 
@@ -28,7 +28,7 @@ Thus it is easier for CPU to access memory at aligned addresses and to cache dat
 \RU{Попробуем скомпилировать тот же исходник с опцией}\EN{Let's try to compile it with option} (\TT{/Zp1}) 
 (\IT{/Zp[n] pack structures on n-byte boundary}).
 
-\lstinputlisting[caption=MSVC /Zp1]{patterns/15_structs/packing_msvc_Zp1.asm}
+\lstinputlisting[caption=MSVC /Zp1]{patterns/15_structs/4_packing/packing_msvc_Zp1.asm}
 
 \RU{Теперь структура занимает 10 байт и все \Tchar занимают по байту. Что это дает? 
 Экономию места. Недостаток ~--- процессор будет обращаться к этим полям не так эффективно 
@@ -92,7 +92,7 @@ How our compiler know to pack them on 1-byte alignment boundary?}
 
 \subsection{ARM + \OptimizingKeil + \ThumbMode}
 
-\lstinputlisting[caption=\OptimizingKeil + \ThumbMode]{patterns/15_structs/packing_Keil_thumb.asm}
+\lstinputlisting[caption=\OptimizingKeil + \ThumbMode]{patterns/15_structs/4_packing/packing_Keil_thumb.asm}
 
 \RU{Как мы помним, здесь передается не указатель на структуру, а сама структура, а так как в ARM первые 4 аргумента
 функции передаются через регистры, то поля структуры передаются через}
@@ -128,7 +128,7 @@ if it works just as we need.}
 
 \subsection{ARM + \OptimizingXcode + \ThumbTwoMode}
 
-\lstinputlisting[caption=\OptimizingXcode + \ThumbTwoMode]{patterns/15_structs/packing_Xcode_thumb.asm}
+\lstinputlisting[caption=\OptimizingXcode + \ThumbTwoMode]{patterns/15_structs/4_packing/packing_Xcode_thumb.asm}
 
 \index{ARM!\Instructions!SXTB}
 \index{x86!\Instructions!MOVSX}

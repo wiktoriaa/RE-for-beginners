@@ -5,11 +5,11 @@
 \RU{В Линуксе, для примера, возьмем структуру \TT{tm} из \TT{time.h}:}
 \EN{As of Linux, let's take \TT{tm} structure from \TT{time.h} for example:}
 
-\lstinputlisting{patterns/15_structs/GCC_tm.c}
+\lstinputlisting{patterns/15_structs/3_tm_linux/GCC_tm.c}
 
 \RU{Компилируем при помощи}\EN{Let's compile it in} GCC 4.4.1:
 
-\lstinputlisting[caption=GCC 4.4.1]{patterns/15_structs/GCC_tm_\LANG.asm}
+\lstinputlisting[caption=GCC 4.4.1]{patterns/15_structs/3_tm_linux/GCC_tm_\LANG.asm}
 
 \RU{К сожалению, по какой-то причине, \IDA не сформировала названия локальных переменных в стеке. 
 Но так как мы уже опытные реверсеры :-) то можем обойтись и без этого в таком простом примере.}
@@ -32,7 +32,7 @@ but not modifies any flags. See also relevant section about \LEA{}~(\ref{sec:LEA
 осталось бы таким же.}
 \EN{Of course, I wasn't able to run GDB that quickly in the same second.}}:
 
-\lstinputlisting[caption=GDB]{patterns/15_structs/GCC_tm_GDB.txt}
+\lstinputlisting[caption=GDB]{patterns/15_structs/3_tm_linux/GCC_tm_GDB.txt}
 
 \RU{Мы легко находим нашу структуру в стеке}\EN{We can easily find our structure in the stack}.
 \RU{Для начала, посмотрим, как она объявлена в}\EN{First, let's see how it's defined in} \IT{time.h}:
@@ -108,7 +108,7 @@ struct tm
 \EN{In order to illustrate the structure is just variables laying side-by-side in one place, 
 let's rework example, while looking at the \IT{tm} structure definition again}: \lstname \ref{struct_tm}.
 
-\lstinputlisting{patterns/15_structs/GCC_tm2.c}
+\lstinputlisting{patterns/15_structs/3_tm_linux/GCC_tm2.c}
 
 N.B. \RU{В \TT{localtime\_r} передается указатель именно на \TT{tm\_sec}, 
 т.е., на первый элемент ``структуры''.}
@@ -126,7 +126,7 @@ In file included from GCC_tm2.c:2:0:
 
 \RU{Тем не менее, сгенерирует такое}\EN{But nevertheless, will generate this}:
 
-\lstinputlisting[caption=GCC 4.7.3]{patterns/15_structs/GCC_tm2.asm}
+\lstinputlisting[caption=GCC 4.7.3]{patterns/15_structs/3_tm_linux/GCC_tm2.asm}
 
 \RU{Этот код почти идентичен уже рассмотренному, и нельзя сказать, была ли структура
 в оригинальном исходном коде либо набор переменных.}\EN{This code is identical to what we saw previously and it is
@@ -178,7 +178,7 @@ saw.}
 
 \RU{Этот же пример}\EN{Same example}:
 
-\lstinputlisting[caption=\OptimizingKeil + \ThumbMode]{patterns/15_structs/tm_ARM_keil_thumb.asm}
+\lstinputlisting[caption=\OptimizingKeil + \ThumbMode]{patterns/15_structs/3_tm_linux/tm_ARM_keil_thumb.asm}
 
 \subsection{ARM + \OptimizingXcode + \ThumbTwoMode}
 
@@ -188,5 +188,5 @@ saw.}
 \RU{поэтому показала здесь обращения к отдельным элементам структуры и присвоила им имена}
 \EN{so it shows here structure elements accesses and also names are assigned to them}.
 
-\lstinputlisting[caption=\OptimizingXcode + \ThumbTwoMode]{patterns/15_structs/tm_ARM_xcode_thumb.asm}
+\lstinputlisting[caption=\OptimizingXcode + \ThumbTwoMode]{patterns/15_structs/3_tm_linux/tm_ARM_xcode_thumb.asm}
 

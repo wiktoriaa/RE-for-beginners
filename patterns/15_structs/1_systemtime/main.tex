@@ -24,11 +24,11 @@ typedef struct _SYSTEMTIME {
 \RU{Пишем на Си функцию для получения текущего системного времени:}
 \EN{Let's write a C function to get current time:}
 
-\lstinputlisting{patterns/15_structs/systemtime.c}
+\lstinputlisting{patterns/15_structs/1_systemtime/systemtime.c}
 
 \RU{Что в итоге}\EN{We got} (MSVC 2010):
 
-\lstinputlisting[caption=MSVC 2010 /GS-]{patterns/15_structs/systemtime.asm}
+\lstinputlisting[caption=MSVC 2010 /GS-]{patterns/15_structs/1_systemtime/systemtime.asm}
 
 \RU{Под структуру в стеке выделено 16 байт ~--- именно столько будет \TT{sizeof(WORD)*8}
 (в структуре 8 переменных с типом WORD).}
@@ -116,14 +116,14 @@ in memory right now, available for using}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/15_structs/olly_systemtime1.png}
+\includegraphics[scale=\FigScale]{patterns/15_structs/1_systemtime/olly_systemtime1.png}
 \caption{\olly: \TT{GetSystemTime()} \RU{только что исполнилась}\EN{just executed}}
 \label{fig:struct_olly_1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.66]{patterns/15_structs/olly_systemtime2.png}
+\includegraphics[scale=0.66]{patterns/15_structs/1_systemtime/olly_systemtime2.png}
 \caption{\olly: \RU{Вывод \printf}\EN{\printf output}}
 \label{fig:struct_olly_2}
 \end{figure}
@@ -138,7 +138,7 @@ I can demonstrate by the following technique.}
 \RU{, я могу переписать этот простой пример так:}
 \EN{ structure description, I can rewrite this simple example like this:}
 
-\lstinputlisting{patterns/15_structs/systemtime2.c}
+\lstinputlisting{patterns/15_structs/1_systemtime/systemtime2.c}
 
 \RU{Компилятор немного поворчит:}\EN{Compiler will grumble for a little:}
 
@@ -148,7 +148,7 @@ systemtime2.c(7) : warning C4133: 'function' : incompatible types - from 'WORD [
 
 \RU{Тем не менее, выдаст такой код}\EN{But nevertheless, it will produce this code}:
 
-\lstinputlisting[caption=MSVC 2010]{patterns/15_structs/systemtime2.asm}
+\lstinputlisting[caption=MSVC 2010]{patterns/15_structs/1_systemtime/systemtime2.asm}
 
 \RU{И это работает так же}\EN{And it works just as the same}!
 
