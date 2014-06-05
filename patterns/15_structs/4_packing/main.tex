@@ -15,7 +15,24 @@
 \RU{Компилируется это все в:}\EN{That's all compiling into:}
 
 \lstinputlisting[caption=MSVC 2012 /GS- /Ob0,label=src:struct_packing_4,numbers=left]
-{patterns/15_structs/4_packing/packing.asm}
+{patterns/15_structs/4_packing/packing.asm.\LANG}
+
+\RU{Кстати, мы передаем всю структуру, но в реальности, как видно, структура в начале копируется
+во временную структуру (выделение места под нее в стеке происходит в строке 10,
+а все 4 поля, по одному, копируются в строках 12 \ldots\ 19), 
+затем передается только указатель на нее (или адрес).}
+\EN{By the way, we pass a structure as a whole, but in fact, as we can see, the structure
+is being copied to the temporary one (a place in stack is allocated in line 10 for it,
+and then all 4 fields, one by one, is copied in lines 12 \ldots\ 19), 
+then its pointer is to be passed (or address).}
+\RU{Структура копируется, потому что неизвестно, будет ли ф-ция \TT{f()} модифицировать структуру.
+И если да, то структура внутри \main должна остаться той же.}
+\EN{The structure is copied, because it's unknown, will the f() function modify structure.
+If it's so, then the structure inside of \main should remain as the same.}
+\RU{Мы могли бы использовать указатели на \CCpp, и итоговый код был бы почти такой же,
+только копирования не было бы.}
+\EN{We could use pointers in \CCpp, and resulting code might be almost the same, but without
+copying.}
 
 \RU{Мы видим здесь что адрес каждого поля в структуре выравнивается по 4-байтной границе. 
 Так что каждый \Tchar здесь занимает те же 4 байта что и \Tint. Зачем? 
@@ -29,14 +46,29 @@ Thus it is easier for CPU to access memory at aligned addresses and to cache dat
 \RU{Попробуем скомпилировать тот же исходник с опцией}\EN{Let's try to compile it with option} (\TT{/Zp1}) 
 (\IT{/Zp[n] pack structures on n-byte boundary}).
 
-\lstinputlisting[caption=MSVC 2012 /GS- /Zp1,label=src:struct_packing_1]
-{patterns/15_structs/4_packing/packing_msvc_Zp1.asm}
+\lstinputlisting[caption=MSVC 2012 /GS- /Zp1,label=src:struct_packing_1,numbers=left]
+{patterns/15_structs/4_packing/packing_msvc_Zp1.asm.\LANG}
 
 \RU{Теперь структура занимает 10 байт и все \Tchar занимают по байту. Что это дает? 
 Экономию места. Недостаток ~--- процессор будет обращаться к этим полям не так эффективно 
 по скорости, как мог бы.}
 \EN{Now the structure takes only 10 bytes and each \Tchar value takes 1 byte. What it give to us?
 Size economy. And as drawback~---CPU will access these fields without maximal performance it can.}
+
+\RU{Структура так же копируется в \main. Но не по одному полю, а 10 байт, при помощи трех
+пар \MOV.}
+\EN{Structure is also copied in \main. Not by one-by-one field, but 10 bytes, using three pairs
+of \MOV.}
+\RU{Почему не 4?}\EN{Why not 4?}
+\RU{Компилятор рассудил, что будет лучше скопировать 10 байт
+при помощи 3 пар \MOV, чем копировать два 32-битных слова и два байта при помощи 4 пар \MOV.}
+\EN{Compiler decided that it's better to copy 10 bytes using 3 \MOV pairs then to copy two 32-bit words
+and two bytes using 4 \MOV pairs.}
+\RU{Кстати, подобная реализация копирования при помощи \MOV взамен вызова ф-ции memcpy(), например, это
+очень распространенная практика, потому что это в любом случае работает быстрее чем вызов memcpy() ---
+если речь идет о коротких блоках, конечно.}
+\EN{By the way, such copy implementation using \MOV instead of memcpy() function calling is widely
+used, because it's faster then to call memcpy()---if to talk about short blocks, of course.}
 
 \RU{Как нетрудно догадаться, если структура используется много в каких исходниках и объектных файлах, 
 все они должны быть откомпилированы с одним и тем же соглашением об упаковке структур.}
@@ -93,6 +125,7 @@ How our compiler know to pack them on 1-byte alignment boundary?}
 \EN{That's how compiler will pack structures defined after \TT{\#pragma pack}.}
 
 \subsection{x86 + \olly + \RU{упаковка полей по умолчанию}\EN{fields are packed by default}}
+\index{\olly}
 
 \RU{Попробуем в \olly наш пример, где поля выровнены по умолчанию (4 байта)}
 \EN{Let's try our example (where fields are aligned by default (4 bytes)) in \olly}: 
@@ -108,12 +141,18 @@ has \Tchar type, therefore, only one byte is written, 1 and 3 respectively (line
 \RU{Остальные три байта 32-битного слова не будут модифицироваться в памяти!}
 \EN{Other 3 bytes of 32-bit words are not being modified in memory!}
 \RU{А следовательно, там остается случайный мусор.}\EN{Hence, random garbage is there.}
+\index{x86!\Instructions!MOVSX}
 \RU{Этот мусор никак не будет влиять на работу \printf,
-потому что значения для нее готовятся при помощи инструкции \TT{MOVSX}, которая загружает
+потому что значения для нее готовятся при помощи инструкции \MOVSX, которая загружает
 из памяти байты а не слова}
 \EN{This garbage influence \printf output in no way, because values for it is prepared
-by \TT{MOVSX} instruction, which takes bytes, but not words}: 
+by \MOVSX instruction, which takes bytes, but not words}: 
 \lstname \ref{src:struct_packing_4} (\RU{строки}\EN{lines} 34 \AndENRU 38).
+
+\RU{Кстати, здесь используется именно \MOVSX (расширяющая знак), потому что тип \Tchar\EMDASH{}знаковый.}
+\EN{By the way, \MOVSX (sign-extending) instruction is used here, because \Tchar type is signed.}
+\RU{Если бы здесь был тип}\EN{If the type} \TT{unsigned char} \OrENRU \TT{uint8\_t}\EN{ be here}, 
+\RU{то здесь была бы инструкция \MOVZX}\EN{\MOVZX instruction would be generated here instead}.
 
 \begin{figure}[H]
 \centering
@@ -123,6 +162,7 @@ by \TT{MOVSX} instruction, which takes bytes, but not words}:
 \end{figure}
 
 \subsection{x86 + \olly + \RU{упаковка полей по границе в 1 байт}\EN{fields aligning by 1 byte boundary}}
+\index{\olly}
 
 \RU{Здесь всё куда понятнее: 4 поля занимают 10 байт и значения сложены в памяти друг к другу}
 \EN{Things are much clearer here: 4 fields occupies 10 bytes and values are stored side-by-side}:
