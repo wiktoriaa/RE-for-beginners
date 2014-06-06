@@ -1,0 +1,103 @@
+﻿\subsection{GCC 4.4.1}
+
+\lstinputlisting[caption=GCC 4.4.1]{patterns/12_FPU/3_comparison/GCC_\LANG.asm}
+
+\index{x86!\Instructions!FUCOMPP}
+\RU{\FUCOMPP ~--- это почти то же что и \FCOM, только выкидывает из стека оба значения после сравнения, 
+а также несколько иначе реагирует на ``не-числа''.}
+\EN{\FUCOMPP{}~---is almost like \FCOM, but popping both values from stack and handling 
+``not-a-numbers'' differently.}
+
+\index{\RU{Не-числа}\EN{Non-a-numbers} (NaNs)}
+\RU{Немного о \IT{не-числах}}\EN{More about \IT{not-a-numbers}}:
+
+\newcommand{\NANFN}{\RU{\footnote{\url{http://ru.wikipedia.org/wiki/NaN}}}
+\EN{\footnote{\url{http://en.wikipedia.org/wiki/NaN}}}}
+
+\RU{FPU умеет работать со специальными переменными, которые числами не являются и называются ``не числа'' или 
+\gls{NaN}\NANFN{}. 
+Это бесконечность, результат деления на ноль, и так далее. Нечисла бывают ``тихие'' и ``сигнализирующие''. 
+С первыми можно продолжать работать и далее, а вот если вы попытаетесь совершить какую-то операцию 
+с сигнализирующим нечислом, то сработает исключение.}
+\EN{FPU is able to deal with a special values which are \IT{not-a-numbers} or 
+\gls{NaN}s\NANFN{}. 
+These are infinity, result of dividing by $0$, etc. 
+Not-a-numbers can be ``quiet'' and ``signaling''. It is possible to continue to work with ``quiet'' NaNs, 
+but if one try to do any operation with ``signaling'' NaNs~---an exception will be raised.}
+
+\index{x86!\Instructions!FCOM}
+\index{x86!\Instructions!FUCOM}
+\RU{Так вот, \FCOM вызовет исключение если любой из операндов ~--- какое-либо нечисло.
+\FUCOM же вызовет исключение только если один из операндов именно ``сигнализирующее нечисло''.}
+\EN{\FCOM will raise exception if any operand~---\gls{NaN}. 
+\FUCOM will raise exception only if any operand~---signaling \gls{NaN} (SNaN).}
+
+\index{x86!\Instructions!SAHF}
+\label{SAHF}
+\RU{Далее мы видим \SAHF ~--- это довольно редкая инструкция в коде не использующим FPU. 
+8 бит из \AH перекладываются в младшие 8 бит регистра статуса процессора в таком порядке: 
+\TT{SF:ZF:-:AF:-:PF:-:CF <- AH}.}
+\EN{The following instruction is \SAHF~---this is rare instruction in the code which is not use FPU. 
+8 bits from AH is movinto into lower 8 bits of CPU flags in the following order: 
+\TT{SF:ZF:-:AF:-:PF:-:CF <- AH}.}
+
+\index{x86!\Instructions!FNSTSW}
+\RU{Вспомним, что \FNSTSW перегружает интересующие нас биты \CThreeBits в \AH, 
+и соответственно они будут в позициях 6, 2, 0 в регистре \AH.}
+\EN{Let's remember the \FNSTSW is moving interesting for us bits \CThreeBits into the \AH 
+and they will be in positions 6, 2, 0 in the \AH register.}
+
+\RU{Иными словами, пара инструкций \TT{fnstsw  ax / sahf} перекладывает биты \CThreeBits в флаги \ZF, \PF, \CF.}
+\EN{In other words, \TT{fnstsw  ax / sahf} instruction pair is moving \CThreeBits into \ZF, \PF, \CF CPU flags.}
+
+\RU{Теперь снова вспомним, какие значения бит \CThreeBits будут при каких результатах сравнения:}
+\EN{Now let's also recall, what values of the \CThreeBits bits will be set:}
+
+\begin{itemize}
+\item
+\RU{Если a больше b в нашем случае, то биты \CThreeBits должны быть выставлены так:}
+\EN{If a is greater than b in our example, then \CThreeBits bits will be set as:} 0, 0, 0.
+\item
+\RU{Если a меньше b, то биты будут выставлены:}\EN{if a is less than b, then bits will be set as:} 0, 0, 1.
+\item
+\RU{Если a=b, то биты будут выставлены так:}\EN{If a=b, then bits will be set:} 1, 0, 0.
+\end{itemize}
+% TODO: table?
+
+\RU{Иными словами, после инструкций \FUCOMPP/\FNSTSW/\SAHF, мы получим такое состояние флагов:}
+\EN{In other words, after \FUCOMPP/\FNSTSW/\SAHF instructions, we will have these CPU flags states:}
+
+\begin{itemize}
+\item
+\RU{Если a>b в нашем случае, то флаги будут выставлены так:}
+\EN{If a>b, CPU flags will be set as:} \TT{ZF=0, PF=0, CF=0}.
+\item
+\RU{Если a<b, то флаги будут выставлены:}\EN{If a<b, then CPU flags will be set as:} \TT{ZF=0, PF=0, CF=1}.
+\item
+\RU{Если a=b, то флаги будут выставлены так:}\EN{If a=b, then CPU flags will be set as:} \TT{ZF=1, PF=0, CF=0}.
+\end{itemize}
+% TODO: table?
+
+\index{x86!\Instructions!SETNBE}
+\index{x86!\Instructions!SETcc}
+\index{x86!\Instructions!JNBE}
+\RU{Инструкция \SETNBE выставит в \AL единицу или ноль, в зависимости от флагов и условий. 
+Это почти аналог \JNBE, за тем лишь исключением, что \SETcc
+\footnote{\IT{cc} это \IT{condition code}}
+выставляет 1 или 0 в \AL, а \Jcc делает переход или нет. 
+\SETNBE запишет 1 если только \TT{CF=0} и \TT{ZF=0}. Если это не так, то запишет $0$ в \AL.}
+\EN{How \SETNBE instruction will store 1 or 0 to AL: it is depends of CPU flags. 
+It is almost \JNBE instruction counterpart, with the exception the \SETcc 
+\footnote{\IT{cc} is \IT{condition code}} is storing 1 or 0 to the \AL, but \Jcc do actual jump or not. 
+\SETNBE store 1 only if \TT{CF=0} and \TT{ZF=0}. If it is not true, $0$ will be stored into \AL.}
+
+\RU{\CF будет 0 и \ZF будет 0 одновременно только в одном случае: если a>b.}
+\EN{Both \CF is 0 and \ZF is 0 simultaneously only in one case: if a>b.}
+
+\RU{Тогда в \AL будет записана единица, последующий условный переход \JZ взят не будет, 
+и функция вернет \TT{\_a}. 
+В остальных случаях, функция вернет \TT{\_b}.}
+\EN{Then one will be stored to the \AL and the following \JZ will not be triggered and function will 
+return {\_a}. In all other cases, {\_b} will be returned.}
+
+\RU{Но и это еще не конец.}\EN{But it is still not over.}

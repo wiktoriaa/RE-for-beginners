@@ -1,0 +1,29 @@
+﻿\subsubsection{GCC}
+
+\RU{GCC 4.4.1 (с опцией \Othree) генерирует похожий код, хотя и с некоторой разницей:}
+\EN{GCC 4.4.1 (with \Othree option) emits the same code, however, slightly different:}
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.1]{patterns/12_FPU/1_simple/GCC_\LANG.asm}
+
+\RU{Разница в том, что в стек сначала заталкивается $3.14$ (в \ST{0}), а затем значение 
+из \TT{arg\_0} делится на то что лежит в регистре \ST{0}.}
+\EN{The difference is that, first of all, $3.14$ is pushed to stack (into \ST{0}), and then value 
+in \TT{arg\_0} is divided by value in the \ST{0} register.}
+
+\index{x86!\Instructions!FDIVR}
+\RU{\FDIVR означает \IT{Reverse Divide} ~--- делить поменяв делитель и делимое местами. 
+Точно такой же инструкции для умножения нет, потому что она была бы бессмыслена (ведь умножение ~--- 
+операция коммутативная), так что остается только \FMUL без соответствующей ей \TT{-R} инструкции.}
+\EN{\FDIVR meaning \IT{Reverse Divide}~---to divide with divisor and dividend swapped with each other. 
+There is no likewise instruction for multiplication since multiplication is 
+commutative operation, so we have just \FMUL without its \TT{-R} counterpart.}
+
+\index{x86!\Instructions!FADDP}
+\RU{\FADDP не только складывает два значения, но также и выталкивает из стека одно значение. 
+После этого, в \ST{0} остается только результат сложения.}
+\EN{\FADDP adding two values but also popping one value from stack. 
+After that operation, \ST{0} holds the sum.}
+
+\RU{Этот фрагмент кода получен при помощи \IDA, которая регистр \ST{0} называет для краткости просто \TT{ST}.}
+\EN{This fragment of disassembled code was produced using \IDA which named the \ST{0} register as \TT{ST} for short.}
+

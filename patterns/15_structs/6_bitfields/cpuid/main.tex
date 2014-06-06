@@ -25,12 +25,12 @@ This instruction returning information about current CPU and its features.}
 \begin{center}
 \begin{tabular}{ | l | l | }
 \hline
-3:0 & Stepping \\
-7:4 & Model \\
-11:8 & Family \\
-13:12 & Processor Type \\
-19:16 & Extended Model \\
-27:20 & Extended Family \\
+3:0 (4 \bitsENRU)& Stepping \\
+7:4 (4 \bitsENRU) & Model \\
+11:8 (4 \bitsENRU) & Family \\
+13:12 (2 \bitsENRU) & Processor Type \\
+19:16 (4 \bitsENRU) & Extended Model \\
+27:20 (8 \bitsENRU) & Extended Family \\
 \hline
 \end{tabular}
 \end{center}
@@ -56,6 +56,8 @@ Then, we have a pointer to the \TT{CPUID\_1\_EAX} structure and we point it to t
 
 \RU{Затем мы читаем из структуры.}\EN{Then we read from the stucture.}
 
+\subsubsection{MSVC}
+
 \RU{Компилируем в MSVC 2008 с опцией \Ox}\EN{Let's compile it in MSVC 2008 with \Ox option}:
 
 \lstinputlisting[caption=\Optimizing MSVC 2008]{patterns/15_structs/6_bitfields/cpuid/CPUID_msvc_Ox.asm}
@@ -71,6 +73,62 @@ Then, we have a pointer to the \TT{CPUID\_1\_EAX} structure and we point it to t
 она оставляет по маске только те биты в \EAX, которые нам сейчас нужны.}
 \EN{\ANDIns instruction clears bits not needed \IT{at left}, or, in other words, 
 leaves only those bits in the \EAX register we need now.}
+
+\subsubsection{MSVC + \olly}
+\index{\olly}
+
+\RU{Загрузим пример в}\EN{Let's load our example into} \olly 
+\RU{и увидим, какие значения были установлены в EAX/EBX/ECX/EDX после
+исполнения}\EN{and see, which values was set in EAX/EBX/ECX/EDX after execution of} CPUID: 
+\figname \ref{fig:cpuid_olly_1}.
+
+\RU{В EAX установлено}\EN{EAX has} \TT{0x000206A7} 
+(\RU{мой}\EN{my} \ac{CPU} \EN{is}\RU{---} Intel Xeon E3-1220).\\
+\RU{В двоичном виде это}\EN{This is} $0000 0000 0000 0010 0000 0110 1010 0111$\EN{ in binary form}.
+
+\RU{Вот как распределяются биты по полям в моем случае}\EN{Here is how bits are distributed by fields}:
+
+\begin{center}
+\begin{tabular}{ | l | l | l | }
+\hline
+\headercolor{} \RU{поле}\EN{field} &
+\headercolor{} \RU{в двоичном виде}\EN{in binary form} &
+\headercolor{} \RU{в десятичном виде}\EN{in decimal form} \\
+\hline
+reserved2		& 0000 & 0 \\
+\hline
+extended\_family\_id	& 00000000 & 0 \\
+\hline
+extended\_model\_id	& 0010 & 2 \\
+\hline
+reserved1		& 00 & 0 \\
+\hline
+processor\_id		& 00 & 0 \\
+\hline
+family\_id		& 0110 & 6 \\
+\hline
+model			& 1010 & 10 \\
+\hline
+stepping		& 0111 & 7 \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/15_structs/6_bitfields/cpuid/olly.png}
+\caption{\olly: \RU{После исполнения CPUID}\EN{After CPUID execution}}
+\label{fig:cpuid_olly_1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/15_structs/6_bitfields/cpuid/result.png}
+\caption{\olly: \RU{Результат работы}\EN{Result}}
+\label{fig:cpuid_olly_2}
+\end{figure}
+
+\subsubsection{GCC}
 
 \RU{Попробуем GCC 4.4.1 с опцией \Othree.}\EN{Let's try GCC 4.4.1 with \Othree option.}
 

@@ -1,0 +1,56 @@
+﻿\subsection{\RU{А теперь скомпилируем все это в MSVC 2010 с опцией \Ox}
+\EN{Now let's compile it with MSVC 2010 with optimization option \Ox}}
+
+\lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/12_FPU/3_comparison/MSVC_Ox_\LANG.asm}
+
+\index{x86!\Instructions!FCOM}
+\RU{\FCOM отличается от \FCOMP тем что просто сравнивает значения и оставляет стек в том же состоянии. 
+В отличие от предыдущего примера, операнды здесь в другом порядке. 
+Поэтому и результат сравнения в \CThreeBits будет другим чем раньше:}
+\EN{\FCOM is distinguished from \FCOMP in that sense that it just comparing values and leaves FPU stack 
+in the same state. 
+Unlike previous example, operands here in reversed order. 
+And that is why result of comparison in the \CThreeBits will be different:}
+
+\begin{itemize}
+\item
+\RU{Если a>b в нашем случае, то биты \CThreeBits должны быть выставлены так:}
+\EN{If a>b in our example, then \CThreeBits bits will be set as:} 0, 0, 0.
+\item
+\RU{Если b>a, то биты будут выставлены:}\EN{If b>a, then bits will be set as:} 0, 0, 1.
+\item
+\RU{Если a=b, то биты будут выставлены так:}\EN{If a=b, then bits will be set as:} 1, 0, 0.
+\end{itemize}
+% TODO: table?
+
+\RU{Инструкция \TT{test ah, 65} как бы оставляет только два бита ~--- \Cthree и \Czero. 
+Они оба будут нулями, если a>b: в таком случае переход \JNE не сработает. 
+Далее имеется инструкция \TT{FSTP ST(1)} ~--- эта инструкция копирует 
+значение \ST{0} в указанный операнд и выдергивает одно значение из стека. В данном случае, 
+она копирует \ST{0} 
+(где сейчас лежит \TT{\_a}) в \ST{1}. 
+После этого на вершине стека два раза лежат \TT{\_a}. Затем одно значение выдергивается. 
+После этого в \ST{0} остается \TT{\_a} и функция завершается.}
+\EN{It can be said, \TT{test ah, 65} instruction just leaves two bits~---\Cthree and \Czero. 
+Both will be zeroes if \TT{a>b}: in that case \JNE jump will not be triggered. 
+Then \TT{FSTP ST(1)} is following~---this instruction copies value in the \ST{0} into operand and 
+popping one value from FPU stack.
+In other words, the instruction copies \ST{0} (where \TT{\_a} value is now) into the \ST{1}.
+After that, two values of the {\_a} are at the top of stack now. 
+After that, one value is popping.
+After that, \ST{0} will contain {\_a} and function is finished.}
+
+\RU{Условный переход \JNE сработает в двух других случаях: если b>a или a==b. 
+\ST{0} скопируется в \ST{0}, что как бы холостая операция, 
+затем одно значение из стека вылетит и на вершине стека останется то что 
+до этого лежало в \ST{1} (то есть, \TT{\_b}). И функция завершится. 
+Эта инструкция используется здесь видимо потому что в FPU нет инструкции которая просто выдергивает 
+значение из стека и больше ничего.}
+\EN{Conditional jump \JNE is triggered in two cases: of b>a or a==b. 
+\ST{0} into \ST{0} will be copied, it is just like idle (\ac{NOP}) operation, then one value 
+is popping from stack and top of stack (\ST{0}) will contain what was in the \ST{1} before 
+(that is {\_b}). Then function finishes. 
+The instruction used here probably since \ac{FPU} has no instruction to pop value from stack and 
+not to store it anywhere.}
+
+\RU{Но и это еще не все.}\EN{Well, but it is still not over.}
