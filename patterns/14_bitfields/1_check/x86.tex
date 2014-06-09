@@ -98,7 +98,7 @@ void main()
 
 \RU{Получим}\EN{We got}:
 
-\lstinputlisting[caption=GCC 4.4.1]{patterns/14_bitfields/check.asm}
+\lstinputlisting[caption=GCC 4.4.1]{patterns/14_bitfields/1_check/check.asm}
 
 \index{Linux!libc.so.6}
 \index{syscalls}
@@ -165,7 +165,7 @@ are to be used.}
 \EN{So, let's download Linux Kernel 2.6.31, compile it in Ubuntu: \TT{make vmlinux}, open it in \IDA, 
 find the \TT{do\_filp\_open()} function. At the beginning, we will see (comments are mine):}
 
-\lstinputlisting[caption=do\_filp\_open() (linux kernel 2.6.31)]{patterns/14_bitfields/check2_\LANG.asm}
+\lstinputlisting[caption=do\_filp\_open() (linux kernel 2.6.31)]{patterns/14_bitfields/1_check/check2_\LANG.asm}
 
 \RU{GCC сохраняет значения первых трех аргументов в локальном стеке. Иначе, если эти три регистра 
 не трогать вообще, то функции компилятора, распределяющей переменные по регистрам (так называемый 
@@ -177,7 +177,7 @@ it would be too tight environment for compiler's \gls{register allocator}}.
 
 \RU{Далее находим примерно такой фрагмент кода}\EN{Let's find this fragment of code}:
 
-\lstinputlisting[caption=do\_filp\_open() (linux kernel 2.6.31)]{patterns/14_bitfields/check3.asm}
+\lstinputlisting[caption=do\_filp\_open() (linux kernel 2.6.31)]{patterns/14_bitfields/1_check/check3.asm}
 
 \RU{\TT{0x40} ~--- это то чему равен макрос \TT{O\_CREAT}. 
 \TT{open\_flag} проверяется на наличие бита \TT{0x40} и если бит равен $1$, то выполняется следующие 
