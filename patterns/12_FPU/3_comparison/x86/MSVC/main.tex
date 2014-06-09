@@ -106,7 +106,7 @@ to the \ST{0} register, and if it is not triggered, the value of the \TT{\_a} va
 
 \paragraph{\RU{Первый пример с \olly}\EN{First \olly example}: a=1.2 \AndENRU b=3.4}
 
-\RU{Загружаем пример в}\EN{Let's load the example into} \olly: \ref{fig:FPU_comparison_case1_olly1}.
+\RU{Загружаем пример в}\EN{Let's load the example into} \olly: \figref{fig:FPU_comparison_case1_olly1}.
 \RU{Текущие параметры ф-ции}\EN{Current function arguments are}: $a=1.2$ \AndENRU $b=3.4$ 
 (\RU{их видно в стеке: 2 пары 32-битных значений}\EN{We can see them in stack: two pairs of 32-bit values}).
 \IT{b} ($3.4$) \RU{уже загружено в}\EN{already loaded in} \ST{0}.
@@ -114,20 +114,20 @@ to the \ST{0} register, and if it is not triggered, the value of the \TT{\_a} va
 \olly \RU{показывает второй аргумент для \FCOMP, который сейчас находится в стеке}\EN{show the second \FCOMP
 argument, which is in stack right now}.\\
 \\
-\FCOMP \RU{отработал}\EN{executed}: \ref{fig:FPU_comparison_case1_olly2}.
+\FCOMP \RU{отработал}\EN{executed}: \figref{fig:FPU_comparison_case1_olly2}.
 \RU{Мы видим состояния condition-флагов \ac{FPU}}\EN{We see \ac{FPU} condition flags state}: 
 \RU{все нули}\EN{all zeroes}.
 \RU{Вытолкнутое значение перемещается в \ST{7}, почему это так, я писал раннее}
 \EN{Popped value is moved into \ST{7}, I wrote earlier about reason of this}: 
 \ref{FPU_is_rather_circular_buffer}.\\
 \\
-\FNSTSW \RU{сработал}\EN{executed}: \ref{fig:FPU_comparison_case1_olly3}.
+\FNSTSW \RU{сработал}\EN{executed}: \figref{fig:FPU_comparison_case1_olly3}.
 \RU{Видно что регистр \TT{AX} содержит нули: действительно, ведь все condition-флаги тоже содержали нули.}
 \EN{We see that \TT{AX} register contain zeroes: indeed, all condition flags has zeroes.}
 (\olly \RU{дизассемблирует команду}\EN{disassembles} \FNSTSW \RU{как}\EN{instruction as} \TT{FSTSW} --- 
 \RU{это синоним}\EN{they are synonyms}).\\
 \\
-\TEST \RU{сработал}\EN{executed}: \ref{fig:FPU_comparison_case1_olly4}.
+\TEST \RU{сработал}\EN{executed}: \figref{fig:FPU_comparison_case1_olly4}.
 \RU{Флаг \TT{PF} равен единице.}\EN{\TT{PF} flag is one.}
 \RU{Все верно: количество выставленных бит в $0$ это $0$, а $0$ --- это четное число.}
 \EN{Indeed: count of bits set in $0$ is $0$ and $0$ is even number.}
@@ -136,7 +136,7 @@ are synonims}.
 \RU{И она сейчас сработает}\EN{And it will be triggered right now}.\\
 \\
 \ac{JPE} \RU{сработала}\EN{triggered}, \FLD \RU{загрузила в \ST{0} значение \IT{b} ($3.4$)}
-\EN{loads \IT{b} ($3.4$) value into \ST{0}}: \ref{fig:FPU_comparison_case1_olly5}.
+\EN{loads \IT{b} ($3.4$) value into \ST{0}}: \figref{fig:FPU_comparison_case1_olly5}.
 \RU{Ф-ция заканчивает свою работу}\EN{The function finishes its work}.
 
 \begin{figure}[H]
@@ -176,22 +176,22 @@ are synonims}.
 
 \paragraph{\RU{Второй пример с \olly}\EN{Second \olly example}: a=5.6 \AndENRU b=-4}
 
-\RU{Загружаем пример в}\EN{Let's load example into} \olly: \ref{fig:FPU_comparison_case2_olly1}.
+\RU{Загружаем пример в}\EN{Let's load example into} \olly: \figref{fig:FPU_comparison_case2_olly1}.
 \RU{Текущие параметры ф-ции}\EN{Current function arguments are}: $a=5.6$ \AndENRU $b=-4$).
 \IT{b} ($-4$) \RU{уже загружено в}\EN{is already loaded into} \ST{0}.
 \RU{Сейчас будет исполняться \FCOMP}\EN{\FCOMP will be executed now}. 
 \olly \RU{показывает второй аргумент \FCOMP, который сейчас находится в стеке}
 \EN{shows second \FCOMP argument which is in stack right now}.\\
 \\
-\FCOMP \RU{отработал}\EN{executed}: \ref{fig:FPU_comparison_case2_olly2}.
+\FCOMP \RU{отработал}\EN{executed}: \figref{fig:FPU_comparison_case2_olly2}.
 \RU{Мы видим значения condition-флагов \ac{FPU}: все нули кроме \Czero.}
 \EN{We see \ac{FPU} condition flags state: all zeroes except of \Czero.}\\
 \\
-\FNSTSW \RU{сработал}\EN{executed}: \ref{fig:FPU_comparison_case2_olly3}.
+\FNSTSW \RU{сработал}\EN{executed}: \figref{fig:FPU_comparison_case2_olly3}.
 \RU{Видно что регистр \TT{AX} содержит \TT{0x100}: флаг \Czero стал на место 16-го бита.}
 \EN{We see that \TT{AX} register contain \TT{0x100}: \Czero flag now on the place of 16th bit.}\\
 \\
-\TEST \RU{сработал}\EN{executed}: \ref{fig:FPU_comparison_case2_olly4}.
+\TEST \RU{сработал}\EN{executed}: \figref{fig:FPU_comparison_case2_olly4}.
 \RU{Флаг }\TT{PF} \RU{равен нулю}\EN{ flag is cleared}.
 \RU{Все верно}\EN{Indeed}: 
 \RU{количество единичных бит в \TT{0x100} --- это $1$, а $1$ --- это нечетное число}
@@ -200,7 +200,7 @@ are synonims}.
 \\
 \ac{JPE} \RU{не сработала}\EN{wasn't triggered}, \FLD 
 \RU{загрузила в \ST{0} значение \IT{a} ($5.6$)}
-\EN{loads \IT{a} value ($5.6$) into \ST{0}}: \ref{fig:FPU_comparison_case2_olly5}.
+\EN{loads \IT{a} value ($5.6$) into \ST{0}}: \figref{fig:FPU_comparison_case2_olly5}.
 \RU{Ф-ция заканчивает свою работу}\EN{The function finishes its work}.
 
 \begin{figure}[H]
