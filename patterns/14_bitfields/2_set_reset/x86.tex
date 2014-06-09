@@ -2,7 +2,7 @@
 
 \RU{Имеем в итоге}\EN{We got} (MSVC 2010):
 
-\lstinputlisting[caption=MSVC 2010]{patterns/14_bitfields/set_reset_msvc.asm}
+\lstinputlisting[caption=MSVC 2010]{patterns/14_bitfields/2_set_reset/set_reset_msvc.asm}
 
 \index{x86!\Instructions!OR}
 \RU{Инструкция \OR здесь добавляет в переменную еще один бит, игнорируя остальные.}
@@ -21,11 +21,11 @@ It is easier way to memorize the logic.}
 \RU{Если скомпилировать в MSVC с оптимизацией (\Ox), то код будет еще короче:}
 \EN{If we compile it in MSVC with optimization turned on (\Ox), the code will be even shorter:}
 
-\lstinputlisting[caption=\Optimizing MSVC]{patterns/14_bitfields/set_reset_msvc_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC]{patterns/14_bitfields/2_set_reset/set_reset_msvc_Ox.asm}
 
 \RU{Попробуем GCC 4.4.1 без оптимизации:}\EN{Let's try GCC 4.4.1 without optimization:}
 
-\lstinputlisting[caption=\NonOptimizing GCC]{patterns/14_bitfields/set_reset_gcc.asm}
+\lstinputlisting[caption=\NonOptimizing GCC]{patterns/14_bitfields/2_set_reset/set_reset_gcc.asm}
 
 \RU{Также избыточный код, хотя короче, чем у MSVC без оптимизации.}
 \EN{There is a redundant code present,
@@ -33,7 +33,7 @@ however, it is shorter then MSVC version without optimization.}
 
 \RU{Попробуем теперь GCC с оптимизацией}\EN{Now let's try GCC with optimization turned on} \Othree:
 
-\lstinputlisting[caption=\Optimizing GCC]{patterns/14_bitfields/set_reset_gcc_O3.asm}
+\lstinputlisting[caption=\Optimizing GCC]{patterns/14_bitfields/2_set_reset/set_reset_gcc_O3.asm}
 
 \RU{Уже короче. Важно отметить что через регистр \AH, компилятор работает с частью регистра \EAX, 
 эта его часть от 8-го до 15-го бита включительно.}
@@ -72,7 +72,7 @@ but that is 5 bytes, or even 6
 но еще и с опцией \TT{regparm=3}, о которой я писал немного выше, то получится еще короче:}
 \EN{It would be even shorter if to turn on \Othree optimization flag and also set \TT{regparm=3}.}
 
-\lstinputlisting[caption=\Optimizing GCC]{patterns/14_bitfields/set_reset_gcc_O3_regparm3.asm}
+\lstinputlisting[caption=\Optimizing GCC]{patterns/14_bitfields/2_set_reset/set_reset_gcc_O3_regparm3.asm}
 
 \index{Inline code}
 \RU{Действительно ~--- первый аргумент уже загружен в \EAX, и прямо здесь можно начинать с ним работать. 
