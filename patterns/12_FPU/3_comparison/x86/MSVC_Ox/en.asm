@@ -7,9 +7,9 @@ _d_max    PROC
 ; current stack state: ST(0) = _a, ST(1) = _b
 
     fcom    ST(1) ; compare _a and ST(1) = (_b)
-    fnstsw    ax
+    fnstsw  ax
     test    ah, 65 ; 00000041H
-    jne    SHORT $LN5@d_max
+    jne     SHORT $LN5@d_max
     fstp    ST(1)  ; copy ST(0) to ST(1) and pop register, leave (_a) on top
 
 ; current stack state: ST(0) = _a
