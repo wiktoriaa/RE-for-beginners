@@ -1,21 +1,24 @@
-\chapter{\RU{Работа с числами с плавающей запятой в x64 используя SIMD}
-\EN{Working with float point numbers using SIMD in x64}}
+\chapter{\RU{Работа с числами с плавающей запятой используя SIMD}
+\EN{Working with float point numbers using SIMD}}
 
 \label{floating_SIMD}
 \index{IEEE 754}
 \index{SIMD}
 \index{SSE}
 \index{SSE2}
-\RU{Разумеется, FPU остался в x86-совместимых процессорах в то время, когда ввели расширение x64}
-\EN{Of course, \ac{FPU} remained in x86-compatible processors, when x64 extension was added}.
-\RU{Но в то время уже везде были \ac{SIMD}-расширения (\ac{SSE}, SSE2, итд), которые, к тому же, тоже умеют работать
-с числами с плавающей запятой}\EN{But at the time, \ac{SIMD}-extensions (\ac{SSE}, SSE2, etc) were already present,
-which can work with float point numbers as well}. \RU{Формат чисел остается тот же}\EN{Number format
-remaining the same} (IEEE 754).
+\RU{Разумеется, FPU остался в x86-совместимых процессорах в то время, когда ввели расширения \ac{SIMD}}
+\EN{Of course, \ac{FPU} remained in x86-compatible processors, when \ac{SIMD} extensions were added}.
+
+\ac{SIMD}-\RU{расширения}\EN{extensions} (SSE2) \RU{позволяют удобнее работать с числами с плавающей 
+запятой}\EN{offers more easy way to work with float-point numbers}.
+
+\RU{Формат чисел остается тот же}\EN{Number format remaining the same} (IEEE 754).
 
 \index{x86-64}
-\RU{Так что, компиляторы для x86-64 обычно используют \ac{SIMD}-инструкции}\EN{So, x86-64 compilers are usually
-use \ac{SIMD}-instructions}.
+\RU{Так что современные компиляторы (включая те, что компилируют под x86-64) 
+обычно используют \ac{SIMD}-инструкции вместо FPU-инструкций.}\EN{So, modern compilers (including those generating
+for x86-64) usually uses \ac{SIMD}-instructions instead of FPU ones.}
+
 \RU{Это, можно сказать, хорошая новость, потому что работать с ними легче}
 \EN{It can be said, it's a good news, because it's easier to work with them}.
 
@@ -25,15 +28,16 @@ use \ac{SIMD}-instructions}.
 
 \lstinputlisting{patterns/12_FPU/1_simple/simple.c}
 
+\subsection{x64}
+
 \lstinputlisting[caption=MSVC 2012 x64 /Ox]{patterns/205_floating_SIMD/simple_MSVC_2012_x64_Ox.asm}
 
-% FIXME -> \XMM{0}...
-\RU{Собственно, входные значения с плавающей запятой передаются через регистры \TT{XMM0}-\TT{XMM3}, 
-а остальные --- через стек}\EN{Input floating point values are passed in \TT{XMM0}-\TT{XMM3} registers,
+\RU{Собственно, входные значения с плавающей запятой передаются через регистры \XMM{0}-\XMM{3}, 
+а остальные --- через стек}\EN{Input floating point values are passed in \XMM{0}-\XMM{3} registers,
 all the rest---via stack}
 \footnote{\href{http://msdn.microsoft.com/en-us/library/zthk2dkh.aspx}{MSDN: Parameter Passing}}.
 
-$a$ \RU{передается через}\EN{is passed in} \TT{XMM0}, $b$\EMDASH{}\RU{через}\EN{via} \TT{XMM1}.
+$a$ \RU{передается через}\EN{is passed in} \XMM{0}, $b$\EMDASH{}\RU{через}\EN{via} \XMM{1}.
 \RU{Но XMM-регистры (как мы уже знаем из секции о \ac{SIMD}\ref{SIMD_x86}) 128-битные, 
 а значения типа \Tdouble --- 64-битные,
 так что используется только младшая половина регистра}
@@ -53,8 +57,8 @@ one value of \Tdouble type by another, stored in the lower halves of operands}.
 \TT{MULSD} \AndENRU \TT{ADDSD} \RU{работают так же, только производят умножение и сложение}
 \EN{works just as the same, but doing multiplication and addition}.
 
-\RU{Результат работы ф-ции типа \Tdouble ф-ция оставляет в регистре \TT{XMM0}}
-\EN{The result of \Tdouble type the function leaves in \TT{XMM0} register}.\\
+\RU{Результат работы ф-ции типа \Tdouble ф-ция оставляет в регистре \XMM{0}}
+\EN{The result of \Tdouble type the function leaves in \XMM{0} register}.\\
 \\
 \RU{Как работает неоптимизирующий MSVC}\EN{That is how non-optimizing MSVC works}:
 
@@ -68,12 +72,88 @@ one value of \Tdouble type by another, stored in the lower halves of operands}.
 \\
 \RU{Результат работы компилятора GCC точно такой же}\EN{GCC produces very same code}.
 
+\subsection{x86}
+
+\RU{Я скомпилировал этот пример также и под x86. MSVC 2012 даже генерируя под x86, использует 
+SSE2-инструкции:}\EN{I also compiled this example for x86. Despite the fact of generating for x86, 
+MSVC 2012 use SSE2-instructions:}
+
+\lstinputlisting[caption=MSVC 2012 x86]{patterns/205_floating_SIMD/simple_MSVC_2012_x86.asm}
+
+\lstinputlisting[caption=MSVC 2012 x86 /Ox]{patterns/205_floating_SIMD/simple_MSVC_2012_x86_Ox.asm}
+
+\RU{Код почти такой же, правда есть пара отличий связанных с соглашениями о вызовах:}
+\EN{It's almost the same code, however, there are couple differences related to calling conventions:}
+1) \RU{аргументы передаются не в XMM-регистрах, а через стек, как и прежде, в примерах с FPU (\ref{sec:FPU});}
+\EN{arguments are passed not in XMM registers, but in stack, like in FPU examples (\ref{sec:FPU});}
+2) \RU{результат работы ф-ции возвращается через \ST{0} --- для этого он через стек
+(через локальную переменную \TT{tv}) копируется из XMM-регистра в \ST{0}.}
+\EN{function result is returned in \ST{0} --- in order to do so, it's copied
+(through local variable \TT{tv}) from one of XMM-registers into \ST{0}.}
+
+\RU{Попробуем соптимизированный пример в}\EN{Let's try optimized example in} \olly:
+\figref{fig:FPU_SIMD_simple_olly1},
+\figref{fig:FPU_SIMD_simple_olly2},
+\figref{fig:FPU_SIMD_simple_olly3},
+\figref{fig:FPU_SIMD_simple_olly4},
+\figref{fig:FPU_SIMD_simple_olly5}.
+
+\RU{Видно что \olly показывает XMM-регистры как пары чисел в формате \Tdouble,
+но используется только \IT{младшая} часть.}
+\EN{We see that \olly shows XMM-reigsters as \Tdouble number pairs,
+but only \IT{lower} part is used.}
+\RU{Должно быть, \olly показывает их именно так, потому что сейчас исполняются SSE2-инструкции
+с суффиксом \TT{-SD}.}
+\EN{Apparently, \olly shows them in that format because SSE2-instructions (suffixed with \TT{-SD}) 
+are executed right now.}
+\RU{Но конечно же, можно переключить отображение значений в регистрах и посмотреть содержимое
+как 4 \Tfloat{}-числа или просто как 16 байт.}
+\EN{But of course, it's possible to switch register format and to see its contents as
+4 \Tfloat{}-numbers or just as 16 bytes.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly1.png}
+\caption{\olly: \TT{MOVSD} \RU{загрузила значение}\EN{loads value of} $a$ \RU{в}\EN{into} \XMM{1}}
+\label{fig:FPU_SIMD_simple_olly1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly2.png}
+\caption{\olly: \TT{DIVSD} \RU{вычислила}\EN{calculated} \gls{quotient} 
+\RU{и оставила его в}\EN{and stored it in} \XMM{1}}
+\label{fig:FPU_SIMD_simple_olly2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly3.png}
+\caption{\olly: \TT{MULSD} \RU{вычислила}\EN{calculated} \gls{product} \RU{и оставила его в}\EN{and stored it
+in} \XMM{0}}
+\label{fig:FPU_SIMD_simple_olly3}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly4.png}
+\caption{\olly: \TT{ADDSD} \RU{прибавила значение в}\EN{adds value in} \XMM{0} \RU{к}\EN{to} \XMM{1}}
+\label{fig:FPU_SIMD_simple_olly4}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly5.png}
+\caption{\olly: \FLD \RU{оставляет результат ф-ции в}\EN{left function result in} \ST{0}}
+\label{fig:FPU_SIMD_simple_olly5}
+\end{figure}
+
 \section{\RU{Передача чисел с плавающей запятой в аргументах}\EN{Passing floating point number via arguments}}
 
 \lstinputlisting{patterns/12_FPU/2_passing_floats/pow.c}
 
 \RU{Они передаются в младших половинах регистров}\EN{They are passed in lower halves
-of the} \TT{XMM0}-\TT{XMM3}\EN{ registers}.
+of the} \XMM{0}-\XMM{3}\EN{ registers}.
 
 \lstinputlisting[caption=MSVC 2012 x64 /Ox]{patterns/205_floating_SIMD/pow_MSVC_2012_x64_Ox.asm}
 
@@ -90,8 +170,8 @@ so they renamed it into} \TT{MOVSDX}.
 \RU{Она просто загружает значение в младшую половину XMM-регистра}\EN{It just loads a value into
 lower half of XMM-register}.
 
-\RU{Ф-ция }\TT{pow()} \RU{берет аргументы из}\EN{takes arguments from} \TT{XMM0} \AndENRU \TT{XMM1}, 
-\RU{и возвращает результат в}\EN{and returning result in} \TT{XMM0}.
+\RU{Ф-ция }\TT{pow()} \RU{берет аргументы из}\EN{takes arguments from} \XMM{0} \AndENRU \XMM{1}, 
+\RU{и возвращает результат в}\EN{and returning result in} \XMM{0}.
 \RU{Далее он перекладывается в}\EN{It is then moved into} \RDX \ForENRU \printf. 
 \RU{Почему}\EN{Why}? 
 \RU{Честно говоря, не знаю, может быть, это потому что}\EN{Honestly speaking, I don't know, maybe because} 
@@ -100,7 +180,7 @@ lower half of XMM-register}.
 \lstinputlisting[caption=GCC 4.4.6 x64 -O3]{patterns/205_floating_SIMD/pow_GCC446_x64_O3_\LANG.s}
 
 GCC \RU{работает понятнее}\EN{making more clear result}. 
-\RU{Значение для}\EN{Value for} \printf \RU{передается в}\EN{is passed in} \TT{XMM0}. 
+\RU{Значение для}\EN{Value for} \printf \RU{передается в}\EN{is passed in} \XMM{0}. 
 \RU{Кстати, вот тот случай, когда в}\EN{By the way, here is a case when 1 is written into} \EAX
 \ForENRU \printf \RU{записывается 1 --- это значит, что будет передан один аргумент в векторных регистрах, 
 так того требует стандарт}\EN{---this mean that one argument will be passed in vector registers,
@@ -109,6 +189,8 @@ just as the standard requires} \cite{SysVABI}.
 \section{\RU{Пример с сравнением}\EN{Comparison example}}
 
 \lstinputlisting{patterns/12_FPU/3_comparison/d_max.c}
+
+\subsection{x64}
 
 \lstinputlisting[caption=MSVC 2012 x64 /Ox]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64_Ox.asm}
 
@@ -131,7 +213,29 @@ which just choose maximal value}!
 
 \lstinputlisting[caption=GCC 4.4.6 x64 -O3]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
 
-\section{\RU{Краткий итог}\EN{Summary}}
+\subsection{x86}
+
+\RU{Скомпилируем этот пример в MSVC 2012 с включенной оптимизацией:}
+\EN{Let's compile this example in MSVC 2012 with optimization turned on:}
+
+\lstinputlisting[caption=MSVC 2012 x86 /Ox]{patterns/205_floating_SIMD/d_max_MSVC_2012_x86_Ox.asm}
+
+\RU{Всё то же самое, только значения}\EN{Almost the same, but values of} $a$ \AndENRU $b$ 
+\RU{берутся из стека, а результат функции оставляется в}\EN{are taked from stack and function result 
+is left in} \ST{0}.
+
+\RU{Если загрузить этот пример в}\EN{If to load this example in} \olly, 
+\RU{увидим как инструкция}\EN{we will see how} \TT{COMISD} \RU{сравнивает значения и устанавливает/сбрасывает
+флаги}\EN{instruction compares values and set/clear} \CF \AndENRU \PF\EN{ flags}: \figref{fig:FPU_SIMD_d_max_olly}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/d_max_olly.png}
+\caption{\olly: \TT{COMISD} \RU{изменила флаги}\EN{changed} \CF \AndENRU \PF\EN{ flags}}
+\label{fig:FPU_SIMD_d_max_olly}
+\end{figure}
+
+\section{\RU{Итог}\EN{Summary}}
 
 \RU{Во всех приведенных примерах, в XMM-регистрах используется только младшая половина регистра, там
 хранится значение в формате IEEE 754}\EN{Only lower half of XMM-registers are used in all examples here, 
@@ -161,3 +265,9 @@ SIMD-register will contain only one value instead of several}.
 \RU{Инструкции, работающие с несколькими значениями в регистре одновременно, имеют ``Packed'' в названии}
 \EN{Instructions working with several values in a register simultaneously, has ``Packed'' in the name}.
 
+\RU{Нужно также обратить внимание, что SSE2-инструкции работают с 64-битными числами (\Tdouble) в формате IEEE 754,
+в то время как внутреннее представление в FPU --- 80-битные числа.}
+\EN{Needless to say that SSE2-instructions works with 64-bit IEEE 754 numbers (\Tdouble),
+while internal representation of float-point numbers in FPU --- 80-bit numbers.}
+\RU{Поэтому ошибок округления (\IT{round-off error}) в FPU может быть меньше чем в SSE2.}
+\EN{Hence, FPU may produce less round-off errors.}
