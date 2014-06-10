@@ -1,0 +1,90 @@
+﻿\section{\RU{Мусор в стеке}\EN{Noise in stack}}
+
+\RU{Часто в этой книге я говорю о ``шуме'' или ``мусоре'' в стеке.}
+\EN{Often in this book, I write about ``noise'' or ``garbage'' values in stack.}
+\RU{Откуда он берется}\EN{Where are they came from}?
+\RU{Это то, что осталось там после исполнения предыдущих ф-ций.}
+\EN{These are what was left in there after other function's executions.}
+\RU{Короткий пример}\EN{Short example}:
+
+\lstinputlisting{patterns/02_stack/08_noise/st.c}
+
+\RU{Компилируем}\EN{Compiling}...
+
+\lstinputlisting[caption=MSVC 2010]{patterns/02_stack/08_noise/st.asm}
+
+\RU{Компилятор поворчит немного}\EN{The compiler grumbling}...
+
+\begin{lstlisting}
+c:\Polygon\c>cl st.c /Fast.asm /MD
+Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 16.00.40219.01 for 80x86
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+st.c
+c:\polygon\c\st.c(11) : warning C4700: uninitialized local variable 'c' used
+c:\polygon\c\st.c(11) : warning C4700: uninitialized local variable 'b' used
+c:\polygon\c\st.c(11) : warning C4700: uninitialized local variable 'a' used
+Microsoft (R) Incremental Linker Version 10.00.40219.01
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:st.exe
+st.obj
+\end{lstlisting}
+
+\RU{Но когда я запускаю}\EN{But when I run}...
+
+\begin{lstlisting}
+c:\Polygon\c>st
+1, 2, 3
+\end{lstlisting}
+
+\RU{Ох. Вот это странно. Мы ведь не устанавливали значения никаких переменных в}\EN{Oh. 
+What a weird thing. We did not set any variables in} \TT{f2()}. 
+\RU{Эти значения это ``приведения'', которые все еще в стеке.}
+\EN{These are values are ``ghosts'', which are still in the stack.}
+
+\RU{Загрузим пример в}\EN{Let's load the example into} \olly: \figref{fig:stack_noise_olly1}.
+
+\RU{Когда}\EN{When} \TT{f1()} \RU{заполняет переменные}\EN{writes to} $a$, $b$ \AndENRU $c$ 
+\RU{они сохранаяются по адресу}\EN{variables, they are stored at the address} \TT{0x14F85C} 
+\RU{итд}\EN{and so on}.
+
+\RU{А когда исполняется}\EN{And when} \TT{f2()}\EN{ executed}: \figref{fig:stack_noise_olly2}.
+
+... $a$, $b$ \AndENRU $c$ \RU{в ф-ции}\EN{of} \TT{f2()} \RU{находятся по тем же адресам!}
+\EN{are located at the same address!}
+\RU{Пока никто не перезаписал их, так что они здесь в нетронутом виде.}
+\EN{No one overwrited values yet, so they are still untouched here.}
+
+\RU{Так что, для такой странной ситуации, несколько ф-ций должны исполняться друг за другом,
+и \ac{SP} должен быть таким же при входе в ф-цию (т.е., у них должно быть равное кол-во
+аргументов). Тогда, локальные переменные будут расположены в том же месте стека.}
+\EN{So, for this weird situation, several functions should be called one after another and
+\ac{SP} should be the same at each function entry (i.e., they should has same number
+of arguments). Then, local variables will be located at the same point of stack.}
+
+\RU{Подводя итоги, все значения в стеке (да и памяти вообще) это значения оставшиеся от 
+исполнения предыдущих ф-ций}\EN{Summarizing, all values in stack (and memory cells at all) 
+has values left there from previous function executions}.
+\RU{Строго говоря, они не случайны, они скорее непредсказуемы}\EN{They are not 
+random in strict sense, but rather has unpredictable values}.
+
+\RU{А как иначе}\EN{How else}?
+\RU{Вероятно, было бы возможным очищать части стека перед исполнением каждой ф-ции,
+но это слишком много лишней (и ненужной) работы.}
+\EN{Probably, it would be possible to clear stack portions before each function execution,
+but that's too much extra (and needless) work.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/02_stack/08_noise/olly1.png}
+\caption{\olly: \TT{f1()}}
+\label{fig:stack_noise_olly1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/02_stack/08_noise/olly2.png}
+\caption{\olly: \TT{f2()}}
+\label{fig:stack_noise_olly2}
+\end{figure}

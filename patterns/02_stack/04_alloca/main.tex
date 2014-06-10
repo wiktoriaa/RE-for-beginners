@@ -29,7 +29,7 @@ the allocated memory will be just annulled.}
 need and sets \ESP as a pointer to the \IT{allocated} block.}
 \RU{Попробуем:}\EN{Let's try:}
 
-\lstinputlisting{patterns/02_stack/2_1.c}
+\lstinputlisting{patterns/02_stack/04_alloca/2_1.c}
 
 \RU{(Функция \TT{\_snprintf()} работает так же, как и \printf, только вместо выдачи результата в 
 stdout (т.е., на терминал или в консоль),
@@ -43,7 +43,7 @@ function calls might be replaced by one \printf call, but I would like to illust
 
 \RU{Компилируем}\EN{Let's compile} (MSVC 2010):
 
-\lstinputlisting[caption=MSVC 2010]{patterns/02_stack/2_2_msvc.asm}
+\lstinputlisting[caption=MSVC 2010]{patterns/02_stack/04_alloca/2_2_msvc.asm}
 
 \index{Compiler intrinsic}
 \RU {Единственный параметр в \TT{alloca()} передается через \EAX, а не как обычно через стек}
@@ -70,13 +70,13 @@ use it as memory for the \TT{buf} array.}
 \RU{А GCC 4.4.1 обходится без вызова других функций:}
 \EN{GCC 4.4.1 can do the same without calling external functions:}
 
-\lstinputlisting[caption=GCC 4.7.3]{patterns/02_stack/2_1_gcc_intel_O3_\LANG.asm}
+\lstinputlisting[caption=GCC 4.7.3]{patterns/02_stack/04_alloca/2_1_gcc_intel_O3_\LANG.asm}
 
 \subsubsection{GCC + \ATTSyntax}
 
 \RU{Посмотрим на тот же код, только в синтаксисе AT\&T}\EN{Let's see the same code, but in AT\&T syntax}:
 
-\lstinputlisting[caption=GCC 4.7.3]{patterns/02_stack/2_1_gcc_ATT_O3.s}
+\lstinputlisting[caption=GCC 4.7.3]{patterns/02_stack/04_alloca/2_1_gcc_ATT_O3.s}
 
 \index{\ATTSyntax}
 \RU{Всё то же самое, что и в прошлом листинге.}\EN{The code is the same as in the previous listing.}

@@ -55,6 +55,7 @@ Thus it is easier for CPU to access memory at aligned addresses and to cache dat
 \EN{Now the structure takes only 10 bytes and each \Tchar value takes 1 byte. What it give to us?
 Size economy. And as drawback~---CPU will access these fields without maximal performance it can.}
 
+\label{short_struct_copying_using_MOV}
 \RU{Структура так же копируется в \main. Но не по одному полю, а 10 байт, при помощи трех
 пар \MOV.}
 \EN{Structure is also copied in \main. Not by one-by-one field, but 10 bytes, using three pairs
@@ -64,11 +65,12 @@ of \MOV.}
 при помощи 3 пар \MOV, чем копировать два 32-битных слова и два байта при помощи 4 пар \MOV.}
 \EN{Compiler decided that it's better to copy 10 bytes using 3 \MOV pairs then to copy two 32-bit words
 and two bytes using 4 \MOV pairs.}
-\RU{Кстати, подобная реализация копирования при помощи \MOV взамен вызова ф-ции memcpy(), например, это
-очень распространенная практика, потому что это в любом случае работает быстрее чем вызов memcpy() ---
-если речь идет о коротких блоках, конечно.}
-\EN{By the way, such copy implementation using \MOV instead of memcpy() function calling is widely
-used, because it's faster then to call memcpy()---if to talk about short blocks, of course.}
+\RU{Кстати, подобная реализация копирования при помощи \MOV взамен вызова ф-ции \TT{memcpy()}, например, это
+очень распространенная практика, потому что это в любом случае работает быстрее чем вызов \TT{memcpy()} ---
+если речь идет о коротких блоках, конечно: \ref{copying_short_blocks}.}
+\EN{By the way, such copy implementation using \MOV instead of \TT{memcpy()} function calling is widely
+used, because it's faster then to call \TT{memcpy()}---if to talk about short blocks, of course:
+\ref{copying_short_blocks}.}
 
 \RU{Как нетрудно догадаться, если структура используется много в каких исходниках и объектных файлах, 
 все они должны быть откомпилированы с одним и тем же соглашением об упаковке структур.}
