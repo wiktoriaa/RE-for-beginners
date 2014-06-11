@@ -1,8 +1,10 @@
 \subsection{x86}
 
+\subsubsection{\NonOptimizing MSVC}
+
 \RU{Имеем в итоге}\EN{We got} (MSVC 2010):
 
-\lstinputlisting[caption=MSVC 2010]{patterns/08_switch/8_5_msvc.asm}
+\lstinputlisting[caption=MSVC 2010]{patterns/08_switch/lot_8_5_msvc.asm}
 
 \index{jumptable}
 \RU{Здесь происходит следующее: в теле функции есть набор вызовов \printf с разными аргументами. 
@@ -50,9 +52,11 @@ Literally, \TT{jmp DWORD PTR \$LN11@f[ecx*4]} instruction means
 This is very suitable for processor since it is able to fetch 32-bit values from memory through memory bus,
 cache memory, etc, in much effective way if it is aligned.}
 
+\subsubsection{\NonOptimizing GCC}
+
 \RU{Посмотрим, что сгенерирует GCC 4.4.1}\EN{Let's see what GCC 4.4.1 generates}:
 
-\lstinputlisting[caption=GCC 4.4.1]{patterns/08_switch/8_6_gcc.asm}
+\lstinputlisting[caption=GCC 4.4.1]{patterns/08_switch/lot_8_6_gcc.asm}
 
 \index{x86!\Registers!JMP}
 \RU{Практически то же самое, за исключением мелкого нюанса: аргумент из \TT{arg\_0} умножается на 4 

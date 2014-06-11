@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 void f (int a)
 {
     switch (a)
@@ -7,4 +9,9 @@ void f (int a)
     case 2: printf ("two\n"); break;
     default: printf ("something unknown\n"); break;
     };
+};
+
+int main()
+{
+    f (2); // test
 };

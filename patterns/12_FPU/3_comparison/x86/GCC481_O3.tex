@@ -1,0 +1,75 @@
+﻿\subsubsection{GCC 4.8.1 \RU{с оптимизацией \Othree}\EN{with \Othree optimization turned on}}
+
+\EN{Some new FPU instructions were appeared in P6 Intel family}\RU{В линейке процессоров P6 от Intel 
+появились новые FPU-инструкции}\footnote{\EN{Starting at}\RU{Начиная с} Pentium Pro, 
+Pentium-II, \RU{итд}\EN{etc}}.
+\RU{Это}\EN{These are} \TT{FUCOMI} (\RU{сравнить операнды и выставить флаги основного CPU}\EN{compare 
+operands and set flags of main CPU}) \AndENRU 
+\TT{FCMOVcc} (\RU{работает как}\EN{works like} \TT{CMOVcc}, \RU{но на регистрах FPU}\EN{but on FPU registers}).
+\RU{Очевидно, разработчики GCC решили отказаться от поддержки процессоров до линейки P6 (ранние Pentium, итд)}
+\EN{Apparently, GCC maintainers decided to drop support of Intel CPUs before P6 family (early Pentiums, etc)}.
+
+\RU{И похоже, FPU уже давно не отдельная часть процессора в линейке P6, так что флаги основного CPU можно
+модифицировать из FPU.}
+\EN{It seems, FPU is no longer separate unit in P6 Intel family, so now it is possible to modify/check flags 
+of main CPU from FPU.}
+
+\RU{Вот что имеем}\EN{So what we got is}:
+
+\lstinputlisting[caption=\Optimizing GCC 4.8.1]{patterns/12_FPU/3_comparison/x86/GCC481_O3.s}
+
+\RU{Не совсем понимаю, зачем здесь \TT{FXCH} (поменять местами операнды)}
+\EN{I'm not sure why \TT{FXCH} (swap operands) is here}.
+\RU{От нее легко избавиться поменяв местами инструкции \FLD либо заменив 
+\TT{FCMOVBE} (\IT{below or equal} --- меньше или равно) на 
+\TT{FCMOVA} (\IT{above} --- больше).}
+\EN{It's possible to get rid of it easily by swapping two first \FLD instructions or by replacing 
+\TT{FCMOVBE} (\IT{below or equal}) by \TT{FCMOVA} (\IT{above}).}
+\RU{Должно быть, неаккуратность компилятора}\EN{Probably, compiler's inaccuracy}.
+
+\RU{Так что}\EN{So} \TT{FUCOMI} \EN{compares}\RU{сравниванет} \ST{0} ($a$) \AndENRU \ST{1} ($b$) 
+\RU{и затем устанавливает флаги основного CPU}\EN{and then sets main CPU flags}.
+\TT{FCMOVBE} \RU{проверяет флаги и копирует}\EN{checks flags and copying} \ST{1} 
+(\RU{в тот момент там находится $b$}\EN{$b$ here at the moment}) \RU{в}\EN{to} 
+\ST{0} (\RU{там $a$}\EN{$a$ here}) \RU{если}\EN{if} $ST0 (a) <= ST1 (b)$.
+\RU{В противном случае}\EN{Otherwise} ($a>b$), \RU{она оставляет}\EN{it leaves} $a$ \InENRU \ST{0}.
+
+\RU{Последняя}\EN{The last} \FSTP \RU{оставляет содержимое}\EN{leaves} \ST{0} 
+\RU{на вершине стека, выбрасывая содержимое}\EN{on top of stack discarding} \ST{1}\EN{ contents}.
+
+\RU{Попробуем оттрасировать ф-цию в}\EN{Let's trace this function in} GDB:
+
+\lstinputlisting[caption=\Optimizing GCC 4.8.1 and GDB,numbers=left]{patterns/12_FPU/3_comparison/x86/gdb.txt}
+
+\RU{Используя}\EN{Using} ``ni'', \RU{дадим первым двум инструкциям \FLD исполниться.}
+\EN{let's execute two first \FLD instructions.}
+
+\RU{Посмотрим регистры FPU}\EN{Let's examine FPU registers} (\LineENRU 33).
+
+\RU{Как я писал раннее, регистры FPU это скорее кольцевой буфер, нежели стек}
+\EN{As I wrote before, FPU registers are circular buffer rather than stack} (\ref{FPU_is_rather_circular_buffer}).
+\RU{И}\EN{And} GDB \RU{показывает не регистры}\EN{shows not} \TT{STx} \RU{а внутренние регистры FPU}
+\EN{registers, but internal FPU registers} (\TT{Rx}). 
+\RU{Стрелка}\EN{Arrow} (\RU{на строке}\EN{at line} 35) 
+\RU{указывает на текущую вершину стека.}
+\EN{points to the current stack top.}
+\RU{Вы можете также увидеть переменную \TT{TOP} в ``Status Word'' (строка 44), там сейчас 6, так что
+вершина стека это сейчас внутренний регистр 6.}
+\EN{You may also see \TT{TOP} variable in \IT{Status Word} (line 44) it has 6 now, 
+so stack top is now in internal register 6.}
+
+\RU{Значения $a$ и $b$ меняются местами после исполнения \TT{FXCH}}\EN{$a$ and $b$ values are swapped 
+after \TT{FXCH} executed} (\LineENRU 54).
+
+\TT{FUCOMI} \RU{исполнилась}\EN{executed} (\LineENRU 83). 
+\RU{Посмотрим флаги}\EN{Let's see flags}: \CF \RU{выставлен}\EN{is set} (\LineENRU 95).
+
+\TT{FCMOVBE} \RU{действительно скопировал значение $b$ (см.строку 104).}
+\EN{is actually copied value of $b$ (see line 104).}
+
+\FSTP \RU{оставляет одно значение на вершине стека}\EN{leaves one value at the top of stack} (\LineENRU 136). 
+\RU{Значение \TT{TOP} теперь 7, так что вершина FPU-стека указывает на внутренний регистр 7}\EN{\TT{TOP} value is 
+now 7, so FPU stack top is points to internal register 7}.
+
+% TODO task: rewrite the function without FXCH and test it
+
