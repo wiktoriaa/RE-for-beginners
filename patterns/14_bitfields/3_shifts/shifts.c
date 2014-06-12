@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #define IS_SET(flag, bit)       ((flag) & (bit))
 
 int f(unsigned int a)
@@ -10,4 +12,9 @@ int f(unsigned int a)
             rt++;
 
     return rt;
+};
+
+int main()
+{
+    f(0x12345678); // test
 };
