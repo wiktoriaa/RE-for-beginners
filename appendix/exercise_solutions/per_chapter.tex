@@ -1,0 +1,70 @@
+﻿\section{\RU{По главам}\EN{Per chapter}}
+
+\subsection{\RU{Глава ``\Stack''}\EN{``\Stack'' chapter}}
+
+\subsubsection{\Exercise \#1}
+\label{exercise_solutions_stack_1}
+
+\Exercise: \ref{exercise_stack_1}.
+
+\EN{\NonOptimizing MSVC, these numbers are: saved \EBP value}\RU{Если MSVC без оптимизации, 
+то эти числа таковы: сохраненное значение \EBP}, \ac{RA} \AndENRU \TT{argc}.
+\RU{В этом легко убедиться, если запускать пример с разным количеством аргументов в командной 
+строке}\EN{It's easy to be assured in that by running the example with different number
+of arguments in command-line}.
+
+\RU{Если MSVC с оптимизацией, то числа таковы}\EN{\Optimizing MSVC, these numbers are}: 
+\ac{RA}, \TT{argc} \RU{и указатель на массив}\EN{and a pointer to} \TT{argv[]}\EN{ array}.
+
+GCC 4.8.x \RU{выделяет в прологе ф-ции \main 16-байтное пространство, поэтому числа на 
+выходе совсем другие}\EN{allocates 16-byte space in \main function prologue, 
+hence different output numbers}.
+
+\subsection{\RU{Глава ``\Arrays''}\EN{``\Arrays'' chapter}}
+
+\subsubsection{\Exercise \#1}
+\label{exercise_solutions_arrays_1}
+
+\Exercise: \ref{exercise_array_1}.
+
+\RU{Ответ: сложение двух матриц размером 100 на 200 элементов типа \Tdouble.}
+\EN{Solution: two 100*200 matrices of \Tdouble type addition.}
+
+\RU{Исходник на \CCpp}\EN{\CCpp source code}:
+
+\begin{lstlisting}
+#define M    100
+#define N    200
+
+void s(double *a, double *b, double *c)
+{
+  for(int i=0;i<N;i++)
+    for(int j=0;j<M;j++)
+      *(c+i*M+j)=*(a+i*M+j) + *(b+i*M+j);
+};
+\end{lstlisting}
+
+\subsubsection{\Exercise \#2}
+\label{exercise_solutions_arrays_2}
+
+\RU{Ответ: умножение двух матриц размерами 100*200 и 100*300 элементов типа \Tdouble, результат: матрица 100*300.}
+\EN{Solution: two matrices (one is 100*200, second is 100*300) of \Tdouble type multiplication, result: 100*300
+matrix.}
+
+\RU{Исходник на \CCpp}\EN{\CCpp source code}:
+
+\begin{lstlisting}
+#define M     100
+#define N     200
+#define P     300
+
+void m(double *a, double *b, double *c)
+{
+  for(int i=0;i<M;i++)
+    for(int j=0;j<P;j++)
+    {
+      *(c+i*M+j)=0;
+      for (int k=0;k<N;k++) *(c+i*M+j)+=*(a+i*M+j) * *(b+i*M+j);
+    }
+};
+\end{lstlisting}

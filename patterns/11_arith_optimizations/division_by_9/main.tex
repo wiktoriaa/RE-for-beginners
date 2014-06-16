@@ -1,4 +1,4 @@
-\chapter{\DivisionByNineSectionName}
+\section{\DivisionByNineSectionName}
 \label{sec:divisionbynine}
 
 \RU{Простая функция:}\EN{Very simple function:}
@@ -10,11 +10,11 @@ int f(int a)
 };
 \end{lstlisting}
 
-\section{x86}
+\subsection{x86}
 
 \dots \RU{компилируется вполне предсказуемо:}\EN{is compiled in a very predictable way:}
 
-\lstinputlisting[caption=MSVC]{patterns/11_division_by_9/11_1_msvc_\LANG.asm}
+\lstinputlisting[caption=MSVC]{patterns/11_arith_optimizations/division_by_9/11_1_msvc_\LANG.asm}
 
 \index{ARM!\Instructions!IDIV}
 \RU{\IDIV делит 64-битное число хранящееся в паре регистров \TT{EDX:EAX} на значение в \ECX. 
@@ -34,7 +34,7 @@ value in the \EAX to 64-bit value taking value sign into account, just as \MOVSX
 \RU{Со включенной оптимизацией (\Ox) получается:}
 \EN{If we turn optimization on (\Ox), we got:}
 
-\lstinputlisting[caption=\Optimizing MSVC]{patterns/11_division_by_9/11_1_msvc_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC]{patterns/11_arith_optimizations/division_by_9/11_1_msvc_Ox.asm}
 
 \RU{Это ~--- деление через умножение. Умножение конечно быстрее работает. 
 Поэтому можно используя этот трюк
@@ -52,9 +52,9 @@ to produce a code which is effectively equivalent and faster.}
 как и MSVC с оптимизацией:}
 \EN{GCC 4.4.1 even without optimization turned on, generates almost the same code as MSVC with optimization turned on:}
 
-\lstinputlisting[caption=\NonOptimizing GCC 4.4.1]{patterns/11_division_by_9/11_2_gcc.asm}
+\lstinputlisting[caption=\NonOptimizing GCC 4.4.1]{patterns/11_arith_optimizations/division_by_9/11_2_gcc.asm}
 
-\section{ARM}
+\subsection{ARM}
 
 \RU{В процессоре ARM, как и во многих других ``чистых'' (pure) RISC-процессорах нет инструкции деления.
 Нет также возможности умножения на 32-битную константу одной инструкцией.}
@@ -86,7 +86,7 @@ subtraction and bit shifts}~(\ref{sec:bitfields}).
     MOV    pc, lr
 \end{lstlisting}
 
-\subsection{\OptimizingXcode + \ARMMode}
+\subsubsection{\OptimizingXcode + \ARMMode}
 
 \begin{lstlisting}
 __text:00002C58 39 1E 08 E3 E3 18 43 E3  MOV    R1, 0x38E38E39
@@ -144,7 +144,7 @@ dropping low 32-bit part of result.}
 \EN{may be supplied by option, is the second operand must be shifted, if yes, by what value and how.}
 \TT{ASR} \RU{означает}\EN{meaning} \IT{Arithmetic Shift Right}, \TT{LSR}\EMDASH\IT{Logican Shift Right}.
 
-\subsection{\OptimizingXcode + \ThumbTwoMode}
+\subsubsection{\OptimizingXcode + \ThumbTwoMode}
 
 \begin{lstlisting}
 MOV             R1, 0x38E38E39
@@ -159,7 +159,7 @@ BX              LR
 \EN{There are separate instructions for shifting in thumb mode}, \RU{и здесь применяется одна из них}
 \EN{and one of them is used here}\EMDASH\TT{ASRS} (\RU{арифметический сдвиг вправо}\EN{arithmetic shift right}).
 
-\subsection{\NonOptimizing Xcode (LLVM) \AndENRU Keil}
+\subsubsection{\NonOptimizing Xcode (LLVM) \AndENRU Keil}
 
 \NonOptimizing LLVM 
 \RU{не занимается генерацией подобного кода, а вместо этого просто вставляет вызов
@@ -170,7 +170,7 @@ BX              LR
 \RU{А Keil во всех случаях вставляет вызов функции}
 \EN{What about Keil: it inserts call to library function} \IT{\_\_aeabi\_idivmod}\EN{ in all cases}.
 
-\section{\RU{Как это работает}\EN{How it works}}
+\subsection{\RU{Как это работает}\EN{How it works}}
 
 \RU{Вот как деление может быть заменено на умножение и деление на числа $2^{n}$}
 \EN{That's how division can be replaced by multiplication and division by $2^{n}$ numbers}:
@@ -236,17 +236,17 @@ unsigned int f3_32_unsigned(unsigned int a)
 $1$ \RU{прибавляется к конечному результату, если знак отрицательный}
 \EN{is added to the final result if sign is negative}.
 
-\lstinputlisting[caption=MSVC 2012 /Ox]{patterns/11_division_by_9/2_\LANG.asm}
+\lstinputlisting[caption=MSVC 2012 /Ox]{patterns/11_arith_optimizations/division_by_9/2_\LANG.asm}
 
 \RU{Читайте больше об этом в}\EN{Read more about it in} \cite[10-3]{Warren:2002:HD:515297}.
 
-\section{\RU{Определение делителя}\EN{Getting divisor}}
+\subsection{\RU{Определение делителя}\EN{Getting divisor}}
 
-\subsection{\RU{Вариант}\EN{Variant} \#1}
+\subsubsection{\RU{Вариант}\EN{Variant} \#1}
 
 \RU{Часто, код имеет вид}\EN{Often, the code has a form of}:
 
-\lstinputlisting{patterns/11_division_by_9/form_\LANG.asm}
+\lstinputlisting{patterns/11_arith_optimizations/division_by_9/form_\LANG.asm}
 
 \RU{Определим 32-битную \IT{magic}-коэффициент через}
 \EN{Let's denote 32-bit \IT{magic}-coefficient as} $M$, 
@@ -260,7 +260,7 @@ D=\frac{2^{32 + C}}{M}
 
 \RU{Например}\EN{For example}:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/11_division_by_9/ex1.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/11_arith_optimizations/division_by_9/ex1.asm}
 
 \RU{Это}\EN{This is}:
 
@@ -304,7 +304,7 @@ In[1]:=N[2^(64+9)/16^^6a37991a23aead6f]
 Out[1]:=1234.
 \end{lstlisting}
 
-\subsection{\RU{Вариант}\EN{Variant} \#2}
+\subsubsection{\RU{Вариант}\EN{Variant} \#2}
 
 \RU{Бывает также вариант с пропущенным арифметическим сдвигом, например}\EN{A variant with 
 omitted arithmetic shift is also exist}:
