@@ -4,42 +4,140 @@
 % matrix addition
 \label{exercise_array_1}
 
-\RU{Что делает этот код}{\EN{What this code do}?
+\WhatThisCodeDoes\
 
-\subsubsection{MSVC 2010 + \TT{/O1}}
+\lstinputlisting[caption=MSVC 2010 + \TT{/O1}]{patterns/13_arrays/exercises/1_msvc.asm}
 
 (/O1: \RU{оптимизация по размеру кода}\EN{minimize space}).
 
-\lstinputlisting{patterns/13_arrays/exercises/1_msvc.asm}
+\lstinputlisting[caption=Keil 5.03 (\ARMMode) + \Othree]{patterns/13_arrays/exercises/1_ARM.s}
 
-\subsubsection{Keil (ARM) + \Othree}
+\lstinputlisting[caption=Keil 5.03 (\ThumbMode) + \Othree]{patterns/13_arrays/exercises/1_thumb.s}
 
-\lstinputlisting{patterns/13_arrays/exercises/1_ARM.s}
-
-\subsubsection{Keil (thumb) + \Othree}
-
-\lstinputlisting{patterns/13_arrays/exercises/1_thumb.s}
-
-\RU{Ответ}\EN{Answer}: \ref{exercise_solutions_arrays_1}.
+\Answer\: \ref{exercise_solutions_arrays_1}.
 
 \subsection{\Exercise \#2}
 % matrix multiplication
 \label{exercise_array_2}
 
-\RU{Что делает этот код}{\EN{What this code do}?
+\WhatThisCodeDoes\
 
-\subsubsection{MSVC 2010 + \TT{/O1}}
+\lstinputlisting[caption=MSVC 2010 + \TT{/O1}]{patterns/13_arrays/exercises/2_msvc.asm}
 
 (/O1: \RU{оптимизация по размеру кода}\EN{minimize space}).
 
-\lstinputlisting{patterns/13_arrays/exercises/2_msvc.asm}
+\lstinputlisting[caption=Keil 5.03 (\ARMMode) + \Othree]{patterns/13_arrays/exercises/2_ARM.s}
 
-\subsubsection{Keil (ARM) + \Othree}
+\lstinputlisting[caption=Keil 5.03 (\ThumbMode) + \Othree]{patterns/13_arrays/exercises/2_thumb.s}
 
-\lstinputlisting{patterns/13_arrays/exercises/2_ARM.s}
+\Answer\: \ref{exercise_solutions_arrays_2}.
 
-\subsubsection{Keil (thumb) + \Othree}
+\subsection{\Exercise \#3}
+\label{exercise_array_3}
 
-\lstinputlisting{patterns/13_arrays/exercises/2_thumb.s}
+\WhatThisCodeDoes\
 
-\RU{Ответ}\EN{Answer}: \ref{exercise_solutions_arrays_2}.
+\EN{Try to determine array size, at least partially.}
+\RU{Попробуйте определить размеры массива, хотя бы частично.}
+
+\begin{lstlisting}[caption=MSVC 2010 /Ox]
+_array$ = 8
+_x$ = 12
+_y$ = 16
+_f	PROC
+	mov	eax, DWORD PTR _x$[esp-4]
+	mov	edx, DWORD PTR _y$[esp-4]
+	mov	ecx, eax
+	shl	ecx, 4
+	sub	ecx, eax
+	lea	eax, DWORD PTR [edx+ecx*8]
+	mov	ecx, DWORD PTR _array$[esp-4]
+	fld	QWORD PTR [ecx+eax*8]
+	ret	0
+_f	ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ARMMode)]
+f PROC
+        RSB      r1,r1,r1,LSL #4
+        ADD      r0,r0,r1,LSL #6
+        ADD      r1,r0,r2,LSL #3
+        LDM      r1,{r0,r1}
+        BX       lr
+        ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ThumbMode)]
+f PROC
+        MOVS     r3,#0xf
+        LSLS     r3,r3,#6
+        MULS     r1,r3,r1
+        ADDS     r0,r1,r0
+        LSLS     r1,r2,#3
+        ADDS     r1,r0,r1
+        LDM      r1,{r0,r1}
+        BX       lr
+        ENDP
+\end{lstlisting}
+
+\Answer\: \ref{exercise_solutions_arrays_3}
+
+\subsection{\Exercise \#4}
+\label{exercise_array_4}
+
+\WhatThisCodeDoes\
+
+\EN{Try to determine array size, at least partially.}
+\RU{Попробуйте определить размеры массива, хотя бы частично.}
+
+\begin{lstlisting}[caption=MSVC 2010 /Ox]
+_array$ = 8	
+_x$ = 12	
+_y$ = 16	
+_z$ = 20	
+_f	PROC
+	mov	eax, DWORD PTR _x$[esp-4]
+	mov	edx, DWORD PTR _y$[esp-4]
+	mov	ecx, eax
+	shl	ecx, 4
+	sub	ecx, eax
+	lea	eax, DWORD PTR [edx+ecx*4]
+	mov	ecx, DWORD PTR _array$[esp-4]
+	lea	eax, DWORD PTR [eax+eax*4]
+	shl	eax, 4
+	add	eax, DWORD PTR _z$[esp-4]
+	mov	eax, DWORD PTR [ecx+eax*4]
+	ret	0
+_f	ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ARMMode)]
+f PROC
+        RSB      r1,r1,r1,LSL #4
+        ADD      r1,r1,r1,LSL #2
+        ADD      r0,r0,r1,LSL #8
+        ADD      r1,r2,r2,LSL #2
+        ADD      r0,r0,r1,LSL #6
+        LDR      r0,[r0,r3,LSL #2]
+        BX       lr
+        ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ThumbMode)]
+f PROC
+        PUSH     {r4,lr}
+        MOVS     r4,#0x4b
+        LSLS     r4,r4,#8
+        MULS     r1,r4,r1
+        ADDS     r0,r1,r0
+        MOVS     r1,#0xff
+        ADDS     r1,r1,#0x41
+        MULS     r2,r1,r2
+        ADDS     r0,r0,r2
+        LSLS     r1,r3,#2
+        LDR      r0,[r0,r1]
+        POP      {r4,pc}
+        ENDP
+\end{lstlisting}
+
+\Answer\: \ref{exercise_solutions_arrays_4}

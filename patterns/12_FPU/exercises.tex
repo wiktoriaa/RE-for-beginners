@@ -4,3 +4,41 @@
 
 \RU{Избавтесь от инструкции}\EN{Eliminate} FXCH \RU{в примере}\EN{instruciton in example} 
 \ref{gcc481_o3} \RU{и протестируйте его}\EN{and test it}.
+
+\subsection{\Exercise \#2}
+\label{exercise_FPU_2}
+
+\WhatThisCodeDoes\
+
+\begin{lstlisting}[caption=MSVC 2010 /Ox]
+__real@4014000000000000 DQ 04014000000000000r	; 5
+
+_a1$ = 8	; size = 8
+_a2$ = 16	; size = 8
+_a3$ = 24	; size = 8
+_a4$ = 32	; size = 8
+_a5$ = 40	; size = 8
+_f	PROC
+	fld	QWORD PTR _a1$[esp-4]
+	fadd	QWORD PTR _a2$[esp-4]
+	fadd	QWORD PTR _a3$[esp-4]
+	fadd	QWORD PTR _a4$[esp-4]
+	fadd	QWORD PTR _a5$[esp-4]
+	fdiv	QWORD PTR __real@4014000000000000
+	ret	0
+_f	ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ThumbMode{} / \RU{скомпилировано для}\EN{compiled for} Cortex-R4F CPU)]
+f PROC
+        VADD.F64 d0,d0,d1
+        VMOV.F64 d1,#5.00000000
+        VADD.F64 d0,d0,d2
+        VADD.F64 d0,d0,d3
+        VADD.F64 d2,d0,d4
+        VDIV.F64 d0,d2,d1
+        BX       lr
+        ENDP
+\end{lstlisting}
+
+\Answer\: \ref{exercise_solutions_FPU_2}.

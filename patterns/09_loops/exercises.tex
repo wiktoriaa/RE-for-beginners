@@ -13,3 +13,143 @@
 \RU{скомпилируйте его в вашей любимой}\EN{compile it in your favorite} \ac{OS}
 \RU{и компиляторе, и модифицируйте исполняемый файл так, чтобы цикл был в пределах}\EN{and compiler 
 and modify (patch) executable file, so the loop range will be} [6..20].
+
+\subsection{\Exercise \#3}
+\label{exercise_loops_3}
+
+\RU{Что делает этот код}\EN{What this code does}?
+
+\begin{lstlisting}[caption=MSVC 2010 /Ox]
+$SG2795	DB	'%d', 0aH, 00H
+
+_main	PROC
+	push	esi
+	push	edi
+	mov	edi, DWORD PTR __imp__printf
+	mov	esi, 100
+	npad	3
+$LL3@main:
+	push	esi
+	push	OFFSET $SG2795 ; '%d'
+	call	edi
+	dec	esi
+	add	esp, 8
+	test	esi, esi
+	jg	SHORT $LL3@main
+	pop	edi
+	xor	eax, eax
+	pop	esi
+	ret	0
+_main	ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ARMMode)]
+main PROC
+        PUSH     {r4,lr}
+        MOV      r4,#0x64
+|L0.8|
+        MOV      r1,r4
+        ADR      r0,|L0.40|
+        BL       __2printf
+        SUB      r4,r4,#1
+        CMP      r4,#0
+        MOVLE    r0,#0
+        BGT      |L0.8|
+        POP      {r4,pc}
+        ENDP
+
+|L0.40|
+        DCB      "%d\n",0
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ThumbMode)]
+main PROC
+        PUSH     {r4,lr}
+        MOVS     r4,#0x64
+|L0.4|
+        MOVS     r1,r4
+        ADR      r0,|L0.24|
+        BL       __2printf
+        SUBS     r4,r4,#1
+        CMP      r4,#0
+        BGT      |L0.4|
+        MOVS     r0,#0
+        POP      {r4,pc}
+        ENDP
+
+        DCW      0x0000
+|L0.24|
+        DCB      "%d\n",0
+\end{lstlisting}
+
+\RU{Ответ}\EN{Answer}: \ref{exercise_solutions_loops_3}.
+
+\subsection{\Exercise \#4}
+\label{exercise_loops_4}
+
+\RU{Что делает этот код}\EN{What this code does}?
+
+\begin{lstlisting}[caption=MSVC 2010 /Ox]
+$SG2795	DB	'%d', 0aH, 00H
+
+_main	PROC
+	push	esi
+	push	edi
+	mov	edi, DWORD PTR __imp__printf
+	mov	esi, 1
+	npad	3
+$LL3@main:
+	push	esi
+	push	OFFSET $SG2795 ; '%d'
+	call	edi
+	add	esi, 3
+	add	esp, 8
+	cmp	esi, 100
+	jl	SHORT $LL3@main
+	pop	edi
+	xor	eax, eax
+	pop	esi
+	ret	0
+_main	ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ARMMode)]
+main PROC
+        PUSH     {r4,lr}
+        MOV      r4,#1
+|L0.8|
+        MOV      r1,r4
+        ADR      r0,|L0.40|
+        BL       __2printf
+        ADD      r4,r4,#3
+        CMP      r4,#0x64
+        MOVGE    r0,#0
+        BLT      |L0.8|
+        POP      {r4,pc}
+        ENDP
+
+|L0.40|
+        DCB      "%d\n",0
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ThumbMode)]
+main PROC
+        PUSH     {r4,lr}
+        MOVS     r4,#1
+|L0.4|
+        MOVS     r1,r4
+        ADR      r0,|L0.24|
+        BL       __2printf
+        ADDS     r4,r4,#3
+        CMP      r4,#0x64
+        BLT      |L0.4|
+        MOVS     r0,#0
+        POP      {r4,pc}
+        ENDP
+
+        DCW      0x0000
+|L0.24|
+        DCB      "%d\n",0
+\end{lstlisting}
+
+\RU{Ответ}\EN{Answer}: \ref{exercise_solutions_loops_4}.

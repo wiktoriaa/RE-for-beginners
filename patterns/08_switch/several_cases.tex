@@ -1,0 +1,48 @@
+﻿\section{\RU{Когда много \IT{case} в одном блоке}
+\EN{When there are several \IT{case} in one block}}
+
+\RU{Вот очень часто используемая конструкция: несколько \IT{case} может быть использовано в одном блоке:}
+\EN{Here is also a very often used construction: several \IT{case} statements may be used in single block:}
+
+\lstinputlisting{patterns/08_switch/several_cases.c}
+
+\RU{Слишком расточительно генерировать каждый блок для каждого случая, поэтому обычно
+каждый блок генерируется плюс диспетчер.}
+\EN{It's too wasteful to generate each block for each possible case,
+so what is usually done, is each block generated plus some kind of dispatcher.}
+
+\subsection{MSVC}
+
+\lstinputlisting[caption=MSVC 2010 /Ox,numbers=left]{patterns/08_switch/several_cases_MSVC_2010_Ox.asm}
+
+\RU{Здесь видим две таблицы}\EN{We see two tables here}: 
+\RU{первая таблица}\EN{the first table} (\TT{\$LN10@f}) \RU{это таблица индексов}\EN{is index table},
+\RU{и вторая таблица}\EN{and the second table} (\TT{\$LN11@f}) \RU{это массив указателей на блоки}\EN{is 
+an array of pointers to blocks}.
+
+\RU{В начале, входное значение используется как индекс в таблице индексов}\EN{First, input value 
+is used as index in index table} (\LineENRU 13). 
+
+\RU{Вот краткое описание значений в таблице}\EN{Here is short legend for values in the table}: 
+0 \RU{это первый блок \IT{case}}\EN{is first \IT{case} block} (\RU{для значений}\EN{for values} 1, 2, 7, 10),
+1 \RU{это второй}\EN{is second} (\RU{для значений}\EN{for values} 3, 4, 5),
+2 \RU{это третий}\EN{is third} (\RU{для значений}\EN{for values} 8, 9, 21),
+3 \RU{это четвертый}\EN{is fourth} (\RU{для значений}\EN{for value} 22),
+4 \RU{это для default-блока}\EN{is for default block}.
+
+\RU{Мы получаем индекс для второй таблицы указателей на блоки и переходим туда}\EN{We get there index for 
+the second table of block pointers and we we jump there} (\LineENRU 14).
+
+\RU{Это очень часто используемый шаблон}\EN{This is very often used pattern}.
+
+\RU{В чем же экономия}\EN{So where economy is}?
+\RU{Почему нельзя сделать так, как уже обсуждалось}\EN{Why it's not possible to make it as it was 
+already discussed} (\ref{switch_lot_GCC}), \RU{используя только одну таблицу, содержащую указатели на 
+блоки}\EN{just with one table, consisting of block pointers}?
+\RU{Причина в том что элементы в таблице индексов занимают только по байту, поэтому всё это более 
+компактно}\EN{The reason is because elemets in index table has byte type, hence it's all more compact}.
+
+\subsection{GCC}
+
+GCC \RU{делает так, как уже обсуждалось}\EN{do the job like it was already discussed} 
+(\ref{switch_lot_GCC}), \RU{используя просто таблицу указателей}\EN{using just one table of pointers}.

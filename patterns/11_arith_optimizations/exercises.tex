@@ -1,0 +1,55 @@
+\section{\Exercises}
+
+\subsection{\Exercise \#1}
+\label{exercise_arith_optimizations_1}
+
+\WhatThisCodeDoes\
+
+\begin{lstlisting}[caption=MSVC 2010 /Ox]
+_a$ = 8
+_f	PROC
+	mov	ecx, DWORD PTR _a$[esp-4]
+	mov	eax, -968154503	; c64b2279H
+	imul	ecx
+	add	edx, ecx
+	sar	edx, 9
+	mov	eax, edx
+	shr	eax, 31		; 0000001fH
+	add	eax, edx
+	ret	0
+_f	ENDP
+\end{lstlisting}
+
+\Answer\: \ref{exercise_solutions_arith_optimizations_1}.
+
+\subsection{\Exercise \#2}
+\label{exercise_arith_optimizations_2}
+
+\WhatThisCodeDoes\
+
+\begin{lstlisting}[caption=MSVC 2010 /Ox]
+_a$ = 8
+_f	PROC
+	mov	ecx, DWORD PTR _a$[esp-4]
+	lea	eax, DWORD PTR [ecx*8]
+	sub	eax, ecx
+	ret	0
+_f	ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ARMMode)]
+f PROC
+        RSB      r0,r0,r0,LSL #3
+        BX       lr
+        ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ThumbMode)]
+f PROC
+        LSLS     r1,r0,#3
+        SUBS     r0,r1,r0
+        BX       lr
+        ENDP
+\end{lstlisting}
+
+\Answer\: \ref{exercise_solutions_arith_optimizations_2}.

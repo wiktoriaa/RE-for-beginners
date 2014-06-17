@@ -1,0 +1,76 @@
+\section{GCC\EMDASH{}\EN{one more thing}\RU{еще кое-что}}
+\label{use_parts_of_C_strings}
+
+\RU{Тот факт что \IT{анонимная} Си-строка имеет тип}\EN{The fact \IT{anonymous} C-string has} 
+\IT{const}\EN{ type} (\ref{string_is_const_char}), 
+\RU{и тот факт что выделенные в сегменте констант Си-строки гаратировано неизменяемые (immutable), 
+ведет к интересному следствию}\EN{and the 
+fact C-strings allocated in constants segment are guaranteed to be immutable, has interesting consequence}:
+\RU{компилятор может использовать определенную часть строки}\EN{compiler may use specific part of string}.
+
+\RU{Вот простой пример}\EN{Let's try this example}:
+
+\begin{lstlisting}
+#include <stdio.h>
+
+int f1()
+{
+	printf ("world\n");
+};
+
+int f2()
+{
+	printf ("hello world\n");
+};
+
+int main()
+{
+	f1();
+	f2();
+};
+\end{lstlisting}
+
+\RU{Среднестатистический компилятор с \CCpp (включая MSVC) выделит место для двух строк, но вот что делает 
+GCC 4.8.1}\EN{Common \CCpp{}-compiler (including MSVC) will allocate two strings, but let's see what 
+GCC 4.8.1 is doing}:
+
+\begin{lstlisting}[caption=GCC 4.8.1 + \RU{листинг в }IDA\EN{ listing}]
+f1              proc near
+
+s               = dword ptr -1Ch
+
+                sub     esp, 1Ch
+                mov     [esp+1Ch+s], offset s ; "world"
+                call    _puts
+                add     esp, 1Ch
+                retn
+f1              endp
+
+f2              proc near
+
+s               = dword ptr -1Ch
+
+                sub     esp, 1Ch
+                mov     [esp+1Ch+s], offset aHello ; "hello "
+                call    _puts
+                add     esp, 1Ch
+                retn
+f2              endp
+
+aHello          db 'hello '
+s               db 'world',0
+\end{lstlisting}
+
+\RU{Действительно: когда мы выводим строку}\EN{Indeed: when we print ``hello world'' string}, 
+\RU{эти два слова расположены в памяти в притык друг к другу и \puts, вызываясь из ф-ции f2(), вообще не знает
+что эти строки разделены}\EN{these two words are laying in memory adjacently and \puts called from f2() 
+function is not aware this string is divided}. \RU{Они и не разделены на самом деле, они разделены
+только ``виртуально'', в нашем листинге}\EN{It's not divided in fact, it's divided only ``virtually'', in this
+listing}.
+
+\RU{Когда}\EN{When} \puts \RU{вызывается из f1(), он использует строку}\EN{is called from f1(), it uses} 
+``world'' \RU{плюс нулевой байт}\EN{string plus zero byte}. \puts \RU{не знает что там еще есть какая-то строка
+перед этой}\EN{is not aware there is something before this string}!
+
+\RU{Этот трюк часто используется по крайней мере в GCC и может сэкономить немного памяти.}
+\EN{This clever trick is often used by at least GCC and can save some memory bytes.}

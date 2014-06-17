@@ -1,4 +1,4 @@
-main            proc near               ; DATA XREF: _start+17
+main            proc near
 
 var_20          = dword ptr -20h
 var_4           = dword ptr -4
