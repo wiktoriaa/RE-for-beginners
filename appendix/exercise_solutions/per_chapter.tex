@@ -21,6 +21,23 @@ GCC 4.8.x \RU{выделяет в прологе ф-ции \main 16-байтно
 выходе совсем другие}\EN{allocates 16-byte space in \main function prologue, 
 hence different output numbers}.
 
+\subsubsection{\Exercise \#2}
+\label{exercise_solutions_stack_2}
+
+\Exercise: \ref{exercise_stack_2}.
+
+\RU{Этот код выводит время в формате UNIX}\EN{This code prints UNIX time}.
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <time.h>
+
+int main()
+{
+	printf ("%d\n", time(NULL));
+};
+\end{lstlisting}
+
 \subsection{\RU{Глава ``\Loops''}\EN{``\Loops'' chapter}}
 %09...
 
@@ -78,6 +95,26 @@ int f(char *s)
 	};
 	return rt;
 };
+\end{lstlisting}
+
+\subsubsection{\Exercise \#2}
+\label{exercise_solutions_strlen_2}
+
+\Exercise: \ref{exercise_strlen_2}.
+
+\index{\CStandardLibrary!toupper()}
+\RU{Решение}\EN{Solution}: \TT{toupper()}.
+
+\RU{Исходник на Си}\EN{C source code}:
+
+\begin{lstlisting}
+char toupper ( char c )
+{
+    if( c >= 'a' && c <= 'z' ) {
+        c = c - 'a' + 'A';
+    }
+    return( c );
+}
 \end{lstlisting}
 
 \subsection{\RU{Глава ``\ArithOptimizations''}\EN{``\ArithOptimizations'' chapter}}
@@ -198,5 +235,152 @@ double f(double array[50][120], int x, int y)
 int f(int array[50][60][80], int x, int y, int z)
 {
 	return array[x][y][z];
+};
+\end{lstlisting}
+
+\subsection{\RU{Глава ``\BitfieldsChapter''}\EN{``\BitfieldsChapter'' chapter}}
+%14..
+
+\subsubsection{\Exercise \#1}
+\label{exercise_solutions_bitfields_1}
+
+\Exercise: \ref{exercise_bitfields_1}.
+
+\RU{Эта ф-ция меняет}\EN{This is a function which changes} \gls{endianness} 
+\RU{в 32-битном значении}\EN{in 32-bit value}.
+
+\lstinputlisting{appendix/exercise_solutions/change_endiannes.c}
+
+\RU{Дополнительный вопрос: в x86 есть инструкция делающая всё это. Какая?}\EN{Additional question: x86 
+instruction can do this. Which one?}
+% BSWAP
+
+\subsubsection{\Exercise \#2}
+\label{exercise_solutions_bitfields_2}
+
+\Exercise: \ref{exercise_bitfields_2}.
+
+\RU{Эта ф-ция конвертирует значение запакованное в формате \ac{BCD} в обычное.}
+\EN{This function converts \ac{BCD}-packed 32-bit value into usual one.}
+
+\begin{lstlisting}
+#include <stdio.h>
+
+unsigned int f(unsigned int a)
+{
+	int i=0;
+	int j=1;
+	unsigned int rt=0;
+	for (;i<=28; i+=4, j*=10)
+		rt+=((a>>i)&0xF) * j;
+	return rt;
+};
+
+int main()
+{
+	// test
+	printf ("%d\n", f(0x12345678));
+	printf ("%d\n", f(0x1234567));
+	printf ("%d\n", f(0x123456));
+	printf ("%d\n", f(0x12345));
+	printf ("%d\n", f(0x1234));
+	printf ("%d\n", f(0x123));
+	printf ("%d\n", f(0x12));
+	printf ("%d\n", f(0x1));
+};
+\end{lstlisting}
+
+\subsubsection{\Exercise \#3}
+\label{exercise_solutions_bitfields_3}
+
+\Exercise: \ref{exercise_bitfields_3}.
+
+\begin{lstlisting}
+#include <windows.h>
+
+int main()
+{
+	MessageBox(NULL, "hello, world!", "caption", 
+		MB_TOPMOST | MB_ICONINFORMATION | MB_HELP | MB_YESNOCANCEL);
+};
+\end{lstlisting}
+
+\subsection{\RU{Глава ``\StructuresChapterName''}\EN{``\StructuresChapterName'' chapter}}
+%15..
+
+\subsubsection{\Exercise \#1}
+\label{exercise_solutions_struct_1}
+
+\Exercise: \ref{exercise_struct_1}.
+
+\RU{Эта программа показывает ID пользователя владеющего файлом}\EN{This program shows user ID of file owner}.
+
+\begin{lstlisting}
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[])
+{
+    struct stat sb;
+
+    if (argc != 2) 
+    {
+        fprintf(stderr, "Usage: %s <pathname>\n", argv[0]);
+        return 0;
+    }
+
+    if (stat(argv[1], &sb) == -1) 
+    {
+    	// error
+        return 0;
+    }
+
+    printf("%ld\n",(long) sb.st_uid);
+}
+\end{lstlisting}
+
+\subsubsection{\Exercise \#1}
+\label{exercise_solutions_struct_2}
+
+\Exercise: \ref{exercise_struct_2}.
+
+\EN{Hint: you may get some information on how values are treated with \TT{Jcc}, \MOVSX and \MOVZX instructions.}
+\RU{Подсказка: вы можете получить какую-то информацию глядя на то как значения обрабатываются при помощи
+инструкций \TT{Jcc}, \MOVSX и \MOVZX.}
+
+\begin{lstlisting}
+#include <stdio.h>
+
+struct some_struct
+{
+	int a;
+	unsigned int b;
+	float f;
+	double d;
+	char c;
+	unsigned char uc;
+};
+
+void f(struct some_struct *s)
+{
+	if (s->a > 1000)
+	{
+		if (s->b > 10)
+		{
+			printf ("%f\n", s->f * 444 + s->d * 123);
+			printf ("%c, %d\n", s->c, s->uc);
+		}
+		else
+		{
+			printf ("error #2\n");
+		};
+	}
+	else
+	{
+		printf ("error #1\n");
+	};
 };
 \end{lstlisting}

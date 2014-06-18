@@ -27,34 +27,34 @@ $LN2@f:
 $LN1@f:
 	mov	DWORD PTR _a$[esp-4], OFFSET $SG2806 ; 'default'
 	jmp	DWORD PTR __imp__printf
-	npad	2
+	npad	2 ; align $LN11@f table on 16-byte boundary
 $LN11@f:
-	DD	$LN5@f
-	DD	$LN4@f
-	DD	$LN3@f
-	DD	$LN2@f
-	DD	$LN1@f
+	DD	$LN5@f ; print '1, 2, 7, 10'
+	DD	$LN4@f ; print '3, 4, 5'
+	DD	$LN3@f ; print '8, 9, 21'
+	DD	$LN2@f ; print '22'
+	DD	$LN1@f ; print 'default'
 $LN10@f:
-	DB	0
-	DB	0
-	DB	1
-	DB	1
-	DB	1
-	DB	1
-	DB	0
-	DB	2
-	DB	2
-	DB	0
-	DB	4
-	DB	4
-	DB	4
-	DB	4
-	DB	4
-	DB	4
-	DB	4
-	DB	4
-	DB	4
-	DB	2
-	DB	2
-	DB	3
+	DB	0 ; a=1
+	DB	0 ; a=2
+	DB	1 ; a=3
+	DB	1 ; a=4
+	DB	1 ; a=5
+	DB	1 ; a=6
+	DB	0 ; a=7
+	DB	2 ; a=8
+	DB	2 ; a=9
+	DB	0 ; a=10
+	DB	4 ; a=11
+	DB	4 ; a=12
+	DB	4 ; a=13
+	DB	4 ; a=14
+	DB	4 ; a=15
+	DB	4 ; a=16
+	DB	4 ; a=17
+	DB	4 ; a=18
+	DB	4 ; a=19
+	DB	2 ; a=20
+	DB	2 ; a=21 
+	DB	3 ; a=22
 _f	ENDP

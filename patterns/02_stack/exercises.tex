@@ -21,4 +21,59 @@ int main()
 };
 \end{lstlisting}
 
-\RU{Ответ}\EN{Answer}: \ref{exercise_solutions_stack_1}.
+\Answer{}: \ref{exercise_solutions_stack_1}.
+
+\subsection{\Exercise \#2}
+\label{exercise_stack_2}
+
+\WhatThisCodeDoes\
+
+\begin{lstlisting}[caption=MSVC 2010 /Ox]
+$SG3103	DB	'%d', 0aH, 00H
+
+_main	PROC
+	push	0
+	call	DWORD PTR __imp___time64
+	push	edx
+	push	eax
+	push	OFFSET $SG3103 ; '%d'
+	call	DWORD PTR __imp__printf
+	add	esp, 16
+	xor	eax, eax
+	ret	0
+_main	ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\Optimizing Keil 5.03 (\ARMMode)]
+main PROC
+        PUSH     {r4,lr}
+        MOV      r0,#0
+        BL       time
+        MOV      r1,r0
+        ADR      r0,|L0.32|
+        BL       __2printf
+        MOV      r0,#0
+        POP      {r4,pc}
+        ENDP
+
+|L0.32|
+        DCB      "%d\n",0
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\Optimizing Keil 5.03 (\ThumbMode)]
+main PROC
+        PUSH     {r4,lr}
+        MOVS     r0,#0
+        BL       time
+        MOVS     r1,r0
+        ADR      r0,|L0.20|
+        BL       __2printf
+        MOVS     r0,#0
+        POP      {r4,pc}
+        ENDP
+
+|L0.20|
+        DCB      "%d\n",0
+\end{lstlisting}
+
+\Answer{}: \ref{exercise_solutions_stack_2}.
