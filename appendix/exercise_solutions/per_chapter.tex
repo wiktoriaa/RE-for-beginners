@@ -238,6 +238,28 @@ int f(int array[50][60][80], int x, int y, int z)
 };
 \end{lstlisting}
 
+\subsubsection{\Exercise \#5}
+\label{exercise_solutions_arrays_5}
+
+\Exercise: \ref{exercise_array_5}.
+
+\EN{This code just calculates multiplication table.}
+\RU{Этот код просто вычисляет таблицу умножения.}
+
+\begin{lstlisting}
+int tbl[10][10];
+
+int main()
+{
+	int x, y;
+	for (x=0; x<10; x++)
+		for (y=0; y<10; y++)
+			tbl[x][y]=x*y;
+};
+\end{lstlisting}
+
+% TODO MSVC 2012 optimizations!
+
 \subsection{\RU{Глава ``\BitfieldsChapter''}\EN{``\BitfieldsChapter'' chapter}}
 %14..
 
@@ -302,6 +324,44 @@ int main()
 {
 	MessageBox(NULL, "hello, world!", "caption", 
 		MB_TOPMOST | MB_ICONINFORMATION | MB_HELP | MB_YESNOCANCEL);
+};
+\end{lstlisting}
+
+\subsubsection{\Exercise \#4}
+\label{exercise_solutions_bitfields_4}
+
+\Exercise: \ref{exercise_bitfields_4}.
+
+\EN{This function just multiplies two 32-bit numbers, returning 64-bit \gls{product}.}
+\RU{Эта ф-ция просто перемножает два 32-битных числа, возвращая 64-битное \glslink{product}{произведение}.}
+\EN{Well, this is a case when simple observing input/outputs may solve problem faster.}
+\RU{Да, это тот случай, когда простое наблюдение входных и выходных значений может решить проблему быстрее.}
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <stdint.h>
+
+// source code taken from
+// http://www4.wittenberg.edu/academics/mathcomp/shelburne/comp255/notes/binarymultiplication.pdf
+
+uint64_t mult (uint32_t m, uint32_t n)
+{
+    uint64_t p = 0; // initialize product p to 0 
+    while (n != 0) // while multiplier n is not 0 
+    { 
+        if (n & 1) // test LSB of multiplier 
+            p = p + m; // if 1 then add multiplicand m 
+        m = m << 1; // left shift multiplicand 
+        n = n >> 1; // right shift multiplier 
+    }
+    return p;
+}
+
+int main()
+{
+    printf ("%d\n", mult (2, 7));
+    printf ("%d\n", mult (3, 11));
+    printf ("%d\n", mult (4, 111));
 };
 \end{lstlisting}
 

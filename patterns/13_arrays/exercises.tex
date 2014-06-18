@@ -141,3 +141,127 @@ f PROC
 \end{lstlisting}
 
 \Answer\: \ref{exercise_solutions_arrays_4}
+
+\subsection{\Exercise \#5}
+\label{exercise_array_5}
+
+\WhatThisCodeDoes\
+
+\begin{lstlisting}[caption=MSVC 2012 /Ox /GS-]
+COMM	_tbl:DWORD:064H
+
+tv759 = -4	; size = 4
+_main	PROC
+	push	ecx
+	push	ebx
+	push	ebp
+	push	esi
+	xor	edx, edx
+	push	edi
+	xor	esi, esi
+	xor	edi, edi
+	xor	ebx, ebx
+	xor	ebp, ebp
+	mov	DWORD PTR tv759[esp+20], edx
+	mov	eax, OFFSET _tbl+4
+	npad	8
+$LL6@main:
+	lea	ecx, DWORD PTR [edx+edx]
+	mov	DWORD PTR [eax+4], ecx
+	mov	ecx, DWORD PTR tv759[esp+20]
+	add	DWORD PTR tv759[esp+20], 3
+	mov	DWORD PTR [eax+8], ecx
+	lea	ecx, DWORD PTR [edx*4]
+	mov	DWORD PTR [eax+12], ecx
+	lea	ecx, DWORD PTR [edx*8]
+	mov	DWORD PTR [eax], edx
+	mov	DWORD PTR [eax+16], ebp
+	mov	DWORD PTR [eax+20], ebx
+	mov	DWORD PTR [eax+24], edi
+	mov	DWORD PTR [eax+32], esi
+	mov	DWORD PTR [eax-4], 0
+	mov	DWORD PTR [eax+28], ecx
+	add	eax, 40
+	inc	edx
+	add	ebp, 5
+	add	ebx, 6
+	add	edi, 7
+	add	esi, 9
+	cmp	eax, OFFSET _tbl+404
+	jl	SHORT $LL6@main
+	pop	edi
+	pop	esi
+	pop	ebp
+	xor	eax, eax
+	pop	ebx
+	pop	ecx
+	ret	0
+_main	ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ARMMode)]
+main PROC
+        LDR      r12,|L0.60|
+        MOV      r1,#0
+|L0.8|
+        ADD      r2,r1,r1,LSL #2
+        MOV      r0,#0
+        ADD      r2,r12,r2,LSL #3
+|L0.20|
+        MUL      r3,r1,r0
+        STR      r3,[r2,r0,LSL #2]
+        ADD      r0,r0,#1
+        CMP      r0,#0xa
+        BLT      |L0.20|
+        ADD      r1,r1,#1
+        CMP      r1,#0xa
+        MOVGE    r0,#0
+        BLT      |L0.8|
+        BX       lr
+        ENDP
+
+|L0.60|
+        DCD      ||.bss||
+
+        AREA ||.bss||, DATA, NOINIT, ALIGN=2
+
+tbl
+        %        400
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Keil 5.03 (\ThumbMode)]
+main PROC
+        PUSH     {r4,r5,lr}
+        LDR      r4,|L0.40|
+        MOVS     r1,#0
+|L0.6|
+        MOVS     r2,#0x28
+        MULS     r2,r1,r2
+        MOVS     r0,#0
+        ADDS     r3,r2,r4
+|L0.14|
+        MOVS     r2,r1
+        MULS     r2,r0,r2
+        LSLS     r5,r0,#2
+        ADDS     r0,r0,#1
+        CMP      r0,#0xa
+        STR      r2,[r3,r5]
+        BLT      |L0.14|
+        ADDS     r1,r1,#1
+        CMP      r1,#0xa
+        BLT      |L0.6|
+        MOVS     r0,#0
+        POP      {r4,r5,pc}
+        ENDP
+
+        DCW      0x0000
+|L0.40|
+        DCD      ||.bss||
+
+        AREA ||.bss||, DATA, NOINIT, ALIGN=2
+
+tbl
+        %        400
+\end{lstlisting}
+
+\Answer\: \ref{exercise_solutions_arrays_5}
