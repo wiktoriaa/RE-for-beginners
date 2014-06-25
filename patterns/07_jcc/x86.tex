@@ -229,8 +229,8 @@ jump will be done to the next instruction}.
 \subsection{\Optimizing GCC}
 
 \RU{Наблюдательный читатель может спросить, зачем исполнять \CMP так много раз,
-если флаги всегда одни и те же}\EN{Observant reader may ask, why to execute \CMP so many times, 
-if flags are same all the time}?
+если флаги всегда одни и те же}\EN{Observant reader may ask, why to execute \CMP several times, 
+if flags are same after each execution}?
 \RU{По видимому, оптимизирующий MSVC не может этого делать, но GCC 4.8.1 делает больше оптимизаций}\EN{Perhaps, 
 optimizing MSVC can't do this, but optimizing GCC 4.8.1 can do deep optimization}:
 
@@ -240,9 +240,10 @@ optimizing MSVC can't do this, but optimizing GCC 4.8.1 can do deep optimization
 \RU{Мы здесь также видим}\EN{We also see} \TT{JMP puts} \RU{вместо}\EN{here instead of} \TT{CALL puts / RETN}.
 \RU{Этот прием будет описан немного позже}\EN{This kind of trick will be described later}: \ref{JMP_instead_of_RET}.
 
-\RU{Нужно сказать что x86-код такого типа редок}\EN{Needless to say, that type of x86 code is rare}.
-MSVC 2012, \RU{как видно, не может этого делать}\EN{as it seems, can't do that}.
-\RU{С другой стороны, программисты на ассемблере прекрасно осведомлены о том, что инструкции}\EN{On the other case, 
+\RU{Нужно сказать что x86-код такого типа редок}\EN{Needless to say, that this type of x86 code 
+is somewhat rare}.
+MSVC 2012, \RU{как видно, не может генерировать подобное}\EN{as it seems, can't generate such code}.
+\RU{С другой стороны, программисты на ассемблере прекрасно осведомлены о том, что инструкции}\EN{On the other hand, 
 assembly language programmers are fully aware of the fact that} \TT{Jcc} \RU{можно располагать последовательно}
 \EN{instructions can be stacked}.
 \RU{Так что если вы видите это где-то, имеется немалая вероятность, что этот фрагмент кода был написан вручную}
