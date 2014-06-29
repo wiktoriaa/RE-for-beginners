@@ -197,10 +197,14 @@ BX              LR
 	result = \frac{input \cdot M}{2^{n}}
 \]
 
-\RU{$n$ это произвольное число, оно может быть 32 (тогда старшая часть результата умножения берется из
-регистра \EDX или \RDX) или 31 (тогда старшая часть результата умножения дополнительно сдвигается)}
-\EN{$n$ can be arbitrary number, it may be 32 (then high part of multiplication result is taked from
-\EDX or \RDX register), or 31 (then high part of multiplication result is shifted right additionally)}.
+\RU{Деление на $2^{n}$ производится обычным битовым сдвигом вправо.}
+\EN{Division by $2^{n}$ is usually done by simple right bit shift.}
+\RU{Если}\EN{If} $n<32$, 
+\RU{то тогда сдвигается младшая часть \glslink{product}{произведения}}
+\EN{then low part of \gls{product} is shifted} (\InENRU \EAX \OrENRU \RAX).
+\RU{Если}\EN{If} $n\geq32$, 
+\RU{то тогда сдвигается старшая часть \glslink{product}{произведения}}
+\EN{then the high part of \gls{product} is shifted} (\InENRU \EDX \OrENRU \RDX).
 
 $n$ \RU{выбирается так, чтобы улучшить точность результата}\EN{is choosen in order to minimize
 error}.
@@ -224,19 +228,22 @@ unsigned int f3_32_unsigned(unsigned int a)
 
 \RU{В беззнаковой версии функции}\EN{In the unsigned version of function}, 
 \IT{magic}-\RU{коэффициент это}\EN{coefficient is} \TT{0xAAAAAAAB} \RU{и результат умножения делится на}
-\EN{and multiplication result is divided by} $2^33$.
+\EN{and multiplication result is divided by} $2^{33}$.
 
 \RU{В знаковой версии функции}\EN{In the signed version of function}, \IT{magic}-\RU{коэффициент это}
 \EN{coefficient is} \TT{0x55555556} \RU{и результат умножения делится на}
-\EN{and multiplication result is divided by} $2^{32}$. 
-\RU{Знак результата умножения также учитывается: старшие 32 бита результата сдвигаются на 32
-(таким образом, оставляя знак в самом младшем бите\EAX).}
-\EN{Sign also taken from multiplication result: high 32 bits of result is shifted by 31 
-(leaving sign in least significant bit of \EAX).}
-$1$ \RU{прибавляется к конечному результату, если знак отрицательный}
-\EN{is added to the final result if sign is negative}.
+\EN{and multiplication result is divided by} $2^{32}$.
+\RU{Впрочем здесь нет инструкции деления: результат просто берется из}\EN{There are no 
+division instruction though: result is just taken from} \EDX. 
 
-\lstinputlisting[caption=MSVC 2012 /Ox]{patterns/11_arith_optimizations/division_by_9/2_\LANG.asm}
+\RU{Знак результата умножения также учитывается: старшие 32 бита результата сдвигаются на 31
+(таким образом, оставляя знак в самом младшем бите \EAX).}
+\EN{Sign is also taken from multiplication result: high 32 bits of result is shifted by 31
+(leaving sign in least significant bit of \EAX).}
+$1$ \RU{прибавляется к конечному результату, если знак отрицательный, для коррекции результата}
+\EN{is added to the final result if sign is negative, for result correction}.
+
+\lstinputlisting[caption=MSVC 2012 /Ox]{patterns/11_arith_optimizations/division_by_9/2.asm.\LANG}
 
 \RU{Читайте больше об этом в}\EN{Read more about it in} \cite[10-3]{Warren:2002:HD:515297}.
 
