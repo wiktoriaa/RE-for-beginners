@@ -60,7 +60,7 @@ For bug reporting instructions, please see:
 Reading symbols from /home/dennis/polygon/2...done.
 \end{lstlisting}
 
-\begin{lstlisting}[caption=\RU{ставим брякпойнт на \printf, запускаем}\EN{let's set breakpoint to \printf, and run}]
+\begin{lstlisting}[caption=\RU{ставим брякпойнт на \printf, запускаем}\EN{let's set the breakpoint to \printf, and run}]
 (gdb) b printf
 Breakpoint 1 at 0x400410
 (gdb) run
@@ -97,12 +97,12 @@ rip            0x7ffff7a65f60	0x7ffff7a65f60 <__printf>
 ...
 \end{lstlisting}
 
-\begin{lstlisting}[caption=\RU{смотрим на строку формата}\EN{let's inspect format string}]
+\begin{lstlisting}[caption=\RU{смотрим на строку формата}\EN{let's inspect the format string}]
 (gdb) x/s $rdi
 0x400628:	"a=%d; b=%d; c=%d; d=%d; e=%d; f=%d; g=%d; h=%d\n"
 \end{lstlisting}
 
-\RU{Дампим стек на этот раз с командой x/g}\EN{Let's dump stack with x/g command this time}\EMDASH{}g 
+\RU{Дампим стек на этот раз с командой x/g}\EN{Let's dump the stack with the x/g command this time}\EMDASH{}g 
 \RU{означает}\EN{means} \IT{giant words}, \RU{т.е., 64-битные слова}\EN{i.e., 64-bit words}.
 
 \begin{lstlisting}
@@ -115,17 +115,17 @@ rip            0x7ffff7a65f60	0x7ffff7a65f60 <__printf>
 \end{lstlisting}
 
 \RU{Самый первый элемент стека, как и в прошлый раз, это}\EN{The very first stack element, 
-just like in previous case, is} \ac{RA}.
+just like in the previous case, is the} \ac{RA}.
 \RU{Через стек также передаются 3 значения}\EN{3 values are also passed in stack}: 6, 7, 8.
 \RU{Видно, что 8 передается с не очищенной старшей 32-битной частью}\EN{We also see that 8 is passed
 with high 32-bits not cleared}: \TT{0x00007fff00000008}.
-\RU{Это нормально, ведь передаются числа типа \Tint, а они 32-битные}\EN{That's OK, because, values has
+\RU{Это нормально, ведь передаются числа типа \Tint, а они 32-битные}\EN{That's OK, because the values have
 \Tint type, which is 32-bit type}.
-\RU{Так что в старшей части регистра или памяти стека остался ``случайный мусор''}\EN{So, high register
+\RU{Так что в старшей части регистра или памяти стека остался ``случайный мусор''}\EN{So, the high register
 or stack element part may contain ``random garbage''}.
 
 \RU{\ac{GDB} показывает всю ф-цию \main, если попытаться посмотреть, куда возвратится управление после
-исполнения \printf}\EN{If to take a look, where control flow will return after \printf execution,
+исполнения \printf}\EN{If you take a look at where control flow will return after \printf execution,
 \ac{GDB} will show the whole \main function}:
 
 \begin{lstlisting}
@@ -153,10 +153,10 @@ End of assembler dump.
 \end{lstlisting}
 
 \RU{Заканчиваем исполнение \printf, исполняем инструкцию обнуляющую \EAX, 
-удостоверяемся что в регистре \EAX именно ноль}\EN{Let's finish \printf execution, execute the instruction
-zeroing \EAX, take a notice that \EAX register has exactly zero}.
+удостоверяемся что в регистре \EAX именно ноль}\EN{Let's finish executing \printf, execute the instruction
+zeroing \EAX, and note that the \EAX register has a value of exactly zero}.
 \RIP \RU{указывает сейчас на инструкцию}\EN{now points to the} \TT{LEAVE}\RU{, т.е., предпоследнюю в ф-ции \main}
-\EN{ instruction, i.e., penultimate in \main function}.
+\EN{ instruction, i.e., the penultimate one in the \main function}.
 
 \begin{lstlisting}
 (gdb) finish

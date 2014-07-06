@@ -33,12 +33,12 @@ $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 \RU{Когда при помощи инструкции \TT{``ADD ESP, X''} корректируется \glslink{stack pointer}{указатель стека} \ESP 
 после вызова какой-либо функции, зачастую можно сделать вывод о том, сколько аргументов 
 у вызываемой функции было, разделив X на 4.}
-\EN{When the \gls{stack pointer} (\ESP register) is corrected by \TT{``ADD ESP, X''}
+\EN{When the \gls{stack pointer} (\ESP register) is changed back by the \TT{``ADD ESP, X''}
 instruction after a function 
 call, often, the number of function arguments can be deduced here: just divide X by 4.}
 
 \RU{Конечно, это относится только к cdecl-методу передачи аргументов через стек.}
-\EN{Of course, this is related only to \IT{cdecl} calling convention.}
+\EN{Of course, this is specific to the \IT{cdecl} calling convention.}
 
 \RU{См. также в соответствующем разделе о способах передачи аргументов через стек}
 \EN{See also the section about calling conventions}~(\ref{sec:callingconventions}).
@@ -72,24 +72,24 @@ popular user-land win32 debugger}.
 \RU{с опцией}\EN{with} \TT{/MD} \RU{что означает, линковать с библиотекой}\EN{option, meaning, to link 
 against} \TT{MSVCR*.DLL},
 \RU{чтобы импортируемые ф-ции были хорошо видны в отладчике}\EN{so we will able to see imported 
-functions clearly in debugger}.
+functions clearly in the debugger}.
 
 \RU{Затем загружаем исполняемый файл в}\EN{Then load executable in} \olly.
 \RU{Самый первый брякпойнт в}\EN{The very first breakpoint is in} \TT{ntdll.dll}, \RU{нажмите}\EN{press} 
 F9 (\RU{запустить}\EN{run}).
 \RU{Второй брякпойнт в}\EN{The second breakpoint is in} \ac{CRT}-\RU{коде}\EN{code}.
-\RU{Теперь мы должны найти ф-цию}\EN{Now we should find} \main\EN{ function}.
+\RU{Теперь мы должны найти ф-цию}\EN{Now we should find the} \main\EN{ function}.
 
 \RU{Найдите этот код скроллируя окно кода до самого верха (MSVC располагает ф-цию \main в самом начале
-секции кода)}\EN{Find this code by scrolling the code to the very bottom (MSVC allocates \main function at
+секции кода)}\EN{Find this code by scrolling the code to the very top (MSVC allocates \main function at
 the very beginning of the code section)}: 
 \figref{fig:printf3_olly_1}.\\
 \\
-\RU{Кликните на инструкции}\EN{Click on} \TT{PUSH EBP}\RU{, нажмите}\EN{ instruction, press} F2 
+\RU{Кликните на инструкции}\EN{Click on the} \TT{PUSH EBP}\RU{, нажмите}\EN{ instruction, press} F2 
 (\RU{установка брякпойнта}\EN{set breakpoint}) \RU{и нажмите}\EN{and press} F9 (\RU{запустить}\EN{run}).
 \RU{Нам нужно произвести все эти манипуляции, чтобы пропустить \ac{CRT}-код, потому что нам он пока
-не интересен}\EN{We need to do these manupulations in order to skip \ac{CRT}-code, because, we don't really 
-interesting in it yet}.\\
+не интересен}\EN{We need to do these manipulations in order to skip \ac{CRT}-code, because, we aren't really
+interested in it, yet}.\\
 \\
 \RU{Нажмите}\EN{Press} F8 (\stepover) 6 \RU{раз, т.е., пропустить
 6 инструкций}\EN{times, i.e., skip 6 instructions}: \figref{fig:printf3_olly_2}.\\
@@ -99,23 +99,23 @@ interesting in it yet}.\\
 \olly, \RU{как и другие отладчики, подсвечивает регистры со значениями, которые изменились}
 \EN{like other debuggers, highlights value of registers which were changed}.
 \RU{Так что, каждый раз, когда мы нажимаем}\EN{So each time you press F8}, \EIP 
-\RU{изменяется и его значение подсвечивается красным}\EN{is changing and its value looking red}.
-\ESP \RU{также меняется, потому что значения заталкиваются в стек}\EN{is changing as well, 
+\RU{изменяется и его значение подсвечивается красным}\EN{ changes and its value looks red}.
+\ESP \RU{также меняется, потому что значения заталкиваются в стек}\EN{changes as well, 
 because values are pushed into the stack}.\\
 \\
 \RU{Где находятся эти значения в стеке}\EN{Where are the values in the stack}?
-\RU{Посмотрите на правое/нижнее окно в отладчике}\EN{Take a look into right/bottom window of debugger}:
+\RU{Посмотрите на правое/нижнее окно в отладчике}\EN{Take a look at the right/bottom window of debugger}:
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.66]{patterns/03_printf/olly3_stack.png}
 \caption{\olly: \RU{стек, после того как значения там сохранены}\EN{stack after values pushed}
-(\RU{я сделал здесь округлую красную пометку в графическом редакторе}\EN{I made round red mark 
-here in graphics editor})}
+(\RU{я сделал здесь округлую красную пометку в графическом редакторе}\EN{I made the round red mark 
+here in a graphics editor})}
 \end{figure}
 
 \RU{Так что здесь видно 3 столбца: адрес в стеке, значение в стеке и еще дополнительный комментарий
-от \olly}\EN{So we can see there 3 columns: address in the stack, 
+от \olly}\EN{So we can see 3 columns there: address in the stack, 
 value in the stack and some additional \olly comments}. 
 \olly \RU{понимает}\EN{understands} \printf\RU{-строки}\EN{-like strings}, 
 \RU{так что он показывает здесь и строку и 3 значения \IT{привязанных} к ней}\EN{so it reports the 
@@ -130,8 +130,8 @@ is always seen}.
 \RU{Можно изменить саму строку формата, и тогда результат работы нашего примера будет другой}
 \EN{It is possible to change the format string, and then the result of our example will be different}.
 \RU{В данном случае, пользы от этого немного, но для упражнения это полезно,
-чтобы начать чувствовать как тут всё работает}\EN{It is probably not very useful now, but it's very
-good idea for doing it as exercise, to get feeling how everything is works here}.
+чтобы начать чувствовать как тут всё работает}\EN{It is probably not very useful now, but it's a very
+good idea for doing it as an exercise, to get a feeling of how everything works here}.
 
 \RU{Нажмите}\EN{Press} F8 (\stepover).
 
@@ -147,32 +147,32 @@ good idea for doing it as exercise, to get feeling how everything is works here}
 are changed}: \figref{fig:printf3_olly_3}.
 
 \RU{Регистр }\EAX \RU{теперь содержит}\EN{register now contains} \TT{0xD} (13).
-That's correct, \printf returns number of characters printed.
+That's correct, since \printf returns the number of characters printed. The
 \RU{Значение }\EIP \RU{изменилось: действительно, теперь здесь адрес инструкции после}
-\EN{value is changed: indeed, now there is address of the instruction after} \TT{CALL printf}.
+\EN{value is changed: indeed, now there is the address of the instruction after} \TT{CALL printf}.
 \RU{Значения регистров }\ECX \AndENRU \EDX \RU{также изменились}\EN{values are changed as well}.
 \RU{Очевидно, внутренности ф-ции \printf используют их для каких-то своих нужд}\EN{Apparently, 
 \printf function's hidden machinery used them for its own needs}.
 
 \RU{Очень важный момент в том что значение \ESP не изменилось. И состояние стека также!}
-\EN{A very important thing is that \ESP value is not changed. And stack state too!}
+\EN{A very important thing is that neither the \ESP value, nor the stack state is changed.}
 \RU{Мы ясно видим здесь и строку формата и соответствующие ей 3 значения, они все еще здесь}
-\EN{We clearly see that format string and corresponding 3 values are still there}.
+\EN{We clearly see that the format string and corresponding 3 values are still there}.
 \RU{Действительно, по соглашению вызовов \IT{cdecl}, вызывающая ф-ция не очищает аргументы из стека}
-\EN{Indeed, that's \IT{cdecl} calling convention, calling function doesn't clear arguments in stack}.
-\RU{Это должна делать вызывающая ф-ция}\EN{It's caller's duty to do so}.
+\EN{Indeed, that's the \IT{cdecl} calling convention: calling a function doesn't clear arguments in stack}.
+\RU{Это должна делать вызывающая ф-ция}\EN{It's the caller's duty to do so}.
 
 \RU{Нажмите}\EN{Press} F8 \RU{снова, чтобы исполнилась инструкция}\EN{again to execute} 
 \TT{ADD ESP, 10}\EN{ instruction}: \figref{fig:printf3_olly_4}.
 
-\ESP \RU{изменился, но значения все еще в стеке}\EN{is changed, but values are still in the stack}!
+\ESP \RU{изменился, но значения все еще в стеке}\EN{is changed, but the values are still in the stack}!
 \RU{Конечно, никому не нужно заполнять эти значения нулями или что-то в этом роде}\EN{Yes, 
-of course, no one needs to fill these values by zero or something like that}.
-\RU{Потому что всё что выше указателя стека}\EN{Because, everything above stack pointer} (\ac{SP}) 
+of course; no one needs to fill these values by zero or something like that}.
+\RU{Потому что всё что выше указателя стека}\EN{Because everything above stack pointer} (\ac{SP}) 
 \RU{это}\EN{is} \IT{\RU{шум}\EN{noise}} \OrENRU \IT{\RU{мусор}\EN{garbage}}, \RU{это всё не имеет
-особой ценности}\EN{it has no value at all}.
+особой ценности}\EN{and has no meaning at all}.
 \RU{Было бы очень затратно по времени очищать ненужные элементы стека, к тому же, никому это и не 
-нужно}\EN{It would be time consuming to clear unused stack entries, besides, no one really needs to}.
+нужно}\EN{It would be time consuming to clear unused stack entries anyways, and no one really needs to}.
 
 \begin{figure}[H]
 \centering
@@ -282,7 +282,7 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
 \end{lstlisting}
 
 \RU{Выдать 10 элементов стека. Левый столбец это адрес в стеке.}
-\EN{Print 10 stack elements. Left column is an address in stack.}
+\EN{Print 10 stack elements. The left column is an address in stack.}
 
 \begin{lstlisting}
 (gdb) x/10w $esp
@@ -291,9 +291,9 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
 0xbffff13c:	0xb7e29905	0x00000001
 \end{lstlisting}
 
-\RU{Самый первый элемент это}\EN{The very first element is} \ac{RA} (\TT{0x0804844a}).
-\RU{Мы можем удостовериться в этом, дизассемблируя память по этому адресу}\EN{We can be sure 
-in it by disassembling the memory at this address}:
+\RU{Самый первый элемент это}\EN{The very first element is the} \ac{RA} (\TT{0x0804844a}).
+\RU{Мы можем удостовериться в этом, дизассемблируя память по этому адресу}\EN{We can make sure 
+by disassembling the memory at this address}:
 
 \begin{lstlisting}
 (gdb) x/5i 0x0804844a
@@ -321,7 +321,7 @@ in it by disassembling the memory at this address}:
 \RU{Остальные элементы это может быть и мусор в стеке, но могут быть и значения
 от других ф-ций, их локальные переменные, итд}\EN{Other elements may be just ``garbage'' present in stack,
 but also may be values from other functions, their local variables, etc}.
-\RU{Пока что мы можем игнорировать их}\EN{We can ignore it yet}.
+\RU{Пока что мы можем игнорировать их}\EN{We can ignore it for now}.
 
 \RU{Исполняем}\EN{Execute} ``finish''. 
 \RU{Это значит, исполнять до конца ф-ции}\EN{This mean, execute till function end}. 
@@ -343,14 +343,14 @@ Value returned is $2 = 13
 \TT{1.c} в строке 6}\EN{and the information that this expression is in the \TT{1.c} file at the line 6}.
 \RU{Действительно, файл \TT{1.c} лежит в текущем директории и \ac{GDB} находит там эту строку}
 \EN{Indeed, the \TT{1.c} file is located in the current directory, and \ac{GDB} finds the string there}.
-\RU{Как \ac{GDB} знает, какая строка Си-кода сейчас исполняется}\EN{How \ac{GDB} knows, which C-code line
+\RU{Как \ac{GDB} знает, какая строка Си-кода сейчас исполняется}\EN{How does \ac{GDB} know which C-code line
 is being executed now}?
 \RU{Это связано с тем фактом, что компилятор, генерируя отладочную информацию,
 также сохраняет информацию о 
-соответствии строк в исходном коде и адресов инструкций}\EN{This is related to the fact that compiler,
+соответствии строк в исходном коде и адресов инструкций}\EN{This is due to the fact that the compiler,
 while generating debugging information, also saves a table of relations between source code line
 numbers and instruction addresses}.
-GDB \RU{это всё-таки отладчик уровня исходных текстов}\EN{is source-level debugger, after all}.
+GDB \RU{это всё-таки отладчик уровня исходных текстов}\EN{is a source-level debugger, after all}.
 
 \RU{Посмотрим регистры}\EN{Let's examine registers}.
 13 \InENRU \EAX:
@@ -369,9 +369,9 @@ eip            0x804844a	0x804844a <main+45>
 ...
 \end{lstlisting}
 
-\RU{Попробуем дизассемблировать текущие инструкции}\EN{Let's disassemble current instructions}.
-\RU{Стрелка указывает на инструкцию, которая будет исполнена следующей}\EN{Arrow points to the 
-instruction being executed next}.
+\RU{Попробуем дизассемблировать текущие инструкции}\EN{Let's disassemble the current instructions}.
+\RU{Стрелка указывает на инструкцию, которая будет исполнена следующей}\EN{The arrow points to the 
+instruction to be executed next}.
 
 \begin{lstlisting}
 (gdb) disas
@@ -416,14 +416,14 @@ End of assembler dump.
 
 \RU{Исполняем следующую инструкцию}\EN{Execute next instruction}.
 \ac{GDB} \RU{покажет закрывающуюся скобку, означая, что это конец блока в ф-ции}\EN{shows ending bracket, 
-meaning, this is ending block of function}.
+meaning, this ends the block of the function}.
 
 \begin{lstlisting}
 (gdb) step
 7	};
 \end{lstlisting}
 
-\RU{Посмотрим регистры после исполнения инструкции}\EN{Let's see registers after} 
+\RU{Посмотрим регистры после исполнения инструкции}\EN{Let's see the registers after the} 
 \TT{MOV EAX, 0}\EN{ instruction execution}.
 \EAX \RU{здесь уже действительно ноль}\EN{here is zero indeed}.
 
