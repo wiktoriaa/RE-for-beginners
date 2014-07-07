@@ -102,14 +102,14 @@ to be used in the function are saved in the stack, including} \ac{LR}.
 \RU{Тем не менее, если некая функция не вызывает никаких более функций, в терминологии ARM она называется}
 \EN{Nevertheless, if a function never calls any other function, in ARM terminology it is called a}
 \IT{\gls{leaf function}}\footnote{\url{http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.faqs/ka13785.html}}. 
-\RU{Как следствие, ``leaf''-функция не использует регистр \ac{LR}}
-\EN{As a consequence, leaf functions do not use the \ac{LR} register}.
+\RU{Как следствие, ``leaf''-функция не сохраняет регистр \ac{LR} (потому что не изменяет его).}
+\EN{As a consequence, leaf functions do not save the \ac{LR} register (because doesn't modify it).}
 \RU{А если эта функция небольшая, использует мало регистров, она может не использовать стек вообще}
 \EN{If this function is small and uses a small number of registers, it may not use the stack at all}.
 \RU{Таким образом, в ARM возможен вызов небольших leaf-функций не используя стек}
 \EN{Thus, it is possible to call leaf functions without using the stack}.
-\RU{Это может быть быстрее чем в x86, ведь внешняя память для стека не используется}
-\EN{This can be faster than on x86 because external RAM is not used for the stack}
+\RU{Это может быть быстрее чем в старых x86, ведь внешняя память для стека не используется}
+\EN{This can be faster than on older x86 because external RAM is not used for the stack}
 \footnote{\RU{Когда-то, очень давно, на PDP-11 и VAX на инструкцию CALL (вызов других функций) могло тратиться
 вплоть до 50\% времени (возможно из-за работы с памятью),
 поэтому считалось, что много небольших функций это \glslink{anti-pattern}{анти-паттерн}}
@@ -117,3 +117,9 @@ to be used in the function are saved in the stack, including} \ac{LR}.
 of execution time might be spent on it, so it was common sense that big number of small function is \gls{anti-pattern}}\cite[Chapter 4, Part II]{Raymond:2003:AUP:829549}.}.
 \RU{Либо это может быть полезным для тех ситуаций, когда память для стека еще не выделена либо недоступна}
 \EN{It can be useful for such situations when memory for the stack is not yet allocated or not available}.
+
+\EN{Some examples of leaf functions here are}\RU{Некоторые примеры таких ф-ций здесь}: \lstname 
+\ref{ARM_leaf_example1}, \ref{ARM_leaf_example2}, 
+\ref{ARM_leaf_example3}, \ref{ARM_leaf_example4}, \ref{ARM_leaf_example5},
+\ref{ARM_leaf_example6}, \ref{ARM_leaf_example7}, \ref{ARM_leaf_example8},
+\ref{ARM_leaf_example9}, \ref{ARM_leaf_example10}.
