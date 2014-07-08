@@ -55,20 +55,58 @@ they will be at the same positions in the \AX register and all they are placed i
 \RU{Если a>b, то биты будут выставлены:}\EN{If a>b, then bits will be set:} 0, 0, 1.
 \item
 \RU{Если a=b, то биты будут выставлены так:}\EN{If a=b, then bits will be set:} 1, 0, 0.
+\item
+\RU{Если результат неопределен (в случае ошибки), то биты будут выставлены так}\EN{If result 
+is unordered (in case of error), then bits will be set}: 1, 1, 1.
 \end{itemize}
 % TODO: table here?
 
-\RU{После исполнения \TT{test ah, 5}, бит \Cthree и \TT{C1} сбросится в ноль, 
-на позициях 0 и 2 (внутри регистра \AH) 
-останутся соответственно \Czero и \Ctwo.}
-\EN{After \TT{test ah, 5} execution, bits \Cthree and \TT{C1} will be set to 0, 
-but at positions 0 and 2 (in the \AH registers) 
-\Czero and \Ctwo bits will be left.}
+\EN{This is how \CThreeBits bits are located in the \AX register:}
+\RU{Вот как биты \CThreeBits расположены в регистре \AX:}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitwidth=0.03\linewidth]{16}
+\bitheader{14,10,9,8} \\
+\bitbox{1}{} & 
+\bitbox{1}{\TT{C3}} & 
+\bitbox{3}{} & 
+\bitbox{1}{\TT{C2}} & 
+\bitbox{1}{\TT{C1}} & 
+\bitbox{1}{\TT{C0}} &
+\bitbox{8}{}
+\end{bytefield}
+\end{center}
+
+\EN{This is how \CThreeBits bits are located in the \AH register:}
+\RU{Вот как биты \CThreeBits расположены в регистре \AH:}
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitwidth=0.03\linewidth]{8}
+\bitheader{6,2,1,0} \\
+\bitbox{1}{} & 
+\bitbox{1}{\TT{C3}} & 
+\bitbox{3}{} & 
+\bitbox{1}{\TT{C2}} & 
+\bitbox{1}{\TT{C1}} & 
+\bitbox{1}{\TT{C0}}
+\end{bytefield}
+\end{center}
+
+\RU{После исполнения \TT{test ah, 5}\footnote{5=1001b}, % FIXME: subscript here!
+будут учтены только биты \Czero и \Ctwo (на позициях 0 и 2), остальные проигнорированы.}
+\EN{After \TT{test ah, 5} execution\footnote{5=1001b}, 
+only \Czero and \Ctwo bits (on 0 and 2 position) will be considered, all other bits will be
+ignored.}
 
 \label{parity_flag}
 \index{x86!\Registers!\RU{Флаг четности}\EN{Parity flag}}
 \RU{Теперь немного о \IT{parity flag}\footnote{флаг четности}. Еще один замечательный рудимент}
 \EN{Now let's talk about parity flag. Another notable epoch rudiment}:
+
+\RU{Этот флаг выставляется в $1$ если количество единиц в последнем результате ~--- четно. 
+И в $0$ если ~--- нечетно.}
+\EN{This flag is to be set to $1$ if number of ones in last calculation result is even. 
+And to $0$ if odd.}
 
 \begin{framed}
 \begin{quotation}
@@ -80,9 +118,8 @@ with the FUCOM instructions.\footnote{\url{http://en.wikipedia.org/wiki/Parity_f
 \end{quotation}
 \end{framed}
 
-\RU{Этот флаг выставляется в $1$ если количество единиц в последнем результате ~--- четно. 
-И в $0$ если ~--- нечетно.}
-\EN{This flag is to be set to $1$ if ones number is even. And to $0$ if odd.}
+\EN{As noted in Wikipedia, the parity flag used sometimes in FPU code and let's see how.}
+\RU{Как упоминается в Wikipedia, флаг четности иногда используется в FPU-коде и сейчас увидим, как.}
 
 \index{x86!\Instructions!JP}
 \RU{Таким образом, что мы имеем, флаг \PF будет выставлен в $1$, если \Czero и \Ctwo 
@@ -103,6 +140,14 @@ the \TT{test ah, 5} instruction).}
 а если не сработал, то загрузится \TT{\_a} и произойдет выход из функции.}
 \EN{It is all simple thereafter. If conditional jump was triggered, \FLD will load the \TT{\_b} value 
 to the \ST{0} register, and if it is not triggered, the value of the \TT{\_a} variable will be loaded.}
+
+\paragraph{\RU{А как же проверка флага \Ctwo}\EN{What about \Ctwo flag checking}?}
+
+\RU{Флаг \Ctwo включается в случае ошибки (\gls{NaN}, итд), но наш код его не проверяет.}
+\EN{\Ctwo flag is set in case of error (\gls{NaN}, etc), but our code doesn't check it.}
+\RU{Если программисту нужно знать, не произошла ли FPU-ошибка, он должен позаботиться об этом
+дополнительно добавив соответствующие проверки.}
+\EN{If programmer is aware about FPU errors, he/she must add additional checks.}
 
 \paragraph{\RU{Первый пример с \olly}\EN{First \olly example}: a=1.2 \AndENRU b=3.4}
 
