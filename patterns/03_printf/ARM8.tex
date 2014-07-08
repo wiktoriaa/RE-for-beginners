@@ -43,6 +43,14 @@ void printf_main2()
 
 \begin{itemize}
 \index{Function prologue}
+% It might be useful to mention, to those who are not so familiar with ARM,
+% that the `!' automatically changes the stack pointer afterwards.
+% To somebody who doesn't know or forgot that fact, it might look like
+% LR will be overwritten later:
+% the stack pointer would be subtracted only by 0x14 (and not 0x18 total),
+% and then -0x14 + 0x4 = -0x10 is used later,
+% which only leaves space for the last 4 parameters, but not the LR.
+% But actually, the 0x4 is already canceled because of the `!'.
 \item \RU{Пролог функции}\EN{Function prologue}:
 
 \index{ARM!\Instructions!STR}
@@ -72,16 +80,16 @@ are written to the \Reg{0}, \Reg{1}, \Reg{2} and \Reg{3} registers respectively}
 \index{IDA!var\_?}
 \IT{var\_14} \RU{~--- это макрос ассемблера}\EN{is an assembly macro}, \RU{равный}\EN{equal to} $-0x14$, 
 \RU{такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку}
-\EN{such macros are created by \IDA to succinctly denote code accessing the stack}.
+\EN{which is created by \IDA to succinctly denote code accessing the stack}.
 \RU{Макросы \IT{var\_?}, создаваемые \IDA, отражают локальные переменные в стеке}\EN{\IT{var\_?} macros created
-by \IDA reflecting local variables in the stack}.
+by \IDA reflect local variables in the stack}.
 \RU{Так что в \TT{R12} будет записано $SP+4$}\EN{So, $SP+4$ will be written into the \TT{R12} register}.
 \index{ARM!\Instructions!STMIA}
 \RU{Следующая инструкция}\EN{The next} \TT{``STMIA R12, {R0-R3}''} 
 \RU{записывает содержимое регистров \Reg{0}-\Reg{3} по адресу в памяти, на который указывает \TT{R12}}
 \EN{instruction
-writes \Reg{0}-\Reg{3} registers contents at the point in memory to which \TT{R12} pointing}.
-\RU{Инструкция }\TT{STMIA} \RU{означает}\EN{instruction meaning} \IT{Store Multiple Increment After}. 
+writes the contents of registers \Reg{0}-\Reg{3} to the point in memory to which \TT{R12} is pointing}.
+\RU{Инструкция }\TT{STMIA} \RU{означает}\EN{means} \IT{Store Multiple Increment After}. 
 \IT{Increment After} \RU{означает, что \TT{R12} будет увеличиваться на 4 после записи каждого значения регистра}
 \EN{means that \TT{R12} will be increased by $4$ after each register value is written}.
 
@@ -89,7 +97,7 @@ writes \Reg{0}-\Reg{3} registers contents at the point in memory to which \TT{R1
 \RU{$4$ записывается в \Reg{0}, затем это значение при помощи инструкции}\EN{$4$ is stored in \Reg{0} and then,
 this value, with the help of} \TT{``STR R0, [SP,\#0x18+var\_18]''} \RU{попадает в стек}\EN{instruction, is saved
 on the stack}.
-\IT{var\_18} \RU{равен}\EN{is} $-0x18$, \RU{смещение будет $0$}\EN{offset will be $0$}, 
+\IT{var\_18} \RU{равен}\EN{is} $-0x18$, \RU{смещение будет $0$}\EN{so the offset will be $0$}, 
 \RU{так что, значение из регистра \Reg{0} ($4$) запишется туда, куда указывает \ac{SP}}
 \EN{so, the value from the \Reg{0} register ($4$) will be written to the point where \ac{SP} is pointing to}.
 
@@ -97,7 +105,7 @@ on the stack}.
 
 \RU{Значения для первых трех чисел (a, b, c) (1, 2, 3 соответственно) передаются в регистрах 
 \Reg{1}, \Reg{2} и \Reg{3} перед самим вызовом \printf}
-\EN{Values of the first 3 numbers (a, b, c) (1, 2, 3 respectively) are passed in the 
+\EN{The values of the first 3 numbers (a, b, c) (1, 2, 3 respectively) are passed in the 
 \Reg{1}, \Reg{2} and \Reg{3}
 registers right before the \printf call}, \RU{а остальные 5 значений передаются через стек, и вот как}\EN{and the other
 5 values are passed via the stack}:
@@ -157,9 +165,9 @@ the function to exit}.
 
 \RU{Это почти то же самое, что и в предыдущем примере, только код для thumb и значения помещаются в 
 стек немного иначе: в начале $8$ за первый раз, затем $5$, $6$, $7$ за второй раз и $4$ за третий раз}\EN{Almost 
-same as
-in previous example, however, this is thumb code and values are packed into stack differently: 
-$8$ for the first time, then $5$, $6$, $7$ for the second and $4$ for the third}.
+like
+the previous example. However, this is thumb code and values are packed into stack differently: 
+$8$ for the first time, then $5$, $6$, $7$ for the second, and $4$ for the third}.
 
 \subsection{\OptimizingXcode: \ARMMode}
 
@@ -194,26 +202,26 @@ __text:00002958 80 80 BD E8   LDMFD  SP!, {R7,PC}
 \index{ARM!\Instructions!STMFA}
 \index{ARM!\Instructions!STMIB}
 \RU{Почти то же самое, что мы уже видели, за исключением того, что}
-\EN{Almost the same what we already figured out, with the
+\EN{Almost the same as what we have already seen, with the
 exception of} \TT{STMFA} (Store Multiple Full Ascending) 
-\RU{~--- это синоним инструкции}\EN{instruction, it is synonym to} 
+\RU{~--- это синоним инструкции}\EN{instruction, which is a synonym of} 
 \TT{STMIB} (Store Multiple Increment Before) \EN{instruction}. 
 \RU{Эта инструкция увеличивает \ac{SP} и только затем записывает в память значение очередного регистра, 
 но не наоборот}\EN{This
-instruction increasing value in the \ac{SP} register and only then writing next register value into memory, but not vice versa}.
+instruction increases the value in the \ac{SP} register and only then writes the next register value into memory, rather than the opposite order}.
 
 \RU{Второе, что бросается в глаза, это то, что инструкции как будто бы расположены случайно}\EN{Another thing
-we easily spot is the instructions are ostensibly located randomly}.
+we easily spot is that the instructions are ostensibly located randomly}.
 \RU{Например, значение в регистре \Reg{0} подготавливается в трех местах, по адресам \TT{0x2918}, \TT{0x2920} 
 и \TT{0x2928}, 
-когда это можно было бы сделать в одном месте}\EN{For instance, value in the \Reg{0} register is prepared in three
+когда это можно было бы сделать в одном месте}\EN{For instance, the value in the \Reg{0} register is prepared in three
 places, at addresses \TT{0x2918}, \TT{0x2920} and \TT{0x2928}, when it would be possible to do it in one single point}.
 \RU{Однако, у оптимизирующего компилятора могут быть свои доводы о том, как лучше составлять инструкции 
 друг с другом для лучшей эффективности исполнения}
-\EN{However, optimizing compiler has its own reasons about how
+\EN{However, the optimizing compiler has its own reasons for how
 to place instructions better}.
 \RU{Процессор обычно пытается исполнять одновременно идущие друг за другом инструкции}
-\EN{Usually, processor attempts to simultaneously execute instructions located side-by-side}.
+\EN{Usually, the processor attempts to simultaneously execute instructions located side-by-side}.
 \RU{К примеру, инструкции}\EN{For example, instructions like} \TT{``MOVT R0, \#0''} \AndENRU 
 \TT{``ADD R0, PC, R0''} \RU{не могут быть исполнены одновременно, потому что обе инструкции модифицируют 
 регистр \Reg{0}}\EN{cannot be executed simultaneously since they both modifying the \Reg{0} register}. 
@@ -258,6 +266,8 @@ __text:00002BD8 80 BD          POP      {R7,PC}
 
 \RU{Почти то же самое, что и в предыдущем примере,
 лишь за тем исключением, что здесь используются thumb-инструкции}
-\EN{Almost the same as in previous example,
-with the exception the thumb-instructions are used here instead}.
+\EN{Almost the same as in the previous example,
+with the exception that thumb-instructions are used here instead}.
+% also STMIA is used instead of STMIB,
+% which is why it uses LR, which is 4 bytes ahead of SP
 
