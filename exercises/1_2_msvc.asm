@@ -18,7 +18,7 @@ _f    PROC
     add    esp, 12                    ; 0000000cH
     test   eax, eax
     je     SHORT $LN6@f
-    npad   2
+    npad   2 ; align next label
 $LL7@f:
     mov    ecx, DWORD PTR [esi+4]
     add    esi, 4

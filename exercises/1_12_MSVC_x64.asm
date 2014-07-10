@@ -3,7 +3,7 @@ f	PROC
 	cmp	BYTE PTR [rcx], 0
 	mov	r9, rcx
 	je	SHORT $LN13@f
-	npad	8
+	npad	8	; align next label
 $LL5@f:
 	movzx	edx, BYTE PTR [rcx]
 	lea	eax, DWORD PTR [rdx-97]

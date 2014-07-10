@@ -43,7 +43,7 @@ $LN9@f:
     mov    esp, ebp
     pop    ebp
     ret    0
-    npad    2
+    npad    2 ; align next label
 $LN11@f:
     DD    $LN6@f ; 0
     DD    $LN5@f ; 1
