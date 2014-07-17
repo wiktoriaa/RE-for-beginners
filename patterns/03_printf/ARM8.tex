@@ -11,7 +11,7 @@ void printf_main2()
 };
 \end{lstlisting}
 
-\subsection{\OptimizingKeil: \ARMMode}
+\subsection{\OptimizingKeilVI: \ARMMode}
 
 \begin{lstlisting}
 .text:00000028             printf_main2
@@ -43,20 +43,19 @@ void printf_main2()
 
 \begin{itemize}
 \index{Function prologue}
-% It might be useful to mention, to those who are not so familiar with ARM,
-% that the `!' automatically changes the stack pointer afterwards.
-% To somebody who doesn't know or forgot that fact, it might look like
-% LR will be overwritten later:
-% the stack pointer would be subtracted only by 0x14 (and not 0x18 total),
-% and then -0x14 + 0x4 = -0x10 is used later,
-% which only leaves space for the last 4 parameters, but not the LR.
-% But actually, the 0x4 is already canceled because of the `!'.
 \item \RU{Пролог функции}\EN{Function prologue}:
 
 \index{ARM!\Instructions!STR}
 \RU{Самая первая инструкция}\EN{The very first} \TT{``STR LR, [SP,\#var\_4]!''} 
 \RU{сохраняет в стеке \ac{LR}, ведь нам придется использовать этот регистр для вызова \printf}
 \EN{instruction saves \ac{LR} on the stack, because we will use this register for the \printf call}.
+\RU{Восклицательный знак в конце означает}\EN{Exclamation mark at the end mean} \IT{pre-index}.
+\RU{Это значит, что в начале \ac{SP} должно быть
+уменьшено на 4, затем по адресу в \ac{SP} должно быть записано значение \ac{LR}.}
+\EN{This mean, \ac{SP} will be decreased by 4 at the beginning, 
+then \ac{LR} will be written by the address stored in \ac{SP}.}
+\RU{Это аналог знакомой в x86 инструкции \PUSH}\EN{This is analogous to \PUSH in x86}.
+\RU{Читайте больше об этом}\EN{Read more about it}: \ref{ARM_postindex_vs_preindex}.
 
 \index{ARM!\Instructions!SUB}
 \RU{Вторая инструкция}\EN{The second} \TT{``SUB SP, SP, \#0x14''}
@@ -125,14 +124,30 @@ thus cleaning the stack}.
 rewritten during the execution of subsequent functions}.
 
 \index{ARM!\Instructions!LDR}
-\RU{Инструкция}\EN{The} \TT{``LDR PC, [SP+4+var\_4],\#4''} \RU{загружает в \ac{PC} сохраненное значение \ac{LR} из стека,
-обеспечивая таким образом выход из функции}
-\EN{instruction loads the saved \ac{LR} value from the stack into the \ac{PC} register, thus causing
-the function to exit}.
+\RU{Инструкция}\EN{The} \TT{``LDR PC, [SP+4+var\_4],\#4''} \RU{загружает в \ac{PC} 
+сохраненное значение \ac{LR} из стека, обеспечивая таким образом выход из функции.}
+\EN{instruction loads the saved \ac{LR} value from the stack into the \ac{PC} register, 
+thus causing the function to exit.}
+\EN{There are no exclamation mark---indeed, first PC is loaded from the point SP pointing to}
+\RU{Здесь нет восклицательного знака --- действительно,  в начале PC загружается из места,
+куда указывает SP}
+($4+var\_4=4+(-4)=0$, \RU{так что эта инструкция аналогична}\EN{so this instruction is 
+analogous to} \TT{LDR PC, [SP],\#4}), \RU{затем}\EN{then} \ac{SP} \RU{увеличивается 
+на}\EN{increased by} $4$.
+\RU{Это называется}\EN{This is called} \IT{post-index}\footnote{\RU{Читайте больше об 
+этом}\EN{Read more about it}: \ref{ARM_postindex_vs_preindex}.}.
+\RU{Почему}\EN{Why} \IDA \RU{показывает инструкцию именно так}\EN{shows the instruction like that}?
+\RU{Потому что она хочет показать разметку стека и тот факт, что}\RU{Because it wants to show 
+stack layout and the fact} \TT{var\_4} \RU{выделена в локальном стеке именно для сохраненного
+значения}\EN{is allocated for saved value of} \ac{LR}\EN{ in the local stack}.
+\RU{Эта инструкция в каком-то смысле аналогична}\EN{This instruction is somewhat 
+analogous to} \TT{POP PC} \InENRU x86\footnote{\EN{It's impossible to
+set value of \TT{IP/EIP/RIP} using \POP in x86, but anyway, you got the idea, I hope}\RU{В x86 
+невозможно установить значение \TT{IP/EIP/RIP} используя \POP, но надеюсь, вы поняли, о чем я}.}.
 
 \end{itemize}
 
-\subsection{\OptimizingKeil: \ThumbMode}
+\subsection{\OptimizingKeilVI: \ThumbMode}
 
 \begin{lstlisting}
 .text:0000001C             printf_main2
@@ -169,7 +184,7 @@ like
 the previous example. However, this is thumb code and values are packed into stack differently: 
 $8$ for the first time, then $5$, $6$, $7$ for the second, and $4$ for the third}.
 
-\subsection{\OptimizingXcode: \ARMMode}
+\subsection{\OptimizingXcodeIV: \ARMMode}
 
 \begin{lstlisting}
 __text:0000290C             _printf_main2
@@ -232,7 +247,7 @@ simultaneously since effects of their execution are not conflicting with each ot
 \RU{Вероятно, компилятор старается генерировать код именно таким образом там, где это возможно}
 \EN{Presumably, compiler tries to generate code in such a way, where it is possible, of course}.
  
-\subsection{\OptimizingXcode: \ThumbTwoMode}
+\subsection{\OptimizingXcodeIV: \ThumbTwoMode}
 
 \begin{lstlisting}
 __text:00002BA0               _printf_main2

@@ -1,0 +1,147 @@
+﻿\subsection{ARM64}
+
+\subsubsection{GCC}
+
+\RU{Компилируем пример в}\EN{Let's compile the example using} GCC 4.8.1 \InENRU ARM64:
+
+\lstinputlisting[numbers=left,label=hw_ARM64_GCC,caption=\NonOptimizing GCC 4.8.1 + objdump]
+{patterns/01_helloworld/ARM/hw.lst}
+
+\RU{В ARM64 нет режима thumb и thumb-2, только ARM, так что тут только 32-битные инструкции.}
+\EN{There are no thumb and thumb-2 modes in ARM64, only ARM, so there are 32-bit instructions only.}
+\RU{Регистров тут в 2 раза больше}\EN{Registers count is doubled}: \ref{ARM64_GPRs}.
+\RU{64-битные регистры теперь имеют префикс}\EN{64-bit registers has} 
+\TT{X-}\EN{ prefixes, while its 32-bit parts}\RU{, а их 32-битные части}\EMDASH{}\TT{W-}.
+
+\RU{Инструкция }\TT{STP}\EN{ instruction} (\IT{Store Pair}) 
+\RU{сохраняет в стеке сразу два регистра}\EN{saves two registers in stack simultaneously}: \RegX{29} \InENRU \RegX{30}.
+\RU{Конечно, эта инструкция может сохранять эту пару где угодно в памяти, но здесь указан регистр \ac{SP}, так что,
+пара сохраняется именно в стеке.}
+\EN{Of course, this instruction is able to save this pair at random place of memory, 
+but \ac{SP} register is specified here, so the pair is saved in stack.}
+\RU{Регистры в ARM64 64-битные, каждый это 8 байт, так что для хранения двух регистров нужно именно 16 байт.}
+\EN{ARM64 registers are 64-bit ones, each contain 8 bytes, so one need 16 bytes for saving two registers.}
+
+\RU{Восклицательный знак после операнда означает, что в начале от \ac{SP} будет отнято 16, и только затем
+значения из пары регистров будут записаны в стек.}
+\EN{Exclamation mark after operand mean that 16 will be subtracted from \ac{SP} first, and only then
+values from registers pair will be written into the stack.}
+\RU{Это называется}\EN{This is also called} \IT{pre-index}.
+\RU{Больше о разнице между}\EN{About difference between} \IT{post-index} \AndENRU \IT{pre-index}, 
+\RU{описано здесь}\EN{read here}: \ref{ARM_postindex_vs_preindex}.
+
+\RU{Таким образом, в терминах более знакомого всем процессора x86, первая инструкция это просто аналог 
+пары инструкций}
+\EN{Hence, in terms of more familiar x86, the first instruction is just analogous to pair of}
+\TT{PUSH X29} \AndENRU \TT{PUSH X30}.
+\RegX{29} \EN{is used as \ac{FP} in ARM64}\RU{в ARM64 используется как \ac{FP}}, \EN{and}\RU{а} \RegX{30} 
+\EN{as}\RU{как} \ac{LR}, \RU{поэтому они сохраняются в прологе ф-ции и
+восстанавливаются в эпилоге}\EN{so that's why they are saved in function prologue and restored in function
+epilogue}.
+
+\EN{The second instruction saves}\RU{Вторая инструкция записывает} \ac{SP} \InENRU \RegX{29} (\OrENRU \ac{FP}).
+\RU{Это нужно для установки стекового фрейма ф-ции}\EN{This is needed for function stack frame setup}.
+
+\RU{Инструкции }\TT{ADRP} \AndENRU \ADD \EN{instructions are needed for forming address of the 
+string}\RU{нужны для формирования адреса строки} ``Hello!'' \EN{in the \RegX{0} register}\RU{в регистре \RegX{0}}, 
+\RU{ведь первый аргумент ф-ции передается через этот регистр}\EN{because first function argument is passed
+in this register}.
+\RU{Но в ARM нет инструкций, при помощи которых можно записать в регистр длинное число}\EN{But there are
+no instructions in ARM helping to write large number into register} 
+(\RU{потому что сама длина инструкции ограничена 4-ю байтами, больше об этом здесь}\EN{because instruction
+length is limited by 4 bytes, read more about it here}: \ref{ARM_big_constants_loading}).
+\RU{Так что нужно использовать несколько инструкций}\EN{So several instructions should be used}.
+\RU{Первая инструкция}\EN{The first instruction} (\TT{ADRP}) \EN{writes address of 4Kb page where string is
+located into \RegX{0}}\RU{записывает в \RegX{0} адрес 4-килобайтной страницы где находится строка}, 
+\EN{and the second one}\RU{а вторая} (\ADD) \RU{просто прибавляет к этому адресу остаток}\EN{just adds
+reminder to the address}.
+\EN{Read more about}\RU{Читайте больше об этом}: \ref{ARM64_relocs}.
+
+\TT{0x400000 + 0x648 = 0x400648}, \EN{and we see our ``Hello!'' C-string in the \TT{.rodata} data segment at this
+address}\RU{и мы видим что в секции данных \TT{.rodata} по этому адресу как раз находится наша
+Си-строка ``Hello!''}.
+
+\RU{Затем, при помощи инструкции \TT{BL} вызывается \puts, это уже рассматривалось раннее: \ref{puts}.}
+\EN{\puts is called then using \TT{BL} instruction, this was already discussed before: \ref{puts}.}
+
+\RU{Инструкция }\MOV \EN{instruction writes $0$ into}\RU{записывает $0$ в} \RegW{0}. 
+\RegW{0} \RU{это младшие 32 бита регистра}\EN{is low 32 bits of} \RegX{0}\EN{ register}:
+
+\input{ARM_X0_register}
+
+\RU{А результат ф-ции возвращается через \RegX{0}, и \main возвращает $0$, 
+так что вот так готовится возвращаемый результат.}
+\EN{Function result is returning via \RegX{0} and \main returning $0$, so that's how returning
+result is prepared.}
+\RU{Почему именно 32-битная часть}\EN{But why 32-bit part}?
+\RU{Потому в ARM64, как и в x86-64, тип \Tint оставили 32-битным, для лучшей совместимости.}
+\EN{Because \Tint in ARM64, just like in x86-64, is still 32-bit, for better compatibility.}
+\RU{Следовательно, раз уж ф-ция возвращает 32-битный \Tint, то нужно заполнить только 32 младших бита 
+регистра \RegX{0}.}
+\EN{So if function returning 32-bit \Tint, only 32 lowest bits of \RegX{0} register should be filled.}
+
+\RU{Для того, чтобы удостовериться в этом, я немного отредактировал свой пример и перекомпилировал его.}
+\EN{In order to get sure about it, I changed by example slightly and recompiled it.}
+\RU{Теперь}\EN{Now} \main \RU{возвращает 64-битное значение}\EN{returns 64-bit value}:
+
+\begin{lstlisting}[caption=\main \RU{возвращающая значение типа}\EN{returning a value of} \TT{uint64\_t}\EN{ type}]
+#include <stdio.h>
+#include <stdint.h>
+
+uint64_t main()
+{
+        printf ("Hello!\n");
+        return 0;
+};
+\end{lstlisting}
+
+\RU{Результат точно такой же, только \MOV в той строке теперь выглядит так:}
+\EN{Result is very same, but that's how \MOV at that line is now looks like:}
+
+\begin{lstlisting}[caption=\NonOptimizing GCC 4.8.1 + objdump]
+  4005a4:       d2800000        mov     x0, #0x0                        // #0
+\end{lstlisting}
+
+\RU{Далее, при помощи инструкции \TT{LDP} (\IT{Load Pair}), восстанавливаются регистры \RegX{29} и \RegX{30}.}
+\EN{\TT{LDP} (\IT{Load Pair}) then restores \RegX{29} and \RegX{30} registers.}
+\RU{Восклицательного знака после инструкции нет: это означает, что в начале значения достаются из стека,
+и только потом \ac{SP} увеличивается на 16.}
+\EN{There are no exclamation mark after instruction: this mean, the value is first loaded from the stack,
+only then \ac{SP} value is increased by 16.}
+\RU{Это называется}\EN{This is called} \IT{post-index}.
+
+\RU{В ARM64 есть новая инструкция}\EN{New instruction appeared in ARM64}: \RET. 
+\RU{Она работает так же как и}\EN{It works just as} \TT{BX LR}, \RU{но там добавлен специальный бит,
+подсказывающий процессору, что это именно выход из ф-ции, а не просто переход, чтобы процессор
+мог более оптимально исполнять эту инструкцию}\EN{but a special \IT{hint} bit is added, showing to the \ac{CPU}
+that this is return from the function, not just another branch instruction, so it can execute it more optimally}.
+
+\RU{Из-за простоты этой ф-ции, оптимизирующий GCC генерирует точно такой же код.}
+\EN{Due to simplicity of the function, optimizing GCC generates the very same code.}
+
+\subsubsection{Xcode}
+
+\OptimizingXcodeV \RU{делает почти такой же код}\EN{doing the same}.
+\RU{Вот что показывает}\EN{Here is what} otool\footnote{\RU{аналог}\EN{analogous to} objdump} 
+\RU{с ключом}\EN{with the} \TT{-tv}\EN{ key shows}:
+
+\begin{lstlisting}[caption=\OptimizingXcodeV + otool]
+0000000000000000		stp	fp, lr, [sp, #-16]!
+0000000000000004		add	fp, sp, 0
+0000000000000008		adrp	x0, 0 ; 0x0
+000000000000000c		add	x0, x0, 0
+0000000000000010		bl	0x10
+0000000000000014		movz	w0, #0
+0000000000000018		ldp	fp, lr, [sp], #16
+000000000000001c		ret	lr
+\end{lstlisting}
+
+\RU{Код такой же}\EN{The code is the same}.
+\TT{MOVZ} \RU{в данном случае это синоним}\EN{here is synonymous to} \MOV.
+\RU{Вот что немного отличается: otool показывает регистр}\EN{Here is difference: otool shows} 
+\RegX{29}\EN{ register} \RU{как}\EN{as} \ac{FP}, \RU{а}\EN{and} \RegX{30} \RU{как}\EN{as} \ac{LR}.
+\RU{Это действительно синонимы для этих регистров.}
+\EN{These are indeed nicknames for these registers.}
+
+\RU{\RET otool показывает как \TT{RET LR}, это немного избыточный результат дизассемблера.}
+\EN{otool also shows \RET as \TT{RET LR}, this is somewhat redundant disassembler result.}

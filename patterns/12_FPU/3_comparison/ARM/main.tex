@@ -1,8 +1,8 @@
 \subsection{ARM}
 
-\subsubsection{\OptimizingXcode + \ARMMode}
+\subsubsection{\OptimizingXcodeIV + \ARMMode}
 
-\begin{lstlisting}[caption=\OptimizingXcode + \ARMMode]
+\begin{lstlisting}[caption=\OptimizingXcodeIV + \ARMMode]
 VMOV            D16, R2, R3 ; b
 VMOV            D17, R0, R1 ; a
 VCMPE.F64       D17, D16
@@ -53,9 +53,9 @@ BX              LR
 \EN{Penultimate instruction \TT{VMOV} will prepare value in the \TT{D16} register for returning via \Reg{0} and \Reg{1}
 registers pair.}
 
-\subsubsection{\OptimizingXcode + \ThumbTwoMode}
+\subsubsection{\OptimizingXcodeIV + \ThumbTwoMode}
 
-\begin{lstlisting}[caption=\OptimizingXcode + \ThumbTwoMode]
+\begin{lstlisting}[caption=\OptimizingXcodeIV + \ThumbTwoMode]
 VMOV            D16, R2, R3 ; b
 VMOV            D17, R0, R1 ; a
 VCMPE.F64       D17, D16
@@ -201,9 +201,9 @@ cat AngryBirdsClassic.lst | grep " BF" | grep "IT" > results.lst
 with adding conditional suffixes,
 assembler will add \TT{IT} instructions automatically, with respectable flags, where it is necessary.}
 
-\subsubsection{\NonOptimizingXcode + \ARMMode}
+\subsubsection{\NonOptimizingXcodeIV + \ARMMode}
 
-\begin{lstlisting}[caption=\NonOptimizingXcode + \ARMMode]
+\begin{lstlisting}[caption=\NonOptimizingXcodeIV + \ARMMode]
 b               = -0x20
 a               = -0x18
 val_to_return   = -0x10
@@ -244,9 +244,9 @@ loc_2E10
 \EN{but too much redundant code because of $a$ and $b$ variables storage in local stack, as well
 as returning value.}
 
-\subsubsection{\OptimizingKeil + \ThumbMode}
+\subsubsection{\OptimizingKeilVI + \ThumbMode}
 
-\begin{lstlisting}[caption=\OptimizingKeil + \ThumbMode]
+\begin{lstlisting}[caption=\OptimizingKeilVI + \ThumbMode]
                 PUSH    {R3-R7,LR}
                 MOVS    R4, R2
                 MOVS    R5, R3

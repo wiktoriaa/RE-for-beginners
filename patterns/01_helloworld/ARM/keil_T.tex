@@ -1,0 +1,47 @@
+﻿\subsection{\NonOptimizingKeilVI: \ThumbMode}
+
+\RU{Скомпилируем тот же пример в Keil для режима thumb}\EN{Let's compile the same example using Keil in thumb mode}:
+
+\begin{lstlisting}
+armcc.exe --thumb --c90 -O0 1.c 
+\end{lstlisting}
+
+\RU{Получим (в \IDA)}\EN{We will get (in \IDA)}:
+
+\begin{lstlisting}[caption=\NonOptimizingKeilVI + \ThumbMode + \IDA]
+.text:00000000             main
+.text:00000000 10 B5          PUSH    {R4,LR}
+.text:00000002 C0 A0          ADR     R0, aHelloWorld ; "hello, world"
+.text:00000004 06 F0 2E F9    BL      __2printf
+.text:00000008 00 20          MOVS    R0, #0
+.text:0000000A 10 BD          POP     {R4,PC}
+
+.text:00000304 68 65 6C 6C+aHelloWorld  DCB "hello, world",0    ; DATA XREF: main+2
+\end{lstlisting}
+
+\RU{Сразу бросаются в глаза двухбайтные (16-битные) опкоды ~--- это, как я уже упоминал, thumb}
+\EN{We can easily spot the 2-byte (16-bit) opcodes. This is, as I mentioned, thumb}.
+\index{ARM!\Instructions!BL}
+\RU{Кроме инструкции \TT{BL}.}\EN{The \TT{BL} instruction however}
+\RU{Но на самом деле она состоит из двух 16-битных инструкций}
+\EN{consists of two 16-bit instructions}.
+\RU{Это потому, что загрузить в \ac{PC} смещение, по которому находится функция \printf, используя так мало места в одном 16-битном опкоде, нельзя}
+\EN{This is because it is impossible to load an offset for the \printf function into \ac{PC} while using the small space in one 16-bit opcode}.
+\RU{Поэтому первая 16-битная инструкция загружает старшие 10 бит смещения, а вторая ~--- младшие 11 бит смещения}
+\EN{That's why the first 16-bit instruction loads the higher 10 bits of the offset and the second instruction loads 
+the lower 11 bits of the offset}.
+\RU{Как я уже упоминал, все инструкции в thumb-режиме имеют длину 2 байта (или 16 бит)}
+\EN{As I mentioned, all instructions in thumb mode have a size of 2 bytes (or 16 bits)}.
+\RU{Поэтому невозможна такая ситуация, когда thumb-инструкция начинается по нечетному адресу}
+\EN{This means it is impossible for a thumb-instruction to be at an odd address whatsoever}.
+\RU{Учитывая сказанное, последний бит адреса можно не кодировать}
+\EN{Given the above, the last address bit may be omitted while encoding instructions}.
+\RU{Таким образом, в итоге, в thumb-инструкции \TT{BL} кодируется смещение}
+\EN{In summary, in the \TT{BL} thumb-instruction} $\pm{}\approx{}2M$ 
+\RU{от текущего адреса}\EN{can be encoded as the offset from the current address}.
+
+\RU{Остальные инструкции в функции: \PUSH и \POP работают почти так же, как и описанные \TT{STMFD}/\TT{LDMFD}, только регистр \ac{SP} здесь не указывается явно}
+\EN{As for the other instructions in the function: \PUSH and \POP work just like the described \TT{STMFD}/\TT{LDMFD} but the \ac{SP} register is not mentioned explicitly here}.
+\TT{ADR} \RU{работает так же, как и в предыдущем примере}\EN{works just like in previous example}.
+\TT{MOVS} \RU{записывает $0$ в регистр \Reg{0} для возврата нуля}
+\EN{writes $0$ into the \Reg{0} register in order to return zero}.

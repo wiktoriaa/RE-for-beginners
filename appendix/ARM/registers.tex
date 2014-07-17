@@ -1,5 +1,8 @@
-\section{\RU{Регистры общего пользования}\EN{General purpose registers}}
+\section{32-\RU{битный}\EN{bit} ARM (AArch32)}
 
+\subsection{\RU{Регистры общего пользования}\EN{General purpose registers}}
+
+% FIXME: make it tidy
 \begin{itemize}
 \index{ARM!\Registers!R0}
 	\item R0 --- \RU{результат ф-ции обычно возвращается через R0}
@@ -28,7 +31,7 @@
 \EN{are also called ``scratch registers'': function arguments are usually passed in them,
 and values in them are not necessary to restore upon function exit}.
 
-\section{Current Program Status Register (CPSR)}
+\subsection{Current Program Status Register (CPSR)}
 
 \begin{center}
 \begin{tabular}{ | l | l | }
@@ -72,14 +75,14 @@ and values in them are not necessary to restore upon function exit}.
 
 % TODO
 % \index{ARM!\Registers!APSR}
-% \section{Application Program Status Register (APSR)}
+% \subsection{Application Program Status Register (APSR)}
 
 % TODO
 % \index{ARM!\Registers!FPSCR}
-% \section{Floating-Point Status and Control Register (FPPSR)}
+% \subsection{Floating-Point Status and Control Register (FPPSR)}
 % http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0344b/Chdfafia.html
 
-\section{\RU{Регистры VPF (для чисел с плавающей точкой) и NEON}
+\subsection{\RU{Регистры VPF (для чисел с плавающей точкой) и NEON}
 \EN{VFP (floating point) and NEON registers}}
 
 % http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dht0002a/ch01s03s02.html
@@ -132,3 +135,36 @@ sharing a space with other S-registers}.
 делящих место с регистрами D0..D31}
 \EN{there are also 16 128-bit Q-registers added, which share the same space as D0..D31}.
 
+\section{64-\RU{битный}\EN{bit} ARM (AArch64)}
+
+\subsection{\RU{Регистры общего пользования}\EN{General purpose registers}}
+\label{ARM64_GPRs}
+
+\RU{Количество регистров было удвоено со времен}\EN{Register count was doubled since} AArch32.
+
+\begin{itemize}
+\index{ARM!\Registers!X0}
+	\item X0\EMDASH{}\RU{результат ф-ции обычно возвращается через X0}
+		\EN{function result is usually returned using X0}
+        \item X0...X7\EMDASH{}\RU{Здесь передаются аргументы ф-ции}\EN{Function arguments are passed here}.
+	\item X8
+	\item X9...X15\EMDASH{}\RU{временные регистры, вызываемая ф-ция может их использовать и не восстанавливать 
+их}\EN{are temporary registers, callee function may use it and not restore}.
+	\item X16
+	\item X17
+	\item X18
+	\item X19...X29\EMDASH{}\RU{вызываемая ф-ция может их использовать, но должна восстанавливать их по 
+завершению}\EN{callee function may use, but should restore them upon exit}.
+	\item X29\EMDASH{}\EN{used as}\RU{используется как} \ac{FP} (\EN{at least}\RU{как минимум в} GCC)
+	\item X30\EMDASH{}``Procedure Link Register'' \ac{AKA} \ac{LR} (\gls{link register}).
+	\item X31\EMDASH{}\EN{register always containing zero}\RU{регистр, всегда содержащий ноль}
+\ac{AKA} ZR \OrENRU ``Zero Register''.
+	\item \ac{SP}, \RU{больше не регистр общего пользования}\EN{not general register anymore}.
+\end{itemize}
+
+\RU{См.также}\EN{See also}: \cite{ARM64_PCS}.
+
+\EN{32-bit part of each X-register is also accessible via W-registers}\RU{32-битная часть 
+каждого X-регистра также доступна как W-регистр} (W0, W1, \RU{и т.д.}\EN{etc}).
+
+\input{ARM_X0_register}
