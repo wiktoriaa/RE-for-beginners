@@ -152,7 +152,7 @@ using single instruction.}
 \RU{Я скомпилировал пример из}\EN{I compiled example from} ``\HelloWorldSectionName'' 
 (\lstref{hw_c}) \InENRU GCC (Linaro) 4.9 \RU{под}\EN{under} win32:
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=GCC (Linaro) 4.9 \AndENRU objdump \EN{of object file}\RU{объектного файла}]
 ...>aarch64-linux-gnu-gcc.exe hw.c -c
 
 ...>aarch64-linux-gnu-objdump.exe -d hw.o
@@ -198,50 +198,31 @@ jump to the \printf function is.}
 \EN{Since it's not possible in ARM64 (and in ARM in ARM mode) to jump to the address not multiple of 4,
 so the available address space is not 26 bits, but 28.}
 \end{itemize}
-% FIXME: objdump of resulting image
-\RU{Если запустить пример в GDB под Linux и посмотреть опкоды:}
-\EN{Here is what we see if to load the example in GDB under Linux and to see opcodes:}
 
-\begin{lstlisting}
-(gdb) disas/r main
-Dump of assembler code for function main:
-   0x0000000000400590 <+0>:     fd 7b bf a9     stp     x29, x30, [sp,#-16]!
-   0x0000000000400594 <+4>:     fd 03 00 91     mov     x29, sp
-   0x0000000000400598 <+8>:     00 00 00 90     adrp    x0, 0x400000
-   0x000000000040059c <+12>:    00 20 19 91     add     x0, x0, #0x648
-=> 0x00000000004005a0 <+16>:    a0 ff ff 97     bl      0x400420 <puts@plt>
-   0x00000000004005a4 <+20>:    00 00 80 52     mov     w0, #0x0                        // #0
-   0x00000000004005a8 <+24>:    fd 7b c1 a8     ldp     x29, x30, [sp],#16
-   0x00000000004005ac <+28>:    c0 03 5f d6     ret
-End of assembler dump.
+\RU{В слинкованном исполняемом файле релоков в этих местах нет: потому что там уже точно известно, 
+где будет находится строка ``Hello!'', и в какой странице, а также известен адрес ф-ции \puts.}
+\EN{There are no such relocs in the executable file: because, it's known, where the ``Hello!'' string
+will be located, in which page, and also \puts function address is known.}
+\RU{И поэтому там, в инструкциях \TT{ADRP}, \ADD и \TT{BL}, уже проставлены нужные значения 
+(их проставил линкер во время компоновки):}
+\EN{So there are values already set in the \TT{ADRP}, \ADD and \TT{BL} instructions
+(linker set it while linking):}
+
+\begin{lstlisting}[caption=objdump \EN{of executable file}\RU{исполняемого файла}]
+0000000000400590 <main>:
+  400590:       a9bf7bfd        stp     x29, x30, [sp,#-16]!
+  400594:       910003fd        mov     x29, sp
+  400598:       90000000        adrp    x0, 400000 <_init-0x3b8>
+  40059c:       91192000        add     x0, x0, #0x648
+  4005a0:       97ffffa0        bl      400420 <puts@plt>
+  4005a4:       52800000        mov     w0, #0x0                        // #0
+  4005a8:       a8c17bfd        ldp     x29, x30, [sp],#16
+  4005ac:       d65f03c0        ret
+
+...
+
+Contents of section .rodata:
+ 400640 01000200 00000000 48656c6c 6f210000  ........Hello!..
 \end{lstlisting}
-
-\RU{Видно что}\EN{We see that} \IT{immhi} \AndENRU \IT{immlo} \RU{в инструкции}\EN{in} 
-\TT{ADRP}\EN{ instruction}\EMDASH{}
-\RU{нули, т.е., строка по нужному адресу находится в той же 4Kb-странице что и код ф-ции \main.}
-\EN{are zeroes, i.e., the string is located in the same 4Kb-page as a \main function code.}
-
-\RU{Дизассемблируем инструкцию \ADD вручную используя}\EN{Let's disassemble \ADD instruction manually 
-using} \cite{ARM64ref}\footnote{N.B.: \RU{GDB показывает байты опкодов в том же порядке, в котором
-они расположены в памяти, но документация от ARM показывает их наоборот}\EN{GDB shows opcode bytes in the same
-order as they located in memory, but ARM manuals shows them contrariwise}}, \RU{и получим}\EN{and we will see}:
-
-\begin{lstlisting}
-91          19          20       00
-10010001    00011001    00100000 00000000
-sf=1 0 0 10001  shift=00 imm12=011001001000 (0x648) Rn=00000 (X0) Rd=00000 (X0)
-\end{lstlisting}
-
-\RU{Т.е., загрузчик Linux дописал \TT{0x648} на место бит \TT{imm12} в этой инструкции.}
-\EN{So, the Linux loader writes \TT{0x648} on the \TT{imm12} bits place in this instruction.}
-\TT{0x648} \RU{это адрес строки}\EN{is the address of} ``Hello!'' \RU{относительно начала 4Kb-страницы}\EN{string
-relatively to the start of 4Kb-page}:
-
-\lstinputlisting{patterns/ARM/gdb2.txt}
-
-\RU{Действительно}\EN{Indeed}, \main \RU{начинается с}\EN{is beginning at} \TT{0x400590}, \RU{а строка}
-\EN{and the} ``Hello!'' \RU{с}\EN{string at} \TT{0x400648}, 
-\RU{страница начинается с}\EN{the page beginning at} \TT{0x400000}, \RU{а следующая страница 
-уже с}\EN{and the next page at} \TT{0x401000}.
 
 \RU{Больше о релоках связанных с ARM64}\EN{More about ARM64-related relocs}: \cite{ARM64_ELF}.

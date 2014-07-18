@@ -1,6 +1,4 @@
-\section{ARM}
-
-\subsection{\NonOptimizingKeilVI + \ARMMode}
+﻿\subsection{\NonOptimizingKeilVI + \ARMMode}
 
 \begin{lstlisting}
 .text:000000A4 00 30 A0 E1                 MOV     R3, R0
@@ -66,39 +64,3 @@ called, from ARM or thumb.}
 but also will switch processor mode to thumb mode.}
 \RU{Либо не переключит, если функция вызывалась из кода для режима ARM.}
 \EN{Or not switch, if the function was called from ARM code.}
-
-\subsection{\OptimizingKeilVI + \ARMMode}
-
-\begin{lstlisting}[label=ARM_leaf_example1]
-.text:00000098             f
-.text:00000098 91 20 20 E0                 MLA     R0, R1, R0, R2
-.text:0000009C 1E FF 2F E1                 BX      LR
-\end{lstlisting}
-
-\RU{А вот и функция \TT{f} скомпилированная компилятором Keil в режиме полной оптимизации}
-\EN{And here is \TT{f} function compiled by Keil compiler in full optimization mode} (\Othree).
-\RU{Инструкция \MOV была соптимизирована и теперь \TT{MLA} использует все входящие регистры 
-и помещает результат в \Reg{0}, как раз, где вызываемая функция будет его читать и использовать.}
-\EN{\MOV instruction was optimized (or reduced) and now \TT{MLA} uses all 
-input registers and also places result right into \Reg{0},
-exactly where calling function will read it and use.}
-
-\subsection{\OptimizingKeilVI + \ThumbMode}
-
-\begin{lstlisting}[label=ARM_leaf_example2]
-.text:0000005E 48 43                       MULS    R0, R1
-.text:00000060 80 18                       ADDS    R0, R0, R2
-.text:00000062 70 47                       BX      LR
-\end{lstlisting}
-
-\RU{В режиме thumb, инструкция \TT{MLA} недоступна, так что компилятору пришлось сгенерировать код, 
-делающий обе операции по отдельности.}
-\EN{\TT{MLA} instruction is not available in thumb mode, so, compiler generates the code doing these two 
-operations separately.}
-\index{ARM!\Instructions!MULS}
-\index{ARM!\Instructions!ADDS}
-\RU{Первая инструкция \TT{MULS} умножает \Reg{0} на \Reg{1} оставляя результат в \Reg{1}.}
-\EN{First \TT{MULS} instruction multiply \Reg{0} by \Reg{1} leaving result in the \Reg{1} register.}
-\RU{Вторая (\TT{ADDS}) складывает результат и \Reg{2}, оставляя результат в \Reg{0}.}
-\EN{Second (\TT{ADDS}) instruction adds result and \Reg{2} leaving result in the \Reg{0} register.}
-

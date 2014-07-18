@@ -1,0 +1,15 @@
+﻿\subsection{\OptimizingKeilVI + \ARMMode}
+
+\begin{lstlisting}[label=ARM_leaf_example1]
+.text:00000098             f
+.text:00000098 91 20 20 E0                 MLA     R0, R1, R0, R2
+.text:0000009C 1E FF 2F E1                 BX      LR
+\end{lstlisting}
+
+\RU{А вот и функция \TT{f} скомпилированная компилятором Keil в режиме полной оптимизации}
+\EN{And here is \TT{f} function compiled by Keil compiler in full optimization mode} (\Othree).
+\RU{Инструкция \MOV была соптимизирована и теперь \TT{MLA} использует все входящие регистры 
+и помещает результат в \Reg{0}, как раз, где вызываемая функция будет его читать и использовать.}
+\EN{\MOV instruction was optimized (or reduced) and now \TT{MLA} uses all 
+input registers and also places result right into \Reg{0},
+exactly where calling function will read it and use.}

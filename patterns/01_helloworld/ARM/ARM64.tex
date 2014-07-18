@@ -118,30 +118,3 @@ that this is return from the function, not just another branch instruction, so i
 
 \RU{Из-за простоты этой ф-ции, оптимизирующий GCC генерирует точно такой же код.}
 \EN{Due to simplicity of the function, optimizing GCC generates the very same code.}
-
-\subsubsection{Xcode}
-
-\OptimizingXcodeV \RU{делает почти такой же код}\EN{doing the same}.
-\RU{Вот что показывает}\EN{Here is what} otool\footnote{\RU{аналог}\EN{analogous to} objdump} 
-\RU{с ключом}\EN{with the} \TT{-tv}\EN{ key shows}:
-
-\begin{lstlisting}[caption=\OptimizingXcodeV + otool]
-0000000000000000		stp	fp, lr, [sp, #-16]!
-0000000000000004		add	fp, sp, 0
-0000000000000008		adrp	x0, 0 ; 0x0
-000000000000000c		add	x0, x0, 0
-0000000000000010		bl	0x10
-0000000000000014		movz	w0, #0
-0000000000000018		ldp	fp, lr, [sp], #16
-000000000000001c		ret	lr
-\end{lstlisting}
-
-\RU{Код такой же}\EN{The code is the same}.
-\TT{MOVZ} \RU{в данном случае это синоним}\EN{here is synonymous to} \MOV.
-\RU{Вот что немного отличается: otool показывает регистр}\EN{Here is difference: otool shows} 
-\RegX{29}\EN{ register} \RU{как}\EN{as} \ac{FP}, \RU{а}\EN{and} \RegX{30} \RU{как}\EN{as} \ac{LR}.
-\RU{Это действительно синонимы для этих регистров.}
-\EN{These are indeed nicknames for these registers.}
-
-\RU{\RET otool показывает как \TT{RET LR}, это немного избыточный результат дизассемблера.}
-\EN{otool also shows \RET as \TT{RET LR}, this is somewhat redundant disassembler result.}
