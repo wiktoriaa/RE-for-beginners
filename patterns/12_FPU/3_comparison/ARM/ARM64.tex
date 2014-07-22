@@ -1,0 +1,82 @@
+\subsection{ARM64}
+
+\subsubsection{\Optimizing GCC (Linaro) 4.9}
+
+\lstinputlisting{patterns/12_FPU/3_comparison/ARM/ARM64_GCC_O3.lst}
+
+\RU{В }ARM64 \ac{ISA} \RU{теперь есть FPU-инструкции устанавливающие флаги CPU}\EN{now also have FPU-instructions 
+which sets} \ac{APSR} \RU{вместо}\EN{CPU flags instead of} \ac{FPSCR}, \EN{for convenience}\RU{для удобства}.
+\ac{FPU} \RU{больше не отдельное устройство (по крайней мере, логически)}\EN{is not separate device here 
+anymore (at least, logically)}.
+\RU{Это}\EN{That is} \TT{FCMPE}, \RU{она сравнивает два значения, переданных в}\EN{it compares two values, 
+passed here in} \RegD{0} \AndENRU \RegD{1} 
+(\RU{а это первый и второй аргументы ф-ции}\EN{which are first and second function arguments})
+\RU{и выставляет флаги в}\EN{and sets} \ac{APSR}\EN{ flags} (N, Z, C, V).
+
+\TT{FCSEL} (\IT{Floating Conditional Select}) \RU{копирует значение}\EN{copies value of} \RegD{0} \OrENRU 
+\RegD{1} \RU{в}\EN{into} \RegD{0} \RU{в зависимости от условия}\EN{depending on condition} 
+(\TT{GT} (\IT{Greater Than}\RU{ (больше чем)}) \RU{здесь}\EN{here}), 
+\RU{и снова, она использует флаги в регистре}\EN{and again, it uses flags in} \ac{APSR} \RU{вместо}\EN{register
+instead of} \ac{FPSCR}.
+\RU{Очень удобная инструкция, если сравнивать с тем набором инструкций, что был в процессорах раньше}\EN{Very 
+convenient instruction, if to compare to the instruction set in previous CPUs}.
+
+\RU{Если условие верно}\EN{If condition is true} (\TT{GT}) \RU{тогда значение из}\EN{then value of} \RegD{0} 
+\RU{копируется в}\EN{is copied into} \RegD{0} (\RU{т.е., ничего не происходит}\EN{i.e., nothing happens}).
+\RU{Если условие не верно, то значение}\EN{If condition is not true, value of} \RegD{1} 
+\RU{копируется в}\EN{is copied into} \RegD{0}.
+
+\subsubsection{\NonOptimizing GCC (Linaro) 4.9}
+
+\lstinputlisting{patterns/12_FPU/3_comparison/ARM/ARM64_GCC.lst}
+
+\RU{Неоптимизирующий GCC более многословен}\EN{Non-optimizing GCC is more verbose}.
+\RU{В начале, код сохраняет значения входных аргументов в локальном стеке}\EN{First, code saves input argument 
+values in the local stack} (\IT{Register Save Area}).
+\RU{Затем код перезагружает значения в регистры}\EN{Then the code reloads these values into}
+\RegX{0}/\RegX{1} \RU{и наконец копирует их в}\EN{registers and finally copies them into} 
+\RegD{0}/\RegD{1} \RU{для сравнения инструкцией}\EN{for comparison using} \TT{FCMPE}. 
+\RU{Много избыточного кода, но так работают неоптимизирующие компиляторы}\EN{A lot of redundant code, 
+but that is how non-optimizing compiler may work}.
+\TT{FCMPE} \RU{сравнивает значения и устанавливает флаги в}\EN{compare values and set} \ac{APSR}\EN{ flags}.
+\RU{В этот момент, компилятор еще не думает о более удобной инструкции}\EN{At this moment, 
+compiler is not yet thinking about more convenient} \TT{FCSEL} \RU{так что он работает по старым 
+методам}\EN{instruction, so it proceed to old methods}: 
+\RU{использует инструкцию}\EN{using} \TT{BLE}\EN{ instruction} (\IT{Branch if Less than or Equal}\RU{ (переход
+если меньше или равно)}).
+\RU{В одном случае}\EN{In one case} ($a>b$), \RU{значение }$a$ \RU{перезагружается в}\EN{value is reloaded 
+into} \RegX{0}.
+\RU{В другом случае}\EN{In other case} ($a<=b$), \RU{значение }$b$ \RU{загружается в}\EN{value is placed in} 
+\RegX{0}.
+\RU{Наконец, значение из}\EN{Finally, value from} \RegX{0} \RU{копируется в}\EN{copied into} \RegD{0}, 
+\RU{потому что возвращаемое значение оставляется в этом регистре}\EN{because returning value is leaved in this 
+register}.
+
+\paragraph{\Exercise}
+
+\RU{Для упражнения, вы можете попробовать оптимизировать этот фрагмент кода вручную, удалив избыточные инструкции,
+но не добавляя новых (включая \TT{FCSEL})}\EN{As an exercise, you may try to optimize this piece of code 
+manually my removing redundant instructions, but do not introduce new ones (including \TT{FCSEL})}.
+
+\subsubsection{\Optimizing GCC (Linaro) 4.9\EMDASH{}float}
+
+\RU{Я еще переписал пример, теперь здесь \Tfloat вместо \Tdouble}\EN{I also rewrote this example, 
+now \Tfloat is used instead of \Tdouble}.
+
+\begin{lstlisting}
+float f_max (float a, float b)
+{
+	if (a>b)
+		return a;
+
+	return b;
+};
+\end{lstlisting}
+
+\lstinputlisting{patterns/12_FPU/3_comparison/ARM/ARM64_GCC_O3_float.lst}
+
+\RU{Всё то же самое, только используются S-регистры вместо D-.}
+\EN{It is a very same code, but S-registers are used instead of D- ones.}
+\RU{Так что числа типа \Tfloat передаются в 32-битных S-регистрах (а это младшие части 64-битных D-регистров).}
+\EN{So numbers of \Tfloat type is passed in 32-bit S-registers (which are lower parts of 64-bit D-registers).}
+
