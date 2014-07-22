@@ -1,0 +1,34 @@
+﻿\subsection{ARM64}
+
+\subsubsection{\Optimizing GCC (Linaro) 4.9}
+
+\lstinputlisting{patterns/10_strlen/ARM/ARM64_GCC_O3.lst}
+
+\RU{Алгоритм такой же как и в}\EN{The algorithm is the same as in} \ref{strlen_MSVC_Ox}: 
+\RU{найти нулевой байт, затем вычислить разницу между указателями, затем отнять 1 от результата}\EN{find a zero 
+byte, then calculate difference between pointers, then decrement result}.
+\RU{Я добавил комментариев}\EN{I added some comments}.
+\RU{Вот что еще стоит добавить, так это то что мой пример с ошибкой}\EN{The only thing worth noting is that 
+my example is somewhat broken}: \TT{my\_strlen()} \RU{возвращает 32-битный}\EN{function returns
+32-bit} \Tint, \RU{тогда как должна возвращать}\EN{while it should return} \TT{size\_t} \RU{или иной 64-битный
+тип}\EN{or other 64-bit type}.
+\RU{Причина в том что, теоретически, \TT{strlen()} можно вызывать для огромных блоков в памяти,
+превышающих 4GB, так что она должна иметь возможность вернуть 64-битное значение на 64-битной платформе.}
+\EN{The reason for that is that, theoretically, \TT{strlen()} can be called for huge blocks in memory, exceeding
+4GB, so it must able to return 64-bit value on 64-bit platform.}
+\RU{Так что из-за моей ошибки, последняя инструкция \SUB работает над 32-битной частью регистра, тогда
+как предпоследняя \SUB работает с полными 64-битными частями (она вычисляет разницу между указателями).}
+\EN{So because of my mistake, the last \SUB instruction operates on 32-bit part of register, while penultimate
+\SUB instruction works on full 64-bit parts (it calculates pointer difference).}
+\RU{Это моя ошибка, но я решил оставить это как есть, как пример кода, который возможен в таком случае.}
+\EN{It's my mistake, but I decided to leave it as is, as an example of what code could be in such case.}
+
+\subsubsection{\NonOptimizing GCC (Linaro) 4.9}
+
+\lstinputlisting{patterns/10_strlen/ARM/ARM64_GCC_O0.lst}
+
+\RU{Более многословно}\EN{It's more verbose}.
+\RU{Переменные часто сохраняются в память и загружаются назад (локальный стек)}\EN{Variables are 
+often tossed here to and from memory (local stack)}.
+\RU{Здесь та же ошибка: операция декремента происходит над 32-битной частью регистра}\EN{The same mistake here: 
+decrement operation is happen on 32-bit register part}.
