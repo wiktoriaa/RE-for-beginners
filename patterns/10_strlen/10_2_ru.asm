@@ -1,13 +1,13 @@
 _str$ = 8			; size = 4
 _strlen PROC
-	mov	edx, DWORD PTR _str$[esp-4] ; EDX -> указатель на строку
-	mov	eax, edx                    ; переложить в EAX
+	mov	edx, DWORD PTR _str$[esp-4] ; EDX -> СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃС‚СЂРѕРєСѓ
+	mov	eax, edx                    ; РїРµСЂРµР»РѕР¶РёС‚СЊ РІ EAX
 $LL2@strlen:
 	mov	cl, BYTE PTR [eax]          ; CL = *EAX
 	inc	eax                         ; EAX++
 	test	cl, cl                      ; CL==0?
-	jne	SHORT $LL2@strlen           ; нет, продолжаем цикл
-	sub	eax, edx                    ; вычисляем разницу указателей
-	dec	eax                         ; декремент EAX
+	jne	SHORT $LL2@strlen           ; РЅРµС‚, РїСЂРѕРґРѕР»Р¶Р°РµРј С†РёРєР»
+	sub	eax, edx                    ; РІС‹С‡РёСЃР»СЏРµРј СЂР°Р·РЅРёС†Сѓ СѓРєР°Р·Р°С‚РµР»РµР№
+	dec	eax                         ; РґРµРєСЂРµРјРµРЅС‚ EAX
 	ret	0
 _strlen ENDP

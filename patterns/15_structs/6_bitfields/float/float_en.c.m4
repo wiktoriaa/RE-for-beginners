@@ -5,9 +5,9 @@ include(`commons.m4')#include <stdio.h>
 
 struct float_as_struct
 {
-    unsigned int fraction : 23; // _LANG(`мантисса',`fractional part')
-    unsigned int exponent : 8;  // _LANG(`экспонента',`exponent') + 0x3FF
-    unsigned int sign : 1;      // _LANG(`бит знака',`sign bit')
+    unsigned int fraction : 23; // _LANG(`РјР°РЅС‚РёСЃСЃР°',`fractional part')
+    unsigned int exponent : 8;  // _LANG(`СЌРєСЃРїРѕРЅРµРЅС‚Р°',`exponent') + 0x3FF
+    unsigned int sign : 1;      // _LANG(`Р±РёС‚ Р·РЅР°РєР°',`sign bit')
 };
 
 float f(float _in)
@@ -19,8 +19,8 @@ float f(float _in)
 
     memcpy (&t, &f, sizeof (float));
 
-    t.sign=1; // _LANG(`установить отрицательный знак',`set negative sign')
-    t.exponent=t.exponent+2; // _LANG(`умножить d на 2^n (n здесь 2)',`multiply d by 2^n (n here is 2)')
+    t.sign=1; // _LANG(`СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Р№ Р·РЅР°Рє',`set negative sign')
+    t.exponent=t.exponent+2; // _LANG(`СѓРјРЅРѕР¶РёС‚СЊ d РЅР° 2^n (n Р·РґРµСЃСЊ 2)',`multiply d by 2^n (n here is 2)')
 
     memcpy (&f, &t, sizeof (float));
 

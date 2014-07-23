@@ -1,8 +1,8 @@
 include(`commons.m4')mov	esi, 1
-...	; _LANG(`какой-то не трогающий ESI код',`some code not touching ESI')
+...	; _LANG(`РєР°РєРѕР№-С‚Рѕ РЅРµ С‚СЂРѕРіР°СЋС‰РёР№ ESI РєРѕРґ',`some code not touching ESI')
 dec	esi
-...	; _LANG(`какой-то не трогающий ESI код',`some code not touching ESI')
+...	; _LANG(`РєР°РєРѕР№-С‚Рѕ РЅРµ С‚СЂРѕРіР°СЋС‰РёР№ ESI РєРѕРґ',`some code not touching ESI')
 cmp	esi, 0
 jz	real_code
-; _LANG(`фальшивый багаж',`fake luggage')
+; _LANG(`С„Р°Р»СЊС€РёРІС‹Р№ Р±Р°РіР°Р¶',`fake luggage')
 real_code:

@@ -1,2 +1,2 @@
 for (i=0; i<total_entries_to_process; i++)
-    òåëî_öèêëà;
+    Ñ‚ÐµÐ»Ð¾_Ñ†Ð¸ÐºÐ»Ð°;

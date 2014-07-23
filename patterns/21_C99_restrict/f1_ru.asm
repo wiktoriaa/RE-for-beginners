@@ -21,17 +21,17 @@ f1:
 	add	rax, r9
 	mov	r15d, DWORD PTR [r10]
 	add	r15d, DWORD PTR [r14]
-	mov	DWORD PTR [rsi], r15d         ; сохранить в sum[]
+	mov	DWORD PTR [rsi], r15d         ; СЃРѕС…СЂР°РЅРёС‚СЊ РІ sum[]
 	mov	r10d, DWORD PTR [r10]
 	imul	r10d, DWORD PTR [r14]
-	mov	DWORD PTR [rax], r10d         ; сохранить в product[]
-	mov	DWORD PTR [r12+r11*4], ebx    ; сохранить в update_me[]
+	mov	DWORD PTR [rax], r10d         ; СЃРѕС…СЂР°РЅРёС‚СЊ РІ product[]
+	mov	DWORD PTR [r12+r11*4], ebx    ; СЃРѕС…СЂР°РЅРёС‚СЊ РІ update_me[]
 	add	ebx, 123
-	mov	r10d, DWORD PTR [rsi]         ; перезагрузить sum[i]
-	add	r10d, DWORD PTR [rax]         ; перезагрузить product[i]
+	mov	r10d, DWORD PTR [rsi]         ; РїРµСЂРµР·Р°РіСЂСѓР·РёС‚СЊ sum[i]
+	add	r10d, DWORD PTR [rax]         ; РїРµСЂРµР·Р°РіСЂСѓР·РёС‚СЊ product[i]
 	lea	rax, 1[rdi]
 	cmp	rax, r13
-	mov	DWORD PTR 0[rbp+r11*4], r10d  ; сохранить в sum_product[]
+	mov	DWORD PTR 0[rbp+r11*4], r10d  ; СЃРѕС…СЂР°РЅРёС‚СЊ РІ sum_product[]
 	jne	.L6
 .L1:
 	pop	rbx rsi rdi rbp r12 r13 r14 r15

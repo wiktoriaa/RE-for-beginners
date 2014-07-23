@@ -21,10 +21,11 @@ define compile
 	rm -f *.fls
 	rm -f *.bbl
 	rm -f *.aux
-	latexmk -c
-	latexmk -pdf $1.tex
+	xelatex $1
+	biber $1
+	makeindex $1
 	makeglossaries $1
-	latexmk -pdf $1.tex
+	xelatex $1
 endef
 
 russian: listings

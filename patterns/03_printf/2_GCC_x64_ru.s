@@ -10,7 +10,7 @@ main:
 	mov	edx, 2
 	mov	esi, 1
 	mov	edi, OFFSET FLAT:.LC0
-	xor	eax, eax ; количество задействованных векторных регистров
+	xor	eax, eax ; РєРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РґРµР№СЃС‚РІРѕРІР°РЅРЅС‹С… РІРµРєС‚РѕСЂРЅС‹С… СЂРµРіРёСЃС‚СЂРѕРІ
 	mov	DWORD PTR [rsp+16], 8
 	mov	DWORD PTR [rsp+8], 7
 	mov	DWORD PTR [rsp], 6

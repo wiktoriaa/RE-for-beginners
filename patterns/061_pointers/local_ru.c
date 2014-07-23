@@ -1,6 +1,6 @@
 void main()
 {
-	int sum, product; // теперь переменные здесь
+	int sum, product; // С‚РµРїРµСЂСЊ РїРµСЂРµРјРµРЅРЅС‹Рµ Р·РґРµСЃСЊ
 
 	f1(123, 456, &sum, &product);
 	printf ("sum=%d, product=%d\n", sum, product);

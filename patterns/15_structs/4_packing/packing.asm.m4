@@ -3,13 +3,13 @@ _main    PROC
     push   ebp
     mov    ebp, esp
     sub    esp, 16
-    mov    BYTE PTR _tmp$[ebp], 1     ; _LANG(`установить поле',`set field') a
-    mov    DWORD PTR _tmp$[ebp+4], 2  ; _LANG(`установить поле',`set field') b
-    mov    BYTE PTR _tmp$[ebp+8], 3   ; _LANG(`установить поле',`set field') c
-    mov    DWORD PTR _tmp$[ebp+12], 4 ; _LANG(`установить поле',`set field') d
-    sub    esp, 16                    ; _LANG(`выделить место для временной структуры',`allocate place for temporary structure')
+    mov    BYTE PTR _tmp$[ebp], 1     ; _LANG(`СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»Рµ',`set field') a
+    mov    DWORD PTR _tmp$[ebp+4], 2  ; _LANG(`СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»Рµ',`set field') b
+    mov    BYTE PTR _tmp$[ebp+8], 3   ; _LANG(`СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»Рµ',`set field') c
+    mov    DWORD PTR _tmp$[ebp+12], 4 ; _LANG(`СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»Рµ',`set field') d
+    sub    esp, 16                    ; _LANG(`РІС‹РґРµР»РёС‚СЊ РјРµСЃС‚Рѕ РґР»СЏ РІСЂРµРјРµРЅРЅРѕР№ СЃС‚СЂСѓРєС‚СѓСЂС‹',`allocate place for temporary structure')
     mov    eax, esp
-    mov    ecx, DWORD PTR _tmp$[ebp]  ; _LANG(`скопировать нашу структуру во временную',`copy our structure to the temporary one')
+    mov    ecx, DWORD PTR _tmp$[ebp]  ; _LANG(`СЃРєРѕРїРёСЂРѕРІР°С‚СЊ РЅР°С€Сѓ СЃС‚СЂСѓРєС‚СѓСЂСѓ РІРѕ РІСЂРµРјРµРЅРЅСѓСЋ',`copy our structure to the temporary one')
     mov    DWORD PTR [eax], ecx
     mov    edx, DWORD PTR _tmp$[ebp+4]
     mov    DWORD PTR [eax+4], edx

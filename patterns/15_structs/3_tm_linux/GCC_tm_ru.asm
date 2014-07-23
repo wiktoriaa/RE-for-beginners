@@ -3,13 +3,13 @@ main proc near
      mov     ebp, esp
      and     esp, 0FFFFFFF0h
      sub     esp, 40h
-     mov     dword ptr [esp], 0 ; первый агрумент для time()
+     mov     dword ptr [esp], 0 ; РїРµСЂРІС‹Р№ Р°РіСЂСѓРјРµРЅС‚ РґР»СЏ time()
      call    time
      mov     [esp+3Ch], eax
-     lea     eax, [esp+3Ch]  ; берем указатель на то что вернула time()
-     lea     edx, [esp+10h]  ; по ESP+10h будет начинаться структура struct tm
-     mov     [esp+4], edx    ; передаем указатель на начало структуры
-     mov     [esp], eax      ; передаем указатель на результат time()
+     lea     eax, [esp+3Ch]  ; Р±РµСЂРµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° С‚Рѕ С‡С‚Рѕ РІРµСЂРЅСѓР»Р° time()
+     lea     edx, [esp+10h]  ; РїРѕ ESP+10h Р±СѓРґРµС‚ РЅР°С‡РёРЅР°С‚СЊСЃСЏ СЃС‚СЂСѓРєС‚СѓСЂР° struct tm
+     mov     [esp+4], edx    ; РїРµСЂРµРґР°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅР°С‡Р°Р»Рѕ СЃС‚СЂСѓРєС‚СѓСЂС‹
+     mov     [esp], eax      ; РїРµСЂРµРґР°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЂРµР·СѓР»СЊС‚Р°С‚ time()
      call    localtime_r
      mov     eax, [esp+24h]  ; tm_year
      lea     edx, [eax+76Ch] ; edx=eax+1900

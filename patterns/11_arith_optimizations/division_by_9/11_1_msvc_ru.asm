@@ -3,7 +3,7 @@ _f    PROC
     push   ebp
     mov    ebp, esp
     mov    eax, DWORD PTR _a$[ebp]
-    cdq            ; знаковое расширение EAX до EDX:EAX
+    cdq            ; Р·РЅР°РєРѕРІРѕРµ СЂР°СЃС€РёСЂРµРЅРёРµ EAX РґРѕ EDX:EAX
     mov    ecx, 9
     idiv   ecx
     pop    ebp

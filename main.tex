@@ -2,7 +2,7 @@
 \documentclass[a5paper,oneside]{book}
 \newcommand{\FigScale}{0.4}
 \else
-\documentclass[a4paper,oneside]{book} % oneside: do not put blank page after each chapter. a4paper?
+\documentclass[a4paper,oneside]{book}
 \newcommand{\FigScale}{0.66} % FIXME
 \fi
 
@@ -11,33 +11,18 @@
 
 \ifdefined\RUSSIAN
 \usepackage[english,russian]{babel}
-\usepackage[T2A]{fontenc}
-
-% if to turn this font on, copy&paste from Adobe Acrobat to clipboard will not work
-%\usepackage{paratype}
-%\renewcommand*\familydefault{\sfdefault}
-
-% http://www.emerson.emory.edu/services/latex/latex_169.html
-% too small!
-%\newcommand{\lstlistingsize}{\scriptsize}
-
 \else
 \usepackage[english]{babel}
-%\usepackage[T2A]{fontenc}
-\usepackage[T1]{fontenc}
-\usepackage[default]{sourcesanspro}
-% too small!
-%\newcommand{\lstlistingsize}{\footnotesize}
 \fi
 
-\usepackage[utf8]{inputenc} % but not utf8x - glossary package will grizzle
+\usepackage{inputenc}
 \usepackage{listings}
 \usepackage{ulem}
 \usepackage{url}
 \usepackage{graphicx}
-\usepackage{listingsutf8}
 \usepackage{makeidx}
-\usepackage{cite}
+\usepackage[backend=biber,style=alphabetic]{biblatex}
+%\usepackage{cite}
 \usepackage[cm]{fullpage}
 \usepackage{color}
 \usepackage{fancyvrb}
@@ -45,19 +30,29 @@
 \usepackage{float}
 \usepackage{tabularx}
 \usepackage{framed}
+
+\usepackage{fontspec}
+% fonts
+\setmonofont{Droid Sans Mono}
+\setmainfont[Ligatures=TeX]{PT Sans}
+
 \usepackage{epigraph}
 \usepackage{ccicons}
 \usepackage[nottoc]{tocbibind}
 \usepackage{longtable}
-\usepackage{amsmath}
 \usepackage[footnote,printonlyused,withpage]{acronym}
 \usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
 \usepackage[]{bookmark,hyperref} % must be last
+
 \usepackage{glossaries}
 \usepackage{tikz}
 %\usepackage{fixltx2e}
 \usepackage{bytefield}
+
+\usepackage{amsmath}
 \usepackage{MnSymbol}
+\undef\mathdollar 
+
 \usepackage{shorttoc}
 \usetikzlibrary{calc,positioning,chains,arrows}
 \ifdefined\ebook
@@ -112,17 +107,17 @@
 
 \lstset{
     backgroundcolor=\color{lstbgcolor},
-    basicstyle=\ttfamily,
-    %basicstyle=\ttfamily\lstlistingsize, 
+    basicstyle=\ttfamily\small,
     breaklines=true,
     prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\rhookswarrow}},
     postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\rcurvearrowse\space}},
     frame=single,
     columns=fullflexible,keepspaces,
+    inputencoding=utf8
 }
-\RU{\lstset{inputencoding=cp1251}}
 
 \DeclareMathSizes{12}{30}{16}{12}
+\bibliography{C_book_\LANG,books,articles,usenet,misc}
 
 \begin{document}
 
@@ -217,11 +212,6 @@ To view a copy of this license, visit} \url{http://creativecommons.org/licenses/
 
 \bookmarksetup{startatroot}
 
-%\bibliographystyle{alpha}
-\bibliographystyle{plain} % FIXME
-\phantomsection
-\bibliography{C_book_\LANG,books,articles,usenet,misc}
-
 \clearpage
 \phantomsection
 \addcontentsline{toc}{chapter}{\RU{Глоссарий}\EN{Glossary}}
@@ -230,5 +220,10 @@ To view a copy of this license, visit} \url{http://creativecommons.org/licenses/
 \clearpage
 \phantomsection
 \printindex
+
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\RU{Библиография}\EN{Bibliography}}
+\printbibliography
 
 \end{document}

@@ -4,27 +4,27 @@ _strlen PROC
     push    ebp
     mov     ebp, esp
     push    ecx
-    mov     eax, DWORD PTR _str$[ebp]   ; взять указатель на символ из str 
-    mov     DWORD PTR _eos$[ebp], eax   ; и переложить его в нашу локальную переменную eos
+    mov     eax, DWORD PTR _str$[ebp]   ; РІР·СЏС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃРёРјРІРѕР» РёР· str 
+    mov     DWORD PTR _eos$[ebp], eax   ; Рё РїРµСЂРµР»РѕР¶РёС‚СЊ РµРіРѕ РІ РЅР°С€Сѓ Р»РѕРєР°Р»СЊРЅСѓСЋ РїРµСЂРµРјРµРЅРЅСѓСЋ eos
 $LN2@strlen_:
     mov     ecx, DWORD PTR _eos$[ebp]   ; ecx=eos
     
-    ; взять байт, на который указывает ecx и положить его в edx с signed-расширением
+    ; РІР·СЏС‚СЊ Р±Р°Р№С‚, РЅР° РєРѕС‚РѕСЂС‹Р№ СѓРєР°Р·С‹РІР°РµС‚ ecx Рё РїРѕР»РѕР¶РёС‚СЊ РµРіРѕ РІ edx СЃ signed-СЂР°СЃС€РёСЂРµРЅРёРµРј
 
     movsx   edx, BYTE PTR [ecx]               
     mov     eax, DWORD PTR _eos$[ebp]   ; eax=eos
-    add     eax, 1                      ; увеличить eax на единицу
-    mov     DWORD PTR _eos$[ebp], eax   ; положить eax назад в eos
+    add     eax, 1                      ; СѓРІРµР»РёС‡РёС‚СЊ eax РЅР° РµРґРёРЅРёС†Сѓ
+    mov     DWORD PTR _eos$[ebp], eax   ; РїРѕР»РѕР¶РёС‚СЊ eax РЅР°Р·Р°Рґ РІ eos
     test    edx, edx                    ; edx==0?
-    je      SHORT $LN1@strlen_          ; да, то что лежит в edx это ноль, выйти из цикла
-    jmp     SHORT $LN2@strlen_          ; продолжаем цикл
+    je      SHORT $LN1@strlen_          ; РґР°, С‚Рѕ С‡С‚Рѕ Р»РµР¶РёС‚ РІ edx СЌС‚Рѕ РЅРѕР»СЊ, РІС‹Р№С‚Рё РёР· С†РёРєР»Р°
+    jmp     SHORT $LN2@strlen_          ; РїСЂРѕРґРѕР»Р¶Р°РµРј С†РёРєР»
 $LN1@strlen_:
     
-    ; здесь мы вычисляем разницу двух указателей
+    ; Р·РґРµСЃСЊ РјС‹ РІС‹С‡РёСЃР»СЏРµРј СЂР°Р·РЅРёС†Сѓ РґРІСѓС… СѓРєР°Р·Р°С‚РµР»РµР№
 
     mov    eax, DWORD PTR _eos$[ebp]         
     sub    eax, DWORD PTR _str$[ebp]
-    sub    eax, 1                       ; отнимаем от разницы еще единицу и возвращаем результат
+    sub    eax, 1                       ; РѕС‚РЅРёРјР°РµРј РѕС‚ СЂР°Р·РЅРёС†С‹ РµС‰Рµ РµРґРёРЅРёС†Сѓ Рё РІРѕР·РІСЂР°С‰Р°РµРј СЂРµР·СѓР»СЊС‚Р°С‚
     mov    esp, ebp
     pop    ebp
     ret    0

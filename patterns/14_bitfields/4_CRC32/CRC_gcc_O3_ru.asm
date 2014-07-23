@@ -14,11 +14,11 @@ hash            = dword ptr  0Ch
                 test    ebx, ebx
                 mov     eax, ebx
                 jz      short loc_80484D3
-                nop                     ; âûðàâíèâàíèå
-                lea     esi, [esi+0]    ; âûðàâíèâàíèå; ESI íå ìåíÿåòñÿ çäåñü
+                nop                     ; Ð²Ñ‹Ñ€Ð°Ð²Ð½Ð¸Ð²Ð°Ð½Ð¸Ðµ
+                lea     esi, [esi+0]    ; Ð²Ñ‹Ñ€Ð°Ð²Ð½Ð¸Ð²Ð°Ð½Ð¸Ðµ; ESI Ð½Ðµ Ð¼ÐµÐ½ÑÐµÑ‚ÑÑ Ð·Ð´ÐµÑÑŒ
 
 loc_80484B8:
-                mov     ecx, eax        ; ñîõðàíèòü ïðåäûäóùåå ñîñòîÿíèå õåøà â ECX
+                mov     ecx, eax        ; ÑÐ¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ð¿Ñ€ÐµÐ´Ñ‹Ð´ÑƒÑ‰ÐµÐµ ÑÐ¾ÑÑ‚Ð¾ÑÐ½Ð¸Ðµ Ñ…ÐµÑˆÐ° Ð² ECX
                 xor     al, [esi+edx]   ; AL=*(key+i)
                 add     edx, 1          ; i++
                 shr     ecx, 8          ; ECX=hash>>8

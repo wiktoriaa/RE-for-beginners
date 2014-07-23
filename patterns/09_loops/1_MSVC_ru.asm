@@ -3,21 +3,21 @@ _main    PROC
     push   ebp
     mov    ebp, esp
     push   ecx
-    mov    DWORD PTR _i$[ebp], 2   ; инициализация цикла
+    mov    DWORD PTR _i$[ebp], 2   ; РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С†РёРєР»Р°
     jmp    SHORT $LN3@main
 $LN2@main:
-    mov    eax, DWORD PTR _i$[ebp] ; то что мы делаем после каждой итерации:
-    add    eax, 1                  ; добавляем 1 к i
+    mov    eax, DWORD PTR _i$[ebp] ; С‚Рѕ С‡С‚Рѕ РјС‹ РґРµР»Р°РµРј РїРѕСЃР»Рµ РєР°Р¶РґРѕР№ РёС‚РµСЂР°С†РёРё:
+    add    eax, 1                  ; РґРѕР±Р°РІР»СЏРµРј 1 Рє i
     mov    DWORD PTR _i$[ebp], eax
 $LN3@main:
-    cmp    DWORD PTR _i$[ebp], 10  ; это условие проверяется *перед* каждой итерацией
-    jge    SHORT $LN1@main         ; если i больше или равно 10, заканчиваем цикл
-    mov    ecx, DWORD PTR _i$[ebp] ; тело цикла: вызов функции f(i)
+    cmp    DWORD PTR _i$[ebp], 10  ; СЌС‚Рѕ СѓСЃР»РѕРІРёРµ РїСЂРѕРІРµСЂСЏРµС‚СЃСЏ *РїРµСЂРµРґ* РєР°Р¶РґРѕР№ РёС‚РµСЂР°С†РёРµР№
+    jge    SHORT $LN1@main         ; РµСЃР»Рё i Р±РѕР»СЊС€Рµ РёР»Рё СЂР°РІРЅРѕ 10, Р·Р°РєР°РЅС‡РёРІР°РµРј С†РёРєР»
+    mov    ecx, DWORD PTR _i$[ebp] ; С‚РµР»Рѕ С†РёРєР»Р°: РІС‹Р·РѕРІ С„СѓРЅРєС†РёРё f(i)
     push   ecx
     call   _f
     add    esp, 4
-    jmp    SHORT $LN2@main         ; переход на начало цикла
-$LN1@main:                         ; конец цикла
+    jmp    SHORT $LN2@main         ; РїРµСЂРµС…РѕРґ РЅР° РЅР°С‡Р°Р»Рѕ С†РёРєР»Р°
+$LN1@main:                         ; РєРѕРЅРµС† С†РёРєР»Р°
     xor    eax, eax
     mov    esp, ebp
     pop    ebp

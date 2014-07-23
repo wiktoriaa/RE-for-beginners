@@ -1,6 +1,6 @@
 include(`commons.m4')_f3_32_unsigned PROC
 	mov	eax, -1431655765	; aaaaaaabH
-	mul	DWORD PTR _a$[esp-4] ; _LANG(`беззнаковое умножение',`unsigned multiply')
+	mul	DWORD PTR _a$[esp-4] ; _LANG(`Р±РµР·Р·РЅР°РєРѕРІРѕРµ СѓРјРЅРѕР¶РµРЅРёРµ',`unsigned multiply')
 ; EDX=(input*0xaaaaaaab)/2^32
 	shr	edx, 1
 ; EDX=(input*0xaaaaaaab)/2^33
@@ -10,11 +10,11 @@ _f3_32_unsigned ENDP
 
 _f3_32_signed PROC
 	mov	eax, 1431655766		; 55555556H
-	imul	DWORD PTR _a$[esp-4] ; _LANG(`знаковое умножение',`signed multiply')
-; _LANG(`берем старшую часть произведения',`take high part of product')
-; _LANG(``это всё равно что сдвинуть произведение на 32 бита вправо, либо разделить его на'',`it is just the same as if to shift product by 32 bits right or to divide it by') 2^32
+	imul	DWORD PTR _a$[esp-4] ; _LANG(`Р·РЅР°РєРѕРІРѕРµ СѓРјРЅРѕР¶РµРЅРёРµ',`signed multiply')
+; _LANG(`Р±РµСЂРµРј СЃС‚Р°СЂС€СѓСЋ С‡Р°СЃС‚СЊ РїСЂРѕРёР·РІРµРґРµРЅРёСЏ',`take high part of product')
+; _LANG(``СЌС‚Рѕ РІСЃС‘ СЂР°РІРЅРѕ С‡С‚Рѕ СЃРґРІРёРЅСѓС‚СЊ РїСЂРѕРёР·РІРµРґРµРЅРёРµ РЅР° 32 Р±РёС‚Р° РІРїСЂР°РІРѕ, Р»РёР±Рѕ СЂР°Р·РґРµР»РёС‚СЊ РµРіРѕ РЅР°'',`it is just the same as if to shift product by 32 bits right or to divide it by') 2^32
 	mov	eax, edx        ; EAX=EDX=(input*0x55555556)/2^32
 	shr	eax, 31		; 0000001fH
-	add	eax, edx	; _LANG(`прибавить 1 если знак отрицательный',`add 1 if sign is negative')
+	add	eax, edx	; _LANG(`РїСЂРёР±Р°РІРёС‚СЊ 1 РµСЃР»Рё Р·РЅР°Рє РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Р№',`add 1 if sign is negative')
 	ret	0
 _f3_32_signed ENDP

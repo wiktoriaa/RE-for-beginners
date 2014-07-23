@@ -13,13 +13,13 @@ _main	PROC
 	mov	ebp, esp
 	sub	esp, 24
 	mov	DWORD PTR _random_value$[ebp], 287454020 ; 11223344H
-	; _LANG(`установить fakearray[] на байт раньше перед array[]',`set fakearray[] one byte earlier before array[]')
+	; _LANG(`СѓСЃС‚Р°РЅРѕРІРёС‚СЊ fakearray[] РЅР° Р±Р°Р№С‚ СЂР°РЅСЊС€Рµ РїРµСЂРµРґ array[]',`set fakearray[] one byte earlier before array[]')
 	lea	eax, DWORD PTR _array$[ebp]
 	add	eax, -1 ; eax=eax-1
 	mov	DWORD PTR _fakearray$[ebp], eax
 	mov	DWORD PTR _i$[ebp], 0
 	jmp	SHORT $LN3@main
-	; _LANG(`заполнить array[] 0..9',`fill array[] with 0..9')
+	; _LANG(`Р·Р°РїРѕР»РЅРёС‚СЊ array[] 0..9',`fill array[] with 0..9')
 $LN2@main:
 	mov	ecx, DWORD PTR _i$[ebp]
 	add	ecx, 1
@@ -33,27 +33,27 @@ $LN3@main:
 	jmp	SHORT $LN2@main
 $LN1@main:
 	mov	ecx, DWORD PTR _fakearray$[ebp]
-	; ecx=_LANG(`адрес',`address of') fakearray[0], ecx+1 _LANG(`это',`is') fakearray[1] _LANG(`либо',`or') array[0]
+	; ecx=_LANG(`Р°РґСЂРµСЃ',`address of') fakearray[0], ecx+1 _LANG(`СЌС‚Рѕ',`is') fakearray[1] _LANG(`Р»РёР±Рѕ',`or') array[0]
 	movzx	edx, BYTE PTR [ecx+1]
 	push	edx
 	push	OFFSET $SG2751 ; 'first element %d'
 	call	_printf
 	add	esp, 8
 	mov	eax, DWORD PTR _fakearray$[ebp]
-	; eax=_LANG(`адрес',`address of') fakearray[0], eax+2 _LANG(`это',`is') fakearray[2] _LANG(`либо',`or') array[1]
+	; eax=_LANG(`Р°РґСЂРµСЃ',`address of') fakearray[0], eax+2 _LANG(`СЌС‚Рѕ',`is') fakearray[2] _LANG(`Р»РёР±Рѕ',`or') array[1]
 	movzx	ecx, BYTE PTR [eax+2]
 	push	ecx
 	push	OFFSET $SG2752 ; 'second element %d'
 	call	_printf
 	add	esp, 8
 	mov	edx, DWORD PTR _fakearray$[ebp]
-	; edx=_LANG(`адрес',`address of') fakearray[0], edx+10 _LANG(`это',`is') fakearray[10] _LANG(`либо',`or') array[9]
+	; edx=_LANG(`Р°РґСЂРµСЃ',`address of') fakearray[0], edx+10 _LANG(`СЌС‚Рѕ',`is') fakearray[10] _LANG(`Р»РёР±Рѕ',`or') array[9]
 	movzx	eax, BYTE PTR [edx+10]
 	push	eax
 	push	OFFSET $SG2753 ; 'last element %d'
 	call	_printf
 	add	esp, 8
-	; _LANG(`отнять',`subtract') 4, 3, 2 _LANG(`и',`and') 1 _LANG(`от указателя',`from pointer to') array[0] _LANG(``чтобы найти значения, лежащие перед'',`in order to find values before') array[]
+	; _LANG(`РѕС‚РЅСЏС‚СЊ',`subtract') 4, 3, 2 _LANG(`Рё',`and') 1 _LANG(`РѕС‚ СѓРєР°Р·Р°С‚РµР»СЏ',`from pointer to') array[0] _LANG(``С‡С‚РѕР±С‹ РЅР°Р№С‚Рё Р·РЅР°С‡РµРЅРёСЏ, Р»РµР¶Р°С‰РёРµ РїРµСЂРµРґ'',`in order to find values before') array[]
 	lea	ecx, DWORD PTR _array$[ebp]
 	movzx	edx, BYTE PTR [ecx-4]
 	push	edx
