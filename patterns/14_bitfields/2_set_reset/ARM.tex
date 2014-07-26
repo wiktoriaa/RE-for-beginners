@@ -7,8 +7,11 @@
 \end{lstlisting}
 
 \index{ARM!\Instructions!BIC}
+\TT{BIC} (\IT{BItwise bit Clear}) \RU{это инструкция сбрасывающая заданные биты. 
+Это как аналог \TT{AND}, но только с инвертированным операндом.}\EN{is an instruction clearing 
+specific bits. This is just like \TT{AND} instruction, but with inverted operand.}
+
 \index{ARM!\Instructions!ORR}
-\TT{BIC} \RU{это ``логическое и'', аналог}\EN{is ``logical and'', analogical to} \ANDIns \InENRU x86.
 \TT{ORR} \RU{это ``логическое или'', аналог}\EN{is ``logical or'', analogical to} \OR \InENRU x86.
 
 \RU{Пока всё понятно}\EN{So far, so easy}.
@@ -66,3 +69,69 @@
 \RU{Для режима Thumb}\EN{For thumb mode}, \OptimizingXcodeIV \RU{генерирует точно такой же код}
 \EN{generates likewise code}.
 
+\subsection{ARM: \RU{еще об инструкции \TT{BIC}}\EN{more about \TT{BIC} instruction}}
+\index{ARM!\Instructions!BIC}
+
+\RU{Если немного переделать пример}\EN{If to rework example slightly}:
+
+\begin{lstlisting}
+int f(int a)
+{
+    int rt=a;
+
+    REMOVE_BIT (rt, 0x1234);
+
+    return rt;
+};
+\end{lstlisting}
+
+\EN{Then optimizing}\RU{То оптимизирующий} Keil 5.03 \RU{в режиме ARM сделает такое}\EN{in ARM mode will do}:
+
+\begin{lstlisting}
+f PROC
+        BIC      r0,r0,#0x1000
+        BIC      r0,r0,#0x234
+        BX       lr
+        ENDP
+\end{lstlisting}
+
+\EN{There are two \TT{BIC} instructions, i.e., \TT{0x1234} bits are cleared in two passes.}
+\RU{Здесь две инструкции \TT{BIC}, т.е., биты \TT{0x1234} сбрасываются в два прохода.}
+\EN{This is because it's not possible to encode \TT{0x1234} value in \TT{BIC} instruction, 
+but it's possible \TT{0x1000} or \TT{0x234}.}
+\RU{Это потому что в инструкции \TT{BIC} нельзя закодировать самое значение \TT{0x1234}, но можно \TT{0x1000}
+либо \TT{0x234}.}
+
+\subsection{ARM64: \Optimizing GCC (Linaro) 4.9}
+
+\Optimizing GCC \RU{компилирующий для ARM64 может использовать \TT{AND} вместо}\EN{compiling for ARM64 can use 
+\TT{AND} instruction instead of} \TT{BIC}:
+
+\begin{lstlisting}[caption=\Optimizing GCC (Linaro) 4.9]
+f:
+	and	w0, w0, -513	; 0xFFFFFFFFFFFFFDFF
+	orr	w0, w0, 16384	; 0x4000
+	ret
+\end{lstlisting}
+
+\subsection{ARM64: \NonOptimizing GCC (Linaro) 4.9}
+
+\NonOptimizing GCC \RU{генерирует больше избыточного кода, но он работает также}\EN{generate more redundant 
+code, but works just like optimized}:
+
+\begin{lstlisting}[caption=\NonOptimizing GCC (Linaro) 4.9]
+f:
+	sub	sp, sp, #32
+	str	w0, [sp,12]
+	ldr	w0, [sp,12]
+	str	w0, [sp,28]
+	ldr	w0, [sp,28]
+	orr	w0, w0, 16384	; 0x4000
+	str	w0, [sp,28]
+	ldr	w0, [sp,28]
+	and	w0, w0, -513	; 0xFFFFFFFFFFFFFDFF
+	str	w0, [sp,28]
+	ldr	w0, [sp,28]
+	add	sp, sp, 32
+	ret
+\end{lstlisting}
