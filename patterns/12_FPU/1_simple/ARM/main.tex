@@ -11,10 +11,10 @@ instructions extensions}.
 \EN{One important difference from x86, there you working with FPU-stack, but here, in ARM, there
 are no any stack, you work just with registers.}
 
-\lstinputlisting[label=ARM_leaf_example10]{patterns/12_FPU/1_simple/Xcode_ARM_O3.asm}
+\lstinputlisting[label=ARM_leaf_example10]{patterns/12_FPU/1_simple/ARM/Xcode_ARM_O3.asm}
 
-\index{ARM!D-\RU{регистры}\EN{registers}}
-\index{ARM!S-\RU{регистры}\EN{registers}}
+\index{ARM!D-\registers{}}
+\index{ARM!S-\registers{}}
 \RU{Итак, здесь мы видим использование новых регистров, с префиксом D.}
 \EN{So, we see here new registers used, with D prefix.}
 \RU{Это 64-битные регистры, их 32, и их можно
@@ -76,7 +76,7 @@ product\FNPRODUCT and sum\FNSUM, respectively.}
 
 \subsection{ARM: \OptimizingKeilVI + \ThumbMode}
 
-\lstinputlisting{patterns/12_FPU/1_simple/Keil_O3_thumb.asm}
+\lstinputlisting{patterns/12_FPU/1_simple/ARM/Keil_O3_thumb.asm}
 
 \RU{Keil компилировал для процессора, в котором может и не быть поддержки FPU или NEON.}
 \EN{Keil generates for processors not supporting FPU or NEON.}
@@ -119,3 +119,30 @@ case~---via D-registers.}
 so that is
 why all code in Linux distribution must be compiled according to the chosen calling convention.}
 
+\subsection{ARM64: \Optimizing GCC (Linaro) 4.9}
+
+\lstinputlisting{patterns/12_FPU/1_simple/ARM/ARM64_GCC_O3.s}
+
+\RU{Очень компактный код}\EN{Very compact code}.
+
+\subsection{ARM64: \NonOptimizing GCC (Linaro) 4.9}
+
+\lstinputlisting{patterns/12_FPU/1_simple/ARM/ARM64_GCC_O0.s}
+
+\NonOptimizing GCC \RU{более многословный}\EN{is more verbose}.
+\RU{Здесь много ненужных перетасовок значений, включая явно избыточный код 
+(последние две инструкции \TT{GMOV}).}
+\EN{There are a lot of unnecessary value shuffling, including clearly redundant code 
+(last two \TT{FMOV} instructions).}
+\RU{Должно быть}\EN{Probably}, GCC 4.9 \RU{пока еще не очень хорош для генерации кода под ARM64}\EN{is not 
+yet good on generating ARM64 code}.
+\RU{Вот что интересно заметить, это то что у ARM64 64-битные регистры, и D-регистры так же 64-битные.}
+\EN{What is worth to note is that ARM64 has 64-bit registers, and D-registers are 64-bit ones as well.}
+\RU{Так что компилятор может сохранять значения типа \Tdouble в \ac{GPR} вместо локального стека.}
+\EN{So the compiler is free to save values of \Tdouble type in \ac{GPR}'s instead of local stack.}
+\RU{Это не было возможно на 32-битных CPU}\EN{This wasn't possible on 32-bit CPUs}.
+
+\RU{И снова, как упражнение, вы можете попробовать соптимизировать эту ф-цию вручную, без добавления
+новых инструкций вроде \TT{FMADD}.}
+\EN{And again, as an exercise, you can try to optimize this function manually, without introducing
+new instructions like \TT{FMADD}.}
