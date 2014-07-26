@@ -1,7 +1,7 @@
 .text:00541204 sub     edx, 0
-.text:00541207 jz      short call_rotate1 ; если остаток 0, перейти к rotate1
+.text:00541207 jz      short call_rotate1 ; РµСЃР»Рё РѕСЃС‚Р°С‚РѕРє 0, РїРµСЂРµР№С‚Рё Рє rotate1
 .text:00541209 dec     edx
-.text:0054120A jz      short call_rotate2 ; .. если он 1, перейти к rotate2
+.text:0054120A jz      short call_rotate2 ; .. РµСЃР»Рё РѕРЅ 1, РїРµСЂРµР№С‚Рё Рє rotate2
 .text:0054120C dec     edx
 .text:0054120D jnz     short next_character_in_password
 .text:0054120F test    ebx, ebx
