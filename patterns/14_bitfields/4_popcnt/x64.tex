@@ -2,7 +2,7 @@
 
 \RU{Я немного изменли пример, расширив его до 64-х бит}\EN{I changed example slightly to extend it to 64-bit}:
 
-\lstinputlisting{patterns/14_bitfields/4_popcnt/shifts64.c}
+\lstinputlisting[label=popcnt_x64_example]{patterns/14_bitfields/4_popcnt/shifts64.c}
 
 \subsubsection{\NonOptimizing GCC 4.8.2}
 
@@ -12,14 +12,14 @@
 
 \subsubsection{\Optimizing GCC 4.8.2}
 
-\lstinputlisting[caption=\Optimizing GCC 4.8.2]{patterns/14_bitfields/4_popcnt/shifts64_GCC_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.8.2,numbers=left,label=shifts64_GCC_O3]{patterns/14_bitfields/4_popcnt/shifts64_GCC_O3.s}
 
 \RU{Код более лаконичный, но содержит одну необычную вещь}\EN{This code is more terse, but also, has some quirk}.
 \RU{Во всех примерах, что мы пока видели, инкремент значения переменной ``rt'' происходит после сравнения 
-определнного бита с единицей, но здесь ``rt'' увеличивется на 1 до этого (строка 7), записывая новое значение
+определнного бита с единицей, но здесь ``rt'' увеличивется на 1 до этого (строка 6), записывая новое значение
 в регистр \EDX.}
 \EN{While all examples we saw so far, incrementing ``rt'' value after comparing specific bit with one,
-the code here incrementing ``rt'' before (line 7), writing new value into \EDX register.}
+the code here incrementing ``rt'' before (line 6), writing new value into \EDX register.}
 \RU{Затем, если последний бит был 1, инструкция}\EN{Then, if the last bit was 1,} \TT{CMOVNE}
 \footnote{Conditional MOVe if Not Equal\RU{ (MOV если не равно)}}\EN{ instruction} 
 (\RU{которая синонимична}\EN{which is synonymous to} \TT{CMOVNZ}

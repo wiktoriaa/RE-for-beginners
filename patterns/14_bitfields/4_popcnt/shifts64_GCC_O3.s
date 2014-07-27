@@ -1,5 +1,4 @@
 f:
-.LFB24:
 	xor	eax, eax	; rt variable will be here
 	xor	ecx, ecx	; i variable will be here
 .L3:

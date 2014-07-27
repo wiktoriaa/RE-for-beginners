@@ -75,3 +75,26 @@ loc_2F7A
                 BX              LR
 \end{lstlisting}
 
+\subsection{ARM64 + \Optimizing GCC 4.9}
+
+\RU{Я взял 64-битный пример, который уже использовал}\EN{I took 64-bit example I already used}: 
+\ref{popcnt_x64_example}.
+
+\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.8]{patterns/14_bitfields/4_popcnt/ARM64_GCC_O3.s}
+
+\RU{Результат очень похож на тот, что GCC сгенерировал для x64}\EN{The result is very similar to what GCC 
+generated for x64}: \ref{shifts64_GCC_O3}.
+
+\RU{Инструкция }\TT{CSEL} \RU{это}\EN{instruction is} ``Conditional SELect''\RU{ (выбор при условии)}, 
+\RU{она просто выбирает одну из переменных, в зависимости от флагов выставленных}\EN{it just choose one 
+variable of two depending on flags set by} \TT{TST} \RU{и копирует значение в регистр}\EN{and copy value 
+into} \RegW{2}\RU{, содержаий переменную ``rt''}\EN{ register, which holds ``rt'' variable}.
+
+\subsection{ARM64 + \NonOptimizing GCC 4.9}
+
+\RU{И снова, я использовал 64-битный пример, который я уже использовал раннее}\EN{Again, I use 64-bit 
+example I already used}: \ref{popcnt_x64_example}.
+
+\RU{Код более многословный, как обычно}\EN{The code is more verbose, as usual}.
+
+\lstinputlisting[caption=\NonOptimizing GCC (Linaro) 4.8]{patterns/14_bitfields/4_popcnt/ARM64_GCC_O0.s}
