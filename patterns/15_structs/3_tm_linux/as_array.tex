@@ -44,15 +44,16 @@ not possible to say, was it structure in original source code or just pack of va
 \RU{Действительно, ведь компилятор не знает что они будут заполнены при вызове функции}
 \EN{Indeed, compiler do not know these will be filled when calling to} \TT{localtime\_r()}.
 
-\RU{Я выбрал именно этот пример для иллюстрации, потому что все члены структуры имеют тип \Tint, а члены структуры
-\TT{SYSTEMTIME} ~--- 16-битные \TT{WORD}, и если их объявлять так же, как локальные переменные, 
-то они будут выровнены по 32-битной границе 
-и ничего не выйдет (потому что \TT{GetSystemTime()} заполнит их неверно).}
-\EN{I chose exactly this example for illustration, since all structure fields has \Tint type, 
-and \TT{SYSTEMTIME} structure
-fields~---16-bit \TT{WORD}, and if to declare them as a local variables, they will be aligned on a 32-bit border,
-and nothing will work (because \TT{GetSystemTime()} will fill them incorrectly).}
-\RU{Читайте об этом в следующей секции}\EN{Read more about it in next section}: ``\StructurePackingSectionName''.
+\EN{I chose exactly this example for illustration, since all structure fields has \Tint type.}
+\RU{Я выбрал именно этот пример для иллюстрации, потому что все члены структуры имеют тип \Tint.}
+\RU{Это не сработает, если поля структуры будут иметь размер 16 бит (\TT{WORD}), как в случае
+со структурой \TT{SYSTEMTIME}}\EN{This will not work if structure fields have 16-bit size (\TT{WORD}), 
+as in case of \TT{SYSTEMTIME} structure}\EMDASH{}\TT{GetSystemTime()} 
+\RU{заполнит их неверно}\EN{will fill them incorrectly} 
+(\RU{потому что локальные переменные будут выровнены по 32-битной границе}\EN{because local 
+variables will be aligned on 32-bit border}).
+\RU{Читайте об этом в следующей секции}\EN{Read more about it in next section}: 
+``\StructurePackingSectionName'' (\ref{structure_packing}).
 
 \index{\SyntacticSugar}
 \RU{Так что, структура ~--- это просто набор переменных лежащих в одном месте, рядом.}
