@@ -25,3 +25,40 @@ it is actually possible to load values into R-registers straightforwardly withou
 \RU{Здесь не используются D-регистры, используются только пары R-регистров.}
 \EN{D-registers are not used here, only R-register pairs are used.}
 
+\subsection{ARM64 + \Optimizing GCC (Linaro) 4.9}
+
+\begin{lstlisting}
+f:
+	stp	x29, x30, [sp, -16]!
+	add	x29, sp, 0
+	ldr	d1, .LC1 ; load 1.54 into D1
+	ldr	d0, .LC0 ; load 32.01 into D0
+	bl	pow
+; result of pow() in D0
+	adrp	x0, .LC2
+	add	x0, x0, :lo12:.LC2
+	bl	printf
+	mov	w0, 0
+	ldp	x29, x30, [sp], 16
+	ret
+.LC0:
+; 32.01 in IEEE 754 format
+	.word	-1374389535
+	.word	1077936455
+.LC1:
+; 1.54 in IEEE 754 format
+	.word	171798692
+	.word	1073259479
+.LC2:
+	.string	"32.01 ^ 1.54 = %lf\n"
+\end{lstlisting}
+
+\RU{Константы загружаются в}\EN{Constants are loaded into} \RegD{0} \AndENRU \RegD{1}: 
+\RU{ф-ция }pow() \RU{возьмет их оттуда}\EN{function will take them there}.
+\RU{Результат в}\EN{Result is in} \RegD{0} \RU{после исполнения}\EN{after execution of} pow().
+\RU{Он пропускается в}\EN{It is passed into} \printf \RU{без всякой модификации и перемещений}\EN{without 
+any modification and moving}, 
+\RU{потому что}\EN{because} \printf \RU{берет аргументы \glslink{integral type}{интегральных типов} и указатели 
+из X-регистров,
+а аргументы типа плавающей точки из D-регистров}\EN{takes argumens of \glslink{integral type}{integral types} 
+and pointers from X-registers, and floating pointer arguments from D-registers}.

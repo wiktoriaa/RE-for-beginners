@@ -1,7 +1,7 @@
 \subsection{ARM: \OptimizingKeilVI + \ARMMode}
 \index{\CLanguageElements!switch}
 
-\lstinputlisting{patterns/08_switch/few_ARM_ARM_O3.asm}
+\lstinputlisting{patterns/08_switch/1_few/few_ARM_ARM_O3.asm}
 
 \RU{Мы снова не сможем сказать, глядя на этот код, был ли в оригинальном исходном коде switch() 
 либо же несколько if()-в.}
@@ -69,10 +69,30 @@ at this point.}
 
 \subsection{ARM: \OptimizingKeilVI + \ThumbMode}
 
-\lstinputlisting{patterns/08_switch/few_ARM_thumb_O3.asm}
+\lstinputlisting{patterns/08_switch/1_few/few_ARM_thumb_O3.asm}
 
 \RU{Как я уже писал, в thumb-режиме нет возможности \IT{присоединять} предикаты к большинству инструкций,
 так что thumb-код вышел похожим на код x86, вполне понятный.}
 \EN{As I already mentioned, there is no feature of \IT{connecting} predicates to majority of instructions in thumb
-mode, so the thumb-code here is somewhat similar to the easily understandable x86 \ac{CISC}-code}
+mode, so the thumb-code here is somewhat similar to the easily understandable x86 \ac{CISC}-code.}
 
+\subsection{ARM64: \NonOptimizing GCC (Linaro) 4.9}
+
+\lstinputlisting{patterns/08_switch/1_few/ARM64_GCC_O0.lst}
+
+\RU{Входное значение имеет тип \Tint поэтому для него используется регистр \RegW{0},
+а не целая часть регистра \RegX{0}.}
+\EN{Input value has \Tint type, hence \RegW{0} register is used as input value instead of the whole
+\RegX{0} register.}
+\RU{Указатели на строки передаются в \puts, как я и показывал в примере}\EN{String pointers are passed to 
+\puts just like I showed in} ``\HelloWorldSectionName''\EN{ example}: \ref{pointers_ADRP_and_ADD}.
+
+\subsection{ARM64: \Optimizing GCC (Linaro) 4.9}
+
+\lstinputlisting{patterns/08_switch/1_few/ARM64_GCC_O3.lst}
+
+\RU{Фрагмент кода более оптимизированный}\EN{Better optimized piece of code}.
+\RU{Инструкция }\TT{CBZ} (\IT{Compare and Branch on Zero}\RU{ (сравнить и перейти если ноль)}) 
+\RU{совершает переход если}\EN{instruction do jump if} \RegW{0} \RU{ноль}\EN{is zero}.
+\RU{Здесь также прямой переход на}\EN{There is also direct jump to} \puts \RU{вместо вызова}\EN{instead 
+of calling it}: \ref{JMP_instead_of_RET}.

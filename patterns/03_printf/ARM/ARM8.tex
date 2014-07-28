@@ -286,3 +286,48 @@ with the exception that thumb-instructions are used here instead}.
 % also STMIA is used instead of STMIB,
 % which is why it uses LR, which is 4 bytes ahead of SP
 
+\subsection{ARM64}
+
+\subsubsection{\NonOptimizing GCC (Linaro) 4.9}
+
+\begin{lstlisting}
+.LC2:
+	.string	"a=%d; b=%d; c=%d; d=%d; e=%d; f=%d; g=%d; h=%d\n"
+f3:
+	sub	sp, sp, #32
+	stp	x29, x30, [sp,16]
+	add	x29, sp, 16
+	adrp	x0, .LC2 ; "a=%d; b=%d; c=%d; d=%d; e=%d; f=%d; g=%d; h=%d\n"
+	add	x0, x0, :lo12:.LC2
+	mov	w1, 8		; 9th argument
+	str	w1, [sp]	; store 9th argument in the stack
+	mov	w1, 1
+	mov	w2, 2
+	mov	w3, 3
+	mov	w4, 4
+	mov	w5, 5
+	mov	w6, 6
+	mov	w7, 7
+	bl	printf
+	sub	sp, x29, #16
+	ldp	x29, x30, [sp,16]
+	add	sp, sp, 32
+	ret
+\end{lstlisting}
+
+\RU{Первые 8 аргументов передаются в X- или W-регистрах}\EN{First 8 arguments are passed 
+in X- or W-registers}: \cite{ARM64_PCS}.
+\RU{Указатель на строку требует 64-битного регистра, так что он передается в}\EN{Pointer to 
+the string require 64-bit register, so it's passed in} \RegX{0}.
+\RU{Все остальные значения имеют 32-битный тип \Tint, так что они записываются в 32-битные
+части регистров (W-).}
+\EN{All other values has \Tint 32-bit type, so these are written in 32-bit part of 
+registers (W-).}
+\RU{Девятый аргумент ($8$) передается через стек.}
+\EN{9th argument ($8$) is passed via the stack.}
+\RU{Действительно: невозможно передать большое количество аргументов в регистрах, потому
+что количество регистров ограничено.}
+\EN{Indeed: it's not possible to pass large number of arguments in registers, 
+its count is limited.}
+
+\Optimizing GCC (Linaro) 4.9 \RU{генерирует почти такой же код}\EN{makes the same code}.
