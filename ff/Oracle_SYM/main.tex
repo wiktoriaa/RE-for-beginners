@@ -1,4 +1,4 @@
-\section{\EN{.SYM-files}\RU{.SYM-файлы}}
+\chapter{\oracle: \EN{.SYM-files}\RU{.SYM-файлы}}
 
 \RU{Когда процесс в \oracle терпит серьезную ошибку (crash), он записывает массу информации в лог-файлы,
 включая состояние стека, вроде:}
@@ -83,7 +83,7 @@ strings strings_block | wc -l
 \RU{Это действительно так, мы можем найти значение 66 (0x42) в самом начале файла, прямо после сигнатуры OSYM:}
 \EN{It's indeed so, we can find 66 value (0x42) at the file begin, right after OSYM signature:}
 
-\lstinputlisting{examples/oracle/SYM/dump1.txt}
+\lstinputlisting{ff/Oracle_SYM/dump1.txt}
 
 \RU{Конечно, 0x42 здесь это не байт, но скорее всего, 32-битное значение, запакованное как little-endian,
 поэтому мы видим 0x42 и затем как минимум 3 байта.}
@@ -136,7 +136,7 @@ so started by 0x10 and 0 bytes.}
 
 \RU{Посмотрим на этот блок как на массив 32-битных значений}\EN{Let's dump the block as 32-bit values array}:
 
-\lstinputlisting[caption=\RU{первый столбец это адрес}\EN{first column is address}]{examples/oracle/SYM/dump2.txt}
+\lstinputlisting[caption=\RU{первый столбец это адрес}\EN{first column is address}]{ff/Oracle_SYM/dump2.txt}
 
 \RU{Здесь 132 значения, а это 66*2}\EN{There are 132 values, that's 66*2}.
 \RU{Может быть здесь 2 32-битных значения на каждый символ, а может быть здесь два массива}\EN{Probably, 
@@ -256,7 +256,7 @@ sequence of numbers is growing}.
 \EN{I wrote an utility to convert these .SYM files into \IDA script, so I can load .idc script and it will
 set function names:}
 
-\lstinputlisting{examples/oracle/SYM/unpacker.c}
+\lstinputlisting{ff/Oracle_SYM/unpacker.c}
 
 \RU{Пример его работы}\EN{Here is an example of its work}:
 
@@ -297,35 +297,35 @@ library in which I have function to access \oracle .SYM-files}:
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{examples/oracle/SYM/whole1.png}
+\includegraphics[scale=\FigScale]{ff/Oracle_SYM/whole1.png}
 \caption{\RU{Весь файл в Hiew}\EN{The whole file in Hiew}}
 \label{fig:oracle_SYM_whole1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{examples/oracle/SYM/whole2.png}
+\includegraphics[scale=\FigScale]{ff/Oracle_SYM/whole2.png}
 \caption{\RU{Сигнатура OSYM и текстовые строки}\EN{OSYM signature and text strings}}
 \label{fig:oracle_SYM_whole2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{examples/oracle/SYM/binary1.png}
+\includegraphics[scale=\FigScale]{ff/Oracle_SYM/binary1.png}
 \caption{\RU{Бинарный блок}\EN{Binary block}}
 \label{fig:oracle_SYM_binary1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{examples/oracle/SYM/binary2.png}
+\includegraphics[scale=\FigScale]{ff/Oracle_SYM/binary2.png}
 \caption{\RU{Структура бинарного блока}\EN{Binary block patterns}}
 \label{fig:oracle_SYM_binary2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{examples/oracle/SYM/whole64.png}
+\includegraphics[scale=\FigScale]{ff/Oracle_SYM/whole64.png}
 \caption{\RU{пример .SYM-файла из \oracle для win64}\EN{.SYM-file example from \oracle for win64}}
 \label{fig:oracle_SYM_whole64}
 \end{figure}
