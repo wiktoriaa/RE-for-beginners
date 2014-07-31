@@ -1,0 +1,237 @@
+\chapter{\MinesweeperWinXPExampleChapterName}
+\label{minesweeper_winxp}
+
+\RU{Я не очень хорошо играю в Сапёра (Minesweeper), так что я попробую найти все скрытые мины в отладчике.}
+\EN{I'm not very good at playing Minesweeper, so I will try to reveal hidden mines in debugger.}
+
+\RU{Как мы знаем, Сапёр располагает мины случайным образом, так что там должен быть генератор случайных чисел
+или вызов стандартой ф-ции Си \TT{rand()}.}
+\EN{As we know, Minesweeper places mines randomly, so there should be some kind of random numbers generator or
+call to the standard \TT{rand()} C-function.}
+\RU{Вот что хорошо в реверсинге продуктов от Microsoft, так это то что часто есть \gls{PDB}-файл со всеми
+символами (имена ф-ций, итд).}
+\EN{What is really cool about reversing Microsoft products is that there are \gls{PDB} 
+file exist with symbols (function names, etc).}
+\RU{Когда я загружаю}\EN{When I load} \TT{winmine.exe} \RU{в}\EN{into} \IDA, \RU{она скачивает}\EN{it downloads} 
+\gls{PDB} \RU{файл именно для этого исполняемого файла и добавляет все имена}\EN{file exactly for this 
+executable and adds all names}.
+
+\RU{И вот оно, только один вызов}\EN{So here it is, the only call to} \TT{rand()} \RU{в этой 
+ф-ции}\EN{is this function}:
+
+\begin{lstlisting}
+.text:01003940 ; __stdcall Rnd(x)
+.text:01003940 _Rnd@4          proc near               ; CODE XREF: StartGame()+53
+.text:01003940                                         ; StartGame()+61
+.text:01003940
+.text:01003940 arg_0           = dword ptr  4
+.text:01003940
+.text:01003940                 call    ds:__imp__rand
+.text:01003946                 cdq
+.text:01003947                 idiv    [esp+arg_0]
+.text:0100394B                 mov     eax, edx
+.text:0100394D                 retn    4
+.text:0100394D _Rnd@4          endp
+\end{lstlisting}
+
+\RU{Так её назвала \IDA и это было имя данное ей разработчиками Сапёра.}
+\EN{\IDA named it so, and it was the name given to it by Minesweeper developers.}
+
+\RU{Ф-ция очень простая}\EN{The function is very simple}:
+
+\begin{lstlisting}
+int Rnd(int limit)
+{
+    return rand() % limit;
+};
+\end{lstlisting}
+
+\RU{(В \gls{PDB}-файле не было имени ``limit''; это я назвал этот аргумент так.)}
+\EN{(There are was no ``limit'' name in \gls{PDB}-file; I named this argument so.)}
+
+\RU{Так что она возвращает случайное число в пределах от нуля до заданного предела}\EN{So it returns 
+a random value in range from 0 to specified limit}.
+
+\TT{Rnd()} \RU{вызывается только из одного места, это ф-ция с названием}\EN{is called only from one place, 
+this is function called} \TT{StartGame()}, 
+\RU{и как видно, это именно тот код, что расставляет мины}\EN{and as it seems, this is exactly 
+the code which place mines}:
+
+\begin{lstlisting}
+.text:010036C7                 push    _xBoxMac
+.text:010036CD                 call    _Rnd@4          ; Rnd(x)
+.text:010036D2                 push    _yBoxMac
+.text:010036D8                 mov     esi, eax
+.text:010036DA                 inc     esi
+.text:010036DB                 call    _Rnd@4          ; Rnd(x)
+.text:010036E0                 inc     eax
+.text:010036E1                 mov     ecx, eax
+.text:010036E3                 shl     ecx, 5          ; ECX=ECX*32
+.text:010036E6                 test    _rgBlk[ecx+esi], 80h
+.text:010036EE                 jnz     short loc_10036C7
+.text:010036F0                 shl     eax, 5          ; ECX=ECX*32
+.text:010036F3                 lea     eax, _rgBlk[eax+esi]
+.text:010036FA                 or      byte ptr [eax], 80h
+.text:010036FD                 dec     _cBombStart
+.text:01003703                 jnz     short loc_10036C7
+\end{lstlisting}
+
+\RU{Сапёр позволяет задать размеры доски, так что X (xBoxMac) и Y (yBoxMac) это глобальные переменные.}
+\EN{Minesweeper allows to set board size, so the X (xBoxMac) and Y (yBoxMac) of board are global variables.}
+\RU{Они передаются в}\EN{They are passed to} \TT{Rnd()} \RU{и генерируются случайные координаты}\EN{and random 
+coordinates are generated}.
+\RU{Мина устанавливается инструкцией}\EN{Mine is placed by} \TT{OR} \RU{на}\EN{at} \TT{0x010036FA}. 
+\RU{И если она уже была установлена до этого}\EN{And if it was placed before} 
+(\RU{это возможно, если пара ф-ций}\EN{it's possible if} \TT{Rnd()} 
+\RU{сгенерирует пару, которая уже была сгенерирована}\EN{pair will generate coordinates pair which already 
+was generated}), 
+\RU{тогда}\EN{then} \TT{TEST} \AndENRU \TT{JNZ} \RU{на}\EN{at} \TT{0x010036E6} 
+\RU{перейдет на повторную генерацию пары}\EN{will jump to generation routine again}.
+
+\TT{cBombStart} \RU{это глобальная переменная, содержащая количество мин. So this is loop.}
+\EN{is the global variable containing total number of mines. Так что это цикл.}
+
+\RU{Ширина двухмерного массива это 32 (мы можем это вывести глядя на инструкцию \TT{SHL}, которая умножает
+одну из координат на 32)}\EN{The width of array is 32 
+(we can conclude this by looking at \TT{SHL} instruction, which multiplies one of the coordinates by 32)}.
+
+\RU{Размер глобального массива}\EN{The size of} \TT{rgBlk} 
+\RU{можно легко узнать по разнице между меткой}\EN{global array can be easily determined by difference 
+between} \TT{rgBlk} 
+\RU{в сегменте данных и следующей известной меткой}\EN{label in data segment and next known one}. 
+\RU{Это}\EN{It is} 0x360 (864):
+
+\begin{lstlisting}
+.data:01005340 _rgBlk          db 360h dup(?)          ; DATA XREF: MainWndProc(x,x,x,x)+574
+.data:01005340                                         ; DisplayBlk(x,x)+23
+.data:010056A0 _Preferences    dd ?                    ; DATA XREF: FixMenus()+2
+...
+\end{lstlisting}
+
+$864/32=27$.
+
+\RU{Так что размер массива}\EN{So the array size is} $27*32$?
+\RU{Это близко к тому что мы знаем: когда я попытался установить размер доски в установках Сапёра на}\EN{It is 
+close to what we know: when I try to set board size to} $100*100$\RU{, то он установил размер}\EN{ in Minesweeper 
+settings, it fallbacks to the board of size} $24*30$.
+\RU{Так что это максимальный размер доски здесь}\EN{So this is maximal board size here}.
+\RU{И размер массива фиксирован для доски любого размера}\EN{And the array has fixed size for any board size}.
+
+\RU{Посмотрим на всё это в}\EN{So let's see all this in} \olly.
+\RU{Я запустил Сапёр, присоеденил (attach) \olly к нему и увидел содержимое памяти по адресу где массив}\EN{I run 
+Minesweeper, I attaching \olly to it and I see memory dump at the address of} 
+\TT{rgBlk}\EN{ array}(\TT{0x01005340})
+\footnote{\RU{Все адреса здесь для Сапёра под}\EN{All addresses here are for Minesweeper for} 
+Windows XP SP3 english. 
+\RU{Они могут отличаться для других сервис-паков}\EN{They may differ for other service packs}.}.
+
+\RU{Так что у меня вышел такой дамп памяти массива}\EN{So I got this memory dump of array}:
+
+\lstinputlisting{examples/minesweeper/1.lst}
+
+\olly, \RU{как и любой другой шестнадцатеричный редактор, показывает 16 байт на строку}\EN{like any other 
+hexadecimal editor, shows 16 bytes per line}.
+\RU{Так что каждая 32-байтная строка массива занимает ровно 2 строки}\EN{So each 32-byte array row occupies
+here exactly 2 lines}.
+
+\RU{Это уровень для начинающих (доска 9*9)}\EN{This is beginner level (9*9 board)}.
+
+\RU{Тут еще какая-то квадратная структура, заметная визуально (байты 0x10)}\EN{There are some square 
+structure can be seen visually (0x10 bytes)}.
+
+\RU{Я нажал}\EN{I click} ``Run'' \InENRU \olly 
+\RU{чтобы разморозить процесс Сапёра, потом нажал в случайное место окна Сапёра, попался на мине, но теперь
+видны все мины}\EN{to unfreeze Minesweeper process, then I clicked randomly at Minesweeper window
+and trapped into mine, but now I see all mines}: \figref{fig:minesweeper1}.
+
+\RU{Сравнивая места с минами и дамп, мы можем обнаружить что 0x10 это граница, 0x0F --- пустой блок, 
+0x8F --- мина.}
+\EN{By comparing mine places and dump, we can conclude that 0x10 mean border, 0x0F---empty block, 0x8F---mine.}
+
+\RU{Теперь я добавил комментариев и также включил все байты 0x8F в квадратные скобки:}
+\EN{Now I added commentaries and also enclosed all 0x8F bytes into square brackets:}
+
+\lstinputlisting{examples/minesweeper/2.lst}
+
+\RU{Теперь я убрал все байты связанные с границами (0x10) и всё что за ними:}
+\EN{Now I removed all border bytes (0x10) and what's beyond those:}
+
+\lstinputlisting{examples/minesweeper/3.lst}
+
+\RU{Да, это всё мины, теперь это очень хорошо видно, в сравнении со скриншотом.}
+\EN{Yes, these are mines, now it can be clearly seen and compared with screenshot.}
+
+\RU{Вот что интересно, это то что я могу модифицировать массив прямо в \olly.}
+\EN{What is interetsting is that I can modify array right in \olly.}
+\RU{Я убрал все мины заменив все байты 0x8F на 0x0F, и вот что у меня получилось в Сапёре}\EN{I removed 
+all mines by changing all 0x8F bytes by 0x0F, and then what I got in Minesweeper}: \figref{fig:minesweeper3}.
+
+\RU{Я также убрал их все и добавил их в первом ряду}\EN{I also removed all them and add them at the first line}: 
+\figref{fig:minesweeper2}.
+
+\RU{Отладчик не очень удобен для подсматривания (а это была моя изначальная цель), так что я написал маленькую
+утилиту для показа содержимого доски:}
+\EN{Well, debugger is not very convenient for eavesdropping (which was my goal anyway), so I wrote small utility
+to dump board contents:}
+
+\lstinputlisting{examples/minesweeper/minesweeper_cheater.c}
+
+\RU{Просто установите}\EN{Just set} \ac{PID}
+\footnote{PID \RU{можно увидеть в}\EN{can be shown in} Task Manager 
+(\RU{это можно включить в}\EN{enable it in} ``View $\rightarrow$ Select Columns'')} 
+\RU{и адрес массива}\EN{and address of array} (\TT{0x01005340} \RU{для}\EN{for} Windows XP SP3 english) 
+\RU{и она покажет его}\EN{and it will dump it}
+\footnote{\RU{Скомпилированная версия здесь}\EN{Compiled executable is here}: 
+\url{http://beginners.re/examples/minesweeper_WinXP/minesweeper_cheater.exe}}.
+
+\RU{Она подключается к win32-процессу по \ac{PID}-у и просто читает из памяти процесса по этому адресу.}
+\EN{It attaches to win32 process by \ac{PID} and just read process memory by address.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{examples/minesweeper/1.png}
+\caption{\RU{Мины}\EN{Mines}}
+\label{fig:minesweeper1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{examples/minesweeper/3.png}
+\caption{\RU{Я убрал все мины в отладчике}\EN{I removed all mines in debugger}}
+\label{fig:minesweeper3}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{examples/minesweeper/2.png}
+\caption{\RU{Мины, установленные мною в отладчике}\EN{Mines I set in debugger}}
+\label{fig:minesweeper2}
+\end{figure}
+
+\section{\Exercises}
+
+\begin{itemize}
+
+\item \RU{Почему байты описывающие границы (0x10) присутствуют вообще?}
+\EN{Why border bytes (0x10) are exist in array?}
+\RU{Зачем они нужны, если они вообще не видимы в интерфейсе Сапёра?}
+\EN{What they are for if they are not visible in Minesweeper interface?}
+\RU{Как можно обойтись без них}\EN{How to do without them}?
+
+\item \RU{Как выясняется, здесь больше возможных значений (для открытых блоков, для тех на которых игрок установил
+флажок, итд).}
+\EN{As it turns out, there are more values possible (for open blocks, for flagged by user, etc).}
+\RU{Попробуйте найти значение каждого}\EN{Try to find meaning of each}.
+
+\item \RU{Измените мою утилиту так, чтобы она в запущенном процессе Сапёра убирала все мины, 
+или расставляла их в соответствии с каким-то заданным шаблоном.}
+\EN{Modify my utility so it will remove all mines or set them by fixed pattern you want in the Minesweeper
+process currently running.}
+
+\item \RU{Измените мою утилиту так, чтобы она работала без задаваемого адреса массива и без \gls{PDB}-файла.}
+\EN{Modify my utility so it can work without array address specified and without \gls{PDB} file.}
+\RU{Да, вполне возмжоно автоматически найти информацию о доске в сегменте данных в запущенном процессе Сапёра.}
+\EN{Yes, it's possible to find board information in data segment of Minesweeper running process automatically.}
+\RU{Подсказка}\EN{Hint}: \ref{minesweeper_winxp_hint}.
+
+\end{itemize}
