@@ -1,10 +1,10 @@
-\section{x86}
+\subsection{x86}
 
-\subsection{\NonOptimizing MSVC}
+\subsubsection{\NonOptimizing MSVC}
 
 \RU{Итак, компилируем:}\EN{Let's compile:}
 
-\lstinputlisting{patterns/10_strlen/10_1_msvc_\LANG.asm}
+\lstinputlisting{patterns/10_strings/1_strlen/10_1_msvc_\LANG.asm}
 
 \index{x86!\Instructions!MOVSX}
 \index{x86!\Instructions!TEST}
@@ -56,11 +56,11 @@ we need to identify its sign and extend it. That is what \MOVSX does.}
 About \TEST instruction, read more in section about bit fields~(\ref{sec:bitfields}).
 But here, this instruction just checking value in the \EDX, if it is equals to $0$.}
 
-\subsection{\NonOptimizing GCC}
+\subsubsection{\NonOptimizing GCC}
 
 \RU{Попробуем}\EN{Let's try} GCC 4.4.1:
 
-\lstinputlisting{patterns/10_strlen/10_3_gcc.asm}
+\lstinputlisting{patterns/10_strings/1_strlen/10_3_gcc.asm}
 
 \label{movzx}
 \index{x86!\Instructions!MOVZX}
@@ -98,13 +98,13 @@ will set $0$ to the \ZF flag, but \SETNZ, if \TT{ZF==0} (\IT{NZ} means \IT{not z
 Speaking in natural language, \IT{if \AL is not zero, let's jump to loc\_80483F0}. 
 Compiler emitted slightly redundant code, but let's not forget the optimization is turned off.}
 
-\subsection{\Optimizing MSVC}
+\subsubsection{\Optimizing MSVC}
 \label{strlen_MSVC_Ox}
 
 \RU{Теперь скомпилируем все то же самое в MSVC 2012, но с включенной оптимизацией (\Ox)}
 \EN{Now let's compile all this in MSVC 2012, with optimization turned on (\Ox)}:
 
-\lstinputlisting[caption=MSVC 2012 /Ox /Ob0]{patterns/10_strlen/10_2_\LANG.asm}
+\lstinputlisting[caption=MSVC 2012 /Ox /Ob0]{patterns/10_strings/1_strlen/10_2_\LANG.asm}
 
 \RU{Здесь все попроще стало. Но следует отметить, что компилятор обычно может так хорошо использовать регистры 
 только на не очень больших функциях с не очень большим количеством локальных переменных.}
@@ -118,7 +118,7 @@ only in small functions with small number of local variables.}
 увеличить на единицу или уменьшить.}
 \EN{are \gls{increment}/\gls{decrement} instruction, in other words: add 1 to variable or subtract.}
 
-\subsection{\Optimizing MSVC + \olly}
+\subsubsection{\Optimizing MSVC + \olly}
 \index{\olly}
 
 \RU{Можем попробовать этот (соптимизированный) пример в}
@@ -163,38 +163,38 @@ now and then return from the function}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/10_strlen/olly1.png}
+\includegraphics[scale=\FigScale]{patterns/10_strings/1_strlen/olly1.png}
 \caption{\olly: \RU{начало первой итерации}\EN{first iteration begin}}
 \label{fig:strlen_olly_1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/10_strlen/olly2.png}
+\includegraphics[scale=\FigScale]{patterns/10_strings/1_strlen/olly2.png}
 \caption{\olly: \RU{начало второй итерации}\EN{second iteration begin}}
 \label{fig:strlen_olly_2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/10_strlen/olly3.png}
+\includegraphics[scale=\FigScale]{patterns/10_strings/1_strlen/olly3.png}
 \caption{\olly: \RU{сейчас будет вычисление разницы указателей}\EN{pointers difference to be calculated now}}
 \label{fig:strlen_olly_3}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/10_strlen/olly4.png}
+\includegraphics[scale=\FigScale]{patterns/10_strings/1_strlen/olly4.png}
 \caption{\olly: \RU{сейчас будет декремент \EAX}\EN{\EAX to be decremented now}}
 \label{fig:strlen_olly_4}
 \end{figure}
 
-\subsection{\Optimizing GCC}
+\subsubsection{\Optimizing GCC}
 
 \RU{Попробуем GCC 4.4.1 с включенной оптимизацией (ключ \Othree:}
 \EN{Let's check GCC 4.4.1 with optimization turned on (\Othree key):}
 
-\lstinputlisting{patterns/10_strlen/10_3_gcc_O3.asm}
+\lstinputlisting{patterns/10_strings/1_strlen/10_3_gcc_O3.asm}
 
 \RU{Здесь GCC не очень отстает от MSVC за исключением наличия \MOVZX.} 
 \EN{Here GCC is almost the same as MSVC, except of \MOVZX presence.}
