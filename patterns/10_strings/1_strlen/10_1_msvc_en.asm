@@ -5,7 +5,7 @@ _strlen PROC
     mov     ebp, esp
     push    ecx
     mov     eax, DWORD PTR _str$[ebp]  ; place pointer to string from str 
-    mov     DWORD PTR _eos$[ebp], eax  ; place it to local varuable eos
+    mov     DWORD PTR _eos$[ebp], eax  ; place it to local variable eos
 $LN2@strlen_:
     mov     ecx, DWORD PTR _eos$[ebp]  ; ECX=eos
     
