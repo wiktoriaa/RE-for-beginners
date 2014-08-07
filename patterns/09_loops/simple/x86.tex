@@ -1,4 +1,4 @@
-\section{x86}
+\subsubsection{x86}
 
 \index{x86!\Instructions!LOOP}
 \RU{Для организации циклов, в архитектуре x86 есть старая инструкция \LOOP, 
@@ -30,30 +30,30 @@ of assembly code.}
 loop condition (is counter is bigger than a limit?), what is done at each iteration (\gls{increment}/\gls{decrement})
 and of course loop body.}
 
-\lstinputlisting{patterns/09_loops/loops_1_\LANG.c}
+\lstinputlisting{patterns/09_loops/simple/loops_1_\LANG.c}
 
 \RU{Примерно так же, генерируемый код и будет состоять из этих четырех частей}
 \EN{So, generated code will be consisted of four parts too}.
 
 \RU{Возьмем пример}\EN{Let's start with simple example}:
 
-\lstinputlisting[label=loops_src]{patterns/09_loops/loops_2.c}
+\lstinputlisting[label=loops_src]{patterns/09_loops/simple/loops_2.c}
 
 \RU{Имеем в итоге}\EN{Result} (MSVC 2010):
 
-\lstinputlisting[caption=MSVC 2010]{patterns/09_loops/1_MSVC_\LANG.asm}
+\lstinputlisting[caption=MSVC 2010]{patterns/09_loops/simple/1_MSVC_\LANG.asm}
 
 \RU{В принципе, ничего необычного.}\EN{Nothing very special, as we see.}
 
 \RU{GCC 4.4.1 выдает примерно такой же код, с небольшой разницей:}
 \EN{GCC 4.4.1 emits almost the same code, with one subtle difference:}
 
-\lstinputlisting[caption=GCC 4.4.1]{patterns/09_loops/1_GCC_\LANG.asm}
+\lstinputlisting[caption=GCC 4.4.1]{patterns/09_loops/simple/1_GCC_\LANG.asm}
 
 \RU{Интересно становится, если скомпилируем этот же код при помощи MSVC 2010 с включенной оптимизацией}
 \EN{Now let's see what we will get if optimization is turned on} (\Ox):
 
-\lstinputlisting[caption=\Optimizing MSVC]{patterns/09_loops/1_MSVC_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC]{patterns/09_loops/simple/1_MSVC_Ox.asm}
 
 \RU{Здесь происходит следующее: переменную \IT{i} компилятор не выделяет в локальном стеке, 
 а выделяет целый регистр под нее: \ESI. 
@@ -78,7 +78,7 @@ at the function begin and end.}
 \RU{Попробуем GCC 4.4.1 с максимальной оптимизацией (\Othree):}
 \EN{Let's try GCC 4.4.1 with maximal optimization turned on (\Othree option):}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.1]{patterns/09_loops/1_GCC_O3.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.4.1]{patterns/09_loops/simple/1_GCC_O3.asm}
 
 \index{Loop unwinding}
 \RU{Однако, GCC просто \IT{развернул} цикл\footnote{\gls{loop unwinding} в англоязычной литературе}.}
@@ -94,7 +94,7 @@ On the other side, resulting code is obviously larger.}
 \RU{OK, увеличим максимальное значение \IT{i} в цикле до $100$ и попробуем снова. GCC выдаст подобное:}
 \EN{OK, let's increase maximal value of the \IT{i} variable to $100$ and try again. GCC resulting:}
 
-\lstinputlisting[caption=GCC]{patterns/09_loops/2_GCC_\LANG.asm}
+\lstinputlisting[caption=GCC]{patterns/09_loops/simple/2_GCC_\LANG.asm}
 
 \RU{Это уже похоже на то что сделал MSVC 2010 в режиме оптимизации (\Ox). 
 За исключением того, что под переменную \TT{i} будет выделен регистр \EBX.}
@@ -107,7 +107,7 @@ With the exception the \EBX register will be fixed to the \TT{i} variable.}
 and if it will, it will be saved at the function prologue and restored at epilogue, 
 just like here in the \main function.}
 
-\subsection{\olly}
+\subsubsection{x86: \olly}
 
 \index{\olly}
 \RU{Скомпилируем наш пример в}\EN{Let's compile our example in} MSVC 2010 \RU{с}\EN{with} \Ox \AndENRU \Obzero 
@@ -129,26 +129,26 @@ $9$ \RU{это последнее значение цикла}\EN{is a last loop
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/09_loops/olly1.png}
+\includegraphics[scale=\FigScale]{patterns/09_loops/simple/olly1.png}
 \caption{\olly: \RU{начало \main}\EN{\main begin}}
 \label{fig:loops_olly_1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/09_loops/olly2.png}
+\includegraphics[scale=\FigScale]{patterns/09_loops/simple/olly2.png}
 \caption{\olly: \RU{тело цикла только что отработало с}\EN{loop body just executed with} i=6}
 \label{fig:loops_olly_2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/09_loops/olly3.png}
+\includegraphics[scale=\FigScale]{patterns/09_loops/simple/olly3.png}
 \caption{\olly: \ESI=10, \RU{конец цикла}\EN{loop end}}
 \label{fig:loops_olly_3}
 \end{figure}
 
-\subsection{tracer}
+\subsubsection{x86: tracer}
 \index{tracer}
 
 \RU{Как видно, трассировать вручную цикл в отладчике это не очень удобно}\EN{As we might see, it is not very
@@ -170,7 +170,7 @@ tracer.exe -l:loops_2.exe bpx=loops_2.exe!0x00401026
 
 \RU{В}\EN{In the} \TT{tracer.log} \RU{после запуска я вижу следующее}\EN{I see after running}:
 
-\lstinputlisting{patterns/09_loops/tracer.log}
+\lstinputlisting{patterns/09_loops/simple/tracer.log}
 
 \RU{Видно как значение}\EN{We see how value of} \ESI \RU{последовательно изменяется от 2 до 9}
 \EN{register is changed from 2 to 9}.
@@ -206,13 +206,13 @@ but from 3 to 0xA (10) after increment}.
 каждая и значения регистров}\EN{containing information about how many times each instruction was executed and
 register values}:
 
-\lstinputlisting[caption=loops\_2.exe.txt]{patterns/09_loops/loops_2.exe.txt}
+\lstinputlisting[caption=loops\_2.exe.txt]{patterns/09_loops/simple/loops_2.exe.txt}
 \index{\GrepUsage}
 \RU{Так можно использовать grep}\EN{grep can be used here}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/09_loops/IDA_tracer_cc.png}
+\includegraphics[scale=\FigScale]{patterns/09_loops/simple/IDA_tracer_cc.png}
 \caption{\IDA \RU{с загруженным .idc-скриптом}\EN{with .idc-script loaded}}
 \label{fig:loops_IDA_tracer}
 \end{figure}
