@@ -4,39 +4,6 @@
 \EN{While pursuing the goal of optimization, one instruction may be replaced by others, 
 or even with group of instructions.}
 
-\RU{Вот простой пример}\EN{Here is a simple example}:
-
-\begin{lstlisting}[caption=MSVC 2010 /Ox]
-unsigned int f(unsigned int a)
-{
-	return a*8;
-};
-\end{lstlisting}
-
-\RU{Умножение на 8 заменяется на три инструкции сложения, делающих то же самое.}
-\EN{Multiplication by 8 is replaced by 3 addition instructions, which do the same.}
-\RU{Должно быть, оптимизатор в MSVC решил, что этот код будет работать быстрее.}
-\EN{Apparently, MSVC's optimizer decided that code will be faster.}
-
-\begin{lstlisting}
-_TEXT	SEGMENT
-_a$ = 8							; size = 4
-_f	PROC
-; File c:\polygon\c\2.c
-	mov	eax, DWORD PTR _a$[esp-4]
-	add	eax, eax
-	add	eax, eax
-	add	eax, eax
-	ret	0
-_f	ENDP
-_TEXT	ENDS
-END
-\end{lstlisting}
-
-\RU{Еще очень часто умножения и деления на числа вида $2^{n}$ заменяются на инструкции сдвигов:}
-\EN{Multiplication and division instructions by numbers in form $2^{n}$ are often replaced
-by shift instructions:} \ref{subsec:mult_div_shifts}.
-
 \RU{Инструкция \LEA также нередко применяется для простых арифметических действий:}
 \EN{\LEA instruction is also often used for simple arithmetic calculations:}  \ref{sec:LEA}.
 
@@ -44,5 +11,7 @@ by shift instructions:} \ref{subsec:mult_div_shifts}.
 \RU{Например}\EN{For example}, \LineENRU 18 \InENRU \lstref{neg_array_c}.
 
 % sections
+\input{patterns/11_arith_optimizations/mult}
+\input{patterns/11_arith_optimizations/div}
 \input{patterns/11_arith_optimizations/division_by_9/main}
 \input{patterns/11_arith_optimizations/exercises}
