@@ -18,32 +18,32 @@ network accesses,} Wireshark\footnote{\url{http://www.wireshark.org/}}\EN{ may h
 \\
 \RU{Первое на что нужно обратить внимание, это какие функции из \ac{API} \ac{OS} 
 и какие функции стандартных библиотек используются.}
-\EN{First what to look on is which functions from \ac{OS} \ac{API} and standard libraries are used.}
+\EN{The first thing to look for is which functions from \ac{OS} \ac{API} and standard libraries are used.}
 
 \RU{Если программа поделена на главный исполняемый файл и группу DLL-файлов, 
 то имена функций в этих DLL, бывает так, могут помочь.}
 \EN{If the program is divided into main executable file and a group of DLL-files, sometimes,
-these function's names may be helpful.}
+these function's names can be helpful.}
 
 \RU{Если нас интересует, что именно приводит к вызову \TT{MessageBox()} с определенным текстом, 
 то первое что можно попробовать сделать: найти в сегменте данных этот текст, найти ссылки на него, и найти, 
 откуда может передаться управление к интересующему нас вызову \TT{MessageBox()}.}
-\EN{If we are interesting, what exactly may lead to the \TT{MessageBox()} call with specific text,
-first what we can try to do: find this text in data segment, find references to it and find the points
-from which a control may be passed to the \TT{MessageBox()} call we're interesting in.}
+\EN{If we are interested in exactly what can lead to the \TT{MessageBox()} call with specific text, 
+we can try to find this text in data segment, find references to it and find the points
+from which a control may be passed to the \TT{MessageBox()} call we're interested in.}
 
 \index{\CStandardLibrary!rand()}
 \RU{Если речь идет о компьютерной игре, и нам интересно какие события в ней более-менее случайны, 
 мы можем найти функцию \rand или её заменитель (как алгоритм Mersenne twister), и посмотреть, 
 из каких мест эта функция вызывается и что самое главное: как используется результат этой функции.}
-\EN{If we are talking about a video game and we're interesting, which events are more or less random in it,
-we may try to find \rand function or its replacement (like Mersenne twister algorithm) and find a places
-from which this function called and most important: how the results are used.}
+\EN{If we are talking about a video game and we're intereste in which events are more or less random in it,
+we may try to find \rand function or its replacements (like Mersenne twister algorithm) and find the places
+from which those functions are called, and more important: how the results are used.}
 \RU{Один пример}\EN{One example}: \ref{chap:color_lines}.
 
 \RU{Но если это не игра, а \rand используется, то также весьма любопытно, зачем. 
 Бывают неожиданные случаи вроде использования \rand в алгоритме для сжатия данных (для имитации шифрования):}
-\EN{But if it is not a game, but \rand is used, it is also interesting, why.
+\EN{But if it is not a game, and \rand is used, it is also interesting to know why.
 There are cases of unexpected \rand usage in data compression algorithm (for encryption imitation):}
 \url{http://blog.yurichev.com/node/44}.
 
@@ -145,7 +145,7 @@ strlen, strstr, strchr.
 
 \RU{В \tracer есть INT3-брякпойнты, хотя и срабатывающие только один раз, но зато их можно установить на все
 сразу ф-ции в некоей DLL.}
-\EN{There is INT3-breakpoints in \tracer, triggering only once, however, they can be set to all functions
+\EN{There is INT3-breakpoints in \tracer, triggered only once, however, they can be set to all functions
 in specific DLL.}
 
 \begin{lstlisting}
@@ -163,7 +163,7 @@ in specific DLL.}
 \EN{On the other side of coin, such breakpoints are triggered only once.}
 
 Tracer \RU{покажет вызов какой-либо функции, если он случится, но только один раз.}
-\EN{will show calling of a function, if it happens, but only once.}
+\EN{will show the call of a function, if it happens, but only once.}
 \RU{Еще один недостаток --- увидеть аргументы функции также нельзя.}
 \EN{Another drawback~---it is impossible to see function's arguments.}
 
@@ -171,7 +171,7 @@ Tracer \RU{покажет вызов какой-либо функции, есл�
 когда вы знаете что некая программа использует некую DLL,
 но не знаете какие именно функции в этой DLL.}
 \EN{Nevertheless, this feature is very useful when you know the program uses a DLL,
-but do not know which functions in it.}
+but do not know which functions are actually used.}
 \RU{И функций много.}\EN{And there are a lot of functions.} \\
 \\
 \index{cygwin}
