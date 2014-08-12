@@ -24,7 +24,7 @@ sign or to 0 if \IT{plus}.}
 
 \RU{И вот зачем все это.}\EN{And here is why all this.}
 
-\RU{По стандарту \CCpp, тип \Tchar ~--- знаковый. Если у нас есть две переменные, одна \Tchar, а другая \Tint 
+\RU{По умолчанию, в MSVC и GCC, тип \Tchar ~--- знаковый. Если у нас есть две переменные, одна \Tchar, а другая \Tint 
 (\Tint тоже знаковый), и если в первой переменной лежит $-2$ (что кодируется как \TT{0xFE}) и мы просто 
 переложим это в \Tint, 
 то там будет \TT{0x000000FE}, а это, с точки зрения \Tint, даже знакового, будет $254$, но никак не $-2$. 
@@ -32,7 +32,7 @@ $-2$ в переменной \Tint кодируется как \TT{0xFFFFFFFE}. 
 \Tchar переложить 
 в знаковый \Tint с сохранением всего, нужно узнать его знак, и затем заполнить остальные биты. 
 Это делает \MOVSX.}
-\EN{\CCpp standard defines \Tchar type as signed. If we have two values, one is \Tchar 
+\EN{By default, \Tchar type as signed in MSVC and GCC. If we have two values, one is \Tchar 
 and another is \Tint, (\Tint is signed too), and if first value contain $-2$ (it is coded as \TT{0xFE}) 
 and we just copying this byte into \Tint container, there will be \TT{0x000000FE}, and this, 
 from the point of signed \Tint view is $254$, but not $-2$. In signed int, $-2$ is coded as \TT{0xFFFFFFFE}. 
