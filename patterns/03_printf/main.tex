@@ -13,6 +13,68 @@ the \main function body by this:}
 \input{patterns/03_printf/ARM/ARM3}
 \input{patterns/03_printf/ARM/ARM8}
 
+\section{\RU{Примерный скелет вызова ф-ции}\EN{Rough skeleton of function call}}
+
+\RU{Так что вот примерный скелет вызова ф-ции}\EN{So here is rough skeleton of function call}:
+
+% FIXME: russian version
+\begin{lstlisting}[caption=x86]
+...
+PUSH argument 3
+PUSH argument 2
+PUSH argument 1
+CALL function
+; modify stack pointer (if needed)
+\end{lstlisting}
+
+\begin{lstlisting}[caption=x64 (MSVC)]
+MOV RCX, argument 1
+MOV RDX, argument 2
+MOV R8, argument 3
+MOV R9, argument 4
+...
+PUSH argument 5, 6, etc (if needed)
+CALL function
+; modify stack pointer (if needed)
+\end{lstlisting}
+
+\begin{lstlisting}[caption=x64 (GCC)]
+MOV RDI, argument 1
+MOV RSI, argument 2
+MOV RDX, argument 3
+MOV RCX, argument 4
+MOV R8, argument 5
+MOV R9, argument 6
+...
+PUSH argument 7, 8, etc (if needed)
+CALL function
+; modify stack pointer (if needed)
+\end{lstlisting}
+
+\begin{lstlisting}[caption=ARM]
+MOV R0, argument 1
+MOV R1, argument 2
+MOV R2, argument 3
+MOV R3, argument 4
+; add arguments 5, 6, etc into stack (if needed)
+BL function
+; modify stack pointer (if needed)
+\end{lstlisting}
+
+\begin{lstlisting}[caption=ARM64]
+MOV X0, argument 1
+MOV X1, argument 2
+MOV X2, argument 3
+MOV X3, argument 4
+MOV X4, argument 5
+MOV X5, argument 6
+MOV X6, argument 7
+MOV X7, argument 8
+; add arguments 9, 10, etc into stack (if needed)
+BL function
+; modify stack pointer (if needed)
+\end{lstlisting}
+
 \section{\RU{Кстати}\EN{By the way}}
 
 \index{fastcall}

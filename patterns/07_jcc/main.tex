@@ -4,3 +4,44 @@
 
 % sections
 \input{patterns/07_jcc/simple/main}
+
+\section{\RU{Примерный скелет условных переходов}\EN{Rough skeleton of conditional jump}}
+
+% FIXME: russian translation
+\begin{lstlisting}[caption=x86]
+CMP register, register/value
+Jcc true ; cc=condition code
+false:
+... some code to be executed if comparison result is false ...
+jmp exit 
+true:
+... some code to be executed if comparison result is true ...
+exit:
+\end{lstlisting}
+
+\begin{lstlisting}[caption=ARM]
+CMP register, register/value
+Bcc true ; cc=condition code
+false:
+... some code to be executed if comparison result is false ...
+jmp exit 
+true:
+... some code to be executed if comparison result is true ...
+exit:
+\end{lstlisting}
+
+\RU{Можно использовать условные суффиксы в режиме ARM для некоторых инструкций:}
+\EN{It's possible to use conditional suffixes in ARM mode for some instructions:}
+
+\begin{lstlisting}[caption=ARM]
+CMP register, register/value
+instr1_cc ; some instruction will be executed if condition code is true
+instr2_cc ; some other instruction will be executed if other condition code is true
+... etc ...
+\end{lstlisting}
+
+\RU{Конечно, нет никаких ограничений на количество инструкций с условными суффиксами, до тех пор
+пока флаги CPU не были модифицированы одной из таких инструкций.}
+\EN{Of course, there are no limit of number of instructions with conditional code suffixes, 
+as long as CPU flags are not modified by any of them.}
+% FIXME: list of such instructions or \ref{} to it
