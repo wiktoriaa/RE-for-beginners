@@ -1,5 +1,4 @@
-\chapter{\RU{И еще немного о возвращаемых результатах}\EN{One more word about results returning.}}
-
+\chapter{\RU{Еще о возвращаемых результатах}\EN{More about results returning}}
 
 \index{x86!\Registers!EAX}
 \index{ARM!\Registers!R0}
@@ -16,8 +15,10 @@ MSDN: Return Values (C++): \url{http://msdn.microsoft.com/en-us/library/7572ztz4
 If it is byte type or character (\Tchar)~---then in the lowest register \EAX part~---\AL. 
 If function returns \Tfloat number, the FPU register 
 \ST{0} is to be used instead.
-In ARM, result is usually returned in the \Reg{0} register.} \\
-\\
+In ARM, result is usually returned in the \Reg{0} register.}
+
+\section{\RU{Попытка использовать результат ф-ции возвращающей \Tvoid}
+\EN{Attempt to use result of function returning \Tvoid}}
 
 \RU{Кстати, что будет если возвращаемое значение в ф-ции \main объявлять не как \Tint а как \Tvoid?}
 \EN{By the way, what if returning value of the \main function will be declared not as \Tint but as \Tvoid?}
@@ -108,8 +109,36 @@ Hello, world!
 14
 \end{lstlisting}
 
-$14$ \RU{это как раз количество выведенных символов}\EN{is a number of characters printed}. \\
-\\
+$14$ \RU{это как раз количество выведенных символов}\EN{is a number of characters printed}.
+
+\section{\RU{Что если не использовать результат ф-ции?}\EN{What if not to use function result?}}
+
+\RU{\printf возвращает количество успешно выведенных символов, но результат работы этой ф-ции 
+редко используется на практике.}
+\EN{\printf returns count of characters successfully sent to output, but result of this function 
+is rarely used in practice.}
+\RU{Можно даже явно вызывать ф-ции, чей смысл именно в возвращаемых значениях, но явно не использовать их:}
+\EN{It's possible to call functions which essence in returning values, but not to use them explicitely:}
+
+\begin{lstlisting}
+int f()
+{
+    // skip first 3 random values
+    rand();
+    rand();
+    rand();
+    // and use 4th
+    return rand();
+};
+\end{lstlisting}
+
+\EN{Result of rand() function will always be leaved in \EAX, in all four cases.}
+\RU{Результат работы rand() будет оставаться в \EAX во всех четырех случаях.}
+\EN{But in first 3 cases, a value in \EAX will be just ignored.}
+\RU{Но в первых трех случаях, значение лежащее в \EAX, будет просто игнорироваться.}
+
+\section{\RU{Возврат структуры}\EN{Returning a structure}}
+
 \index{\CLanguageElements!return}
 \RU{Вернемся к тому факту, что возвращаемое значение остается в регистре \EAX}
 \EN{Let's back to the fact the returning value is left in the \EAX register}.
@@ -152,4 +181,3 @@ C99 language extensions}:
 \RU{Как видно, ф-ция просто заполняет поля в структуре, выделенной вызывающей ф-цией. Так что никаких проблем
 с эффективностью нет.}\EN{As we may see, the function is just filling fields in the structure, allocated by
 caller function. So there are no performance drawbacks.}
-

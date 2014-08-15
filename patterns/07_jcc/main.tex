@@ -7,6 +7,8 @@
 
 \section{\Conclusion{}}
 
+\subsection{x86}
+
 \RU{Примерный скелет условных переходов}\EN{Rough skeleton of conditional jump}:
 
 % FIXME: russian translation
@@ -32,10 +34,12 @@ true:
 exit:
 \end{lstlisting}
 
-\RU{Можно использовать условные суффиксы в режиме ARM для некоторых инструкций:}
+\subsection{ARM}
+
+\RU{В режиме ARM, Можно использовать условные суффиксы для некоторых инструкций:}
 \EN{It's possible to use conditional suffixes in ARM mode for some instructions:}
 
-\begin{lstlisting}[caption=ARM]
+\begin{lstlisting}[caption=ARM (\ARMMode)]
 CMP register, register/value
 instr1_cc ; some instruction will be executed if condition code is true
 instr2_cc ; some other instruction will be executed if other condition code is true
@@ -47,3 +51,17 @@ instr2_cc ; some other instruction will be executed if other condition code is t
 \EN{Of course, there are no limit of number of instructions with conditional code suffixes, 
 as long as CPU flags are not modified by any of them.}
 % FIXME: list of such instructions or \ref{} to it
+
+\RU{В режиме Thumb есть инструкция IT, позволяющая дополнить следующие 4 инструкции суффиксами, задающими
+условие.}
+\EN{Thumb mode has IT instruction, allowing to add conditional suffixes to the next four instructions.}
+\RU{Читайте больше об этом}\EN{Read more about it}: \ref{ARM_Thumb_IT}.
+
+\begin{lstlisting}[caption=ARM (\ThumbMode)]
+CMP register, register/value
+ITEEE EQ ; set these suffixes: if-then-else-else-else
+instr1   ; instruction will be executed if condition is true
+instr2   ; instruction will be executed if condition is false
+instr3   ; instruction will be executed if condition is false
+instr4   ; instruction will be executed if condition is false
+\end{lstlisting}

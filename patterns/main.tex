@@ -65,6 +65,54 @@ to do it without making a huge amount of annoying mistakes}.
 \footnote{В более старой русскоязычной литературе также часто встречается термин ``транслятор''.}}
 \EN{The program which converts high-level \ac{PL} code into assembly is called a \IT{compiler}}.
 
+\section{\RU{Несколько слов о x86 и ARM}\EN{Couple words about x86 and ARM}}
+
+\RU{x86 всегда был архитектурой с опкодами переменной длины, так что когда пришла 64-битная эра,
+расширения x64 не очень сильно повлияли на \ac{ISA}.}
+\EN{x86 was always an \ac{ISA} with variable-length opcodes, so when 64-bit era came, 
+x64 extensions was not affect \ac{ISA} very much.}
+\RU{В x86 до сих пор есть масса инструкций появившихся в 16-битном 8086 и присутствующих в самых последних
+процессорах.}
+\EN{x86 have a lot of instructions appeared in 16-bit 8086 CPU and still present in latest CPUs.}\\
+\\
+\RU{ARM это \ac{RISC}-процессор разработанный с учетом опкодов одинаковой длины, что было некоторым преимуществом
+в прошлом.}
+\EN{ARM is a \ac{RISC} \ac{CPU} designed with constant opcode length in mind, which had some advantages in past.}
+\RU{Так что в самом начале, инструкции ARM кодировались 4-мя байтами.}
+\EN{So at very start, ARM has instructions all encoded in 4 bytes.}
+\RU{Это то что сейчас называется ``режим ARM''}\EN{This is now called ``ARM mode''}.
+\RU{Потом они подумали что это не очень экономично}\EN{Then they thought it's not very frugal}.
+\RU{На самом деле, самые используемые инструкции процессора на практике могут быть закодированы
+используя меньшее количество информации.}
+\EN{In fact, most used \ac{CPU} instructions in real world applications can be encoded using 
+lesser ammount of information.}
+\RU{Так что они добавили другую \ac{ISA} с названием Thumb, где каждая инструкция кодируется всего лишь
+2-мя байтами.}
+\EN{So they added another \ac{ISA} called Thumb, where each instruction encoded in just 2 bytes.}
+\RU{Теперь это называется ``режим Thumb''}\EN{Now this is called ``Thumb mode''}.
+\RU{Но не все инструкции ARM могут быть закодированы в двух байтах, так что набор инструкций Thumb ограниченный.}
+\EN{But not all ARM instructions could be encoded in just 2 bytes, so Thumb instruction set is somewhat limited.}
+\RU{Код скомпилированный для режима ARM и Thumb может сосуществовать в одной программе, конечно.}
+\EN{Code compiled for ARM mode and Thumb mode may coexist in one program, of course.}
+\RU{Затем создатели ARM решили что Thumb можно расширить: так появился Thumb-2.}
+\EN{Then ARM creators thought Thumb can be extended: Thumb-2 was appeared. }
+\RU{Thumb-2 это все еще двухбайтные инструкции, но некоторые новые инструкции имеют длину 4 байта.}
+\EN{Thumb-2 is still 2-byte instructions, but some new instructions has size of 4 bytes.}
+\RU{По поводу богатства возможностей, Thumb-2 теперь может конкурировать с режимом ARM.}
+\EN{On instruction richness, Thumb-2 can compete with original ARM mode.}
+\RU{Потом появился 64-битный ARM, это \ac{ISA} снова с 4-хбайтными опкодами, без дополнительного режима Thumb.}
+\EN{Then 64-bit ARM came, this \ac{ISA} has 4-byte opcodes again, without any additional Thumb mode.}
+\RU{Но 64-битные требования повлияли на \ac{ISA}, так что, подводя итог, теперь у нас 3 набора инструкций ARM:
+режим ARM, режим Thumb (включая Thumb-2) и ARM64.}
+\EN{But 64-bit requirements affected \ac{ISA}, so, summarizing, we now have 3 ARM instruction sets: ARM mode, 
+Thumb mode (including Thumb-2) and ARM64.}
+\RU{Эти наборы инструкций частично пересекаются, но я бы сказал, это скорее разные наборы, нежели
+вариации одного.}
+\EN{These \ac{ISA}'s intersects partially, but I would say, they are much more different
+\ac{ISA}'s than variations of one.}
+\RU{Следовательно, в этой книге я стараюсь добавлять фрагменты кода на всех трех ARM \ac{ISA}, где это нужно.}
+\EN{Therefore, I try to add fragments of code in all 3 ARM \ac{ISA}'s in this book, wherever it's needed.}
+
 % chapters
 \input{patterns/01_helloworld/main}
 \input{patterns/015_prolog_epilogue/main}
