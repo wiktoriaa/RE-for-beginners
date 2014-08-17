@@ -1,0 +1,154 @@
+﻿\chapter{\EN{Task manager practical joke}\RU{Шутка с task manager} (Windows Vista)}
+
+\RU{У меня только 4 ядра в процессоре в компьютере, так что Task Manager в Windows показывает только 4
+графика загрузки процессора.}
+\EN{I have only 4 CPU cores on my computer, so the Windows Task Manager shows only 4 CPU load graphs.}
+
+\RU{Посмотрим, сможем ли мы немного хакнуть Task Manager, чтобы он находил больше ядер в компьютере.}
+\EN{Let's see if it's possible to hack Task Manager slightly so it would detect more CPU cores on a computer.}
+
+\RU{В начале задумаемся, откуда Task Manager знает количество ядер?}
+\EN{Let us first think, how Task Manager would know number of cores?}
+\RU{В win32 имеется ф-ция \TT{GetSystemInfo()}, при помощи которой можно узнать.}
+\EN{There are \TT{GetSystemInfo()} win32 function present in win32 userspace which can tell us this.}
+\RU{Но она не импортируется в}\EN{But it's not imported in} \TT{taskmgr.exe}.
+\RU{Есть еще одна в \gls{NTAPI}, \TT{NtQuerySystemInformation()}, которая используется в 
+\TT{taskmgr.exe} в ряде мест.}
+\EN{There are, however, another one in \gls{NTAPI}, \TT{NtQuerySystemInformation()}, 
+which is used in \TT{taskmgr.exe} in several places.}
+\RU{Чтобы узнать количество ядер, нужно вызвать эту ф-цию с константной \TT{SystemBasicInformation} в 
+первом аргументе (а это ноль}
+\EN{To get number of cores, one should call this function with \TT{SystemBasicInformation} constant 
+in first argument (which is zero}
+\footnote{MSDN: \url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms724509(v=vs.85).aspx}}).
+
+\RU{Второй аргумент должен указывать на буфер, который примет всю информацию.}
+\EN{Second argument should point to the buffer, which will receive all the information.}
+
+\RU{Так что нам нужно найти все вызовы ф-ции \TT{NtQuerySystemInformation(0, ?, ?, ?)}.}
+\EN{So we need to find all calls to the \TT{NtQuerySystemInformation(0, ?, ?, ?)} function.}
+\RU{Откроем}\EN{Let's open} \TT{taskmgr.exe} \InENRU IDA. 
+\RU{Что всегда хорошо с исполняемыми файлами от Microsoft, это то что IDA может скачать соответствующуий 
+\gls{PDB}-файл именно для этого файла и добавить все имена ф-ций.}
+\EN{What is always good about Microsoft executables is that IDA can download corresponding \gls{PDB} 
+file for exactly this executable and add all function names.}
+\RU{Видимо, Task Manager написан на C++ и некоторые ф-ции и классы имеют говорящие за себя имена.}
+\EN{It seems, Task Manager written in C++ and some of function names and classes are really 
+speaking for themselves.}
+\RU{Тут есть классы}\EN{There are classes} CAdapter, CNetPage, CPerfPage, CProcInfo, CProcPage, CSvcPage, 
+CTaskPage, CUserPage.
+\RU{Должно быть, каждый класс соответствует каждой вкладке в Task Manager.}
+\EN{Apparently, each class corresponding each tab in Task Manager.}
+
+\RU{Я прошелся по всем вызовам и добавил комментарий с числом, передающимся как первый аргумент.}
+\EN{I visited each call and I add comment with a value which is passed as the first function argument.}
+\RU{В некоторых местах я написал ``not zero'', потому что значение в тех местах однозначно не ноль, 
+но что-то другое (больше об этом во второй части главы).}
+\EN{There are ``not zero'' I wrote at some places, because, the value there was not clearly zero, 
+but something really different (more about this in the second part of this chapter).}
+\RU{А мы все-таки ищем ноль передаваемый как аргумент.}
+\EN{And we are looking for zero passed as argument after all.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{examples/taskmgr/IDA_xrefs.png}
+\caption{IDA: \RU{вызовы ф-ции}\EN{cross references to} NtQuerySystemInformation()}
+\end{figure}
+
+\RU{Да, имена действительно говорящие сами за себя.}
+\EN{Yes, the names are really speaking for themselves.}
+
+\RU{Когда я внимательно изучил каждое место, где вызывается \TT{NtQuerySystemInformation(0, ?, ?, ?)},
+я быстро нашел то что нужно в ф-ции \TT{InitPerfInfo()}:}
+\EN{When I closely investigating each place where \TT{NtQuerySystemInformation(0, ?, ?, ?)} is called,
+I quickly found what I need in the \TT{InitPerfInfo()} function:}
+
+\lstinputlisting[caption=taskmgr.exe (Windows Vista)]{examples/taskmgr/taskmgr.lst}
+
+\TT{g\_cProcessors} \RU{это глобальная переменная и это имя присвоено IDA в соответствии с \gls{PDB}-файлом,
+скачанным с сервера символов Microsoft}\EN{is a global variable, and this name was assigned by 
+IDA according to \gls{PDB} loaded from the Microsoft symbol server}.
+
+\RU{Байт берется из}\EN{The byte is taken from} \TT{var\_C20}. 
+\RU{И}\EN{And} \TT{var\_C58} \RU{передается в}\EN{is passed to} \TT{NtQuerySystemInformation()} 
+\RU{как указатель на принимающий буфер}\EN{as a pointer to the receiving buffer}.
+\RU{Разница между}\EN{The difference between} 0xC20 \AndENRU 0xC58 \RU{это}\EN{is} 0x38 (56).
+\RU{Посмотрим на формат структуры, который можно найти в MSDN:}
+\EN{Let's take a look at returning structure format, which we can find in MSDN:}
+
+\begin{lstlisting}
+typedef struct _SYSTEM_BASIC_INFORMATION {
+    BYTE Reserved1[24];
+    PVOID Reserved2[4];
+    CCHAR NumberOfProcessors;
+} SYSTEM_BASIC_INFORMATION;
+\end{lstlisting}
+
+\RU{Это система x64, так что каждый PVOID занимает здесь 8 байт.}
+\EN{This is x64 system, so each PVOID takes 8 byte here.}
+\RU{Так что все \IT{reserved}-поля занимают $24+4*8=56$.}
+\EN{So all \IT{reserved} fields in the structure takes $24+4*8=56$.}
+\RU{О да, это значит что }\EN{Oh yes, this means, }\TT{var\_C20} \RU{в локальном стеке это именно поле}\EN{is the 
+local stack is exactly} \TT{NumberOfProcessors} \RU{структуры}\EN{field of the} 
+\TT{SYSTEM\_BASIC\_INFORMATION}\EN{ structure}.
+
+\RU{Проверим, прав ли я}\EN{Let's check if I'm right}.
+\RU{Скопируем}\EN{Copy} \TT{taskmgr.exe} \RU{из}\EN{from} \TT{C:\textbackslash{}Windows\textbackslash{}System32} 
+\RU{в какую-нибудь другую папку}\EN{to some other folder} 
+(\RU{чтобы}\EN{so the} \IT{Windows Resource Protection} \RU{не пыталась восстанавливать измененный}\EN{will not 
+try to restore patched} \TT{taskmgr.exe}).
+
+\RU{Откроем его в Hiew и найдем это место:}
+\EN{Let's open it in Hiew and find the place:}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{examples/taskmgr/hiew1.png}
+\caption{Hiew: \RU{найдем это место}\EN{find the place to be patched}}
+\end{figure}
+
+\RU{Заменим инструкцию \TT{MOVZX} на нашу.}
+\EN{Let's replace \TT{MOVZX} instruction by our.}
+\RU{Сделаем вид что у нас 64 ядра процессора}\EN{Let's pretend we've got 64 CPU cores}.
+\RU{Добавим дополнительную инструкцию \ac{NOP} (потому что наша инструкция короче чем та что там сейчас):}
+\EN{Add one additional \ac{NOP} (because our instruction is shorter than original one):}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{examples/taskmgr/hiew1.png}
+\caption{Hiew: \RU{меняем инструкцию}\EN{patch it}}
+\end{figure}
+
+\RU{И это работает}\EN{And it works}!
+\RU{Конечно же, данные в графиках неправильные}\EN{Of course, data in graphs is not correct}.
+\RU{Иногда, Task Manager даже показывает общую загрузку CPU более 100\%.}
+\EN{At times, Task Manager even shows overall CPU load more than 100\%.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{examples/taskmgr/taskmgr_64cpu_crop.png}
+\caption{\RU{Обманутый}\EN{Fooled} Windows Task Manager}
+\end{figure}
+
+\RU{Я выбрал число 64, потому что Task Manager падает если установить б\'{о}льшее значение.}
+\EN{I picked number of 64, because Task Manager is crashing if you try to set larger value.}
+\RU{Должно быть, Task Manager в Windows Vista не тестировался на компьютерах с большим количеством ядер.}
+\EN{Apparently, Task Manager in Windows Vista was not tested on computer with larger count of cores.}
+\RU{И наверное там есть внутри какие-то статичные структуры данных, ограниченные до 64-х ядер.}
+\EN{So there are probably some static data structures inside it limited to 64 cores.}
+
+\section{\RU{Использование LEA для загрузки значений}\EN{Using LEA to load values}}
+
+\RU{Иногда, \TT{LEA} используется в \TT{taskmgr.exe} вместо \TT{MOV} для установки первого аргумента 
+\TT{NtQuerySystemInformation()}:}
+\EN{Sometimes, \TT{LEA} is used in \TT{taskmgr.exe} instead of \TT{MOV} to set first argument of 
+\TT{NtQuerySystemInformation()}:}
+
+\lstinputlisting[caption=taskmgr.exe (Windows Vista)]{examples/taskmgr/taskmgr2.lst}
+
+\RU{Честно говоря, я не знаю почему, но \ac{MSVC} часто так делает.}
+\EN{I honestly, don't know why, but that is what \ac{MSVC} often does.}
+\RU{Может быть, это какая-то оптимизация и \TT{LEA} работает быстрее или лучше чем загрузка значения 
+используя \TT{MOV}?}
+\EN{Maybe this some kind of optiization and \TT{LEA} works faster or better than load 
+value using \TT{MOV}?}
