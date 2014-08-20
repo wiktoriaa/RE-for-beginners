@@ -69,7 +69,7 @@ but network engineers use more compact notation (\ac{CIDR}), like /8, /16 or lik
 \RU{она просто умножает (логически, используя \ANDIns) адрес хоста на сетевую маску, в итоге давая адрес
 сети.}
 
-\lstinputlisting[caption=MSVC 2012 /Ox /Ob0,numbers=left]
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,numbers=left]
 {patterns/14_bitfields/5_netmask/calc_network_address_MSVC_2012_Ox.asm}
 
 \EN{At line 22 we see most important \ANDIns --- here is network address is calculated.}
@@ -128,7 +128,7 @@ value in form \TT{0xddccbbaa}.}
 \EN{And that's how it's done by non-optimizing MSVC 2012:}
 \RU{И вот как работает неоптимизирующий MSVC 2012:}
 
-\lstinputlisting[caption=MSVC 2012]{patterns/14_bitfields/5_netmask/form_IP_MSVC_2012.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2012]{patterns/14_bitfields/5_netmask/form_IP_MSVC_2012.asm}
 
 \EN{Well, order is different, but, of course, order of operations doesn't matters.}
 \RU{Хотя, порядок операций другой, но, конечно, порядок роли не играет.}
@@ -136,7 +136,7 @@ value in form \TT{0xddccbbaa}.}
 \Optimizing MSVC 2012 \EN{does essentially the same, but in different way}\RU{делает то же самое,
 но немного иначе}:
 
-\lstinputlisting[caption=MSVC 2012 /Ox /Ob0]{patterns/14_bitfields/5_netmask/form_IP_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0]{patterns/14_bitfields/5_netmask/form_IP_MSVC_2012_Ox.asm}
 
 \EN{We could say, each byte is written to the lowest 8 bits of returning value, 
 and then returning value is shifting by one byte left at each step.}
@@ -163,12 +163,12 @@ bits from zeroth to seventh (lowest byte), and that's it:}
 \RU{Расщепление работает немного проще: просто сдвигайте входное значение на 24, 16, 8 или 0 бит,
 берите биты с нулевого по седьмой (младший байт), вот и всё:}
 
-\lstinputlisting[caption=MSVC 2012]{patterns/14_bitfields/5_netmask/print_as_IP_MSVC_2012.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2012]{patterns/14_bitfields/5_netmask/print_as_IP_MSVC_2012.asm}
 
 \Optimizing MSVC 2012 \EN{does almost the same, but without unnecessary input value reloads:}
 \RU{делает почти всё то же самое, только без ненужных перезагрузок входного значения:}
 
-\lstinputlisting[caption=MSVC 2012 /Ox /Ob0]{patterns/14_bitfields/5_netmask/print_as_IP_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0]{patterns/14_bitfields/5_netmask/print_as_IP_MSVC_2012_Ox.asm}
 
 \subsection{form\_netmask() \AndENRU set\_bit()}
 
@@ -184,7 +184,7 @@ for such primitive operation, but it would be easy to understand how all it work
 \RU{Не очень хорошая идея выделять отдельную ф-цию для такой примитивной операции, но так будет проще понять,
 как это всё работает.}
 
-\lstinputlisting[caption=MSVC 2012 /Ox /Ob0]{patterns/14_bitfields/5_netmask/form_netmask_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0]{patterns/14_bitfields/5_netmask/form_netmask_MSVC_2012_Ox.asm}
 
 \TT{set\_bit()} \RU{примитивна: просто сдвигает единицу на нужное количество бит, затем складывает (логически) с
 входным значением ``input''}\EN{is primitive: just shift 1 to number of bits we need and then 

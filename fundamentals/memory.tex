@@ -32,6 +32,7 @@ globally.}
 pointer to variable to the function to be executed).}
 \RU{Выделение и освобождение очень быстрое, достаточно просто сдвига \ac{SP}.}
 \EN{Allocation and deallocation are very fast, \ac{SP} only needs to be shifted.}
+\index{\CStandardLibrary!alloca()}
 \EN{But also not convenient for buffers/arrays, because buffer size should be fixed at some length,
 unless \TT{alloca()} (\ref{alloca}) (or variable-length array) is used.}
 \RU{Но так же не удобно для буферов/массивов, потому что размер буфера фиксирован,
@@ -39,12 +40,15 @@ unless \TT{alloca()} (\ref{alloca}) (or variable-length array) is used.}
 \RU{Переполнение буфера обычно перезаписывает важные структуры стека}\EN{Buffer overflow usually 
 overwrites important stack structures}: \ref{subsec:bufferoverflow}.
 
+\index{\CStandardLibrary!malloc()}
+\index{\CStandardLibrary!free()}
 \item \RU{Куча (\IT{heap}}\EN{Heap}. 
 \ac{AKA} ``dynamic memory allocation''.
 \RU{Выделение происходит при помощи вызова}\EN{Allocation is done by calling} 
 \TT{malloc()/free()} \OrENRU \TT{new/delete} \InENRU \Cpp.
 \RU{Самый удобный метод: размер блока может быть задан во время исполнения}\EN{Most convenient 
 method: block size may be set in runtime}.
+\index{\CStandardLibrary!realloc()}
 \RU{Изменение размера возможно (при помощи \TT{realloc()}), но может быть медленным.}
 \EN{Resizing is possible  (using \TT{realloc()}), but may be slow.}
 \RU{Это самый медленный метод выделения памяти: аллокатор памяти должен поддерживать и обновлять
@@ -58,6 +62,7 @@ overwrites these structures}.
 явно освобожден, но кто-то может забыть об этом, или делать это неправильно.}
 \EN{Heap allocations is also source of memory leak problem: each memory block should be deallocated
 explicitly, but one may forgot about it, or do it incorrectly.}
+\index{\CStandardLibrary!free()}
 \RU{Еще одна проблема это ``использовать после освобождения'' --- использовать блок памяти после
 того как \TT{free()} был вызван на нем, это тоже очень опасно.}
 \EN{Another problem is ``use after free''---using a memory block after \TT{free()} was called on it,

@@ -62,9 +62,11 @@ get_month2:
 \end{lstlisting}
 
 \NonOptimizing MSVC just use IMUL instruction:
+\index{x86!\Instructions!IMUL}
 
 \lstinputlisting[caption=\NonOptimizing MSVC 2013 x64]{patterns/13_arrays/55_month_2D/MSVC2013_x64.asm}
 
+\index{\CompilerAnomaly}
 \dots but one thing is weird here: why to add multiplication by zero and adding zero to the final result?
 I don't know, this looks like compiler code generator quirk, which wasn't catched by compiler's tests
 (resulting code is correct after all).
@@ -117,6 +119,8 @@ Optimizing Keil for ARM mode use add and shift operations:
 	ret
 \end{lstlisting}
 
+\index{ARM!\Instructions!SXTW}
+\index{ARM!\Instructions!ADRP/ADD pair}
 SXTW is used for sign-extension and promoting input 32-bit value into 64-bit one and storing into X0.
 ADRP/ADD pair is used for loading address of the table.
 ADD instructions also has LSL suffix, which helps with multiplications.

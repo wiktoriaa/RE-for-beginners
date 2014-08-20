@@ -10,7 +10,7 @@
 
 \lstinputlisting{patterns/185_64bit_in_32_env/1.c}
 
-\lstinputlisting[caption=MSVC 2012 /Ox /Ob1]{patterns/185_64bit_in_32_env/1_MSVC.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob1]{patterns/185_64bit_in_32_env/1_MSVC.asm}
 
 \RU{В}\EN{We may see in the} \TT{f1\_test()} \RU{видно как каждое 64-битное число передается двумя 32-битными значениями,
 сначала старшая часть, затем младшая}\EN{function as each 64-bit value is passed by two 32-bit values,
@@ -44,7 +44,7 @@ from the result}. \\
 
 \lstinputlisting{patterns/185_64bit_in_32_env/2.c}
 
-\lstinputlisting[caption=MSVC 2012 /Ox /Ob1]{patterns/185_64bit_in_32_env/2_MSVC.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob1]{patterns/185_64bit_in_32_env/2_MSVC.asm}
 
 \RU{Умножение и деление это более сложная операция, так что обычно, компилятор встраивает вызовы библиотечных ф-ций,
 делающих это}\EN{Multiplication and division is more complex operation, so usually, the compiler embedds calls to
@@ -52,7 +52,7 @@ the library functions doing that}. \\
 \\
 \RU{Значение этих библиотечных ф-ций, здесь}\EN{These functions meaning are here}: \ref{sec:MSVC_library_func}.
 
-\lstinputlisting[caption=GCC 4.8.1 \Othree -fno-inline]{patterns/185_64bit_in_32_env/2_GCC.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline]{patterns/185_64bit_in_32_env/2_GCC.asm}
 
 \RU{GCC делает почти то же самое, тем не менее,
 встраивает код умножения прямо в ф-цию, посчитав что так будет эффективнее}\EN{GCC doing almost the same, but multiplication
@@ -63,9 +63,9 @@ code is inlined right in the function, thinking it could be more efficient}.
 
 \lstinputlisting{patterns/185_64bit_in_32_env/3.c}
 
-\lstinputlisting[caption=MSVC 2012 /Ox /Ob1]{patterns/185_64bit_in_32_env/3_MSVC.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob1]{patterns/185_64bit_in_32_env/3_MSVC.asm}
 
-\lstinputlisting[caption=GCC 4.8.1 \Othree -fno-inline]{patterns/185_64bit_in_32_env/3_GCC.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline]{patterns/185_64bit_in_32_env/3_GCC.asm}
 
 \index{x86!\Instructions!SHRD}
 \RU{Сдвиг происходит также в две операции: в начале сдвигается младшая часть, затем старшая}
@@ -83,7 +83,7 @@ should be just filled with zeroes}.
 
 \lstinputlisting{patterns/185_64bit_in_32_env/4.c}
 
-\lstinputlisting[caption=MSVC 2012 /Ox /Ob1]{patterns/185_64bit_in_32_env/4_MSVC.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob1]{patterns/185_64bit_in_32_env/4_MSVC.asm}
 
 \RU{Здесь появляется необходимость расширить 32-битное знаковое значение из $c$ в 64-битное знаковое}
 \EN{Here we also run into necessity to extend 32-bit signed value from $c$ into 64-bit signed}.
@@ -102,7 +102,7 @@ most significant bit in \EAX{}), and depending of it, setting all 32-bits in \ED
 \RU{Её работа в каком-то смысле напоминает работу инструкции \MOVSX{}}\EN{Its operation is somewhat
 similar to the \MOVSX{} instruction}.
 
-\lstinputlisting[caption=GCC 4.8.1 \Othree -fno-inline]{patterns/185_64bit_in_32_env/4_GCC.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline]{patterns/185_64bit_in_32_env/4_GCC.asm}
 
 \RU{GCC генерирует такой же код как и MSVC, но обходится без вызова библиотечной ф-ции для перемножения значений.}
 \EN{GCC generates just the same code as MSVC, but inlines multiplication code right in the function.}

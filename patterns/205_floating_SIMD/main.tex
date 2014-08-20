@@ -30,7 +30,7 @@ for x86-64) usually uses \ac{SIMD}-instructions instead of FPU ones.}
 
 \subsection{x64}
 
-\lstinputlisting[caption=MSVC 2012 x64 /Ox]{patterns/205_floating_SIMD/simple_MSVC_2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/simple_MSVC_2012_x64_Ox.asm}
 
 \RU{Собственно, входные значения с плавающей запятой передаются через регистры \XMM{0}-\XMM{3}, 
 а остальные --- через стек}\EN{Input floating point values are passed in \XMM{0}-\XMM{3} registers,
@@ -78,9 +78,9 @@ one value of \Tdouble type by another, stored in the lower halves of operands}.
 SSE2-инструкции:}\EN{I also compiled this example for x86. Despite the fact of generating for x86, 
 MSVC 2012 use SSE2-instructions:}
 
-\lstinputlisting[caption=MSVC 2012 x86]{patterns/205_floating_SIMD/simple_MSVC_2012_x86.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2012 x86]{patterns/205_floating_SIMD/simple_MSVC_2012_x86.asm}
 
-\lstinputlisting[caption=MSVC 2012 x86 /Ox]{patterns/205_floating_SIMD/simple_MSVC_2012_x86_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x86]{patterns/205_floating_SIMD/simple_MSVC_2012_x86_Ox.asm}
 
 \RU{Код почти такой же, правда есть пара отличий связанных с соглашениями о вызовах:}
 \EN{It's almost the same code, however, there are couple differences related to calling conventions:}
@@ -155,7 +155,7 @@ in} \XMM{0}}
 \RU{Они передаются в младших половинах регистров}\EN{They are passed in lower halves
 of the} \XMM{0}-\XMM{3}\EN{ registers}.
 
-\lstinputlisting[caption=MSVC 2012 x64 /Ox]{patterns/205_floating_SIMD/pow_MSVC_2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/pow_MSVC_2012_x64_Ox.asm}
 
 \index{x86!\Instructions!MOVSD}
 \index{x86!\Instructions!MOVSDX}
@@ -177,7 +177,7 @@ lower half of XMM-register}.
 \RU{Честно говоря, не знаю, может быть, это потому что}\EN{Honestly speaking, I don't know, maybe because} 
 \printf\EMDASH{}\RU{ф-ция с переменным количеством аргументов}\EN{is a variable arguments function}?
 
-\lstinputlisting[caption=GCC 4.4.6 x64 \Othree]{patterns/205_floating_SIMD/pow_GCC446_x64_O3_\LANG.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/205_floating_SIMD/pow_GCC446_x64_O3_\LANG.s}
 
 GCC \RU{работает понятнее}\EN{making more clear result}. 
 \RU{Значение для}\EN{Value for} \printf \RU{передается в}\EN{is passed in} \XMM{0}. 
@@ -192,7 +192,7 @@ just as the standard requires} \cite{SysVABI}.
 
 \subsection{x64}
 
-\lstinputlisting[caption=MSVC 2012 x64 /Ox]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64_Ox.asm}
 
 \Optimizing MSVC \RU{генерирует очень понятный код}\EN{generates very easy code to understand}.
 
@@ -211,14 +211,14 @@ but it is still not hard to understand}:
 Double-Precision  Floating-Point Value'')\RU{, которая просто выбирает максимальное значение}\EN{ instruction,
 which just choose maximal value}!
 
-\lstinputlisting[caption=GCC 4.4.6 x64 \Othree]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
 
 \subsection{x86}
 
 \RU{Скомпилируем этот пример в MSVC 2012 с включенной оптимизацией:}
 \EN{Let's compile this example in MSVC 2012 with optimization turned on:}
 
-\lstinputlisting[caption=MSVC 2012 x86 /Ox]{patterns/205_floating_SIMD/d_max_MSVC_2012_x86_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x86]{patterns/205_floating_SIMD/d_max_MSVC_2012_x86_Ox.asm}
 
 \RU{Всё то же самое, только значения}\EN{Almost the same, but values of} $a$ \AndENRU $b$ 
 \RU{берутся из стека, а результат функции оставляется в}\EN{are taked from stack and function result 

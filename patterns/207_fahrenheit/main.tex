@@ -14,6 +14,7 @@ programming books for beginners, is a small program converting Fahrenheit temper
 уроков физики, ниже абсолютного ноля)}\EN{we should check if Celsius temperature is not below $-273$ number 
 (which is below absolute zero, as we may remember from school physics lessons)}.
 
+\index{\CStandardLibrary!exit()}
 \RU{Ф-ция }\TT{exit()} \RU{заканчивает программу тут же, без возврата в вызывающую ф-цию}\EN{function terminates 
 program instantly, without returning to the \gls{caller} function}.
 
@@ -21,9 +22,9 @@ program instantly, without returning to the \gls{caller} function}.
 
 \lstinputlisting{patterns/207_fahrenheit/i.c}
 
-\subsection{MSVC 2012 x86 /Ox}
+\subsection{\Optimizing MSVC 2012 x86}
 
-\lstinputlisting[caption=MSVC 2012 x86 /Ox]{patterns/207_fahrenheit/i_MSVC_2012_Ox_x86.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x86]{patterns/207_fahrenheit/i_MSVC_2012_Ox_x86.asm}
 
 \RU{Что мы можем сказать об этом}\EN{What we can say about it}:
 
@@ -42,6 +43,7 @@ $EAX=EAX+(-32)$ \RU{эквивалентно}\EN{is equivalent to} $EAX=EAX-32$ 
 \EN{and somehow, compiler decide to use} \TT{ADD} \RU{вместо}\EN{instead of} \TT{SUB}.
 \RU{Может быть оно того стоит}\EN{Maybe it's worth it}.
 
+\index{x86!\Instructions!LEA}
 \item \RU{Инструкция }\LEA \RU{используются там где нужно умножить значение на}\EN{instruction is used when 
 value should be multiplied by} 5: \TT{lea ecx, DWORD PTR [eax+eax*4]}.
 \RU{Да}\EN{Yes}, $i+i*4$ \RU{эквивалентно}\EN{is equivalent to} $i*5$ \AndENRU \LEA \RU{работает быстрее чем}
@@ -63,7 +65,7 @@ some compilers do it in this way}.
 but maybe partly it does}?
 \end{itemize}
 
-\subsection{MSVC 2012 x64 /Ox}
+\subsection{\Optimizing MSVC 2012 x64}
 
 \RU{Код почти такой же, хотя я заметил инструкцию}\EN{The code is almost the same, but I've found} 
 \TT{INT 3} \RU{после каждого вызова}\EN{instructions after each} \TT{exit()}\EN{ call}:
@@ -88,12 +90,12 @@ but maybe partly it does}?
 
 MSVC 2010 x86 \RU{использует инструкции}\EN{use} \ac{FPU}\EN{ instructions}...
 
-\lstinputlisting[caption=MSVC 2010 x86 /Ox]{patterns/207_fahrenheit/f_MSVC_2010_x86_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010 x86]{patterns/207_fahrenheit/f_MSVC_2010_x86_Ox.asm}
 
-... \RU{но}\EN{but} MSVC \RU{от года}\EN{from year} 2012 \RU{использует инструкции}\EN{use} \ac{SIMD} 
+\dots \RU{но}\EN{but} MSVC \RU{от года}\EN{from year} 2012 \RU{использует инструкции}\EN{use} \ac{SIMD} 
 \RU{вместо этого}\EN{instructions instead}:
 
-\lstinputlisting[caption=MSVC 2010 x86 /Ox]{patterns/207_fahrenheit/f_MSVC_2012_x86_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010 x86]{patterns/207_fahrenheit/f_MSVC_2012_x86_Ox.asm}
 
 \RU{Конечно}\EN{Of course}, \ac{SIMD}\RU{-инструкции доступны и в x86-режиме, включая те что работают
 с числами с плавающей запятой}\EN{ instructions are available in x86 mode, 

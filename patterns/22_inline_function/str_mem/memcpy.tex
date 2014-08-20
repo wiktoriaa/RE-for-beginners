@@ -1,17 +1,19 @@
 \subsection{memcpy()}
+\index{\CStandardLibrary!memcpy()}
 
 \subsubsection{\RU{Короткие блоки}\EN{Short blocks}}
 \label{copying_short_blocks}
 
+\index{x86!\Instructions!MOV}
 \RU{Если нужно скопировать немного байт, то, нередко, 
 \TT{memcpy()} заменяется на несколько инструкций \MOV.}
 \EN{Short block copy routine is often implemented as pack of \MOV instructions.}
 
 \lstinputlisting[caption=\RU{пример с memcpy()}\EN{memcpy() example}]{patterns/22_inline_function/str_mem/memcpy_7.c}
 
-\lstinputlisting[caption=MSVC 2010 /Ox]{patterns/22_inline_function/str_mem/memcpy_7_MSVC_2010_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/22_inline_function/str_mem/memcpy_7_MSVC_2010_Ox.asm}
 
-\lstinputlisting[caption=GCC 4.8.1 \Othree]{patterns/22_inline_function/str_mem/memcpy_7_GCC_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.8.1]{patterns/22_inline_function/str_mem/memcpy_7_GCC_O3.s}
 
 \RU{Обынчо это происходит так: в начале копируются 4-байтные блоки, затем 16-битное слово (если нужно), 
 затем последний байт (если нужно).}
@@ -31,11 +33,12 @@ then the last byte (if needed).}
 
 \lstinputlisting[caption=\RU{пример с memcpy()}\EN{memcpy() example}]{patterns/22_inline_function/str_mem/memcpy.c}
 
+\index{x86!\Instructions!MOVSD}
 \RU{При копировании 128 байт, MSVC может обойтись одной инструкцией \TT{MOVSD} (ведь 128 кратно 4):}
 \EN{While copying 128 bytes, MSVC can do this with single \TT{MOVSD} instruction (because 128 
 divides evenly by 4):}
 
-\lstinputlisting[caption=MSVC 2010 /Ox]{patterns/22_inline_function/str_mem/memcpy_128_MSVC_2010_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/22_inline_function/str_mem/memcpy_128_MSVC_2010_Ox.asm}
 
 \RU{При копировании 123-х байт, в начале копируется 30 32-битных слов при помощи \TT{MOVSD} 
 (это 120 байт), 
@@ -46,12 +49,12 @@ divides evenly by 4):}
 then 2 bytes are copied using \TT{MOVSW}, 
 then one more byte using \TT{MOVSB}.}
 
-\lstinputlisting[caption=MSVC 2010 /Ox]{patterns/22_inline_function/str_mem/memcpy_123_MSVC_2010_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/22_inline_function/str_mem/memcpy_123_MSVC_2010_Ox.asm}
 
 \RU{GCC во всех случаях вставляет большую универсальную ф-цию, работающую для всех размеров блоков:}
 \EN{GCC uses one big universal functions, working for any block size:}
 
-\lstinputlisting[caption=GCC 4.8.1 \Othree]{patterns/22_inline_function/str_mem/memcpy_GCC.s}
+\lstinputlisting[caption=\Optimizing GCC 4.8.1]{patterns/22_inline_function/str_mem/memcpy_GCC.s}
 
 \RU{Универсальные ф-ции копирования блоков обычно работают по следующей схеме: 
 вычислить, сколько 32-битных слов
@@ -60,5 +63,7 @@ then one more byte using \TT{MOVSB}.}
 calculate, how many 32-bit words can be copied, then copy then by \TT{MOVSD}, then copy
 remaining bytes.}
 
-\RU{Более сложные ф-ции копирования используют \ac{SIMD} и учитывают выравнивание.}
-\EN{More complex copy functions uses \ac{SIMD} instructions and take aligning into consideration.}
+\index{SIMD}
+\RU{Более сложные ф-ции копирования используют \ac{SIMD} и учитывают выравнивание в памяти.}
+\EN{More complex copy functions uses \ac{SIMD} instructions and also take memory aligning 
+into consideration.}

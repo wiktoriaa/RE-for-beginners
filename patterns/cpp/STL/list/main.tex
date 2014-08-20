@@ -16,17 +16,17 @@ bytes in 64-bit)}.
 \EN{This is also a circular list, meaning that the last element has a pointer to the first and 
 vice versa: first element has a pointer to the last one}.
 
-\RU{C++ STL просто добавляет указатели ``next'' и ``previous'' к той вашей структуре, которую вы желаете
+\RU{STL в \Cpp просто добавляет указатели ``next'' и ``previous'' к той вашей структуре, которую вы желаете
 объединить в список}
-\EN{C++ STL just append ``next'' and ``previous'' pointers to your existing structure you wish to 
+\EN{\Cpp STL just append ``next'' and ``previous'' pointers to your existing structure you wish to 
 unite into a list}.
 
 \RU{Попробуем разобраться с примером в котором простая структура из двух переменных, мы объеденим её в список}
 \EN{Let's work out an example with a simple 2-variable structure we want to store in the list}.
 
-\RU{Хотя и стандарт Си++ \cite{CPP11} не предлагает, как он должен быть реализован, реализации
+\RU{Хотя и стандарт \Cpp \cite{CPP11} не предлагает, как он должен быть реализован, реализации
 MSVC и GCC прямолинейны и похожи друг на друга, так что этот исходный код для обоих}
-\EN{Although standard C++ standard \cite{CPP11} does not offer how to implement it, 
+\EN{Although \Cpp standard \cite{CPP11} does not offer how to implement it, 
 MSVC and GCC implementations are straightforward and similar to each other, so here is only one
 source code for both}:
 
@@ -140,7 +140,7 @@ it should traverse the whole list counting elements, because it doesn't have any
 \RU{Это означает что эта операция $O(n)$, т.е., она работает тем медленнее, чем больше элементов в списке}
 \EN{This mean this operation is $O(n)$, i.e., it is as slow, as how many elements present in the list}.
 
-\lstinputlisting[caption=GCC 4.8.1 \Othree -fno-inline-small-functions]{patterns/cpp/STL/list/GCC.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline-small-functions]{patterns/cpp/STL/list/GCC.asm}
 
 \lstinputlisting[caption=\RU{Весь вывод}\EN{The whole output}]{patterns/cpp/STL/list/GCC.txt}
 
@@ -162,7 +162,7 @@ it should traverse the whole list counting elements, because it doesn't have any
 \RU{У GCC его элемент с ``мусором'' в самом конце списка, а у MSVC в самом начале}
 \EN{GCC has its ``garbage'' element at the end of the list, while MSVC at the beginning of it}.
 
-\lstinputlisting[caption=MSVC 2012 /Fa2.asm /Ox /GS- /Ob1]{patterns/cpp/STL/list/MSVC.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Fa2.asm /GS- /Ob1]{patterns/cpp/STL/list/MSVC.asm}
 
 \RU{В отличие от GCC, код MSVC выделяет элемент с ``мусором'' в самом начале ф-ции при помощи
 ф-ции ``Buynode'', она также используется и во время выделения остальных элементов}

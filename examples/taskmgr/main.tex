@@ -1,4 +1,5 @@
 ﻿\chapter{\EN{Task manager practical joke}\RU{Шутка с task manager} (Windows Vista)}
+\index{Windows!Windows Vista}
 
 \RU{У меня только 4 ядра в процессоре в компьютере, так что Task Manager в Windows показывает только 4
 графика загрузки процессора.}
@@ -7,6 +8,7 @@
 \RU{Посмотрим, сможем ли мы немного хакнуть Task Manager, чтобы он находил больше ядер в компьютере.}
 \EN{Let's see if it's possible to hack Task Manager slightly so it would detect more CPU cores on a computer.}
 
+\index{Windows!NTAPI}
 \RU{В начале задумаемся, откуда Task Manager знает количество ядер?}
 \EN{Let us first think, how Task Manager would know number of cores?}
 \RU{В win32 имеется ф-ция \TT{GetSystemInfo()}, при помощи которой можно узнать.}
@@ -28,12 +30,13 @@ in first argument (which is zero}
 \RU{Так что нам нужно найти все вызовы ф-ции \TT{NtQuerySystemInformation(0, ?, ?, ?)}.}
 \EN{So we need to find all calls to the \TT{NtQuerySystemInformation(0, ?, ?, ?)} function.}
 \RU{Откроем}\EN{Let's open} \TT{taskmgr.exe} \InENRU IDA. 
+\index{Windows!PDB}
 \RU{Что всегда хорошо с исполняемыми файлами от Microsoft, это то что IDA может скачать соответствующуий 
 \gls{PDB}-файл именно для этого файла и добавить все имена ф-ций.}
 \EN{What is always good about Microsoft executables is that IDA can download corresponding \gls{PDB} 
 file for exactly this executable and add all function names.}
-\RU{Видимо, Task Manager написан на C++ и некоторые ф-ции и классы имеют говорящие за себя имена.}
-\EN{It seems, Task Manager written in C++ and some of function names and classes are really 
+\RU{Видимо, Task Manager написан на \Cpp и некоторые ф-ции и классы имеют говорящие за себя имена.}
+\EN{It seems, Task Manager written in \Cpp and some of function names and classes are really 
 speaking for themselves.}
 \RU{Тут есть классы}\EN{There are classes} CAdapter, CNetPage, CPerfPage, CProcInfo, CProcPage, CSvcPage, 
 CTaskPage, CUserPage.
@@ -146,6 +149,7 @@ try to restore patched} \TT{taskmgr.exe}).
 
 \lstinputlisting[caption=taskmgr.exe (Windows Vista)]{examples/taskmgr/taskmgr2.lst}
 
+\index{x86!\Instructions!LEA}
 \RU{Честно говоря, я не знаю почему, но \ac{MSVC} часто так делает.}
 \EN{I honestly, don't know why, but that is what \ac{MSVC} often does.}
 \RU{Может быть, это какая-то оптимизация и \TT{LEA} работает быстрее или лучше чем загрузка значения 

@@ -151,7 +151,7 @@ int __fastcall f3 (int a, int b, int c)
 
 \RU{Вот как он будет скомпилирован}\EN{Here is how it will be compiled}:
 
-\lstinputlisting[caption=MSVC 2010 /Ox /Ob0]{OS/calling_conventions/fastcall_ex.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010 /Ob0]{OS/calling_conventions/fastcall_ex.asm}
 
 \RU{Видно что \glslink{callee}{вызываемая ф-ция} сама возвращает}
 \EN{We see that a \gls{callee} returns} \ac{SP} 
@@ -195,8 +195,8 @@ those having other calling convention}.
 \section{thiscall}
 \index{thiscall}
 
-\RU{В С++, это передача в функцию-метод указателя \ITthis на объект.}
-\EN{In C++, it is a \ITthis pointer to object passing into function-method.}
+\RU{В \Cpp, это передача в функцию-метод указателя \ITthis на объект.}
+\EN{In \Cpp, it is a \ITthis pointer to object passing into function-method.}
 
 \RU{В MSVC указатель \ITthis обычно передается в регистре \ECX.}
 \EN{In MSVC, \ITthis is usually passed in the \ECX register.}
@@ -256,13 +256,14 @@ which will otherwise be occupied by arguments until function execution end}.
 \RU{Выделение ``scratch space'' в стеке лежит на ответственности вызывающей ф-ции}
 \EN{The ``scratch space'' allocation in the stack is on the caller's shoulders}.
 
-\lstinputlisting[caption=MSVC 2012 /Ox /0b]{OS/calling_conventions/x64_MSVC_Ox_Ob.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /0b]{OS/calling_conventions/x64_MSVC_Ox_Ob.asm}
 
 \RU{Если компилировать этот пример с оптимизацией, то выйдет почти то же самое, только ``scratch space''
 не используется, потому что незачем}
 \EN{If to compile the example with optimization switch, it is almost the same, but ``scratch space''
 is not used, because no need to}.
 
+\index{x86!\Instructions!LEA}
 \RU{Обратите также внимание на то как MSVC 2012 оптимизирует примитивную загрузку значений в регистры
 используя \LEA (\ref{sec:LEA})}
 \EN{Also take a look on how MSVC 2012 optimizes primitive value loads into registers by using 
@@ -286,7 +287,7 @@ used instead of 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}) and there are no ``
 but \gls{callee}
 may save register values in the stack, if it needs to}.
 
-\lstinputlisting[caption=GCC 4.7.3 \Othree]{OS/calling_conventions/x64_linux_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.7.3]{OS/calling_conventions/x64_linux_O3.s}
 
 \RU{N.B.: здесь значения записываются в 32-битные части регистров (например EAX) а не в весь 64-битный
 регистр (RAX).

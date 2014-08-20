@@ -15,6 +15,7 @@ The code is very simple.
 \begin{itemize}
 
 \item
+\index{x86!\Instructions!MOVSXD}
 The first MOVSXD instruction copies 32-bit value from ECX (where $month$ argument is passed) 
 to RAX with sign-extension (because $month$ argument has \Tint type).
 The reason of extension laying in the fact that this 32-bit value will be used in calculation among
@@ -69,6 +70,7 @@ And it's multiplied by 4, because table elements has width of 32-bit or 4 bytes.
 \lstinputlisting[caption=\OptimizingKeilVI + \ARMMode]{patterns/13_arrays/45_month_1D/month1_Keil_ARM_O3.s}
 
 Table address is loaded into R1.
+\index{ARM!\Instructions!LDR}
 All the rest is done using only one LDR instruction.
 Then input $month$ value is shifted left by 2 (which is the same as multiplying by 4), this value added
 to R1 (where address of table is) and then a value is loaded at this address.
@@ -91,6 +93,7 @@ get_month1 PROC
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 ARM64]{patterns/13_arrays/45_month_1D/month1_GCC49_ARM64_O3.s}
 
+\index{ARM!\Instructions!ADRP/ADD pair}
 Table address is loaded into X1 using ADRP/ADD pair.
 Then corresponding element is picked using only one instruction LDR, which takes W0 
 (register where input $month$ argument is), shifts it 3 bits left (which is the same as multiplying by 8), 
@@ -132,6 +135,7 @@ an argument larger than 11.
 There are also a good philisophy ``fail early and fail loudly'' or ``fail-fast'', which teaches to report
 problems as early as possible and stop.
 
+\index{\CStandardLibrary!assert()}
 One of such methods in \CCpp is assertions.
 We can modify our program to fail if incorrect value is passed:
 

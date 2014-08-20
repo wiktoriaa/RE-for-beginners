@@ -1,5 +1,6 @@
 \chapter{\RU{Условный оператор}\EN{Conditional operator}}
 \label{chap:cond}
+% FIXME: should be in 07_jcc folder...
 
 \RU{Условный оператор (conditional operator) в}\EN{Conditional operator in} \CCpp \RU{это}\EN{is}:
 
@@ -25,12 +26,14 @@ expression ? expression : expression
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/075_cond_operator/MSVC2012_Ox_x64.asm}
 
+\index{x86!\Instructions!CMOVcc}
 \Optimizing GCC 4.8 \ForENRU x86 \RU{также использует инструкцию}\EN{also use} \TT{CMOVcc}\RU{, тогда как
 неоптимизирующий GCC 4.8 использует условные переходы}\EN{ instruction, while non-optimizing GCC 4.8 use 
 conditional jumps}.
 
 \section{ARM}
 
+\index{x86!\Instructions!ADRcc}
 \Optimizing Keil \ForENRU \RU{режима ARM также использует инструкцию \TT{ADRcc}, срабатывающую при некотором
 условии}\EN{ARM mode also use conditional instructions \TT{ADRcc}}:
 
@@ -57,6 +60,7 @@ supporting conditional flags}:
 \EN{That's because ARM64 hasn't simple load instruction with conditional flags, like \TT{ADRcc} in 32-bit 
 ARM mode or CMOVcc in x86}
 \cite[p390, C5.5]{ARM64ref}.
+\index{ARM!\Instructions!CSEL}
 \RU{Но с другой стороны, там есть инструкция \TT{CSEL} (``Conditional SELect''), но GCC 4.9 наверное пока не так
 хорош, чтобы генерировать её в таком фрагменте кода.}
 \EN{It has, however, ``Conditional SELect'' instruction (\TT{CSEL}), but GCC 4.9 is probably not that good to 
@@ -66,6 +70,7 @@ generate it in such piece of code.}
 
 \lstinputlisting{patterns/075_cond_operator/cond2.c}
 
+\index{x86!\Instructions!CMOVcc}
 \RU{Интересно, оптимизирующий GCC 4.8 для x86 также может генерировать \TT{CMOVcc} в этом случае:}
 \EN{Interestingly, optimizing GCC 4.8 for x86 also was able to generate \TT{CMOVcc} in this case:}
 

@@ -1,13 +1,13 @@
 \subsection{\RU{Забудем на время о MSVC}\EN{Let's forget about MSVC}}
 
-\RU{\ac{SEH} в Windows предназначен для обработки исключений, тем не менее, с Си++ и \ac{OOP} он никак не связан}
+\RU{\ac{SEH} в Windows предназначен для обработки исключений, тем не менее, с \Cpp и \ac{OOP} он никак не связан}
 \EN{In Windows, \ac{SEH} is intended for exceptions handling, nevertheless, it is language-agnostic,
-it is not connected to the C++ or \ac{OOP} in any way}.
+it is not connected to the \Cpp or \ac{OOP} in any way}.
 \RU{Здесь мы рассмотрим \ac{SEH} изолированно от Си++ и расширений MSVC}
 \EN{Here we will take a look on \ac{SEH} in isolated (from C++ and MSVC extensions) form}.
 
 \index{Windows!TIB}
-\index{Win32!RaiseException()}
+\index{Windows!Win32!RaiseException()}
 \RU{Каждый процесс имеет цепочку \ac{SEH}-обработчиков, и адрес последнего записан в \ac{TIB}}
 \EN{Each running process has a chain of \ac{SEH}-handlers, \ac{TIB} has address of the last handler}.
 \RU{Когда происходит исключение (деление на ноль, обращение по неверному адресу в памяти, 
@@ -65,7 +65,7 @@ and offering to collect all information and send it to developers in Microsoft}.
 \RU{Кстати, некоторые разработчики делают свой собственный обработчик,
 отправляющий информацию о падении программы им самим}
 \EN{By the way, some developers made their own handler, sending information about program crash to themselves}.
-\index{Win32!SetUnhandledExceptionFilter()}
+\index{Windows!Win32!SetUnhandledExceptionFilter()}
 \RU{Он регистрируется при помощи ф-ции}\EN{It is registered with the help of} \TT{SetUnhandledExceptionFilter()} 
 \RU{и будет вызван если \ac{OS} не знает как иначе обработать исключение}\EN{and will be called if
 \ac{OS} do not have any other way to handle exception}.
@@ -272,5 +272,6 @@ where it is used for ``on-fly'' error fixing in practice}.
 \EN{Supposedly because then \ac{OS} will not need to care about freeing this information, these records
 will be disposed when function finishing its execution}.
 \RU{Но я не уверен на}\EN{But I'm not} 100\%\RU{ и могу ошибаться}\EN{-sure and can be wrong}.
+\index{\CStandardLibrary!alloca()}
 \RU{Это чем-то похоже на}\EN{This is somewhat like} alloca(): (\ref{alloca}).
 
