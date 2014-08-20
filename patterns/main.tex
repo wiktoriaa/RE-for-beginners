@@ -12,11 +12,11 @@ was produced in the assembly language. This was easy for me. I did it many times
 between the \CCpp code and what the compiler produced was imprinted in my mind so deep that 
 I can quickly understand what was in the original C code when I look at produced x86 code. 
 Perhaps this technique may be helpful for someone else so I will try to describe some examples here.}
-
-\RU{Здесь много примеров и для x86/x64 и для ARM}\EN{There are a lot of examples for both x86/x64 
-and ARM}. 
-\RU{Те, кто уже хорошо знаком с одной из архитектур, могут легко пролистывать страницы}
-\EN{Those who already familiar with one of architectures, may freely skim over pages}.
+%
+%\RU{Здесь много примеров и для x86/x64 и для ARM}\EN{There are a lot of examples for both x86/x64 
+%and ARM}. 
+%\RU{Те, кто уже хорошо знаком с одной из архитектур, могут легко пролистывать страницы}
+%\EN{Those who already familiar with one of architectures, may freely skim over pages}.
 
 \chapter{\RU{Краткое введенение в CPU}\EN{Short introduction to the CPU}}
 
@@ -44,8 +44,8 @@ of general purpose registers} (\ac{GPR}).
 $\approx 8$ \InENRU x86, $\approx 16$ \InENRU x86-64, $\approx 16$ \InENRU ARM.
 \RU{Проще всего понимать регистр как временную переменную без типа}
 \EN{The easiest way to understand a register is to think of it as an untyped temporary variable}.
-\RU{Можно представить что вы пишете на \ac{PL} высокого уровня и у вас только 8 переменных шириной 32 бита}
-\EN{Imagine you are working with a high-level \ac{PL} and you have only 8 32-bit variables}.
+\RU{Можно представить что вы пишете на \ac{PL} высокого уровня и у вас только 8 переменных шириной 32 (или 64) бита}
+\EN{Imagine you are working with a high-level \ac{PL} and you have only 8 32-bit (or 64-bit) variables}.
 \RU{Можно сделать очень много используя только их}\EN{A lot of things can be done using only these}!
 \end{description}
 
@@ -64,6 +64,7 @@ to do it without making a huge amount of annoying mistakes}.
 \RU{Программа переводящая код из \ac{PL} высокого уровня в ассемблер называется \IT{компилятором}
 \footnote{В более старой русскоязычной литературе также часто встречается термин ``транслятор''.}}
 \EN{The program which converts high-level \ac{PL} code into assembly is called a \IT{compiler}}.
+% TODO add about linker
 
 \section{\RU{Несколько слов о x86 и ARM}\EN{Couple words about x86 and ARM}}
 
@@ -75,16 +76,26 @@ x64 extensions was not affect \ac{ISA} very much.}
 процессорах.}
 \EN{x86 have a lot of instructions appeared in 16-bit 8086 CPU and still present in latest CPUs.}\\
 \\
+\index{ARM!\ARMMode}
+\index{ARM!\ThumbMode}
+\index{ARM!\ThumbTwoMode}
 \RU{ARM это \ac{RISC}-процессор разработанный с учетом опкодов одинаковой длины, что было некоторым преимуществом
 в прошлом.}
 \EN{ARM is a \ac{RISC} \ac{CPU} designed with constant opcode length in mind, which had some advantages in past.}
-\RU{Так что в самом начале, инструкции ARM кодировались 4-мя байтами.}
-\EN{So at very start, ARM has instructions all encoded in 4 bytes.}
+\RU{Так что в самом начале, все инструкции ARM кодировались 4-мя байтами}
+\EN{So at very start, ARM has all instructions encoded in 4 bytes}\footnote{\RU{Кстати, 
+инструкции фиксированного размера удобны тем, что всегда можно легко узнать адрес 
+следующей (или предыдущей) инструкции. Эта особенность будет рассмотрена в секции о 
+switch()~(\ref{sec:SwitchARMLot}).}
+\EN{By the way, fixed-length instructions are handy in a way that one can calculate the next (or previous) 
+instruction's address without effort. This feature will be discussed in switch()~(\ref{sec:SwitchARMLot}) section.}
+}.
 \RU{Это то что сейчас называется ``режим ARM''}\EN{This is now called ``ARM mode''}.
+
 \RU{Потом они подумали что это не очень экономично}\EN{Then they thought it's not very frugal}.
-\RU{На самом деле, самые используемые инструкции процессора на практике могут быть закодированы
+\RU{На самом деле, самые используемые инструкции\footnote{А это MOV/PUSH/CALL/Jcc} процессора на практике могут быть закодированы
 используя меньшее количество информации.}
-\EN{In fact, most used \ac{CPU} instructions in real world applications can be encoded using 
+\EN{In fact, most used \ac{CPU} instructions\footnote{These are MOV/PUSH/CALL/Jcc} in real world applications can be encoded using 
 lesser amount of information.}
 \RU{Так что они добавили другую \ac{ISA} с названием Thumb, где каждая инструкция кодируется всего лишь
 2-мя байтами.}
@@ -94,12 +105,22 @@ lesser amount of information.}
 \EN{But not all ARM instructions could be encoded in just 2 bytes, so Thumb instruction set is somewhat limited.}
 \RU{Код скомпилированный для режима ARM и Thumb может сосуществовать в одной программе, конечно.}
 \EN{Code compiled for ARM mode and Thumb mode may coexist in one program, of course.}
-\RU{Затем создатели ARM решили что Thumb можно расширить: так появился Thumb-2.}
-\EN{Then ARM creators thought Thumb can be extended: Thumb-2 was appeared. }
+
+\RU{Затем создатели ARM решили что Thumb можно расширить: так появился Thumb-2 (в ARMv7).}
+\EN{Then ARM creators thought Thumb can be extended: Thumb-2 was appeared (in ARMv7). }
 \RU{Thumb-2 это все еще двухбайтные инструкции, но некоторые новые инструкции имеют длину 4 байта.}
 \EN{Thumb-2 is still 2-byte instructions, but some new instructions has size of 4 bytes.}
+\RU{Распространено заблуждение, что thumb-2 ~--- это смесь ARM и thumb. Это не верно. Просто thumb-2 был дополнен до
+более полной поддержки возможностей процессора, что теперь может легко конкурировать с режимом ARM.}
+\EN{There is a common misconception that thumb-2 is a mix of ARM and thumb. This is not correct. 
+Rather, thumb-2 was extended to fully support processor features so it could
+compete with ARM mode.}
 \RU{По поводу богатства возможностей, Thumb-2 теперь может конкурировать с режимом ARM.}
 \EN{On instruction richness, Thumb-2 can compete with original ARM mode.}
+\RU{Основное количество приложений для \idevices скомпилировано для набора инструкций thumb-2, потому что Xcode
+делает так по умолчанию}
+\EN{The majority of \idevices applications are compiled for the thumb-2 instruction set because Xcode does this by default}.
+
 \RU{Потом появился 64-битный ARM, это \ac{ISA} снова с 4-хбайтными опкодами, без дополнительного режима Thumb.}
 \EN{Then 64-bit ARM came, this \ac{ISA} has 4-byte opcodes again, without any additional Thumb mode.}
 \RU{Но 64-битные требования повлияли на \ac{ISA}, так что, подводя итог, теперь у нас 3 набора инструкций ARM:
@@ -110,8 +131,8 @@ Thumb mode (including Thumb-2) and ARM64.}
 вариации одного.}
 \EN{These \ac{ISA}'s intersects partially, but I would say, they are much more different
 \ac{ISA}'s than variations of one.}
-\RU{Следовательно, в этой книге я стараюсь добавлять фрагменты кода на всех трех ARM \ac{ISA}, где это нужно.}
-\EN{Therefore, I try to add fragments of code in all 3 ARM \ac{ISA}'s in this book, wherever it's needed.}
+\RU{Следовательно, в этой книге я стараюсь добавлять фрагменты кода на всех трех ARM \ac{ISA}.}
+\EN{Therefore, I try to add fragments of code in all 3 ARM \ac{ISA}'s in this book.}
 
 % chapters
 \input{patterns/01_helloworld/main}
@@ -124,7 +145,6 @@ Thumb mode (including Thumb-2) and ARM64.}
 \input{patterns/061_pointers/main}
 \input{patterns/065_GOTO/main}
 \input{patterns/07_jcc/main}
-\input{patterns/075_cond_operator/main}
 \input{patterns/08_switch/main}
 \input{patterns/09_loops/main}
 \input{patterns/10_strings/main}

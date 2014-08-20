@@ -22,6 +22,19 @@ to the stack in a straightforward manner}.
 
 \lstinputlisting[caption=MSVC 2012 x64]{patterns/03_printf/2_MSVC_x64.asm}
 
+\RU{Наблюдательный читатель может спросить, почему для значений типа \Tint отводится 8 байт,
+ведь нужно только 4?}
+\EN{Observant reader may ask, what 8 bytes are allocated for \Tint values, while 4 is enough?}
+\RU{Да, это нужно запомнить: для значений всех типов более коротких чем 64-бита, отводится 8 байт.}
+\EN{Yes, this should be memorized: 8 bytes are allocated for any data type shorter than 64 bits.}
+\RU{Это сделано для удобства: так всегда легко расчитать адрес того или иного аргумента.}
+\EN{It's done for convenience: it's always easy to calculate address of this or that argument.}
+\RU{К тому же, все они расположены по выровненным адресам в памяти.}
+\EN{Besides, all they are located at aligned memory addresses.}
+% also for local variables?
+\RU{В 32-битных средах точно также: для всех типов резервируется 4 байта в стеке.}
+\EN{The same story in 32-bit environments: 4 bytes are reserved for all data types.}
+
 \subsection{GCC}
 
 \RU{В *NIX-системах для x86-64 ситуация похожая, вот только первые 6 аргументов передаются через}

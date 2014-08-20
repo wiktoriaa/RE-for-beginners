@@ -20,8 +20,8 @@
 пара сохраняется именно в стеке.}
 \EN{Of course, this instruction is able to save this pair at random place of memory, 
 but \ac{SP} register is specified here, so the pair is saved in stack.}
-\RU{Регистры в ARM64 64-битные, каждый это 8 байт, так что для хранения двух регистров нужно именно 16 байт.}
-\EN{ARM64 registers are 64-bit ones, each contain 8 bytes, so one need 16 bytes for saving two registers.}
+\RU{Регистры в ARM64 64-битные, каждый имеет длину в 8 байт, так что для хранения двух регистров нужно именно 16 байт.}
+\EN{ARM64 registers are 64-bit ones, each has size of 8 bytes, so one need 16 bytes for saving two registers.}
 
 \RU{Восклицательный знак после операнда означает, что в начале от \ac{SP} будет отнято 16, и только затем
 значения из пары регистров будут записаны в стек.}
@@ -40,7 +40,7 @@ values from registers pair will be written into the stack.}
 восстанавливаются в эпилоге}\EN{so that's why they are saved in function prologue and restored in function
 epilogue}.
 
-\EN{The second instruction saves}\RU{Вторая инструкция записывает} \ac{SP} \InENRU \RegX{29} (\OrENRU \ac{FP}).
+\EN{The second instruction copies}\RU{Вторая инструкция копирует} \ac{SP} \InENRU \RegX{29} (\OrENRU \ac{FP}).
 \RU{Это нужно для установки стекового фрейма ф-ции}\EN{This is needed for function stack frame setup}.
 
 \label{pointers_ADRP_and_ADD}
@@ -50,10 +50,10 @@ string}\RU{нужны для формирования адреса строки}
 \RU{ведь первый аргумент ф-ции передается через этот регистр}\EN{because first function argument is passed
 in this register}.
 \RU{Но в ARM нет инструкций, при помощи которых можно записать в регистр длинное число}\EN{But there are
-no instructions in ARM helping to write large number into register} 
+no instructions in ARM allowing to write large number into register} 
 (\RU{потому что сама длина инструкции ограничена 4-ю байтами, больше об этом здесь}\EN{because instruction
 length is limited by 4 bytes, read more about it here}: \ref{ARM_big_constants_loading}).
-\RU{Так что нужно использовать несколько инструкций}\EN{So several instructions should be used}.
+\RU{Так что нужно использовать несколько инструкций}\EN{So several instructions must be used}.
 \RU{Первая инструкция}\EN{The first instruction} (\TT{ADRP}) \EN{writes address of 4Kb page where string is
 located into \RegX{0}}\RU{записывает в \RegX{0} адрес 4-килобайтной страницы где находится строка}, 
 \EN{and the second one}\RU{а вторая} (\ADD) \RU{просто прибавляет к этому адресу остаток}\EN{just adds
@@ -69,7 +69,7 @@ address}\RU{и мы видим что в секции данных \TT{.rodata} 
 \EN{\puts is called then using \TT{BL} instruction, this was already discussed before: \ref{puts}.}
 
 \RU{Инструкция }\MOV \EN{instruction writes $0$ into}\RU{записывает $0$ в} \RegW{0}. 
-\RegW{0} \RU{это младшие 32 бита регистра}\EN{is low 32 bits of} \RegX{0}\EN{ register}:
+\RegW{0} \RU{это младшие 32 бита 64-битного регистра}\EN{is low 32 bits of 64-bit} \RegX{0}\EN{ register}:
 
 \input{ARM_X0_register}
 
@@ -79,7 +79,7 @@ address}\RU{и мы видим что в секции данных \TT{.rodata} 
 result is prepared.}
 \RU{Почему именно 32-битная часть}\EN{But why 32-bit part}?
 \RU{Потому в ARM64, как и в x86-64, тип \Tint оставили 32-битным, для лучшей совместимости.}
-\EN{Because \Tint in ARM64, just like in x86-64, is still 32-bit, for better compatibility.}
+\EN{Because \Tint data type in ARM64, just like in x86-64, is still 32-bit, for better compatibility.}
 \RU{Следовательно, раз уж ф-ция возвращает 32-битный \Tint, то нужно заполнить только 32 младших бита 
 регистра \RegX{0}.}
 \EN{So if function returning 32-bit \Tint, only 32 lowest bits of \RegX{0} register should be filled.}
@@ -119,8 +119,8 @@ only then \ac{SP} value is increased by 16.}
 \RU{В ARM64 есть новая инструкция}\EN{New instruction appeared in ARM64}: \RET. 
 \RU{Она работает так же как и}\EN{It works just as} \TT{BX LR}, \RU{но там добавлен специальный бит,
 подсказывающий процессору, что это именно выход из ф-ции, а не просто переход, чтобы процессор
-мог более оптимально исполнять эту инструкцию}\EN{but a special \IT{hint} bit is added, showing to the \ac{CPU}
-that this is return from the function, not just another branch instruction, so it can execute it more optimally}.
+мог более оптимально исполнять эту инструкцию}\EN{but a special \IT{hint} bit is added, telling to the \ac{CPU}
+that this is return from the function, not just another jump instruction, so it can execute it more optimally}.
 
 \RU{Из-за простоты этой ф-ции, оптимизирующий GCC генерирует точно такой же код.}
 \EN{Due to simplicity of the function, optimizing GCC generates the very same code.}

@@ -1,10 +1,10 @@
-﻿\subsection{\OptimizingXcodeIV + \ThumbTwoMode}
+﻿\subsection{\OptimizingXcodeIV (\ThumbTwoMode)}
 
 \RU{По умолчанию,}\EN{By default} Xcode 4.6.3 
 \RU{генерирует код для режима thumb-2 примерно в такой манере}
 \EN{generates code for thumb-2 in this manner}:
 
-\begin{lstlisting}[caption=\OptimizingXcodeIV + \ThumbTwoMode]
+\begin{lstlisting}[caption=\OptimizingXcodeIV (\ThumbTwoMode)]
 __text:00002B6C                   _hello_world
 __text:00002B6C 80 B5          PUSH            {R7,LR}
 __text:00002B6E 41 F2 D8 30    MOVW            R0, #0x13D8
@@ -48,8 +48,8 @@ then the second and finally the first (due to different \gls{endianness})}.
 \EN{So as we can see, the \TT{MOVW}, \TT{MOVT.W} and \TT{BLX} instructions begin with} \TT{0xFx}.
 
 \RU{Одна из thumb-2 инструкций это}\EN{One of the thumb-2 instructions is}
-\TT{``MOVW R0, \#0x13D8''}\RU{ ~--- она записывает 16-битное число в младшую часть регистра \Reg{0}}
-\EN{~---it writes a 16-bit value into the lower part of the \Reg{0} register}.
+\TT{``MOVW R0, \#0x13D8''}\RU{ ~--- она записывает 16-битное число в младшую часть регистра \Reg{0}, очищая старшие биты.}
+\EN{~---it writes a 16-bit value into the lower part of the \Reg{0} register, clearing higher bits.}
 
 \RU{Еще}\EN{Also,} \TT{``MOVT.W R0, \#0''}\RU{ ~--- эта инструкция работает так же, как и}
 \EN{~works just like} 

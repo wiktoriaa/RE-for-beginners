@@ -1,4 +1,4 @@
-﻿\subsection{\NonOptimizingKeilVI + \ARMMode}
+﻿\subsection{\NonOptimizingKeilVI (\ARMMode)}
 
 \RU{Для начала скомпилируем наш пример в Keil}\EN{Let's start by compiling our example in Keil}:
 
@@ -16,7 +16,7 @@ armcc.exe --arm --c90 -O0 1.c
 \RU{а нам важнее увидеть инструкции ``как есть'', так что посмотрим скомпилированный результат в \IDA}
 \EN{but it is more important for us to see the instructions ``as is'' so let's see the compiled result in \IDA}.
 
-\begin{lstlisting}[caption=\NonOptimizingKeilVI + \ARMMode + \IDA]
+\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode) \IDA]
 .text:00000000             main
 .text:00000000 10 40 2D E9    STMFD   SP!, {R4,LR}
 .text:00000004 1E 0E 8F E2    ADR     R0, aHelloWorld ; "hello, world"
@@ -27,49 +27,10 @@ armcc.exe --arm --c90 -O0 1.c
 .text:000001EC 68 65 6C 6C+aHelloWorld  DCB "hello, world",0    ; DATA XREF: main+4
 \end{lstlisting}
 
-% TODO merge it with what in preface about ARM...
-\index{ARM!\ARMMode}
-\index{ARM!\ThumbMode}
-\index{ARM!\ThumbTwoMode}
-\RU{Вот чуть-чуть фактов о процессоре ARM, которые желательно знать}
-\EN{Here are a couple of ARM-related facts that we should know in order to proceed}.
-\RU{Процессор ARM имеет по крайней мере два основных режима: режим ARM и thumb}
-\EN{An ARM processor has at least two major modes: ARM mode and thumb mode}. 
-\RU{В первом (ARM) режиме доступны все инструкции и каждая имеет размер 32 бита (или 4 байта)}
-\EN{In the first (ARM) mode, all instructions are enabled and each is 32 bits (4 bytes) in size}. 
-\RU{Во втором режиме (thumb) каждая инструкция имеет размер 16 бит (или 2 байта)}
-\EN{In the second (thumb) mode each instruction is 16 bits (2 bytes) in size}
-\footnote{\RU{Кстати, инструкции фиксированного размера удобны тем, что всегда можно легко узнать адрес 
-следующей (или предыдущей) инструкции. Эта особенность будет рассмотрена в секции о 
-switch()~(\ref{sec:SwitchARMLot}).}
-\EN{By the way, fixed-length instructions are handy in a way that one can calculate the next (or previous) 
-instruction's address without effort. This feature will be discussed in switch()~(\ref{sec:SwitchARMLot}) section.}
-}.
-\RU{Режим thumb может выглядеть привлекательнее тем, что программа на нем может быть 1) компактнее; 2) эффективнее исполняться на микроконтроллере с 16-битной шиной данных}
-\EN{Thumb mode may look attractive because programs that use it may 1) be compact and
-2) execute faster on microcontrollers having a 16-bit memory datapath}. 
-\RU{Но за всё нужно платить: в режиме thumb куда меньше возможностей процессора, например, возможен доступ только к 8-и регистрам процессора, и, чтобы совершить некоторые действия, выполнимые в режиме ARM одной инструкцией, нужны несколько thumb-инструкций}
-\EN{Nothing comes for free. In thumb mode, there is a reduced instruction set, 
-only 8 registers are accessible and one needs several thumb instructions for doing some operations when you only need one in ARM mode}.
-
-\RU{Начиная с ARMv7, имеется также поддержка инструкций thumb-2. Это thumb, расширенный до поддержки куда большего числа инструкций}
-\EN{Starting from ARMv7 the thumb-2 instruction set is also available. 
-This is an extended thumb mode that supports a much larger instruction set}.
-\RU{Распространено заблуждение, что thumb-2 ~--- это смесь ARM и thumb. Это не верно. Просто thumb-2 был дополнен до
-более полной поддержки возможностей процессора, что теперь может легко конкурировать с режимом ARM.}
-\EN{There is a common misconception that thumb-2 is a mix of ARM and thumb. This is not correct. 
-Rather, thumb-2 was extended to fully support processor features so it could
-compete with ARM mode.}
-\RU{Программа для процессора ARM может представлять смесь процедур, скомпилированных для обоих режимов}
-\EN{A program for the ARM processor may be a mix of procedures compiled for both modes}.
-\RU{Основное количество приложений для \idevices скомпилировано для набора инструкций thumb-2, потому что Xcode
-делает так по умолчанию}
-\EN{The majority of \idevices applications are compiled for the thumb-2 instruction set because Xcode does this by default}.
-
-\RU{В вышеприведённом примере можно легко увидеть, что каждая инструкция имеет размер 4 байта}
-\EN{In the example we can easily see each instruction has a size of 4 bytes}.
-\RU{Действительно, ведь мы же компилировали наш код для режима ARM а не thumb}
-\EN{Indeed, we compiled our code for ARM mode, not for thumb}.
+\RU{В вышеприведённом примере можно легко увидеть, что каждая инструкция имеет размер 4 байта.}
+\EN{In the example we can easily see each instruction has a size of 4 bytes.}
+\RU{Действительно, ведь мы же компилировали наш код для режима ARM а не thumb.}
+\EN{Indeed, we compiled our code for ARM mode, not for thumb.}
 
 \index{ARM!\Instructions!STMFD}
 \index{ARM!\Instructions!POP}
@@ -82,7 +43,7 @@ compete with ARM mode.}
 actually shows the} \TT{``PUSH \{r4,lr\}''}\EN{ instruction}.
 \RU{Но это не совсем точно, инструкция \PUSH доступна только в режиме thumb, поэтому,
 во избежание путаницы, я предложил работать в \IDA}
-\EN{But it is not quite correct. The \PUSH instruction is only available in thumb mode.
+\EN{But it is not quite precise. The \PUSH instruction is only available in thumb mode.
 So, to make things less messy, that is why I suggested working in \IDA}.
 
 \RU{Итак, эта инструкция уменьшает \ac{SP}, чтобы он указывал на место в стеке, свободное для записи
@@ -95,9 +56,11 @@ in changed \ac{SP}}.
 \RU{Эта инструкция, как и инструкция \PUSH в режиме thumb, может сохранить в стеке одновременно несколько значений регистров, что может быть очень удобно}
 \EN{This instruction (like the \PUSH instruction in thumb mode) is able to save several register values at once and this may be useful}. 
 \RU{Кстати, такого в x86 нет}\EN{By the way, there is no such thing in x86}.
-\RU{Также следует заметить, что \TT{STMFD} ~--- генерализация инструкции \PUSH (то есть, расширяет её возможности), потому что может работать с любым регистром, а не только с \ac{SP}, это тоже может быть очень удобно}
+\RU{Также следует заметить, что \TT{STMFD} ~--- генерализация инструкции \PUSH (то есть, расширяет её возможности), потому что может работать с любым регистром, а не только с \ac{SP}.}
 \EN{It can also be noted that the \TT{STMFD} instruction is a generalization 
-of the \PUSH instruction (extending its features), since it can work with any register, not just with \ac{SP}, and this can be very useful}.
+of the \PUSH instruction (extending its features), since it can work with any register, not just with \ac{SP}.}
+\RU{Другими словами, \TT{STMFD} можно использовать для записи набора регистров в указанном месте памяти.}
+\EN{In other words, \TT{STMFD} may be used for storing pack of registers at the specified memory place.}
 
 \index{\PICcode}
 \index{ARM!\Instructions!ADR}
@@ -142,19 +105,19 @@ independent of the address where the code is loaded by the \ac{OS}}.
 That's why each function passes control to the address stored in the \ac{LR} register}.
 
 \RU{В этом разница между ``чистыми'' \ac{RISC}-процессорами вроде ARM и \ac{CISC}-процессорами как x86,
-где адрес возврата записывается в стек}
+где адрес возврата обычно записывается в стек}
 \EN{That is the difference between ``pure'' \ac{RISC}-processors like ARM and \ac{CISC}-processors like x86,
-where the return address is stored on the stack}\footnote{\RU{Подробнее об этом будет описано в следующей главе}\EN{Read more about this in next section}~(\ref{sec:stack})}.
+where the return address is usually stored on the stack}\footnote{\RU{Подробнее об этом будет описано в следующей главе}\EN{Read more about this in next section}~(\ref{sec:stack})}.
 
 \RU{Кстати, 32-битный абсолютный адрес, либо же смещение, невозможно закодировать в 32-битной инструкции \TT{BL}, в ней есть место только для 24-х бит}
 \EN{By the way, an absolute 32-bit address or offset cannot be encoded in the 32-bit \TT{BL} instruction because
 it only has space for 24 bits}.
-\RU{Также следует отметить, что из-за того, что все инструкции в режиме ARM имеют длину 4 байта (32 бита), и инструкции могут находится только по адресам кратным 4, то последние 2 бита (всегда нулевых) можно не кодировать.}
-\EN{It is also worth noting all ARM-mode instructions have a size of 4 bytes (32 bits).
+\RU{Как мы помним, все инструкции в режиме ARM имеют длину 4 байта (32 бита), и инструкции могут находится только по адресам кратным 4, то последние 2 бита (всегда нулевых) можно не кодировать.}
+\EN{As we may remember, all ARM-mode instructions have a size of 4 bytes (32 bits).
 Hence they can only be located on 4-byte boundary addresses.
 This means the the last 2 bits of the instruction address (which are always zero bits) may be omitted.}
-\RU{В итоге имеем 26 бит, при помощи которых, можно закодировать смещение}
-\EN{In summary, we have 26 bits for offset encoding. This is enough to represent offset} $\pm{}\approx{}32M$.
+\RU{В итоге имеем 26 бит, при помощи которых, можно закодировать}
+\EN{In summary, we have 26 bits for offset encoding. This is enough to encode} $current\_PC \pm{} \approx{}32M$.
 
 \index{ARM!\Instructions!MOV}
 \RU{Следующая инструкция}\EN{Next, the} \TT{``MOV R0, \#0''}\footnote{MOVe}
@@ -166,9 +129,9 @@ This means the the last 2 bits of the instruction address (which are always zero
 \index{ARM!\Instructions!LDMFD}
 \index{ARM!\Instructions!POP}
 \RU{Последняя инструкция  ~---}\EN{The last instruction} \TT{``LDMFD SP!, {R4,PC}''}\footnote{\ac{LDMFD}} \RU{это инструкция, обратная от}\EN{is an inverse instruction of} \TT{STMFD}. 
-\RU{Она загружает из стека значения для сохранения их в \Reg{4} и \ac{PC}, увеличивая \glslink{stack pointer}{указатель стека} \ac{SP}}
-\EN{It loads values from the stack in order to save them into \Reg{4} and \ac{PC}, and \glslink{increment}{increments} the \gls{stack pointer} \ac{SP}}.
-\RU{Это, в каком-то смысле, аналог \POP}\EN{It can be said that it is similar to \POP}. 
+\RU{Она загружает из стека (или любого другого места в памяти) значения для сохранения их в \Reg{4} и \ac{PC}, увеличивая \glslink{stack pointer}{указатель стека} \ac{SP}}
+\EN{It loads values from the stack (or any other memory place) in order to save them into \Reg{4} and \ac{PC}, and \glslink{increment}{increments} the \gls{stack pointer} \ac{SP}}.
+\RU{Здесь она работает как аналог \POP}\EN{It works like \POP here}.\\
 N.B. \RU{Самая первая инструкция \TT{STMFD} сохранила в стеке \Reg{4} и \ac{LR}, а \IT{восстанавливаются} во время исполнения \TT{LDMFD} регистры \Reg{4} и \ac{PC}}
 \EN{The very first instruction \TT{STMFD} saves the \Reg{4} and \ac{LR} registers pair on the stack, but \Reg{4} and \ac{PC} are \IT{restored} during execution of \TT{LDMFD}}.
 
@@ -178,8 +141,8 @@ register}.
 \RU{Самая первая инструкция сохраняет это значение в стеке, потому что наша функция \main позже будет сама пользоваться этим регистром, в момент вызова \printf}
 \EN{The very first function saves its value in the stack because our
 \main function will use the register in order to call \printf}.
-\RU{А затем, в конце функции, это значение можно сразу записать в \ac{PC}, таким образом, передав управление туда, откуда была вызвана наша функция}
-\EN{In the function end this value can be written to the \ac{PC} register, thus passing control to where our function was called}.
+\RU{А затем, в конце функции, это значение можно сразу записать прямо в \ac{PC}, таким образом, передав управление туда, откуда была вызвана наша функция}
+\EN{In the function end this value can be written directly to the \ac{PC} register, thus passing control to where our function was called}.
 \RU{Так как функция \main обычно самая главная в \CCpp, управление будет возвращено в загрузчик \ac{OS}, либо куда-то в \ac{CRT} 
 или что-то в этом роде}
 \EN{Since our \main function is usually the primary function in \CCpp,
