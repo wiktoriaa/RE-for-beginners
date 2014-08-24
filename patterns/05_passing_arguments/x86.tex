@@ -11,11 +11,11 @@
 функция \TT{f(int,int,int)}.}
 \EN{What we see is the 3 numbers are pushing to stack in function \main and \TT{f(int,int,int)} 
 is called then.}
-\RU{Внутри \TT{f()}, доступ к аргументам, также как и к локальным переменным, происходит через макросы: 
+\RU{Внутри \ttf, доступ к аргументам, также как и к локальным переменным, происходит через макросы: 
 \TT{\_a\$ = 8}, но разница в том, что эти смещения со знаком \IT{плюс}, 
 таким образом если прибавить макрос \TT{\_a\$} к указателю на \EBP, то адресуется \IT{внешняя} 
 часть \glslink{stack frame}{фрейма} стека относительно \EBP.}
-\EN{Argument access inside \TT{f()} is organized with the help of macros like: \TT{\_a\$ = 8}, 
+\EN{Argument access inside \ttf is organized with the help of macros like: \TT{\_a\$ = 8}, 
 in the same way as local variables accessed,
 but the difference in that these offsets are positive 
 (addressed with \IT{plus} sign).
@@ -26,7 +26,7 @@ So, adding \TT{\_a\$} macro to the value in the \EBP register, \IT{outer} side o
 \RU{Далее все более-менее просто: значение a помещается в \EAX. 
 Далее \EAX умножается при помощи инструкции \IMUL на то что лежит в \TT{\_b}, 
 так в \EAX остается произведение\FNPRODUCT этих двух значений.}
-\EN{Then \TT{a} value is stored into \EAX. After \IMUL instruction execution, value in the \EAX is 
+\EN{Then $a$ value is stored into \EAX. After \IMUL instruction execution, value in the \EAX is 
 a product\FNPRODUCT of value in \EAX and what is stored in \TT{\_b}.}
 \RU{Далее к регистру \EAX прибавляется то что лежит в \TT{\_c}.}
 \EN{After \IMUL execution, \ADD is 
@@ -40,10 +40,10 @@ Now return to \gls{caller}~---it will take value from the \EAX and used it as \p
 \subsection{MSVC + \olly}
 \index{\olly}
 \RU{Проиллюстрируем всё это в}\EN{Let's illustrate this in} \olly.
-\RU{Когда мы протрассируем до первой инструкции в \TT{f()}, которая использует какой-то из аргументов
+\RU{Когда мы протрассируем до первой инструкции в \ttf, которая использует какой-то из аргументов
 (первый), мы увидим что \EBP указывает на \glslink{stack frame}{фрейм стека}, 
 я отметил его начало красной стрелкой}\EN{When 
-we trace until the very first instruction in \TT{f()} that uses one of the arguments (first one),
+we trace until the very first instruction in \ttf that uses one of the arguments (first one),
 we see that \EBP is pointing to the \gls{stack frame}, I marked its begin with red arrow}.
 \RU{Самый первый элемент \glslink{stack frame}{фрейма стека} это сохраненное значение \EBP, 
 затем \ac{RA}, третий элемент это

@@ -2,8 +2,6 @@
 \index{\CLanguageElements!\Pointers}
 \label{label_pointers}
 
-\newcommand{\ttf}{\TT{f1()}}
-
 \RU{Указатели также часто используются для возврата значений из функции (вспомните случай
 со \scanf{}~(\ref{label_scanf}))}
 \EN{Pointers are often used to return values from function (recall \scanf case~(\ref{label_scanf}))}.
@@ -21,27 +19,26 @@
 \index{\olly}
 \RU{Посмотрим это в}\EN{Let's see this in} \olly: \figref{fig:pointers_olly_global_1}.
 \RU{В начале адреса обоих глобальных переменных передаются в}\EN{At first, global
-variables addresses are passed into} \ttf.
+variables addresses are passed into} \ttfone.
 \RU{Можно нажать}\EN{We can click} ``Follow in dump'' \RU{на элементе стека и в окне слева 
 увидим место в сегменте данных выделенных для двух переменных}\EN{on the stack element, and we will see 
 a place in data segment allocated for two variables}.
 \RU{Эти переменные обнулены, потому что, по стандарту, неинициализированные данные (\ac{BSS}) 
-обнуляются перед началом исполнения}
+обнуляются перед началом исполнения: \cite[6.7.8p10]{C99TC3}.}
 \EN{These variables are cleared, because non-initialized data (\ac{BSS}) are cleared before
-execution begin}.
+execution begin: \cite[6.7.8p10]{C99TC3}.}
 \RU{И они находятся в сегменте данных, о чем можно удостовериться нажав}
 \EN{They are residing in data segment, we can be sure it is so, by pressing} Alt-M \RU{и увидев карту
 памяти}\EN{and seeing memory map}: \figref{fig:pointers_olly_global_5}.
 
-\RU{Трассируем}\EN{Let's trace} (F7) \RU{до начала исполнения}\EN{until execution of} \ttf 
-\figref{fig:pointers_olly_global_2}.
+\RU{Трассируем}\EN{Let's trace} (F7) \RU{до начала исполнения}\EN{until execution of} \ttfone: \figref{fig:pointers_olly_global_2}.
 \RU{В стеке видны и значения}\EN{Two values are seen in the stack} $456$ (\TT{0x1C8}) \AndENRU 
 $123$ (\TT{0x7B}), \RU{а также адреса двух глобальных переменных}\EN{and two global variables addresses
 as well}.
 
-\RU{Трассируем до конца}\EN{Let's trace until the end of} \ttf.
+\RU{Трассируем до конца}\EN{Let's trace until the end of} \ttfone.
 \RU{Мы видим в окне слева, как результаты вычисления появились в глобальных переменных}
-\EN{At the window at left we see how calculation results are appeared in the gloval variables} 
+\EN{At the window at left we see how calculation results are appeared in the global variables}: 
 \figref{fig:pointers_olly_global_3}.
 
 \RU{Теперь из глобальных переменных значения загружаются в регистры для передачи в}
@@ -52,21 +49,21 @@ as well}.
 \centering
 \includegraphics[scale=\FigScale]{patterns/061_pointers/olly_global1.png}
 \caption{\olly: \RU{передаются адреса двух глобальных переменных в}
-\EN{global variables addresses are passing into} \ttf}
+\EN{global variables addresses are passing into} \ttfone}
 \label{fig:pointers_olly_global_1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/061_pointers/olly_global2.png}
-\caption{\olly: \RU{начало работы \ttf}\EN{\ttf is started}}
+\caption{\olly: \RU{начало работы \ttfone}\EN{\ttfone is started}}
 \label{fig:pointers_olly_global_2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/061_pointers/olly_global3.png}
-\caption{\olly: \ttf \RU{заканчивает работу}\EN{finishes}}
+\caption{\olly: \ttfone \RU{заканчивает работу}\EN{finishes}}
 \label{fig:pointers_olly_global_3}
 \end{figure}
 
@@ -92,7 +89,7 @@ as well}.
 \lstinputlisting[caption=\RU{теперь переменные локальные}
 \EN{now variables are local}]{patterns/061_pointers/local_\LANG.c}
 
-\RU{Код ф-ции }\ttf \RU{не изменится}\EN{function code will not changed}.
+\RU{Код ф-ции }\ttfone \RU{не изменится}\EN{function code will not be changed}.
 \RU{Изменится только \main}\EN{Only \main code will}:
 
 \lstinputlisting[caption=\Optimizing MSVC 2010 (/Ob0)]{patterns/061_pointers/local.asm}
@@ -104,15 +101,15 @@ as well}.
 \RU{Видно как они заталкиваются в стек}\EN{We see how these are pushed into the stack}: 
 \figref{fig:pointers_olly_stk_1}.
 
-\RU{Начало работы \ttf}\EN{\ttf is started}.
+\RU{Начало работы \ttfone}\EN{\ttfone is started}.
 \RU{В стеке по адресам}\EN{Random garbage are at} \PtrsAddresses \RU{пока находится случайный мусор}
-\EN{so far} \figref{fig:pointers_olly_stk_2}.
+\EN{so far}: \figref{fig:pointers_olly_stk_2}.
 
-\RU{Конец работы \ttf}\EN{\ttf finished}.
+\RU{Конец работы \ttfone}\EN{\ttfone finished}.
 \RU{В стеке по адресам \PtrsAddresses теперь значения \TT{0xDB18} \AndENRU \TT{0x243}, 
-это результаты работы \ttf}
+это результаты работы \ttfone}
 \EN{There are \TT{0xDB18} \AndENRU \TT{0x243} now at \PtrsAddresses addresses, these values are
-\ttf function result}.
+\ttfone function result}.
 
 \begin{figure}[H]
 \centering
@@ -125,22 +122,24 @@ pushed into the stack}}
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/061_pointers/olly_stk2.png}
-\caption{\olly: \ttf \RU{начинает работу}\EN{starting}}
+\caption{\olly: \ttfone \RU{начинает работу}\EN{starting}}
 \label{fig:pointers_olly_stk_2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/061_pointers/olly_stk3.png}
-\caption{\olly: \ttf \RU{заканчивает работу}\EN{finished}}
+\caption{\olly: \ttfone \RU{заканчивает работу}\EN{finished}}
 \label{fig:pointers_olly_stk_3}
 \end{figure}
 
 \section{\Conclusion{}}
 
-\RU{\ttf может одинаково хорошо возвращать результаты работы в любые места памяти, 
-находящиеся где угодно}\EN{\ttf can return results to any place in memory, located anywhere}.
-\RU{В этом суть и удобство указателей}\EN{This is essence and usefulness of pointers}.
+\RU{\ttfone может одинаково хорошо возвращать результаты работы в любые места памяти, 
+находящиеся где угодно.}
+\EN{\ttfone can return results to any place in memory, located anywhere.}
+\RU{В этом суть и удобство указателей.}
+\EN{This is essence and usefulness of pointers.}
 
 \RU{Кстати,}\EN{By the way, \Cpp} \IT{references} \RU{в \Cpp работают точно так же}\EN{works just in the
 same way}. \RU{Читайте больше об этом}\EN{Read more about them}: (\ref{cpp_references}).

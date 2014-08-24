@@ -13,7 +13,7 @@
 Так получилось, что локальные переменные располагаются в стеке. 
 Может быть, можно было бы использовать и другие варианты, но в x86 это традиционно так.}
 \EN{\CCpp standard tell us it must be visible only in this function and not from any other point. 
-Traditionally, local variables are placed in the stack. 
+Traditionally, local variables are placed in the local stack. 
 Probably, there could be other ways, but in x86 it is so.}
 
 \index{x86!\Instructions!PUSH}
@@ -40,9 +40,9 @@ Probably, there could be other ways, but in x86 it is so.}
 to have an access to local variables and function arguments via \TT{EBP+offset}.}
 
 \index{x86!\Registers!ESP}
-\RU{Можно было бы использовать \ESP, но он во время исполнения функции постоянно меняется. 
+\RU{Можно было бы использовать \ESP, но он во время исполнения функции часто меняется, а это не удобно. 
 Так что можно сказать, что \EBP это \IT{замороженное состояние} \ESP на момент начала исполнения функции.}
-\EN{It is also possible to use \ESP, but it is often changing and not very convenient.
+\EN{It is also possible to use \ESP, but since it's changing too often, it's not very convenient.
 So it can be said, the value of the \EBP is \IT{frozen state} of the value of the \ESP at the moment of function execution start.}
 
 % FIXME это уже было в 02_stack?
@@ -76,14 +76,14 @@ EBP+0x10 & \argument \#3, \MarkedInIDAAs{} \TT{arg\_8} \\
 \RU{У функции \scanf в нашем примере два аргумента.}\EN{Function \scanf in our example has two arguments.}
 
 \RU{Первый ~--- указатель на строку содержащую \TT{``\%d''} и второй ~--- адрес переменной \TT{x}.} 
-\EN{First is pointer to the string containing \TT{``\%d''} and second~---address of variable \TT{x}.} 
+\EN{First is pointer to the string containing \TT{``\%d''} and second~---address of \TT{x} variable.} 
 
 \index{x86!\Instructions!LEA}
 \RU{Вначале адрес \TT{x} помещается в регистр \EAX при помощи инструкции \TT{lea eax, DWORD PTR \_x\$[ebp]}.}
 \EN{First of all, address of the \TT{x} variable is placed into the \EAX register by \TT{lea eax, DWORD PTR \_x\$[ebp]} instruction}
 
-\RU{Инструкция \LEA означает \IT{load effective address}, но со временем она изменила свою функцию}
-\EN{\LEA meaning \IT{load effective address} but over a time it changed its primary application}
+\RU{Инструкция \LEA означает \IT{load effective address}, и часто используется для формирования адреса чего-либо}
+\EN{\LEA meaning \IT{load effective address}, and is often used for forming address of something}
 ~(\ref{sec:LEA}).
 
 \RU{Можно сказать, что в данном случае \LEA просто помещает в \EAX результат суммы значения в регистре 
@@ -98,7 +98,7 @@ EBP+0x10 & \argument \#3, \MarkedInIDAAs{} \TT{arg\_8} \\
 And then value in the \EAX register is pushing into stack and \scanf is called.}
 
 \RU{После этого вызывается \printf. Первый аргумент вызова которого, строка:} 
-\EN{After that, \printf is called. First argument is pointer to string:} \TT{``You entered \%d...\textbackslash{}n''}.
+\EN{\printf is called after that. First argument is pointer to string:} \TT{``You entered \%d...\textbackslash{}n''}.
 
 \RU{Второй аргумент: \TT{mov ecx, [ebp-4]}, эта инструкция помещает в \ECX не адрес переменной \TT{x}, 
 а его значение, что там сейчас находится.}

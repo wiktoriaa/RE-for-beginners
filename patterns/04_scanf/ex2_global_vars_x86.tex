@@ -62,11 +62,13 @@ you'll see something like this:}
 \end{lstlisting}
 
 \RU{\TT{\_x} обозначен как \TT{?}, наряду с другими переменными не требующими инициализации. 
-Это означает, что при загрузке .exe в память, место под все это выделено будет. 
-Но в самом .exe ничего этого нет. Неинициализированные переменные не занимают места в исполняемых файлах. Удобно для больших массивов, например.}
+Это означает, что при загрузке .exe в память, место под все это выделено будет и будет заполнено
+нулевыми байтами \cite[6.7.8p10]{C99TC3}. 
+Но в самом .exe ничего этого нет. Неинициализированные переменные не занимают места в исполняемых файлах. 
+Удобно для больших массивов, например.}
 \EN{\TT{\_x} marked as \TT{?} among other variables not required to be initialized. 
 This means that after loading .exe to memory, a space for all these variables will be 
-allocated and a random garbage will be here. 
+allocated and filled by zeroes \cite[6.7.8p10]{C99TC3}. 
 But in an .exe file these not initialized variables are not occupy anything. 
 E.g. it is suitable for large arrays.}
 
@@ -75,9 +77,9 @@ E.g. it is suitable for large arrays.}
 
 \RU{Тут даже проще}\EN{Things are even simpler here}: \figref{fig:scanf_ex2_olly_1}.
 \RU{Переменная хранится в сегменте данных}\EN{Variable is located in the data segment}.
-\RU{Кстати, после исполнения инструкции \PUSH, заталкивающей адрес $x$, адрес появится в стеке, и на этом
+\RU{Кстати, после исполнения инструкции \PUSH (заталкивающей адрес $x$) адрес появится в стеке, и на этом
 элементе можно нажать правой кнопкой, выбрать ``Follow in dump''}\EN{By the way, after 
-\PUSH instruction, pushing $x$ address, is executed, the address
+\PUSH instruction (pushing $x$ address) is executed, the address
 will appear in stack, and it is possible to right-click on that element and select ``Follow in dump''}.
 \RU{И в окне памяти слева появится эта переменная}\EN{And the variable will appear in the memory window
 at left}.

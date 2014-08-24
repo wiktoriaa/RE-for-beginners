@@ -62,7 +62,7 @@ processor flags\footnote{About x86 flags, see also: \url{http://en.wikipedia.org
 инструкция \SUB, которая отнимает числа одно от другого.}
 \EN{But in fact, this could be perceived paradoxical, but \CMP instruction is in fact \SUB (subtract).}
 \RU{Все арифметические инструкции также выставляют флаги в соответствии с результатом, не только \CMP.}
-\EN{All arithmetic instructions set processor flags too, not only \CMP.}
+\EN{All arithmetic instructions set processor flags too, not just \CMP.}
 \RU{Если мы сравним 1 и 1, от единицы отнимется единица, получится $0$, и выставится флаг 
 \ZF (\IT{zero flag}), означающий что последний полученный результат был $0$.}
 \EN{If we compare 1 and 1, $1-1$ will be $0$ in result, \ZF flag will be set (meaning the last result was $0$).}
@@ -75,7 +75,7 @@ processor flags\footnote{About x86 flags, see also: \url{http://en.wikipedia.org
 \EN{\JNE checks only \ZF flag and jumping only if it is not set. 
 \JNE is in fact a synonym of \JNZ (\IT{Jump if Not Zero}) instruction.}
 \RU{Ассемблер транслирует обе инструкции в один и тот же опкод.}
-\EN{Assembler translating both \JNE and \JNZ instructions into one single opcode.}
+\EN{Assembler translating both \JNE and \JNZ instructions into same opcode.}
 \RU{Таким образом, можно \CMP заменить на \SUB и все будет работать также, но разница в том, что \SUB 
 все-таки испортит значение в первом операнде. \CMP это \IT{SUB без сохранения результата}.}
 \EN{So, \CMP instruction can be replaced to \SUB instruction and almost everything will be fine,
@@ -111,14 +111,16 @@ which standard function used and where}.
 \RU{Впрочем, меру нужно знать во всем и комментировать каждую инструкцию не стоит}
 \EN{However, it's not good idea to comment every instruction excessively}.
 
-\RU{В \IDA также можно скрывать части ф-ций: нужно отметить часть, нажать ``-'' на цифровой клавиатуре и ввести
-текст}\EN{A part of function can also be hidden in \IDA: a block should be marked, then ``-'' on numerical pad
+% FIXME draw button?
+\RU{В \IDA также можно скрывать части ф-ций: нужно отметить часть, нажать ``--'' на цифровой клавиатуре и ввести
+текст}\EN{A part of function can also be hidden in \IDA: a block should be marked, then ``--'' on numerical pad
 is pressed and text to be entered}.
 
 \RU{Я скрыл две части и придумал им названия}\EN{I've hide two parts and gave names to them}:
 
 \lstinputlisting{patterns/04_scanf/ex3_2.lst}
 
+% FIXME draw button?
 \RU{Раскрывать скрытые части ф-ций можно при помощи ``+'' на цифровой клавиатуре}
 \EN{To unhide these parts, ``+'' on numerical pad can be used}.
 
@@ -163,7 +165,7 @@ initially this variable contain some random garbage, that is} \TT{0x4CD478}\EN{ 
 \figref{fig:scanf_ex3_olly_1}.
 
 \RU{Когда}\EN{When} \scanf \RU{запускается, я ввожу в консоли что-то непохожее на число, например}
-\EN{is executing, I enter in the console something definitely not a number, like} ``asdasd''.
+\EN{is executing, I entered something definitely not a number in the console, like} ``asdasd''.
 \scanf \RU{заканчивается с 0 в}\EN{finishing with 0 in} \EAX, \RU{что означает, что произошла ошибка}
 \EN{which mean, an error occurred}: \figref{fig:scanf_ex3_olly_2}.
 

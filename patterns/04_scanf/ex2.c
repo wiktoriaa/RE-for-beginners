@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+// make x as global variable
 int x;
 
 int main() 

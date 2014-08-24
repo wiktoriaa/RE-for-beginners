@@ -25,9 +25,9 @@ equals to each other}.
 если первый операнд больше второго или равен ему}\EN{jump if the first operand is larger than 
 the second or if they are equals to each other}.
 \RU{Кстати, если все три условных перехода сработают, ни один \printf не вызовется. 
-Но, без внешнего вмешательства, это, пожалуй, невозможно.}
+Но, без внешнего вмешательства, это невозможно.}
 \EN{By the way, if all three conditional jumps are triggered, no \printf will be called whatsoever. 
-But, without special intervention, it is nearly impossible.}
+But, without special intervention, it is impossible.}
 
 \RU{Функция }\TT{f\_unsigned()} \RU{точно такая же, за тем исключением, что используются инструкции 
 \JBE и \JAE вместо \JLE и \JGE, об этом читайте ниже}
@@ -81,8 +81,8 @@ flags will be the same each time}.
 
 \RU{Результат первого сравнения}\EN{First comparison results}: \figref{fig:jcc_olly_unsigned_1}.
 \RU{Итак, флаги}\EN{So, the flags are}: C=1, P=1, A=1, Z=0, S=1, T=0, D=0, O=0.
-\RU{Для краткости, в \olly флаги называются только одной буквой}
-\EN{Flags are named by one characters in \olly for brevity}.
+\RU{Для краткости, в \olly флаги называются только одной буквой.}
+\EN{Flags are named by one character for brevity in \olly.}
 
 \olly \RU{подсказывает, что первый переход}\EN{gives a hint that} (\JBE) \RU{сработает}\EN{jump will be triggered}.
 \RU{Действительно, если заглянуть в}\EN{Indeed, if to take a look into} \cite{Intel}, 
@@ -90,7 +90,7 @@ flags will be the same each time}.
 CF=1 \OrENRU ZF=1.
 \RU{Условие здесь выполняется, так что переход срабатывает}\EN{Condition is true here, so jump is triggered}.
 
-\RU{Следующий переход}\EN{The next conditional jump}:\figref{fig:jcc_olly_unsigned_2}.
+\RU{Следующий переход}\EN{The next conditional jump}: \figref{fig:jcc_olly_unsigned_2}.
 \olly \RU{подсказывает, что}\EN{gives a hint that} \JNZ \RU{сработает}\EN{will trigger}.
 \RU{Действительно}\EN{Indeed}, \JNZ \RU{срабатывает если}\EN{will trigger if} ZF=0 (zero flag).
 
@@ -122,13 +122,12 @@ CF=1 \OrENRU ZF=1.
 \end{figure}
 
 \RU{Теперь можно попробовать в \olly ф-цию}\EN{Now we can try in \olly the} \TT{f\_signed()} 
-\RU{работающую с знаковыми величинами}\EN{function working with signed values}.
+\RU{работающую с знаковыми величинами}\EN{function which works with signed values}.
 
 \RU{Флаги выставляются точно так же}\EN{Flags are set in the same way}: 
 C=1, P=1, A=1, Z=0, S=1, T=0, D=0, O=0.
 
-\RU{Первый переход}\EN{The first conditional jump} \JLE \RU{сработает}\EN{will trigger}. 
-\figref{fig:jcc_olly_signed_1}.
+\RU{Первый переход}\EN{The first conditional jump} \JLE \RU{сработает}\EN{will trigger}: \figref{fig:jcc_olly_signed_1}.
 \RU{В}\EN{In} \cite{Intel} \RU{мы можем прочитать что эта инструкция срабатывает если}\EN{we may find
 that this instruction is triggering if} 
 ZF=1 \OrENRU SF$\neq$OF.
@@ -204,8 +203,9 @@ jump will be done to the next instruction}.
 \RU{Что и делаем}\EN{That's what we do}: \figref{fig:jcc_hiew_2}.
 
 \RU{Если забыть про какой-то из переходов, то тогда будет срабатывать несколько вызовов \printf, 
-а нам ведь нужно чтобы исполнялся только один}\EN{If we could forget about any of these jumps, then several
-\printf calls may execute, but this behaviour is not we're need}.
+а нам ведь нужно чтобы исполнялся только один.}
+\EN{If we could forget about any of these jumps, then several
+\printf calls may execute, but this is not behaviour we're need.}
 
 \begin{figure}[H]
 \centering
@@ -232,8 +232,8 @@ jump will be done to the next instruction}.
 \RU{Наблюдательный читатель может спросить, зачем исполнять \CMP так много раз,
 если флаги всегда одни и те же}\EN{Observant reader may ask, why to execute \CMP several times, 
 if flags are same after each execution}?
-\RU{По видимому, оптимизирующий MSVC не может этого делать, но GCC 4.8.1 делает больше оптимизаций}\EN{Perhaps, 
-optimizing MSVC can't do this, but optimizing GCC 4.8.1 can do deep optimization}:
+\RU{По видимому, оптимизирующий MSVC не может этого делать, но GCC 4.8.1 делает больше оптимизаций:}
+\EN{Perhaps, optimizing MSVC can't do this, but optimizing GCC 4.8.1 can optimize more deeply:}
 
 \lstinputlisting[caption=GCC 4.8.1 f\_signed()]{patterns/07_jcc/simple/GCC_O3_signed.asm}
 
@@ -255,6 +255,8 @@ assembly language programmers are fully aware of the fact that} \TT{Jcc} \RU{м�
 
 \lstinputlisting[caption=GCC 4.8.1 f\_unsigned()]{patterns/07_jcc/simple/GCC_O3_unsigned_\LANG.asm}
 
+\RU{Но тем не менее, здесь 2 инструкции \TT{CMP} вместо трех.}
+\EN{But nevertheless, there are two \TT{CMP} instructions instead of three.}
 \RU{Так что, алгоритмы оптимизации}\EN{So, optimization algorithms of} GCC 4.8.1 
 \RU{наверное, еще пока не идеальны}\EN{are probably not always perfect yet}.
 

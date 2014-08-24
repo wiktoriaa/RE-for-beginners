@@ -12,13 +12,10 @@ if it is not $0$, do \ECX \gls{decrement}
 and pass control flow to the label mentioned in the \LOOP operand. 
 Probably, this instruction is not very convenient, so, I did not ever see any modern compiler emit it automatically.
 So, if you see the instruction somewhere in code, it is most likely this is manually written piece 
-of assembly code.}
-
-\RU{Кстати, в качестве домашнего задания, вы можете попытаться объяснить, чем именно эта инструкция неудобна.}
-\EN{By the way, as home exercise, you could try to explain, why this instruction is not very convenient.}
-
-\RU{Циклы на \CCpp создаются при помощи \TT{for()}, \TT{while()}, \TT{do/while()}.}
-\EN{In \CCpp loops are constructed using \TT{for()}, \TT{while()}, \TT{do/while()} statements.}
+of assembly code.}\\
+\\
+\RU{Обычно, циклы на \CCpp создаются при помощи \TT{for()}, \TT{while()}, \TT{do/while()}.}
+\EN{In \CCpp loops are usually constructed using \TT{for()}, \TT{while()}, \TT{do/while()} statements.}
 
 \RU{Начнем с}\EN{Let's start with} \TT{for()}.
 \index{\CLanguageElements!for}
@@ -32,8 +29,8 @@ and of course loop body.}
 
 \lstinputlisting{patterns/09_loops/simple/loops_1_\LANG.c}
 
-\RU{Примерно так же, генерируемый код и будет состоять из этих четырех частей}
-\EN{So, generated code will be consisted of four parts too}.
+\RU{Примерно так же, генерируемый код и будет состоять из этих четырех частей.}
+\EN{So, generated code will be consisted of four parts as well.}
 
 \RU{Возьмем пример}\EN{Let's start with simple example}:
 
@@ -55,23 +52,22 @@ and of course loop body.}
 
 \lstinputlisting[caption=\Optimizing MSVC]{patterns/09_loops/simple/1_MSVC_Ox.asm}
 
-\RU{Здесь происходит следующее: переменную \IT{i} компилятор не выделяет в локальном стеке, 
+\RU{Здесь происходит следующее: переменную $i$ компилятор не выделяет в локальном стеке, 
 а выделяет целый регистр под нее: \ESI. 
 Это возможно для маленьких функций, где мало локальных переменных.}
-\EN{What is going on here is: space for the \IT{i} variable is not allocated in local stack anymore,
-but even individual register: the \ESI.
-This is possible in such small functions where not so 
-many local variables are present.}
+\EN{What is going on here is: space for the $i$ variable is not allocated in local stack anymore,
+but individual register is allocated for it: the \ESI.
+This is possible in such small functions where not so many local variables are present.}
 
 \RU{В принципе, все то же самое, только теперь одна важная особенность: 
-\TT{f()} не должна менять значение \ESI. 
-Наш компилятор уверен в этом, а если бы и была необходимость использовать регистр \ESI в функции \TT{f()}, 
+\ttf не должна менять значение \ESI. 
+Наш компилятор уверен в этом, а если бы и была необходимость использовать регистр \ESI в функции \ttf, 
 то её значение сохранялось бы в стеке. Примерно так же, как и в нашем листинге: 
 обратите внимание на \TT{PUSH ESI/POP ESI} в начале и конце функции.}
-\EN{One very important property is the \TT{f()} function must not change the value in the \ESI.
+\EN{One very important property is the \ttf function must not change the value in the \ESI.
 Our compiler is sure here. 
-And if compiler decided to use the \ESI register in \TT{f()} too, its value would be saved then 
-at the \TT{f()} function's prologue and restored at the \TT{f()} function's epilogue.
+And if compiler decided to use the \ESI register in \ttf too, its value would be saved then 
+at the \ttf function's prologue and restored at the \ttf function's epilogue.
 Almost like in our listing: please note \TT{PUSH ESI/POP ESI}
 at the function begin and end.}
 
@@ -88,22 +84,23 @@ at the function begin and end.}
 и можно немного сэкономить время, убрав все инструкции, обеспечивающие цикл. 
 В качестве обратной стороны медали, размер кода увеличился.}
 \EN{\Gls{loop unwinding} has advantage in these cases when there is not so much iterations and 
-we could economy some execution speed by removing all loop supporting instructions. 
+we could cut some execution speed by removing all loop supporting instructions. 
 On the other side, resulting code is obviously larger.}
+% FIXME но в наше время это уже не нужно
 
-\RU{OK, увеличим максимальное значение \IT{i} в цикле до $100$ и попробуем снова. GCC выдаст подобное:}
-\EN{OK, let's increase maximal value of the \IT{i} variable to $100$ and try again. GCC resulting:}
+\RU{OK, увеличим максимальное значение $i$ в цикле до $100$ и попробуем снова. GCC выдаст подобное:}
+\EN{OK, let's increase maximal value of the $i$ variable to $100$ and try again. GCC will do:}
 
 \lstinputlisting[caption=GCC]{patterns/09_loops/simple/2_GCC_\LANG.asm}
 
 \RU{Это уже похоже на то что сделал MSVC 2010 в режиме оптимизации (\Ox). 
-За исключением того, что под переменную \TT{i} будет выделен регистр \EBX.}
+За исключением того, что под переменную $i$ будет выделен регистр \EBX.}
 \EN{It is quite similar to what MSVC 2010 with optimization (\Ox) produce. 
-With the exception the \EBX register will be fixed to the \TT{i} variable.}
+With the exception the \EBX register will be fixed to the $i$ variable.}
 \RU{GCC уверен, что этот регистр не будет 
-модифицироваться внутри \TT{f()}, а если вдруг это и придётся там сделать, то его значение будет сохранено 
+модифицироваться внутри \ttf, а если вдруг это и придётся там сделать, то его значение будет сохранено 
 в начале функции, прямо как в \main здесь.}
-\EN{GCC is sure this register will not be modified inside of the \TT{f()} function, 
+\EN{GCC is sure this register will not be modified inside of the \ttf function, 
 and if it will, it will be saved at the function prologue and restored at epilogue, 
 just like here in the \main function.}
 
@@ -119,12 +116,12 @@ just like here in the \main function.}
 
 \RU{Трассируя}\EN{By tracing} (F8 (\stepover)) \RU{мы видим как}\EN{we see how} \ESI \RU{увеличивается на 1}
 \EN{\glslink{increment}{incrementing}}.
-\RU{Например, здесь}\EN{Here, for instance,} \ESI=i=6:
+\RU{Например, здесь}\EN{Here, for instance,} $ESI=i=6$:
 \figref{fig:loops_olly_2}.
 
 $9$ \RU{это последнее значение цикла}\EN{is a last loop value}.
 \RU{Поэтому}\EN{That's why} \JL \RU{после \glslink{increment}{инкремента} не срабатывает и ф-ция заканчивается}
-\EN{will not trigger after \gls{increment}, and function finishing}:
+\EN{will not trigger after \gls{increment}, and function is finishing}:
 \figref{fig:loops_olly_3}.
 
 \begin{figure}[H]
@@ -137,14 +134,14 @@ $9$ \RU{это последнее значение цикла}\EN{is a last loop
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/09_loops/simple/olly2.png}
-\caption{\olly: \RU{тело цикла только что отработало с}\EN{loop body just executed with} i=6}
+\caption{\olly: \RU{тело цикла только что отработало с}\EN{loop body just executed with} $i=6$}
 \label{fig:loops_olly_2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/09_loops/simple/olly3.png}
-\caption{\olly: \ESI=10, \RU{конец цикла}\EN{loop end}}
+\caption{\olly: $ESI=10$, \RU{конец цикла}\EN{loop end}}
 \label{fig:loops_olly_3}
 \end{figure}
 
@@ -153,12 +150,12 @@ $9$ \RU{это последнее значение цикла}\EN{is a last loop
 
 \RU{Как видно, трассировать вручную цикл в отладчике это не очень удобно}\EN{As we might see, it is not very
 convenient to trace in debugger manually}.
-\RU{Это одна из причин, почему я писал}\EN{That's one of the reasons I write} \tracer \RU{для себя}
+\RU{Это одна из причин, почему я писал}\EN{That's one of the reasons I wrote} \tracer \RU{для себя}
 \EN{for myself}.
 
 \RU{Я открываю скомпилированный пример в}\EN{I open compiled example in} \IDA, 
 \RU{нахожу там адрес инструкции}\EN{I find the address of the instruction} \TT{PUSH ESI}
-(\RU{передающей единственный аргумент в}\EN{passing sole argument into} \TT{f()}) 
+(\RU{передающей единственный аргумент в}\EN{passing sole argument into} \ttf) 
 \RU{а это}\EN{and this is} \TT{0x401026} \RU{у меня и запускаю}\EN{for me and I run} \tracer:
 
 \begin{lstlisting}
@@ -180,8 +177,8 @@ tracer.exe -l:loops_2.exe bpx=loops_2.exe!0x00401026
 \RU{Там это называется}\EN{This is called} \IT{trace}\EN{ there}.
 \RU{Каждая инструкция трассируется, значения самых интересных регистров запоминаются}\EN{Each instruction
 is being traced, all interesting register values are noticed and collected}.
-\RU{Затем генерируется .idc-скрипт для \IDA, который добавляет комментарии}\EN{.idc-script for \IDA
-is then generated}.
+\RU{Затем генерируется .idc-скрипт для \IDA, который добавляет комментарии.}
+\EN{\IDA .idc-script is generated then.}
 \RU{Итак, в}\EN{So, in the} \IDA \RU{я узнал что адрес}\EN{I've learned that} \main \RU{это}\EN{function address
 is} \TT{0x00401020} \RU{и запускаю}\EN{and I run}:
 

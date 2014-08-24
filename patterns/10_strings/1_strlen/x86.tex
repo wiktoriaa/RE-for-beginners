@@ -40,7 +40,7 @@ So if we need to transfer \TT{0xFE} value from variable of \Tchar type to \Tint,
 we need to identify its sign and extend it. That is what \MOVSX does.}
 
 \RU{См. также об этом раздел}
-\EN{See also in section} ``\IT{\SignedNumbersSectionName}''~(\ref{sec:signednumbers}).
+\EN{Also read about it in} ``\IT{\SignedNumbersSectionName}''\EN{ section}~(\ref{sec:signednumbers}).
 
 \RU{Хотя, конкретно здесь, компилятору врядли была особая надобность хранить значение \Tchar в регистре \EDX 
 а не его восьмибитной части, скажем, \DL. Но получилось, как получилось: должно быть, 
@@ -131,18 +131,18 @@ only in small functions with small number of local variables.}
 \EN{and the memory window position will scroll to the right place}.
 \RU{Здесь мы видим в памяти строку}\EN{We can see here a string} ``hello!''\EN{ in memory}.
 \RU{После нее имеется как минимум 1 нулевой байт, затем случайный мусор}\EN{There are at least
-once zero byte after it and then random garbage}.
-\RU{Если \olly видит что в регистре содержится адрес указывающий на строку, он показывает эту строку}
-\EN{If \olly sees that a register has an address pointing to a string, it will show it}.\\
+one zero byte after it and then random garbage}.
+\RU{Если \olly видит что в регистре содержится адрес какой-то строки, он показывает эту строку.}
+\EN{If \olly sees a register with a valid address in it, pointing to some string, it will show a string.}\\
 \\
 \RU{Нажем}\EN{Let's press} F8 (\stepover) \RU{столько раз, чтобы текущий адрес снова был 
-в начале тела цикла}\EN{enough time so the current address will be at the loop body begin again}:
+в начале тела цикла}\EN{enough number of times, so the current address will be at the loop body begin again}:
 \figref{fig:strlen_olly_2}.
 \RU{Видно что}\EN{We see that} \EAX \RU{уже содержит адрес второго символа в строке}
 \EN{contain address of the second character in the string}.\\
 \\
-\RU{Будем нажимать F8 достаточное количество раз, чтобы выйти из цикла}\EN{We will press F8 enough
-times in order to escape from the loop}:
+\RU{Будем нажимать F8 достаточное количество раз, чтобы выйти из цикла:}
+\EN{We will press F8 enough number of times in order to escape from the loop:}
 \figref{fig:strlen_olly_3}.
 \RU{Увидим что \EAX теперь содержит адрес нулевого байта, следующего сразу за строкой}
 \EN{We will see that \EAX now contain address of zeroth byte, placed right after the string}.
@@ -153,11 +153,13 @@ so it still pointing to the string begin}.
 \\
 \RU{Инструкция \SUB исполнилась}\EN{\SUB instruction was just executed}:
 \figref{fig:strlen_olly_4}.
-\RU{Разница в \EAX --- 7}\EN{Difference in the \EAX---7}. 
-\RU{Действительно, длина строки}\EN{Indeed, the} ``hello!''\EN{ string length}\EMDASH{}6, 
+\RU{Разница указателей сейчас в регистре \EAX --- 7.}
+\EN{Difference of pointers in the \EAX register now---7.}
+\RU{Действительно, длина строки}\EN{Indeed, the} ``hello!'' \RU{--- 6}\EN{string length is 6}, 
 \RU{но вместе с нулевым байтом}\EN{but with zeroth byte included}\EMDASH{}7.
-\RU{Но}\EN{But the} \TT{strlen()} \RU{должна возвращать количество ненулевых символов в строке}
-\EN{must return non-zero characters in the string}.
+\RU{Но}\EN{But the} \TT{strlen()} 
+\RU{должна возвращать количество ненулевых символов в строке.}
+\EN{must return number of non-zero characters in the string.}
 \RU{Так что сейчас будет исполняться декремент и выход из ф-ции}\EN{So the decrement will processed
 now and then return from the function}.
 
@@ -203,8 +205,9 @@ now and then return from the function}.
 \EN{However, \MOVZX could be replaced here to} \TT{mov dl, byte ptr [eax]}.
 
 \RU{Но, возможно, компилятору GCC просто проще помнить, что у него под переменную типа \Tchar отведен целый 
-32-битный регистр и быть уверенным в том, что старшие биты регистра не будут замусорены.}
-\EN{Probably, it is simpler for GCC compiler's code generator to \IT{remember} the whole register 
+32-битный регистр \EDX и быть уверенным в том, что старшие биты регистра не будут замусорены.}
+\EN{Probably, it is simpler for GCC compiler's code generator to \IT{remember} 
+the whole 32-bit \EDX register 
 is allocated for \Tchar variable and it can be sure the highest bits will not contain any noise 
 at any point.}
 

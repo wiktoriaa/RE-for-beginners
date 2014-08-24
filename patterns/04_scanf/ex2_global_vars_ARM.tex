@@ -51,23 +51,23 @@ it is now located in another segment, namely data segment} (\IT{.data}).
 very often.}
 \index{\RAM}
 \index{\ROM}
-\RU{Сегмент кода нередко может быть расположен в ПЗУ микроконтроллера (не забывайте, 
+\RU{Сегмент кода иногда может быть расположен в ПЗУ микроконтроллера (не забывайте, 
 мы сейчас имеем дело с embedded-микроэлектроникой, где дефицит памяти ~--- это обычное дело),
 а изменяемые переменные ~--- в ОЗУ.}
-\EN{Segment of code not infrequently can be located in microcontroller ROM (remember, we now deal
+\EN{Segment of code can sometimes be located in microcontroller ROM (remember, we now deal
 with embedded microelectronics, and memory scarcity is common here), and changeable 
 variables~---in \ac{RAM}.}
 \RU{Хранить в ОЗУ неизменяемые данные, когда в наличии есть ПЗУ, не экономно.}
 \EN{It is not very economically to store constant variables in RAM when one have ROM.}
-\RU{К тому же, сегмент данных в ОЗУ с константами нужно было бы инициализировать перед работой,
+\RU{К тому же, сегмент данных в ОЗУ с константами нужно инициализировать перед работой,
 ведь, после включения ОЗУ, очевидно, она содержит в себе случайную информацию.}
-\EN{Furthermore, data segment with constants in RAM must be initialized before, 
-since after RAM turning on, obviously, it contain random information.}
+\EN{Furthermore, constant variables in RAM must be initialized before, 
+since after RAM turning on, it, obviously, contain random information.}
 
 \index{\RU{Компоновщик}\EN{Linker}}
 \RU{Далее, мы видим, в сегменте кода, хранится указатель на переменную \TT{x} (\TT{off\_2C}) и вообще, 
 все операции с переменной, происходят через этот указатель.}
-\EN{Onwards, we see, in code segment, a pointer to the \TT{x} (\TT{off\_2C}) variable, and all
+\EN{Onwards, we see a pointer to the \TT{x} (\TT{off\_2C}) variable in code segment, and all
 operations with variable occurred via this pointer.}
 \RU{Это связано с тем что переменная \TT{x} может быть расположена где-то довольно далеко от 
 данного участка кода, так что её адрес нужно сохранить в непосредственной близости к этому коду.}
@@ -78,11 +78,13 @@ must be saved somewhere in close proximity to the code.}
 до 1020 байт от места где она находится.}
 \EN{\TT{LDR} instruction in thumb mode can address only variable in range of 1020 bytes from the point
 it is located.}
-\RU{Эта же инструкция в ARM-режиме ~--- переменные в пределах $\pm{}4095$ байт, таким образом,
+\RU{Эта же инструкция в ARM-режиме ~--- переменные в пределах $\pm{}4095$ байт.}
+\EN{Same instruction in ARM-mode~---variables in range of $\pm{}4095$ bytes.}
+\RU{Таким образом,
 адрес глобальной переменной \TT{x} нужно расположить в непосредственной близости, ведь нет никакой гарантии, 
 что компоновщик\footnote{linker в англоязычной литературе} сможет разместить саму переменную где-то рядом, 
 она может быть даже в другом чипе памяти!}
-\EN{Same instruction in ARM-mode~---variables in range $\pm{}4095$ bytes, this, address of the \TT{x} variable
+\EN{This, address of the \TT{x} variable
 must be located somewhere in close proximity, because, there is no guarantee the linker will able to place
 this variable near the code, it could be even in external memory chip!}
 

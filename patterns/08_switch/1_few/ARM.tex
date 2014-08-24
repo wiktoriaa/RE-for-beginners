@@ -27,54 +27,36 @@ is already filled the \Reg{0} register with another value.}
 \EN{Yes, it will since \ac{BEQ} checking flags set by \CMP instruction, and \ADREQ not modifying flags
 at all.}
 
-\RU{Кстати, в ARM имеется также для некоторых инструкций суффикс \IT{-S}, указывающий, 
-что эта инструкция будет модифицировать флаги, а при отсутствии суффикса ~--- не будет.}
-\EN{By the way, there is \IT{-S} suffix for some instructions in ARM,
-indicating the instruction will set the flags according to the result, and without 
-it~---the flags will not be touched.}
-\index{ARM!\Instructions!ADD}
-\index{ARM!\Instructions!ADDS}
-\index{ARM!\Instructions!CMP}
-\RU{Например, инструкция}\EN{For example} \TT{ADD} \RU{в отличие от}\EN{unlike} \TT{ADDS}
-\RU{сложит два числа, но флаги не изменит}
-\EN{will add two numbers, but flags will not be touched}.
-\RU{Такие инструкции удобно использовать
-между \CMP где выставляются флаги и, например, инструкциями перехода, где флаги используются.}
-\EN{Such instructions are convenient to use between \CMP where flags are set and, 
-e.g. conditional jumps, where flags are used.}
-
 \RU{Далее всё просто и знакомо.}\EN{Other instructions are already familiar to us.} 
 \RU{Вызов}\EN{There is only one call to} \printf \RU{один, и в самом конце, 
 мы уже рассматривали подобный трюк здесь}\EN{, at the end, and we already examined this trick here}
 ~(\ref{ARM_B_to_printf}).
-\RU{К}\EN{There are three paths to} \printf{}\RU{-у в конце ведут три пути}\EN{at the end}.
+\RU{К}\EN{There are three paths to} \printf{}\RU{-у в конце ведут три пути}\EN{ at the end}.
 
-\RU{Обратите внимание на то что происходит если $a=2$ и если $a$ не попадает под сравниваемые константы.}
-\EN{Also pay attention to what is going on if $a=2$ and if $a$ is not in range of constants it is comparing against.}
 \index{ARM!\Instructions!ADRcc}
 \index{ARM!\Instructions!CMP}
-\RU{Инструкция }\TT{``CMP R0, \#2''} \RU{нужна чтобы узнать $a=2$ или нет}\EN{instruction is needed here
-to know, if $a=2$ or not}.
+\RU{Последняя инструкция}\EN{The last} \TT{``CMP R0, \#2''} 
+\RU{здесь нужна чтобы узнать $a=2$ или нет.}
+\EN{instruction is needed here to figure out, if $a=2$ or not.}
 \RU{Если это не так, то при помощи \ADRNE (\IT{Not Equal}) в \Reg{0} будет загружен указатель на 
 строку \IT{<<something unknown \textbackslash{}n>>}, ведь $a$ уже было проверено на $0$ и $1$ до этого, 
 и здесь $a$ точно не попадает под эти константы.}
 \EN{If it is not true, then \ADRNE will load pointer to the string \IT{<<something unknown \textbackslash{}n>>} 
-into \Reg{0} since $a$ was already
-checked before to be equal to $0$ or $1$,
-so we can be assured the $a$ variable is not equal to these numbers
-at this point.}
-\RU{Ну а если}\EN{And if} $R0=2$, \RU{в \Reg{0} будет загружен указатель на строку}\EN{a pointer to string} 
-\IT{<<two\textbackslash{}n>>} 
+into \Reg{0} since $a$ was already checked to be equal to $0$ or $1$ before,
+so we can be assured the $a$ variable is not equal to these numbers at this point.}
+\RU{Ну а если}\EN{And if} $R0=2$, \RU{в \Reg{0} будет загружен указатель на строку}
+\EN{a pointer to string} \IT{<<two\textbackslash{}n>>} 
 \RU{при помощи инструкции \ADREQ}\EN{will be loaded by \ADREQ into \Reg{0}}.
 
 \subsection{ARM: \OptimizingKeilVI (\ThumbMode)}
 
 \lstinputlisting{patterns/08_switch/1_few/few_ARM_thumb_O3.asm}
 
-\RU{Как я уже писал, в thumb-режиме нет возможности \IT{присоединять} предикаты к большинству инструкций,
-так что thumb-код вышел похожим на код x86, вполне понятный.}
-\EN{As I already mentioned, there is no feature of \IT{connecting} predicates to majority of instructions in thumb
-mode, so the thumb-code here is somewhat similar to the easily understandable x86 \ac{CISC}-code.}
+% FIXME а каким можно? к каким нельзя? \ref{} ->
+\RU{Как я уже писал, в thumb-режиме нет возможности добавлять условные предикаты к большинству инструкций,
+так что thumb-код вышел похожим на код x86 в стиле \ac{CISC}, вполне понятный.}
+\EN{As I already mentioned, there is no feature of adding conditional predicates to majority of instructions in thumb
+mode, so the thumb-code here is somewhat similar to the easily understandable x86 \ac{CISC}-style code.}
 
 \subsection{ARM64: \NonOptimizing GCC (Linaro) 4.9}
 
@@ -84,8 +66,10 @@ mode, so the thumb-code here is somewhat similar to the easily understandable x8
 а не целая часть регистра \RegX{0}.}
 \EN{Input value has \Tint type, hence \RegW{0} register is used as input value instead of the whole
 \RegX{0} register.}
-\RU{Указатели на строки передаются в \puts, как я и показывал в примере}\EN{String pointers are passed to 
-\puts just like I showed in} ``\HelloWorldSectionName''\EN{ example}: \ref{pointers_ADRP_and_ADD}.
+\RU{Указатели на строки передаются в \puts при помощи пары инструкций ADRP/ADD, 
+как я и показывал в примере}
+\EN{String pointers are passed to \puts using ADRP/ADD instructions pair just like I showed in} 
+``\HelloWorldSectionName''\EN{ example}: \ref{pointers_ADRP_and_ADD}.
 
 \subsection{ARM64: \Optimizing GCC (Linaro) 4.9}
 
@@ -94,5 +78,7 @@ mode, so the thumb-code here is somewhat similar to the easily understandable x8
 \RU{Фрагмент кода более оптимизированный}\EN{Better optimized piece of code}.
 \RU{Инструкция }\TT{CBZ} (\IT{Compare and Branch on Zero}\RU{ (сравнить и перейти если ноль)}) 
 \RU{совершает переход если}\EN{instruction do jump if} \RegW{0} \RU{ноль}\EN{is zero}.
-\RU{Здесь также прямой переход на}\EN{There is also direct jump to} \puts \RU{вместо вызова}\EN{instead 
-of calling it}: \ref{JMP_instead_of_RET}.
+\RU{Здесь также прямой переход на}\EN{There is also direct jump to} \puts 
+\RU{вместо вызова, как я уже описывал это здесь:}
+\EN{instead of calling it, like I described before:} 
+\ref{JMP_instead_of_RET}.

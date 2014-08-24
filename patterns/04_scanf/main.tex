@@ -25,10 +25,10 @@ while passing its address is much easier.}
 то возвращать её полностью ~--- это так же абсурдно.}
 \EN{More than that: if calling function must modify something in the large array or structure,
 to return it as a whole is absurd as well.}
-\RU{Так что самое простое, что можно сделать, это передать в функцию адрес массива или структуры,
-и пусть она что-то там изменит.}
-\EN{So the simplest thing to do is to pass an address of array or structure to function,
-and let it change what must be changed.}
+\RU{Так что самое простое, что можно сделать, это передать в функцию-\gls{callee} адрес массива или структуры,
+и пусть \gls{callee} что-то там изменит.}
+\EN{So the simplest thing to do is to pass an address of array or structure to \gls{callee} function,
+and let \gls{callee} change what must be changed.}
 
 \RU{Указатель в}\EN{In} \CCpp \RU{ ~--- это просто адрес какого-либо места в памяти.}
 \EN{it is just an address of some point in memory.}
@@ -39,25 +39,25 @@ and let it change what must be changed.}
 \EN{In x86, address is represented as 32-bit number (i.e., occupying 4 bytes), while in x86--64 it is 64-bit number
 (occupying 8 bytes).}
 \RU{Кстати, отсюда негодование некоторых людей, связанное с переходом на x86-64 ~--- на этой архитектуре все указатели
-будут занимать места в 2 раза больше.}
+занимают в 2 раза больше места.}
 \EN{By the way, that is the reason of some people's indignation related to switching to x86-64~---all pointers
-on x64-architecture will require twice as more space.}
+on x64-architecture require twice as more space.}
 
 \index{\CStandardLibrary!memcpy()}
 \RU{При некотором упорстве можно работать только с бестиповыми указателями (\TT{void*})}\EN{With some effort,
-it is possible to work only with untyped pointers}; \RU{например,}\EN{e.g.} 
+it is possible to work with untyped pointers only}; \RU{например,}\EN{e.g.} 
 \RU{стандартная функция Си}\EN{standard C function} \TT{memcpy()},
 \RU{копирующая блок из одного места памяти в другое}\EN{copying a block from one place in memory to another}, 
 \RU{принимает на вход 2 указателя типа}\EN{takes 2 pointers of} \TT{void*}\EN{ type on input}, 
 \RU{потому что нельзя
 заранее предугадать, какого типа блок вы собираетесь копировать. 
-Да в общем это и не важно, важно только знать размер блока.}
+Да в общем, тип данных не важен, важен только размер блока.}
 \EN{since it is impossible to predict block data type you would like to copy. 
-And it is not even important to know, only block size matters.}
+Data types is not even important to know, only block size matters.}
 
 \RU{Также указатели широко используются, когда функции нужно вернуть более одного значения}
 \EN{Also pointers are widely used when function needs to return more than one value}
-(\RU{мы еще вернемся к этому в будущем}\EN{we will back to this in future}~(\ref{label_pointers})).
+(\RU{мы еще вернемся к этому в будущем}\EN{we will back to this further}~(\ref{label_pointers})).
 \IT{scanf()} \RU{ ~--- это как раз такой случай}\EN{is just that case}. 
 \RU{Помимо того, что этой функции нужно показать, сколько значений
 было прочитано успешно, ей еще и нужно вернуть сами значения.}

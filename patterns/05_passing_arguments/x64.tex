@@ -4,7 +4,7 @@
 \RU{В x86-64 всё немного иначе, здесь аргументы ф-ции (4 или 6) передаются через регистры, 
 а \gls{callee} из регистров их и читает, вместо того чтобы обращаться к стеку}\EN{The story is a bit different
 in x86-64, function arguments (4 or 6) are passed in registers, and a \gls{callee} reading them from there
-instead of stack accessing}.
+instead of stack}.
 
 \subsection{MSVC}
 
@@ -12,8 +12,8 @@ instead of stack accessing}.
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/05_passing_arguments/x64_MSVC_Ox.asm}
 
-\RU{Как видно, очень компактная ф-ция \TT{f()}, берет аргументы прямо из регистров}
-\EN{As we can see, very compact \TT{f()} function takes arguments right from the registers}.
+\RU{Как видно, очень компактная ф-ция \ttf, берет аргументы прямо из регистров}
+\EN{As we can see, very compact \ttf function takes arguments right from the registers}.
 \RU{Инструкция \LEA используется здесь для сложения чисел, 
 должно быть компилятор посчитал что так будет эффективнее нежели использование \TT{ADD}}
 \EN{\LEA instruction is used here for addition,
@@ -46,6 +46,11 @@ so it will be accessed via stack};
 aware where to find function arguments at a break}
 \footnote{\url{http://msdn.microsoft.com/en-us/library/ew5tede7(v=VS.90).aspx}}.
 
+\RU{Так что, какие-то большие ф-ции могут сохранять входные аргументы в ``shadows space'' 
+для использования в будущем, а небольшие ф-ции, как наша, могут этого и не делать.}
+\EN{So, some large functions can save input arguments in ``shadows space'' if they need to use it
+while execution, but some small functions, like ours, may not do this.}
+
 \RU{Место в стеке для ``shadow space'' выделяет именно \gls{caller}}\EN{It is duty
 of \gls{caller} to allocate ``shadow space'' in stack}.
 
@@ -62,11 +67,11 @@ of \gls{caller} to allocate ``shadow space'' in stack}.
 \index{Shadow space}
 \RU{В соглашении о вызовах System V *NIX\cite{SysVABI} нет ``shadow space'', но \gls{callee} тоже иногда
 должен сохранять где-то аргументы, потому что, опять же, регистров может и не хватить на все действия.
-Что мы здесь и видим}
+Что мы здесь и видим.}
 \EN{There are no ``shadow space'' requirement in System V *NIX\cite{SysVABI}, but \gls{callee} may need to save
-arguments somewhere, because, again, it may be regsiters shortage}.
+arguments somewhere, in case of regsiters shortage.}
 
-\subsection{GCC: uint64\_t \RU{вместо}\EN{instead} int}
+\subsection{GCC: uint64\_t \RU{вместо}\EN{instead of} int}
 
 \RU{Наш пример работал с 32-битным \Tint, поэтому использовались 32-битные части регистров с префиксом \TT{E-}}
 \EN{Our example worked with 32-bit \Tint, that is why 32-bit register parts were used (prefixed by \TT{E-})}.

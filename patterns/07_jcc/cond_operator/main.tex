@@ -11,7 +11,7 @@ expression ? expression : expression
 
 \lstinputlisting{patterns/07_jcc/cond_operator/cond.c}
 
-\section{x86}
+\subsection{x86}
 
 \RU{Старые и неоптимизирующие компиляторы генерируют код так, как если бы выражение \TT{if/else} было использовано
 вместо:}
@@ -30,7 +30,7 @@ expression ? expression : expression
 неоптимизирующий GCC 4.8 использует условные переходы}\EN{ instruction, while non-optimizing GCC 4.8 use 
 conditional jumps}.
 
-\section{ARM}
+\subsection{ARM}
 
 \index{x86!\Instructions!ADRcc}
 \Optimizing Keil \ForENRU \RU{режима ARM также использует инструкцию \TT{ADRcc}, срабатывающую при некотором
@@ -48,7 +48,7 @@ supporting conditional flags}:
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/07_jcc/cond_operator/Keil_thumb_O3.s}
 
-\section{ARM64}
+\subsection{ARM64}
 
 \Optimizing GCC (Linaro) 4.9 \ForENRU ARM64 \RU{также использует условные переходы}\EN{also use conditional jumps}:
 
@@ -65,7 +65,7 @@ ARM mode or CMOVcc in x86}
 \EN{It has, however, ``Conditional SELect'' instruction (\TT{CSEL}), but GCC 4.9 is probably not that good to 
 generate it in such piece of code.}
 
-\section{\RU{Перепишем используя обычный \TT{if/else}}\EN{Let's rewrite it in \TT{if/else} way}}
+\subsection{\RU{Перепишем используя обычный \TT{if/else}}\EN{Let's rewrite it in \TT{if/else} way}}
 
 \lstinputlisting{patterns/07_jcc/cond_operator/cond2.c}
 
@@ -80,12 +80,12 @@ code identical to} \lstref{cond_Keil_ARM_O3}.
 
 \RU{Но оптимизирующий}\EN{But optimizing} MSVC 2012 \RU{пока не так хорош}\EN{is not that good (yet)}.
 
-\section{\Conclusion{}}
+\subsection{\Conclusion{}}
 
 \RU{Почему оптимизирующие компиляторы стараются избавиться от условных переходов? Читайте больше об этом здесь:}
 \EN{Why optimizing compilers try to get rid of conditional jumps? Read here about it:} \ref{branch_predictors}.
 
-\section{\Exercise}
+\subsection{\Exercise}
 
 \RU{Попробуйте переписать код в}\EN{Try to rewrite the code in} \lstref{cond_ARM64} 
 \RU{убрав все инструкции условного перехода, и используйте инструкцию \TT{CSEL}}\EN{by removing all 

@@ -16,8 +16,8 @@ local variables in the stack.}
 \RU{я переименовал}\EN{I renamed} \IT{var\_8} \AndENRU \IT{var\_4} \RU{в}\EN{into} \IT{eos} 
 \AndENRU \IT{str} \RU{вручную}\EN{manually}.
 
-\RU{Итак, первые несколько инструкций просто сохраняют входное значение в переменных}\EN{So, 
-first instructions are just saves input value in} \IT{str} \AndENRU \IT{eos}.
+\RU{Итак, первые несколько инструкций просто сохраняют входное значение в обоих переменных}
+\EN{So, first instructions are just saves input value into both} \IT{str} \AndENRU \IT{eos}.
 
 \RU{Начиная с метки}\EN{Loop body is beginning at} \IT{loc\_2CB8}\RU{, начинается тело цикла}\EN{ label}.
 
@@ -38,7 +38,7 @@ treat \Tchar type as signed, just like MSVC and GCC}.}.
 \RU{Компилятор считает этот байт знаковым (signed), потому что тип \Tchar по стандарту Си ~--- знаковый.}
 \EN{The compiler treating this byte as signed since \Tchar type in C standard is signed.}
 \RU{Об это я уже немного писал}\EN{I already wrote about it}~(\ref{MOVSX}) \RU{в этой же секции, 
-но посвященной x86}\EN{in this section, but related to x86}.
+но посвященной x86}\EN{in this section, but in relation to x86}.
 
 \index{Intel!8086}
 \index{Intel!8080}
@@ -49,10 +49,10 @@ treat \Tchar type as signed, just like MSVC and GCC}.}.
 of 32-bit register separately of the whole register,
 as it is in x86.}
 \RU{Вероятно, это связано с тем что за x86 тянется длинный шлейф совместимости со своими предками, 
-такими как
-16-битный 8086 и даже 8-битный 8080, а ARM разрабатывался с чистого листа как 32-битный RISC-процессор.}
-\EN{Apparently, it is because x86 has a huge history of compatibility with its ancestors like 16-bit 8086 
-and even 8-bit 8080,
+вплоть до 16-битного 8086 и даже 8-битного 8080, 
+а ARM разрабатывался с чистого листа как 32-битный RISC-процессор.}
+\EN{Apparently, it is because x86 has a huge history of compatibility with its ancestors 
+up to 16-bit 8086 and even 8-bit 8080,
 but ARM was developed from scratch as 32-bit RISC-processor.}
 \RU{Следовательно, чтобы работать с отдельными байтами на ARM, так или иначе, придется использовать 
 32-битные регистры.}
@@ -60,9 +60,9 @@ but ARM was developed from scratch as 32-bit RISC-processor.}
 
 \RU{Итак}\EN{So}, \TT{LDRSB} \RU{загружает символ из строки в \Reg{0}, по одному}
 \EN{loads symbol from string into \Reg{0}, one by one}.
-\RU{Следующие инструкции}\EN{Next} \CMP \AndENRU \ac{BEQ} \RU{проверяют, является ли этот символ $0$.}
+\RU{Следующие инструкции}\EN{The next} \CMP \AndENRU \ac{BEQ} \RU{проверяют, является ли этот символ $0$.}
 \EN{instructions checks, if loaded symbol is $0$.}
-\RU{Если не $0$, то происходит переход на начало тела цикла.}\EN{If not $0$, control passing to loop body
+\RU{Если не $0$, то происходит переход на начало тела цикла.}\EN{If not $0$, control passed to loop body
 begin.}
 \RU{А если $0$, выходим из цикла.}\EN{And if $0$, loop is finishing.}
 
@@ -107,7 +107,7 @@ to address in the \ac{LR} register.}
 расширяя его как знаковый (signed), до 32-битного
 значения, но не только это.}
 \EN{instruction loads byte from memory at the address \Reg{1} into \Reg{2}, sign-extending it to 32-bit value, but not
-only that.}
+just that.}
 \TT{\#1} \RU{в конце инструкции называется}\EN{at the instruction's end calling} ``Post-indexed addressing'', 
 \RU{это значит, что после загрузки байта, к \Reg{1} добавится единица.}\EN{this means, $1$ is to be added
 to the \Reg{1} after byte load.}
@@ -122,8 +122,8 @@ $0$ will be met in string.}
 \index{ARM!\Instructions!MVNS}
 \index{x86!\Instructions!NOT}
 \RU{После конца цикла }\TT{MVNS}\footnote{MoVe Not} 
-\RU{(инвертирование всех бит, аналог \NOT на x86)}
-\EN{(inverting all bits, \NOT in x86 analogue)}
+\RU{(инвертирование всех бит, \NOT в x86)}
+\EN{(inverting all bits, \NOT in x86)}
 \RU{и \ADD вычисляют}\EN{instructions and \ADD computes} $eos - str - 1$.
 \RU{На самом деле, эти две инструкции вычисляют}
 \EN{In fact, these two instructions computes}
@@ -154,5 +154,5 @@ $str - eos - 1$
 \CMP were equal to each other.}
 \RU{Таким образом}\EN{Thus}, \RU{если в \Reg{0} будет $0$}\EN{if $0$ will be in the \Reg{0} register},
 \RU{обе инструкции}\EN{both} \TT{SUBEQ} \RU{исполнятся и результат останется в \Reg{0}.}
-\EN{instructions are to be executed and result is leaving in the \Reg{0} register.}
+\EN{instructions are to be executed and result is leaved in the \Reg{0} register.}
 
