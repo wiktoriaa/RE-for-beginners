@@ -16,45 +16,47 @@
 
 \index{x86!\Instructions!FCOMP}
 \RU{\FCOMP сравнивает содержимое \ST{0} с тем что лежит в \TT{\_a} и выставляет биты \CThreeBits в 
-регистре статуса FPU. Это 16-битный регистр отражающий текущее состояние FPU.} 
+регистре статуса FPU. Это 16-битный регистр отражающий текущее состояние FPU.}
 \EN{\FCOMP compares the value in the \ST{0} register with what is in \TT{\_a} value 
 and set \CThreeBits bits in FPU 
 status word register. 
-This is 16-bit register reflecting current state of FPU.} 
+This is 16-bit register reflecting current state of FPU.}
 
-\RU{Итак, биты \CThreeBits выставлены, но, к сожалению, у процессоров до Intel P6 
+\RU{После этого, инструкция \FCOMP также выдергивает одно значение из стека. 
+Это отличает её от \FCOM, которая просто сравнивает значения, оставляя стек в таком же состоянии.}
+\EN{After bits are set, the \FCOMP instruction also popping one variable from stack. 
+This is what distinguish it from \FCOM, which is just comparing values, leaving the stack at the same state.}
+
+\RU{К сожалению, у процессоров до Intel P6 
 \footnote{Intel P6 это Pentium Pro, Pentium II, и далее} нет инструкций условного перехода,
-проверяющих эти биты. 
+проверяющих биты \CThreeBits. 
 Возможно, так сложилось исторически (вспомните о том что FPU когда-то был вообще отдельным чипом). 
 А у Intel P6 появились инструкции \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP ~--- делающие тоже самое, 
 только напрямую модифицирующие флаги \ZF/\PF/\CF.}
-\EN{For now \CThreeBits bits are set, but unfortunately, CPU before Intel P6
+\EN{Unfortunately, CPU before Intel P6
 \footnote{Intel P6 is Pentium Pro, Pentium II, etc} has not any conditional 
-jumps instructions which are checking these bits. 
+jumps instructions which are checking \CThreeBits bits. 
 Probably, it is a matter of history (remember: FPU was separate chip in past). 
 Modern CPU starting at Intel P6 has \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP 
 instructions~---which does the same, but modifies CPU flags \ZF/\PF/\CF.}
 
-\RU{После этого, инструкция \FCOMP выдергивает одно значение из стека. 
-Это отличает её от \FCOM, которая просто сравнивает значения, оставляя стек в таком же состоянии.}
-\EN{After bits are set, the \FCOMP instruction popping one variable from stack. 
-This is what distinguish it from \FCOM, which is just comparing values, leaving the stack at the same state.}
-
 \index{x86!\Instructions!FNSTSW}
-\RU{\FNSTSW копирует содержимое регистра статуса в \AX. Биты \CThreeBits занимают позиции, 
+\RU{Так что \FNSTSW копирует содержимое регистра статуса в \AX. 
+Биты \CThreeBits занимают позиции, 
 соответственно, 14, 10, 8, в этих позициях они и остаются в регистре \AX, 
 и все они расположены в старшей части регистра ~--- \AH.}
-\EN{\FNSTSW copies FPU status word register to the \AX. Bits \CThreeBits are placed at positions 14/10/8, 
+\EN{So the \FNSTSW instruction copies FPU status word register to the \AX. 
+Bits \CThreeBits are placed at positions 14/10/8, 
 they will be at the same positions in the \AX register and all they are placed in high part of the \AX{}~---\AH{}.}
 
 \begin{itemize}
 \item
-\RU{Если b>a в нашем случае, то биты \CThreeBits должны быть выставлены так:}
-\EN{If b>a in our example, then \CThreeBits bits will be set as following:} 0, 0, 0.
+\RU{Если $b>a$ в нашем случае, то биты \CThreeBits должны быть выставлены так:}
+\EN{If $b>a$ in our example, then \CThreeBits bits will be set as following:} 0, 0, 0.
 \item
-\RU{Если a>b, то биты будут выставлены:}\EN{If a>b, then bits will be set:} 0, 0, 1.
+\RU{Если $a>b$, то биты будут выставлены:}\EN{If $a>b$, then bits will be set:} 0, 0, 1.
 \item
-\RU{Если a=b, то биты будут выставлены так:}\EN{If a=b, then bits will be set:} 1, 0, 0.
+\RU{Если $a=b$, то биты будут выставлены так:}\EN{If $a=b$, then bits will be set:} 1, 0, 0.
 \item
 \RU{Если результат неопределен (в случае ошибки), то биты будут выставлены так}\EN{If result 
 is unordered (in case of error), then bits will be set}: 1, 1, 1.
@@ -100,13 +102,17 @@ ignored.}
 
 \label{parity_flag}
 \index{x86!\Registers!\Flags!\RU{Флаг четности}\EN{Parity flag}}
-\RU{Теперь немного о \IT{parity flag}\footnote{флаг четности}. Еще один замечательный рудимент}
-\EN{Now let's talk about parity flag. Another notable epoch rudiment}:
+\RU{Теперь немного о \IT{parity flag}\footnote{флаг четности}. 
+Еще один замечательный рудимент эпохи.}
+\EN{Now let's talk about \IT{parity flag}. Another notable epoch rudiment.}
 
 \RU{Этот флаг выставляется в $1$ если количество единиц в последнем результате ~--- четно. 
 И в $0$ если ~--- нечетно.}
 \EN{This flag is to be set to $1$ if number of ones in last calculation result is even. 
 And to $0$ if odd.}
+
+\RU{Заглянем в}\EN{Let's look into} Wikipedia
+\footnote{\url{http://en.wikipedia.org/wiki/Parity_flag}}:
 
 \begin{framed}
 \begin{quotation}
@@ -114,7 +120,7 @@ One common reason to test the parity flag actually has nothing to do with parity
 (C0 to C3), but they can not be tested directly, and must instead be first copied to the flags register. 
 When this happens, C0 is placed in the carry flag, C2 in the parity flag and C3 in the zero flag. 
 The C2 flag is set when e.g. incomparable floating point values (NaN or unsupported format) are compared 
-with the FUCOM instructions.\footnote{\url{http://en.wikipedia.org/wiki/Parity_flag}}
+with the FUCOM instructions.
 \end{quotation}
 \end{framed}
 
@@ -122,18 +128,18 @@ with the FUCOM instructions.\footnote{\url{http://en.wikipedia.org/wiki/Parity_f
 \RU{Как упоминается в Wikipedia, флаг четности иногда используется в FPU-коде и сейчас увидим, как.}
 
 \index{x86!\Instructions!JP}
-\RU{Таким образом, что мы имеем, флаг \PF будет выставлен в $1$, если \Czero и \Ctwo 
+\RU{Флаг \PF будет выставлен в $1$, если \Czero и \Ctwo 
 оба $1$ или оба $0$. 
 И тогда сработает последующий \JP (\IT{jump if PF==1}). 
 Если мы вернемся чуть назад и посмотрим значения \CThreeBits 
-для разных вариантов, то увидим, что условный переход \JP сработает в двух случаях: если b>a или если a==b 
-(ведь бит \Cthree уже \IT{вылетел} после исполнения \TT{test ah, 5}).}
-\EN{Thus, \PF flag will be set to 1 if both \Czero and \Ctwo are set to $0$ or both are $1$.
+для разных вариантов, то увидим, что условный переход \JP сработает в двух случаях: если $b>a$ или если $a=b$ 
+(ведь бит \Cthree перестал учитываться после исполнения \TT{test ah, 5}).}
+\EN{The \PF flag will be set to 1 if both \Czero and \Ctwo are set to $0$ or both are $1$.
 And then following \JP (\IT{jump if PF==1}) will be triggered. 
 If we recall values of the \CThreeBits for various cases,
 we will see the conditional jump 
-\JP will be triggered in two cases: if b>a or a==b 
-(\Cthree bit is already not considering here since it was cleared while execution of 
+\JP will be triggered in two cases: if $b>a$ or $a=b$ 
+(\Cthree bit is not considering here since it was cleared while execution of 
 the \TT{test ah, 5} instruction).}
 
 \RU{Дальше все просто. Если условный переход сработал, то \FLD загрузит значение \TT{\_b} в \ST{0}, 
@@ -160,23 +166,23 @@ $b$ ($3.4$) \RU{уже загружено в}\EN{already loaded in} \ST{0}.
 \olly \RU{показывает второй аргумент для \FCOMP, который сейчас находится в стеке}\EN{show the second \FCOMP
 argument, which is in stack right now}.\\
 \\
-\FCOMP \RU{отработал}\EN{executed}: \figref{fig:FPU_comparison_case1_olly2}.
+\FCOMP \RU{отработал}\EN{is executed}: \figref{fig:FPU_comparison_case1_olly2}.
 \RU{Мы видим состояния condition-флагов \ac{FPU}}\EN{We see \ac{FPU} condition flags state}: 
 \RU{все нули}\EN{all zeroes}.
-\RU{Вытолкнутое значение перемещается в \ST{7}, почему это так, я писал раннее}
-\EN{Popped value is moved into \ST{7}, I wrote earlier about reason of this}: 
+\RU{Вытолкнутое значение отображается как \ST{7}, почему это так, я писал раннее}
+\EN{Popped value is reflected as \ST{7}, I wrote earlier about reason of this}: 
 \ref{FPU_is_rather_circular_buffer}.\\
 \\
-\FNSTSW \RU{сработал}\EN{executed}: \figref{fig:FPU_comparison_case1_olly3}.
+\FNSTSW \RU{сработал}\EN{is executed}: \figref{fig:FPU_comparison_case1_olly3}.
 \RU{Видно что регистр \TT{AX} содержит нули: действительно, ведь все condition-флаги тоже содержали нули.}
 \EN{We see that \TT{AX} register contain zeroes: indeed, all condition flags has zeroes.}
 (\olly \RU{дизассемблирует команду}\EN{disassembles} \FNSTSW \RU{как}\EN{instruction as} \TT{FSTSW} --- 
 \RU{это синоним}\EN{they are synonyms}).\\
 \\
-\TEST \RU{сработал}\EN{executed}: \figref{fig:FPU_comparison_case1_olly4}.
+\TEST \RU{сработал}\EN{is executed}: \figref{fig:FPU_comparison_case1_olly4}.
 \RU{Флаг \TT{PF} равен единице.}\EN{\TT{PF} flag is one.}
 \RU{Все верно: количество выставленных бит в $0$ это $0$, а $0$ --- это четное число.}
-\EN{Indeed: count of bits set in $0$ is $0$ and $0$ is even number.}
+\EN{Indeed: number of bits set in $0$ is $0$ and $0$ is even number.}
 \olly \RU{дизассемблирует}\EN{disassembles} \TT{JP} \RU{как}\EN{as} \ac{JPE} --- \RU{это синонимы}\EN{they
 are synonims}.
 \RU{И она сейчас сработает}\EN{And it will be triggered right now}.\\
@@ -188,35 +194,35 @@ are synonims}.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/12_FPU/3_comparison/x86/MSVC/olly1_1.png}
-\caption{\olly: \RU{первая \FLD исполнилась}\EN{first \FLD executed}}
+\caption{\olly: \RU{первая \FLD исполнилась}\EN{first \FLD is executed}}
 \label{fig:FPU_comparison_case1_olly1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/12_FPU/3_comparison/x86/MSVC/olly1_2.png}
-\caption{\olly: \FCOMP \RU{исполнилась}\EN{executed}}
+\caption{\olly: \FCOMP \RU{исполнилась}\EN{is executed}}
 \label{fig:FPU_comparison_case1_olly2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/12_FPU/3_comparison/x86/MSVC/olly1_3.png}
-\caption{\olly: \FNSTSW \RU{исполнилась}\EN{executed}}
+\caption{\olly: \FNSTSW \RU{исполнилась}\EN{is executed}}
 \label{fig:FPU_comparison_case1_olly3}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/12_FPU/3_comparison/x86/MSVC/olly1_4.png}
-\caption{\olly: \TEST \RU{исполнилась}\EN{executed}}
+\caption{\olly: \TEST \RU{исполнилась}\EN{is executed}}
 \label{fig:FPU_comparison_case1_olly4}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/12_FPU/3_comparison/x86/MSVC/olly1_5.png}
-\caption{\olly: \RU{вторая \FLD исполнилась}\EN{second \FLD executed}}
+\caption{\olly: \RU{вторая \FLD исполнилась}\EN{second \FLD is executed}}
 \label{fig:FPU_comparison_case1_olly5}
 \end{figure}
 
@@ -235,7 +241,7 @@ $b$ ($-4$) \RU{уже загружено в}\EN{is already loaded into} \ST{0}.
 \\
 \FNSTSW \RU{сработал}\EN{executed}: \figref{fig:FPU_comparison_case2_olly3}.
 \RU{Видно что регистр \TT{AX} содержит \TT{0x100}: флаг \Czero стал на место 16-го бита.}
-\EN{We see that \TT{AX} register contain \TT{0x100}: \Czero flag now on the place of 16th bit.}\\
+\EN{We see that \TT{AX} register contain \TT{0x100}: \Czero flag now at the place of 16th bit.}\\
 \\
 \TEST \RU{сработал}\EN{executed}: \figref{fig:FPU_comparison_case2_olly4}.
 \RU{Флаг }\TT{PF} \RU{равен нулю}\EN{ flag is cleared}.

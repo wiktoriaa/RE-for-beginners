@@ -7,18 +7,19 @@
 \RU{\FLD берет 8 байт из стека и загружает их в регистр \ST{0}, автоматически конвертируя во внутренний 
 80-битный формат (\IT{extended precision}).}
 \EN{\FLD takes 8 bytes from stack and load the number into the \ST{0} register, automatically converting 
-it into internal 80-bit format \IT{extended precision}).}
+it into internal 80-bit format (\IT{extended precision}).}
 
 \index{x86!\Instructions!FDIV}
 \RU{\FDIV делит содержимое регистра \ST{0} на число, лежащее по адресу \TT{\_\_real@40091eb851eb851f} ~--- 
 там закодировано значение $3.14$. Синтаксис ассемблера не поддерживает подобные числа, 
 так что то что мы там видим, это шестнадцатеричное представление числа \IT{3.14} в формате IEEE 754.}
-\EN{\FDIV divides value in the \ST{0} register by number storing at address 
-\TT{\_\_real@40091eb851eb851f}~---$3.14$ value is coded there. Assembler syntax missing floating point numbers, so, 
-what we see here is hexadecimal representation of \IT{3.14} number in 64-bit IEEE 754 encoded.}
+\EN{\FDIV divides value in the \ST{0} register by number stored at address 
+\TT{\_\_real@40091eb851eb851f}~---$3.14$ value is encoded there. 
+Assembler syntax missing floating point numbers, so, 
+what we see here is hexadecimal representation of \IT{3.14} number in 64-bit IEEE 754 format.}
 
-\RU{После выполнения \FDIV, в \ST{0} остается частное\FNQUOTIENT.}
-\EN{After \FDIV execution, \ST{0} will hold quotient\FNQUOTIENT.}
+\RU{После выполнения \FDIV, в \ST{0} остается \glslink{quotient}{частное}.}
+\EN{After \FDIV execution, \ST{0} will hold \gls{quotient}.}
 
 \index{x86!\Instructions!FDIVP}
 \RU{Кстати, есть еще инструкция \FDIVP, которая делит \ST{1} на \ST{0}, 
@@ -30,7 +31,7 @@ If you know Forth language\FNURLFORTH,
 you will quickly understand that this is stack machine\FNURLSTACK.}
 
 \RU{Следующая \FLD заталкивает в стек значение $b$.}
-\EN{Next \FLD instruction pushing $b$ value into stack.}
+\EN{The next \FLD instruction pushing $b$ value into stack.}
 
 \RU{После этого, в \ST{1} перемещается результат деления, а в \ST{0} теперь будет $b$.}
 \EN{After that, quotient is placed to the \ST{1} register, and the \ST{0} will hold $b$ value.}
@@ -38,21 +39,20 @@ you will quickly understand that this is stack machine\FNURLSTACK.}
 \index{x86!\Instructions!FMUL}
 \RU{Следующий \FMUL умножает $b$ из \ST{0} на значение \TT{\_\_real@4010666666666666} ~--- 
 там лежит число 4.1, и оставляет результат в \ST{0}.}
-\EN{Next \FMUL instruction do multiplication: $b$ from the \ST{0} register by value at 
+\EN{Tht next \FMUL instruction do multiplication: $b$ from the \ST{0} register by value at 
 \TT{\_\_real@4010666666666666} (4.1 number is there) and leaves result in the \ST{0} register.}
 
 \index{x86!\Instructions!FADDP}
 \RU{Самая последняя инструкция \FADDP складывает два значения из вершины стека, 
 в \ST{1} и затем выталкивает значение, лежащее в \ST{0}, 
 таким образом результат сложения остается на вершине стека в \ST{0}.}
-\EN{Very last \FADDP instruction adds two values at top of stack, storing result to the \ST{1} 
+\EN{The very last \FADDP instruction adds two values at top of stack, storing result to the \ST{1} 
 register and then popping value at \ST{1}, hereby leaving result at top of stack in the \ST{0}.}
 
 \RU{Функция должна вернуть результат в \ST{0}, так что больше ничего здесь не производится, 
 кроме эпилога функции.}
-\EN{The function must return result in the \ST{0} register, so,
-after \FADDP there are no any 
-other instructions except of function epilogue.}
+\EN{The function must return result in the \ST{0} register, 
+so there are no any other instructions except of function epilogue after \FADDP.}
 
 \subsubsection{MSVC + \olly}
 \index{\olly}
@@ -79,9 +79,8 @@ from memory.}
 (\gls{quotient}): \figref{fig:FPU_simple_olly_2}.\\
 \\
 \RU{Третий шаг}\EN{Third step}: \RU{вторая}\EN{the next} \FLD 
-\RU{исполнилась, загружая в \ST{0} $3.4$ (мы видим приближенное число $3.39999...$).}
-\EN{executed, loading $3.4$ into \ST{0} (we see here approximated value $3.39999...$).}
-\figref{fig:FPU_simple_olly_3}.
+\RU{исполнилась, загружая в \ST{0} $3.4$ (мы видим приближенное число $3.39999...$)}
+\EN{executed, loading $3.4$ into \ST{0} (we see here approximated value $3.39999...$)}: \figref{fig:FPU_simple_olly_3}.
 \RU{В это время}\EN{At the same time,} \gls{quotient} \IT{\RU{провалилось}\EN{pushed}} 
 \RU{в}\EN{into} \ST{1}.
 \RU{\EIP в это время указывает не следующую инструкцию}\EN{Right now, \EIP points to the next
@@ -95,13 +94,8 @@ instruction}: \FMUL.
 \\
 \RU{Затем}\EN{Next}: \FADDP \RU{исполнилась, теперь в \ST{0} сумма, а \ST{1} очистился}
 \EN{was executed, now result of addition is in \ST{0}, and \ST{1} is cleared}:
-\figref{fig:FPU_simple_olly_5}.
-\RU{Кстати}\EN{By the way}, \olly, \RU{для краткости}\EN{for brevity}, 
-\RU{показывает регистр}\EN{shows the register as} \TT{ST}, \RU{это синоним для}\EN{it's synonymous
-for} \ST{0}
-\footnote{\RU{Кстати, можно запомнить это как}
-\EN{By the way, it could be memorized as} ``Stack Top''.}.
-
+\figref{fig:FPU_simple_olly_5}.\\
+\\
 \RU{Сумма остается в \ST{0}, потому что ф-ция возвращает результат своей работы через \ST{0}.}
 \EN{Result is left in \ST{0}, because the function returns its value in \ST{0}.}
 \RU{Позже, \main возьмет это значение оттуда.}
@@ -110,7 +104,7 @@ for} \ST{0}
 \RU{Мы также видим кое-что необычное: значение $13.93...$ теперь находится в \ST{7}.}
 \EN{We also see something unusual: $13.93...$ value is now located in \ST{7}.}
 \RU{Почему}\EN{Why}?
-\RU{Объяснение простое}\EN{It's easy to understand}.
+
 \label{FPU_is_rather_circular_buffer}
 \RU{Я писал что регистры в \ac{FPU} представляю собой стек}\EN{As I wrote before, \ac{FPU} registers
 is stack}: \ref{FPU_is_stack}. 
@@ -118,9 +112,11 @@ is stack}: \ref{FPU_is_stack}.
 \RU{Представьте, если бы \IT{в железе} было бы так, как описано, тогда при каждом заталкивании 
 (или выталкивания) в стек,
 все остальные 7 значений нужно было бы передвигать (или копировать) в соседние регистры, 
-а это слишком много лишней работы.}
-\EN{Just imagine if it would be implemented \IT{in hardware} as it's described, the all 7 register's
-contents must be moved (or copied) to adjacent registers, and that's a lot of work.}
+а это слишком много работы.}
+\EN{Just imagine if it would be implemented \IT{in hardware} as it's described, 
+then all the rest 7 register's
+contents must be moved (or copied) to adjacent registers during pushing and popping, 
+and that's a lot of work.}
 \RU{Так что в реальности,
 \ac{FPU} имеет просто 8 регистров и указатель (называемый \TT{TOP}), содержащий номер регистра,
 которая в текущим момент является ``вершиной стека''.}

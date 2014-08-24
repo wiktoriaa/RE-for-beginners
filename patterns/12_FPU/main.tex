@@ -15,7 +15,7 @@
 стоит немного в стороне от \ac{CPU}.}
 \EN{It was called coprocessor in past.
 It stay aside of the main \ac{CPU} and looks like programmable calculator
-in some way and.}\\
+in some way.}\\
 \\
 \RU{Перед изучением \ac{FPU} полезно ознакомиться с тем как работают стековые машины\FNURLSTACK, 
 или ознакомиться с основами языка Forth\FNURLFORTH.}
@@ -25,7 +25,7 @@ in some way and.}\\
 \index{Intel!FPU}
 \RU{Интересен факт, что в свое время (до 80486) сопроцессор был отдельным чипом на материнской плате, 
 и вследствие его высокой цены, он стоял не всегда. Его можно было докупить отдельно и поставить}
-\EN{It is interesting to know that in past (before 80486 CPU) coprocessor was a separate chip 
+\EN{It is interesting to know that coprocessor in past (before 80486 CPU) was a separate chip 
 and it was not always settled on motherboard. It was possible to buy it separately and install}
 \footnote{\RU{Например, Джон Кармак использовал в своей игре Doom числа с фиксированной запятой, хранящиеся
 в обычных 32-битных \ac{GPR} (16 бит на целую часть и 16 на дробную),
@@ -43,24 +43,29 @@ could work on 32-bit computer without FPU, i.e., 80386 and 80486 SX}}.\\
 \ac{CPU} ожидать, пока \ac{FPU} закончит работу}\EN{\TT{FWAIT} instruction may remind us that fact---it
 switches \ac{CPU} to waiting state, so it can wait until \ac{FPU} finishes its work}.
 \RU{Другой рудимент, это тот факт что опкоды \ac{FPU}-инструкций начинаются с т.н. ``escape''-опкодов 
-(\TT{D8..DF}), т.е., опкоды, передающиеся в \ac{FPU}}\EN{Another rudiment is the fact that 
-\ac{FPU}-instruction 
-opcodes are started with so called ``escape''-opcodes (\TT{D8..DF}), i.e., opcodes passed into \ac{FPU}}. \\
+(\TT{D8..DF}), т.е., опкоды, передающиеся в отдельный сопроцессор.}
+\EN{Another rudiment is the fact that \ac{FPU}-instruction 
+opcodes are started with so called ``escape''-opcodes (\TT{D8..DF}), i.e., 
+opcodes passed into separate coprocessor.} \\
 \\
 \index{IEEE 754}
 \label{FPU_is_stack}
 \RU{FPU имеет стек из восьми 80-битных регистров, каждый может содержать число в формате IEEE 754\FNURLIEEE.}
 \EN{FPU has a stack capable to hold 8 80-bit registers, each register can hold a number 
-in IEEE 754\FNURLIEEE format.}\\
+in IEEE 754\FNURLIEEE format.}
+\RU{Это \ST{0}..\ST{7}. Для краткости, IDA и \olly отображают \ST{0} как \TT{ST},
+что в некоторых учебниках и документациях означает ``Stack Top'' (``вершина стека'').}
+\EN{They are \ST{0}..\ST{7}. For brevity, IDA and \olly shows \ST{0} as \TT{ST}, 
+which is represented in some textbooks and manuals as ``Stack Top''.}
 \\
 \index{float}
 \index{double}
-\RU{В \CCpp имеются два типа для работы с числами с плавающей запятой, 
+\RU{В стандартных \CCpp имеются два типа для работы с числами с плавающей запятой, 
 это \Tfloat (\IT{число одинарной точности}\FNURLSP, 32 бита)
 \footnote{Формат представления float-чисел затрагивается в разделе 
 \IT{\WorkingWithFloatAsWithStructSubSubSectionName}~(\ref{sec:floatasstruct}).}
 и \Tdouble (\IT{число двойной точности}\FNURLDP, 64 бита).}
-\EN{\CCpp language offer at least two floating number types, \Tfloat (\IT{single-precision}\FNURLSP, 32 bits)
+\EN{Standard \CCpp languages offer at least two floating number types, \Tfloat (\IT{single-precision}\FNURLSP, 32 bits)
 \footnote{single precision float numbers format is also addressed in 
 the \IT{\WorkingWithFloatAsWithStructSubSubSectionName}~(\ref{sec:floatasstruct}) section}
 and \Tdouble (\IT{double-precision}\FNURLDP, 64 bits).}\\
@@ -74,18 +79,9 @@ and \Tdouble (\IT{double-precision}\FNURLDP, 64 bits).}\\
 \EN{\Tfloat type requires the same number of bits as \Tint type in 32-bit environment, 
 but number representation is completely different.}\\
 \\
-\RU{Число с плавающей точкой состоит из знака, мантиссы\footnote{\IT{significand} или \IT{fraction} 
-в англоязычной литературе} и экспоненты.}
-\EN{Number consisting of sign, significand (also called \IT{fraction}) and exponent.}\\
-\\
-\RU{Функция, имеющая \Tfloat или \Tdouble среди аргументов, получает эти значения через стек. 
-Если функция возвращает \Tfloat или \Tdouble, она оставляет значение в регистре \ST{0} ~--- то есть, 
-на вершине FPU-стека.}
-\EN{Function having \Tfloat or \Tdouble among argument list is getting 
-the value via stack. 
-If function returns \Tfloat or \Tdouble value,
-it leaves the value in the \ST{0}
-register~---at top of FPU stack.}
+\RU{Число с плавающей точкой в формате IEEE 754 состоит из \IT{знака}, \IT{мантиссы}\footnote{\IT{significand} или \IT{fraction} 
+в англоязычной литературе} и \IT{экспоненты}.}
+\EN{Number in IEEE 754 format consisting of \IT{sign}, \IT{significand} (also called \IT{fraction}) and \IT{exponent}.}
 
 \input{patterns/12_FPU/1_simple/main}
 \input{patterns/12_FPU/2_passing_floats/main}
