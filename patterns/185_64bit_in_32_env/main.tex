@@ -1,10 +1,11 @@
 \chapter{\RU{64-битные значения в 32-битной среде}\EN{64-bit values in 32-bit environment}}
 \label{sec:64bit_in_32_env}
 
-\RU{В среде, где \ac{GPR}-ы 32-битные, 64-битные значения передаются как пары 32-битных значений}
-\EN{In the 32-bit environment \ac{GPR}'s are 32-bit, so 64-bit values are passed as 32-bit value pairs}
+\RU{В среде, где \ac{GPR}-ы 32-битные, 64-битные значения хранятся и передаются как пары 32-битных значений}
+\EN{In the 32-bit environment \ac{GPR}'s are 32-bit, so 64-bit values are stored and passed as 32-bit value pairs}
 \footnote{\RU{Кстати, в 16-битной среде, 32-битные значения передаются 16-битными парами точно так же}
-\EN{By the way, 32-bit values are passed as pairs in 16-bit environment just as the same}}.
+\EN{By the way, 32-bit values are passed as pairs in 16-bit environment just as the same}: 
+\ref{win16_32bit_values}}.
 
 \section{\RU{Передача аргументов, сложение, вычитание}\EN{Arguments passing, addition, subtraction}}
 
@@ -21,8 +22,8 @@ high part first, then low part}. \\
 \index{x86!\Instructions!ADC}
 \RU{При сложении, в начале складываются младшие 32 бита}\EN{While addition, low 32-bit part are added first}.
 \RU{Если при сложении был перенос, выставляется флаг CF}\EN{If carry was occurred while addition, CF flag is set}.
-\RU{Следующая инструкция \TT{ADC} складывает старшие части чисел, но также прибавляет единицу если CF=1}
-\EN{The next \TT{ADC} instruction adds high parts of values, but also adding 1 if CF=1}. \\
+\RU{Следующая инструкция \TT{ADC} складывает старшие части чисел, но также прибавляет единицу если $CF=1$}
+\EN{The next \TT{ADC} instruction adds high parts of values, but also adds 1 if $CF=1$}. \\
 \\
 \index{x86!\Instructions!SBB}
 \RU{Вычитание также происходит парами}\EN{Subtraction is also occurred by pairs}.
@@ -78,7 +79,7 @@ from \EAX{}, i.e., from the higher part}.
 просто заполнить нулями}\EN{Higher part is shifting using more popular \SHR{} instruction: indeed, freed bits in the higher part
 should be just filled with zeroes}.
 
-\section{\RU{Конвертирование 32-битного значения в 64-битное}\EN{Converting of 32-bit value into 64-bit one}}
+\section{\RU{Конвертирование 32-битного значения в 64-битное}\EN{Converting 32-bit value into 64-bit one}}
 \label{subsec:sign_extending_32_to_64}
 
 \lstinputlisting{patterns/185_64bit_in_32_env/4.c}
@@ -88,16 +89,16 @@ should be just filled with zeroes}.
 \RU{Здесь появляется необходимость расширить 32-битное знаковое значение из $c$ в 64-битное знаковое}
 \EN{Here we also run into necessity to extend 32-bit signed value from $c$ into 64-bit signed}.
 \RU{Конвертировать беззнаковые значения очень просто: нужно просто выставить в 0 все биты в старшей части}
-\EN{Unsigned values are converted straightforwardly: all bits in higher part should be set to 0}.
+\EN{Unsigned values are converted straightforwardly: all bits in higher part must be set to 0}.
 \RU{Но для знаковых типов это не подходит: знак числа должен быть скопирован в старшую часть числа-результата}
 \EN{But it is not appropriate for signed data types: sign should be copied into higher part of resulting number}.
 \index{x86!\Instructions!CDQ}
-\RU{Здесь это делает инструкция \TT{CDQ}, она берет входное значение в \EAX{}, расширяет число до 64-битного,
+\RU{Здесь это делает инструкция \TT{CDQ}, она берет входное значение в \EAX{}, расширяет его до 64-битного,
 и оставляет его в паре регистров \EDX{}:\EAX{}}
-\EN{An instruction \TT{CDQ} doing that here, it takes input value in \EAX{}, extending value to 64-bit and leaving it
+\EN{\TT{CDQ} instruction doing that here, it takes input value in \EAX{}, extending it to 64-bit and leaving it
 in the \EDX{}:\EAX{} registers pair}.
 \RU{Иными словами, инструкция \TT{CDQ} узнает знак числа в \EAX{} (просто берет самый старший бит в \EAX{}) и в зависимости от этого,
-выставляет все 32 бита в \EDX{} в 0 или в 1}\EN{In other words, \TT{CDQ} instruction getting number sign in \EAX{} (by getting just
+выставляет все 32 бита в \EDX{} в 0 или в 1}\EN{In other words, \TT{CDQ} instruction gets number sign in \EAX{} (by getting just
 most significant bit in \EAX{}), and depending of it, setting all 32-bits in \EDX{} to 0 or 1}.
 \RU{Её работа в каком-то смысле напоминает работу инструкции \MOVSX{}}\EN{Its operation is somewhat
 similar to the \MOVSX{} instruction}.
@@ -106,6 +107,3 @@ similar to the \MOVSX{} instruction}.
 
 \RU{GCC генерирует такой же код как и MSVC, но обходится без вызова библиотечной ф-ции для перемножения значений.}
 \EN{GCC generates just the same code as MSVC, but inlines multiplication code right in the function.}
-
-\RU{См.также: 32-битные значения в 16-битной среде}
-\EN{See also: 32-bit values in 16-bit environment}: \ref{win16_32bit_values}.

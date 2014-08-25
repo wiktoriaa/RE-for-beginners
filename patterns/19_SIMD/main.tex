@@ -1,13 +1,13 @@
 \chapter{SIMD}
 
 \label{SIMD_x86}
-\ac{SIMD} \RU{это акроним:}\EN{is just acronym:} \IT{Single Instruction, Multiple Data}.
+\ac{SIMD} \RU{это акроним}\EN{is an acronym}: \IT{Single Instruction, Multiple Data}.
 
 \RU{Как можно судить по названию, это обработка множества данных исполняя только одну инструкцию.}
 \EN{As it is said, it is multiple data processing using only one instruction.}
 
 \RU{Как и \ac{FPU}, эта подсистема процессора выглядит так же отдельным процессором внутри x86.}
-\EN{Just as \ac{FPU}, that \ac{CPU} subsystem looks like separate processor inside x86.}
+\EN{As \ac{FPU}, that \ac{CPU} subsystem looks like separate processor inside x86.}
 
 \index{x86!MMX}
 \RU{SIMD в x86 начался с MMX. Появилось 8 64-битных регистров MM0-MM7.}
@@ -51,7 +51,7 @@ AVX\EMDASH\RU{расширение регистров до 256 бит.}\EN{anoth
 \RU{Немного о практическом применении.}\EN{Now about practical usage.}
 
 \RU{Конечно же, копирование блоков в памяти (\TT{memcpy}), сравнение (\TT{memcmp}), и подобное.}
-\EN{Of course, memory copying (\TT{memcpy}), memory comparing (\TT{memcmp}) and so on.}
+\EN{Of course, memory copy routines (\TT{memcpy}), memory comparing (\TT{memcmp}) and so on.}
 
 \index{DES}
 \RU{Еще пример: имеется алгоритм шифрования DES, который берет 64-битный блок, 56-битный ключ, 
@@ -254,20 +254,19 @@ if to use \Othree option and to turn on SSE2 support: \TT{-msse2}.}
 special macros\footnote{\URLMSDNSSE}.
 As of MSVC, some of them are located in the \TT{intrin.h} file.}
 
+\newcommand{\URLSTRLEN}{http://www.strchr.com/sse2\_optimised\_strlen}
+
 \index{\CStandardLibrary!strlen()}
 \RU{Имеется возможность реализовать функцию \strlen\footnote{strlen() ~--- стандартная функция Си 
 для подсчета длины строки} при помощи SIMD-инструкций, работающий в 2-2.5 раза быстрее обычной реализации. 
-Эта функция будет загружать в XMM-регистр сразу 16 байт и проверять каждый на ноль.}
+Эта функция будет загружать в XMM-регистр сразу 16 байт и проверять каждый на ноль}
 \EN{It is possible to implement \strlen function\footnote{strlen()~---standard C library function for calculating
 string length} using SIMD-instructions, working 2-2.5 times faster than common implementation.
-This function will load 16 characters into a XMM-register and check each against zero.}
+This function will load 16 characters into a XMM-register and check each against zero}
+\footnote{\RU{Пример базируется на исходнике отсюда: \url{\URLSTRLEN}.}
+\EN{The example is based on source code from: \url{\URLSTRLEN}.}}.
 
 \lstinputlisting{patterns/19_SIMD/18_3.c}
-
-\newcommand{\URLSTRLEN}{http://www.strchr.com/sse2\_optimised\_strlen}
-
-\RU{(пример базируется на исходнике \href{\URLSTRLEN}{отсюда}).}
-\EN{(the example is based on source code from \href{\URLSTRLEN}{there}).}
 
 \RU{Компилируем в MSVC 2010 с опцией \Ox:}\EN{Let's compile in MSVC 2010 with \Ox option:}
 
@@ -284,7 +283,7 @@ If not, let's call generic \strlen implementation.}
 \RU{Наблюдательный читатель может спросить, почему в этом месте мы не можем использовать \MOVDQU, 
 которая может загружать откуда угодно не взирая на факт, выровнен ли указатель?}
 \EN{Observant reader might ask, why \MOVDQU cannot be used here since it can load data from the memory
-regardless the fact if the pointer aligned or not.}
+regardless pointer alignment?}
 
 \RU{Да, можно было бы сделать вот как: если указатель выровнен, загружаем используя \MOVDQA, 
 иначе используем работающую чуть медленнее \MOVDQU.}
@@ -297,16 +296,16 @@ if not~---use slower \MOVDQU.}
 \index{Page (memory)}
 \newcommand{\URLPAGE}{\url{http://en.wikipedia.org/wiki/Page_(computer_memory)}}
 
-\RU{В \ac{OS} линии \gls{Windows NT}, и не только, память выделяется страницами по 4 KiB (4096 байт). 
+\RU{В \ac{OS} линии \gls{Windows NT} (и не только), память выделяется страницами по 4 KiB (4096 байт). 
 Каждый win32-процесс якобы имеет в наличии 4 GiB, но на самом деле, 
 только некоторые части этого адресного пространства присоединены к реальной физической памяти. 
 Если процесс обратится к блоку памяти, которого не существует, сработает исключение. 
-Так работает виртуальная память\footnote{\URLPAGE}.}
-\EN{In \gls{Windows NT} line of \ac{OS} but not limited to it, memory allocated by pages of 4 KiB (4096 bytes).
+Так работает \ac{VM}\footnote{\URLPAGE}.}
+\EN{In \gls{Windows NT} line of \ac{OS} (but not limited to it), memory allocated by pages of 4 KiB (4096 bytes).
 Each win32-process has ostensibly 4 GiB, but in fact, only some parts
 of address space are connected to real physical memory.
 If the process accessing to the absent memory block, exception will be raised.
-That's how virtual memory works\footnote{\URLPAGE}.}
+That's how \ac{VM} works\footnote{\URLPAGE}.}
 
 \RU{Так вот, функция, читающая сразу по 16 байт, имеет возможность нечаянно вылезти за границу 
 выделенного блока памяти. 
@@ -369,10 +368,10 @@ read from unallocated memory.}
 
 \index{x86!\Instructions!PXOR}
 \verb|_mm_setzero_si128()|\EMDASH\RU{это макрос, генерирующий \TT{pxor xmm0, xmm0} ~--- инструкция просто обнуляет регистр \XMM{0}.}
-\EN{is a macro generating \TT{pxor xmm0, xmm0}~---instruction just clears the \XMM{0} register}
+\EN{is a macro generating \TT{pxor xmm0, xmm0}~---instruction just clears the \XMM{0} register}.
 
 \verb|_mm_load_si128()|\EMDASH\RU{это макрос для \MOVDQA, он просто загружает 16 байт по адресу из указателя в \XMM{1}.}
-\EN{is a macro for \MOVDQA, it just loading 16 bytes from the address in the \XMM{1} register.}
+\EN{is a macro for \MOVDQA, it just loading 16 bytes from the address into the \XMM{1} register.}
 
 \index{x86!\Instructions!PCMPEQB}
 \verb|_mm_cmpeq_epi8()|\EMDASH\RU{это макрос для \PCMPEQB, это инструкция которая 
@@ -419,24 +418,37 @@ was set in the \XMM{0} register by \TT{pxor xmm0, xmm0}.}
 In other words, if first byte of the \XMM{1} register is \TT{0xff}, first \EAX bit will be set to 1 too.}
 
 \RU{Если второй байт в регистре \XMM{1} является \TT{0xff}, то второй бит в \EAX также будет единицей. 
-Иными словами, инструкция отвечает на вопрос, \IT{какие из байт в \XMM{1} являются \TT{0xff}?}
+Иными словами, инструкция отвечает на вопрос, ``какие из байт в \XMM{1} являются \TT{0xff}?''
 В результате приготовит 16 бит и запишет в \EAX. Остальные биты в \EAX обнулятся.}
 \EN{If second byte in the \XMM{1} register is \TT{0xff}, then second \EAX bit will be set to 1 too.
-In other words, the instruction is answer to the question \IT{which bytes in the \XMM{1} are \TT{0xff?}}
+In other words, the instruction is answering to the question ``which bytes in the \XMM{1} are \TT{0xff}?''
 And will prepare 16 bits in the \EAX register. Other bits in the \EAX register are to be cleared.}
 
-\RU{Кстати, не забывайте также вот о какой особенности нашего алгоритма:}
-\EN{By the way, do not forget about this feature of our algorithm:}
+\RU{Кстати, не забывайте также вот о какой особенности нашего алгоритма.}
+\EN{By the way, do not forget about this feature of our algorithm.}
+\RU{На вход может прийти 16 байт вроде}\EN{There might be 16 bytes on input like}:
 
-\RU{На вход может прийти 16 байт вроде}\EN{There might be 16 bytes on input like} \TT{hello\textbackslash{}x00garbage\textbackslash{}x00ab}
+\begin{center}
+\begin{bytefield}[endianness=big,bitwidth=0.05\linewidth]{16}
+\bitheader{15,14,13,12,11,10,9,3,2,1,0} \\
+\bitbox{1}{``h''} & 
+\bitbox{1}{``e''} & 
+\bitbox{1}{``l''} & 
+\bitbox{1}{``l''} & 
+\bitbox{1}{``o''} & 
+\bitbox{1}{0} & 
+\bitbox{7}{garbage} & 
+\bitbox{1}{0} &
+\bitbox{2}{garbage} & 
+\end{bytefield}
+\end{center}
 
 \RU{Это строка \TT{'hello'}, после нее терминирующий ноль, затем немного мусора в памяти.}
 \EN{It is a \TT{'hello'} string, terminating zero, and also a random noise in memory.}
-
 \RU{Если мы загрузим эти 16 байт в \XMM{1} и сравним с нулевым \XMM{0}, то в итоге получим такое 
-(я использую здесь порядок с \ac{MSB} до \ac{LSB}):}
+\footnote{Я использую здесь порядок с \ac{MSB} до \ac{LSB}}:}
 \EN{If we load these 16 bytes into \XMM{1} and compare them with zeroed \XMM{0}, we will get something like
-(I use here order from \ac{MSB} to \ac{LSB}):}
+\footnote{I use here order from \ac{MSB} to \ac{LSB}}:}
 
 \begin{verbatim}
 XMM1: 0000ff00000000000000ff0000000000
@@ -450,7 +462,7 @@ XMM1: 0000ff00000000000000ff0000000000
 
 \RU{Совершенно очевидно, что далее наша функция должна учитывать только первый встретившийся
 нулевой бит и игнорировать все остальное.}
-\EN{Obviously, our function must consider only first zero bit and ignore the rest ones.}
+\EN{Obviously, our function must take only first zero bit and ignore the rest ones.}
 
 \index{x86!\Instructions!BSF}
 \label{instruction_BSF}
@@ -483,4 +495,3 @@ ready to return result.}
 \RU{Кстати, в SSE 4.2 (который появился в Intel Core i7) все эти манипуляции со строками могут быть еще проще:}
 \EN{By the way, SSE 4.2 (appeared in Intel Core i7) offers more instructions where these string manipulations might be
 even easier:} \url{http://www.strchr.com/strcmp\_and\_strlen\_using\_sse\_4.2}
-

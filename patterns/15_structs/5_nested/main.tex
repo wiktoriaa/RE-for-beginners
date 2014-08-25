@@ -1,7 +1,7 @@
 \section{\RU{Вложенные структуры}\EN{Nested structures}}
 
-\RU{Теперь, как насчет ситуаций, когда одна структура определяет внутри себя еще одну структуру?}
-\EN{Now what about situations when one structure defines another structure inside?}
+\RU{Теперь, как насчет ситуаций, когда одна структура определена внутри другой структуры?}
+\EN{Now what about situations when one structure is defined inside of another structure?}
 
 \lstinputlisting{patterns/15_structs/5_nested/nested.c}
 
@@ -26,6 +26,7 @@ Thus, we would say, nested structures are finally unfolds into \IT{linear} or \I
 (объявляя таким образом указатель), ситуация будет совсем иная.}
 \EN{Of course, if to replace \TT{struct inner\_struct c;} declaration to \TT{struct inner\_struct *c;} 
 (thus making a pointer here) situation will be quite different.}
+% FIXME: нарисовать вложенную структуру и развернутую
 
 \subsection{\olly}
 \index{\olly}
@@ -35,12 +36,12 @@ Thus, we would say, nested structures are finally unfolds into \IT{linear} or \I
 
 \RU{Вот как расположены значения в памяти}\EN{That's how values are located in memory}:
 \begin{itemize}
-\item \RU{байт 1 + 3 байта случайного мусора}\EN{byte 1 + 3 bytes of random garbage};
-\item \RU{32-битное слово}\EN{32-bit word} 2;
-\item \RU{32-битное слово}\EN{32-bit word} 0x64 (100);
-\item \RU{32-битное слово}\EN{32-bit word} 0x65 (101);
-\item \RU{байт 3 + 3 байта случайного мусора}\EN{byte 3 + 3 bytes of random garbage};
-\item \RU{32-битное слово}\EN{32-bit word} 4.
+\item \IT{(outer\_struct.a)} \RU{байт 1 + 3 байта случайного мусора}\EN{byte 1 + 3 bytes of random garbage};
+\item \IT{(outer\_struct.b)} \RU{32-битное слово}\EN{32-bit word} 2;
+\item \IT{(inner\_struct.a)} \RU{32-битное слово}\EN{32-bit word} 0x64 (100);
+\item \IT{(inner\_struct.b)} \RU{32-битное слово}\EN{32-bit word} 0x65 (101);
+\item \IT{(outer\_struct.d)} \RU{байт 3 + 3 байта случайного мусора}\EN{byte 3 + 3 bytes of random garbage};
+\item \IT{(outer\_struct.e)} \RU{32-битное слово}\EN{32-bit word} 4.
 \end{itemize}
 
 \begin{figure}[H]
