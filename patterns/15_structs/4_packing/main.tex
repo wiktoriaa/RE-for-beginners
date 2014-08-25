@@ -26,9 +26,9 @@
 is being copied to the temporary one (a place in stack is allocated in line 10 for it,
 and then all 4 fields, one by one, is copied in lines 12 \ldots\ 19), 
 then its pointer is to be passed (or address).}
-\RU{Структура копируется, потому что неизвестно, будет ли ф-ция \ttf модифицировать структуру.
+\RU{Структура копируется, потому что неизвестно, будет ли ф-ция \ttf модифицировать структуру или нет.
 И если да, то структура внутри \main должна остаться той же.}
-\EN{The structure is copied, because it's unknown, will the f() function modify structure.
+\EN{The structure is copied, because it's unknown, will the f() function modify structure or not.
 If it's so, then the structure inside of \main should remain as the same.}
 \RU{Мы могли бы использовать указатели на \CCpp, и итоговый код был бы почти такой же,
 только копирования не было бы.}
@@ -54,7 +54,7 @@ Thus it is easier for CPU to access memory at aligned addresses and to cache dat
 Экономию места. Недостаток ~--- процессор будет обращаться к этим полям не так эффективно 
 по скорости, как мог бы.}
 \EN{Now the structure takes only 10 bytes and each \Tchar value takes 1 byte. What it give to us?
-Size economy. And as drawback~---CPU will access these fields without maximal performance it can.}
+Size economy. And as drawback~---CPU will access these fields without full performance it could.}
 
 \label{short_struct_copying_using_MOV}
 \RU{Структура так же копируется в \main. Но не по одному полю, а 10 байт, при помощи трех
@@ -70,7 +70,7 @@ and two bytes using 4 \MOV pairs.}
 очень распространенная практика, потому что это в любом случае работает быстрее чем вызов \TT{memcpy()} ---
 если речь идет о коротких блоках, конечно: \ref{copying_short_blocks}.}
 \EN{By the way, such copy implementation using \MOV instead of \TT{memcpy()} function calling is widely
-used, because it's faster then to call \TT{memcpy()}---if to talk about short blocks, of course:
+used, because it's faster then to call \TT{memcpy()}---if to consider short blocks, of course:
 \ref{copying_short_blocks}.}
 
 \RU{Как нетрудно догадаться, если структура используется много в каких исходниках и объектных файлах, 
@@ -148,8 +148,8 @@ has \Tchar type, therefore, only one byte is written, 1 and 3 respectively (line
 \RU{Этот мусор никак не будет влиять на работу \printf,
 потому что значения для нее готовятся при помощи инструкции \MOVSX, которая загружает
 из памяти байты а не слова}
-\EN{This garbage influence \printf output in no way, because values for it is prepared
-by \MOVSX instruction, which takes bytes, but not words}: 
+\EN{This garbage influence \printf output in no way, because values for it are prepared
+using \MOVSX instruction, which takes bytes, but not words}: 
 \lstref{src:struct_packing_4} (\RU{строки}\EN{lines} 34 \AndENRU 38).
 
 \RU{Кстати, здесь используется именно \MOVSX (расширяющая знак), потому что тип 
@@ -157,7 +157,7 @@ by \MOVSX instruction, which takes bytes, but not words}:
 \EN{By the way, \MOVSX (sign-extending) instruction is used here, because 
 \Tchar type is signed by default in MSVC and GCC.}
 \RU{Если бы здесь был тип}\EN{If the type} \TT{unsigned char} \OrENRU \TT{uint8\_t}\EN{ be here}, 
-\RU{то здесь была бы инструкция \MOVZX}\EN{\MOVZX instruction would be generated here instead}.
+\RU{то здесь была бы инструкция \MOVZX}\EN{\MOVZX instruction would be used instead}.
 
 \begin{figure}[H]
 \centering

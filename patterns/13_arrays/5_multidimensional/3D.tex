@@ -1,4 +1,4 @@
-\subsection{\RU{Пример с трехмерным массивом}\EN{Threedimensional array example}}
+\subsection{\RU{Пример с трехмерным массивом}\EN{Three-dimensional array example}}
 
 \RU{То же самое и для многомерных массивов.}\EN{Same thing about multidimensional arrays.}
 
@@ -50,30 +50,33 @@ used, one bitwise shift operation and one subtraction operation.}
 \lstinputlisting[caption=\OptimizingXcodeIV (\ThumbMode)]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O3_\LANG.asm}
 
 \RU{Тут используются уже описанные трюки для замены умножения на операции сдвига, сложения и вычитания.}
-\EN{Here is used tricks for replacing multiplication by shift, addition and subtraction we already considered.}
+\EN{Tricks for replacing multiplication by shift, addition and subtraction which we already considered
+are also present here.}
 
 \index{ARM!\Instructions!RSB}
 \index{ARM!\Instructions!SUB}
 \RU{Также мы видим новую для себя инструкцию}\EN{Here we also see new instruction for us:} 
 \TT{RSB} (\IT{Reverse Subtract}).
 \RU{Она работает так же, как и \SUB, только меняет операнды местами.}
-\EN{It works just as \SUB, but swapping operands with each other.}
+\EN{It works just as \SUB, but it swaps its operands with each other before.}
 \RU{Зачем?}\EN{Why?}
 \index{ARM!Optional operators!LSL}
-\SUB, \TT{RSB}, \RU{это те инструкции, ко второму операнду которых можно применить коэффициент сдвига, 
-как мы видим и здесь}
-\EN{are those instructions, to the second operand of which shift coefficient may be applied}: (\TT{LSL\#4}). 
+\SUB \AndENRU \TT{RSB}\RU{, это те инструкции, ко второму операнду которых 
+можно применить коэффициент сдвига, как мы видим и здесь}
+\EN{ are those instructions, to the second operand of which shift coefficient may be applied}: 
+(\TT{LSL\#4}). 
 \RU{Но этот коэффициент можно применить только ко второму операнду.}
 \EN{But this coefficient may be applied only to second operand.}
 \RU{Для коммутативных операций, таких как сложение или умножение, 
-там операнды можно менять местами и это не влияет на результат.}
-\EN{That's fine for commutative operations like addition or multiplication, operands may be swapped there
-without result affecting.}
+(там операнды можно менять местами и это не влияет на результат).}
+\EN{That's fine for commutative operations like addition or multiplication 
+(operands may be swapped there without result affecting).}
 \RU{Но вычитание ~--- операция некоммутативная, так что, для этих случаев существует инструкция \TT{RSB}.}
-\EN{But subtraction is non-commutative operation, so, for these cases, \TT{RSB} exist.}
+\EN{But subtraction is non-commutative operation, so \TT{RSB} exist for these cases.}
 
 \index{ARM!\Instructions!LDR.W}
 \RU{Инструкция }\TT{``LDR.W R9, [R9]''} \RU{работает как}\EN{instruction works like} \LEA~(\ref{sec:LEA})
-\RU{в x86, и здесь она ничего не делает, она избыточна.}\EN{in x86, but here it does nothing, it is redundant.}
+\RU{в x86, и здесь она ничего не делает, она избыточна.}
+\EN{in x86, but it does nothing here, it is redundant.}
 \RU{Вероятно, компилятор несоптимизировал её.}\EN{Apparently, compiler not optimized it.}
 

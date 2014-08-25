@@ -5,19 +5,32 @@
 \index{x86!\Instructions!JA}
 \RU{Почти все что здесь есть уже описано мною, кроме одного: использование \JA после \SAHF. 
 Действительно, инструкции условных переходов ``больше'', ``меньше'', ``равно'' для сравнения беззнаковых чисел 
-(\JA, \JAE, \JB, \JBE, \JE/\JZ, \JNA, \JNAE, \JNB, \JNBE, \JNE/\JNZ) проверяют только флаги \CF и \ZF. 
-И биты \CThreeBits после сравнения перекладываются в эти флаги аккурат так, 
-чтобы перечисленные инструкции переходов могли работать. \JA сработает если \CF и \ZF обнулены.}
-\EN{It is almost the same except one: \JA usage instead of \SAHF. 
+(а это \JA, \JAE, \JB, \JBE, \JE/\JZ, \JNA, \JNAE, \JNB, \JNBE, \JNE/\JNZ) проверяют только флаги \CF и \ZF.}
+\EN{It is almost the same except one: \JA is used after \SAHF. 
 Actually, conditional jump instructions checking ``larger'', ``lesser'' or ``equal'' for unsigned number comparison 
-(\JA, \JAE, \JB, \JBE, \JE/\JZ, \JNA, \JNAE, \JNB, \JNBE, \JNE/\JNZ) are checking only \CF and \ZF flags. 
-And \CThreeBits bits after comparison are moving into these flags exactly in the same fashion 
-so conditional jumps will work here. \JA will work if both \CF are \ZF zero.}
+(these are \JA, \JAE, \JB, \JBE, \JE/\JZ, \JNA, \JNAE, \JNB, \JNBE, \JNE/\JNZ) are checking only \CF and \ZF flags.}\\
+\\
+\EN{Let's recall how \CThreeBits bits are located in the \TT{AH} register after \TT{FSTSW}/\FNSTSW execution:}
+\RU{Вспомним, как биты \CThreeBits располагаются в регистре \TT{AH} после исполнения \TT{FSTSW}/\FNSTSW:}
+
+\input{C3_in_AH}
+
+\RU{Вспомним также, как располагаются биты из AH во флагах CPU после исполнения \SAHF:}
+\EN{Let's also recall, how bits from AH are stored into CPU flags after \SAHF execution:}
+
+\input{SAHF_LAHF}
+
+\RU{Биты \Cthree и \Czero после сравнения перекладываются в флаги \ZF и \CF так, 
+что перечисленные инструкции переходов могут работать. 
+\JA сработает если \CF и \ZF обнулены.}
+\EN{\Cthree and \Czero bits after comparison are moving into \ZF and \CF flags exactly,
+so conditional jumps will able to work here. 
+\JA will work if both \CF are \ZF zero.}
 
 \RU{Таким образом, перечисленные инструкции условного перехода можно использовать после инструкций \FNSTSW/\SAHF.}
 \EN{Thereby, conditional jumps instructions listed here can be used after \FNSTSW/\SAHF instructions pair.}
 
 \RU{Вполне возможно, что биты статуса FPU \CThreeBits преднамеренно были размещены таким образом, 
-чтобы переноситься на базовые флаги процессора без перестановок.}
+чтобы переноситься на базовые флаги процессора без перестановок. Хотя я не уверен.}
 \EN{Apparently, FPU \CThreeBits status bits was placed there intentionally, 
-so to easily map them to base CPU flags without additional permutations.}
+so to easily map them to base CPU flags without additional permutations. But I'm not sure.}

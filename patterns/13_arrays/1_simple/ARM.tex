@@ -2,23 +2,22 @@
 
 \lstinputlisting{patterns/13_arrays/1_simple/simple_Keil_ARM_O0_\LANG.asm}
 
-\RU{Тип \Tint требует 32 бита для хранения, или 4 байта}\EN{\Tint type requires 32 bits for storage,
-or 4 bytes}, 
-\RU{так что для хранения 20 переменных типа \Tint, нужно $80$ (\TT{0x50}) байт}
-\EN{so for storage of 20 \Tint variables, $80$ (\TT{0x50}) bytes are needed},
-\RU{поэтому инструкция}\EN{so that is why} \TT{``SUB SP, SP, \#0x50''} 
-\RU{в эпилоге функции выделяет в локальном стеке под массив
-именно столько места.}
+\RU{Тип \Tint требует 32 бита для хранения (или 4 байта),}
+\EN{\Tint type requires 32 bits for storage (or 4 bytes),}
+\RU{так что для хранения 20 переменных типа \Tint, нужно $80$ (\TT{0x50}) байт.}
+\EN{so for storage of 20 \Tint variables, $80$ (\TT{0x50}) bytes are needed.}
+\RU{Поэтому инструкция}\EN{So that is why} \TT{``SUB SP, SP, \#0x50''} 
+\RU{в эпилоге функции выделяет в локальном стеке под массив именно столько места.}
 \EN{instruction in function epilogue allocates exactly this amount of space in local stack.}
 
 \RU{И в первом и во втором цикле, итератор цикла $i$ будет постоянно находится в регистре \Reg{4}.}
 \EN{In both first and second loops, $i$ loop iterator will be placed in the \Reg{4} register.}
 
-\RU{Число, которое нужно записать в массив}\EN{A number to be written into array},
-\RU{вычисляется так $i*2$, и это эквивалентно сдвигу на 1 бит влево}
-\EN{is calculating as $i*2$ which is effectively equivalent to shifting left by one bit},
 \index{ARM!Optional operators!LSL}
-\RU{инструкция}\EN{so} \TT{``MOV R0, R4,LSL\#1''} \RU{делает это}\EN{instruction do this}.
+\RU{Число, которое нужно записать в массив, вычисляется так: $i*2$, и это эквивалентно 
+сдвигу на 1 бит влево, так что инструкция \TT{``MOV R0, R4,LSL\#1''} делает это.}
+\EN{A number to be written into array is calculating as $i*2$ which is effectively equivalent 
+to shifting left by one bit, so \TT{``MOV R0, R4,LSL\#1''} instruction do this.}
 
 \index{ARM!\Instructions!STR}
 \TT{``STR R0, [SP,R4,LSL\#2]''} \RU{записывает содержимое \Reg{0} в массив}\EN{writes \Reg{0} contents into array}.
@@ -30,10 +29,10 @@ or 4 bytes},
 (since each array element has size of 4 bytes) and add it to address of array begin.}
 
 \index{ARM!\Instructions!LDR}
-\RU{Во втором цикле используется обратная инструкция}\EN{The second loop has inverse} 
-\TT{``LDR R2, [SP,R4,LSL\#2]''}, 
-\RU{она загружает из массива нужное значение, и указатель на него вычисляется точно так же.}
-\EN{instruction, it loads from array value we need, and the pointer to it is calculated likewise.}
+\RU{Во втором цикле используется обратная инструкция \TT{``LDR R2, [SP,R4,LSL\#2]''},
+она загружает из массива нужное значение, и указатель на него вычисляется точно так же.}
+\EN{The second loop has inverse \TT{``LDR R2, [SP,R4,LSL\#2]''}
+instruction, it loads from array value we need, and the pointer to it is calculated likewise.}
 
 \subsection{ARM + \OptimizingKeilVI (\ThumbMode)}
 

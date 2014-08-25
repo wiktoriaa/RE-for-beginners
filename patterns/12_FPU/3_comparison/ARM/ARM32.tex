@@ -22,12 +22,12 @@ BX              LR
 \EN{Just like in x86 coprocessor, ARM coprocessor has its own status and flags register}, (\ac{FPSCR}),
 \RU{потому как есть необходимость хранить специфичные для его работы флаги.}
 \EN{since there is a need to store coprocessor-specific flags.}
-
+% TODO -> расписать регистр по битам
 \index{ARM!\Instructions!VMRS}
 \RU{И так же, как и в x86}\EN{And just like in x86}, 
 \RU{в ARM нет инструкций условного перехода}
 \EN{there are no conditional jump instruction in ARM}, 
-\RU{проверяющих биты в регистре статуса сопроцессора}\EN{checking bits in coprocessor status register}, 
+\RU{проверяющих биты в регистре статуса сопроцессора}\EN{which can check bits in coprocessor status register}, 
 \RU{так что имеется инструкция}\EN{so there is} \TT{VMRS}
 \RU{, копирующая 4 бита}\EN{ instruction, copying 4 bits} (N, Z, C, V) 
 \RU{из статуса сопроцессора в биты \IT{общего} статуса (регистр \ac{APSR}).}
@@ -35,22 +35,22 @@ BX              LR
 
 \index{ARM!\Instructions!VMOVGT}
 \TT{VMOVGT} \RU{это аналог}\EN{is analogue of} \TT{MOVGT}, 
-\RU{инструкция, сработающая если при сравнении один операнд был больше чем второй}
-\EN{instruction, to be executed if one operand is greater than other while comparing} 
+\RU{инструкция для D-регистров, сработающая если при сравнении один операнд был больше чем второй}
+\EN{instruction for D-registers, to be executed if one operand is greater than other while comparing} 
 (\IT{GT\EMDASH{}Greater Than}). 
 
 \RU{Если она сработает}\EN{If it will be executed}, 
 \RU{в \TT{D16} запишется значение $b$}\EN{$b$ value will be written into \TT{D16}}, 
 \RU{лежащее в тот момент в}\EN{stored at the moment in} \TT{D17}.
 
-\RU{А если не сработает}\EN{And if it will not be triggered}, 
-\RU{то в \TT{D16} останется лежать значение $a$.}
-\EN{then $a$ value will stay in the \TT{D16} register.}
+\RU{В обратном случае}\EN{Otherwise}, 
+\RU{в \TT{D16} останется лежать значение $a$.}
+\EN{$a$ value will stay in the \TT{D16} register.}
 
 \index{ARM!\Instructions!VMOV}
 \RU{Предпоследняя инструкция \TT{VMOV} подготовит то что было в \TT{D16} для возврата через 
 пару регистров \Reg{0} и \Reg{1}.}
-\EN{Penultimate instruction \TT{VMOV} will prepare value in the \TT{D16} register for returning via \Reg{0} and \Reg{1}
+\EN{Penultimate instruction \TT{VMOV} will prepare value in the \TT{D16} register for returning it via \Reg{0} and \Reg{1}
 registers pair.}
 
 \subsubsection{\OptimizingXcodeIV (\ThumbTwoMode)}
@@ -67,17 +67,15 @@ BX              LR
 \end{lstlisting}
 
 \RU{Почти то же самое что и в предыдущем примере, за парой отличий.}
-\EN{Almost the same as in previous example, howeverm slightly different.}
-\RU{Дело в том, многие инструкции в режиме ARM
-можно дополнять условием, которое если справедливо, то инструкция выполнится.}
-\EN{As a matter of fact, many instructions in ARM mode can be supplied by condition predicate,
-and the instruction is to be executed if condition is true.}
+\EN{Almost the same as in previous example, however slightly different.}
+\RU{Как мы уже знаем, многие инструкции в режиме ARM можно дополнять условием.}
+\EN{As we already know, many instructions in ARM mode can be supplied by condition predicate.}
 
 \RU{Но в режиме thumb такого нет}
 \EN{But there is no such thing in thumb mode}. 
 \RU{В 16-битных инструкций просто нет места для лишних 4 битов, при помощи
 которых можно было бы закодировать условие выполнения.}
-\EN{There is no place in 16-bit instructions for spare 4 bits where condition can be encoded.}
+\EN{There is no place in 16-bit instructions for spare 4 bits in which condition can be encoded.}
 
 \index{ARM!\ThumbTwoMode}
 \RU{Поэтому в thumb-2 добавили возможность дополнять thumb-инструкции условиями.}
@@ -87,7 +85,7 @@ and the instruction is to be executed if condition is true.}
 такую же как и в предыдущем примере.}
 \EN{Here, is the \IDA-generated listing, we see \TT{VMOVGT} instruction, the same as in previous example.}
 
-\RU{Но в реальности}\EN{But in fact}, 
+\RU{В реальности}\EN{In fact}, 
 \RU{там закодирована обычная инструкция \TT{VMOV}}
 \EN{usual \TT{VMOV} is encoded there}, 
 \RU{просто \IDA добавила суффикс \TT{-GT} к ней}
@@ -126,8 +124,8 @@ second~---if the condition will not be true}.
 (\RU{Обратное условие от}\EN{Inverse condition of} \TT{NE} \RU{это}\EN{is} \TT{EQ} (\IT{equal})).
 
 \index{Angry Birds}
-\RU{Еще чуть сложнее}\EN{Slightly harder}, \RU{и снова этот фрагмент из}\EN{and this fragment from} 
-``Angry Birds''\EN{ as well}:
+\RU{Еще чуть сложнее}\EN{Slightly harder}, 
+\RU{и снова этот фрагмент из}\EN{and this fragment is also from} ``Angry Birds'':
 
 \begin{lstlisting}[caption=Angry Birds Classic]
 ITTTT EQ
@@ -144,7 +142,7 @@ the 4 next instructions will be executed if condition is true.}
 \EN{That's why \IDA added} \TT{-EQ}\EN{ suffix
 to each 4 instructions}. 
 
-\RU{А если бы здесь было, например,}\EN{And if there will be e.g.}
+\RU{А если бы здесь было, например,}\EN{And if there will be, for example,}
 \TT{ITEEE EQ} (\IT{if-then-else-else-else}), 
 \RU{тогда суффиксы для следующих четырех инструкций были бы расставлены так:}
 \EN{then suffixes will be set as follows:}
@@ -174,7 +172,7 @@ MOVGT           R10, R0
 (\TT{GT}\EMDASH\IT{Greater Than})\EN{ is true}.
 
 \RU{Компиляторы способны генерировать далеко не все варианты.}
-\EN{Compilers usually are not generating all possible combinations.}
+\EN{Compilers usually not generating all possible combinations.}
 \index{Angry Birds}
 \RU{Например, в вышеупомянутой игре ``Angry Birds'' (версия \IT{classic} для iOS)}
 \EN{For example, it mentioned ``Angry Birds'' game (\IT{classic} version for iOS)}
@@ -184,11 +182,11 @@ MOVGT           R10, R0
 \RU{Как я это узнал?}\EN{How I learnt this?}
 \RU{В \IDA можно сгенерировать листинг, так я и сделал, только в опциях я установил так 
 чтобы показывались 4 байта для каждого опкода.}
-\EN{In \IDA it is possible to produce listing files, so I did it, but I also set in options 
+\EN{It is possible in \IDA to produce listing files, so I did it, but I also set in options 
 to show 4 bytes of each opcodes .}
-\RU{Затем, зная, что старшая часть 16-битного опкода \TT{IT} это \TT{0xBF}, я сделал при помощи \TT{grep} это:}
-\EN{Then, knowing the high part of 16-bit opcode \TT{IT} is \TT{0xBF},
-I did this with \TT{grep}:}
+\RU{Затем, зная, что старшая часть 16-битного опкода (\TT{IT} это \TT{0xBF}), я сделал при помощи \TT{grep} это:}
+\EN{Then, knowing the high part of 16-bit opcode (\TT{IT} is \TT{0xBF}),
+I did this using \TT{grep}:}
 
 \begin{lstlisting}
 cat AngryBirdsClassic.lst | grep " BF" | grep "IT" > results.lst
@@ -242,7 +240,7 @@ loc_2E10
 \RU{Почти то же самое что мы уже видели}\EN{Almost the same we already saw}, 
 \RU{но много избыточного кода из-за хранения $a$ и $b$, 
 а также выходного значения, в локальном стеке.}
-\EN{but too much redundant code because of $a$ and $b$ variables storage in local stack, as well
+\EN{but too much redundant code because of $a$ and $b$ variables stored in the local stack, as well
 as returning value.}
 
 \subsubsection{\OptimizingKeilVI (\ThumbMode)}
@@ -265,17 +263,18 @@ loc_1C0
                 POP     {R3-R7,PC}
 \end{lstlisting}
 
-\RU{Keil не генерирует специальную инструкцию для сравнения чисел с плавающей запятой, потому что не 
-рассчитывает на то что она будет поддерживаться, а простым сравнением побитово здесь не обойтись.}
-\EN{Keil not generates special instruction for float numbers comparing since it cannot rely it will
+\RU{Keil не генерирует FPU-инструкции, потому что не 
+рассчитывает на то что они будет поддерживаться, а простым сравнением побитово здесь не обойтись.}
+\EN{Keil doesn't generate FPU-instructions since it cannot rely it will
 be supported on the target CPU, and it cannot be done by straightforward bitwise comparing.}
 %TODO: why?
 \RU{Для сравнения вызывается библиотечная функция}\EN{So there is called external library
 function for comparing:} \TT{\_\_aeabi\_cdrcmple}. 
-\index{ARM!\Instructions!BCS}
+\index{ARM!\Instructions!BCS}\\
+\\
 N.B. \RU{Результат
 сравнения эта функция оставляет в флагах, чтобы следующая за вызовом инструкция}
-\EN{Comparison result is to be left in flags, so the following}
+\EN{Comparison result is to be left in flags by this function, so the following}
 \TT{BCS} (\IT{Carry set - Greater than or equal})
 \RU{могла работать без дополнительного кода.}\EN{instruction may work without any additional code.}
 

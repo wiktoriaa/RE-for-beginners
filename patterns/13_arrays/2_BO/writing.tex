@@ -54,19 +54,22 @@ The \ESP pointing now to the \TT{\_i} variable in the local stack and after exec
 \begin{center}
 \begin{tabular}{ | l | l | }
 \hline
-  \TT{ESP}    & \RU{4 байта для $i$}\EN{4 bytes for $i$} \\
-  \TT{ESP+4}  & \RU{80 байт для массива \TT{a[20]}}\EN{80 bytes for \TT{a[20]} array} \\
+  \TT{ESP}    & \RU{4 байта выделенных для переменной $i$}\EN{4 bytes allocated for $i$ variable} \\
+\hline
+  \TT{ESP+4}  & \RU{80 байт выделенных для массива \TT{a[20]}}\EN{80 bytes allocated for \TT{a[20]} array} \\
+\hline
   \TT{ESP+84} & \RU{сохраненное значение \EBP}\EN{saved \EBP value} \\
+\hline
   \TT{ESP+88} & \RU{адрес возврата}\EN{returning address} \\
 \hline
 \end{tabular}
 \end{center}
 
-\RU{Команда \TT{a[19]=чего\_нибудь} записывает последний \Tint в пределах массива (пока что в пределах!)}
-\EN{Instruction \TT{a[19]=something} writes last \Tint in array bounds (in bounds so far!)}
+\RU{Выражение \TT{a[19]=чего\_нибудь} записывает последний \Tint в пределах массива (пока что в пределах!)}
+\EN{\TT{a[19]=something} statement writes last \Tint in array bounds (in bounds so far!)}
 
-\RU{Команда \TT{a[20]=чего\_нибудь} записывает \IT{чего\_нибудь} на место где сохранено значение \EBP.}
-\EN{Instruction \TT{a[20]=something} writes \IT{something} to the place where value from the \EBP is saved.}
+\RU{Выражение \TT{a[20]=чего\_нибудь} записывает \IT{чего\_нибудь} на место где сохранено значение \EBP.}
+\EN{\TT{a[20]=something} statement writes \IT{something} to the place where value of the \EBP is saved.}
 
 \RU{Обратите внимание на состояние регистров на момент падения процесса. В нашем случае, 
 в 20-й элемент записалось значение 20. 
@@ -76,7 +79,7 @@ The \ESP pointing now to the \TT{\_i} variable in the local stack and after exec
 \EN{Please take a look at registers state at the crash moment. In our case,
 number 20 was written to 20th element. 
 By the function ending, function epilogue restores original \EBP value.
-(20 in decimal system is 0x14 in hexadecimal).
+(20 in decimal base is 0x14 in hexadecimal).
 Then, \RET instruction was executed, which is effectively equivalent to \TT{POP EIP} instruction.}
 
 \RU{Инструкция \RET вытащила из стека адрес возврата (это адрес где-то внутри \ac{CRT}), 
