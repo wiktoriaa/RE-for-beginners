@@ -4,10 +4,10 @@
 
 \subsubsection{\RU{Как устроена структура}\EN{Internals}}
 
-\RU{Многие строковые библиотеки (\cite[2.2]{CBook}) обеспечивают структуру содержащую ссылку 
+\RU{Многие строковые библиотеки \cite[2.2]{CBook} обеспечивают структуру содержащую ссылку 
 на буфер собственно со строкой, переменная всегда содержащую длину строки 
 (что очень удобно для массы ф-ций \cite[2.2.1]{CBook}) и переменную содержащую текущий размер буфера.}
-\EN{Many string libraries (\cite[2.2]{CBook}) implements structure containing pointer to the buffer containing string,
+\EN{Many string libraries \cite[2.2]{CBook} implements structure containing pointer to the buffer containing string,
 a variable always containing current string length 
 (that is very convenient for many functions: \cite[2.2.1]{CBook}) and
 a variable containing current buffer size.}
@@ -16,9 +16,9 @@ a variable containing current buffer size.}
 \EN{A string in buffer is usually terminated with zero: in order to be able to pass a pointer to a buffer
 into the functions taking usual C \ac{ASCIIZ}-string.}
 
-\RU{Стандарт \Cpp (\cite{CPP11}) не описывает, как именно нужно реализовывать std::string,
+\RU{Стандарт \Cpp \cite{CPP11} не описывает, как именно нужно реализовывать std::string,
 но как правило они реализованы как описано выше, с небольшими дополнениями}
-\EN{It is not specified in the \Cpp standard (\cite{CPP11}) how std::string should be implemented,
+\EN{It is not specified in the \Cpp standard \cite{CPP11} how std::string should be implemented,
 however, it is usually implemented as described above}.
 
 \RU{По стандарту, std::string это не класс (как, например, QString в Qt), а темплейт, 
@@ -27,9 +27,10 @@ however, it is usually implemented as described above}.
 \EN{By standard, std::string is not a class (as QString in Qt, for instance) but template,
 this is done in order to support various character types: at least \Tchar and \IT{wchar\_t}.}
 
-\RU{Здесь пока не будет листингов на ассемблере, потому что проиллюстрировать внутренности std::string 
-в MSVC и GCC можно и без этого}
-\EN{There are no assembly listings, because std::string internals in MSVC and GCC can be illustrated without them}.
+\RU{Здесь нет листингов на ассемблере, потому что проиллюстрировать внутренности std::string 
+в MSVC и GCC можно и без этого.}
+\EN{There are no assembly listings, because std::string internals in MSVC and GCC 
+can be illustrated without them.}
 
 \myparagraph{MSVC}
 
@@ -171,7 +172,16 @@ variables of \ac{STL} types are in fact can be defined}.
 
 \lstinputlisting{patterns/cpp/STL/string/5.cpp}
 
-\lstinputlisting[caption=MSVC 2012]{patterns/cpp/STL/string/5_MSVC.asm}
+\RU{На самом деле, эта переменная будет инициализирована даже перед началом \main{}.}
+\EN{In fact, this variable will be initialized even before \main start.}
+
+\lstinputlisting[caption=MSVC 2012: \RU{здесь конструируется глобальная переменная а также регистрируется её десктруктор}\EN{here is global variable constructed and also its destructor is registered}]{patterns/cpp/STL/string/5_MSVC_p2.asm}
+
+\lstinputlisting[caption=MSVC 2012: 
+\RU{здесь глобальная переменная используется в}\EN{here global variable is used in} \main]{patterns/cpp/STL/string/5_MSVC_p1.asm}
+
+\lstinputlisting[caption=MSVC 2012: \RU{эта функция-деструктор вызывается перед выходом}
+\EN{this destructor function is called before exit}]{patterns/cpp/STL/string/5_MSVC_p3.asm}
 
 \index{\CStandardLibrary!atexit()}
 \RU{В реальности, из \ac{CRT}, еще до вызова main(), вызывается специальная ф-ция,
@@ -179,15 +189,16 @@ variables of \ac{STL} types are in fact can be defined}.
 \EN{In fact, a special function with all constructors of global variables is called from \ac{CRT}, before
 main()}.
 \RU{Более того: при помощи atexit() регистрируется ф-ция, которая будет вызвана в конце работы программы:
-в этой ф-ции компилятор собирает деструкторы всех подобных глобальных переменных}
-\EN{More than that: with the help of atexit() another function is registered: which contain all destructors
-of such variables}.
+в этой ф-ции компилятор собирает вызовы деструкторов всех подобных глобальных переменных.}
+\EN{More than that: with the help of atexit() another function is registered: 
+which contain calls to all destructors of such global variables.}
 
 GCC \RU{работает похожим образом}\EN{works likewise}:
 
 \lstinputlisting[caption=GCC 4.8.1]{patterns/cpp/STL/string/5_GCC.s}
 
-\RU{Он даже не выделяет отдельной ф-ции в которой будут собраны деструкторы: 
-каждый деструктор передается в atexit() по одному}\EN{It even not creates separated functions for this, each
-destructor is passed to atexit(), one by one}.
+\RU{Но он не выделяет отдельной ф-ции в которой будут собраны деструкторы: 
+каждый деструктор передается в atexit() по одному.}
+\EN{But it not create a separate functions for this, 
+each destructor is passed to atexit(), one by one.}
 

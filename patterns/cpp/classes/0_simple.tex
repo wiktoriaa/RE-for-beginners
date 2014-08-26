@@ -65,22 +65,22 @@ in one ASCII-string, which is to be used as internal function name.
 That's all because neither linker, nor DLL \ac{OS} loader (mangled names may be among 
 DLL exports as well) knows nothing about \Cpp or \ac{OOP}.}
 
-\RU{Далее вызывается два раза \TT{dump()}.}\EN{\TT{dump()} function called two times after.}
+\RU{Далее вызывается два раза \TT{dump()}.}\EN{\TT{dump()} function is called two times.}
 
 \RU{Теперь смотрим на код в конструкторах:}\EN{Now let's see constructors' code:}
 
 \lstinputlisting[caption=MSVC]{patterns/cpp/classes/simple_2_msvc.asm}
 
 \RU{Конструкторы ~--- это просто функции, они используют указатель на структуру в \ECX, 
-перекладывают его себе в локальную переменную, хотя это и не обязательно.}
+копируют его себе в локальную переменную, хотя это и не обязательно.}
 \EN{Constructors are just functions, they use pointer to structure in the \ECX,
-moving the pointer into own local variable, however, it is not necessary.}
+copying the pointer into own local variable, however, it is not necessary.}
 
 \RU{Из стандарта \Cpp мы знаем}\EN{From the \Cpp standard} \cite[12.1]{CPP11} 
 \RU{что конструкторы не должны возвращать значение}\EN{we know that constructors should not return
 any values}.
 \RU{В реальности, внутри, конструкторы возвращают указатель на созданный объект, т.е.}
-\EN{In fact, internally, constructors are returns pointer to the newly created object, i.e.}, \ITthis.
+\EN{In fact, internally, constructors are returning pointer to the newly created object, i.e.}, \ITthis.
 
 \RU{И еще метод \TT{dump()}:}\EN{Now \TT{dump()} method:}
 
@@ -108,10 +108,10 @@ Withal, constructor has \TT{ret 8} instead of the \RET at the end.}
 \RU{Это потому что здесь используется thiscall~(\ref{thiscall}), который, вместе с stdcall~(\ref{sec:stdcall})
 (все это ~--- методы передачи аргументов через стек), предлагает вызываемой функции корректировать стек. 
 Инструкция \TT{ret X} сначала прибавляет \TT{X} к \ESP, затем передает управление вызывающей функции.}
-\EN{This is all because here used thiscall~(\ref{thiscall}) calling convention, the method of passing values through the
+\EN{This is all because thiscall~(\ref{thiscall}) calling convention here used, the method of passing values through the
 stack, which is, together with stdcall~(\ref{sec:stdcall}) method, offers to correct stack to \gls{callee}
 rather then to \gls{caller}.
-\TT{ret x} instruction adding \TT{X} to the value in the \ESP, then passes control to the \gls{caller} function.}
+\TT{ret x} instruction adds \TT{X} to the value in the \ESP, then passes control to the \gls{caller} function.}
 
 \RU{См. также в соответствующем разделе о способах передачи аргументов через стек}
 \EN{See also section about calling conventions}~(\ref{sec:callingconventions}).
@@ -130,7 +130,7 @@ destructor~---but that is we already know from \Cpp language basics.}
 \Reg{9} registers, all the rest\EMDASH{}via stack}.
 \RU{Тем не менее, указатель на объект \ITthis передается через \RCX, 
 а первый аргумент метода\EMDASH{}в \RDX, итд}\EN{Nevertheless, \ITthis pointer to the object is passed
-in \RCX, first method argument\EMDASH{}in \EDX, etc}.
+in \RCX, first method argument\EMDASH{}in \RDX, etc}.
 \RU{Здесь это видно во внутренностях метода}\EN{We can see this in the} 
 \TT{c(int a, int b)}\EN{ method internals}:
 
@@ -150,7 +150,7 @@ earlier}: \ref{JMP_instead_of_RET}.
 \subsubsection{GCC\EMDASH{}x86}
 
 \RU{В GCC 4.4.1 всё почти так же, за исключением некоторых различий.}
-\EN{It is almost the same situation in GCC 4.4.1, with a few exceptions.}
+\EN{It is almost the same story in GCC 4.4.1, with a few exceptions.}
 
 \lstinputlisting[caption=GCC 4.4.1]{patterns/cpp/classes/simple_GCC.asm}
 
@@ -159,10 +159,10 @@ earlier}: \ref{JMP_instead_of_RET}.
 Во-вторых, указатель на экземпляр передается как первый аргумент функции ~--- 
 конечно же, скрыто от программиста.}
 \EN{Here we see another \IT{name mangling} style, specific to GNU
-\footnote{One more document about different compilers name mangling types:
-\cite{AgnerFogCC} standards.}
+\footnote{There is a good document about various compilers name mangling conventions:
+\cite{AgnerFogCC}.}
 It is also can be noted the pointer to object is passed as first function 
-argument~---transparently from programmer, of course.}
+argument~---invisibly for programmer, of course.}
 
 \RU{Это первый конструктор:}\EN{First constructor:}
 
@@ -252,6 +252,15 @@ _ZN1c4dumpEv    endp
 объект\footnote{экземпляр класса} (\ITthis).}
 \EN{This function in its \IT{internal representation} has sole argument, 
 used as pointer to the object (\ITthis).}
+
+\RU{Это можно переписать на Си}\EN{This function could be rewritten into C}:
+
+\begin{lstlisting}
+void ZN1c4dumpEv (int *obj)
+{
+  printf ("%d; %d\n", *obj, *(obj+1));
+};
+\end{lstlisting}
 
 \RU{Таким образом, если брать в учет только эти простые примеры, разница между MSVC и GCC 
 в способе кодирования имен функций (\IT{name mangling}) и передаче указателя на экземпляр класса 

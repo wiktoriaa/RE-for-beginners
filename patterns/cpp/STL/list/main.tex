@@ -6,9 +6,9 @@
 элементы}\EN{This is a well-known doubly-linked list: each element has two pointers, to the previous and the next
 elements}.
 
-\RU{Это означает что расход памяти увеличивается на 2 слова на каждый элемент (8 байт в 32-битной среде или
+\RU{Это означает что расход памяти увеличивается на 2 \glslink{word}{слова} на каждый элемент (8 байт в 32-битной среде или
 16 байт в 64-битной)}
-\EN{This mean that a memory footprint is enlarged by 2 words for each element (8 bytes in 32-bit environment or 16
+\EN{This mean that a memory footprint is enlarged by 2 \glslink{word}{words} for each element (8 bytes in 32-bit environment or 16
 bytes in 64-bit)}.
 
 \RU{Это также циркулярный список, что означает что последний элемент имеет указатель на первый 
@@ -18,17 +18,17 @@ vice versa: first element has a pointer to the last one}.
 
 \RU{STL в \Cpp просто добавляет указатели ``next'' и ``previous'' к той вашей структуре, которую вы желаете
 объединить в список}
-\EN{\Cpp STL just append ``next'' and ``previous'' pointers to your existing structure you wish to 
+\EN{\Cpp STL just adds ``next'' and ``previous'' pointers to your existing structure you wish to 
 unite into a list}.
 
 \RU{Попробуем разобраться с примером в котором простая структура из двух переменных, мы объеденим её в список}
 \EN{Let's work out an example with a simple 2-variable structure we want to store in the list}.
 
-\RU{Хотя и стандарт \Cpp \cite{CPP11} не предлагает, как он должен быть реализован, реализации
-MSVC и GCC прямолинейны и похожи друг на друга, так что этот исходный код для обоих}
-\EN{Although \Cpp standard \cite{CPP11} does not offer how to implement it, 
+\RU{Хотя и стандарт \Cpp \cite{CPP11} не указывает, как он должен быть реализован, реализации
+MSVC и GCC прямолинейны и похожи друг на друга, так что этот исходный код для обоих:}
+\EN{Although \Cpp standard \cite{CPP11} does not tell how to implement it, 
 MSVC and GCC implementations are straightforward and similar to each other, so here is only one
-source code for both}:
+source code for both:}
 
 \lstinputlisting{patterns/cpp/STL/list/2.cpp}
 
@@ -73,16 +73,16 @@ ptr=0x0028fe90 _Next=0x000349a0 _Prev=0x00034b40 x=5 y=6
 \RU{Случайно совпало так, что эти значения точно такие же как и в последнем элементе, но это не значит,
 что они имеют какое-то значение}\EN{By occasion, these values are the same as in the last element, but it doesn't mean they are meaningful}.
 
-\RU{Вот как эти 3 элемента хранятся в памяти}\EN{Here is how 3 elements will be stored in memory}:
+\RU{Вот как эти 3 элемента хранятся в памяти}\EN{Here is how these 3 elements are stored in memory}:
 
 \input{patterns/cpp/STL/list/GCC_internals}
 
-\RU{Переменная}\EN{The variable} $l$ \RU{всегда указывает на первый элемент}\EN{is always points to the first node}.
+\RU{Переменная}\EN{The variable} $l$ \RU{всегда указывает на первый элемент}\EN{always points to the first node}.
 
-\RU{Итераторы .begin() и .end() ни на что не указывают, и вообще отсутствуют в памяти,
-но указатели на эти элементы будут возвращены, когда соответствующие методы будут вызваны}
-\EN{.begin() and .end() iterators are not pointing to anything and not present in memory at all, but the pointers
-to these nodes will be returned when corresponding method is called}.
+\RU{Итераторы .begin() и .end() это не переменные, а ф-ции,
+возвращающие указатели на соответствующие узлы.}
+\EN{.begin() and .end() iterators are not variables, but functions, 
+when called, returning pointers to a corresponding nodes.}
 
 \RU{Иметь элемент с ``мусором'' это очень популярная практика в реализации двусвязных списков}
 \EN{Having a ``garbage'' element is a very popular practice in implementing doubly-linked lists}.
@@ -110,7 +110,8 @@ it is easy to get a pointer to the last one quickly, without need to traverse wh
 
 \TT{operator--} \AndENRU \TT{operator++} \RU{просто выставляют текущее значение итератора на}
 \EN{are just set current iterator value to the} \TT{current\_node->prev}
-\OrENRU \TT{current\_node->next}\EN{ values}.
+\OrENRU \\
+\TT{current\_node->next}\EN{ values}.
 \RU{Обратные итераторы}\EN{Reverse iterators} (.rbegin, .rend) \RU{работают точно так же,
 только наоборот}
 \EN{works just as the same, but in inverse way}.
@@ -126,17 +127,20 @@ very first structure element} ($x$).
 to be valid}.
 
 \RU{Вот почему итератор может стать недействительным после удаления элемента:
-он может всё еще указывать на уже освобожденный элемент}\EN{That's why iterator may become invalid after 
-element deletion: it may still point to the node already deallocated}.
-\RU{И конечно же, информация из освобожденного элемента, на который указывает итератор, не может использоваться
-более}
-\EN{And of course, the information from the freed node, to which iterator still points, cannot be used anymore}.
+он может всё еще указывать на уже освобожденный элемент.}
+\EN{That's why iterator may become invalid after element deletion: 
+it may still point to the node already deallocated.}
+\RU{Это также называется}\EN{This is also called} \IT{dangling pointer}.
+\RU{И конечно же, информация из освобожденного элемента, на который указывает итератор, 
+не может использоваться более.}
+\EN{And of course, the information from the freed node, to which iterator still points, 
+cannot be used anymore.}
 
 \RU{В реализации GCC (по крайней мере 4.8.1) не сохраняется текущая длина списка: это выливается в медленный
 метод .size(): он должен пройти по всему списку считая элементы, просто потому что нет
 другого способа получить эту информацию}
-\EN{The GCC implementation (as of 4.8.1) doesn't store current list size: this resulting in slow .size() method:
-it should traverse the whole list counting elements, because it doesn't have any other way to get the information}.
+\EN{The GCC implementation (as of 4.8.1) doesn't store current list size: this implies slow .size() method:
+it should traverse the whole list for counting elements, because it doesn't have any other way to get the information}.
 \RU{Это означает что эта операция $O(n)$, т.е., она работает тем медленнее, чем больше элементов в списке}
 \EN{This mean this operation is $O(n)$, i.e., it is as slow, as how many elements present in the list}.
 
@@ -166,7 +170,7 @@ it should traverse the whole list counting elements, because it doesn't have any
 
 \RU{В отличие от GCC, код MSVC выделяет элемент с ``мусором'' в самом начале ф-ции при помощи
 ф-ции ``Buynode'', она также используется и во время выделения остальных элементов}
-\EN{Unlike GCC, MSVC code allocates ``garbage'' element at the function start with ``Buynode'' function,
+\EN{Unlike GCC, MSVC code allocates ``garbage'' element at the function start with the help of ``Buynode'' function,
 it is also used for the rest nodes allocations} (\RU{код GCC выделяет самый первый элемент в локальном стеке}
 \EN{GCC code allocates the very first element in the local stack}).
 

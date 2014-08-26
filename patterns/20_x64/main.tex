@@ -7,34 +7,38 @@
 \RU{Это расширение x86-архитуктуры до 64 бит.}\EN{It is a 64-bit extension to x86-architecture.}
 
 \RU{С точки зрения начинающего reverse engineer-а, наиболее важные отличия от 32-битного x86 это:}
-\EN{From the reverse engineer's perspective, most important differences are:}
+\EN{From the reverse engineer's perspective, most important changes are:}
 
 \index{\CLanguageElements!\Pointers}
 \begin{itemize}
 
 \item
-\RU{Почти все регистры (кроме FPU и SIMD) расширены до 64-бит и получили префикс r-. 
+\RU{Почти все регистры (кроме FPU и SIMD) расширены до 64-бит и получили префикс R-. 
 И еще 8 регистров добавлено. 
 В итоге имеются эти \ac{GPR}-ы:}
-\EN{Almost all registers (except FPU and SIMD) are extended to 64 bits and got r- prefix.
+\EN{Almost all registers (except FPU and SIMD) are extended to 64 bits and got R- prefix.
 8 additional registers added.
 Now \ac{GPR}'s are:} \RAX, \RBX, \RCX, \RDX, 
 \RBP, \RSP, \RSI, \RDI, \Reg{8}, \Reg{9}, \Reg{10}, 
 \Reg{11}, \Reg{12}, \Reg{13}, \Reg{14}, \Reg{15}. 
 
 \RU{К ним также можно обращаться так же, как и прежде. Например, для доступа к младшим 32 битам \TT{RAX} 
-можно использовать \EAX.}
+можно использовать \EAX:}
 \EN{It is still possible to access to \IT{older} register parts as usual. 
-For example, it is possible to access lower 32-bit part of the \TT{RAX} register using \EAX.}
+For example, it is possible to access lower 32-bit part of the \TT{RAX} register using \EAX:}
 
-\RU{У новых регистров \TT{r8-r15} также имеются их \IT{младшие части}: \TT{r8d-r15d} 
+\RegTableOne{RAX}{EAX}{AX}{AH}{AL}
+
+\RU{У новых регистров \TT{R8-R15} также имеются их \IT{младшие части}: \TT{R8D-R15D} 
 (младшие 32-битные части), 
-\TT{r8w-r15w} (младшие 16-битные части), \TT{r8b-r15b} (младшие 8-битные части).}
-\EN{New \TT{r8-r15} registers also has its \IT{lower parts}: \TT{r8d-r15d} (lower 32-bit parts),
-\TT{r8w-r15w} (lower 16-bit parts), \TT{r8b-r15b} (lower 8-bit parts).}
+\TT{R8W-R15W} (младшие 16-битные части), \TT{R8L-R15L} (младшие 8-битные части).}
+\EN{New \TT{R8-R15} registers also has its \IT{lower parts}: \TT{R8D-R15D} (lower 32-bit parts),
+\TT{R8W-R15W} (lower 16-bit parts), \TT{R8L-R15L} (lower 8-bit parts).}
+
+\RegTableFour{R8}{R8D}{R8W}{R8L}
 
 \RU{Удвоено количество SIMD-регистров: с 8 до 16:}
-\EN{SIMD-registers number are doubled: from 8 to 16:} \XMM{0}-\XMM{15}.
+\EN{SIMD-registers number is doubled from 8 to 16:} \XMM{0}-\XMM{15}.
 
 \item
 \RU{В win64 передача всех параметров немного иная, это немного похоже на fastcall~(\ref{fastcall}).
@@ -58,18 +62,18 @@ fastcall, \RU{использует 6 регистров}\EN{it uses 6 registers}
 \EN{See also section about calling conventions}~(\ref{sec:callingconventions}).
 
 \item
-\RU{Сишный \Tint остается 32-битным для совместимости.}
-\EN{C \Tint type is still 32-bit for compatibility.}
+\RU{\Tint в \CCpp остается 32-битным для совместимости.}
+\EN{\CCpp \Tint type is still 32-bit for compatibility.}
 
 \item
 \RU{Все указатели теперь 64-битные}\EN{All pointers are 64-bit now}.
 
 \RU{На это иногда сетуют: ведь теперь для хранения всех указателей нужно в 2 раза больше места 
-в памяти, в т.ч. и в кэш-памяти, не смотря на то что x64-процессоры адресуют только 48 бит
-внешней \ac{RAM}}
+в памяти, в т.ч. и в кэш-памяти, не смотря на то что x64-процессоры могут адресовать только 48 бит
+внешней \ac{RAM}.}
 \EN{This provokes irritation sometimes: now one need twice as much memory for storing pointers,
-including, cache memory, despite the fact x64 \ac{CPU}s addresses only 48 bits of external 
-\ac{RAM}}.
+including, cache memory, despite the fact x64 \ac{CPU}s can address only 48 bits of external 
+\ac{RAM}.}
 
 \end{itemize}
 
@@ -77,7 +81,7 @@ including, cache memory, despite the fact x64 \ac{CPU}s addresses only 48 bits o
 \RU{Из-за того, что регистров общего пользования теперь вдвое больше, у компиляторов теперь больше 
 свободного места для маневра называемого \glslink{register allocator}{register allocation}.
 Для нас это означает, что в итоговом коде будет меньше локальных переменных.}
-\EN{Since now registers number are doubled, compilers has more space now for maneuvering calling 
+\EN{Since now register number is doubled, compilers has more space now for maneuvering called 
 \glslink{register allocator}{register allocation}.
 What it meanings for us, emitted code will contain less local variables.}
 
@@ -110,11 +114,14 @@ Let's compile it with MSVC 2008 with \Ox option:}
 \RU{Компилятор ничего не выделил в локальном стеке, а \TT{x36} это синоним для \TT{a5}.}
 \EN{Nothing allocated in local stack by compiler, \TT{x36} is synonym for \TT{a5}.}
 
+\iffalse
+% FIXME невнятно
 \RU{Кстати, видно, что функция сохраняет регистры \RCX, \RDX в отведенных для 
 этого вызываемой функцией местах, 
 а \Reg{8} и \Reg{9} не сохраняет, а начинает использовать их сразу.}
 \EN{By the way, we can see here, the function saved \RCX and \RDX registers in allocated by \gls{caller} space,
 but \Reg{8} and \Reg{9} are not saved but used from the beginning.}
+\fi
 
 \RU{Кстати, существуют процессоры с еще большим количеством \ac{GPR}, например, 
 Itanium ~--- 128 регистров.}
@@ -122,10 +129,9 @@ Itanium ~--- 128 регистров.}
 
 \section{ARM}
 
-\RU{64-битные инструкции в ARM появились в}\EN{In ARM, 64-bit instructions are appeared in} ARMv8.
+\RU{64-битные инструкции появились в}\EN{64-bit instructions were appeared in} ARMv8.
 
 \section{\RU{Числа с плавающей запятой}\EN{Float point numbers}}
 
-\RU{О том как происходит работа с числами с плавающей запятой в x86-64, читайте здесь: 
-\ref{floating_SIMD}.}
-\EN{Read more here\ref{floating_SIMD} about how float point numbers are processed in x86-64.}
+\RU{О том как происходит работа с числами с плавающей запятой в x86-64, читайте здесь: \ref{floating_SIMD}.}
+\EN{How float point numbers are processed in x86-64, read more here: \ref{floating_SIMD}.}
