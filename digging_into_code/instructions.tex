@@ -8,11 +8,10 @@ one can try to check each one manually by debugger.}\\
 \RU{К примеру, нас может заинтересовать, при помощи чего Microsoft Excel считает 
 результаты формул введенных пользователем. Например, операция деления.}
 \EN{For example, we may be interesting, how Microsoft Excel calculating formulae entered by user.
-For example, division operation.}\\
-\\
+For example, division operation.}
+
 \index{\GrepUsage}
 \index{x86!\Instructions!FDIV}
-
 \RU{Если загрузить excel.exe (из Office 2010) версии 14.0.4756.1000 в \IDA, затем сделать полный листинг 
 и найти все инструкции \FDIV (но кроме тех, которые в качестве второго операнда используют константы ~--- они, 
 очевидно, не подходят нам):}
@@ -56,8 +55,8 @@ FPU ST(0): 1.000000
 \EN{\ST{0} holding first argument (1) and second one is in} \TT{[EBX]}.\\
 \\
 \index{x86!\Instructions!FDIV}
-\RU{Следующая за \FDIV инструкция записывает результат в память:}
-\EN{Next instruction after \FDIV writes result into memory:}\\
+\RU{Следующая за \FDIV инструкция (\TT{FSTP}) записывает результат в память:}
+\EN{Instruction next after \FDIV (\TT{FSTP}) writes result into memory:}\\
 
 \begin{lstlisting}
 .text:3011E91B DD 1E                                fstp    qword ptr [esi]

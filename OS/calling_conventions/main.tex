@@ -109,9 +109,9 @@ Thus it is not suitable for such functions to use \IT{stdcall}, \IT{cdecl} is be
 в памяти использовался меньше).
 Впрочем, на современных, намного более сложных CPU, выигрыша может не быть.}
 \EN{That's general naming for a method of passing some of arguments via registers and all 
-other~---via stack. It worked faster than \IT{cdecl}/\IT{stdcall} on older CPUs 
+others~---via stack. It worked faster than \IT{cdecl}/\IT{stdcall} on older CPUs 
 (because of smaller stack pressure).
-It will not help to gain performance on modern much complex CPUs, however.}
+It will not help to gain performance on modern much more complex CPUs, however.}
 
 \RU{Это не стандартизированный способ, поэтому разные компиляторы делают это по-своему. 
 Разумеется, если у вас есть, скажем, две DLL, одна использует другую, и обе они собраны с \IT{fastcall}
@@ -253,8 +253,8 @@ intended exactly for the purpose}.
 для работы исключая эти 4, которые иначе будут заняты аргументами до конца исполнения ф-ции}
 \EN{It is done because compiler may not be sure if it will be enough to use other registers without these 4,
 which will otherwise be occupied by arguments until function execution end}.
-\RU{Выделение ``scratch space'' в стеке лежит на ответственности вызывающей ф-ции}
-\EN{The ``scratch space'' allocation in the stack is on the caller's shoulders}.
+\RU{Выделение ``scratch space'' в стеке лежит на ответственности вызывающей ф-ции.}
+\EN{The ``scratch space'' allocation in the stack is the caller's duty.}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 /0b]{OS/calling_conventions/x64_MSVC_Ox_Ob.asm}
 
@@ -264,13 +264,16 @@ which will otherwise be occupied by arguments until function execution end}.
 is not used, because no need to}.
 
 \index{x86!\Instructions!LEA}
+\label{using_MOV_and_pack_of_LEA_to_load_values}
 \RU{Обратите также внимание на то как MSVC 2012 оптимизирует примитивную загрузку значений в регистры
 используя \LEA (\ref{sec:LEA})}
 \EN{Also take a look on how MSVC 2012 optimizes primitive value loads into registers by using 
 \LEA (\ref{sec:LEA})}.
 \RU{Я не уверен, что это того стоит, но может быть}\EN{I'm not sure if it worth so, but maybe}.
 
-\subsubsection{\RU{Передача \ITthis}\EN{\ITthis passing}}
+\RU{Еще один пример подобного}\EN{Another example of such thing is}: \ref{TaskMgr_LEA}.
+
+\subsubsection{\RU{Передача \ITthis}\EN{\ITthis passing} (\CCpp)}
 
 \RU{Указатель }\ITthis \RU{передается через}\EN{pointer is passed in} \RCX, 
 \RU{первый аргумент метода через}\EN{first method argument in} \RDX, \RU{итд}\EN{etc}.
@@ -280,12 +283,10 @@ is not used, because no need to}.
 
 \RU{Метод передачи аргументов в Linux для x86-64 почти такой же, как и в Windows, но 6 регистров
 используется вместо 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}), и здесь нет ``scratch space'', 
-но \gls{callee}
-может сохранять значения регистров в стеке, если нужно}
+но \gls{callee} может сохранять значения регистров в стеке, если ему это нужно.}
 \EN{The way arguments passed in Linux for x86-64 is almost the same as in Windows, but 6 registers are
 used instead of 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}) and there are no ``scratch space'', 
-but \gls{callee}
-may save register values in the stack, if it needs to}.
+although \gls{callee} may save register values in the stack, if it needs/wants to.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.7.3]{OS/calling_conventions/x64_linux_O3.s}
 
@@ -306,8 +307,10 @@ Supposedly, it was done for x86-64 code porting simplification.}
 \RU{Во всех соглашениях кроме Win64, переменная типа \Tfloat или \Tdouble возвращается через регистр FPU \ST{0}.}
 \EN{In all conventions except of Win64, values of type \Tfloat or \Tdouble are returning via the FPU register \ST{0}.}
 
-\RU{В Win64 переменные типа \Tfloat и \Tdouble возвращаются в регистре \XMM{0} вместо \ST{0}.}
-\EN{In Win64, values of \Tfloat and \Tdouble types are returned in the \XMM{0} register instead of the \ST{0}.}
+\RU{В Win64 переменные типа \Tfloat и \Tdouble возвращаются в младших 16-и или 32-х битах 
+регистра \XMM{0}.}
+\EN{In Win64, values of \Tfloat and \Tdouble types are returned 
+in the low 32 or 64 bits of \XMM{0} register.}
 
 \section{\RU{Модификация аргументов}\EN{Modifying arguments}}
 
@@ -330,4 +333,4 @@ may ask, what will happen if to modify arguments?}
 \RU{и если вы не модифицируете данные по указателю}\EN{and if you not modify data a pointer pointing to} 
 (\RU{тогда эффект распространится не только на текущую ф-цию}
 \EN{then the effect will be propagated outside of current function}).
-
+% TODO пример как в стеке меняется $a$

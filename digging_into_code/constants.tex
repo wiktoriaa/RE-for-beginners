@@ -8,7 +8,7 @@
 \EN{Practicing reverse engineer, usually know them well in hexadecimal representation}:
 10=0xA, 100=0x64, 1000=0x3E8, 10000=0x2710.
 
-\RU{Иногда попадаются константы}\EN{Constants} \TT{0xAAAAAAAA} (10101010101010101010101010101010) \AndENRU 
+\RU{Иногда попадаются константы}\EN{Constants} \TT{0xAAAAAAAA} (10101010101010101010101010101010) \AndENRU \\
 \TT{0x55555555} (01010101010101010101010101010101) \RU{--- это чередующиеся биты}\EN{ are also popular---this
 is alternating bits}.
 \RU{Например, константа}\EN{For example} \TT{0x55AA} \RU{используется как минимум в бут-секторе}\EN{constant
@@ -84,7 +84,7 @@ jnz _error_not_a_MIDI_file
 \index{x86!\Instructions!CMPSB}
 \RU{\dots либо вызвав функцию сравнения блоков памяти \TT{memcmp()} или любой аналогичный код, 
 вплоть до инструкции \TT{CMPSB} (\ref{REPE_CMPSx}).}
-\EN{\dots or by calling function for comparing memory blocks \TT{memcmp()} or any other equivalent code
+\EN{\dots or by calling a function for comparing memory blocks \TT{memcmp()} or any other equivalent code
 up to a \TT{CMPSB} (\ref{REPE_CMPSx}) instruction.}
 
 \RU{Найдя такое место мы получаем как минимум информацию о том, где начинается загрузка MIDI-файла, во-вторых, 
@@ -99,13 +99,13 @@ of MIDI-file contents buffer and what is used from the buffer, and how.}
 Например, сетевые пакеты протокола DHCP содержат так называемую \IT{magic cookie}: \TT{0x63538263}. 
 Какой-либо код, генерирующий пакеты по протоколу DHCP где-то и как-то должен внедрять в пакет также и эту константу. 
 Найдя её в коде мы сможем найти место где происходит это и не только это. 
-\IT{Что-либо} что получает пакеты по DHCP должно где-то как-то проверять \IT{magic cookie}, 
+Любая программа, получающая DHCP-пакеты, должна где-то как-то проверять \IT{magic cookie}, 
 сравнивая это поле пакета с константой.}
 \EN{This applies to network protocols as well.
 For example, DHCP protocol network packets contains so-called \IT{magic cookie}: \TT{0x63538263}.
 Any code generating DHCP protocol packets somewhere and somehow must embed this constant into packet.
 If we find it in the code we may find where it happen and not only this.
-\IT{Something} received DHCP packet must check \IT{magic cookie}, comparing it with the constant.}
+Any program which can receive DHCP packet, must check \IT{magic cookie}, comparing it with the constant.}
 
 \RU{Например, берем файл dhcpcore.dll из Windows 7 x64 и ищем эту константу. 
 И находим, два раза: оказывается, эта константа используется в функциях с красноречивыми 

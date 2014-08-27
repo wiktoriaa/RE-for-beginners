@@ -42,22 +42,24 @@ int CALLBACK WinMain(
 \\
 \RU{Вот типичный для MSVC 2008 CRT-код}\EN{Here is a typical CRT-code for MSVC 2008}.
 
-\lstinputlisting{OS/win32_CRT/crt_msvc_2008.asm}
+\lstinputlisting[numbers=left]{OS/win32_CRT/crt_msvc_2008.asm}
 
 \RU{Здесь можно увидеть по крайней мере вызов
-ф-ции}\EN{Here we may see calls to} \TT{GetCommandLineA()}, \RU{затем}\EN{then to} \TT{setargv()} \AndENRU 
-\TT{setenvp()},
+ф-ции}\EN{Here we may see calls to} \TT{GetCommandLineA()} (\LineENRU 62), 
+\RU{затем}\EN{then to} \TT{setargv()} (\LineENRU 66) \AndENRU \TT{setenvp()} (\LineENRU 74),
 \RU{которые, видимо, заполняют глобальные переменные-указатели}\EN{which are, apparently, fills global variables}
 \TT{argc}, \TT{argv}, \TT{envp}.
 
-\RU{В итоге, вызывается \main{} с этими аргументами}\EN{Finally, \main{} is called with these arguments}.
+\RU{В итоге, вызывается \main{} с этими аргументами}\EN{Finally, \main{} is called with these arguments} 
+(\LineENRU 97).
 
 \RU{Также имеются вызовы ф-ций с говорящими именами вроде}\EN{There are also calls to the functions
-having self-describing names like} \TT{heap\_init()}, \TT{ioinit()}.
+having self-describing names like} \TT{heap\_init()} (\LineENRU 35), \TT{ioinit()} (\LineENRU 54).
 
 \RU{\glslink{heap}{Куча} действительно инициализируется в \ac{CRT}}
-\EN{\glslink{heap}{Heap} is indeed initialized in \ac{CRT}}: 
-\RU{если вы попытаетесь использовать}\EN{if you will try to use} \TT{malloc()}, 
+\EN{\glslink{heap}{Heap} is indeed initialized in \ac{CRT}}.
+\RU{Если вы попытаетесь использовать}\EN{If you will try to use} \TT{malloc()} 
+\RU{в программе без}\EN{in the program without} CRT,
 \RU{программа упадет с такой ошибкой}\EN{the program exiting abnormally with the error}:
 
 \begin{lstlisting}
@@ -66,10 +68,10 @@ runtime error R6030
 \end{lstlisting}
 
 \RU{Инициализация глобальных объектов в \Cpp происходит до вызова \main{}, именно в \ac{CRT}}
-\EN{Global objects initializations in \Cpp is also occurred in the \ac{CRT} before \main{}}: 
+\EN{Global object initializations in \Cpp is also occurred in the \ac{CRT} before \main{} execution}: 
 \ref{sec:std_string_as_global_variable}.
 
-\RU{Значение, возвращаемое из}\EN{A variable} \main{} \RU{передается или в}\EN{returns is passed to} \TT{cexit()}, 
+\RU{Значение, возвращаемое из}\EN{A value} \main{} \RU{передается или в}\EN{returns is passed to} \TT{cexit()}, 
 \RU{или же в}\EN{or to} \TT{\$LN32}, \RU{которая далее вызывает}\EN{which in turn calling} \TT{doexit()}.
 
 \RU{Можно ли обойтись без \ac{CRT}? Можно, если вы знаете что делаете.}\EN{Is it possible to get rid of \ac{CRT}?
