@@ -56,7 +56,9 @@
 \usepackage{shorttoc}
 \usetikzlibrary{calc,positioning,chains,arrows}
 \ifdefined\ebook
-\usepackage[margin=0.5in]{geometry}
+\usepackage[margin=0.5in,headheight=11pt]{geometry}
+\else
+\usepackage[margin=0.5in,headheight=12.5pt]{geometry}
 \fi
 
 \ifdefined\RUSSIAN
@@ -64,7 +66,7 @@
 \renewcommand\lstlistlistingname{Листинг}
 \fi
 
-% fancyhdr
+% fancyhdr ********************************************************
 \makeatletter
     \let\stdchapter\chapter
     \renewcommand*\chapter{%
@@ -79,6 +81,20 @@
         \thispagestyle{fancy}
     }
 \makeatother
+
+% taken from http://texblog.org/tag/fancyhdr-font-size/
+\newcommand{\changefont}{%
+\ifdefined\ebook
+    \fontsize{6}{7}\selectfont
+\else
+    \fontsize{8}{9.5}\selectfont
+\fi
+}
+\fancyhf{}
+\fancyhead[LE,RO]{\changefont \slshape \rightmark} %section
+\fancyhead[RE,LO]{\changefont \slshape \leftmark} %chapter
+\fancyfoot[C]{\changefont \thepage} %footer
+% *****************************************************************
 
 \newcommand{\footnoteref}[1]{\textsuperscript{\ref{#1}}}
 
@@ -120,9 +136,6 @@
 \bibliography{C_book_\LANG,books,articles,usenet,misc}
 
 \begin{document}
-
-%\setlength{\headheight}{15.2pt}
-\setlength{\headheight}{20pt}
 
 \pagestyle{fancy}
 
