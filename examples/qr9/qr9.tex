@@ -559,7 +559,7 @@ Read more about it in the ``\DivisionByNineSectionName'' section~(\ref{sec:divis
 
 \RU{Это код, на самом деле, делит значение символа пароля на 3.}
 \EN{The code actually divides password character value by 3.}
-
+% FIXME: add Mathematica calculations
 \begin{lstlisting}
 .text:005411EA                 mov     eax, 55555556h
 .text:005411EF                 imul    ecx
@@ -736,10 +736,10 @@ Isolate lowest bit and return it.}
 \end{lstlisting}
 
 \RU{\TT{DL} тут равно 1. Сдвигаем эту единицу на количество указанное в arg\_8. Например, если в arg\_8 число 4,
-тогда значение в \TT{DL} станет 0x10 или 1000 в двоичной системе счисления.}
+тогда значение в \TT{DL} станет 0x10 или 1000b в двоичной системе счисления.}
 \EN{Value in the \TT{DL} is 1 here. Shift left it by arg\_8.
 For example, if arg\_8 is 4, value in the \TT{DL} register became 
-0x10 or 1000 in binary form.}
+0x10 or 1000b in binary form.}
 
 \begin{lstlisting}
 .text:00541017                 shl     dl, cl
@@ -770,10 +770,10 @@ For example, if arg\_8 is 4, value in the \TT{DL} register became
 \end{lstlisting}
 
 \index{x86!\Instructions!NOT}
-\RU{\dots инвертировать DL. Например, если состояние DL после сдвига 0x10 или 1000 в двоичной системе,
-здесь будет 0xEF после инструкции \NOT или 11101111 в двоичной системе.}
-\EN{\dots invert DL. For example, if DL state after shift was 0x10 or 1000 in binary form, 
-there will be 0xEF after \NOT instruction or 11101111 in binary form.}
+\RU{\dots инвертировать DL. Например, если состояние DL после сдвига 0x10 или 1000b в двоичной системе,
+здесь будет 0xEF после инструкции \NOT или 11101111b в двоичной системе.}
+\EN{\dots invert DL. For example, if DL state after shift was 0x10 or 1000b in binary form, 
+there will be 0xEF after \NOT instruction or 11101111b in binary form.}
 
 \begin{lstlisting}
 .text:00541034                 not     dl
@@ -781,10 +781,10 @@ there will be 0xEF after \NOT instruction or 11101111 in binary form.}
 
 \RU{Эта инструкция сбрасывает бит, иными словами, она сохраняет все биты в \TT{CL} которые также
 выставлены в \TT{DL} кроме тех в \TT{DL}, что были сброшены. Это значит, что если в \TT{DL}, например,
-$11101111$ в двоичной системе, все биты будут сохранены кроме пятого (считая с младшего бита).}
+11101111b в двоичной системе, все биты будут сохранены кроме пятого (считая с младшего бита).}
 \EN{This instruction clears bit, in other words, it saves all bits in \TT{CL} which are also set in 
 \TT{DL} except those in \TT{DL} which are cleared.
-This means that if \TT{DL} is e.g. $11101111$ in binary form,
+This means that if \TT{DL} is e.g. 11101111b in binary form,
 all bits will be saved except 5th (counting from lowest bit).}
 
 \begin{lstlisting}

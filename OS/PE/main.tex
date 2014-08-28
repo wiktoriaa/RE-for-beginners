@@ -124,7 +124,7 @@ and each virtual addresses in the second DLL will be corrected.} \\
 \footnote{\RU{\url{https://ru.wikipedia.org/wiki/Address_Space_Layout_Randomization}}
 \EN{\url{https://en.wikipedia.org/wiki/Address_space_layout_randomization}}}.
 
-\index{shellcode}
+\index{Shellcode}
 \RU{Дело в том, что некий шеллкод, пытающийся исполниться на зараженной системе, 
 должен вызывать какие-то системные ф-ции}\EN{The fact is that a shellcode trying to be executed on a compromised
 system must call a system functions}.
@@ -157,8 +157,8 @@ fixed and shellcode can call it directly}.
 
 \subsection{\RU{Версия ОС}\EN{OS version}}
 
-\RU{В PE-файле имеется минимальный номер версии Windows, необходимый для загрузки модуля.}
-\EN{A PE-file also has minimal Windows version needed in order to load it.}
+\RU{PE-файле также задает минимальный номер версии Windows, необходимый для загрузки модуля.}
+\EN{A PE-file also specify minimal Windows version needed in order to load it.}
 \RU{Соответствие номеров версий в файле и кодовых наименований Windows, можно посмотреть}
 \EN{The table of version numbers stored in PE-file and corresponding Windows codenames is}
 \RU{здесь}\EN{here}\footnote{\url{https://en.wikipedia.org/wiki/Windows_NT#Releases}}.
@@ -172,15 +172,21 @@ fixed and shellcode can call it directly}.
 \RU{для запуска необходима как минимум Windows 2000}\EN{at least Windows 2000 is needed to run them}).
 
 \index{Windows!Windows XP}
-\ac{MSVC} 2012 \RU{по умолчанию генерирует .exe-файлы версии}\EN{by default generates .exe-files of version} 6.00, 
-\RU{для запуска нужна как минимум Windows Vista}\EN{targeting at least Windows Vista}, \RU{хотя}\EN{however, by} 
-\RU{изменив настройки компиляции}\EN{by changing compiler's options}
-\footnote{\url{http://blogs.msdn.com/b/vcblog/archive/2012/10/08/10357555.aspx}}, 
-\RU{можно заставить генерировать и под Windows XP}\EN{it is possible to force it to compile for Windows XP}.
+\RU{\ac{MSVC} 2012 по умолчанию генерирует .exe-файлы версии 6.00, для запуска нужна как минимум 
+Windows Vista. 
+Хотя, изменив настройки компиляции
+\footnote{\url{http://blogs.msdn.com/b/vcblog/archive/2012/10/08/10357555.aspx}},
+можно заставить генерировать и под Windows XP.}
+\EN{\ac{MSVC} 2012 generates .exe-files of version 6.00 by default, 
+targeting at least Windows Vista. 
+However, by changing compiler's options
+\footnote{\url{http://blogs.msdn.com/b/vcblog/archive/2012/10/08/10357555.aspx}},
+it is possible to force it to compile for Windows XP.}
+
 \subsection{\RU{Секции}\EN{Sections}}
 
-\RU{Разделение на секции присутствует, по-видимому, во всех форматах исполняемых файлов}\EN{Division by sections,
-as it seems, are present in all executable file formats}.
+\RU{Разделение на секции присутствует, по-видимому, во всех форматах исполняемых файлов.}
+\EN{Division by sections, as it seems, is present in all executable file formats.}
 
 \RU{Сделано это для того, чтобы отделить код от данных, а данные ~--- от константных данных.}
 \EN{It is done in order to separate code from data, and data~---from constant data.}
@@ -221,7 +227,7 @@ it is not very important}.
 \item \TT{.idata}\EMDASH{}\RU{секция импортов}\EN{imports section}.
 \ac{IDA} \RU{может создавать псевдо-секцию с этим же именем}
 \EN{may create pseudo-section named like this}: \ref{IDA_idata}.
-\item \TT{.edata}\EMDASH{}\RU{секция экспортов}\EN{exports section}
+\item \TT{.edata}\EMDASH{}\RU{секция экспортов (редко встречается)}\EN{exports section (rare)}
 \item \TT{.pdata}\EMDASH{}\RU{секция содержащая информацию об исключениях в Windows NT для MIPS, \ac{IA64} и x64}
 \EN{section containing all information about exceptions in Windows NT for MIPS, \ac{IA64} and x64}: \ref{SEH_win64}
 \item \TT{.reloc}\EMDASH{}\RU{секция релоков}\EN{relocs section}
@@ -229,7 +235,7 @@ it is not very important}.
 \item \TT{.tls}\EMDASH{}thread local storage (\ac{TLS})
 \item \TT{.rsrc}\EMDASH{}\RU{ресурсы}\EN{resources}
 \item \TT{.CRT}\EMDASH{}\RU{может присутствует в бинарных файлах скомпилированных очень старыми версиями MSVC}
-\EN{may present in binary files compiled by very old MSVC versions}
+\EN{may present in binary files compiled by ancient MSVC versions}
 \end{itemize}
 
 \RU{Запаковщики/зашифровщики PE-файлов часто затирают имена секций, или меняют на свои}
@@ -240,15 +246,15 @@ it is not very important}.
 \footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/cc307397.aspx}}.
 
 \RU{Некоторые компиляторы и линкеры могут добавлять также секцию с отладочными символами 
-и вообще отладочной информацией}
-\EN{Some compilers and linkers can add a section with debugging symbols and other debugging information}
-(\RU{например,}\EN{e.g.} MinGW).
+и вообще отладочной информацией (например, MinGW).}
+\EN{Some compilers and linkers can add a section with debugging symbols and 
+other debugging information (MinGW for instance).}
 \index{Windows!PDB}
 \RU{Хотя это не так в современных версиях}\EN{However it is not so in modern versions of} \ac{MSVC} 
 (\RU{там принято отладочную информацию сохранять в отдельных \gls{PDB}-файлах}
-\EN{a separate \gls{PDB}-files are used there for this purpose}).
-
-\RU{Вот как секция описывается в файле}\EN{That is how section described in the file}:
+\EN{a separate \gls{PDB}-files are used there for this purpose}).\\
+\\
+\RU{Вот как PE-секция описывается в файле}\EN{That is how PE-section is described in the file}:
 
 \begin{lstlisting}
 typedef struct _IMAGE_SECTION_HEADER {
@@ -286,18 +292,19 @@ typedef struct _IMAGE_SECTION_HEADER {
 \RU{Как видно, модули могут загружаться по другим базовым адресам,
 но как же тогда работать с глобальными переменными, например?}
 \EN{Obviously, modules can be loaded on various base addresses,
-but how to deal with e.g. global variables?}
+but how to deal with global variables for example?}
 \RU{Ведь нужно обращаться к ним по адресу}\EN{They must be accessed by an address}.
-\RU{Одно из решений это}\EN{One solution is} \PICcode(\ref{sec:PIC}).
+\RU{Одно из решений это}\EN{One solution is} \PICcode{} (\ref{sec:PIC}).
 \RU{Но это далеко не всегда удобно}\EN{But it is not always suitable}.
 
 \RU{Поэтому имеется таблица релоков. 
 Там просто перечислены адреса мест в модуле подлежащими коррекции при загрузке
 по другому базовому адресу.}
 \EN{That is why relocations table is present.
-The addresses of points needs to be corrected in case of loading on another base address 
-are just enumerated in the table.}
+There are enumerated the addresses of points which needs to be corrected, 
+in case of loading on another base address.}
 
+% FIXME тут бы пример с HIEW или objdump..
 \RU{Например, по}\EN{For example, there is a global variable at the address}
 \TT{0x410000} 
 \RU{лежит некая глобальная переменная, и вот как обеспечивается её чтение}
@@ -343,7 +350,7 @@ of the global variable must be} \TT{0x510000}.
 
 \index{Hiew}
 \RU{Кстати, релоки маркируются темным в Hiew, например}
-\EN{By the way, relocs are darkened in Hiew, for example} \figref{fig:scanf_ex3_hiew_1}.
+\EN{By the way, relocs are darkened in Hiew, for example}: \figref{fig:scanf_ex3_hiew_1}.
 
 \index{\olly}
 \olly \RU{подчеркивает места в памяти, к которым будут применены релоки, например}\EN{underlines
@@ -352,7 +359,7 @@ memory places to which relocs will be applied, for example}: \figref{fig:switch_
 \subsection{\RU{Экспорты и импорты}\EN{Exports and imports}}
 
 \label{PE_exports_imports}
-\RU{Как известно}\EN{As all we know}, 
+\RU{Как известно}\EN{As we all know}, 
 \RU{любая исполняемая программа должна как-то пользоваться сервисами \ac{OS} и прочими DLL-библиотеками}
 \EN{any executable program must use \ac{OS} services and other DLL-libraries somehow}.
 
@@ -395,8 +402,9 @@ that is a function numbers stored in the table instead of their names}.
 \RU{и в таких программах, в \ac{INT}, нет имен ф-ций \ac{MFC}}
 \EN{and in such programs there are no \ac{MFC} function names in \ac{INT}}.
 
+% TODO example!
 \RU{При загрузке такой программы в \IDA, она спросит у вас путь к файлу mfc*.dll,
-чтобы установить имена ф-ций}\EN{While loading such program in \IDA, it will asks for a path to mfs*.dll files,
+чтобы установить имена ф-ций}\EN{While loading such program in \IDA, it will ask for a path to mfs*.dll files,
 in order to determine function names}.
 \RU{Если в \IDA не указать путь к этой DLL, то вместо имен ф-ций будет что-то вроде}
 \EN{If not to tell \IDA path to this DLL, they will look like}
@@ -484,9 +492,9 @@ has relative addresses, they are not to be corrected}.
 \end{itemize}
 
 \RU{Оба этих два метода могут комбинироваться}\EN{Both of these methods can be combined}.
-\RU{Вероятно, линкер создает отдельный ``thunk'', если вызовов слишком много, но по умолчанию --- не создает}
+\RU{Вероятно, линкер создает отдельный ``thunk'', если вызовов слишком много, но по умолчанию --- не создает.}
 \EN{Apparently, linker creates individual ``thunk'' if there are too many calls to the functions,
-but by default it is not to be created}. \\
+but it's not to be created by default.} \\
 \\
 \RU{Кстати, массив адресов ф-ций, на который указывает FirstThunk,
 не обязательно может быть в секции \ac{IAT}}\EN{By the way, an array of function addresses to which FirstThunk is
@@ -495,9 +503,10 @@ pointing is not necessary to be located in \ac{IAT} section}.
 PE\_add\_import\footnote{\url{http://yurichev.com/PE_add_imports.html}} 
 \RU{для добавления импорта в уже существующий .exe-файл}\EN{utility for adding import to an existing .exe-file}.
 \RU{Раньше, в прошлых версиях утилиты, на месте ф-ции, вместо которой вы хотите подставить вызов в другую DLL,
-моя утилита вписывала такой код}\EN{Some time earlier, in the previous versions of the utility, 
+моя утилита вписывала такой код:}
+\EN{Some time earlier, in the previous versions of the utility, 
 at the place of the function you want to substitute by call to another DLL,
-the following code my utility writed}:
+the following code my utility written:}
 
 \begin{lstlisting}
 MOV EAX, [yourdll.dll!function]
@@ -549,12 +558,13 @@ installation on the computer of the end user}. \\
 \EN{In this case, Windows loader, of course, will not load all necessary DLLs}.
 \index{Windows!Win32!LoadLibrary}
 \index{Windows!Win32!GetProcAddress}
+% FIXME поэтому эти импорты часто только и присутствуют в запакованных файлах...
 \RU{Поэтому распаковщик/расшифровщик делает это сам, при помощи вызовов}
 \EN{Therefore, packer/encryptor do this on its own, with the help of} 
 \IT{LoadLibrary()} \AndENRU \IT{GetProcAddress()}\EN{ functions}. \\
 \\
-\RU{В стандартных DLL входящих в состав Windows, часто, \ac{IAT} находится в самом начале PE-файла}
-\EN{In the standard DLLs from Windows installation, often, \ac{IAT} is located right in the beginning of PE-file}.
+\RU{В стандартных DLL входящих в состав Windows, часто, \ac{IAT} находится в самом начале PE-файла.}
+\EN{In the standard DLLs from Windows installation, \ac{IAT} often is located right in the beginning of PE-file.}
 \RU{Возможно это для оптимизации}\EN{Supposedly, it is done for optimization}.
 \RU{Ведь .exe-файл при загрузке не загружается в память весь 
 (вспомните что инсталляторы огромного размера подозрительно быстро запускаются), он ``мапится'' (map), 
@@ -625,8 +635,8 @@ data for} \ac{TLS}(\ref{TLS}) (\RU{если нужно}\EN{if needed}).
 \begin{itemize}
 \item
 \index{objdump}
-\index{cygwin}
-objdump (\RU{из}\EN{from} cygwin) \RU{для вывода всех структур PE-файла}\EN{for dumping all PE-file structures}.
+\index{Cygwin}
+objdump (\RU{имеется в}\EN{present in} cygwin) \RU{для вывода всех структур PE-файла}\EN{for dumping all PE-file structures}.
 
 \item
 \index{Hiew}

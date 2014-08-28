@@ -2,7 +2,7 @@
 
 \RU{\ac{SEH} в Windows предназначен для обработки исключений, тем не менее, с \Cpp и \ac{OOP} он никак не связан}
 \EN{In Windows, \ac{SEH} is intended for exceptions handling, nevertheless, it is language-agnostic,
-it is not connected to the \Cpp or \ac{OOP} in any way}.
+it is not related to the \Cpp or \ac{OOP} in any way}.
 \RU{Здесь мы рассмотрим \ac{SEH} изолированно от Си++ и расширений MSVC}
 \EN{Here we will take a look on \ac{SEH} in isolated (from C++ and MSVC extensions) form}.
 
@@ -120,9 +120,9 @@ list and its elements are stored right in the stack}.
 the code}.
 \RU{Если код}\EN{If the code is} \TT{0xE1223344}, \RU{то он возвращает}\EN{it will return} 
 \TT{ExceptionContinueExecution},
-\RU{что сигнализирует системе что обработчик изменил состояние CPU (обычно это EIP/ESP) и что OS может
+\RU{что сигнализирует системе что обработчик скорректировал состояние CPU (обычно это регистры EIP/ESP) и что OS может
 возобновить исполнение треда}
-\EN{which means that handler fixes CPU state (it is usually EIP/ESP) and the OS can resume thread execution}.
+\EN{which means that handler corrected CPU state (it is usually correction of EIP/ESP registers) and the OS can resume thread execution}.
 \RU{Если вы немного измените код так что обработчик будет возвращать}\EN{If to alter the code slightly
 so the handler will return} \TT{ExceptionContinueSearch},
 \RU{то \ac{OS} будет вызывать остальные
@@ -194,10 +194,10 @@ CONTROL\_C\_EXIT                      & STATUS\_CONTROL\_C\_EXIT             & 0
 \end{tabular}
 \end{center}
 
-\RU{Так определяется код}\EN{That is how code is defined}:
+\RU{Так определяется код}\EN{That is how the code is defined}:
 
 \begin{center}
-\begin{bytefield}{32}
+\begin{bytefield}[bitwidth=0.03\linewidth]{32}
 \bitheader[endianness=big]{31,29,28,27,16,15,0} \\
 \bitbox{2}{\TT{S}} & 
 \bitbox{1}{\TT{U}} &

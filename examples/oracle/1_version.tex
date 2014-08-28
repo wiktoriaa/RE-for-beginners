@@ -134,11 +134,14 @@ GV$VERSION
 select inst_id, banner from x$version
 \end{lstlisting}
 
-\RU{Таблицы с префиксом X\$ в \oracle ~--- это также служебные таблицы, они не документированы, не могут изменятся пользователем, и обновляются динамически.}\EN{Tables prefixed as X\$ in the \oracle -- is service tables too, undocumented, cannot be changed by user and refreshed dynamically.}
+\RU{Таблицы с префиксом X\$ в \oracle ~--- это также служебные таблицы, они не документированы, не могут изменятся пользователем, и обновляются динамически.}\EN{Tables prefixed as X\$ in the \oracle -- is service tables too, undocumented, cannot be changed by user and they are refreshed dynamically.}
 
-\RU{Попробуем поискать текст}\EN{Let's also try to search the text} \TT{select  BANNER from GV\$VERSION where inst\_id = USERENV('Instance')} \RU{в файле \TT{kqf.o} и находим ссылку на него в таблице \TT{kqfvip}}\EN{in the \TT{kqf.o} file and we find it in the \TT{kqfvip} table}:
+\RU{Попробуем поискать текст}\EN{Let's also try to search the text} 
+\TT{select  BANNER from GV\$VERSION where inst\_id = USERENV('Instance')} 
+\RU{в файле \TT{kqf.o} и находим ссылку на него в таблице \TT{kqfvip}}
+\EN{in the \TT{kqf.o} file and we find it in the \TT{kqfvip} table}:
 
-.\begin{lstlisting}[caption=kqf.o]
+\begin{lstlisting}[caption=kqf.o]
 rodata:080185A0 kqfvip          dd offset _2__STRING_11126_0 ; DATA XREF: kqfgvcn+18
 .rodata:080185A0                                         ; kqfgvt+F
 .rodata:080185A0                                         ; "select inst_id,decode(indx,1,'data bloc"...
