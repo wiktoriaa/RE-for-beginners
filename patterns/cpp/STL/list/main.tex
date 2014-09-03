@@ -11,11 +11,6 @@ elements}.
 \EN{This mean that a memory footprint is enlarged by 2 \glslink{word}{words} for each element (8 bytes in 32-bit environment or 16
 bytes in 64-bit)}.
 
-\RU{Это также циркулярный список, что означает что последний элемент имеет указатель на первый 
-и наоборот: первый имеет указатель на последний}
-\EN{This is also a circular list, meaning that the last element has a pointer to the first and 
-vice versa: first element has a pointer to the last one}.
-
 \RU{STL в \Cpp просто добавляет указатели ``next'' и ``previous'' к той вашей структуре, которую вы желаете
 объединить в список}
 \EN{\Cpp STL just adds ``next'' and ``previous'' pointers to your existing structure you wish to 
@@ -25,7 +20,7 @@ unite into a list}.
 \EN{Let's work out an example with a simple 2-variable structure we want to store in the list}.
 
 \RU{Хотя и стандарт \Cpp \cite{CPP11} не указывает, как он должен быть реализован, реализации
-MSVC и GCC прямолинейны и похожи друг на друга, так что этот исходный код для обоих:}
+MSVC и GCC простые и похожи друг на друга, так что этот исходный код для обоих:}
 \EN{Although \Cpp standard \cite{CPP11} does not tell how to implement it, 
 MSVC and GCC implementations are straightforward and similar to each other, so here is only one
 source code for both:}
@@ -45,8 +40,10 @@ ptr=0x0028fe90 _Next=0x0028fe90 _Prev=0x0028fe90 x=3 y=0
 \end{lstlisting}
 
 \RU{Видим пустой список}\EN{Here we see an empty list}.
-\RU{Не смотря на то что он пуст, имеется один элемент с мусором в переменных $x$ и $y$}
-\EN{Despite the fact it is empty, it has one element with garbage in $x$ and $y$ variables}.
+\RU{Не смотря на то что он пуст, имеется один элемент с мусором (\ac{AKA} узел-пустышка (\IT{dummy node})) 
+в переменных $x$ и $y$.}
+\EN{Despite the fact it is empty, it has one element with garbage (\ac{AKA} \IT{dummy node})
+in $x$ and $y$ variables.}
 \RU{Оба указателя}\EN{Both} ``next'' \AndENRU ``prev'' \RU{указывают на себя}
 \EN{pointers are pointing to the self node}:
 
@@ -84,8 +81,10 @@ ptr=0x0028fe90 _Next=0x000349a0 _Prev=0x00034b40 x=5 y=6
 \EN{.begin() and .end() iterators are not variables, but functions, 
 when called, returning pointers to a corresponding nodes.}
 
-\RU{Иметь элемент с ``мусором'' это очень популярная практика в реализации двусвязных списков}
-\EN{Having a ``garbage'' element is a very popular practice in implementing doubly-linked lists}.
+\RU{Иметь элемент-пустышку (\IT{dummy node} \OrENRU \IT{sentinel node}) 
+это очень популярная практика в реализации двусвязных списков.}
+\EN{Having a dummy element (\ac{AKA} \IT{sentinel node}) 
+is a very popular practice in implementing doubly-linked lists.}
 \RU{Без него, многие операции были бы сложнее, и, следовательно, медленнее}
 \EN{Without it, a lot of operations may become slightly more complex and, hence, slower}.
 
@@ -99,10 +98,15 @@ node at .end:
 ptr=0x0028fe90 _Next=0x000349a0 _Prev=0x00034b40 x=5 y=6
 \end{lstlisting}
 
-\RU{Тот факт что список циркулярный, очень помогает: если иметь указатель только на первый элемент, т.е.,
+\RU{Тот факт что что последний элемент имеет указатель на первый 
+и первый имеет указатель на последний, напоминает нам циркулярный список.}
+\EN{The fact the last element has a pointer to the first and first element has a pointer 
+to the last one, remind us circular list.}
+
+\RU{Это очень помогает: если иметь указатель только на первый элемент, т.е.,
 тот что в переменной $l$, очень легко получить указатель на последний элемент, без необходимости
 обходить все элементы списка}
-\EN{The fact the list is circular is very helpful here: having a pointer to the first list element,
+\EN{This is very helpful here: having a pointer to the first list element,
 i.e., that is in the $l$ variable,
 it is easy to get a pointer to the last one quickly, without need to traverse whole list}.
 \RU{Вставка элемента в конец списка также быстра благодаря этой особенности}
@@ -158,19 +162,19 @@ it should traverse the whole list for counting elements, because it doesn't have
 \RU{С другой стороны, переменная хранящая размер должна корректироваться при каждой вставке/удалении}
 \EN{On the other way, size variable must be corrected at each insertion/deletion}.
 
-\RU{Реализация MSVC также немного отлична в смысле расстановки элементов}
-\EN{MSVC implementation is also slightly different in a way it arrange nodes}:
+\RU{Реализация MSVC также немного отлична в смысле расстановки элементов:}
+\EN{MSVC implementation is also slightly different in a way it arrange nodes:}
 
 \input{patterns/cpp/STL/list/MSVC_internals}
 
-\RU{У GCC его элемент с ``мусором'' в самом конце списка, а у MSVC в самом начале}
-\EN{GCC has its ``garbage'' element at the end of the list, while MSVC at the beginning of it}.
+\RU{У GCC его элемент-пустышка в самом конце списка, а у MSVC в самом начале.}
+\EN{GCC has its dummy element at the end of the list, while MSVC at the beginning of it.}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 /Fa2.asm /GS- /Ob1]{patterns/cpp/STL/list/MSVC.asm}
 
-\RU{В отличие от GCC, код MSVC выделяет элемент с ``мусором'' в самом начале ф-ции при помощи
+\RU{В отличие от GCC, код MSVC выделяет элемент-пустышку в самом начале ф-ции при помощи
 ф-ции ``Buynode'', она также используется и во время выделения остальных элементов}
-\EN{Unlike GCC, MSVC code allocates ``garbage'' element at the function start with the help of ``Buynode'' function,
+\EN{Unlike GCC, MSVC code allocates dummy element at the function start with the help of ``Buynode'' function,
 it is also used for the rest nodes allocations} (\RU{код GCC выделяет самый первый элемент в локальном стеке}
 \EN{GCC code allocates the very first element in the local stack}).
 
