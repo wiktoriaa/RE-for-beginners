@@ -48,8 +48,13 @@ OFFSET           TYPE              VALUE
 \EN{So there are 3 relocs in this object file.}
 
 \begin{itemize}
-\item \RU{Самый первый записывает 21-битный адрес страницы в битовые поля инструкции \TT{ADRP}.}
-\EN{The very first writes 21-bit page address into \TT{ADRP} instruction bit fields.}
+\item 
+\RU{Самый первый берет адрес страницы, отсекает младшие 12 бит и записывает оставшиеся старшие 21
+в битовые поля инструкции \TT{ADRP}. Это потому что младшие 12 бит кодировать не нужно,
+и в ADRP выделено место только для 21 бит.}
+\EN{The very first takes page address, cuts lowest 12 bits and writes remaining high 21 bits
+into \TT{ADRP} instruction bit fields. This is because we don't need to encode low 12 bits,
+and ADRP instruction has space only for 21 bits.}
 
 \item \RU{Второй ---- 12 бит адреса, относительного от начала страницы, в поля инструкции \ADD.}
 \EN{Second---12 bit of address relative to page start, into \ADD instruction bit fields.}
@@ -57,10 +62,13 @@ OFFSET           TYPE              VALUE
 \item \RU{Последний, 26-битный, накладывается на инструкцию по адресу \TT{0x10}, где переход на ф-цию \printf.}
 \EN{Last, 26-bit one, is applied to the instruction at \TT{0x10} address where the 
 jump to the \printf function is.}
-\RU{Из-за того что в ARM64 (да и в ARM в режиме ARM) невозможен переход по адресу не кратному 4,
-так что доступное адресное пространство становится не 26 бит, а 28.}
-\EN{Since it's not possible in ARM64 (and in ARM in ARM mode) to jump to the address not multiple of 4,
-so the available address space is not 26 bits, but 28.}
+\RU{Все адреса инструкций в ARM64 (да и в ARM в режиме ARM) имеют нули в двух младших битах
+(потому что все инструкции имеют размер в 4 байта),
+так что нужно кодировать только старшие 26 бит из 28-битного адресного пространства ($\pm 128$MB).}
+\EN{All ARM64 (and in ARM in ARM mode) instruction addresses has zeroes in two lowest bits
+(because all instructions has size of 4 bytes),
+so one need to encode only highest 26 bits of 28-bit address space ($\pm 128$MB).}
+
 \end{itemize}
 
 \RU{В слинкованном исполняемом файле релоков в этих местах нет: потому что там уже точно известно, 
@@ -89,4 +97,19 @@ Contents of section .rodata:
  400640 01000200 00000000 48656c6c 6f210000  ........Hello!..
 \end{lstlisting}
 
+\index{ARM!\Instructions!BL}
+\RU{В качестве примера, попробуем дизассемблировать инструкцию BL вручную.}
+\EN{As an example, let's try to disassemble BL instruction manually.}
+\TT{0x97ffffa0} \RU{это}\EN{is} $10010111111111111111111110100000b$.
+\RU{В соответствии с}\EN{Accoring to} \cite[C5.6.26]{ARM64ref}, 
+imm26 \RU{это последние 26 бит}\EN{is the last 26 bits}: 
+$imm26 = 11111111111111111110100000$.
+\RU{Это}\EN{It is} \TT{0x3FFFFA0}, \RU{но}\EN{but} \ac{MSB} \RU{это}\EN{is} 1, 
+\RU{так что число отрицательное, и в терминал модульной арифметики, по модулю 32, это}
+\EN{so the number is negative, and in terms of modular arithmetic of modulo 32, it is} 
+\TT{0xFFFFFFA0}.
+\RU{И снова, по модулю}\EN{Again, in modulo} 32, \TT{0xFFFFFFA0} * 4 = \TT{0xFFFFFE80}, 
+\AndENRU \TT{0x4005a0} + \TT{FFFFFE80} = \TT{0x400420}.
+\RU{Так что адрес в итоге}\EN{So the destination address is} \TT{0x400420}.\\
+\\
 \RU{Больше о релоках связанных с ARM64}\EN{More about ARM64-related relocs}: \cite{ARM64_ELF}.
