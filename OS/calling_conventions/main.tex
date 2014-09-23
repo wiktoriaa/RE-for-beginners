@@ -328,9 +328,21 @@ may ask, what will happen if to modify arguments?}
 
 \lstinputlisting[caption=MSVC 2012]{OS/calling_conventions/change_arguments.asm}
 
+% TODO (OllyDbg) пример как в стеке меняется $a$
+
 \RU{Следовательно, модифицировать аргументы ф-ции можно запросто.}\EN{So yes, one may modify arguments easily.}
 \RU{Разумеется, если это не}\EN{Of course, if it is not} \IT{references} \InENRU \Cpp{} (\ref{cpp_references}),
 \RU{и если вы не модифицируете данные по указателю}\EN{and if you not modify data a pointer pointing to} 
 (\RU{тогда эффект распространится не только на текущую ф-цию}
 \EN{then the effect will be propagated outside of current function}).
-% TODO пример как в стеке меняется $a$
+
+\ifdefined\RUSSIAN
+\else
+Theoretically, after \gls{callee} return, 
+\gls{caller} function could get modified argument and use it somehow.
+Maybe if it will be written in assembly language.
+But \CCpp languages doesn't offer any way to access them.
+\fi
+
+% sections
+\input{OS/calling_conventions/ptr_to_argument/main}

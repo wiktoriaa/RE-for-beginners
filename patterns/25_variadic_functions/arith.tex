@@ -1,0 +1,55 @@
+\section{Computing arithmetic mean}
+
+Let's imagine, I need to calculate arithmetic mean, and by some weird reason, 
+I need to specify all values in function arguments.
+This is just sum of all values divided by its number.
+
+But it's impossible to get number of arguments in variadic function in \CCpp, so I'll denote 
+value of $-1$ as a terminator.
+
+There are standard stdarg.h file which define macros for dealing such type of arguments.
+printf() and scanf() use it as well.
+
+\lstinputlisting{patterns/25_variadic_functions/arith.c}
+
+The very first argument should be treated just like usual argument.
+\index{\CStandardLibrary!va\_arg}
+All other arguments are loaded using \TT{va\_arg} macro and summed.
+
+So what is inside?
+
+\subsection{cdecl calling conventions}
+
+\lstinputlisting[caption=\Optimizing MSVC 6.0]{patterns/25_variadic_functions/arith_MSVC60_Ox.asm}
+
+The arguments, as we may see, is pushed in \main one-by-one.
+The first argument is pushed first. Terminator value ($-1$) pushed last.
+
+\TT{arith\_mean()} function takes first argument and stores it to $sum$ variable.
+Then, it sets \EDX register to the address of the second argument, takes value from it, adds to $sum$,
+and do this in infinite loop, until $-1$ is met.
+
+When it's met, sum is divided by number of all values which were not $-1$ and the \gls{quotient} is returned.
+
+So, in other words, I would say, the function treat stack fragment as an array of integer values of infinite
+length.
+Now we can understand why cdecl calling convention forcing to pass the first argument last. 
+Because otherwise, it would not be possible to find the last value, or, for printf-like functions, it would not be
+possible to find address of the format-string.
+
+\subsection{Register-based calling conventions}
+
+Observant reader may ask, what about calling convetions where first arguments are passed in registers?
+Let's see:
+
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/25_variadic_functions/arith_MSVC_2012_Ox_x64.asm}
+
+We see that first 4 arguments are passed in registers and two more --- in stack.
+\TT{arith\_mean()} function first place these 4 arguments into \IT{Shadow Space} and then treat
+\IT{Shadow Space} and stack behind it as a single continuous array!
+
+What about GCC? Things are slightly clumsy here, because now the function is divided by two parts:
+first part is saving registers into ``red zone'', workout that space, and the second part working out
+the rest of stack:
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/25_variadic_functions/arith_GCC491_x64_O3.s}

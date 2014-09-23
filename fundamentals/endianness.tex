@@ -48,6 +48,50 @@
 
 \RU{CPU с таким порядком байт включают в себя}\EN{Little-endian CPUs include} Intel x86.
 
+\ifdefined\RUSSIAN
+\else
+\section{Example}
+
+I've got big-endianness MIPS Linux installed and ready for QEMU
+\footnote{I've got it here: \url{https://people.debian.org/~aurel32/qemu/mips/}}.
+
+And I compiled simple example:
+
+\begin{lstlisting}
+#include <stdio.h>
+
+int main()
+{
+	int v, i;
+
+	v=123;
+
+	printf ("%02X %02X %02X %02X\n", 
+		*(char*)&v,
+		*(((char*)&v)+1),
+		*(((char*)&v)+2),
+		*(((char*)&v)+3));
+};
+\end{lstlisting}
+
+And run it:
+
+\begin{lstlisting}
+root@debian-mips:~# ./a.out 
+00 00 00 7B
+\end{lstlisting}
+
+That is.
+0x7B is 123 in decimal.
+In little-endianness architecture, 7B will be the first byte (you can check on x86 or x86-64), 
+but here it is the last one, because highest goes first.
+
+That's why there are separate Linux distributions exist for MIPS 
+(``mips'' (big-endian) and ``mipsel'' (little-endian)).
+It is impossible for binary compiled for one endianness to work on the OS with different endianness.
+
+\fi
+
 \section{Bi-endian\RU{ (переключаемый порядок)}}
 
 \RU{CPU поддерживающие оба порядка, и его можно переключать, включают в себя}

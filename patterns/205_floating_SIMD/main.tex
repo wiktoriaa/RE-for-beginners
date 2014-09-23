@@ -1,3 +1,4 @@
+% FIXME divide this file into files...
 \chapter{\RU{Работа с числами с плавающей запятой используя SIMD}
 \EN{Working with float point numbers using SIMD}}
 
@@ -234,6 +235,30 @@ is left in} \ST{0}.
 \caption{\olly: \TT{COMISD} \RU{изменила флаги}\EN{changed} \CF \AndENRU \PF\EN{ flags}}
 \label{fig:FPU_SIMD_d_max_olly}
 \end{figure}
+
+\ifdefined\RUSSIAN
+\else
+\section{Calculating machine epsilon: x64 and SIMD}
+\label{machine_epsilon_x64_and_SIMD}
+
+Let's revisit ``calculating machine epsilon'' example for \Tdouble \lstref{machine_epsilon_double_c} again.
+
+Now we compile it for x64:
+
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/epsilon_double_MSVC_2012_x64_Ox.asm}
+
+There are no way to add 1 to 128-bit XMM register, so it must be placed into memory yet.
+
+There are, however, ADDSD instruction (\IT{Add Scalar Double-Precision Floating-Point Values}) 
+which can add a value to lowest 64-bit half of XMM register while ignoring highest one, 
+but MSVC 2012 probably is not that good yet
+\footnote{As an exercise, you may try to rework this code to eliminate local stack usage.}.
+
+Nevertheless, the value is then reloaded to XMM register and subtraction is occurred.
+SUBSD is ``Subtract Scalar Double-Precision Floating-Point Values'', i.e., it operates
+on lowest 64-bit part of 128-bit XMM register.
+Result is returned in XMM0 register.
+\fi
 
 \section{\RU{Итог}\EN{Summary}}
 
