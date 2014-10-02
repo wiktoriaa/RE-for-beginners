@@ -1,0 +1,126 @@
+\ifdefined\RUSSIAN
+\else
+
+\chapter{String to number conversion (atoi())}
+
+\index{\CStandardLibrary!atoi()}
+Let's try to reimplement atoi() standard C function.
+
+\section{Simple example}
+
+Here is simplest possible way to read number represented in \ac{ASCII} form.
+It's not error-prone: character other than digit will lead to incorrect result.
+
+\lstinputlisting{patterns/26_atoi/atoi.c}
+
+So what the algorithm does is just reads digits from left to right. 
+A zero \ac{ASCII} character is subtracted from each digit. 
+Digits from 0 to 9 are came subsequently in the \ac{ASCII} table, so, 
+we may not even know exact '0' character value. 
+All we need to know is that '0' minus '0' is 0, '9' minus '0' is 9 and so on.
+Subtracting '0' from each character resulting a number from 0 to 9 inclusive.
+Any other character will lead to incorrect result, of course!
+Each digit is to be added to the final result (in ``rt'' variable), but final result
+is also multiplied by 10 at each digit.
+In other word, result is shifted left by one position in decimal form on each iteration.
+The very last digit is added, but not shifted.
+
+\subsection{\Optimizing MSVC 2013 x64}
+
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/26_atoi/atoi.asm.MSVC2013.x64.Ox}
+
+Character is loaded in two places: first character and all subsequent characters.
+This is done for loop regrouping.
+\index{x86!\Instructions!LEA}
+There are no instruction for multiplication by 10, two LEA instruction do this instead.
+\index{x86!\Instructions!ADD}
+\index{x86!\Instructions!SUB}
+MSVC sometimes use ADD instruction with negative constant instead of SUB.
+This is the case.
+I truly don't know why this is better then SUB.
+But MSVC does this often.
+
+\subsection{\Optimizing GCC 4.9.1 x64}
+
+\Optimizing GCC 4.9.1 is more concise, but there are one redundant RET instruction at the end.
+One would be enough.
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/26_atoi/atoi.s.GCC491.O3.x64}
+
+\subsection{\OptimizingKeilVI (\ARMMode)}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/26_atoi/atoi.s.ARM.O3}
+
+\subsection{\OptimizingKeilVI (\ThumbMode)}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/26_atoi/atoi.s.thumb.O3}
+
+Interestingly, from school mathematics we may remember that order of addition and 
+subtraction operations doesn't matter.
+That's our case: first, $rt*10 - '0'$ expression is computed, then the input character value is added
+to it.
+Indeed, result is the same, but compiler probably did some regrouping.
+
+\subsection{\Optimizing GCC 4.9.1 ARM64}
+
+ARM64 compiler can use pre-increment instruction suffix:
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{patterns/26_atoi/atoi.s.GCC49.ARM64.O3}
+
+\section{Slightly advanced example}
+
+My new code snippet is more advanced, now it checks for minus sign at the very first character
+and reports about error if non-digit was found in the input string:
+
+\lstinputlisting{patterns/26_atoi/atoi2.c}
+
+\subsection{\Optimizing GCC 4.9.1 x64}
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/26_atoi/atoi2.s.GCC491.O3.x64}
+
+\index{x86!\Instructions!NEG}
+If minus sign was encountered at the string begin, 
+NEG instruction will be executed at the end.
+It just negates a number.
+
+There are also one thing to mention. 
+How common programmer would check if the character is not a digit?
+Just how I wrote in the source code:
+
+\begin{lstlisting}
+if (*s<'0' || *s>'9')
+    ...
+\end{lstlisting}
+
+There are two comparison operations.
+What is interesting is that we can replace both operations by single one: 
+just subtract '0' from character value,
+treat result as unsigned value (this is important) and check if it's greater than 9.
+
+As an example, let's say, user input contain dot character (``.'') which have \ac{ASCII} code 46.
+$46-48=-2$ if to treat result as signed number.
+Indeed, dot character is located two places earlier than ``0'' character in the \ac{ASCII} table.
+But it is \TT{0xFFFFFFFE} if to treat result as unsigned value, and that's definitely bigger than 9!
+
+Compilers does this often, so it's important to recognize these tricks.
+
+\Optimizing MSVC 2013 x64 does the same tricks.
+
+\subsection{\OptimizingKeilVI (\ARMMode)}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),numbers=left]{patterns/26_atoi/atoi2.s.ARM.O3}
+
+There are no NEG instruction in 32-bit ARM, so ``Reverse Subtraction'' operation (line 31) 
+is used here.
+It is triggered if the result of CMP instruction (at line 29) was ``Not Equal'' (hence -NE suffix).
+\index{ARM!\Instructions!RSB}
+So what RSBNE does is subtract resulting value from 0.
+It works just like regular subtraction operation, but swaps operands.
+Subtracting any number from 0 resulting negation: $0-x=-x$.
+
+Thumb code is mostly the same.
+
+\index{ARM!\Instructions!NEG}
+GCC 4.9 for ARM64 can use NEG instruction, available in ARM64.
+
+\fi
