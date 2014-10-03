@@ -41,11 +41,13 @@ JZ is_cleared
 ; bit is set
 \end{lstlisting}
 
+\ifdefined\IncludeARM
 \begin{lstlisting}[caption=ARM (\ARMMode)]
 TST REG, #0x40
 BNE is_set
 ; bit is not set
 \end{lstlisting}
+\fi
 
 \index{x86!\Instructions!AND}
 \index{x86!\Instructions!TEST}
@@ -97,9 +99,11 @@ value=value|0x40;
 OR REG, 40h
 \end{lstlisting}
 
+\ifdefined\IncludeARM
 \begin{lstlisting}[caption=ARM (\ARMMode) \AndENRU ARM64]
 ORR R0, R0, #0x40
 \end{lstlisting}
+\fi
 
 \subsection{\RU{Установка определенного бита (заданного во время исполнения)}
 \EN{Set specific bit (specified at runtime)}}
@@ -137,6 +141,7 @@ AND REG, 0FFFFFFFFFFFFFFBFh
 \RU{Это на самом деле сохранение всех бит кроме одного.}
 \EN{This is actually leaving all bits set but one.}
 
+\ifdefined\IncludeARM
 \index{ARM!\Instructions!BIC}
 \RU{В ARM в режиме ARM есть инструкция BIC, работающая как две инструкции NOT+AND:}
 \EN{ARM in ARM mode has BIC instruction, which works like NOT+AND instruction pair:}
@@ -144,6 +149,7 @@ AND REG, 0FFFFFFFFFFFFFFBFh
 \begin{lstlisting}[caption=ARM (\ARMMode)]
 BIC R0, R0, #0x40
 \end{lstlisting}
+\fi
 
 \subsection{\RU{Сброс определенного бита (заданного во время исполнения)}
 \EN{Clear specific bit (specified at runtime)}}

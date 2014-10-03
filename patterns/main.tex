@@ -26,6 +26,7 @@ code snippet.
 
 \ifdefined\RUSSIAN
 \else
+\ifdefined\IncludeExercises
 \section*{Exercises}
 
 When I learned assembly language, I also often compile small C-functions and then rewrite
@@ -35,6 +36,7 @@ This probably not worth doing today in real-world scenarious
 but it's a very good method to learn assembly better.
 So you can try to take any assembly code from this book and try to make it shorter.
 But please also do not forget about testing your results!
+\fi
 \fi
 
 \chapter{\RU{Краткое введенение в CPU}\EN{Short introduction to the CPU}}
@@ -85,6 +87,7 @@ to do it without making a huge amount of annoying mistakes}.
 \EN{The program which converts high-level \ac{PL} code into assembly is called a \IT{compiler}}.
 % TODO add about linker: "компоновщик" и "редактор связей" в русскоязычной лит-ре
 
+\ifdefined\IncludeARM
 \section{\RU{Несколько слов о x86 и ARM}\EN{Couple words about x86 and ARM}}
 
 \RU{x86 всегда был архитектурой с опкодами переменной длины, так что когда пришла 64-битная эра,
@@ -152,6 +155,7 @@ Thumb mode (including Thumb-2) and ARM64.}
 \ac{ISA}'s than variations of one.}
 \RU{Следовательно, в этой книге я стараюсь добавлять фрагменты кода на всех трех ARM \ac{ISA}.}
 \EN{Therefore, I try to add fragments of code in all 3 ARM \ac{ISA}'s in this book.}
+\fi
 
 % chapters
 \input{patterns/01_helloworld/main}
@@ -161,7 +165,9 @@ Thumb mode (including Thumb-2) and ARM64.}
 \input{patterns/04_scanf/main}
 \input{patterns/05_passing_arguments/main}
 \input{patterns/06_return_results/main}
+\ifx\LITE\undefined
 \input{patterns/061_pointers/main}
+\fi
 \input{patterns/065_GOTO/main}
 \input{patterns/07_jcc/main}
 \input{patterns/08_switch/main}
@@ -180,13 +186,25 @@ Thumb mode (including Thumb-2) and ARM64.}
 \input{patterns/205_floating_SIMD/main}
 \input{patterns/207_fahrenheit/main}
 \input{patterns/208_fib/main}
+\ifx\LITE\undefined
 \input{patterns/21_C99_restrict/main}
+\fi
 \input{patterns/22_inline_function/main}
+\ifx\LITE\undefined
 \input{patterns/23_incorrect_disassembly/main}
+\fi
 \input{patterns/24_duff_device/main}
 \input{patterns/25_variadic_functions/main}
 \input{patterns/26_atoi/main}
+\ifdefined\IncludeCPP
 \input{patterns/cpp/main}
+\fi
+\ifx\LITE\undefined
 \input{patterns/obfuscation/main}
+\fi
+\ifdefined\IncludeARM
 \input{patterns/ARM/main}
+\fi
+\ifx\LITE\undefined
 \input{patterns/win16/main}
+\fi

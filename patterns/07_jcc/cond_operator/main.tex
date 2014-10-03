@@ -30,6 +30,7 @@ expression ? expression : expression
 неоптимизирующий GCC 4.8 использует условные переходы}\EN{ instruction, while non-optimizing GCC 4.8 use 
 conditional jumps}.
 
+\ifdefined\IncludeARM
 \subsection{ARM}
 
 \index{x86!\Instructions!ADRcc}
@@ -64,6 +65,7 @@ ARM mode or CMOVcc in x86}
 хорош, чтобы генерировать её в таком фрагменте кода.}
 \EN{It has, however, ``Conditional SELect'' instruction (\TT{CSEL}), but GCC 4.9 is probably not that good to 
 generate it in such piece of code.}
+\fi
 
 \subsection{\RU{Перепишем используя обычный \TT{if/else}}\EN{Let's rewrite it in \TT{if/else} way}}
 
@@ -75,8 +77,10 @@ generate it in such piece of code.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.8]{patterns/07_jcc/cond_operator/cond2_GCC_O3.s}
 
+\ifdefined\IncludeARM
 \Optimizing Keil \InENRU \RU{режиме ARM генерирует код идентичный этому:}\EN{ARM mode generates a 
 code identical to} \lstref{cond_Keil_ARM_O3}.
+\fi
 
 \RU{Но оптимизирующий}\EN{But optimizing} MSVC 2012 \RU{пока не так хорош}\EN{is not that good (yet)}.
 
@@ -85,8 +89,10 @@ code identical to} \lstref{cond_Keil_ARM_O3}.
 \RU{Почему оптимизирующие компиляторы стараются избавиться от условных переходов? Читайте больше об этом здесь:}
 \EN{Why optimizing compilers try to get rid of conditional jumps? Read here about it:} \ref{branch_predictors}.
 
+\ifdefined\IncludeExercises
 \subsection{\Exercise}
 
 \RU{Попробуйте переписать код в}\EN{Try to rewrite the code in} \lstref{cond_ARM64} 
 \RU{убрав все инструкции условного перехода, и используйте инструкцию \TT{CSEL}}\EN{by removing all 
 conditional jump instructions, and use \TT{CSEL} instruction}.
+\fi

@@ -57,6 +57,7 @@ and that's how loop will be stopped: just iterate until second index not reached
 
 \lstinputlisting{patterns/09_loops/iterators/iterators2.c}
 
+\ifdefined\IncludeARM
 GCC (Linaro) 4.9 \ForENRU ARM64 \RU{делает тоже самое, только предвычисляет последний индекс массива \IT{a1} вместо
 \IT{a2}, а это, конечно, имеет тот же эффект}\EN{do the same, but precalculates last index of \IT{a1} 
 array instead of \IT{a2}, and this has the same effect, of course}:
@@ -64,7 +65,9 @@ array instead of \IT{a2}, and this has the same effect, of course}:
 \lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64,label=GCC_no_number_sign]{patterns/09_loops/iterators/ARM64_GCC_49_O3.s}
 
 % FIXME -> post-increment
+\fi
 
+\ifx\LITE\undefined
 \subsubsection{\RU{Случай }Intel C++ 2011\EN{ case}}
 \index{\CompilerAnomaly}
 \label{loops_iterators_loop_anomaly}
@@ -90,3 +93,4 @@ array instead of \IT{a2}, and this has the same effect, of course}:
 тесты прошли нормально.}
 \EN{I'm adding such example code to my book so reader would understand that compilers output is weird at times,
 but still correct, because when compiler was tested, tests were passed.}
+\fi

@@ -63,6 +63,8 @@ Let's also compile it in 32-bit MSVC compiler:
 Input value not needed to be extended to 64-bit value, so it is used as is.
 And it's multiplied by 4, because table elements has width of 32-bit or 4 bytes.
 
+\ifdefined\IncludeARM
+% FIXME move to another file
 \subsection{32-bit ARM}
 
 \subsubsection{ARM in ARM mode}
@@ -99,8 +101,9 @@ Then corresponding element is picked using only one instruction LDR, which takes
 (register where input $month$ argument is), shifts it 3 bits left (which is the same as multiplying by 8), 
 sign-extends it (this is what ``sxtw'' suffix mean) and adds to X0.
 Then 64-bit value is loaded into X0 from the table.
+\fi
 
-\subsubsection{Array overflow}
+\subsection{Array overflow}
 
 Our function accepts values in range of 0..11, but what if 12 will be passed?
 There are no element in table present at this place.

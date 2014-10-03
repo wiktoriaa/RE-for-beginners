@@ -5,6 +5,8 @@
 	m4 --define=lang=ru $*.m4 >$*.ru
 
 all:    russian english russian-A5 english-A5
+#all:    russian english russian-A5 english-A5 \
+#	russian-lite english-lite russian-A5-lite english-A5-lite
 
 listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.en \
 	patterns/obfuscation/1.asm.ru patterns/obfuscation/1.asm.en \
@@ -39,3 +41,15 @@ russian-A5: listings
 
 english-A5: listings
 	$(call compile,RE_for_beginners-en-A5)
+
+#russian-lite: listings
+#	$(call compile,RE_for_beginners-ru-lite)
+#
+#english-lite: listings
+#	$(call compile,RE_for_beginners-en-lite)
+#
+#russian-A5-lite: listings
+#	$(call compile,RE_for_beginners-ru-A5-lite)
+#
+#english-A5-lite: listings
+#	$(call compile,RE_for_beginners-en-A5-lite)
