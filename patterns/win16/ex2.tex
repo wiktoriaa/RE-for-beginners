@@ -40,14 +40,16 @@ dseg02:0018 aHelloWorld     db 'hello, world',0
 
 \index{x86!\Instructions!RET}
 \RU{Пара важных моментов: соглашение о передаче аргументов здесь \TT{PASCAL}: оно указывает что самый
-последний аргумент должен передаваться первым}
-\EN{Couple important things here: \TT{PASCAL} calling convention dictates passing the last argument first} 
-(\TT{MB\_YESNOCANCEL}), \RU{а самый первый аргмент\EMDASH{}последним}\EN{and the first argument\EMDASH{}last} (NULL).
+первый аргумент должен передаваться первым}
+\EN{Couple important things here: \TT{PASCAL} calling convention dictates passing the first argument first} 
+(\TT{MB\_YESNOCANCEL}), \RU{а самый последний аргмент\EMDASH{}последним}\EN{and the last argument\EMDASH{}last} (NULL).
 \RU{Это соглашение также указывает вызываемой ф-ции восстановить}
 \EN{This convention also tells \gls{callee} to restore} \gls{stack pointer}:
 \RU{поэтому инструкция}\EN{hence} \TT{RETN} \RU{имеет аргумент}\EN{instruction has} \TT{0Ah} 
 \RU{означая что указатель нужно сдвинуть вперед на $10$ байт во время возврата из ф-ции}
 \EN{argument, meaning pointer should be shifted above by $10$ bytes upon function exit}.
+\RU{Это как}\EN{It is like} stdcall (\ref{sec:stdcall}), \RU{but arguments are passed in 
+``natural'' order}\EN{только аргументы передаются в ``естественном'' порядке}.
 
 \RU{Указатели передаются парами: сначала сегмент данных, потом указатель внутри сегмента}
 \EN{Pointers are passed by pairs: a segment of data is first passed, then the pointer inside of segment}.
