@@ -2,7 +2,7 @@
 
 \RU{Вот, что выходит на ассемблере}\EN{What we got in assembly language} (MSVC 2010):
 
-\lstinputlisting{patterns/04_scanf/ex3_MSVC_x86.asm}
+\lstinputlisting{patterns/04_scanf/3_checking_retval/ex3_MSVC_x86.asm}
 
 \index{x86!\Registers!EAX}
 \RU{Для того чтобы вызывающая функция имела доступ к результату вызываемой функции, 
@@ -106,7 +106,7 @@ which standard function used and where}.
 \RU{Еще одну метку}\EN{Another label}\EMDASH{}\RU{в}\EN{into} ``exit''.
 \RU{Вот как у меня получилось в итоге}\EN{What I've got}:
 
-\lstinputlisting{patterns/04_scanf/ex3.lst}
+\lstinputlisting{patterns/04_scanf/3_checking_retval/ex3.lst}
 
 \RU{Так понимать код становится чуть легче}\EN{Now it's slightly easier to understand the code}.
 \RU{Впрочем, меру нужно знать во всем и комментировать каждую инструкцию не стоит}
@@ -119,7 +119,7 @@ is pressed and text to be entered}.
 
 \RU{Я скрыл две части и придумал им названия}\EN{I've hide two parts and gave names to them}:
 
-\lstinputlisting{patterns/04_scanf/ex3_2.lst}
+\lstinputlisting{patterns/04_scanf/3_checking_retval/ex3_2.lst}
 
 % FIXME draw button?
 \RU{Раскрывать скрытые части ф-ций можно при помощи ``+'' на цифровой клавиатуре}
@@ -131,7 +131,7 @@ we can see how \IDA can represent a function as a graph}:
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_IDA.png}
+\includegraphics[scale=\FigScale]{patterns/04_scanf/3_checking_retval/IDA.png}
 \caption{\RU{Отображение в IDA в виде графа}\EN{Graph mode in IDA}}
 \label{fig:ex3_IDA_1}
 \end{figure}
@@ -148,7 +148,7 @@ after each conditional jump: green and red}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_2_IDA.png}
+\includegraphics[scale=\FigScale]{patterns/04_scanf/3_checking_retval/IDA2.png}
 \caption{\RU{Отображение в IDA в виде графа с тремя свернутыми блоками}\EN{Graph mode in IDA with 3 nodes folded}}
 \label{fig:ex3_IDA_2}
 \end{figure}
@@ -172,7 +172,7 @@ initially this variable contain some random garbage, that is} \TT{0x4CD478}\EN{ 
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_olly_1.png}
+\includegraphics[scale=\FigScale]{patterns/04_scanf/3_checking_retval/olly_1.png}
 \caption{\olly: \RU{передача адреса переменной в}\EN{passing variable address into} \scanf}
 \label{fig:scanf_ex3_olly_1}
 \end{figure}
@@ -185,7 +185,7 @@ initially this variable contain some random garbage, that is} \TT{0x4CD478}\EN{ 
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_olly_2.png}
+\includegraphics[scale=\FigScale]{patterns/04_scanf/3_checking_retval/olly_2.png}
 \caption{\olly: \scanf \RU{закончился с ошибкой}\EN{returning error}}
 \label{fig:scanf_ex3_olly_2}
 \end{figure}
@@ -210,7 +210,7 @@ console window}:
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_olly_3.png}
+\includegraphics[scale=\FigScale]{patterns/04_scanf/3_checking_retval/olly_3.png}
 \caption{\RU{консоль}\EN{console window}}
 \end{figure}
 
@@ -239,7 +239,7 @@ find the very beginning of} \TT{.text}\EN{ section} (Enter, F8, F6, Enter, Enter
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_hiew_1.png}
+\includegraphics[scale=\FigScale]{patterns/04_scanf/3_checking_retval/hiew_1.png}
 \caption{Hiew: \RU{ф-ция }\main\EN{ function}}
 \label{fig:scanf_ex3_hiew_1}
 \end{figure}
@@ -255,7 +255,7 @@ should bypass}), \RU{нажмите}\EN{press} F3,
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_hiew_2.png}
+\includegraphics[scale=\FigScale]{patterns/04_scanf/3_checking_retval/hiew_2.png}
 \caption{Hiew: \RU{замена}\EN{replacing} \TT{JNZ} \RU{на два}\EN{by two} \ac{NOP}-\RU{а}\EN{s}}
 \label{fig:scanf_ex3_hiew_2}
 \end{figure}
