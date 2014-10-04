@@ -93,12 +93,49 @@ MSVC 2012 use SSE2-instructions:}
 (through local variable \TT{tv}) from one of XMM-registers into \ST{0}.}
 
 \ifdefined\IncludeOlly
+\clearpage
 \RU{Попробуем соптимизированный пример в}\EN{Let's try optimized example in} \olly:
-\figref{fig:FPU_SIMD_simple_olly1},
-\figref{fig:FPU_SIMD_simple_olly2},
-\figref{fig:FPU_SIMD_simple_olly3},
-\figref{fig:FPU_SIMD_simple_olly4},
-\figref{fig:FPU_SIMD_simple_olly5}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly1.png}
+\caption{\olly: \TT{MOVSD} \RU{загрузила значение}\EN{loads value of} $a$ \RU{в}\EN{into} \XMM{1}}
+\label{fig:FPU_SIMD_simple_olly1}
+\end{figure}
+
+\clearpage
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly2.png}
+\caption{\olly: \TT{DIVSD} \RU{вычислила}\EN{calculated} \gls{quotient} 
+\RU{и оставила его в}\EN{and stored it in} \XMM{1}}
+\label{fig:FPU_SIMD_simple_olly2}
+\end{figure}
+
+\clearpage
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly3.png}
+\caption{\olly: \TT{MULSD} \RU{вычислила}\EN{calculated} \gls{product} \RU{и оставила его в}\EN{and stored it
+in} \XMM{0}}
+\label{fig:FPU_SIMD_simple_olly3}
+\end{figure}
+
+\clearpage
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly4.png}
+\caption{\olly: \TT{ADDSD} \RU{прибавила значение в}\EN{adds value in} \XMM{0} \RU{к}\EN{to} \XMM{1}}
+\label{fig:FPU_SIMD_simple_olly4}
+\end{figure}
+
+\clearpage
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly5.png}
+\caption{\olly: \FLD \RU{оставляет результат ф-ции в}\EN{left function result in} \ST{0}}
+\label{fig:FPU_SIMD_simple_olly5}
+\end{figure}
 
 \RU{Видно что \olly показывает XMM-регистры как пары чисел в формате \Tdouble,
 но используется только \IT{младшая} часть.}
@@ -112,45 +149,9 @@ are executed right now.}
 как 4 \Tfloat{}-числа или просто как 16 байт.}
 \EN{But of course, it's possible to switch register format and to see its contents as
 4 \Tfloat{}-numbers or just as 16 bytes.}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly1.png}
-\caption{\olly: \TT{MOVSD} \RU{загрузила значение}\EN{loads value of} $a$ \RU{в}\EN{into} \XMM{1}}
-\label{fig:FPU_SIMD_simple_olly1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly2.png}
-\caption{\olly: \TT{DIVSD} \RU{вычислила}\EN{calculated} \gls{quotient} 
-\RU{и оставила его в}\EN{and stored it in} \XMM{1}}
-\label{fig:FPU_SIMD_simple_olly2}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly3.png}
-\caption{\olly: \TT{MULSD} \RU{вычислила}\EN{calculated} \gls{product} \RU{и оставила его в}\EN{and stored it
-in} \XMM{0}}
-\label{fig:FPU_SIMD_simple_olly3}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly4.png}
-\caption{\olly: \TT{ADDSD} \RU{прибавила значение в}\EN{adds value in} \XMM{0} \RU{к}\EN{to} \XMM{1}}
-\label{fig:FPU_SIMD_simple_olly4}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly5.png}
-\caption{\olly: \FLD \RU{оставляет результат ф-ции в}\EN{left function result in} \ST{0}}
-\label{fig:FPU_SIMD_simple_olly5}
-\end{figure}
 \fi
 
+\clearpage
 \section{\RU{Передача чисел с плавающей запятой в аргументах}\EN{Passing floating point number via arguments}}
 
 \lstinputlisting{patterns/12_FPU/2_passing_floats/pow.c}
@@ -216,6 +217,7 @@ which just choose maximal value}!
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
 
+\clearpage
 \subsection{x86}
 
 \RU{Скомпилируем этот пример в MSVC 2012 с включенной оптимизацией:}
@@ -230,7 +232,7 @@ is left in} \ST{0}.
 \ifdefined\IncludeOlly
 \RU{Если загрузить этот пример в}\EN{If to load this example in} \olly, 
 \RU{увидим как инструкция}\EN{we will see how} \TT{COMISD} \RU{сравнивает значения и устанавливает/сбрасывает
-флаги}\EN{instruction compares values and set/clear} \CF \AndENRU \PF\EN{ flags}: \figref{fig:FPU_SIMD_d_max_olly}.
+флаги}\EN{instruction compares values and set/clear} \CF \AndENRU \PF\EN{ flags}:
 
 \begin{figure}[H]
 \centering

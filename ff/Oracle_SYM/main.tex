@@ -48,7 +48,15 @@ information included or something like that.}
 \footnote{\RU{Я выбрал древнюю версию \oracle сознательно, из-за более короткого размера его модулей}\EN{I chose 
 ancient \oracle version intentionally due to smaller size of its modules}}.
 
-\RU{Вот я открываю этот файл в}\EN{Here is the file opened in} Hiew: \figref{fig:oracle_SYM_whole1}.
+\clearpage
+\RU{Вот я открываю этот файл в}\EN{Here is the file opened in} Hiew:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{ff/Oracle_SYM/whole1.png}
+\caption{\RU{Весь файл в Hiew}\EN{The whole file in Hiew}}
+\label{fig:oracle_SYM_whole1}
+\end{figure}
 
 \RU{Сравнивая этот файл с другими .SYM-файлами, мы можем быстро заметить что \TT{OSYM} всегда является
 заголовком (и концом), так что это наверное сигнатура файла.}
@@ -60,8 +68,16 @@ so this is maybe file signature.}
 \EN{We also see that basically, file format is: OSYM + some binary data + zero delimited text strings + OSYM.}
 \RU{Строки это, очевидно, имена ф-ций и глобальных переменных}\EN{Strings are, obviously, function and global 
 variable names}.
+
+\clearpage
 \RU{Я отметил сигнатуры OSYM и строки здесь}\EN{I marked OSYM signatures and strings here}: 
-\figref{fig:oracle_SYM_whole2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{ff/Oracle_SYM/whole2.png}
+\caption{\RU{Сигнатура OSYM и текстовые строки}\EN{OSYM signature and text strings}}
+\label{fig:oracle_SYM_whole2}
+\end{figure}
 
 \RU{Посмотрим}\EN{Well, let's see}. 
 \RU{В Hiew я отметил весь блок со строками (исключая оконечивающую сигнатуру OSYM) и сохранил его в отдельный
@@ -115,11 +131,27 @@ about file.}
 \EN{Using Hiew again, I put the block starting at address 8 (i.e., after 32-bit \IT{count} value) 
 till strings block into separate binary file.}
 
-\RU{Посмотрим этот блок в}\EN{Let's see the binary block in} Hiew: \figref{fig:oracle_SYM_binary1}.
+\clearpage
+\RU{Посмотрим этот блок в}\EN{Let's see the binary block in} Hiew:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{ff/Oracle_SYM/binary1.png}
+\caption{\RU{Бинарный блок}\EN{Binary block}}
+\label{fig:oracle_SYM_binary1}
+\end{figure}
 
 \RU{Тут явно есть какая-то структура}\EN{There is some clear pattern in it}. 
+
+\clearpage
 \RU{Я добавил красные линии, чтобы разделить блок}\EN{I added red lines to divide the block}: 
-\figref{fig:oracle_SYM_binary2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{ff/Oracle_SYM/binary2.png}
+\caption{\RU{Структура бинарного блока}\EN{Binary block patterns}}
+\label{fig:oracle_SYM_binary2}
+\end{figure}
 
 \RU{Hiew, как и многие другие шестнадцатеричные редакторы, показывает 16 байт на строку.}
 \EN{Hiew, like almost any other hexadecimal editor, shows 16 bytes per line.}
@@ -279,13 +311,20 @@ static main() {
 \end{lstlisting}
 
 \RU{Файлы, которые я использовал в этом примере, здесь}\EN{The files I used for example are here}: 
-\url{http://beginners.re/examples/oracle/SYM/}.\\
-\\
+\url{http://beginners.re/examples/oracle/SYM/}.
+
+\clearpage
 \RU{О, можно еще попробовать \oracle для win64}\EN{Oh, let's also try \oracle for win64}.
 \RU{Там ведь должны быть 64-битные адреса, верно}\EN{There should be 64-bit addresses instead, right}?
 
 \RU{8-байтная структура здесь видна даже еще лучше}\EN{The 8-byte pattern is visible even easier here}:
-\figref{fig:oracle_SYM_whole64}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{ff/Oracle_SYM/whole64.png}
+\caption{\RU{пример .SYM-файла из \oracle для win64}\EN{.SYM-file example from \oracle for win64}}
+\label{fig:oracle_SYM_whole64}
+\end{figure}
 
 \RU{Так что да, все таблицы здесь имеют 64-битные элементы, даже смещения строк!}
 \EN{So yes, all tables now has 64-bit elements, even string offsets!}
@@ -297,37 +336,7 @@ static main() {
 library in which I have function to access \oracle .SYM-files}:
 \url{https://github.com/dennis714/porg/blob/master/oracle_sym.c}.
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{ff/Oracle_SYM/whole1.png}
-\caption{\RU{Весь файл в Hiew}\EN{The whole file in Hiew}}
-\label{fig:oracle_SYM_whole1}
-\end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{ff/Oracle_SYM/whole2.png}
-\caption{\RU{Сигнатура OSYM и текстовые строки}\EN{OSYM signature and text strings}}
-\label{fig:oracle_SYM_whole2}
-\end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{ff/Oracle_SYM/binary1.png}
-\caption{\RU{Бинарный блок}\EN{Binary block}}
-\label{fig:oracle_SYM_binary1}
-\end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{ff/Oracle_SYM/binary2.png}
-\caption{\RU{Структура бинарного блока}\EN{Binary block patterns}}
-\label{fig:oracle_SYM_binary2}
-\end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{ff/Oracle_SYM/whole64.png}
-\caption{\RU{пример .SYM-файла из \oracle для win64}\EN{.SYM-file example from \oracle for win64}}
-\label{fig:oracle_SYM_whole64}
-\end{figure}

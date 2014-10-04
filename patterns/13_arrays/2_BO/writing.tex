@@ -16,14 +16,29 @@
 \RU{Запускаете скомпилированную программу, и она падает. Немудрено. Но давайте теперь узнаем, где именно.}
 \EN{Run compiled program and its crashing. No wonder. Let's see, where exactly it is crashing.}
 
+\clearpage
 \index{\olly}
 
 \RU{Загружаем в}{Let's load into} \olly, \RU{трассируем, пока запишуются все 30 элементов}
 \EN{trace until all 30 elements are written}:
-\figref{fig:array_BO_olly_w1}.
 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/13_arrays/2_BO/olly_w1.png}
+\caption{\olly: \RU{после восстановления EBP}\EN{after restoring value of EBP}}
+\label{fig:array_BO_olly_w1}
+\end{figure}
+
+\clearpage
 \RU{Доходим до конца ф-ции}\EN{Trace until the function end}:
-\figref{fig:array_BO_olly_w2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/13_arrays/2_BO/olly_w2.png}
+\caption{\olly: \RU{EIP восстановлен, но \olly не может дизассемблировать по адресу 0x15}
+\EN{EIP is restored, but \olly can't disassemble at 0x15}}
+\label{fig:array_BO_olly_w2}
+\end{figure}
 
 \RU{Итак, следите внимательно за регистрами.}
 \EN{Now please keep your eyes on registers.}
@@ -107,21 +122,6 @@ and pass it to the program, to the function which is not checking string length 
 and you'll able to point to a program an address to which it must jump.
 Not that simple in reality, but that is how it was emerged
 \footnote{Classic article about it: \cite{Phrack4914}.}}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/13_arrays/2_BO/olly_w1.png}
-\caption{\olly: \RU{после восстановления EBP}\EN{after restoring value of EBP}}
-\label{fig:array_BO_olly_w1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/13_arrays/2_BO/olly_w2.png}
-\caption{\olly: \RU{EIP восстановлен, но \olly не может дизассемблировать по адресу 0x15}
-\EN{EIP is restored, but \olly can't disassemble at 0x15}}
-\label{fig:array_BO_olly_w2}
-\end{figure}
 
 \subsubsection{GCC}
 

@@ -30,13 +30,13 @@ This is what distinguish it from \FCOM, which is just comparing values, leaving 
 \RU{К сожалению, у процессоров до Intel P6 
 \footnote{Intel P6 это Pentium Pro, Pentium II, и далее} нет инструкций условного перехода,
 проверяющих биты \CThreeBits. 
-Возможно, так сложилось исторически (вспомните о том что FPU когда-то был вообще отдельным чипом). 
+Возможно, так сложилось исторически (вспомните о том что FPU когда-то был вообще отдельным чипом).\\
 А у Intel P6 появились инструкции \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP ~--- делающие тоже самое, 
 только напрямую модифицирующие флаги \ZF/\PF/\CF.}
 \EN{Unfortunately, CPU before Intel P6
 \footnote{Intel P6 is Pentium Pro, Pentium II, etc} has not any conditional 
 jumps instructions which are checking \CThreeBits bits. 
-Probably, it is a matter of history (remember: FPU was separate chip in past). 
+Probably, it is a matter of history (remember: FPU was separate chip in past).\\
 Modern CPU starting at Intel P6 has \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP 
 instructions~---which does the same, but modifies CPU flags \ZF/\PF/\CF.}
 
@@ -135,41 +135,11 @@ to the \ST{0} register, and if it is not triggered, the value of the \TT{\_a} va
 \EN{If programmer is aware about FPU errors, he/she must add additional checks.}
 
 \ifdefined\IncludeOlly
+\clearpage
 \myparagraph{\RU{Первый пример с \olly}\EN{First \olly example}: a=1.2 \AndENRU b=3.4}
 \index{\olly}
 
-\RU{Загружаем пример в}\EN{Let's load the example into} \olly: \figref{fig:FPU_comparison_case1_olly1}.
-\RU{Текущие параметры ф-ции}\EN{Current function arguments are}: $a=1.2$ \AndENRU $b=3.4$ 
-(\RU{их видно в стеке: 2 пары 32-битных значений}\EN{We can see them in stack: two pairs of 32-bit values}).
-$b$ ($3.4$) \RU{уже загружено в}\EN{already loaded in} \ST{0}.
-\RU{Сейчас будет исполняться \FCOMP}\EN{\FCOMP will be executed now}. 
-\olly \RU{показывает второй аргумент для \FCOMP, который сейчас находится в стеке}\EN{show the second \FCOMP
-argument, which is in stack right now}.\\
-\\
-\FCOMP \RU{отработал}\EN{is executed}: \figref{fig:FPU_comparison_case1_olly2}.
-\RU{Мы видим состояния condition-флагов \ac{FPU}}\EN{We see \ac{FPU} condition flags state}: 
-\RU{все нули}\EN{all zeroes}.
-\RU{Вытолкнутое значение отображается как \ST{7}, почему это так, я писал раннее}
-\EN{Popped value is reflected as \ST{7}, I wrote earlier about reason of this}: 
-\ref{FPU_is_rather_circular_buffer}.\\
-\\
-\FNSTSW \RU{сработал}\EN{is executed}: \figref{fig:FPU_comparison_case1_olly3}.
-\RU{Видно что регистр \TT{AX} содержит нули: действительно, ведь все condition-флаги тоже содержали нули.}
-\EN{We see that \TT{AX} register contain zeroes: indeed, all condition flags has zeroes.}
-(\olly \RU{дизассемблирует команду}\EN{disassembles} \FNSTSW \RU{как}\EN{instruction as} \TT{FSTSW} --- 
-\RU{это синоним}\EN{they are synonyms}).\\
-\\
-\TEST \RU{сработал}\EN{is executed}: \figref{fig:FPU_comparison_case1_olly4}.
-\RU{Флаг \TT{PF} равен единице.}\EN{\TT{PF} flag is one.}
-\RU{Все верно: количество выставленных бит в $0$ это $0$, а $0$ --- это четное число.}
-\EN{Indeed: number of bits set in $0$ is $0$ and $0$ is even number.}
-\olly \RU{дизассемблирует}\EN{disassembles} \TT{JP} \RU{как}\EN{as} \ac{JPE} --- \RU{это синонимы}\EN{they
-are synonims}.
-\RU{И она сейчас сработает}\EN{And it will be triggered right now}.\\
-\\
-\ac{JPE} \RU{сработала}\EN{triggered}, \FLD \RU{загрузила в \ST{0} значение $b$ ($3.4$)}
-\EN{loads $b$ ($3.4$) value into \ST{0}}: \figref{fig:FPU_comparison_case1_olly5}.
-\RU{Ф-ция заканчивает свою работу}\EN{The function finishes its work}.
+\RU{Загружаем пример в}\EN{Let's load the example into} \olly:
 
 \begin{figure}[H]
 \centering
@@ -178,6 +148,16 @@ are synonims}.
 \label{fig:FPU_comparison_case1_olly1}
 \end{figure}
 
+\RU{Текущие параметры ф-ции}\EN{Current function arguments are}: $a=1.2$ \AndENRU $b=3.4$ 
+(\RU{их видно в стеке: 2 пары 32-битных значений}\EN{We can see them in stack: two pairs of 32-bit values}).
+$b$ ($3.4$) \RU{уже загружено в}\EN{already loaded in} \ST{0}.
+\RU{Сейчас будет исполняться \FCOMP}\EN{\FCOMP will be executed now}. 
+\olly \RU{показывает второй аргумент для \FCOMP, который сейчас находится в стеке}\EN{show the second \FCOMP
+argument, which is in stack right now}.
+
+\clearpage
+\FCOMP \RU{отработал}\EN{is executed}:
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/12_FPU/3_comparison/x86/MSVC/olly1_2.png}
@@ -185,12 +165,28 @@ are synonims}.
 \label{fig:FPU_comparison_case1_olly2}
 \end{figure}
 
+\RU{Мы видим состояния condition-флагов \ac{FPU}}\EN{We see \ac{FPU} condition flags state}: 
+\RU{все нули}\EN{all zeroes}.
+\RU{Вытолкнутое значение отображается как \ST{7}, почему это так, я писал раннее}
+\EN{Popped value is reflected as \ST{7}, I wrote earlier about reason of this}: 
+\ref{FPU_is_rather_circular_buffer}.
+
+\clearpage
+\FNSTSW \RU{сработал}\EN{is executed}:
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/12_FPU/3_comparison/x86/MSVC/olly1_3.png}
 \caption{\olly: \FNSTSW \RU{исполнилась}\EN{is executed}}
 \label{fig:FPU_comparison_case1_olly3}
 \end{figure}
+
+\RU{Видно что регистр \TT{AX} содержит нули: действительно, ведь все condition-флаги тоже содержали нули.}
+\EN{We see that \TT{AX} register contain zeroes: indeed, all condition flags has zeroes.}
+(\olly \RU{дизассемблирует команду}\EN{disassembles} \FNSTSW \RU{как}\EN{instruction as} \TT{FSTSW} --- 
+\RU{это синоним}\EN{they are synonyms}).
+
+\clearpage
+\TEST \RU{сработал}\EN{is executed}:
 
 \begin{figure}[H]
 \centering
@@ -199,6 +195,17 @@ are synonims}.
 \label{fig:FPU_comparison_case1_olly4}
 \end{figure}
 
+\RU{Флаг \TT{PF} равен единице.}\EN{\TT{PF} flag is one.}
+\RU{Все верно: количество выставленных бит в $0$ это $0$, а $0$ --- это четное число.}
+\EN{Indeed: number of bits set in $0$ is $0$ and $0$ is even number.}
+\olly \RU{дизассемблирует}\EN{disassembles} \TT{JP} \RU{как}\EN{as} \ac{JPE} --- \RU{это синонимы}\EN{they
+are synonims}.
+\RU{И она сейчас сработает}\EN{And it will be triggered right now}.
+
+\clearpage
+\ac{JPE} \RU{сработала}\EN{triggered}, \FLD \RU{загрузила в \ST{0} значение $b$ ($3.4$)}
+\EN{loads $b$ ($3.4$) value into \ST{0}}:
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/12_FPU/3_comparison/x86/MSVC/olly1_5.png}
@@ -206,34 +213,12 @@ are synonims}.
 \label{fig:FPU_comparison_case1_olly5}
 \end{figure}
 
+\RU{Ф-ция заканчивает свою работу}\EN{The function finishes its work}.
+
+\clearpage
 \myparagraph{\RU{Второй пример с \olly}\EN{Second \olly example}: a=5.6 \AndENRU b=-4}
 
-\RU{Загружаем пример в}\EN{Let's load example into} \olly: \figref{fig:FPU_comparison_case2_olly1}.
-\RU{Текущие параметры ф-ции}\EN{Current function arguments are}: $a=5.6$ \AndENRU $b=-4$).
-$b$ ($-4$) \RU{уже загружено в}\EN{is already loaded into} \ST{0}.
-\RU{Сейчас будет исполняться \FCOMP}\EN{\FCOMP will be executed now}. 
-\olly \RU{показывает второй аргумент \FCOMP, который сейчас находится в стеке}
-\EN{shows second \FCOMP argument which is in stack right now}.\\
-\\
-\FCOMP \RU{отработал}\EN{executed}: \figref{fig:FPU_comparison_case2_olly2}.
-\RU{Мы видим значения condition-флагов \ac{FPU}: все нули кроме \Czero.}
-\EN{We see \ac{FPU} condition flags state: all zeroes except of \Czero.}\\
-\\
-\FNSTSW \RU{сработал}\EN{executed}: \figref{fig:FPU_comparison_case2_olly3}.
-\RU{Видно что регистр \TT{AX} содержит \TT{0x100}: флаг \Czero стал на место 16-го бита.}
-\EN{We see that \TT{AX} register contain \TT{0x100}: \Czero flag now at the place of 16th bit.}\\
-\\
-\TEST \RU{сработал}\EN{executed}: \figref{fig:FPU_comparison_case2_olly4}.
-\RU{Флаг }\TT{PF} \RU{равен нулю}\EN{ flag is cleared}.
-\RU{Все верно}\EN{Indeed}: 
-\RU{количество единичных бит в \TT{0x100} --- это $1$, а $1$ --- это нечетное число}
-\EN{count of bits set in \TT{0x100} is $1$ and $1$ is odd number}.
-\ac{JPE} \RU{сейчас не сработает}\EN{will not be triggered now}.\\
-\\
-\ac{JPE} \RU{не сработала}\EN{wasn't triggered}, \FLD 
-\RU{загрузила в \ST{0} значение $a$ ($5.6$)}
-\EN{loads $a$ value ($5.6$) into \ST{0}}: \figref{fig:FPU_comparison_case2_olly5}.
-\RU{Ф-ция заканчивает свою работу}\EN{The function finishes its work}.
+\RU{Загружаем пример в}\EN{Let's load example into} \olly:
 
 \begin{figure}[H]
 \centering
@@ -242,12 +227,27 @@ $b$ ($-4$) \RU{уже загружено в}\EN{is already loaded into} \ST{0}.
 \label{fig:FPU_comparison_case2_olly1}
 \end{figure}
 
+\RU{Текущие параметры ф-ции}\EN{Current function arguments are}: $a=5.6$ \AndENRU $b=-4$).
+$b$ ($-4$) \RU{уже загружено в}\EN{is already loaded into} \ST{0}.
+\RU{Сейчас будет исполняться \FCOMP}\EN{\FCOMP will be executed now}. 
+\olly \RU{показывает второй аргумент \FCOMP, который сейчас находится в стеке}
+\EN{shows second \FCOMP argument which is in stack right now}.
+
+\clearpage
+\FCOMP \RU{отработал}\EN{executed}:
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/12_FPU/3_comparison/x86/MSVC/olly2_2.png}
 \caption{\olly: \FCOMP \RU{исполнилась}\EN{executed}}
 \label{fig:FPU_comparison_case2_olly2}
 \end{figure}
+
+\RU{Мы видим значения condition-флагов \ac{FPU}: все нули кроме \Czero.}
+\EN{We see \ac{FPU} condition flags state: all zeroes except of \Czero.}
+
+\clearpage
+\FNSTSW \RU{сработал}\EN{executed}:
 
 \begin{figure}[H]
 \centering
@@ -256,6 +256,12 @@ $b$ ($-4$) \RU{уже загружено в}\EN{is already loaded into} \ST{0}.
 \label{fig:FPU_comparison_case2_olly3}
 \end{figure}
 
+\RU{Видно что регистр \TT{AX} содержит \TT{0x100}: флаг \Czero стал на место 16-го бита.}
+\EN{We see that \TT{AX} register contain \TT{0x100}: \Czero flag now at the place of 16th bit.}
+
+\clearpage
+\TEST \RU{сработал}\EN{executed}:
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/12_FPU/3_comparison/x86/MSVC/olly2_4.png}
@@ -263,10 +269,24 @@ $b$ ($-4$) \RU{уже загружено в}\EN{is already loaded into} \ST{0}.
 \label{fig:FPU_comparison_case2_olly4}
 \end{figure}
 
+\RU{Флаг }\TT{PF} \RU{равен нулю}\EN{ flag is cleared}.
+\RU{Все верно}\EN{Indeed}: 
+\RU{количество единичных бит в \TT{0x100} --- это $1$, а $1$ --- это нечетное число}
+\EN{count of bits set in \TT{0x100} is $1$ and $1$ is odd number}.
+\ac{JPE} \RU{сейчас не сработает}\EN{will not be triggered now}.
+
+\clearpage
+\ac{JPE} \RU{не сработала}\EN{wasn't triggered}, \FLD 
+\RU{загрузила в \ST{0} значение $a$ ($5.6$)}
+\EN{loads $a$ value ($5.6$) into \ST{0}}:
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/12_FPU/3_comparison/x86/MSVC/olly2_5.png}
 \caption{\olly: \RU{вторая \FLD исполнилась}\EN{second \FLD executed}}
 \label{fig:FPU_comparison_case2_olly5}
 \end{figure}
+
+\RU{Ф-ция заканчивает свою работу}\EN{The function finishes its work}.
+
 \fi

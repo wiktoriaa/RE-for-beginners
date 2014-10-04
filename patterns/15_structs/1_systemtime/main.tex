@@ -50,6 +50,7 @@ but it is also can be said, pointer to the \TT{wYear} field is passed, and that 
 ahead, then writes current month, etc, etc.}
 
 \ifdefined\IncludeOlly
+\clearpage
 \subsection{\olly}
 \index{\olly}
 
@@ -59,11 +60,23 @@ ahead, then writes current month, etc, etc.}
 \EN{Let's open windows of data and stack at the address which is passed as the first argument into}
 \TT{GetSystemTime()}\EN{ function}, 
 \RU{ждем пока эта ф-ция исполнится, и видим следующее}\EN{let's wait until it's executed and we see this}:
-\figref{fig:struct_olly_1}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/15_structs/1_systemtime/olly_systemtime1.png}
+\caption{\olly: \TT{GetSystemTime()} \RU{только что исполнилась}\EN{just executed}}
+\label{fig:struct_olly_1}
+\end{figure}
 
 \RU{Точное системнео время на моем компьютере, в которое исполнилась ф-ция, это}
 \EN{Precise system time of function execution on my computer is} 5 \RU{июня}\EN{june} 2014, 7:17:45:
-\figref{fig:struct_olly_2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.66]{patterns/15_structs/1_systemtime/olly_systemtime2.png}
+\caption{\olly: \RU{Вывод \printf}\EN{\printf output}}
+\label{fig:struct_olly_2}
+\end{figure}
 
 \RU{Таким образом, в окне данных мы видим следующие 16 байт}\EN{So we see these 16 bytes in the
 data window}: 
@@ -115,19 +128,6 @@ we see low byte first and then high one}.
 \TT{wMilliseconds}), \RU{но они находятся в памяти и доступны для использования.}
 \EN{but they are in memory right now, available for ussage.}
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/15_structs/1_systemtime/olly_systemtime1.png}
-\caption{\olly: \TT{GetSystemTime()} \RU{только что исполнилась}\EN{just executed}}
-\label{fig:struct_olly_1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.66]{patterns/15_structs/1_systemtime/olly_systemtime2.png}
-\caption{\olly: \RU{Вывод \printf}\EN{\printf output}}
-\label{fig:struct_olly_2}
-\end{figure}
 \fi
 
 \subsection{\RU{Замена структуры массивом}\EN{Replacing the structure by array}}

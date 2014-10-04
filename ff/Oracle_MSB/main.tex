@@ -41,9 +41,18 @@ with irrelevant comments stripped}:
 \RU{Первое число это код ошибки}\EN{The first number is error code}.
 \RU{Второе это может быть дополнительные флаги, но я не уверен}\EN{The second is maybe some additional flags, 
 but I'm not sure}.
+
+\clearpage
 \RU{Давайте откроем бинарный файл}\EN{Now let's open} ORAUS.MSB 
 \RU{и найдем эти текстовые строки}\EN{binary file and find these text strings}. 
-\RU{И вот они}\EN{And there are}: \figref{fig:oracle_MSB_1}.
+\RU{И вот они}\EN{And there are}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{ff/Oracle_MSB/1.png}
+\caption{Hiew: \RU{первый блок}\EN{first block}}
+\label{fig:oracle_MSB_1}
+\end{figure}
 
 \RU{Мы видим текстовые строки (включая те, с которых начинается файл ORAUS.MSG) перемежаемые с какими-то
 бинарными значениями}\EN{We see the text strings (including those with which ORAUS.MSG file started) 
@@ -52,7 +61,15 @@ interleaved with some binary values}.
 байт}\EN{By quick investigation, we can see that main part of binary file is divided by blocks of 
 size 0x200 (512) bytes}.
 
-\RU{Посмотрим содержимое первого блока}\EN{Let's see contents of the first block}: \figref{fig:oracle_MSB_2}.
+\clearpage
+\RU{Посмотрим содержимое первого блока}\EN{Let's see contents of the first block}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{ff/Oracle_MSB/2.png}
+\caption{Hiew: \RU{первый блок}\EN{first block}}
+\label{fig:oracle_MSB_2}
+\end{figure}
 
 \RU{Мы видим тексты первых сообщений об ошибках}\EN{Here we see texts of first messages errors}.
 \RU{Что мы видим еще, так это то, что здесь нет нулевых байтов между сообщениями}\EN{What we also see is 
@@ -126,7 +143,16 @@ save a space by not saving text string size in the file}!
 \RU{Нельзя сказать, что экономия большая, но это интересный трюк}\EN{I cannot say it saves a lot, 
 but it's a clever trick}.
 
-\RU{Вернемся к заголовку .MSB-файла}\EN{Let's back to the header of .MSB-file}: \figref{fig:oracle_MSB_3}.
+\clearpage
+\RU{Вернемся к заголовку .MSB-файла}\EN{Let's back to the header of .MSB-file}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{ff/Oracle_MSB/3.png}
+\caption{Hiew: \RU{заголовок файла}\EN{file header}}
+\label{fig:oracle_MSB_3}
+\end{figure}
+
 \RU{Я быстро нашел количество блоков (отмечено красным)}\EN{I quickly found number of blocks in file 
 (marked by red)}.
 \RU{Я проверил другие .MSB-файлы и это справедливо для всех}\EN{I checked other .MSB-files and that's true 
@@ -137,8 +163,17 @@ for any}.
 \RU{А если бы я писал запаковщик .MSB-файлов, тогда мне наверное пришлось бы понять, зачем нужны остальные.}
 \EN{If I would write .MSB-file packer, I would probably need to understand other value meanings.}
 
+\clearpage
 \RU{Тут еще есть таблица после заголовка, вероятно, содержащая 16-битные значения}\EN{There is also a 
-table came after header which probably contain 16-bit values}: \figref{fig:oracle_MSB_4}.
+table came after header which probably contain 16-bit values}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{ff/Oracle_MSB/4.png}
+\caption{Hiew: \RU{таблица }last\_errnos\EN{ table}}
+\label{fig:oracle_MSB_4}
+\end{figure}
+
 \RU{Их длина может быть определена визуально (я нарисовал красных линий)}\EN{Their size can be determined 
 visually (I draw red lines)}.
 \RU{Когда я сдампил эти значения, я обнаружил, что каждое 16-битное число это последний код ошибки для
@@ -171,34 +206,6 @@ unpacks .MSB-files}:
 (\oracle 11.1.0.6):
 \url{http://beginners.re/examples/oracle/MSB/oraus.msb},
 \url{http://beginners.re/examples/oracle/MSB/oraus.msg}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{ff/Oracle_MSB/1.png}
-\caption{Hiew: \RU{первый блок}\EN{first block}}
-\label{fig:oracle_MSB_1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{ff/Oracle_MSB/2.png}
-\caption{Hiew: \RU{первый блок}\EN{first block}}
-\label{fig:oracle_MSB_2}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{ff/Oracle_MSB/3.png}
-\caption{Hiew: \RU{заголовок файла}\EN{file header}}
-\label{fig:oracle_MSB_3}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{ff/Oracle_MSB/4.png}
-\caption{Hiew: \RU{таблица }last\_errnos\EN{ table}}
-\label{fig:oracle_MSB_4}
-\end{figure}
 
 \section{\RU{Вывод}\EN{Summary}}
 

@@ -81,7 +81,7 @@ processor flags\footnote{About x86 flags, see also: \url{http://en.wikipedia.org
 \EN{So, \CMP instruction can be replaced to \SUB instruction and almost everything will be fine,
 but the difference is in 
 the \SUB alter the value of the first operand.
-\CMP is \IT{``SUB without saving result''}.}
+\CMP is \IT{SUB without saving result}.}
 
 \ifx\LITE\undefined
 \subsection{MSVC: x86: IDA}
@@ -125,20 +125,9 @@ is pressed and text to be entered}.
 \RU{Раскрывать скрытые части ф-ций можно при помощи ``+'' на цифровой клавиатуре}
 \EN{To unhide these parts, ``+'' on numerical pad can be used}.
 
+\clearpage
 \RU{Нажав ``пробел'', мы увидим как \IDA может представить ф-цию в виде графа}\EN{By pressing ``space'',
-we can see how \IDA can represent a function as a graph}: \figref{fig:ex3_IDA_1}.
-\RU{После каждого условного перехода видны две стрелки: зеленая и красная}\EN{There are two arrows
-after each conditional jump: green and red}.
-\RU{Зеленая ведет к тому блоку, который исполнится если переход сработал, а красная --- если не сработал}
-\EN{Green arrow pointing to the block which will be executed if jump is triggered, and red if otherwise}.
-
-\RU{В этом режиме также можно сворачивать узлы и давать им названия}
-\EN{It is possible to fold nodes is this mode and give them names as well} (``group nodes'').
-\RU{Я сделал это для трех блоков}\EN{I did it for 3 blocks}: \figref{fig:ex3_IDA_2}.
-
-\RU{Всё это очень полезно делать}\EN{It's very useful}.
-\RU{Вообще, очень важная часть работы реверсера состоит в том, чтобы уменьшать количество имеющейся информации}
-\EN{It can be said, a very important part of reverse engineer's job is to reduce information he/she have}.
+we can see how \IDA can represent a function as a graph}:
 
 \begin{figure}[H]
 \centering
@@ -147,15 +136,30 @@ after each conditional jump: green and red}.
 \label{fig:ex3_IDA_1}
 \end{figure}
 
+\RU{После каждого условного перехода видны две стрелки: зеленая и красная}\EN{There are two arrows
+after each conditional jump: green and red}.
+\RU{Зеленая ведет к тому блоку, который исполнится если переход сработал, а красная --- если не сработал}
+\EN{Green arrow pointing to the block which will be executed if jump is triggered, and red if otherwise}.
+
+\clearpage
+\RU{В этом режиме также можно сворачивать узлы и давать им названия}
+\EN{It is possible to fold nodes is this mode and give them names as well} (``group nodes'').
+\RU{Я сделал это для трех блоков}\EN{I did it for 3 blocks}:
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_2_IDA.png}
 \caption{\RU{Отображение в IDA в виде графа с тремя свернутыми блоками}\EN{Graph mode in IDA with 3 nodes folded}}
 \label{fig:ex3_IDA_2}
 \end{figure}
+
+\RU{Всё это очень полезно делать}\EN{It's very useful}.
+\RU{Вообще, очень важная часть работы реверсера состоит в том, чтобы уменьшать количество имеющейся информации}
+\EN{It can be said, a very important part of reverse engineer's job is to reduce information he/she have}.
 \fi
 
 \ifdefined\IncludeOlly
+\clearpage
 \subsection{MSVC: x86 + \olly}
 
 \RU{Попробуем в \olly немного хакнуть программу, и сделать вид что \scanf срабатывает всегда без ошибок}
@@ -165,18 +169,33 @@ after each conditional jump: green and red}.
 у нас в этой переменной
 находится некий мусор, а это}\EN{When address of local variable is passed into \scanf,
 initially this variable contain some random garbage, that is} \TT{0x4CD478}\EN{ in case}:
-\figref{fig:scanf_ex3_olly_1}.
 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_olly_1.png}
+\caption{\olly: \RU{передача адреса переменной в}\EN{passing variable address into} \scanf}
+\label{fig:scanf_ex3_olly_1}
+\end{figure}
+
+\clearpage
 \RU{Когда}\EN{When} \scanf \RU{запускается, я ввожу в консоли что-то непохожее на число, например}
 \EN{is executing, I entered something definitely not a number in the console, like} ``asdasd''.
 \scanf \RU{заканчивается с 0 в}\EN{finishing with 0 in} \EAX, \RU{что означает, что произошла ошибка}
-\EN{which mean, an error occurred}: \figref{fig:scanf_ex3_olly_2}.
+\EN{which mean, an error occurred}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_olly_2.png}
+\caption{\olly: \scanf \RU{закончился с ошибкой}\EN{returning error}}
+\label{fig:scanf_ex3_olly_2}
+\end{figure}
 
 \RU{Вместе с этим, мы можем посмотреть на локальную переменную в стеке, она не изменилась}
 \EN{We can also see to the local variable in the stack and notice that it's not changed}.
 \RU{Действительно, ведь что туда записала бы ф-ция \scanf}\EN{Indeed, what \scanf would write there}?
 \RU{Она просто ничего не делала кроме возвращения нуля}\EN{It just did nothing except returning zero}.
 
+\clearpage
 \RU{Теперь попробуем немного ``хакнуть'' нашу программу}\EN{Now let's try to ``hack'' our program}.
 \RU{Кликнем правой кнопкой на}\EN{Let's right-click on} \EAX, \RU{там, в числе опций, будет также}
 \EN{there will also be} ``Set to 1''\EN{ among other options}.
@@ -198,20 +217,7 @@ console window}:
 \RU{Действительно}\EN{Indeed}, $5035128$ \RU{это десятичное представление числа в стеке}
 \EN{is a decimal representation of the number in stack} (\TT{0x4CD478})!
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_olly_1.png}
-\caption{\olly: \RU{передача адреса переменной в}\EN{passing variable address into} \scanf}
-\label{fig:scanf_ex3_olly_1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_olly_2.png}
-\caption{\olly: \scanf \RU{закончился с ошибкой}\EN{returning error}}
-\label{fig:scanf_ex3_olly_2}
-\end{figure}
-
+\clearpage
 \subsection{MSVC: x86 + Hiew}
 \index{Hiew}
 
@@ -229,16 +235,30 @@ very beginning of} \TT{.text}\EN{ section}.
 \RU{Откроем исполняемый файл в Hiew, найдем самое начало секции}\EN{Let's open executable in Hiew, 
 find the very beginning of} \TT{.text}\EN{ section} (Enter, F8, F6, Enter, Enter).
 
-\RU{Мы увидим следующее}\EN{We will see this}: \figref{fig:scanf_ex3_hiew_1}.
+\RU{Мы увидим следующее}\EN{We will see this}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_hiew_1.png}
+\caption{Hiew: \RU{ф-ция }\main\EN{ function}}
+\label{fig:scanf_ex3_hiew_1}
+\end{figure}
 
 Hiew \RU{находит}\EN{finds} \ac{ASCIIZ}\RU{-строки и показывает их, также как и имена импортируемых 
 ф-ций}\EN{ strings and displays them, as well as imported function names}.
 
+\clearpage
 \RU{Переведите курсор на адрес}\EN{Move cursor to the address} \TT{.00401027} 
 (\RU{с инструкцией}\EN{with the} \TT{JNZ}\RU{, которую мы хотим заблокировать}\EN{ instruction we 
 should bypass}), \RU{нажмите}\EN{press} F3,
 \RU{затем наберите}\EN{and then type} ``9090'' (\RU{что означает}\EN{meaning two} \ac{NOP}-\RU{а}\EN{s}): 
-\figref{fig:scanf_ex3_hiew_2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_hiew_2.png}
+\caption{Hiew: \RU{замена}\EN{replacing} \TT{JNZ} \RU{на два}\EN{by two} \ac{NOP}-\RU{а}\EN{s}}
+\label{fig:scanf_ex3_hiew_2}
+\end{figure}
 
 \RU{Затем}\EN{Then} F9 (update). \RU{Теперь исполняемый файл записан на диск. Он будет вести себя
 так, как нам надо.}\EN{Now the executable saved to disk. It will behave as we wanted.}
@@ -258,23 +278,4 @@ jump}.
 \RU{Теперь сообщение об ошибке будет выдаваться всегда, даже если мы ввели число}
 \EN{The error message will be printed always, no matter what number was entered}.
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_hiew_1.png}
-\caption{Hiew: \RU{ф-ция }\main\EN{ function}}
-\label{fig:scanf_ex3_hiew_1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex3_hiew_2.png}
-\caption{Hiew: \RU{замена}\EN{replacing} \TT{JNZ} \RU{на два}\EN{by two} \ac{NOP}-\RU{а}\EN{s}}
-\label{fig:scanf_ex3_hiew_2}
-\end{figure}
 \fi
-
-\subsection{GCC: x86}
-
-\RU{Код созданный при помощи GCC 4.4.1 в Linux практически такой же, если не считать мелких отличий, 
-которые мы уже рассмотрели раннее.}
-\EN{Code generated by GCC 4.4.1 in Linux is almost the same, except differences we already considered.}

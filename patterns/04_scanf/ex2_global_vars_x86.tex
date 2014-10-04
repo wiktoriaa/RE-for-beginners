@@ -73,10 +73,19 @@ But in an .exe file these not initialized variables are not occupy anything.
 E.g. it is suitable for large arrays.}
 
 \ifdefined\IncludeOlly
+\clearpage
 \subsection{MSVC: x86 + \olly}
 \index{\olly}
 
-\RU{Тут даже проще}\EN{Things are even simpler here}: \figref{fig:scanf_ex2_olly_1}.
+\RU{Тут даже проще}\EN{Things are even simpler here}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/04_scanf/ex2_olly_1.png}
+\caption{\olly: \RU{после исполнения \scanf}\EN{after \scanf execution}}
+\label{fig:scanf_ex2_olly_1}
+\end{figure}
+
 \RU{Переменная хранится в сегменте данных}\EN{Variable is located in the data segment}.
 \RU{Кстати, после исполнения инструкции \PUSH (заталкивающей адрес $x$) адрес появится в стеке, и на этом
 элементе можно нажать правой кнопкой, выбрать ``Follow in dump''}\EN{By the way, after 
@@ -101,17 +110,11 @@ there}.
 \EN{Some time after, 32-bit value from this place of memory is loaded into \EAX and passed into} \printf.
 
 \RU{Адрес переменной $x$ в памяти}\EN{$x$ variable address in the memory is} \TT{0xDC3390}.
+
+\clearpage
 \RU{В \olly{} мы можем посмотреть карту памяти процесса (Alt-M) и увидим что этот адрес
 внутри PE-сегмента \TT{.data} нашей программы}\EN{In \olly we can see process memory map (Alt-M)
 and we will see that this address is inside of \TT{.data} PE-segment of our program}:
-\figref{fig:scanf_ex2_olly_2}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex2_olly_1.png}
-\caption{\olly: \RU{после исполнения \scanf}\EN{after \scanf execution}}
-\label{fig:scanf_ex2_olly_1}
-\end{figure}
 
 \begin{figure}[H]
 \centering

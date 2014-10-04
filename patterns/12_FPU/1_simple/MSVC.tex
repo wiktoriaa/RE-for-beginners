@@ -55,6 +55,7 @@ register and then popping value at \ST{1}, hereby leaving result at top of stack
 so there are no any other instructions except of function epilogue after \FADDP.}
 
 \ifdefined\IncludeOlly
+\clearpage
 \subsubsection{MSVC + \olly}
 \index{\olly}
 
@@ -64,7 +65,14 @@ so there are no any other instructions except of function epilogue after \FADDP.
 IEEE 754 format passed from \main.}
 \RU{Видно как первая \FLD загружает значение ($1.2$) из стека и помещает в регистр \ST{0}:}
 \EN{We see how first \FLD loads a value ($1.2$) from stack and put it into \ST{0} register:}
-\figref{fig:FPU_simple_olly_1}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/12_FPU/1_simple/olly1.png}
+\caption{\olly: \RU{первая \FLD исполнилась}\EN{first \FLD executed}}
+\label{fig:FPU_simple_olly_1}
+\end{figure}
+
 \RU{Из-за неизбежных ошибок конвертирования числа из 64-битного IEEE 754 в 80-битное (внутреннее в FPU),
 мы видим здесь $1.1999...$, что очень близко к $1.2$.}
 \EN{Because of unavoidable conversion errors from 64-bit IEEE 754 float point number into 80-bit
@@ -73,30 +81,61 @@ IEEE 754 format passed from \main.}
 из памяти.}
 \EN{\EIP right now is pointing to the next instruction (\FDIV), which loads double-number (a constant)
 from memory.}
-\RU{Для удобства}\EN{For convenience}, \olly \RU{показывает её значение}\EN{shows its value}: $3.14$.\\
-\\
+\RU{Для удобства}\EN{For convenience}, \olly \RU{показывает её значение}\EN{shows its value}: $3.14$.
+
+\clearpage
 \RU{Трассируем дальше}\EN{Let's trace more}. 
 \FDIV \RU{исполнилась}\EN{executed}, \RU{теперь}\EN{now} \ST{0} \RU{содержит}\EN{contain} $0.382...$ 
-(\gls{quotient}): \figref{fig:FPU_simple_olly_2}.\\
-\\
+(\gls{quotient}):
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/12_FPU/1_simple/olly2.png}
+\caption{\olly: \FDIV \RU{исполнилась}\EN{executed}}
+\label{fig:FPU_simple_olly_2}
+\end{figure}
+
+\clearpage
 \RU{Третий шаг}\EN{Third step}: \RU{вторая}\EN{the next} \FLD 
 \RU{исполнилась, загружая в \ST{0} $3.4$ (мы видим приближенное число $3.39999...$)}
-\EN{executed, loading $3.4$ into \ST{0} (we see here approximated value $3.39999...$)}: \figref{fig:FPU_simple_olly_3}.
+\EN{executed, loading $3.4$ into \ST{0} (we see here approximated value $3.39999...$)}: 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/12_FPU/1_simple/olly3.png}
+\caption{\olly: \RU{вторая \FLD исполнилась}\EN{second \FLD executed}}
+\label{fig:FPU_simple_olly_3}
+\end{figure}
+
 \RU{В это время}\EN{At the same time,} \gls{quotient} \IT{\RU{провалилось}\EN{pushed}} 
 \RU{в}\EN{into} \ST{1}.
 \RU{\EIP в это время указывает не следующую инструкцию}\EN{Right now, \EIP points to the next
 instruction}: \FMUL. 
 \RU{Она загружает константу}\EN{It loads} $4.1$ \RU{из памяти, так что \olly тоже показывает её здесь}
-\EN{constant from memory, so \olly shows it here}.\\
-\\
+\EN{constant from memory, so \olly shows it here}.
+
+\clearpage
 \RU{Затем}\EN{Next}: \FMUL \RU{исполнилась, теперь в \ST{0} произведение}
 \EN{was executed, now \gls{product} is in \ST{0}}:
-\figref{fig:FPU_simple_olly_4}.\\
-\\
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/12_FPU/1_simple/olly4.png}
+\caption{\olly: \FMUL \RU{исполнилась}\EN{executed}}
+\label{fig:FPU_simple_olly_4}
+\end{figure}
+
+\clearpage
 \RU{Затем}\EN{Next}: \FADDP \RU{исполнилась, теперь в \ST{0} сумма, а \ST{1} очистился}
 \EN{was executed, now result of addition is in \ST{0}, and \ST{1} is cleared}:
-\figref{fig:FPU_simple_olly_5}.\\
-\\
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/12_FPU/1_simple/olly5.png}
+\caption{\olly: \FADDP \RU{исполнилась}\EN{executed}}
+\label{fig:FPU_simple_olly_5}
+\end{figure}
+
 \RU{Сумма остается в \ST{0}, потому что ф-ция возвращает результат своей работы через \ST{0}.}
 \EN{Result is left in \ST{0}, because the function returns its value in \ST{0}.}
 \RU{Позже, \main возьмет это значение оттуда.}
@@ -139,38 +178,4 @@ could be cleared, but this is another work which may degrade performance}).
 \RU{Было бы еще точнее сказать, что регистры \ac{FPU} представляют собой кольцевой буфер.}
 \EN{More precisely, \ac{FPU} registers is circular buffer.}
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/12_FPU/1_simple/olly1.png}
-\caption{\olly: \RU{первая \FLD исполнилась}\EN{first \FLD executed}}
-\label{fig:FPU_simple_olly_1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/12_FPU/1_simple/olly2.png}
-\caption{\olly: \FDIV \RU{исполнилась}\EN{executed}}
-\label{fig:FPU_simple_olly_2}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/12_FPU/1_simple/olly3.png}
-\caption{\olly: \RU{вторая \FLD исполнилась}\EN{second \FLD executed}}
-\label{fig:FPU_simple_olly_3}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/12_FPU/1_simple/olly4.png}
-\caption{\olly: \FMUL \RU{исполнилась}\EN{executed}}
-\label{fig:FPU_simple_olly_4}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/12_FPU/1_simple/olly5.png}
-\caption{\olly: \FADDP \RU{исполнилась}\EN{executed}}
-\label{fig:FPU_simple_olly_5}
-\end{figure}
 \fi

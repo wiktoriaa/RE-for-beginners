@@ -63,6 +63,7 @@ add esp, 24
 \end{lstlisting}
 
 \ifdefined\IncludeOlly
+\clearpage
 \subsection{MSVC \AndENRU \olly}
 \index{\olly}
 
@@ -84,17 +85,31 @@ F9 (\RU{запустить}\EN{run}).
 \RU{Найдите этот код скроллируя окно кода до самого верха (MSVC располагает ф-цию \main в самом начале
 секции кода)}\EN{Find this code by scrolling the code to the very top (MSVC allocates \main function at
 the very beginning of the code section)}: 
-\figref{fig:printf3_olly_1}.\\
-\\
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/03_printf/olly3_1.png}
+\caption{\olly: \RU{самое начало ф-ции}\EN{the very start of the} \main\EN{ function}}
+\label{fig:printf3_olly_1}
+\end{figure}
+
 \RU{Кликните на инструкции}\EN{Click on the} \TT{PUSH EBP}\RU{, нажмите}\EN{ instruction, press} F2 
 (\RU{установка брякпойнта}\EN{set breakpoint}) \RU{и нажмите}\EN{and press} F9 (\RU{запустить}\EN{run}).
 \RU{Нам нужно произвести все эти манипуляции, чтобы пропустить \ac{CRT}-код, потому что нам он пока
 не интересен}\EN{We need to do these manipulations in order to skip \ac{CRT}-code, because, we aren't really
-interested in it, yet}.\\
-\\
+interested in it, yet}.
+
+\clearpage
 \RU{Нажмите}\EN{Press} F8 (\stepover) 6 \RU{раз, т.е., пропустить
-6 инструкций}\EN{times, i.e., skip 6 instructions}: \figref{fig:printf3_olly_2}.\\
-\\
+6 инструкций}\EN{times, i.e., skip 6 instructions}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/03_printf/olly3_2.png}
+\caption{\olly: \RU{перед исполнением}\EN{before} \printf\EN{ execution}}
+\label{fig:printf3_olly_2}
+\end{figure}
+
 \RU{Теперь}\EN{Now the} \ac{PC} \RU{указывает на инструкцию}\EN{points to the}
 \TT{CALL printf}\EN{ instruction}.
 \olly, \RU{как и другие отладчики, подсвечивает регистры со значениями, которые изменились}
@@ -134,6 +149,7 @@ is always seen}.
 чтобы начать чувствовать как тут всё работает}\EN{It is probably not very useful now, but it's a very
 good idea for doing it as an exercise, to get a feeling of how everything works here}.
 
+\clearpage
 \RU{Нажмите}\EN{Press} F8 (\stepover).
 
 \RU{В консоли мы видим вывод}\EN{In the console we'll see the output}:
@@ -145,7 +161,14 @@ good idea for doing it as an exercise, to get a feeling of how everything works 
 \end{figure}
 
 \RU{Посмотрим, как изменились регистры и состояние стека}\EN{Let's see how registers and stack state 
-are changed}: \figref{fig:printf3_olly_3}.
+are changed}: 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/03_printf/olly3_3.png}
+\caption{\olly: \RU{после исполнения}\EN{after} \printf\EN{ execution}}
+\label{fig:printf3_olly_3}
+\end{figure}
 
 \RU{Регистр }\EAX \RU{теперь содержит}\EN{register now contains} \TT{0xD} (13).
 That's correct, since \printf returns the number of characters printed. The
@@ -163,8 +186,16 @@ That's correct, since \printf returns the number of characters printed. The
 \EN{Indeed, that's the \IT{cdecl} calling convention: \gls{callee} doesn't return \ESP back to its previous value.}
 \RU{Это должна делать вызывающая ф-ция}\EN{It's the \gls{caller}'s duty to do so}.
 
+\clearpage
 \RU{Нажмите}\EN{Press} F8 \RU{снова, чтобы исполнилась инструкция}\EN{again to execute} 
-\TT{ADD ESP, 10}\EN{ instruction}: \figref{fig:printf3_olly_4}.
+\TT{ADD ESP, 10}\EN{ instruction}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/03_printf/olly3_4.png}
+\caption{\olly: \RU{после исполнения инструкции}\EN{after} \TT{ADD ESP, 10}\EN{ instruction execution}}
+\label{fig:printf3_olly_4}
+\end{figure}
 
 \ESP \RU{изменился, но значения все еще в стеке}\EN{is changed, but the values are still in the stack}!
 \RU{Конечно, никому не нужно заполнять эти значения нулями или что-то в этом роде}\EN{Yes, 
@@ -175,33 +206,6 @@ of course; no one needs to fill these values by zero or something like that}.
 \RU{Было бы очень затратно по времени очищать ненужные элементы стека, к тому же, никому это и не 
 нужно}\EN{It would be time consuming to clear unused stack entries anyways, and no one really needs to}.
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/03_printf/olly3_1.png}
-\caption{\olly: \RU{самое начало ф-ции}\EN{the very start of the} \main\EN{ function}}
-\label{fig:printf3_olly_1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/03_printf/olly3_2.png}
-\caption{\olly: \RU{перед исполнением}\EN{before} \printf\EN{ execution}}
-\label{fig:printf3_olly_2}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/03_printf/olly3_3.png}
-\caption{\olly: \RU{после исполнения}\EN{after} \printf\EN{ execution}}
-\label{fig:printf3_olly_3}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/03_printf/olly3_4.png}
-\caption{\olly: \RU{после исполнения инструкции}\EN{after} \TT{ADD ESP, 10}\EN{ instruction execution}}
-\label{fig:printf3_olly_4}
-\end{figure}
 \fi
 
 \subsection{GCC}

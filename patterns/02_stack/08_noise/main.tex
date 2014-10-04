@@ -43,13 +43,29 @@ What a weird thing. We did not set any variables in} \TT{f2()}.
 \RU{Эти значения это ``приведения'', которые все еще в стеке.}
 \EN{These are values are ``ghosts'', which are still in the stack.}
 
-\RU{Загрузим пример в}\EN{Let's load the example into} \olly: \figref{fig:stack_noise_olly1}.
+\clearpage
+\RU{Загрузим пример в}\EN{Let's load the example into} \olly:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/02_stack/08_noise/olly1.png}
+\caption{\olly: \TT{f1()}}
+\label{fig:stack_noise_olly1}
+\end{figure}
 
 \RU{Когда}\EN{When} \TT{f1()} \RU{заполняет переменные}\EN{writes to} $a$, $b$ \AndENRU $c$ 
 \RU{они сохранаяются по адресу}\EN{variables, they are stored at the address} \TT{0x14F85C} 
 \RU{итд}\EN{and so on}.
 
-\RU{А когда исполняется}\EN{And when} \TT{f2()}\EN{ executed}: \figref{fig:stack_noise_olly2}.
+\clearpage
+\RU{А когда исполняется}\EN{And when} \TT{f2()}\EN{ executed}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/02_stack/08_noise/olly2.png}
+\caption{\olly: \TT{f2()}}
+\label{fig:stack_noise_olly2}
+\end{figure}
 
 ... $a$, $b$ \AndENRU $c$ \RU{в ф-ции}\EN{of} \TT{f2()} \RU{находятся по тем же адресам!}
 \EN{are located at the same address!}
@@ -74,17 +90,3 @@ random in strict sense, but rather has unpredictable values}.
 но это слишком много лишней (и ненужной) работы.}
 \EN{Probably, it would be possible to clear stack portions before each function execution,
 but that's too much extra (and needless) work.}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/02_stack/08_noise/olly1.png}
-\caption{\olly: \TT{f1()}}
-\label{fig:stack_noise_olly1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/02_stack/08_noise/olly2.png}
-\caption{\olly: \TT{f2()}}
-\label{fig:stack_noise_olly2}
-\end{figure}

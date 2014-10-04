@@ -109,6 +109,7 @@ this instruction places to the \ECX not address of the \TT{x} variable, but its 
 \EN{After, value in the \ECX is placed on the stack and the last \printf called.}
 
 \ifdefined\IncludeOlly
+\clearpage
 \subsection{MSVC + \olly}
 \index{\olly}
 
@@ -123,7 +124,13 @@ instead of} \TT{ntdll.dll}.
 
 \RU{Трассируем до того места, где готовится адрес переменной $x$}
 \EN{Let's trace to the place where the address of $x$ variable is prepared}:
-\figref{fig:scanf_ex1_olly_1}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/04_scanf/ex1_olly_1.png}
+\caption{\olly: \RU{вычисляется адрес локальной переменной}\EN{address of the local variable is computed}}
+\label{fig:scanf_ex1_olly_1}
+\end{figure}
 
 \RU{На \EAX в окне регистров можно нажать правой кнопкой и далее}
 \EN{It is possible to right-click on \EAX in registers window and then} ``Follow in stack''.
@@ -145,22 +152,8 @@ execution finished}.
 \label{fig:scanf_ex1_olly_2}
 \end{figure}
 
-\RU{Вот тут }\scanf \RU{отработал}\EN{executed here}: \figref{fig:scanf_ex1_olly_3}. 
-\scanf \RU{вернул}\EN{returns} $1$ \InENRU \EAX, \RU{что означает, что он успешно прочитал одно 
-значение}\EN{which means, it have read one value successfully}.
-\RU{В наблюдаемом нами элементе стека теперь}\EN{The element of 
-stack of our attention now contain} \TT{0x7B} (123).
-
-\RU{Чуть позже, это значение копируется из стека в регистр \ECX и передается в \printf}
-\EN{Further, this value is copied from the stack to the \ECX register and passed into \printf}:
-\figref{fig:scanf_ex1_olly_4}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/04_scanf/ex1_olly_1.png}
-\caption{\olly: \RU{вычисляется адрес локальной переменной}\EN{address of the local variable is computed}}
-\label{fig:scanf_ex1_olly_1}
-\end{figure}
+\clearpage
+\RU{Вот тут }\scanf \RU{отработал}\EN{executed here}:
 
 \begin{figure}[H]
 \centering
@@ -168,6 +161,15 @@ stack of our attention now contain} \TT{0x7B} (123).
 \caption{\olly: \scanf \RU{исполнилась}\EN{executed}}
 \label{fig:scanf_ex1_olly_3}
 \end{figure}
+
+\scanf \RU{вернул}\EN{returns} $1$ \InENRU \EAX, \RU{что означает, что он успешно прочитал одно 
+значение}\EN{which means, it have read one value successfully}.
+\RU{В наблюдаемом нами элементе стека теперь}\EN{The element of 
+stack of our attention now contain} \TT{0x7B} (123).
+
+\clearpage
+\RU{Чуть позже, это значение копируется из стека в регистр \ECX и передается в \printf}
+\EN{Further, this value is copied from the stack to the \ECX register and passed into \printf}:
 
 \begin{figure}[H]
 \centering

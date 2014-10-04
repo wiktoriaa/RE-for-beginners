@@ -58,18 +58,41 @@ This is very suitable for processor since it is able to fetch 32-bit values from
 cache memory, etc, in much effective way if it is aligned.}
 
 \ifdefined\IncludeOlly
+\clearpage
 \myparagraph{\olly}
 \index{\olly}
 
 \RU{Попробуем этот пример в}\EN{Let's try this example in} \olly.
 \RU{Входное значение ф-ции}\EN{Function's input value} ($2$) \RU{загружается в}\EN{is loaded into} \EAX: 
-\figref{fig:switch_lot_olly1}.\\
-\\
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/08_switch/2_lot/lot_olly1.png}
+\caption{\olly: \RU{входное значение ф-ции загружено в}\EN{function's input value is loaded in} \EAX}
+\label{fig:switch_lot_olly1}
+\end{figure}
+
+\clearpage
 \RU{Входное значение проверяется, не больше ли оно чем}\EN{Input value is checked, if it's bigger than} $4$? 
 \RU{Нет, переход по умолчанию (``default'') не будет исполнен}\EN{No, ``default'' jump is not 
-taken}: \figref{fig:switch_lot_olly2}.\\
-\\
-\RU{Здесь мы видим}\EN{Here we see a} jumptable: \figref{fig:switch_lot_olly3}.
+taken}:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/08_switch/2_lot/lot_olly2.png}
+\caption{\olly: $2$ \RU{не больше чем}\EN{is no bigger than} $4$: \RU{переход не сработает}\EN{no jump is taken}}
+\label{fig:switch_lot_olly2}
+\end{figure}
+
+\clearpage
+\RU{Здесь мы видим}\EN{Here we see a} jumptable:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/08_switch/2_lot/lot_olly3.png}
+\caption{\olly: \RU{вычисляем адрес для перехода используя}\EN{calculating destination address using} jumptable}
+\label{fig:switch_lot_olly3}
+\end{figure}
+
 \RU{Кстати, я кликнул}\EN{By the way, I clicked} ``Follow in Dump'' $\rightarrow$ ``Address constant'', 
 \RU{так что теперь jumptable видна в окне данных}\EN{so now we see a jumptable in data window}. 
 \RU{Это 4 32-битных значения}\EN{These are 4 32-bit values}\footnote{\EN{They are underlined by \olly because
@@ -80,32 +103,11 @@ these are also FIXUPs}\RU{Они подчеркнуты в \olly, потому �
 \RU{Кстати, можно также кликнуть}\EN{By the way, it's also possible to click} ``Follow in Dump'' $\rightarrow$ 
 ``Memory address'' \AndENRU \olly \RU{покажет элемент, который сейчас адресуется в инструкции \JMP}\EN{will
 show the element \JMP instruction being address now}. 
-\RU{Это}\EN{That's} \TT{0x0116103A}.\\
-\\
+\RU{Это}\EN{That's} \TT{0x0116103A}.
+
+\clearpage
 \RU{Переход сработал и мы теперь на}\EN{Jump occured and we now at} \TT{0x0116103A}: 
 \RU{сейчас будет исполнен код выводящий строку}\EN{the code printing} ``two''\EN{ string will now be executed}:
-\figref{fig:switch_lot_olly4}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/08_switch/2_lot/lot_olly1.png}
-\caption{\olly: \RU{входное значение ф-ции загружено в}\EN{function's input value is loaded in} \EAX}
-\label{fig:switch_lot_olly1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/08_switch/2_lot/lot_olly2.png}
-\caption{\olly: $2$ \RU{не больше чем}\EN{is no bigger than} $4$: \RU{переход не сработает}\EN{no jump is taken}}
-\label{fig:switch_lot_olly2}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/08_switch/2_lot/lot_olly3.png}
-\caption{\olly: \RU{вычисляем адрес для перехода используя}\EN{calculating destination address using} jumptable}
-\label{fig:switch_lot_olly3}
-\end{figure}
 
 \begin{figure}[H]
 \centering

@@ -25,10 +25,19 @@ $0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4
 
 \RU{Этим я хотел проиллюстрировать стековые фреймы}\EN{So I wanted to illustrate 
 stack frames by this}.
+
+\clearpage
 \RU{Загрузим пример в \olly и дотрассируем до самого последнего вызова ф-ции f()}
 \EN{Let's load the example to \olly and trace to the latest call of f() function}:
-\figref{fig:fib_olly}.
 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/208_fib/olly.png}
+\caption{\olly: \RU{последний вызов f()}\EN{last call of f()}}
+\label{fig:fib_olly}
+\end{figure}
+
+\clearpage
 \RU{Исследуем стек более пристально}\EN{Let's investigate stack more closely}. 
 \RU{Я добавил здесь комментариев}\EN{I added some comments to it}
 \footnote{\EN{By the way, it's possible to select several entries in \olly and copy them to clipboard (Ctrl-C).
@@ -79,13 +88,6 @@ arguments}).
 \EN{It's easy to do stack overflow: just remove (or comment) limit check and it will crash with
 exception} \TT{0xC00000FD} (\RU{переполнение стека}\EN{stack overflow}).
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/208_fib/olly.png}
-\caption{\olly: \RU{последний вызов f()}\EN{last call of f()}}
-\label{fig:fib_olly}
-\end{figure}
-
 \section{\RU{Пример}\EN{Example} \#2}
 
 \RU{В моей ф-ции есть некая избыточность, так что добавим переменную \IT{next} и заменим на нее
@@ -102,10 +104,20 @@ in local stack}:
 
 \lstinputlisting[caption=MSVC 2010 x86]{patterns/208_fib/fib2.asm}
 
-\RU{Загрузим}\EN{Let's load} \olly \RU{снова}\EN{again}: \figref{fig:fib_olly2}.
-\RU{Теперь переменная \IT{next} присутствует в каждом фрейме}
-\EN{Now \IT{next} variable is present in each frame}.
+\clearpage
+\RU{Загрузим}\EN{Let's load} \olly \RU{снова}\EN{again}:
 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/208_fib/olly2.png}
+\caption{\olly: \RU{последний вызов f()}\EN{last call of f()}}
+\label{fig:fib_olly2}
+\end{figure}
+
+\RU{Теперь переменная \IT{next} присутствует в каждом фрейме.}
+\EN{Now \IT{next} variable is present in each frame.}
+
+\clearpage
 \RU{Рассмотрим стек более пристально. Я снова добавил туда своих комментариев}
 \EN{Let's investigate the stack more closely. I added my comments again}:
 
@@ -115,13 +127,6 @@ in local stack}:
 аргумент $b$ в следующую инкарнацию} % FIXME what a word! hmmm...
 \EN{Here we see it: \IT{next} value is calculated in each function incarnation, then passed as
 $b$ argument to the next incarnation}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/208_fib/olly2.png}
-\caption{\olly: \RU{последний вызов f()}\EN{last call of f()}}
-\label{fig:fib_olly2}
-\end{figure}
 
 \section{\RU{Итог}\EN{Summary}}
 

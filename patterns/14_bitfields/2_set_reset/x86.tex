@@ -21,6 +21,7 @@ except one bit we would not like to copy (which is $0$ in bitmask).
 It is easier way to memorize the logic.}
 
 \ifdefined\IncludeOlly
+\clearpage
 \myparagraph{\olly}
 
 \RU{Попробуем этот пример в}\EN{Let's try this example in} \olly.
@@ -36,20 +37,7 @@ It is easier way to memorize the logic.}
 \TT{0x4000} (00000000000000{\color{red}1}00000000000000) (\RU{т.е., 15-й бит}\EN{i.e., 15th bit}).
 
 \RU{Входное значение это}\EN{Input value is}: \TT{0x12340678} (10010001101000000011001111000).
-\RU{Видим, как оно загрузилось}\EN{We see how it's loaded}: \figref{fig:set_reset_olly1}.
-
-\OR \RU{исполнилась}\EN{executed}: \figref{fig:set_reset_olly2}.
-\RU{15-й бит выставлен}\EN{15th bit is set}: \TT{0x1234{\color{red}4}678} 
-(10010001101000{\color{red}1}00011001111000).
-
-\RU{Значение перезагружается снова (потому что использовался режим компилятора без оптимизации)}\EN{Value is 
-reloaded again (because it's not optimizing compiler's mode)}: 
-\figref{fig:set_reset_olly3}.
-
-\ANDIns \RU{исполнилась}\EN{executed}: \figref{fig:set_reset_olly3}.
-\RU{10-й бит очищен (или, иным языком, оставлены все биты кроме 10-го) и итоговое значение это}
-\EN{10th bit is cleared (or, in other words, all bits are leaved instead of 10th) and final value now is} 
-\TT{0x12344{\color{red}4}78} (1001000110100010001{\color{red}0}001111000).
+\RU{Видим, как оно загрузилось}\EN{We see how it's loaded}:
 
 \begin{figure}[H]
 \centering
@@ -58,12 +46,22 @@ reloaded again (because it's not optimizing compiler's mode)}:
 \label{fig:set_reset_olly1}
 \end{figure}
 
+\clearpage
+\OR \RU{исполнилась}\EN{executed}:
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/14_bitfields/2_set_reset/olly2.png}
 \caption{\olly: \OR \RU{сработал}\EN{executed}}
 \label{fig:set_reset_olly2}
 \end{figure}
+
+\RU{15-й бит выставлен}\EN{15th bit is set}: \TT{0x1234{\color{red}4}678} 
+(10010001101000{\color{red}1}00011001111000).
+
+\clearpage
+\RU{Значение перезагружается снова (потому что использовался режим компилятора без оптимизации)}\EN{Value is 
+reloaded again (because it's not optimizing compiler's mode)}: 
 
 \begin{figure}[H]
 \centering
@@ -72,12 +70,20 @@ reloaded again (because it's not optimizing compiler's mode)}:
 \label{fig:set_reset_olly3}
 \end{figure}
 
+\clearpage
+\ANDIns \RU{исполнилась}\EN{executed}:
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/14_bitfields/2_set_reset/olly4.png}
 \caption{\olly: \ANDIns \RU{сработал}\EN{executed}}
 \label{fig:set_reset_olly4}
 \end{figure}
+
+\RU{10-й бит очищен (или, иным языком, оставлены все биты кроме 10-го) и итоговое значение это}
+\EN{10th bit is cleared (or, in other words, all bits are leaved instead of 10th) and final value now is} \\
+\TT{0x12344{\color{red}4}78} (1001000110100010001{\color{red}0}001111000).
+
 \fi
 
 \subsubsection{\Optimizing MSVC}

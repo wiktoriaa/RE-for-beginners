@@ -128,12 +128,19 @@ How our compiler know to pack them on 1-byte alignment boundary?}
 \EN{That's how compiler will pack structures defined after \TT{\#pragma pack}.}
 
 \ifdefined\IncludeOlly
+\clearpage
 \subsection{x86 + \olly + \RU{упаковка полей по умолчанию}\EN{fields are packed by default}}
 \index{\olly}
 
 \RU{Попробуем в \olly наш пример, где поля выровнены по умолчанию (4 байта)}
-\EN{Let's try our example (where fields are aligned by default (4 bytes)) in \olly}: 
-\figref{fig:packing_olly_4}.
+\EN{Let's try our example (where fields are aligned by default (4 bytes)) in \olly}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/15_structs/4_packing/olly_packing_4.png}
+\caption{\olly: \RU{Перед исполнением \printf}\EN{Before \printf execution}}
+\label{fig:packing_olly_4}
+\end{figure}
 
 \RU{В окне данных видим наши четыре поля}\EN{We see our 4 fields in data window}.
 \RU{Вот только, откуда взялись случайные байты (0x30, 0x27) рядом с первым (a) и третьим (c) полем?}
@@ -160,19 +167,12 @@ using \MOVSX instruction, which takes bytes, but not words}:
 \RU{Если бы здесь был тип}\EN{If the type} \TT{unsigned char} \OrENRU \TT{uint8\_t}\EN{ be here}, 
 \RU{то здесь была бы инструкция \MOVZX}\EN{\MOVZX instruction would be used instead}.
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/15_structs/4_packing/olly_packing_4.png}
-\caption{\olly: \RU{Перед исполнением \printf}\EN{Before \printf execution}}
-\label{fig:packing_olly_4}
-\end{figure}
-
+\clearpage
 \subsection{x86 + \olly + \RU{упаковка полей по границе в 1 байт}\EN{fields aligning by 1 byte boundary}}
 \index{\olly}
 
 \RU{Здесь всё куда понятнее: 4 поля занимают 10 байт и значения сложены в памяти друг к другу}
-\EN{Things are much clearer here: 4 fields occupies 10 bytes and values are stored side-by-side}:
-\figref{fig:packing_olly_1}.
+\EN{Things are much clearer here: 4 fields occupies 10 bytes and values are stored side-by-side}
 
 \begin{figure}[H]
 \centering

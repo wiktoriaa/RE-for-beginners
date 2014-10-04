@@ -34,18 +34,33 @@ That's the one \CCpp feature it is often blamed for.}
 \EN{It is just \IT{something}, occasionally lying in the stack near to array, 80 bytes from its first element.}
 
 \ifdefined\IncludeOlly
+\clearpage
 \index{\olly}
 \RU{Попробуем узнать в \olly, что это за значение}\EN{Let's try to find out using \olly, 
 where this value came from}.
 \RU{Загружаем и находим это значение, находящееся точно после последнего элемента массива}
 \EN{Let's load and find a value located right after the last array element}:
-\figref{fig:array_BO_olly_r1}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/13_arrays/2_BO/olly_r1.png}
+\caption{\olly: \RU{чтение 20-го элемента и вызов \printf}\EN{reading of 20th element and execution of \printf}}
+\label{fig:array_BO_olly_r1}
+\end{figure}
+
 \RU{Что это за значение}\EN{What is this}? 
 \RU{Судя по разметке стека, это сохраненное значение регистра EBP}\EN{Judging by stack layout,
 this is saved EBP register value}.
+\clearpage
 \RU{Трассируем далее, и видим как оно восстанавливается}\EN{Let's trace further and see, how
 it will be restored}:
-\figref{fig:array_BO_olly_r2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\FigScale]{patterns/13_arrays/2_BO/olly_r2.png}
+\caption{\olly: \RU{восстановление EBP}\EN{restoring value of EBP register}}
+\label{fig:array_BO_olly_r2}
+\end{figure}
 
 \RU{Действительно, а как могло бы быть иначе? Компилятор мог бы встроить какой-то код, 
 каждый раз проверяющий индекс на соответствие пределам массива, как в языках программирования 
@@ -55,17 +70,4 @@ Compiler may generate some additional code for checking index value to be always
 in array's bound (like in higher-level programming languages\footnote{Java, Python, etc})
 but this makes running code slower.}
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/13_arrays/2_BO/olly_r1.png}
-\caption{\olly: \RU{чтение 20-го элемента и вызов \printf}\EN{reading of 20th element and execution of \printf}}
-\label{fig:array_BO_olly_r1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/13_arrays/2_BO/olly_r2.png}
-\caption{\olly: \RU{восстановление EBP}\EN{restoring value of EBP register}}
-\label{fig:array_BO_olly_r2}
-\end{figure}
 \fi
