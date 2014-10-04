@@ -26,3 +26,12 @@ int my_atoi (char *s)
 		return -rt;
 	return rt;
 };
+
+int main()
+{
+	printf ("%d\n", my_atoi ("1234"));
+	printf ("%d\n", my_atoi ("1234567890"));
+	printf ("%d\n", my_atoi ("-1234"));
+	printf ("%d\n", my_atoi ("-1234567890"));
+	printf ("%d\n", my_atoi ("-a1234567890")); // error
+};

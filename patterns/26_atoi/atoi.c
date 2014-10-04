@@ -12,3 +12,9 @@ int my_atoi (char *s)
 
 	return rt;
 };
+
+int main()
+{
+	printf ("%d\n", my_atoi ("1234"));
+	printf ("%d\n", my_atoi ("1234567890"));
+};
