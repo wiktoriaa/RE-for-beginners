@@ -53,3 +53,31 @@ already discussed} (\ref{switch_lot_GCC}), \RU{используя только �
 
 GCC \RU{делает так, как уже обсуждалось}\EN{do the job like it was already discussed} 
 (\ref{switch_lot_GCC}), \RU{используя просто таблицу указателей}\EN{using just one table of pointers}.
+
+\ifx\RUSSIAN\undefined
+\subsection{ARM64: \Optimizing GCC 4.9.1}
+
+First of all, there are no code triggering if input value is 0, so GCC tries to make jumptable more compact
+and so it's started at the case of 1 as input value.
+
+GCC 4.9.1 for ARM64 uses even more clever trick.
+It's able to encode all offsets as 8-bit bytes.
+Let's remind us, all ARM64 instructions has size of 4 bytes.
+GCC is also use the fact that all offsets in my tiny example are in close proximity to each other.
+So the jumptable consisting of bytes of corresponding jumps.
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{patterns/08_switch/3_several_cases/ARM64_GCC491_O3.s}
+
+I just compiled my example to object file and opened it in IDA. Here is a jump table:
+
+\lstinputlisting[caption=jumptable in IDA]{patterns/08_switch/3_several_cases/ARM64_GCC491_O3_IDA.lst}
+
+So in case of 1, 9 will be multiplied by 4 and added to the Lrtx4 label.
+In case of 22, 0 is to be multiplied by 4 resulting 0. 
+The place right after Lrtx4 label is L7 label, where the code printing ``22'' is.
+There are no jumptable in the code segment, it is allocated in separate .rodata section 
+(there are no special need to place it in code section).
+
+There are also negative bytes (0xF7), they are used for jumping back to the code printing ``default'' string 
+(at .L2).
+\fi
