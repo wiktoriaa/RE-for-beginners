@@ -131,7 +131,9 @@ after this call we do not to do anything}!
 .LC1:
 	.string	"a=%d; b=%d; c=%d"
 f2:
+; save FP and LR to stack frame:
 	stp	x29, x30, [sp, -16]!
+; set stack frame (FP=SP):
 	add	x29, sp, 0
 	adrp	x0, .LC1
 	add	x0, x0, :lo12:.LC1
@@ -140,6 +142,7 @@ f2:
 	mov	w3, 3
 	bl	printf
 	mov	w0, 0
+; restore FP and LR
 	ldp	x29, x30, [sp], 16
 	ret
 \end{lstlisting}

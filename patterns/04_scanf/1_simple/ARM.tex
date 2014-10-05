@@ -43,8 +43,15 @@ into \scanf.}
 чтобы быть переданным в \printf.}\EN{Later, with the help of the \TT{LDR} instruction, this value is moved
 from stack into the \Reg{1} register in order to be passed into \printf.}
 
-\RU{Варианты, скомпилированные для ARM-режима процессора, а также варианты скомпилированные при 
-помощи Xcode 4.6.3 LLVM, не очень отличаются от этого, так что, мы можем пропустить их здесь.}
-\EN{Examples compiled for ARM-mode and also examples compiled with Xcode 4.6.3 LLVM are not differ significantly
-from what we saw here, so they are omitted.}
+\subsubsection{ARM64}
 
+\lstinputlisting[caption=\NonOptimizing GCC 4.9.1 ARM64,numbers=left]{patterns/04_scanf/1_simple/ARM64_GCC491_O0.s}
+
+\RU{Самая интересная часть это поиск места под переменную $x$ в стековом фрейме (строка 22).}
+\EN{Most interesting part is finding space for $x$ variable in the stack frame (line 22).}
+\RU{Адрес передается потом в \scanf, которая просто сохраняет значение введенное пользователем в памяти
+по этому адресу.}
+\EN{The address is passed to \scanf then, which just stores value user entered to the memory at this address.}
+\RU{Это 32-битное значение типа \Tint}\EN{This is 32-bit value of \Tint type}.
+\RU{Значение загружается в строке 27 и затем передается в \printf.}
+\EN{Value is fetched at line 27 and then passed to \printf.}

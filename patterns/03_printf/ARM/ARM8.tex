@@ -292,8 +292,11 @@ with the exception that thumb-instructions are used here instead}.
 .LC2:
 	.string	"a=%d; b=%d; c=%d; d=%d; e=%d; f=%d; g=%d; h=%d\n"
 f3:
+; grab more space in stack:
 	sub	sp, sp, #32
+; save FP and LR to stack frame:
 	stp	x29, x30, [sp,16]
+; set stack frame (FP=SP):
 	add	x29, sp, 16
 	adrp	x0, .LC2 ; "a=%d; b=%d; c=%d; d=%d; e=%d; f=%d; g=%d; h=%d\n"
 	add	x0, x0, :lo12:.LC2
@@ -308,6 +311,7 @@ f3:
 	mov	w7, 7
 	bl	printf
 	sub	sp, x29, #16
+; restore FP and LR
 	ldp	x29, x30, [sp,16]
 	add	sp, sp, 32
 	ret
