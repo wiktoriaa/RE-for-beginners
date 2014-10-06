@@ -4,7 +4,7 @@ main
         B       loc_368
 loc_35C  ; CODE XREF: main+1C
         MOV     R0, R4
-        BL      f
+        BL      printing_function
         ADD     R4, R4, #1
 
 loc_368  ; CODE XREF: main+8

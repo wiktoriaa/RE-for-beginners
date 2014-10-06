@@ -12,9 +12,9 @@ $LN2@main:
 $LN3@main:
     cmp    DWORD PTR _i$[ebp], 10  ; это условие проверяется *перед* каждой итерацией
     jge    SHORT $LN1@main         ; если i больше или равно 10, заканчиваем цикл
-    mov    ecx, DWORD PTR _i$[ebp] ; тело цикла: вызов функции f(i)
+    mov    ecx, DWORD PTR _i$[ebp] ; тело цикла: вызов функции printing_function(i)
     push   ecx
-    call   _f
+    call   _printing_function
     add    esp, 4
     jmp    SHORT $LN2@main         ; переход на начало цикла
 $LN1@main:                         ; конец цикла

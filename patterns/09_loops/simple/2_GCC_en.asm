@@ -12,9 +12,9 @@ var_20          = dword ptr -20h
                 nop  ; aligning label loc_80484D0 (loop body begin) by 16-byte border
 
 loc_80484D0:
-                mov     [esp+20h+var_20], ebx ; pass i as first argument to f()
+                mov     [esp+20h+var_20], ebx ; pass i as first argument to printing_function()
                 add     ebx, 1    ; i++
-                call    f
+                call    printing_function
                 cmp     ebx, 64h  ; i==100?
                 jnz     short loc_80484D0 ; if not, continue
                 add     esp, 1Ch

@@ -3,7 +3,7 @@ _main    PROC
     mov    esi, 2
 $LL3@main:
     push   esi
-    call   _f
+    call   _printing_function
     inc    esi
     add    esp, 4
     cmp    esi, 10     ; 0000000aH

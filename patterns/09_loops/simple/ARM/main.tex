@@ -1,13 +1,15 @@
-\subsubsection{ARM: \NonOptimizingKeilVI (\ARMMode)}
+\subsubsection{ARM}
 
-\lstinputlisting[label=Keil_number_sign]{patterns/09_loops/simple/Keil_ARM_O0.asm}
+\myparagraph{\NonOptimizingKeilVI (\ARMMode)}
+
+\lstinputlisting[label=Keil_number_sign]{patterns/09_loops/simple/ARM/Keil_ARM_O0.asm}
 
 \RU{Счетчик итераций $i$ будет храниться в регистре \Reg{4}.}
 \EN{Iteration counter $i$ is to be stored in the \Reg{4} register.}
 
 \RU{Инструкция }\TT{``MOV R4, \#2''} \RU{просто инициализирует}\EN{instruction just initializing} $i$.
 
-\RU{Инструкции }\TT{``MOV R0, R4''} \AndENRU \TT{``BL f''} \RU{составляют тело цикла}\EN{instructions are
+\RU{Инструкции }\TT{``MOV R0, R4''} \AndENRU \TT{``BL printing\_function''} \RU{составляют тело цикла}\EN{instructions are
 compose loop body}, 
 \RU{первая инструкция готовит аргумент для функции \ttf и вторая собственно вызывает её.}
 \EN{the first instruction preparing argument for \ttf function and the second is calling it.}
@@ -26,21 +28,21 @@ compose loop body},
 (\RU{потому что наша функция возвращает}\EN{since our function returns} $0$) 
 \RU{и произойдет выход из функции}\EN{and function execution ended}.
 
-\subsubsection{ARM: \OptimizingKeilVI (\ThumbMode)}
+\myparagraph{\OptimizingKeilVI (\ThumbMode)}
 
-\lstinputlisting{patterns/09_loops/simple/Keil_thumb_O3.asm}
+\lstinputlisting{patterns/09_loops/simple/ARM/Keil_thumb_O3.asm}
 
 \RU{Практически, всё то же самое.}\EN{Practically, the same.}
 
-\subsubsection{ARM: \OptimizingXcodeIV (\ThumbTwoMode)}
+\myparagraph{\OptimizingXcodeIV (\ThumbTwoMode)}
 \label{ARM_unrolled_loops}
 
-\lstinputlisting{patterns/09_loops/simple/xcode_thumb_O3.asm}
+\lstinputlisting{patterns/09_loops/simple/ARM/xcode_thumb_O3.asm}
 
 \RU{На самом деле, в моей функции \ttf было такое:}\EN{In fact, this was in my \ttf function:}
 
 \begin{lstlisting}
-void f(int i)
+void printing_function(int i)
 {
     // do something here
     printf ("%d\n", i);
@@ -57,3 +59,10 @@ very simple function \ttf as \IT{inlined}},
 она вызывается не очень много раз, как здесь.}
 \EN{This is possible when function is so primitive (like mine) and when it is called not many times (like here).}
 
+\myparagraph{ARM64: \Optimizing GCC 4.9.1}
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1]{patterns/09_loops/simple/ARM/ARM64_GCC491_O3.s}
+
+\myparagraph{ARM64: \NonOptimizing GCC 4.9.1}
+
+\lstinputlisting[caption=\NonOptimizing GCC 4.9.1 -fno-inline]{patterns/09_loops/simple/ARM/ARM64_GCC491_O3.s}

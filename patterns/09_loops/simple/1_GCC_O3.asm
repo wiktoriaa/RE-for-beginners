@@ -7,21 +7,21 @@ var_10          = dword ptr -10h
                 and     esp, 0FFFFFFF0h
                 sub     esp, 10h
                 mov     [esp+10h+var_10], 2
-                call    f
+                call    printing_function
                 mov     [esp+10h+var_10], 3
-                call    f
+                call    printing_function
                 mov     [esp+10h+var_10], 4
-                call    f
+                call    printing_function
                 mov     [esp+10h+var_10], 5
-                call    f
+                call    printing_function
                 mov     [esp+10h+var_10], 6
-                call    f
+                call    printing_function
                 mov     [esp+10h+var_10], 7
-                call    f
+                call    printing_function
                 mov     [esp+10h+var_10], 8
-                call    f
+                call    printing_function
                 mov     [esp+10h+var_10], 9
-                call    f
+                call    printing_function
                 xor     eax, eax
                 leave
                 retn

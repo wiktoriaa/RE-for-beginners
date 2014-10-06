@@ -13,7 +13,7 @@ var_4           = dword ptr -4
 loc_8048465:
                 mov     eax, [esp+20h+var_4]
                 mov     [esp+20h+var_20], eax
-                call    f
+                call    printing_function
                 add     [esp+20h+var_4], 1  ; инкремент i
 
 loc_8048476:

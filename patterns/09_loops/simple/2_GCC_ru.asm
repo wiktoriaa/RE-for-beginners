@@ -14,9 +14,9 @@ var_20          = dword ptr -20h
                 nop                           
 
 loc_80484D0:
-                mov     [esp+20h+var_20], ebx ; передать i как первый аргумент для f()
+                mov     [esp+20h+var_20], ebx ; передать i как первый аргумент для printing_function()
                 add     ebx, 1   ; i++
-                call    f
+                call    printing_function
                 cmp     ebx, 64h ; i==100?
                 jnz     short loc_80484D0 ; если нет, продолжать
                 add     esp, 1Ch
