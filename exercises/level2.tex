@@ -29,19 +29,11 @@
 
 \lstinputlisting{exercises/1_4_thumb.s}
 
-\section{\Exercise 2.5}
-% Pentium FDIV bug
+\subsection{\Optimizing GCC 4.9.1 (ARM64)}
 
-\RU{Задача, скорее, на эрудицию, нежели на чтение кода.}
-\EN{This exercise is rather on knowledge than on reading code.}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 (ARM64)]{exercises/1_4_ARM64_O3.s}
 
-\index{OpenWatcom}
-\RU{Функция взята из OpenWatcom.}
-\EN{The function is taken from OpenWatcom.}
-
-\subsection{\Optimizing MSVC 2010}
-
-\lstinputlisting{exercises/1_5_msvc.asm}
+% 2.5
 
 \section{\Exercise 2.6}
 % TEA
@@ -57,6 +49,10 @@
 \subsection{\Optimizing Keil (\ThumbMode)}
 
 \lstinputlisting{exercises/1_6_thumb.s}
+
+\subsection{\Optimizing GCC 4.9.1 (ARM64)}
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 (ARM64)]{exercises/1_6_ARM64_O3.s}
 
 % 2.7
 % 2.8
@@ -123,6 +119,21 @@ f PROC
         ENDP
 \end{lstlisting}
 
+\subsection{\Optimizing GCC 4.9.1 (ARM64)}
+
+\begin{lstlisting}
+f:
+	uxth	w1, w0
+	lsr	w2, w1, 3
+	lsr	w0, w1, 1
+	eor	w2, w2, w1, lsr 2
+	eor	w2, w1, w2
+	eor	w1, w2, w1, lsr 5
+	and	w1, w1, 1
+	orr	w0, w0, w1, lsl 15
+	ret
+\end{lstlisting}
+
 \section{\Exercise 2.14}
 % GCD
 
@@ -131,7 +142,7 @@ f PROC
 
 \subsection{MSVC 2012}
 
-\index{ARM!\Instructions!CLZ}
+\index{x86!\Instructions!BSF}
 \lstinputlisting{exercises/2/GCD_MSVC_2012_Ox.asm}
 
 \subsection{Keil (\ARMMode)}
@@ -141,8 +152,12 @@ f PROC
 
 \subsection{GCC 4.6.3 for Raspberry Pi (\ARMMode)}
 
-\index{x86!\Instructions!BSF}
+\index{ARM!\Instructions!CLZ}
 \lstinputlisting{exercises/2/GCD_ARM_pi_GCC_4.6.3_O3.s}
+
+\subsection{\Optimizing GCC 4.9.1 (ARM64)}
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 (ARM64)]{exercises/2/GCD_ARM64_GCC491_O3.s}
 
 \section{\Exercise 2.15}
 % Monte Carlo
@@ -169,6 +184,10 @@ That's OK}: \ref{floating_SIMD}.
 
 \lstinputlisting{exercises/2/monte_Keil_ARM_Cortex.s}
 
+\subsection{\Optimizing GCC 4.9.1 (ARM64)}
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 (ARM64)]{exercises/2/monte_GCC_491_ARM64_O3.s}
+
 \section{\Exercise 2.16}
 % Ackermann function
 
@@ -187,6 +206,17 @@ Why stack overflows if 4 and 2 are supplied at input? Are there any error?}
 \subsection{\Optimizing Keil (\ThumbMode)}
 
 \lstinputlisting{exercises/2/ack_thumb_O3.s}
+
+\subsection{\NonOptimizing GCC 4.9.1 (ARM64)}
+
+\lstinputlisting[caption=\NonOptimizing GCC 4.9.1 (ARM64)]{exercises/2/ack_ARM64_GCC491_O0.s}
+
+\subsection{\Optimizing GCC 4.9.1 (ARM64)}
+
+\RU{Оптимизирующий GCC генерирует куда больше кода. Почему?}
+\EN{Optimizing GCC generates much more code. Why?}
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 (ARM64)]{exercises/2/ack_ARM64_GCC491_O3.s}
 
 \section{\Exercise 2.17}
 % Rule 110

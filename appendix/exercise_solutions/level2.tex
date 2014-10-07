@@ -42,41 +42,7 @@ char * strstr (
 }
 \end{lstlisting}
 
-\subsection{\Exercise 2.5}
-
-\RU{Подсказка}\EN{Hint} \#1: \RU{Не забывайте, что}\EN{Keep in mind that} 
-\TT{\_\_v}\EMDASH\RU{глобальная переменная}\EN{global variable}.
-
-\RU{Подсказка}\EN{Hint} \#2: \RU{Эта функция вызывается startup-кодом перед вызовом \main}
-\EN{The function is called in \ac{CRT} startup code, before \main execution}.
-
-\index{x86!\Instructions!FDIV}
-\RU{Ответ: это проверка на наличие FDIV-ошибки в ранних процессорах Pentium}
-\EN{Solution: early Pentium CPU FDIV bug checking}\footnote{\url{http://en.wikipedia.org/wiki/Pentium_FDIV_bug}}.
-
-\RU{Исходник на Си}\EN{C source code}:
-
-\begin{lstlisting}
-unsigned _v; // _v
-
-enum e {
-    PROB_P5_DIV = 0x0001
-};
-
-void f( void ) // __verify_pentium_fdiv_bug
-{
-    /*
-        Verify we have got the Pentium FDIV problem.
-        The volatiles are to scare the optimizer away.
-    */
-    volatile double     v1     = 4195835;
-    volatile double     v2   = 3145727;
-
-    if( (v1 - (v1/v2)*v2) > 1.0e-8 ) {
-        _v |= PROB_P5_DIV;
-    }
-}
-\end{lstlisting}
+% 2.5
 
 \subsection{\Exercise 2.6}
 
