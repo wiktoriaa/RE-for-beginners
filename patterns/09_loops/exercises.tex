@@ -82,6 +82,27 @@ main PROC
         DCB      "%d\n",0
 \end{lstlisting}
 
+\begin{lstlisting}[caption=\Optimizing GCC 4.9 (ARM64)]
+main:
+	stp	x29, x30, [sp, -32]!
+	add	x29, sp, 0
+	stp	x19, x20, [sp,16]
+	adrp	x20, .LC0
+	mov	w19, 100
+	add	x20, x20, :lo12:.LC0
+.L2:
+	mov	w1, w19
+	mov	x0, x20
+	bl	printf
+	subs	w19, w19, #1
+	bne	.L2
+	ldp	x19, x20, [sp,16]
+	ldp	x29, x30, [sp], 32
+	ret
+.LC0:
+	.string	"%d\n"
+\end{lstlisting}
+
 \RU{Ответ}\EN{Answer}: \ref{exercise_solutions_loops_3}.
 
 \subsection{\Exercise \#4}
@@ -150,6 +171,28 @@ main PROC
         DCW      0x0000
 |L0.24|
         DCB      "%d\n",0
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\Optimizing GCC 4.9 (ARM64)]
+main:
+	stp	x29, x30, [sp, -32]!
+	add	x29, sp, 0
+	stp	x19, x20, [sp,16]
+	adrp	x20, .LC0
+	mov	w19, 1
+	add	x20, x20, :lo12:.LC0
+.L2:
+	mov	w1, w19
+	mov	x0, x20
+	add	w19, w19, 3
+	bl	printf
+	cmp	w19, 100
+	bne	.L2
+	ldp	x19, x20, [sp,16]
+	ldp	x29, x30, [sp], 32
+	ret
+.LC0:
+	.string	"%d\n"
 \end{lstlisting}
 
 \RU{Ответ}\EN{Answer}: \ref{exercise_solutions_loops_4}.

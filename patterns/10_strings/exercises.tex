@@ -84,4 +84,22 @@ f PROC
         ENDP
 \end{lstlisting}
 
+\begin{lstlisting}[caption=\Optimizing GCC 4.9 (ARM64)]
+f:
+	ldrb	w1, [x0]
+	cbz	w1, .L4
+	mov	w2, 0
+.L3:
+	cmp	w1, 32
+	ldrb	w1, [x0,1]!
+	csinc	w2, w2, w2, ne
+	cbnz	w1, .L3
+.L2:
+	mov	w0, w2
+	ret
+.L4:
+	mov	w2, w1
+	b	.L2
+\end{lstlisting}
+
 \Answer\: \ref{exercise_solutions_strlen_1}.

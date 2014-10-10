@@ -56,6 +56,12 @@ f PROC
         ENDP
 \end{lstlisting}
 
+\begin{lstlisting}[caption=\Optimizing GCC 4.9 (ARM64)]
+f:
+	rev	w0, w0
+	ret
+\end{lstlisting}
+
 \Answer{}: \ref{exercise_solutions_bitfields_1}.
 
 \subsection{\Exercise \#2}
@@ -130,6 +136,43 @@ f PROC
         BLE      |L0.10|
         POP      {r4,pc}
         ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\NonOptimizing GCC 4.9 (ARM64)]
+f:
+	sub	sp, sp, #32
+	str	w0, [sp,12]
+	str	wzr, [sp,28]
+	mov	w0, 1
+	str	w0, [sp,24]
+	str	wzr, [sp,20]
+	b	.L2
+.L3:
+	ldr	w0, [sp,28]
+	ldr	w1, [sp,12]
+	lsr	w0, w1, w0
+	and	w1, w0, 15
+	ldr	w0, [sp,24]
+	mul	w0, w1, w0
+	ldr	w1, [sp,20]
+	add	w0, w1, w0
+	str	w0, [sp,20]
+	ldr	w0, [sp,28]
+	add	w0, w0, 4
+	str	w0, [sp,28]
+	ldr	w1, [sp,24]
+	mov	w0, w1
+	lsl	w0, w0, 2
+	add	w0, w0, w1
+	lsl	w0, w0, 1
+	str	w0, [sp,24]
+.L2:
+	ldr	w0, [sp,28]
+	cmp	w0, 28
+	ble	.L3
+	ldr	w0, [sp,20]
+	add	sp, sp, 32
+	ret
 \end{lstlisting}
 
 \Answer{}: \ref{exercise_solutions_bitfields_2}.
@@ -232,6 +275,23 @@ f PROC
         MOVS     r1,r2
         POP      {r4,r5,pc}
         ENDP
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\Optimizing GCC 4.9 (ARM64)]
+f:
+	mov	w2, w0
+	mov	x0, 0
+	cbz	w1, .L2
+.L3:
+	and	w3, w1, 1
+	lsr	w1, w1, 1
+	cmp	w3, wzr
+	add	x3, x0, x2, uxtw
+	lsl	w2, w2, 1
+	csel	x0, x3, x0, ne
+	cbnz	w1, .L3
+.L2:
+	ret
 \end{lstlisting}
 
 \Answer{}: \ref{exercise_solutions_bitfields_4}.
