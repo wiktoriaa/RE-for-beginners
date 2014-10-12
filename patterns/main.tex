@@ -37,6 +37,21 @@ but it's a very good method to learn assembly better.
 So you can try to take any assembly code from this book and try to make it shorter.
 But please also do not forget about testing your results!
 \fi
+\section*{Difference between non-optimized (debug) and optimized (release) versions}
+
+Non-optimizing compiler works faster and produce more understanable (verbose, though) code.
+
+Optimizing (release) compiler works slower and trying to produce faster (but not necessarily smaller) code.
+
+One important feature of debugging code is that there are might be debugging information showing connections
+between each line in source code and address in code.
+Optimizing compilers tend to produce such code where the whole source code lines may be optimized away.
+
+Practicing reverse engineer usually encounter both versions, because some developers turn on optimization
+switches, some others are not.
+
+That's why I try to give examples of both code.
+
 \fi
 
 \chapter{\RU{Краткое введенение в CPU}\EN{Short introduction to the CPU}}
@@ -87,8 +102,7 @@ to do it without making a huge amount of annoying mistakes}.
 \EN{The program which converts high-level \ac{PL} code into assembly is called a \IT{compiler}}.
 % TODO add about linker: "компоновщик" и "редактор связей" в русскоязычной лит-ре
 
-\ifdefined\IncludeARM
-\section{\RU{Несколько слов о x86 и ARM}\EN{Couple words about x86 and ARM}}
+\section{\RU{Несколько слов о разнице между \ac{ISA}}\EN{Couple words about difference between \ac{ISA}}}
 
 \RU{x86 всегда был архитектурой с опкодами переменной длины, так что когда пришла 64-битная эра,
 расширения x64 не очень сильно повлияли на \ac{ISA}.}
@@ -154,8 +168,14 @@ Thumb mode (including Thumb-2) and ARM64.}
 \EN{These \ac{ISA}'s intersects partially, but I would say, they are much more different
 \ac{ISA}'s than variations of one.}
 \RU{Следовательно, в этой книге я стараюсь добавлять фрагменты кода на всех трех ARM \ac{ISA}.}
-\EN{Therefore, I try to add fragments of code in all 3 ARM \ac{ISA}'s in this book.}
-\fi
+\EN{Therefore, I try to add fragments of code in all 3 ARM \ac{ISA}'s in this book.}\\
+\\
+\index{PowerPC}
+\index{MIPS}
+\index{Alpha AXP}
+\RU{Существует еще много \ac{RISC} \ac{ISA} с опкодами фиксированной 32-битной длины, это как минимум}
+\EN{There are more \ac{RISC} \ac{ISA}s with fixed length 32-bit opcodes, these are at least} 
+MIPS, PowerPC \AndENRU Alpha AXP.
 
 % chapters
 \input{patterns/01_helloworld/main}
