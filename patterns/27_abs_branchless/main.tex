@@ -1,0 +1,49 @@
+\ifdefined\RUSSIAN
+\else
+
+\chapter{Branchless abs() function}
+\label{chap:branchless_abs}
+
+Let's revisit example I gave earlier \ref{sec:abs} and ask ourselves, is it possible
+to make a branchless version of the function in x86 code?
+
+\lstinputlisting{abs.c}
+
+And the answer is yes.
+
+\section{\Optimizing GCC 4.9.1 x64}
+
+We could see it if to compile it using optimizing GCC 4.9:
+
+\lstinputlisting[caption=\Optimizing GCC 4.9 x64]{patterns/27_abs_branchless/abs_GCC491_x64_O3.asm}
+
+That's how it works:
+
+Algorithmically shift input value left by 31. 
+Algorithmical shift meaning sign extension, so if \ac{MSB} is 1, all 32 bits will be filled with 1, or with 0
+if otherwise.
+\index{x86!\Instructions!SAR}
+In other words, \TT{SAR reg, 31} instruction makes \TT{0xFFFFFFFF} if the sign was negative or 0 if positive.
+After \TT{SAR} executed, we have this value in EDX.
+\index{x86!\Instructions!XOR}
+Then, if value is \TT{0xFFFFFFFF} (i.e., sign is negative), input value is inverted 
+(because \TT{XOR reg, 0xFFFFFFFF} is effectively inverse operation).
+Then, again, if value is \TT{0xFFFFFFFF} (i.e., sign is negative), 1 is added to the final result (because
+subtracting -1 from some value resulting in incrementing it).
+Inversion and incrementing is exactly how two's complement value is negated: \ref{sec:signednumbers}.
+
+We may observe that the last two instruction does something if sign of input value is negative.
+Otherwise (if sign is positive) they do not do anything at all, leaving input value untouched.
+
+The algorithm is described in \cite[2-4]{Warren:2002:HD:515297}.
+I'm not sure, how GCC does it, deduced by itself or find suitable pattern among known ones?
+
+\section{\Optimizing GCC 4.9 ARM64}
+
+GCC 4.9 for ARM64 makes mostly the same, decide to use full 64-bit registers.
+There are less number of instructions, because input value can be shifted using instruction suffixed (``asr'')
+instead of separate instruction.
+
+\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64]{patterns/27_abs_branchless/abs_GCC49_ARM64_O3.s}
+
+\fi
