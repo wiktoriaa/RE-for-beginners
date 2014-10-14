@@ -1,0 +1,251 @@
+﻿\section{\RU{Реализация \strlen при помощи SIMD}\EN{SIMD \strlen implementation}}
+
+\newcommand{\URLMSDNSSE}{\href{http://msdn.microsoft.com/en-us/library/y0dh78ez(VS.80).aspx}{MSDN: MMX, SSE, and SSE2 Intrinsics}}
+
+\RU{Прежде всего, следует заметить, что SIMD-инструкции можно вставлять в \CCpp код при помощи специальных 
+макросов\footnote{\URLMSDNSSE}. В MSVC, часть находится в файле \TT{intrin.h}.}
+\EN{It should be noted the \ac{SIMD}-instructions may be inserted into \CCpp code via 
+special macros\footnote{\URLMSDNSSE}.
+As of MSVC, some of them are located in the \TT{intrin.h} file.}
+
+\newcommand{\URLSTRLEN}{http://www.strchr.com/sse2\_optimised\_strlen}
+
+\index{\CStandardLibrary!strlen()}
+\RU{Имеется возможность реализовать функцию \strlen\footnote{strlen() ~--- стандартная функция Си 
+для подсчета длины строки} при помощи SIMD-инструкций, работающий в 2-2.5 раза быстрее обычной реализации. 
+Эта функция будет загружать в XMM-регистр сразу 16 байт и проверять каждый на ноль}
+\EN{It is possible to implement \strlen function\footnote{strlen()~---standard C library function for calculating
+string length} using SIMD-instructions, working 2-2.5 times faster than common implementation.
+This function will load 16 characters into a XMM-register and check each against zero}
+\footnote{\RU{Пример базируется на исходнике отсюда: \url{\URLSTRLEN}.}
+\EN{The example is based on source code from: \url{\URLSTRLEN}.}}.
+
+\lstinputlisting{patterns/19_SIMD/18_3.c}
+
+\RU{Компилируем в MSVC 2010 с опцией \Ox:}\EN{Let's compile in MSVC 2010 with \Ox option:}
+
+\lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/19_SIMD/18_4_msvc_Ox.asm}
+
+\RU{Итак, прежде всего, мы проверяем указатель \TT{str}, выровнен ли он по 16-байтной границе. 
+Если нет, то мы вызовем обычную реализацию \strlen.}
+\EN{First of all, we check \TT{str} pointer, if it is aligned on a 16-byte boundary.
+If not, let's call generic \strlen implementation.}
+
+\RU{Далее мы загружаем по 16 байт в регистр \XMM{1} при помощи команды \MOVDQA.}
+\EN{Then, load next 16 bytes into the \XMM{1} register using \MOVDQA instruction.}
+
+\RU{Наблюдательный читатель может спросить, почему в этом месте мы не можем использовать \MOVDQU, 
+которая может загружать откуда угодно не взирая на факт, выровнен ли указатель?}
+\EN{Observant reader might ask, why \MOVDQU cannot be used here since it can load data from the memory
+regardless pointer alignment?}
+
+\RU{Да, можно было бы сделать вот как: если указатель выровнен, загружаем используя \MOVDQA, 
+иначе используем работающую чуть медленнее \MOVDQU.}
+\EN{Yes, it might be done in this way: if pointer is aligned, load data using \MOVDQA,
+if not~---use slower \MOVDQU.}
+
+\RU{Однако здесь кроется не сразу заметная проблема, которая проявляется вот в чем:}
+\EN{But here we are may stick into hard to notice caveat:}
+
+\index{Page (memory)}
+\newcommand{\URLPAGE}{\url{http://en.wikipedia.org/wiki/Page_(computer_memory)}}
+
+\RU{В \ac{OS} линии \gls{Windows NT} (и не только), память выделяется страницами по 4 KiB (4096 байт). 
+Каждый win32-процесс якобы имеет в наличии 4 GiB, но на самом деле, 
+только некоторые части этого адресного пространства присоединены к реальной физической памяти. 
+Если процесс обратится к блоку памяти, которого не существует, сработает исключение. 
+Так работает \ac{VM}\footnote{\URLPAGE}.}
+\EN{In \gls{Windows NT} line of \ac{OS} (but not limited to it), memory allocated by pages of 4 KiB (4096 bytes).
+Each win32-process has ostensibly 4 GiB, but in fact, only some parts
+of address space are connected to real physical memory.
+If the process accessing to the absent memory block, exception will be raised.
+That's how \ac{VM} works\footnote{\URLPAGE}.}
+
+\RU{Так вот, функция, читающая сразу по 16 байт, имеет возможность нечаянно вылезти за границу 
+выделенного блока памяти. 
+Предположим, \ac{OS} выделила программе 8192 (0x2000) байт по адресу 0x008c0000. 
+Таким образом, блок занимает байты с адреса 0x008c0000 по 0x008c1fff включительно.}
+\EN{So, a function loading 16 bytes at once, may step over a border of allocated memory block.
+Let's consider, \ac{OS} allocated 8192 (0x2000) bytes at the address 0x008c0000.
+Thus, the block is the bytes starting from address 0x008c0000 to 0x008c1fff inclusive.}
+
+\RU{За этим блоком, то есть начиная с адреса 0x008c2000 нет вообще ничего, т.е., \ac{OS} не выделяла там память. 
+Обращение к памяти начиная с этого адреса вызовет исключение.}
+\EN{After the block, that is, starting from address 0x008c2000 there is nothing at all, e.g., \ac{OS} not allocated
+any memory there.
+Attempt to access a memory starting from the address will raise exception.}
+
+\RU{И предположим, что программа хранит некую строку из, скажем, пяти символов почти в самом конце блока, 
+что не является преступлением:}
+\EN{And let's consider, the program holding a string containing 5 characters almost at the end of block,
+and that is not a crime.}
+
+\begin{center}
+  \begin{tabular}{ | l | l | }
+    \hline
+        0x008c1ff8 & 'h' \\
+        0x008c1ff9 & 'e' \\
+        0x008c1ffa & 'l' \\
+        0x008c1ffb & 'l' \\
+        0x008c1ffc & 'o' \\
+        0x008c1ffd & '\textbackslash{}x00' \\
+        0x008c1ffe & \RU{здесь случайный мусор}\EN{random noise} \\
+        0x008c1fff & \RU{здесь случайный мусор}\EN{random noise} \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\RU{В обычных условиях, программа вызывает \strlen передав ей указатель на строку \TT{'hello'} 
+лежащую по адресу 0x008c1ff8. 
+\strlen будет читать по одному байту до 0x008c1ffd, где ноль, и здесь она закончит работу.}
+\EN{So, in common conditions the program calling \strlen passing it a pointer to string \TT{'hello'} 
+lying in memory at address 0x008c1ff8.
+\strlen will read one byte at a time until 0x008c1ffd, where zero-byte, and so here it will stop working.}
+
+\RU{Теперь, если мы напишем свою реализацию \strlen читающую сразу по 16 байт, с любого адреса, 
+будь он выровнен по 16-байтной границе или нет, 
+\MOVDQU попытается загрузить 16 байт с адреса 0x008c1ff8 по 0x008c2008, и произойдет исключение. 
+Это ситуация которой, конечно, хочется избежать.}
+\EN{Now if we implement our own \strlen reading 16 byte at once, starting at any address, will it be aligned or not,
+\MOVDQU may attempt to load 16 bytes at once at address 0x008c1ff8 up to 0x008c2008, 
+and then exception will be raised.
+That's the situation to be avoided, of course.}
+
+\RU{Поэтому мы будем работать только с адресами, выровненными по 16 байт, что в сочетании со знанием 
+что размер страницы \ac{OS} также, как правило, выровнен по 16 байт, 
+даст некоторую гарантию что наша функция не будет пытаться читать из мест в невыделенной памяти.}
+\EN{So then we'll work only with the addresses aligned on a 16 byte boundary, what in combination with a knowledge
+of \ac{OS} page size is usually aligned on a 16-byte boundary too, give us some warranty our function will not
+read from unallocated memory.}
+
+\RU{Вернемся к нашей функции}\EN{Let's back to our function}.
+
+\index{x86!\Instructions!PXOR}
+\verb|_mm_setzero_si128()|\EMDASH\RU{это макрос, генерирующий \TT{pxor xmm0, xmm0} ~--- инструкция просто обнуляет регистр \XMM{0}.}
+\EN{is a macro generating \TT{pxor xmm0, xmm0}~---instruction just clears the \XMM{0} register}.
+
+\verb|_mm_load_si128()|\EMDASH\RU{это макрос для \MOVDQA, он просто загружает 16 байт по адресу из указателя в \XMM{1}.}
+\EN{is a macro for \MOVDQA, it just loading 16 bytes from the address into the \XMM{1} register.}
+
+\index{x86!\Instructions!PCMPEQB}
+\verb|_mm_cmpeq_epi8()|\EMDASH\RU{это макрос для \PCMPEQB, это инструкция которая 
+побайтово сравнивает значения из двух XMM регистров.} 
+\EN{is a macro for \PCMPEQB, is an instruction comparing two XMM-registers bytewise.}
+
+\RU{И если какой-то из байт равен другому, то в результирующем значении будет выставлено на месте этого 
+байта \TT{0xff}, либо 0, если байты не были равны.}
+\EN{And if some byte was equals to other, there will be \TT{0xff} at this point in the result or 0 if otherwise.}
+
+\RU{Например.}\EN{For example.}
+
+\begin{verbatim}
+XMM1: 11223344556677880000000000000000
+XMM0: 11ab3444007877881111111111111111
+\end{verbatim}
+
+\RU{После исполнения \TT{pcmpeqb xmm1, xmm0}, регистр \XMM{1} будет содержать:}
+\EN{After \TT{pcmpeqb xmm1, xmm0} execution, the \XMM{1} register shall contain:}
+
+\begin{verbatim}
+XMM1: ff0000ff0000ffff0000000000000000
+\end{verbatim}
+
+\RU{Эта инструкция в нашем случае, сравнивает каждый 16-байтный блок с блоком состоящим из 16-и нулевых байт, 
+выставленным в \XMM{0} при помощи \TT{pxor xmm0, xmm0}.}
+\EN{In our case, this instruction comparing each 16-byte block with the block of 16 zero-bytes,
+was set in the \XMM{0} register by \TT{pxor xmm0, xmm0}.}
+
+\index{x86!\Instructions!PMOVMSKB}
+\RU{Следующий макрос \TT{\_mm\_movemask\_epi8()} ~--- это инструкция \TT{PMOVMSKB}.}
+\EN{The next macro is \TT{\_mm\_movemask\_epi8()}~---that is \TT{PMOVMSKB} instruction.}
+
+\RU{Она очень удобна как раз для использования в паре с \PCMPEQB.}
+\EN{It is very useful if to use it with \PCMPEQB.}
+
+\TT{pmovmskb eax, xmm1}
+
+\RU{Эта инструкция выставит самый первый бит \EAX в единицу, если старший бит первого байта в 
+регистре \XMM{1} является единицей. 
+Иными словами, если первый байт в регистре \XMM{1} является \TT{0xff}, то первый бит в \EAX будет также единицей, 
+иначе нулем.}
+\EN{This instruction will set first \EAX bit into 1 if most significant bit of the first byte in the \XMM{1} is $1$.
+In other words, if first byte of the \XMM{1} register is \TT{0xff}, first \EAX bit will be set to 1 too.}
+
+\RU{Если второй байт в регистре \XMM{1} является \TT{0xff}, то второй бит в \EAX также будет единицей. 
+Иными словами, инструкция отвечает на вопрос, ``какие из байт в \XMM{1} являются \TT{0xff}?''
+В результате приготовит 16 бит и запишет в \EAX. Остальные биты в \EAX обнулятся.}
+\EN{If second byte in the \XMM{1} register is \TT{0xff}, then second \EAX bit will be set to 1 too.
+In other words, the instruction is answering to the question ``which bytes in the \XMM{1} are \TT{0xff}?''
+And will prepare 16 bits in the \EAX register. Other bits in the \EAX register are to be cleared.}
+
+\RU{Кстати, не забывайте также вот о какой особенности нашего алгоритма.}
+\EN{By the way, do not forget about this feature of our algorithm.}
+\RU{На вход может прийти 16 байт вроде}\EN{There might be 16 bytes on input like}:
+
+\begin{center}
+\begin{bytefield}[endianness=big,bitwidth=0.05\linewidth]{16}
+\bitheader{15,14,13,12,11,10,9,3,2,1,0} \\
+\bitbox{1}{``h''} & 
+\bitbox{1}{``e''} & 
+\bitbox{1}{``l''} & 
+\bitbox{1}{``l''} & 
+\bitbox{1}{``o''} & 
+\bitbox{1}{0} & 
+\bitbox{7}{garbage} & 
+\bitbox{1}{0} &
+\bitbox{2}{garbage} & 
+\end{bytefield}
+\end{center}
+
+\RU{Это строка \TT{'hello'}, после нее терминирующий ноль, затем немного мусора в памяти.}
+\EN{It is a \TT{'hello'} string, terminating zero, and also a random noise in memory.}
+\RU{Если мы загрузим эти 16 байт в \XMM{1} и сравним с нулевым \XMM{0}, то в итоге получим такое 
+\footnote{Я использую здесь порядок с \ac{MSB} до \ac{LSB}}:}
+\EN{If we load these 16 bytes into \XMM{1} and compare them with zeroed \XMM{0}, we will get something like
+\footnote{I use here order from \ac{MSB} to \ac{LSB}}:}
+
+\begin{verbatim}
+XMM1: 0000ff00000000000000ff0000000000
+\end{verbatim}
+
+\RU{Это означает что инструкция сравнения обнаружила два нулевых байта, что и не удивительно.}
+\EN{This means, the instruction found two zero bytes, and that is not surprising.}
+
+\RU{\TT{PMOVMSKB} в нашем случае подготовит \EAX вот так (в двоичном представлении):} 
+\EN{\TT{PMOVMSKB} in our case will prepare \EAX like (in binary representation):} \IT{0010000000100000b}.
+
+\RU{Совершенно очевидно, что далее наша функция должна учитывать только первый встретившийся
+нулевой бит и игнорировать все остальное.}
+\EN{Obviously, our function must take only first zero bit and ignore the rest ones.}
+
+\index{x86!\Instructions!BSF}
+\label{instruction_BSF}
+\RU{Следующая инструкция}\EN{The next instruction}\EMDASH\TT{BSF} (\IT{Bit Scan Forward}). 
+\RU{Это инструкция находит самый младший бит во втором операнде и записывает его позицию в первый операнд.}
+\EN{This instruction find first bit set to 1 and stores its position into first operand.}
+
+\begin{verbatim}
+EAX=0010000000100000b
+\end{verbatim}
+
+\RU{После исполнения этой инструкции \TT{bsf eax, eax}, в \EAX будет 5, что означает, 
+что единица найдена в пятой позиции (считая с нуля).}
+\EN{After \TT{bsf eax, eax} instruction execution, \EAX will contain 5, this means, 
+1 found at 5th bit position (starting from zero).}
+
+\RU{Для использования этой инструкции, в MSVC также имеется макрос}
+\EN{MSVC has a macro for this instruction:} \TT{\_BitScanForward}.
+
+\RU{А дальше все просто. Если нулевой байт найден, его позиция прибавляется к тому что 
+мы уже насчитали и возвращается результат.}
+\EN{Now it is simple. If zero byte found, its position added to what we already counted and now we have 
+ready to return result.}
+
+\RU{Почти всё.}\EN{Almost all.}
+
+\RU{Кстати, следует также отметить, что компилятор MSVC сгенерировал два тела цикла сразу, для оптимизации.}
+\EN{By the way, it is also should be noted, MSVC compiler emitted two loop bodies side by side, for optimization.}
+
+\RU{Кстати, в SSE 4.2 (который появился в Intel Core i7) все эти манипуляции со строками могут быть еще проще:}
+\EN{By the way, SSE 4.2 (appeared in Intel Core i7) offers more instructions where these string manipulations might be
+even easier:} \url{http://www.strchr.com/strcmp\_and\_strlen\_using\_sse\_4.2}

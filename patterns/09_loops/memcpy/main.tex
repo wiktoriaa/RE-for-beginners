@@ -1,0 +1,31 @@
+﻿\ifx\RUSSIAN\undefined
+\section{Memory copying routine}
+\label{loop_memcpy}
+
+Real-world memory copy routines may copy blocks by 4 or 8 bytes at each iteration, use \ac{SIMD}, 
+vectorization, etc.
+But for the sake of simplicity, this example is simplest possible.
+
+\lstinputlisting{memcpy.c}
+
+\subsection{Straight-forward implementation}
+
+\lstinputlisting[caption=GCC 4.9 x64 optimized for size (-Os)]{patterns/09_loops/memcpy/memcpy_GCC49_x64_Os.s}
+
+\lstinputlisting[caption=GCC 4.9 ARM64 optimized for size (-Os)]{patterns/09_loops/memcpy/memcpy_GCC49_ARM64_Os.s}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/09_loops/memcpy/memcpy_Keil_Thumb_O3.s}
+
+\subsection{ARM in ARM mode}
+
+Keil in ARM mode take full advantage of conditional suffixes:
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/09_loops/memcpy/memcpy_Keil_ARM_O3.s}
+
+That's why there are only one branch instruction instead of 2.
+
+\subsection{Vectorization}
+
+Optimizing GCC can do much more on this example: \ref{vec_memcpy}.
+
+\fi
