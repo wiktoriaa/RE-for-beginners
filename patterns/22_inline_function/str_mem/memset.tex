@@ -1,0 +1,35 @@
+﻿\subsection{memset()}
+\index{\CStandardLibrary!memset()}
+
+\subsubsection{\Example \#1}
+
+\lstinputlisting[caption=32 \RU{байта}\EN{bytes}]{patterns/22_inline_function/str_mem/memset_32.c}
+
+\index{x86!\Instructions!MOV}
+\EN{Many compilers doesn't generate call to memset() for short blocks, but rather inserting \MOV:}
+\RU{Многие компиляторы не генерируют вызов memset() для коротких блоков, а просто вставляют \MOV:}
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/22_inline_function/str_mem/memset_32_GCC491_x64_O3.s}
+
+\index{Unrolled loop}
+\RU{Кстати, это напоминает развернутые циклы}\EN{By the way, that remind us unrolled loops}: 
+\ref{ARM_unrolled_loops}.
+
+\subsubsection{\Example \#2}
+
+\lstinputlisting[caption=67 \RU{байт}\EN{bytes}]{patterns/22_inline_function/str_mem/memset_67.c}
+
+\EN{When block size is not multiply of 4 or 8, compilers may behave differently.}
+\RU{Когда размер блока не кратен 4 или 8, разные компиляторы могут вести себя по-разному.}
+
+\index{x86!\Instructions!MOV}
+\EN{For instance, MSVC 2012 continue to insert \MOV:}
+\RU{Например, MSVC 2012 продолжает вставлять \MOV:}
+
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/22_inline_function/str_mem/memset_67_MSVC2012_x64_Ox.asm}
+
+\index{x86!\Instructions!STOSQ}
+\EN{\dots while GCC uses \TT{REP STOSQ}, concluding that this would be shorter than pack of \TT{MOV}'s:}
+\RU{\dots а GCC использует \TT{REP STOSQ}, полагая, что так будет короче, чем пачка \TT{MOV}'s:}
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/22_inline_function/str_mem/memset_67_GCC491_x64_O3.s}
