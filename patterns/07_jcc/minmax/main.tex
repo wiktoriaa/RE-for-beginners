@@ -1,0 +1,61 @@
+﻿\ifx\RUSSIAN\undefined
+\section{Getting minimal and maximal values}
+
+\subsection{32-bit}
+
+\lstinputlisting{patterns/07_jcc/minmax/minmax.c}
+
+\lstinputlisting[caption=\NonOptimizing MSVC 2013]{patterns/07_jcc/minmax/minmax_MSVC_2013.asm}
+
+\index{x86!\Instructions!Jcc}
+These two functions are differ only in conditional jump instruction: 
+JGE (Jump if Greater or Equal) is used in first
+and JLE (Jump if Less or Equal) in second.
+
+\index{\CompilerAnomaly}
+\label{MSVC_double_JMP_anomaly}
+There are unneeded \JMP instruction in each function which MSVC left by mistake, probably.
+
+\subsubsection{Branchless}
+
+ARM for thumb mode reminds us x86 code:
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/07_jcc/minmax/minmax_Keil_Thumb_O3.s}
+
+\index{ARM!\Instructions!Bcc}
+The functions are differ in branching instruction: BGT and BLT.
+
+It's possible to use conditional suffixes in ARM mode, so the code is more terse.
+MOVcc will be executed only if condition is met:
+\index{ARM!\Instructions!MOVcc}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/07_jcc/minmax/minmax_Keil_ARM_O3.s}
+
+\index{x86!\Instructions!CMOVcc}
+\Optimizing GCC 4.8.1 and optimizing MSVC 2013 can use CMOVcc instruction, which is analoogus to MOVcc in ARM:
+
+\lstinputlisting[caption=\Optimizing MSVC 2013]{patterns/07_jcc/minmax/minmax_GCC481_O3.s}
+
+\subsection{64-bit}
+
+\lstinputlisting{patterns/07_jcc/minmax/minmax64.c}
+
+There are redundant value shufflings, but the code is comprehensible:
+
+\lstinputlisting[caption=\NonOptimizing GCC 4.9.1 ARM64]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O0.s}
+
+\subsubsection{Branchless}
+
+No need to load function arguments from stack, they are already in registers:
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/07_jcc/minmax/minmax64_GCC_49_x64_O3.s}
+
+MSVC 2013 does almost the same.
+
+\index{ARM!\Instructions!CSEL}
+ARM64 has CSEL instruction, which works just as MOVcc in ARM or CMOVcc in x86, but name is changed:
+``Conditional SELect'':
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O3.s}
+
+\fi
