@@ -1,0 +1,41 @@
+﻿\chapter{\RU{Простейшая функция}\EN{Simplest possible function}}
+
+\RU{Наверное, простейшая из возможных функций это та что возвращает некоторую константу.}
+\EN{Probably, the simplest possible function is that one which just returns some constant value.}
+
+\RU{Вот, например}\EN{Here it is}:
+
+\lstinputlisting{patterns/00_ret/1.c}
+
+\RU{И вот что делает оптимизирующий GCC}\EN{And that's what optimizing GCC compiler does}:
+
+\lstinputlisting[caption=\Optimizing GCC]{patterns/00_ret/1.s}
+
+\RU{Результат работы MSVC точно такой же}\EN{MSVC's result is very same}.
+
+\index{x86!\Instructions!RET}
+\RU{Здесь только две инструкции: первая помещает значение 123 в регистр \EAX, который используется
+для передачи возвращаемых значений и вторая это \RET, которая возвращает управление в вызывающую ф-цию.}
+\EN{There are just two instructions: first is placing 123 value into \EAX register which is used for return
+value passing and the second one is \RET, which returns execution to \gls{caller}.}
+\RU{Вызывающая ф-ция возьмет результат из регистра \EAX}\EN{Caller will take the result from \EAX register}.
+
+\RU{А что насчет}\EN{What about} ARM?
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/00_ret/1_Keil_ARM_O3.s}
+
+\RU{ARM использует регистр \Reg{0} для возврата значений, так что здесь 123 помещается в \Reg{0}.}
+\EN{ARM uses \Reg{0} register for results returning, so 123 is placed into \Reg{0} here.}
+
+\RU{Адрес возврата (\ac{RA}) в ARM не сохраняется в локальном стеке, а в регистре \ac{LR}.}
+\EN{Return address (\ac{RA}) is not saved in the local stack in ARM, but rather in \ac{LR} register.}
+\RU{Так что инструкция \TT{BX LR} делает переход по этому адресу, и это то же самое что и вернуть управление
+в вызывающую ф-цию.}
+\EN{So \TT{BX LR} instruction is jumping to that address, effectively, returning execution to \gls{caller}.}
+
+\index{ARM!\Instructions!MOV}
+\index{x86!\Instructions!MOV}
+\RU{Нужно отметить, что название инструкции \MOV в x86 и ARM сбивает с толку.}
+\EN{It should be noted that \MOV is confusing name for instruction in both x86 and ARM \ac{ISA}s. }
+\RU{На самом деле, данные не \IT{перемещаются}, а скорее \IT{копируются}.}
+\EN{In fact, data is not \IT{moved}, it's rather \IT{copied}.}
