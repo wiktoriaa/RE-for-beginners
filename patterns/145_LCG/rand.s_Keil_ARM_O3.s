@@ -1,10 +1,10 @@
-srand PROC
+my_srand PROC
         LDR      r1,|L0.52|  ; load pointer to rand_state
         STR      r0,[r1,#0]  ; save rand_state
         BX       lr
         ENDP
 
-rand PROC
+my_rand PROC
         LDR      r0,|L0.52|  ; load pointer to rand_state
         LDR      r2,|L0.56|  ; load RNG_a
         LDR      r1,[r0,#0]  ; load rand_state
