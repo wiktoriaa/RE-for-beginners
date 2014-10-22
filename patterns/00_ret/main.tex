@@ -7,6 +7,8 @@
 
 \lstinputlisting{patterns/00_ret/1.c}
 
+\section{x86}
+
 \RU{И вот что делает оптимизирующий GCC}\EN{And that's what optimizing GCC compiler does}:
 
 \lstinputlisting[caption=\Optimizing GCC]{patterns/00_ret/1.s}
@@ -19,6 +21,8 @@
 \EN{There are just two instructions: first is placing 123 value into \EAX register which is used for return
 value passing and the second one is \RET, which returns execution to \gls{caller}.}
 \RU{Вызывающая ф-ция возьмет результат из регистра \EAX}\EN{Caller will take the result from \EAX register}.
+
+\section{ARM}
 
 \RU{А что насчет}\EN{What about} ARM?
 
@@ -39,3 +43,37 @@ value passing and the second one is \RET, which returns execution to \gls{caller
 \EN{It should be noted that \MOV is confusing name for instruction in both x86 and ARM \ac{ISA}s. }
 \RU{На самом деле, данные не \IT{перемещаются}, а скорее \IT{копируются}.}
 \EN{In fact, data is not \IT{moved}, it's rather \IT{copied}.}
+
+\ifdefined\IncludeMIPS
+\ifx\RUSSIAN\undefined
+\section{MIPS}
+
+\label{MIPS_leaf_function_ex1}
+There are two ways of registers naming are used in the MIPS world. By number (from \$0 to \$31)
+or by pseudoname (\$V0, \$A0, etc).
+Assembly output done by GCC shows registers by number:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (assembly output)]{patterns/00_ret/MIPS.s}
+
+\dots while IDA --- by pseudoname:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/00_ret/MIPS_IDA.lst}
+
+So the \$2 (or \$V0) register is used for value returning.
+\index{MIPS!\Instructions!LI}
+LI is ``Load Immediate''.
+
+\index{MIPS!\Instructions!J}
+The other instruction is jump instruction (J or JR) which returns execution flow to the \gls{caller},
+jumping to the address in \$31 or \$RA.
+This is the register analogous to \ac{LR} in ARM.
+
+By why load instruction (LI) and jump instruction (J or JR) are swapped?
+\index{MIPS!Branch delay slot}
+This is merely \ac{RISC} artifact and called ``branch delay slot''.
+Actually, we don't need to get into it. We should just memorize: the instruction after jump or branch instruction
+is executed \IT{before} jump instruction.
+Hence, jump instruction is always swapped with the one which should be executed before.
+
+\fi
+\fi

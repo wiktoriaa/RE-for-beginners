@@ -7,6 +7,29 @@
 \EN{By the way, 32-bit values are passed as pairs in 16-bit environment just as the same}: 
 \ref{win16_32bit_values}}.
 
+\section{\RU{Возврат 64-битного значения}\EN{Returning of 64-bit value}}
+
+\lstinputlisting{patterns/185_64bit_in_32_env/0.c}
+
+\subsection{x86}
+
+\RU{64-битные значения в 32-битной среде возвращаются из ф-ций в паре регистров \EDX{}:\EAX{}.}
+\EN{In a 32-bit environment, 64-bit values are returned from a functions in \EDX{}:\EAX{} registers pair.}
+
+\lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/185_64bit_in_32_env/0_MSVC_2010_Ox.asm}
+
+\ifx\RUSSIAN\undefined
+\ifdefined\IncludeMIPS
+\subsection{MIPS}
+
+64-bit value is returned in V0-V1 (\$2-\$3) registers pair (V0 (\$2) is for high part and V1 (\$3) for low part):
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (assembly listing)]{patterns/185_64bit_in_32_env/0_MIPS.s}
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/185_64bit_in_32_env/0_MIPS_IDA.lst}
+\fi
+\fi
+
 \section{\RU{Передача аргументов, сложение, вычитание}\EN{Arguments passing, addition, subtraction}}
 
 \lstinputlisting{patterns/185_64bit_in_32_env/1.c}
@@ -32,8 +55,6 @@ high part first, then low part}. \\
 \RU{если флаг переноса включен, то от результата отнимется единица}\EN{if carry flag is on, then 1 will also be subtracted
 from the result}. \\
 \\
-\RU{64-битные значения в 32-битной среде возвращаются из ф-ций в паре регистров \EDX{}:\EAX{}}
-\EN{In a 32-bit environment, 64-bit values are returned from a functions in \EDX{}:\EAX{} registers pair}.
 \RU{Легко увидеть, как результат работы \TT{f1()} затем передается в \printf{}}\EN{It is easily can be seen how
 \TT{f1()} function is then passed to \printf{}}.
 

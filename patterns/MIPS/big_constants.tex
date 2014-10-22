@@ -1,0 +1,39 @@
+﻿\ifx\RUSSIAN\undefined
+\section{\RU{Загрузка констант в регистр}\EN{Loading constants into register}}
+
+\begin{lstlisting}
+unsigned int f()
+{
+	return 0x12345678;
+};
+\end{lstlisting}
+
+MIPS, just like ARM, has all instructions with size of 32-bit, so it's not possible to
+embed 32-bit constant into one instruction.
+\index{MIPS!\Instructions!LI}
+\index{MIPS!\Instructions!ORI}
+So this translates to at least two instructions: 
+first loads high part of 32-bit number and the second
+one apply OR operation which effectively sets low 16-bit part of the target register:
+
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (assembly output)]
+        li      $2,305397760                    # 0x12340000
+        j       $31
+        ori     $2,$2,0x5678
+\end{lstlisting}
+
+\IDA is fully aware of such code patterns, so it shows the last ORI instruction as LI pseudoinstruction
+allegedly it loads full 32-bit number into V0 register --- for convenience.
+
+\index{MIPS!\Instructions!LUI}
+
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA)]
+         lui     $v0, 0x1234
+         jr      $ra
+         li      $v0, 0x12345678
+\end{lstlisting}
+
+GCC assembly output has LI instruction, but in fact, LUI (``Load Upper Imeddiate'') there,
+which stores 16-bit value into high part of register.
+
+\fi
