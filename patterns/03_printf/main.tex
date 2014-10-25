@@ -8,11 +8,12 @@ the \main function body by this:}
 \lstinputlisting[label=hw_c]{patterns/03_printf/1.c}
 
 % sections
-\input{patterns/03_printf/x86}
-\input{patterns/03_printf/x64}
+\input{patterns/03_printf/x86/main}
 \ifdefined\IncludeARM
-\input{patterns/03_printf/ARM/ARM3}
-\input{patterns/03_printf/ARM/ARM8}
+\input{patterns/03_printf/ARM/main}
+\fi
+\ifdefined\IncludeMIPS
+\input{patterns/03_printf/MIPS/main}
 \fi
 
 \section{\Conclusion{}}
@@ -53,12 +54,13 @@ CALL function
 ; modify stack pointer (if needed)
 \end{lstlisting}
 
+\ifdefined\IncludeARM
 \begin{lstlisting}[caption=ARM]
 MOV R0, argument 1
 MOV R1, argument 2
 MOV R2, argument 3
 MOV R3, argument 4
-; add arguments 5, 6, etc into stack (if needed)
+; add arguments 5, 6, etc, into stack (if needed)
 BL function
 ; modify stack pointer (if needed)
 \end{lstlisting}
@@ -72,19 +74,40 @@ MOV X4, argument 5
 MOV X5, argument 6
 MOV X6, argument 7
 MOV X7, argument 8
-; add arguments 9, 10, etc into stack (if needed)
+; add arguments 9, 10, etc, into stack (if needed)
 BL function
 ; modify stack pointer (if needed)
 \end{lstlisting}
+\fi
+
+\ifdefined\IncludeMIPS
+\index{MIPS!O32}
+\begin{lstlisting}[caption=MIPS (O32 calling convention)]
+LI $4, argument 1 ; AKA $A0
+LI $5, argument 2 ; AKA $A1
+LI $6, argument 3 ; AKA $A2
+LI $7, argument 4 ; AKA $A3
+; add arguments 5, 6, etc, into stack (if needed)
+LW temp_reg, address of function
+JALR temp_reg
+\end{lstlisting}
+\fi
 
 \section{\RU{Кстати}\EN{By the way}}
 
 \index{fastcall}
-\RU{Кстати, разница между способом передачи параметров принятая в x86, x64, fastcall и ARM неплохо иллюстрирует тот важный момент, что процессору, в общем, все равно, как будут 
+\RU{Кстати, разница между способом передачи параметров принятая в x86, x64, fastcall, ARM и MIPS неплохо иллюстрирует тот важный момент, что процессору, в общем, все равно, как будут 
 передаваться параметры функций. Можно создать гипотетический компилятор, который будет передавать их при 
 помощи указателя на структуру с параметрами, не пользуясь стеком вообще.}
 \EN{By the way, this difference between passing arguments in x86, x64, 
-fastcall and ARM is a good illustration of the fact that the CPU is not aware of how arguments are passed to functions. 
+fastcall, ARM and MIPS is a good illustration of the fact that the CPU is not aware of how arguments are passed to functions. 
 It is also possible to create a hypothetical compiler that is able to pass arguments 
 via a special structure not using stack at all.}
 
+\ifx\RUSSIAN\undefined
+\ifdefined\IncludeMIPS
+\index{MIPS!O32}
+MIPS \$a0 \dots \$a3 registers are named so only for convenience (that is O32 calling convention).
+Programmer may use any other registers (well, maybe except \$zero) to pass data or use any other calling convention.
+\fi
+\fi

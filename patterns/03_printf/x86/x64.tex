@@ -1,4 +1,4 @@
-\section{x64: \RU{8 аргументов}\EN{8 arguments}}
+\subsection{x64: \RU{8 аргументов}\EN{8 arguments}}
 
 \index{x86-64}
 \label{example_printf8_x64}
@@ -10,7 +10,7 @@ to be passed to 9 (\printf format string + 8 \Tint variables)}:
 
 \lstinputlisting{patterns/03_printf/2.c}
 
-\subsection{MSVC}
+\subsubsection{MSVC}
 
 \RU{Как уже было сказано раннее, первые 4 аргумента в Win64 передаются в регистрах}
 \EN{As we saw before, the first 4 arguments are passed in the} \RCX, \RDX, \Reg{8}, \Reg{9}
@@ -20,7 +20,7 @@ to be passed to 9 (\printf format string + 8 \Tint variables)}:
 \EN{However, the \MOV instruction, instead of \PUSH, is used for preparing the stack, so the values are written
 to the stack in a straightforward manner}.
 
-\lstinputlisting[caption=MSVC 2012 x64]{patterns/03_printf/2_MSVC_x64.asm}
+\lstinputlisting[caption=MSVC 2012 x64]{patterns/03_printf/x86/2_MSVC_x64.asm}
 
 \RU{Наблюдательный читатель может спросить, почему для значений типа \Tint отводится 8 байт,
 ведь нужно только 4?}
@@ -35,7 +35,7 @@ to the stack in a straightforward manner}.
 \RU{В 32-битных средах точно также: для всех типов резервируется 4 байта в стеке.}
 \EN{The same story in 32-bit environments: 4 bytes are reserved for all data types.}
 
-\subsection{GCC}
+\subsubsection{GCC}
 
 \RU{В *NIX-системах для x86-64 ситуация похожая, вот только первые 6 аргументов передаются через}
 \EN{In *NIX OS-es, it's the same story for x86-64, except that the first 6 arguments are passed in the} \RDI, \RSI,
@@ -48,10 +48,10 @@ saw this thing before}: \ref{hw_EDI_instead_of_RDI}.
 \RU{Почему перед вызовом \printf очищается регистр \EAX, мы уже рассмотрели раннее}
 \EN{We also saw before the \EAX register being cleared before a \printf call}: \ref{SysVABI_input_EAX}.
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/03_printf/2_GCC_x64_\LANG.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/03_printf/x86/2_GCC_x64_\LANG.s}
 
 \ifdefined\IncludeGDB
-\subsection{GCC + GDB}
+\subsubsection{GCC + GDB}
 \index{GDB}
 
 \RU{Попробуем этот пример в}\EN{Let's try this example in} \ac{GDB}.

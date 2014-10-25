@@ -1,17 +1,11 @@
-\section{ARM: \RU{8 аргументов}\EN{8 arguments}}
+\subsection{ARM: \RU{8 аргументов}\EN{8 arguments}}
 
 \RU{Снова воспользуемся примером с 9-ю аргументами из предыдущей секции}\EN{Let's use again the example
 with 9 arguments from the previous section}: \ref{example_printf8_x64}.
 
-\begin{lstlisting}
-void printf_main2()
-{
-    printf("a=%d; b=%d; c=%d; d=%d; e=%d; f=%d; g=%d; h=%d\n", 
-        1, 2, 3, 4, 5, 6, 7, 8);
-};
-\end{lstlisting}
+\lstinputlisting{patterns/03_printf/2.c}
 
-\subsection{\OptimizingKeilVI: \ARMMode}
+\subsubsection{\OptimizingKeilVI: \ARMMode}
 
 \begin{lstlisting}
 .text:00000028             main
@@ -145,7 +139,7 @@ set value of \TT{IP/EIP/RIP} using \POP in x86, but anyway, you got the idea, I 
 
 \end{itemize}
 
-\subsection{\OptimizingKeilVI: \ThumbMode}
+\subsubsection{\OptimizingKeilVI: \ThumbMode}
 
 \begin{lstlisting}
 .text:0000001C             printf_main2
@@ -182,7 +176,7 @@ like
 the previous example. However, this is thumb code and values are packed into stack differently: 
 $8$ for the first time, then $5$, $6$, $7$ for the second, and $4$ for the third}.
 
-\subsection{\OptimizingXcodeIV: \ARMMode}
+\subsubsection{\OptimizingXcodeIV: \ARMMode}
 
 \begin{lstlisting}
 __text:0000290C             _printf_main2
@@ -245,7 +239,7 @@ simultaneously since effects of their execution are not conflicting with each ot
 \RU{Вероятно, компилятор старается генерировать код именно таким образом там, где это возможно}
 \EN{Presumably, compiler tries to generate code in such a way, where it is possible, of course}.
  
-\subsection{\OptimizingXcodeIV: \ThumbTwoMode}
+\subsubsection{\OptimizingXcodeIV: \ThumbTwoMode}
 
 \begin{lstlisting}
 __text:00002BA0               _printf_main2
@@ -284,9 +278,9 @@ with the exception that thumb-instructions are used here instead}.
 % also STMIA is used instead of STMIB,
 % which is why it uses LR, which is 4 bytes ahead of SP
 
-\subsection{ARM64}
+\subsubsection{ARM64}
 
-\subsubsection{\NonOptimizing GCC (Linaro) 4.9}
+\myparagraph{\NonOptimizing GCC (Linaro) 4.9}
 
 \begin{lstlisting}
 .LC2:
