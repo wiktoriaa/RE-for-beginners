@@ -1,0 +1,71 @@
+\ifx\RUSSIAN\undefined
+
+\subsection{MIPS}
+
+\subsubsection{Uninitialized global variable}
+
+So now $x$ variable is global.
+I made executable file rather than object one and load it into IDA.
+IDA shows presence of $x$ variable in .sbss ELF section (remember about Global Pointer? \ref{MIPS_GP}),
+since it's value is not initialized at start.
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/04_scanf/2_global/MIPS/O3_IDA.lst}
+
+IDA reduces amount of information, so I also made a listing using objdump and added my comments to it:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump),numbers=left]{patterns/04_scanf/2_global/MIPS/O3_objdump.txt}
+
+Now we see how address of $x$ variable is taken from a 64KiB data buffer using GP and adding
+negative offset to it (line 18).
+More than that: three external functions are used in our example (puts, scanf, printf), and their
+addresses also taken from 64KiB data buffer using GP (lines 9, 16 and 26).
+GP points to the middle of buffer, so such offset may give us a glue that all three function's addresses
+plus address of $x$ variable is stored somewhere at the beginning of data buffer.
+Indeed, our example is tiny.
+
+\index{MIPS!\Pseudoinstructions!MOVE}
+\index{MIPS!\Pseudoinstructions!NOP}
+Another thing to mention is that the function is finished by two NOP's (\TT{move at,at} --- this is idle
+instruction), in order to align next function's start on 16-byte boundary.
+
+\subsubsection{Initialized global variable}
+
+Let's alter our example to make $x$ variable some default value:
+
+\begin{lstlisting}
+int x=10; // default value
+\end{lstlisting}
+
+Now IDA shows that $x$ variable is residing in .data section:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/04_scanf/2_global/MIPS/O3_IDA_init.lst}
+
+Why not .sdata? I don't know, I probably should specify some GCC option?
+Nevertheless, now $x$ is in .data, that's general memory area, and we can now take a look
+how to work with variables there.
+
+\index{MIPS!\Instructions!LUI}
+\index{MIPS!\Instructions!ADDIU}
+Address of variable should be constructed using pair of instructions.
+In our case that's LUI (``Load Upper Immediate'') and ADDIU (``Add Immediate Unsigned Word'').
+
+Here is also objdump listing for close inspection:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump)]{patterns/04_scanf/2_global/MIPS/O3_objdump_init.txt}
+
+\index{MIPS!\Instructions!LUI}
+\index{MIPS!\Instructions!ADDIU}
+\index{MIPS!\Instructions!LW}
+We see that for the first, address is constructed using LUI and ADDIU, but high part of address is still in
+\$S0 register, and it's possible to add offset in LW (``Load Word'') instruction, so one single LW is enough 
+for loading value from variable and pass it to \printf.
+
+Registers holding temporary data are prefixed with T-, but there are also those prefixed with S-, 
+contents of which will be preserved in other functions (i.e., ``saved''). 
+That's why \$S0 was set at address 0x4006cc and was used again
+at address 0x4006e8, after scanf() call. 
+scanf() function doesn't change its value.
+
+% TODO non-optimizing example?
+
+\fi

@@ -2,6 +2,7 @@
 \section{MIPS}
 
 \subsection{Word about ``global pointer''}
+\label{MIPS_GP}
 
 \index{MIPS!Global pointer}
 One important MIPS concept is ``global pointer''.
@@ -104,7 +105,7 @@ We may also see that this pseudoinstruction has size of 8 bytes!
 This is pseudoinstruction (or \IT{macro}) because it's not a real MIPS instruction, but rather
 handy name for instruction pair.
 
-\index{MIPS!\Instructions!NOP}
+\index{MIPS!\Pseudoinstructions!NOP}
 \index{MIPS!\Instructions!OR}
 Another thing is that IDA doesn't recognize \ac{NOP} instructions, so here are they at lines 16, 19 and 27.
 It is \TT{OR \$AT, \$ZERO}. Essentially, this instruction applies OR operation to contents of \$AT register
@@ -119,5 +120,10 @@ The reason of this lies in the fact that \ac{RA} and GP register's values should
 is called), and local stack is used for it.
 If this would be \gls{leaf function}, it's possible to get rid of function prologue and epilogue,
 for example: \ref{MIPS_leaf_function_ex1}.
+
+\subsection{\Optimizing GCC: load it into GDB}
+
+\index{GDB}
+\lstinputlisting[caption=sample GDB session]{patterns/01_helloworld/MIPS/O3_GDB.txt}
 
 \fi

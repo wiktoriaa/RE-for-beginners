@@ -20,7 +20,7 @@ main:
 ; call to puts():
 	move	$25,$2
 	jalr	$25
-	nop
+	nop  ; branch delay slot
 
 ; restore GP from local stack:
 	lw	$28,16($fp)
@@ -36,4 +36,4 @@ main:
 	addiu	$sp,$sp,32
 ; jump to RA:
 	j	$31
-	nop
+	nop  ; branch delay slot

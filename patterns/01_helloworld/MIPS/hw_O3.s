@@ -15,7 +15,7 @@ main:
 	lui	$4,%hi($LC0)
 ; jump to puts() with link register:
 	jalr	$25
-	addiu	$4,$4,%lo($LC0)
+	addiu	$4,$4,%lo($LC0) ; branch delay slot
 ; restore RA:
 	lw	$31,28($sp)
 ; move 0 from $zero to $v0:
@@ -23,4 +23,4 @@ main:
 ; return by jumping to RA:
 	j	$31
 ; function epilogue:
-	addiu	$sp,$sp,32
+	addiu	$sp,$sp,32 ; branch delay slot
