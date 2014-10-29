@@ -14,6 +14,7 @@ This is very usual way to generate it:
 
 GCC 4.9 does mostly the same.
 
+\ifdefined\IncludeARM
 \subsection{\OptimizingKeilVI: \ThumbMode}
 
 \lstinputlisting[caption=\OptimizingKeilVI: \ThumbMode]{patterns/07_jcc/abs/abs_Keil_thumb_O3.s}
@@ -36,6 +37,21 @@ Now there are no conditional jumps and this is good: \ref{branch_predictors}.
 ARM64 has NEG instruction for negating:
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64)]{patterns/07_jcc/abs/abs_GCC49_ARM64_O0.s}
+\fi
+
+\ifdefined\IncludeMIPS
+\subsection{MIPS}
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/07_jcc/abs/MIPS_O3_IDA.lst}
+
+\index{MIPS!\Instructions!BLTZ}
+We see here new instruction: BLTZ (``Branch if Less Than Zero'').
+\index{MIPS!\Instructions!SUBU}
+\index{MIPS!\Pseudoinstructions!NEGU}
+There are also NEGU pseudoinstruction, which is in fact does subtraction from zero.
+U suffix in both SUBU and NEGU means no exception will be raised in case of integer overflow.
+
+\fi
 
 \subsection{Branchless version?}
 

@@ -5,30 +5,38 @@
 
 First four function arguments are passed in four registers prefixed by A-.
 
-\index{MIPS!\Instructions!mult}
+\index{MIPS!\Instructions!MULT}
 There are two special registers in MIPS: HI and LO which are filled by 64-bit result of multiplication while
-execution of \TT{mult} instruction.
-\index{MIPS!\Instructions!mflo}
-\index{MIPS!\Instructions!mfhi}
-Registers are accessible only using \TT{mflo} and \TT{mfhi} instructions.
-\TT{mflo} here is taking result of multiplication and putting it into \$v0.
+execution of \TT{MULT} instruction.
+\index{MIPS!\Instructions!MFLO}
+\index{MIPS!\Instructions!MFHI}
+Registers are accessible only using \TT{MFLO} and \TT{MFHI} instructions.
+\TT{MFLO} here is taking result of multiplication and putting it into \$v0.
 
 So high 32-bit part of multiplication result is dropped (contents of HI register is not used).
 Indeed: we work with 32-bit \Tint data type here.
 
-\index{MIPS!\Instructions!addu}
-Finally, \TT{addu} (``Add Unsigned'') adds value of the third argument to the result.
+\index{MIPS!\Instructions!ADDU}
+Finally, \TT{ADDU} (``Add Unsigned'') adds value of the third argument to the result.
 
-\index{MIPS!\Instructions!add}
-\index{MIPS!\Instructions!addu}
+\index{MIPS!\Instructions!ADD}
+\index{MIPS!\Instructions!ADDU}
 \index{Ada}
 \index{Integer overflow}
-There are two different addition instructions in MIPS: \TT{add} and \TT{addu}.
-In fact, it's not about signedness, but about exceptions: \TT{add} can raise exception on overflow,
+There are two different addition instructions in MIPS: \TT{ADD} and \TT{ADDU}.
+In fact, it's not about signedness, but about exceptions: \TT{ADD} can raise exception on overflow,
 which is sometimes useful\footnote{\url{http://blog.regehr.org/archives/1154}} and supported in Ada, for instance.
-\TT{addu} do not raise exceptions on overflow.
-Since, \CCpp doesn't support this, here we see \TT{addu}.
+\TT{ADDU} do not raise exceptions on overflow.
+Since, \CCpp doesn't support this, here we see \TT{ADDU}.
 
 32-bit result is leaved in \$v0.
+
+\index{MIPS!\Instructions!JAL}
+\index{MIPS!\Instructions!JALR}
+There are new instruction for us in \main: \TT{JAL} (``Jump and Link''). 
+Difference between JAL and JALR is that relative offset is encoded in first instruction, 
+while JALR jumping to the absolute address stored in register (``Jump and Link Register'').
+Both \ttf and \main functions are located in the same object file, so relative address of \ttf 
+is known and fixed.
 
 \fi

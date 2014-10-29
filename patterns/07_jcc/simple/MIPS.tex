@@ -1,0 +1,35 @@
+﻿\ifx\RUSSIAN\undefined
+\subsection{MIPS}
+
+One distinctive MIPS feature is absence of CPU flags.
+Apparently, it was done so to simplify data dependency analysis.
+
+\index{x86!\Instructions!SETcc}
+\index{MIPS!\Instructions!SLT}
+\index{MIPS!\Instructions!SLTU}
+So there are instruction somewhat similar to SETcc in x86: SLT (``Set on Less Than'': signed version) and 
+SLTU (unsigned version).
+This instruction sets destination register value to 1 if condition is true or to 0 if otherwise.
+
+\index{MIPS!\Instructions!BEQ}
+\index{MIPS!\Instructions!BNE}
+Register is then checked using BEQ (``Branch on Equal'') or BNE (``Branch on Not Equal'') 
+instructions and jump is occurred.
+
+So, this instruction pair should be used in MIPS for comparison and branch.
+
+Let's first start with signed version of our function:
+
+\lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (IDA)]{patterns/07_jcc/simple/O0_MIPS_signed_IDA.lst}
+
+``SLT REG0, REG0, REG1'' is reduced by IDA to its shorter form: ``SLT REG0, REG1''.
+\index{MIPS!\Pseudoinstructions!BEQZ}
+We also see there BEQZ pseudoinstruction (``Branch if Equal to Zero''), 
+which is in fact ``BEQ REG, \$ZERO, LABEL''.
+
+\index{MIPS!\Instructions!SLTU}
+Unsigned version is just the same, but SLTU (unsigned version) is used instead of SLT:
+
+\lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (IDA)]{patterns/07_jcc/simple/O0_MIPS_unsigned_IDA.lst}
+
+\fi

@@ -30,7 +30,7 @@ This concept is not unique to MIPS. At least PowerPC uses this technique as well
 
 \subsection{\Optimizing GCC}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (assembly output),numbers=left]{patterns/01_helloworld/MIPS/hw_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),numbers=left]{patterns/01_helloworld/MIPS/hw_O3.s}
 
 So the \$GP register is set in function prologue to equal to this area.
 \ac{RA} register is also saved in the local stack.
@@ -51,6 +51,11 @@ The register \$4 is also called \$A0, which is used for passing first function a
 JALR (``Jump and Link Register'') jumps to the address in \$25 register (address of \puts is there) while saving
 address of the next instruction (LW) in \ac{RA}.
 This is very similar to ARM.
+Oh, and one important thing is that address saved in \ac{RA} is not address of the next instruction (because,
+it's delay slot and is executed before jump instruction),
+but address of the instruction after the next one (after delay slot).
+Hence, $PC + 8$ is written to \ac{RA} during execution of \TT{JALR}, in our case, this is address of the LW
+instruction next to ADDIU.
 
 LW (``Load Word'') at line 19 restores \ac{RA} from the local stack 
 (this instruction is rather part of function epilogue).
@@ -83,7 +88,7 @@ The register which contain address of \puts called \$T9, because registers prefi
 
 \subsection{\NonOptimizing GCC}
 
-\lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (assembly output),numbers=left]{patterns/01_helloworld/MIPS/hw_O0.s}
+\lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (\assemblyOutput),numbers=left]{patterns/01_helloworld/MIPS/hw_O0.s}
 
 \NonOptimizing GCC is more verbose.
 We see here that FP register is used for stack frame.

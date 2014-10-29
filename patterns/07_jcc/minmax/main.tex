@@ -59,3 +59,15 @@ ARM64 has CSEL instruction, which works just as MOVcc in ARM or CMOVcc in x86, b
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O3.s}
 
 \fi
+
+\ifdefined\IncludeMIPS
+\subsection{MIPS}
+
+\RU{А GCC 4.4.5 для MIPS не так хорош, к сожалению}\EN{Unfortunately, GCC 4.4.5 for MIPS is not that good}:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/07_jcc/minmax/minmax_MIPS_O3_IDA.lst}
+
+Do not forget about branch delay slots: first MOVE is executed \IT{before} BEQZ, 
+second MOVE is executed only if branch wasn't taken.
+
+\fi

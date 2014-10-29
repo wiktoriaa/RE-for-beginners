@@ -27,6 +27,9 @@ exit:
 \end{lstlisting}
 
 \ifdefined\IncludeARM
+
+\subsection{ARM}
+
 \begin{lstlisting}[caption=ARM]
 CMP register, register/value
 Bcc true ; cc=condition code
@@ -36,6 +39,43 @@ JMP exit
 true:
 ... some code to be executed if comparison result is true ...
 exit:
+\end{lstlisting}
+\fi
+
+\ifdefined\IncludeMIPS
+
+\subsection{MIPS}
+
+\begin{lstlisting}[caption=\RU{Проверка на ноль}\EN{Check for zero}]
+BEQZ REG, label
+...
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\RU{Меньше ли нуля?}\EN{Check for less than zero:}]
+BLTZ REG, label
+...
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\RU{Проверка на равенство}\EN{Check for equal values}]
+BEQ REG1, REG2, label
+...
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\RU{Проверка на неравенство}\EN{Check for non-equal values}]
+BNE REG1, REG2, label
+...
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\RU{Проверка на меньше, больше (знаковое)}\EN{Check for less than, greater than (signed)}]
+SLT REG1, REG2, REG3
+BEQ REG1, label
+...
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\RU{Проверка на меньше, больше (беззнаковое)}\EN{Check for less than, greater than (unsigned)}]
+SLTU REG1, REG2, REG3
+BEQ REG1, label
+...
 \end{lstlisting}
 \fi
 

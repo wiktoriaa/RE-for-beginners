@@ -12,6 +12,8 @@ But for the sake of simplicity, this example is simplest possible.
 
 \lstinputlisting[caption=GCC 4.9 x64 optimized for size (-Os)]{patterns/09_loops/memcpy/memcpy_GCC49_x64_Os.s}
 
+\ifdefined\IncludeARM
+
 \lstinputlisting[caption=GCC 4.9 ARM64 optimized for size (-Os)]{patterns/09_loops/memcpy/memcpy_GCC49_ARM64_Os.s}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/09_loops/memcpy/memcpy_Keil_Thumb_O3.s}
@@ -23,6 +25,25 @@ Keil in ARM mode take full advantage of conditional suffixes:
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/09_loops/memcpy/memcpy_Keil_ARM_O3.s}
 
 That's why there are only one branch instruction instead of 2.
+
+\fi
+
+\ifdefined\IncludeMIPS
+\subsection{MIPS}
+
+\lstinputlisting[caption=GCC 4.4.5 optimized for size (-Os) (IDA)]{patterns/09_loops/memcpy/memcpy_MIPS_Os_IDA.lst}
+
+\index{MIPS!\Instructions!LBU}
+\index{MIPS!\Instructions!SB}
+There are two new instructions: LBU (``Load Byte Unsigned'') and SB (``Store Byte'').
+Just like in ARM, all MIPS registers has 32-bit width, there are no byte-wide parts like in x86.
+When dealing with bytes, one should allocate whole 32-bit register for it.
+LBU loads byte and clears all other bits (``Unsigned''). 
+\index{MIPS!\Instructions!LB}
+On contrary, LB (``Load Byte'') instruction sign-extends loaded byte to 32-bit value.
+SB just writes byte from lowest 8 bits of register to the memory.
+
+\fi
 
 \subsection{Vectorization}
 
