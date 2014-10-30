@@ -19,7 +19,7 @@ one apply OR operation which effectively sets low 16-bit part of the target regi
 \begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput)]
         li      $2,305397760                    # 0x12340000
         j       $31
-        ori     $2,$2,0x5678
+        ori     $2,$2,0x5678 ; branch delay slot
 \end{lstlisting}
 
 \IDA is fully aware of such code patterns, so it shows the last ORI instruction as LI pseudoinstruction
@@ -30,7 +30,7 @@ allegedly it loads full 32-bit number into V0 register --- for convenience.
 \begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA)]
          lui     $v0, 0x1234
          jr      $ra
-         li      $v0, 0x12345678
+         li      $v0, 0x12345678 ; branch delay slot
 \end{lstlisting}
 
 GCC assembly output has LI instruction, but in fact, LUI (``Load Upper Imeddiate'') there,

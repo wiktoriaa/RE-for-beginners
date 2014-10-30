@@ -1,0 +1,38 @@
+\ifx\RUSSIAN\undefined
+\subsection{MIPS}
+
+MIPS may support several coprocessors (up to 4), 
+zeroth of which is a special control coprocessor,
+and first coprocessor is FPU one.
+
+As in ARM, MIPS coprocessor is not stack machine, it has 32 32-bit registers (\$F0-\$F31): 
+\ref{MIPS_FPU_registers}.
+When one need to work with 64-bit double values, a pair of 32-bit F-registers is used.
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/12_FPU/1_simple/MIPS_O3_IDA.lst}
+
+New instructions here are:
+
+\begin{itemize}
+
+\index{MIPS!\Instructions!LWC1}
+\item LWC1 that loads a 32-bit word into register of first coprocessor (hence 1 in instruction name).
+\index{MIPS!\Pseudoinstructions!L.D}
+Pair of LWC1 instructions may be coalesced into L.D pseudoinstruction.
+
+\index{MIPS!\Instructions!DIV.D}
+\index{MIPS!\Instructions!MUL.D}
+\index{MIPS!\Instructions!ADD.D}
+\item DIV.D, MUL.D, ADD.d do division/multiplication/addition 
+(D in suffix mean double precision, S would mean float precision)
+
+\end{itemize}
+
+\index{MIPS!\Instructions!LUI}
+\index{\CompilerAnomaly}
+There are also weird kind of compiler anomaly: LUI instructions marked by with question marks.
+It's hard for me to understand why to load part of 64-bit double constant into \$V0 register.
+These instructions has no effect.
+If someone knows more about it, please drop me email\footnote{\EMAIL}.
+
+\fi
