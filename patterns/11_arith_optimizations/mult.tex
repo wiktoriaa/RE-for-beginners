@@ -82,6 +82,15 @@ f PROC
 \end{lstlisting}
 \fi
 
+\ifdefined\IncludeMIPS
+\RU{Умножение на 4 в}\EN{Multiplication by 4 in} MIPS:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/11_arith_optimizations/MIPS_SLL.lst}
+
+\index{MIPS!\Instructions!SLL}
+SLL \RU{это}\EN{is} ``Shift Left Logical''
+\fi
+
 \subsection{\RU{Умножение при помощи сдвигов/сложений/вычитаний}
 \EN{Multiplication using shifting/subtracting/adding}}
 \label{multiplication_using_shifts_adds_subs}
@@ -96,9 +105,13 @@ f PROC
 
 \lstinputlisting{patterns/11_arith_optimizations/mult_shifts.c}
 
+\myparagraph{x86}
+
 \lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/11_arith_optimizations/mult_shifts_MSVC_2012_Ox.asm}
 
 \ifdefined\IncludeARM
+\myparagraph{ARM}
+
 \RU{Keil, генерируя для режима ARM, использует модификаторы инструкции, где можно задавать
 сдвиг для второго операнда:}
 \EN{Keil generating for ARM mode took advantage of second operand's shift modifiers:}
@@ -112,13 +125,23 @@ f PROC
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/11_arith_optimizations/mult_shifts_Keil_thumb_O3.s}
 \fi
 
+\ifdefined\IncludeMIPS
+\myparagraph{MIPS}
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/11_arith_optimizations/mult_shifts_MIPS_O3_IDA.lst}
+\fi
+
 \subsubsection{64-\EN{bit}\RU{бита}}
 
 \lstinputlisting{patterns/11_arith_optimizations/mult_shifts_64.c}
 
+\myparagraph{x64}
+
 \lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_x64_O3.s}
 
 \ifdefined\IncludeARM
+\myparagraph{ARM64}
+
 \RU{GCC 4.9 для ARM64 также очень лаконичен благодаря модификаторам сдвига:}
 \EN{GCC 4.9 for ARM64 is also terse, thanks to shift modifiers:}
 
