@@ -1,0 +1,22 @@
+\ifx\RUSSAIN\undefined
+\subsection{MIPS}
+
+\index{MIPS!\Registers!FCCR}
+MIPS FPU coprocessor has one condition bit which can be set in FPU and checked in CPU.
+Earlier MIPS-es has only one condition bit (called FCC0), later has 8 (called FCC7-FCC0).
+These bits are located in register named FCCR.
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/12_FPU/3_comparison/MIPS_O3_IDA.lst}
+
+\index{MIPS!\Instructions!C.LT.D}
+``C.LT.D'' is comparing two values. ``LT'' is condition (``Less Than''). ``D'' mean \Tdouble values.
+Depending on comparison result, FCC0 condition bit is set or cleared.
+
+\index{MIPS!\Instructions!BC1T}
+\index{MIPS!\Instructions!BC1F}
+``BC1T'' checks for FCC0 bit and takes jump if bit is set. ``T'' mean jump taken if bit is set (``True'').
+There are also instruction ``BC1F'' which takes jump if bit is cleared (``False'').
+
+Depending on jump, one of function arguments is placed into \$F0 register.
+
+\fi
