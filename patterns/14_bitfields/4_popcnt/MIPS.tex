@@ -1,0 +1,26 @@
+\ifx\RUSSIAN\undefined
+\subsection{MIPS}
+
+\subsubsection{\NonOptimizing GCC}
+
+\lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (IDA)]{patterns/14_bitfields/4_popcnt/MIPS_O0_IDA.lst}
+
+\index{MIPS!\Instructions!SLL}
+\index{MIPS!\Instructions!SLLV}
+That verbose: all local variables are located in local stack and reloaded each time.
+SLLV instruction is ``Shift Word Left Logical Variable'', it's different from SLL only in that sense
+that shift amount is encoded in SLL instruction, but SLLV takes shift amount value from register.
+
+\subsubsection{\Optimizing GCC}
+
+That is more terse.
+There are two shifting instructions instead of single.
+Why?
+It's possible to replace first SLLV instruction with unconditional branch instruction, 
+jumping right to the second SLLV.
+But this is another branching instruction in function, and it's always favorable to get rid of them: 
+\ref{branch_predictors}.
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/14_bitfields/4_popcnt/MIPS_O3_IDA.lst}
+
+\fi

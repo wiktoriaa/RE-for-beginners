@@ -1,0 +1,19 @@
+﻿\ifx\RUSSIAN\undefined
+\subsection{MIPS}
+% FIXME better start at non-optimizing version?
+The function uses a lot of S- registers which must be preserved, so that's why they are saved in the function
+prologue and restored in epilogue.
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/13_arrays/1_simple/MIPS_O3_IDA.lst}
+
+Interesting thing: there are two loops and the first one doesn't needs $i$ variable, it needs only 
+$i*2$ variable (leaping by 2 at each iteration) and also address in memory (leaping by 4 at each iteration).
+So here we see two variables, one (in \$V0) increasing by 2 each time, and another (in \$V1) --- by 4.
+
+The second loop is a loop where \printf is called, and it should report $i$ value to user, so there are variable
+increasing by 1 each time (in \$S0) and also a memory address (in \$S1) increasing by 4 each time.
+
+That reminds us loop optimizations we considered earlier: \ref{loop_iterators}.
+Its goal is to get rid of multiplication operations.
+
+\fi
