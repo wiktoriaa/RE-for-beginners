@@ -78,4 +78,42 @@ n/a             & LO              & low 32 bit of multiplication and division re
 \index{MIPS!\Instructions!MFHI}
 \AsteriskThree{} --- accessible using \TT{MFHI} and \TT{MFLO} instructions.\\
 
+\section{Instructions}
+
+There are 3 kinds of instructions:
+
+\begin{itemize}
+
+\item R-type: those which has 3 registers.
+R-instruction are often has the following form:
+
+\begin{lstlisting}
+instruction destination, source1, source2
+\end{lstlisting}
+
+One important thing to remember is that when first and second register is the same, 
+IDA may show it in shorter form:
+
+\begin{lstlisting}
+instruction destination/source1, source2
+\end{lstlisting}
+
+That somewhat reminds us Intel-syntax of x86 assembly language.
+
+\item I-type: those which has 2 registers and 16-bit immediate value.
+\item J-type: jump/branch instructions, has 26 bits for offset encoding.
+
+\end{itemize}
+
+\subsection{Jump instructions}
+
+What is the difference between B- instructions and J- ones?
+
+B-instructions are I-type, hence, B-instructions offset is encoded as 16-bit immediate.
+JR and JALR are R-type, which jumps to absolute address specified in register.
+J and JAL are J-type, hence, offset is encoded as 26-bit immediate.
+
+In short, B-instructions can encode condition (B is in fact pseudoinstruction for BEQ), 
+while J-instructions can't.
+
 \fi

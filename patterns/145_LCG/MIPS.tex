@@ -1,0 +1,49 @@
+\ifx\RUSSIAN\undefined
+\section{MIPS}
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/145_LCG/MIPS_O3_IDA.lst}
+
+Wow, we see here only one constant (0x3C6EF35F or 1013904223).
+Where is another one (1664525)?
+
+It seems, multiplication by 1664525 is done using just shifts and additions!
+Let's check this assumption:
+
+\lstinputlisting{patterns/145_LCG/test.c}
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/145_LCG/test_O3_MIPS.lst}
+
+Indeed!
+
+\subsection{MIPS relocations}
+
+I would also focus on how load and stores are actually works. 
+The listings here are produced by IDA, which hiding some details.
+
+I'll run objdump twice to get disassembled listing and also relocations list:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump)]{patterns/145_LCG/MIPS_O3_objdump.txt}
+
+Let's work out two relocations for the my\_srand() function.
+First is R\_MIPS\_HI16 for address 0 and second is R\_MIPS\_LO16 for address 8.
+That means that address of beginning of .bss segment will be written into instructions at
+address of 0 (high part of address) and 8 (low part of address).
+
+rand\_state variable is at the very start of .bss segment.
+
+So we see zeroes in the instructions LUI and SW, because nothing is there yet --- compiler don't know what
+to write there.
+Linker will fix this and high part of address will be written into LUI instruction operand and
+low part of address --- to operand of SW instruction. 
+SW will sum up low part of address and what is in \$V0 register (high part is there).
+
+The same story about my\_rand() function: R\_MIPS\_HI16 relocation instructs linker to write high part
+of .bss segment into LUI instruction.
+So, high part of rand\_state variable address will reside in \$V1 register.
+LW instruction at address 0x10 will sum up high and low part and load value of rand\_state into \$V1.
+SW instruction at address 0x54 will also do the summing and then store value to rand\_state global variable.
+
+So, IDA processes relocations while loading, thus hiding these details.
+But we should remember about them.
+
+\fi

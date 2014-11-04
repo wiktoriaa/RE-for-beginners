@@ -46,6 +46,7 @@ But my\_srand() function takes input argument from the ECX register rather than 
 
 GCC compiler do mostly the same code.
 
+\ifdefined\IncludeARM
 \section{32-bit ARM}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/145_LCG/rand.s_Keil_ARM_O3.s}
@@ -60,6 +61,11 @@ Seems to be useless operation, but nevertheless,
 what it does is clearing high 17 bits, leaving low 15 bits intact, and that's our goal after all.\\
 \\
 \Optimizing Keil for thumb mode do mostly the same code.
+\fi
+
+\ifdefined\IncludeMIPS
+\input{patterns/145_LCG/MIPS}
+\fi
 
 \section{Thread-safe version of the example}
 
