@@ -1,18 +1,19 @@
-﻿\ifx\RUSSIAN\undefined
-\section{Calculating absolute value}
+﻿\section{\RU{Вычисление абсолютной величины}\EN{Calculating absolute value}}
 \label{sec:abs}
 
-That's a simple function:
+\RU{Это простая ф-ция}\EN{That's a simple function}:
 
 \lstinputlisting{abs.c}
 
 \subsection{\Optimizing MSVC}
 
-This is very usual way to generate it:
+\RU{Обычный способ генерации кода:}
+\EN{This is very usual way to generate it:}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/07_jcc/abs/abs_MSVC2012_Ox_x64.asm}
 
-GCC 4.9 does mostly the same.
+\RU{GCC 4.9 делает почти то же самое.}
+\EN{GCC 4.9 does mostly the same.}
 
 \ifdefined\IncludeARM
 \subsection{\OptimizingKeilVI: \ThumbMode}
@@ -20,21 +21,27 @@ GCC 4.9 does mostly the same.
 \lstinputlisting[caption=\OptimizingKeilVI: \ThumbMode]{patterns/07_jcc/abs/abs_Keil_thumb_O3.s}
 
 \index{ARM!\Instructions!RSB}
-ARM lacks negate instruction, so Keil compiler uses ``Reverse Subtract'' instruction, which just subtracts,
-but with operands reversed.
+\RU{В ARM нет инструкции для изменения знака, так что компилятор Keil использует инструкцию ``Reverse Subtract'',
+которая просто вычитает, но с операндами переставленными наоборот.}
+\EN{ARM lacks negate instruction, so Keil compiler uses ``Reverse Subtract'' instruction, which just subtracts,
+but with operands reversed.}
 
 \subsection{\OptimizingKeilVI: \ARMMode}
 
-It's possible to add condition codes to some instructions in ARM mode, so that's what Keil compiler did:
+\RU{В режиме ARM можно добавлять коды условий к некоторым инструкций, что компилятор Keil и сделал:}
+\EN{It's possible to add condition codes to some instructions in ARM mode, so that's what Keil compiler did:}
 
 \lstinputlisting[caption=\OptimizingKeilVI: \ARMMode]{patterns/07_jcc/abs/abs_Keil_ARM_O3.s}
 
-Now there are no conditional jumps and this is good: \ref{branch_predictors}.
+\RU{Теперь здесь нет условных переходов и это хорошо:}
+\EN{Now there are no conditional jumps and this is good:} 
+\ref{branch_predictors}.
 
 \subsection{\NonOptimizing GCC 4.9 (ARM64)}
 
 \index{ARM!\Instructions!XOR}
-ARM64 has NEG instruction for negating:
+\RU{В ARM64 есть инструкция NEG для смены знака:}
+\EN{ARM64 has NEG instruction for negating:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64)]{patterns/07_jcc/abs/abs_GCC49_ARM64_O0.s}
 \fi
@@ -45,16 +52,18 @@ ARM64 has NEG instruction for negating:
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/07_jcc/abs/MIPS_O3_IDA.lst}
 
 \index{MIPS!\Instructions!BLTZ}
-We see here new instruction: BLTZ (``Branch if Less Than Zero'').
+\RU{Видим здесь новую инструкцию}\EN{We see here new instruction}: BLTZ (``Branch if Less Than Zero'').
 \index{MIPS!\Instructions!SUBU}
 \index{MIPS!\Pseudoinstructions!NEGU}
-There are also NEGU pseudoinstruction, which is in fact does subtraction from zero.
-U suffix in both SUBU and NEGU means no exception will be raised in case of integer overflow.
+\RU{Тут есть также псевдоинструкция NEGU, которая на самом деле вычитает из нуля.}
+\EN{There are also NEGU pseudoinstruction, which is in fact does subtraction from zero.}
+\RU{Суффикс ``U'' в обоих инструкциях SUBU и NEGU означает что при целочисленном переполнении исключение не
+сработает.}
+\EN{``U'' suffix in both SUBU and NEGU means no exception will be raised in case of integer overflow.}
 
 \fi
 
-\subsection{Branchless version?}
+\subsection{\RU{Версия без переходов}\EN{Branchless version}?}
 
-There are also could be branchless version, which we will consider later: \ref{chap:branchless_abs}.
-
-\fi
+\RU{Возможна также версия и без переходов, мы рассмотрим её позже:}
+\EN{There are also could be branchless version, which we will consider later:} \ref{chap:branchless_abs}.
