@@ -1,7 +1,7 @@
-include(`commons.m4')xor	esi, 011223344h	; _LANG(`мусор',`garbage')
-add	esi, eax	; _LANG(`мусор',`garbage')
+include(`commons.m4')xor	esi, 011223344h	; _RU(`мусор')_EN(`garbage')
+add	esi, eax	; _RU(`мусор')_EN(`garbage')
 add	eax, ebx
-mov	edx, eax	; _LANG(`мусор',`garbage')
-shl	edx, 4		; _LANG(`мусор',`garbage')
+mov	edx, eax	; _RU(`мусор')_EN(`garbage')
+shl	edx, 4		; _RU(`мусор')_EN(`garbage')
 mul	ecx
-xor	esi, ecx	; _LANG(`мусор',`garbage')
+xor	esi, ecx	; _RU(`мусор')_EN(`garbage')

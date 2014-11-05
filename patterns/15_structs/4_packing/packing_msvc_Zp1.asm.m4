@@ -2,13 +2,13 @@ include(`commons.m4')_main    PROC
     push   ebp
     mov    ebp, esp
     sub    esp, 12
-    mov    BYTE PTR _tmp$[ebp], 1     ; _LANG(`установить поле',`set field') a
-    mov    DWORD PTR _tmp$[ebp+1], 2  ; _LANG(`установить поле',`set field') b
-    mov    BYTE PTR _tmp$[ebp+5], 3   ; _LANG(`установить поле',`set field') c
-    mov    DWORD PTR _tmp$[ebp+6], 4  ; _LANG(`установить поле',`set field') d
-    sub    esp, 12                    ; _LANG(`выделить место для временной структуры',`allocate place for temporary structure')
+    mov    BYTE PTR _tmp$[ebp], 1     ; _RU(`установить поле')_EN(`set field') a
+    mov    DWORD PTR _tmp$[ebp+1], 2  ; _RU(`установить поле')_EN(`set field') b
+    mov    BYTE PTR _tmp$[ebp+5], 3   ; _RU(`установить поле')_EN(`set field') c
+    mov    DWORD PTR _tmp$[ebp+6], 4  ; _RU(`установить поле')_EN(`set field') d
+    sub    esp, 12                    ; _RU(`выделить место для временной структуры')_EN(`allocate place for temporary structure')
     mov    eax, esp
-    mov    ecx, DWORD PTR _tmp$[ebp]  ; _LANG(`скопировать 10 байт',`copy 10 bytes')
+    mov    ecx, DWORD PTR _tmp$[ebp]  ; _RU(`скопировать 10 байт')_EN(`copy 10 bytes')
     mov    DWORD PTR [eax], ecx
     mov    edx, DWORD PTR _tmp$[ebp+4]
     mov    DWORD PTR [eax+4], edx
