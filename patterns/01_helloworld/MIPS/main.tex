@@ -1,64 +1,106 @@
 ﻿\ifx\RUSSIAN\undefined
 \section{MIPS}
 
-\subsection{Word about ``global pointer''}
+\subsection{\RU{Кое-что насчет ``глобального указателя'' (``global pointer'')}\EN{Word about ``global pointer''}}
 \label{MIPS_GP}
 
-\index{MIPS!Global pointer}
-One important MIPS concept is ``global pointer''.
-As we may already know, each MIPS instruction has size of 32 bits, so it's impossible to embed 32-bit
-address into one instruction: pair should be used fo so (like GCC did in our example for the text string address
-loading).
+\index{MIPS!\GlobalPointer}
+\RU{Важная концепция в MIPS это ``глобальный указатель'' (``global pointer'').}
+\EN{One important MIPS concept is ``global pointer''.}
+\RU{Как мы уже возможно знаем, каждая инструкция в MIPS имеет размер в 32 бита, так что невозможно
+закодировать 32-битный адрес внутри одной инструкции: вместо этого нужно использовать пару инструкций
+(как это сделал GCC для загрузки адреса текстовой строки в нашем примере).}
+\EN{As we may already know, each MIPS instruction has size of 32 bits, so it's impossible to embed 32-bit
+address into one instruction: pair should be used for this 
+(like GCC did in our example for the text string address loading).}
 
-It's possible, however, to load data from the address in range of $register-32768...register+32767$ using one
-single instruction (because 16 bit of signed offset could be encoded in single instruction).
-So we can allocate some register for this purpose and also allocate 64KiB area of most used data.
-Allocated register is called ``global pointer'' and it points to the middle of the 64KiB area.
-This area usually contains global variables and addresses of imported functions like \printf, 
+\RU{С другой стороны, используя только одну инструкцию, 
+возможно загружать данные по адресам в пределах $register-32768...register+32767$ (потому что 16 бит
+знакового смещения можно закодировать водной инструкции).}
+\EN{It's possible, however, to load data from the address in range of $register-32768...register+32767$ using one
+single instruction (because 16 bit of signed offset could be encoded in single instruction).}
+\RU{Так мы можем выделить какой-то регистр для этих целей и еще выделить буфер в 64KiB для самых 
+чаще всего используемых данных.}
+\EN{So we can allocate some register for this purpose and also allocate 64KiB area of most used data.}
+\RU{Выделенный регистр называется ``глобальный указатель'' (``global pointer'') и он указывает на середину
+области 64KiB.}
+\EN{Allocated register is called ``global pointer'' and it points to the middle of the 64KiB area.}
+\RU{Эта область обычно содержит глоабльные переменные и адреса импортированных ф-ций вроде \printf,
+потому что разработчики GCC решили что получение адреса ф-ции должно быть как можно более быстрой операцией,
+чтобы она исполнялась со скоростью исполнения одной инструкции вместо двух.}
+\EN{This area usually contains global variables and addresses of imported functions like \printf, 
 because GCC developers decided that getting address of some function must be as fast as single instruction
-execution instead of two.
-In ELF file, this 64KiB area is located partly in .sbss (``small \ac{BSS}'', for not initialized data) and 
-.sdata (``small data'', for initialized data) sections.
+execution instead of two.}
+\RU{В ELF-файле, эта 64KiB-область находится частично в секции .sbss (``small \ac{BSS}'', для неинициализированных
+данных) и в секции .sdata (``small data'', для инициализированных данных).}
+\EN{In ELF file, this 64KiB area is located partly in .sbss (``small \ac{BSS}'', for not initialized data) and 
+.sdata (``small data'', for initialized data) sections.}
 
-This means, programmer may choose, what data he/she wants to be accessed fast and place them into .sdata/.sbss.
+\RU{Это значит что программист может выбирать, к чему нужен как можно более быстрый доступ, и затем расположить
+это в секциях .sdata/.sbss.}
+\EN{This means, programmer may choose, what data he/she wants to be accessed fast and place them into 
+.sdata/.sbss.}
 
-Some old-school programmers may recall MS-DOS memory model (\ref{8086_memory_model}) 
-or MS-DOS memory managers like XMS/EMS where all memory was divided by 64KiB blocks.
+\RU{Некоторые олд-скульные программисты могут вспомнить модель памяти в MS-DOS \ref{8086_memory_model} 
+или в менеджерах памяти вроде XMS/EMS, где вся память делилась на блоки по 64KiB.}
+\EN{Some old-school programmers may recall MS-DOS memory model \ref{8086_memory_model} 
+or MS-DOS memory managers like XMS/EMS where all memory was divided by 64KiB blocks.}
 
 \index{PowerPC}
-This concept is not unique to MIPS. At least PowerPC uses this technique as well.
+\RU{Эта концепция применяется не только в MIPS. По крайней мере PowerPC также использует эту технику.}
+\EN{This concept is not unique to MIPS. At least PowerPC uses this technique as well.}
 
 \subsection{\Optimizing GCC}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),numbers=left]{patterns/01_helloworld/MIPS/hw_O3.s}
 
-So the \$GP register is set in function prologue to equal to this area.
-\ac{RA} register is also saved in the local stack.
-\puts is also used here instead of \printf.
+\RU{Так что регистр \$GP в прологе ф-ции выставляется в середину этой области.}
+\EN{So the \$GP register is set in function prologue to be in the middle of this area.}
+\RU{Регистр \ac{RA} также сохраняется в локальном стеке.}
+\EN{\ac{RA} register is also saved in the local stack.}
+\RU{Здесь также используется \puts вместо \printf.}
+\EN{\puts is also used here instead of \printf.}
 \index{MIPS!\Instructions!LW}
-So address of \puts function is loaded into \$25 using LW instruction (``Load Word'').
+\RU{Адрес ф-ции \puts загружается в \$25 используя инструкцию LW (``Load Word'').}
+\EN{Address of \puts function is loaded into \$25 using LW instruction (``Load Word'').}
 \index{MIPS!\Instructions!LUI}
 \index{MIPS!\Instructions!ADDIU}
-Then address of the text string is loaded to \$4 using LUI (``Load Upper Immediate'') and 
-ADDIU (``Add Immediate Unsigned Word'') instructions pair.
-LUI sets high 16 bits of the register (hence ``upper'' word in instruction name) and ADDIU adds
-lower 16 bits of the address.
-ADDIU is coming after JALR (remember branch delay slots?).
-The register \$4 is also called \$A0, which is used for passing first function argument
-\footnote{MIPS registers table is available in the appendix: \ref{MIPS_registers_ref}}.
+\RU{Затем адрес текстовой строки загружается в \$4 используя пару инструкций: LUI (``Load Upper Immediate'') и
+ADDIU (``Add Immediate Unsigned Word'').}
+\EN{Then address of the text string is loaded to \$4 using LUI (``Load Upper Immediate'') and 
+ADDIU (``Add Immediate Unsigned Word'') instructions pair.}
+\RU{LUI устанавливает старшие 16 бит регистра (поэтому в имени инструкции присутствует ``upper'') и ADDIU
+прибавляет младшие 16 бит к адресу.}
+\EN{LUI sets high 16 bits of the register (hence ``upper'' word in instruction name) and ADDIU adds
+lower 16 bits of the address.}
+\RU{ADDIU следует за JALR (помните о \IT{branch delay slots}?).}
+\EN{ADDIU is coming after JALR (remember \IT{branch delay slots}?).}
+\RU{Регистр \$4 также называется \$A0, который используется для передачи первого аргумента ф-ции}
+\EN{The register \$4 is also called \$A0, which is used for passing first function argument}
+\footnote{\RU{Таблица регистров в MIPS доступна в приложении}\EN{MIPS registers table 
+is available in the appendix}: \ref{MIPS_registers_ref}}.
 
 \index{MIPS!\Instructions!JALR}
-JALR (``Jump and Link Register'') jumps to the address in \$25 register (address of \puts is there) while saving
-address of the next instruction (LW) in \ac{RA}.
-This is very similar to ARM.
-Oh, and one important thing is that address saved in \ac{RA} is not address of the next instruction (because,
-it's delay slot and is executed before jump instruction),
-but address of the instruction after the next one (after delay slot).
-Hence, $PC + 8$ is written to \ac{RA} during execution of \TT{JALR}, in our case, this is address of the LW
-instruction next to ADDIU.
+\RU{JALR (``Jump and Link Register'') делает переход по адресу в регистре \$25 (там адрес \puts) 
+при этом сохраняя адрес следующей инструкции (LW) в \ac{RA}.}
+\EN{JALR (``Jump and Link Register'') jumps to the address in \$25 register (address of \puts is there) 
+while saving address of the next instruction (LW) in \ac{RA}.}
+\RU{Это так же как и в ARM}\EN{This is very similar to ARM}.
+\RU{И еще одна важная вещь это то что адрес сохраняемый в \ac{RA} это адрес не следующей инструцкии (потому что
+это \IT{delay slot} и исполняется перед инструкцией перехода),
+но адрес инструкции после нее (после \IT{delay slot}).}
+\EN{Oh, and one important thing is that address saved in \ac{RA} is not address of the next instruction (because,
+it's \IT{delay slot} and is executed before jump instruction),
+but address of the instruction after the next one (after \IT{delay slot}).}
+\RU{Таким образом, во время исполнения \TT{JALR}, в \ac{RA} записывается $PC + 8$, и в нашем случае, это адрес
+инструкции LW следующей после ADDIU.}
+\EN{Hence, $PC + 8$ is written to \ac{RA} during execution of \TT{JALR}, in our case, this is address of the LW
+instruction next to ADDIU.}
 
-LW (``Load Word'') at line 19 restores \ac{RA} from the local stack 
-(this instruction is rather part of function epilogue).
+\RU{LW (``Load Word'') в строке 19 восстанавливает \ac{RA} из локального стека 
+(эта инструкция скорее часть эпилога ф-ции).}
+\EN{LW (``Load Word'') at line 19 restores \ac{RA} from the local stack 
+(this instruction is rather part of function epilogue).}
 
 \index{MIPS!\Pseudoinstructions!MOVE}
 MOVE at line 22 copies value from \$0 (\$ZERO) register to \$2 (\$V0). 

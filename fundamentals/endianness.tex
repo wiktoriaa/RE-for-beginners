@@ -48,14 +48,13 @@
 
 \RU{CPU с таким порядком байт включают в себя}\EN{Little-endian CPUs include} Intel x86.
 
-\ifdefined\RUSSIAN
-\else
-\section{Example}
+\section{\Example}
 
-I've got big-endianness MIPS Linux installed and ready for QEMU
-\footnote{I've got it here: \url{https://people.debian.org/~aurel32/qemu/mips/}}.
+\RU{У меня есть big-endian Linux для MIPS заинсталированный в QEMU}
+\EN{I've got big-endianness MIPS Linux installed and ready for QEMU}
+\footnote{\RU{Я скачал его здесь}\EN{I've got it here}: \url{https://people.debian.org/~aurel32/qemu/mips/}}.
 
-And I compiled simple example:
+\RU{И вот я сделал простой пример}\EN{And I compiled simple example}:
 
 \begin{lstlisting}
 #include <stdio.h>
@@ -74,23 +73,29 @@ int main()
 };
 \end{lstlisting}
 
-And run it:
+\RU{И запустил его}\EN{And run it}:
 
 \begin{lstlisting}
 root@debian-mips:~# ./a.out 
 00 00 00 7B
 \end{lstlisting}
 
-That is.
-0x7B is 123 in decimal.
-In little-endianness architecture, 7B will be the first byte (you can check on x86 or x86-64), 
-but here it is the last one, because highest goes first.
+\RU{Это оно и есть}\EN{That is}.
+0x7B \RU{это}\EN{is} 123 \RU{в десятичном виде}\EN{in decimal}.
+\RU{В little-endian-архитектуре, 7B будет первым байтом (вы можете это проверить в x86 или x86-64),
+но здесь он последний, потому что старший байт идет первым.}
+\EN{In little-endianness architecture, 7B will be the first byte (you can check on x86 or x86-64), 
+but here it is the last one, because highest byte goes first.}
 
-That's why there are separate Linux distributions exist for MIPS 
-(``mips'' (big-endian) and ``mipsel'' (little-endian)).
-It is impossible for binary compiled for one endianness to work on the OS with different endianness.
-
-\fi
+\RU{Вот почему имеются разные дистрибутивы Linux для MIPS}
+\EN{That's why there are separate Linux distributions exist for MIPS} 
+(``mips'' (big-endian) \AndENRU ``mipsel'' (little-endian)).
+\RU{Программа скомпилированная для одного соглашения об endiannes, не сможет работать в OS использующей
+другое соглашение.}
+\EN{It is impossible for binary compiled for one endianness to work on the OS with different endianness.}\\
+\\
+\RU{Еще один пример связанный с big-endian в MIPS в этой книге:}
+\EN{Another example of MIPS big-endiannes in this book:} \ref{MIPS_structure_big_endian}.
 
 \section{Bi-endian\RU{ (переключаемый порядок)}}
 

@@ -1,11 +1,11 @@
-﻿\subsubsection{\RU{Структура как набор переменных}\EN{Structure as a set of values}}
+﻿\subsection{\RU{Структура как набор переменных}\EN{Structure as a set of values}}
 
 \RU{Чтобы проиллюстрировать то что структура ~--- это просто набор переменных лежащих в одном месте, 
 переделаем немного пример, еще раз заглянув в описание структуры \IT{tm}}
 \EN{In order to illustrate the structure is just variables laying side-by-side in one place, 
 let's rework example, while looking at the \IT{tm} structure definition again}: \lstref{struct_tm}.
 
-\lstinputlisting{patterns/15_structs/3_tm_linux/GCC_tm2.c}
+\lstinputlisting{patterns/15_structs/3_tm_linux/as_array/GCC_tm2.c}
 
 \index{\CStandardLibrary!localtime\_r()}
 N.B. \RU{В \TT{localtime\_r} передается указатель именно на \TT{tm\_sec}, 
@@ -24,7 +24,7 @@ In file included from GCC_tm2.c:2:0:
 
 \RU{Тем не менее, сгенерирует такое}\EN{But nevertheless, will generate this}:
 
-\lstinputlisting[caption=GCC 4.7.3]{patterns/15_structs/3_tm_linux/GCC_tm2.asm}
+\lstinputlisting[caption=GCC 4.7.3]{patterns/15_structs/3_tm_linux/as_array/GCC_tm2.asm}
 
 \RU{Этот код почти идентичен уже рассмотренному, и нельзя сказать, была ли структура
 в оригинальном исходном коде либо набор переменных.}\EN{This code is identical to what we saw previously and it is
@@ -74,9 +74,9 @@ in which there were no structures at all} \cite{Ritchie:1993:DCL:155360.155580}.
 видели.}\EN{I'm not adding debugger example here: because it will be just the same as you already
 saw.}
 
-\subsubsection{\RU{Структура как массив 32-битных слов}\EN{Structure as an array of 32-bit words}}
+\subsection{\RU{Структура как массив 32-битных слов}\EN{Structure as an array of 32-bit words}}
 
-\lstinputlisting{patterns/15_structs/3_tm_linux/GCC_tm3.c}
+\lstinputlisting{patterns/15_structs/3_tm_linux/as_array/GCC_tm3.c}
 
 \RU{Я просто привожу (cast) указатель на структуру к массиву \Tint{}-ов}\EN{I just cast pointer to structure 
 to array of \Tint{}'s}.
@@ -100,7 +100,7 @@ are just in the same order as they are enumerated in structure definition}: \ref
 
 \RU{Вот как это компилируется}\EN{Here is how it was compiled}:
 
-\lstinputlisting[caption=\Optimizing GCC 4.8.1]{patterns/15_structs/3_tm_linux/GCC_tm3.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.8.1]{patterns/15_structs/3_tm_linux/as_array/GCC_tm3.lst}
 
 \RU{И действительно: место в локальном стеке в начале используется как структура, затем как массив.}
 \EN{Indeed: the space in local stack is first treated as structure, then it's treated as array.}
@@ -120,12 +120,12 @@ are just in the same order as they are enumerated in structure definition}: \ref
 array.}
 \fi
 
-\subsubsection{\RU{Структура как массив байт}\EN{Structure as an array of bytes}}
+\subsection{\RU{Структура как массив байт}\EN{Structure as an array of bytes}}
 
 \RU{Я могу даже больше. Можно привести (cast) указатель к массиву байт и вывести его:}
 \EN{I can do even more. Let's cast the pointer to array of bytes and dump it:}
 
-\lstinputlisting{patterns/15_structs/3_tm_linux/GCC_tm4.c}
+\lstinputlisting{patterns/15_structs/3_tm_linux/as_array/GCC_tm4.c}
 
 \begin{lstlisting}
 0x2D 0x00 0x00 0x00 
@@ -145,4 +145,4 @@ array.}
 little-endian}\EN{and of course, lower byte goes first, because this is little-endian architecture} 
 (\ref{sec:endianness}).
 
-\lstinputlisting[caption=\Optimizing GCC 4.8.1]{patterns/15_structs/3_tm_linux/GCC_tm4.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.8.1]{patterns/15_structs/3_tm_linux/as_array/GCC_tm4.lst}
