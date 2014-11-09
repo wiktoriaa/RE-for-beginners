@@ -1,5 +1,4 @@
-﻿\ifx\RUSSIAN\undefined
-\section{Getting minimal and maximal values}
+﻿\section{\RU{Поиск минимального и максимального значения}\EN{Getting minimal and maximal values}}
 
 \subsection{32-bit}
 
@@ -8,31 +7,41 @@
 \lstinputlisting[caption=\NonOptimizing MSVC 2013]{patterns/07_jcc/minmax/minmax_MSVC_2013.asm}
 
 \index{x86!\Instructions!Jcc}
-These two functions are differ only in conditional jump instruction: 
-JGE (Jump if Greater or Equal) is used in first
-and JLE (Jump if Less or Equal) in second.
+\RU{Эти две ф-ции отличаются друг от друга только инструкцией условного перехода:
+JGE (``Jump if Greater or Equal'' --- переход если больше или равно) используется в первой
+и JLE (``Jump if Less or Equal'' --- переход если меньше или равно) во второй.}
+\EN{These two functions are differ only in conditional jump instruction: 
+JGE (``Jump if Greater or Equal'') is used in first
+and JLE (``Jump if Less or Equal'') in second.}
 
 \index{\CompilerAnomaly}
 \label{MSVC_double_JMP_anomaly}
-There are unneeded \JMP instruction in each function which MSVC left by mistake, probably.
+\RU{Здесь есть ненужная инструкция \JMP в каждой ф-ции, которую, MSVC наверное оставила по ошибке.}
+\EN{There are unneeded \JMP instruction in each function which MSVC left by mistake, probably.}
 
-\subsubsection{Branchless}
+\subsubsection{\RU{Без переходов}\EN{Branchless}}
 
-ARM for thumb mode reminds us x86 code:
+\RU{ARM в режиме Thumb напоминает нам x86-код:}
+\EN{ARM for Thumb mode reminds us x86 code:}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/07_jcc/minmax/minmax_Keil_Thumb_O3.s}
 
 \index{ARM!\Instructions!Bcc}
-The functions are differ in branching instruction: BGT and BLT.
+\RU{Ф-ции отличаются только инструкцией перехода: BGT и BLT.}
+\EN{The functions are differ in branching instruction: BGT and BLT.}
 
-It's possible to use conditional suffixes in ARM mode, so the code is more terse.
-MOVcc will be executed only if condition is met:
+\RU{А в режиме ARM можно использовать условные суффиксы, так что код более плотный.}
+\EN{It's possible to use conditional suffixes in ARM mode, so the code is more terse.}
+\RU{MOVcc будет исполнена только если условие верно:}
+\EN{MOVcc will be executed only if condition is met:}
 \index{ARM!\Instructions!MOVcc}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/07_jcc/minmax/minmax_Keil_ARM_O3.s}
 
 \index{x86!\Instructions!CMOVcc}
-\Optimizing GCC 4.8.1 and optimizing MSVC 2013 can use CMOVcc instruction, which is analoogus to MOVcc in ARM:
+\Optimizing GCC 4.8.1 \RU{и оптимизирующий}\EN{and optimizing} MSVC 2013 
+\RU{могут использовать инструкцию CMOVcc, которая аналогична MOVcc в ARM:}
+\EN{can use CMOVcc instruction, which is analoogus to MOVcc in ARM:}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013]{patterns/07_jcc/minmax/minmax_GCC481_O3.s}
 
@@ -40,25 +49,27 @@ MOVcc will be executed only if condition is met:
 
 \lstinputlisting{patterns/07_jcc/minmax/minmax64.c}
 
-There are redundant value shufflings, but the code is comprehensible:
+\RU{Тут есть ненужные перетасовки значений, но код в целом понятен:}
+\EN{There are unneeded value shufflings, but the code is comprehensible:}
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.9.1 ARM64]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O0.s}
 
-\subsubsection{Branchless}
+\subsubsection{\RU{Без переходов}\EN{Branchless}}
 
-No need to load function arguments from stack, they are already in registers:
+\RU{Нет нужды загруждать аргументы ф-ции из стека, они уже в регистрах:}
+\EN{No need to load function arguments from stack, they are already in registers:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/07_jcc/minmax/minmax64_GCC_49_x64_O3.s}
 
-MSVC 2013 does almost the same.
+MSVC 2013 \RU{делает то же самое}\EN{does almost the same}.
 
 \index{ARM!\Instructions!CSEL}
-ARM64 has CSEL instruction, which works just as MOVcc in ARM or CMOVcc in x86, but name is changed:
-``Conditional SELect'':
+\RU{В ARM64 есть инструкция CSEL, которая работает точно также как и MOVcc в ARM и CMOVcc в x86, но название
+другое:}
+\EN{ARM64 has CSEL instruction, which works just as MOVcc in ARM or CMOVcc in x86, but name is different:}
+``Conditional SELect''.
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O3.s}
-
-\fi
 
 \ifdefined\IncludeMIPS
 \subsection{MIPS}
@@ -67,7 +78,9 @@ ARM64 has CSEL instruction, which works just as MOVcc in ARM or CMOVcc in x86, b
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/07_jcc/minmax/minmax_MIPS_O3_IDA.lst}
 
-Do not forget about branch delay slots: first MOVE is executed \IT{before} BEQZ, 
-second MOVE is executed only if branch wasn't taken.
+\RU{Не забывайте о \IT{branch delay slots}: первая MOVE исполняется \IT{перед} BEQZ,
+вторая MOVE исполняется только если переход не произошел.}
+\EN{Do not forget about \IT{branch delay slots}: first MOVE is executed \IT{before} BEQZ, 
+second MOVE is executed only if branch wasn't taken.}
 
 \fi

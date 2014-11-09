@@ -1,14 +1,16 @@
-﻿\ifx\RUSSIAN\undefined
-\section{MIPS}
+﻿\section{MIPS}
 
-\subsection{3 arguments}
+\subsection{3 \RU{аргумента}\EN{arguments}}
 
 \subsubsection{\Optimizing GCC 4.4.5}
 
-One main difference with ``\HelloWorldSectionName'' example is that \printf is actually called here
-instead of \puts and 3 more arguments are passed in registers \$5 \dots \$7 (or \$a0 \dots \$a2).
+\RU{Главное отличие от примера ``\HelloWorldSectionName'' в том что здесь на самом деле
+вызыается \printf вместо \puts и еще три аргумента передаются в регистрах}
+\EN{One main difference with ``\HelloWorldSectionName'' example is that \printf is actually called here
+instead of \puts and 3 more arguments are passed in registers} \$5 \dots \$7 (\OrENRU \$A0 \dots \$A2).
 
-So that's why these registers are prefixed with A-, meaning they are used for function arguments passing.
+\RU{Вот почему эти регистры имеют префикс A-, это значит что они используются для передачи аргументов.}
+\EN{So that's why these registers are prefixed with A-, meaning they are used for function arguments passing.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/03_printf/MIPS/printf3.O3.s}
 
@@ -16,13 +18,13 @@ So that's why these registers are prefixed with A-, meaning they are used for fu
 
 \subsubsection{\NonOptimizing GCC 4.4.5}
 
-\NonOptimizing GCC is more verbose:
+\NonOptimizing GCC \RU{более многословен}\EN{is more verbose}:
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (\assemblyOutput)]{patterns/03_printf/MIPS/printf3.O0.s}
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (IDA)]{patterns/03_printf/MIPS/printf3.O0.IDA.lst}
 
-\subsection{8 arguments}
+\subsection{8 \RU{аргументов}\EN{arguments}}
 
 \RU{Снова воспользуемся примером с 9-ю аргументами из предыдущей секции}\EN{Let's use again the example
 with 9 arguments from the previous section}: \ref{example_printf8_x64}.
@@ -31,14 +33,20 @@ with 9 arguments from the previous section}: \ref{example_printf8_x64}.
 
 \subsubsection{\Optimizing GCC 4.4.5}
 
-Only 4 arguments are passed in \$a0 \dots \$a3 registers, so others are passed via stack.
+\RU{Только 4 первых аргумента передаются в регистрах \$A0 \dots \$A3, так что остальные передаются 
+через стек.}
+\EN{Only 4 first arguments are passed in \$A0 \dots \$A3 registers, so others are passed via stack.}
 \index{MIPS!O32}
-That is O32 calling convention (which is most used and popular in MIPS world).
-Other calling conventions (like N32) may have differ register purposes.
+\RU{Это соглашение о вызовах O32 (которое самое популярное в мире MIPS).
+Другие соглашения о вызовах (как N32) могут наделять регистры другими ф-циями.}
+\EN{That is O32 calling convention (which is most used and popular in MIPS world).
+Other calling conventions (like N32) may have differ register purposes.}
 
 \index{MIPS!\Instructions!SW}
-SW meaning ``Store Word'' (from register to memory).
-MIPS lacks instruction for storing a value into memory, so instruction pair is to be used instead (LI/SW).
+\RU{SW означает ``Store Word'' (записать слово, из регистра в память).}
+\EN{SW meaning ``Store Word'' (from register to memory).}
+\RU{В MIPS нет инструкции для записи значения в память, так что для этого используется пара инструкций (LI/SW).}
+\EN{MIPS lacks instruction for storing a value into memory, so instruction pair is to be used instead (LI/SW).}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/03_printf/MIPS/printf8.O3.s}
 
@@ -46,10 +54,8 @@ MIPS lacks instruction for storing a value into memory, so instruction pair is t
 
 \subsubsection{\NonOptimizing GCC 4.4.5}
 
-\NonOptimizing GCC is more verbose:
+\NonOptimizing GCC \RU{более многословен}\EN{is more verbose}:
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (\assemblyOutput)]{patterns/03_printf/MIPS/printf8.O0.s}
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (IDA)]{patterns/03_printf/MIPS/printf8.O0.IDA.lst}
-
-\fi

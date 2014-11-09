@@ -1,19 +1,25 @@
-\ifx\RUSSIAN\undefined
 \subsection{MIPS}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/08_switch/1_few/MIPS_O3_IDA.lst}
 
 \index{MIPS!\Instructions!JR}
-There is now return from the function, because function is always finished with \puts call,
-so there we see jump to \puts (JR: ``Jump Register'') rather than jump and link.
-We talked about this earlier: \ref{JMP_instead_of_RET}.
+
+\RU{Ф-ция всегда заканчивается вызовом \puts, так что здесь мы видим переход на \puts (JR: ``Jump Register'')
+вместо перехода с сохранением \ac{RA} (``jump and link'').}
+\EN{Function is always finished with \puts call,
+so there we see jump to \puts (JR: ``Jump Register'') instead of ``jump and link''.}
+\RU{Мы говорили об этом раннее}\EN{We talked about this earlier}: \ref{JMP_instead_of_RET}.
 
 \index{MIPS!Load delay slot}
-We also often see NOP instructions after LW ones. This is ``load delay slot'': another delay slot in MIPS.
+\RU{Мы также часто видим NOP-инструкции после LW.}\EN{We also often see NOP instructions after LW ones.}
+\RU{Это}\EN{This is} ``load delay slot'': \RU{еще один \IT{delay slot} в MIPS}\EN{another \IT{delay slot} in MIPS}.
 \index{MIPS!\Instructions!LW}
-Instruction next to LW may execute at the moment when LW loads value from memory. 
-Modern MIPS CPUs has a feature to wait if next instruction uses result of LW, so this is somewhat outdated,
-but GCC still adds NOPs for older MIPS. 
-In general, it can be ignored.
-
-\fi
+\RU{Инструкция после LW может исполняться в тот момент, когда LW загружает значение из памяти.}
+\EN{Instruction next to LW may execute at the moment when LW loads value from memory. }
+\RU{Впрочем, следующая инструкция не должна использовать результат LW.}
+\EN{However, next instruction must not use result of LW.}
+\RU{Современные MIPS-процессоры ждут если следующая инструкция использует результат LW, так что всё это уже
+устарело, но GCC всё еще добавляет NOP-ы для более старых процессоров.}
+\EN{Modern MIPS CPUs has a feature to wait if next instruction uses result of LW, so this is somewhat outdated,
+but GCC still adds NOPs for older MIPS CPUs.}
+\RU{Вообще, это можно игнорировать}\EN{In general, it can be ignored}.
