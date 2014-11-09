@@ -1,49 +1,65 @@
-\ifdefined\RUSSIAN
-\else
-
-\chapter{String to number conversion (atoi())}
+\chapter{\RU{Конверсия строки в число}\EN{String to number conversion} (atoi())}
 
 \index{\CStandardLibrary!atoi()}
-Let's try to reimplement atoi() standard C function.
+\RU{Попробуем реализовать стандарту ф-цию Си atoi().}
+\EN{Let's try to reimplement atoi() standard C function.}
 
-\section{Simple example}
+\section{\RU{Простой пример}\EN{Simple example}}
 
-Here is simplest possible way to read number represented in \ac{ASCII} form.
-It's not error-prone: character other than digit will lead to incorrect result.
+\RU{Это самый простой способ прочитать число представленное в кодировке \ac{ASCII}.}
+\EN{Here is simplest possible way to read number represented in \ac{ASCII} encoding.}
+\RU{Он не защищен от ошибок: символ отличный от цифры приведет к неверному результату.}
+\EN{It's not error-prone: character other than digit will lead to incorrect result.}
 
 \lstinputlisting{patterns/26_atoi/atoi.c}
 
-So what the algorithm does is just reads digits from left to right. 
-A zero \ac{ASCII} character is subtracted from each digit. 
-Digits from 0 to 9 are came subsequently in the \ac{ASCII} table, so, 
-we may not even know exact '0' character value. 
-All we need to know is that '0' minus '0' is 0, '9' minus '0' is 9 and so on.
-Subtracting '0' from each character resulting a number from 0 to 9 inclusive.
-Any other character will lead to incorrect result, of course!
-Each digit is to be added to the final result (in ``rt'' variable), but final result
-is also multiplied by 10 at each digit.
-In other word, result is shifted left by one position in decimal form on each iteration.
-The very last digit is added, but not shifted.
+\RU{То что делает алгоритм это просто считывает цифры слева направо.}
+\EN{So what the algorithm does is just reads digits from left to right.}
+\RU{Символ нуля в \ac{ASCII} вычитается из каждой цифры.}
+\EN{A zero \ac{ASCII} character is subtracted from each digit. }
+\RU{Цифры от ``0'' до ``9'' расположены по порядку в таблице \ac{ASCII}, так что мы даже можем
+и не знать точного значения символа ``0''.}
+\EN{Digits from ``0'' to ``9'' are came subsequently in the \ac{ASCII} table, so, 
+we may not even know exact ``0'' character value.}
+\RU{Всё что нам нужно знать это то что ``0'' минус ``0'' это 0, а ``9'' минус ``0'' это 9, итд.}
+\EN{All we need to know is that ``0'' minus ``0'' is 0, ``9'' minus ``0'''is 9 and so on.}
+\RU{Вычитание ``0'' от каждого символа в итоге дает число от 0 до 9 включительно.}
+\EN{Subtracting ``0'' from each character resulting a number from 0 to 9 inclusive.}
+\RU{Любой другой символ, конечно, приведет к неверному результату!}
+\EN{Any other character will lead to incorrect result, of course!}
+\RU{Каждая цифра добавляется к итоговому результату (в переменной ``rt''), но итоговый результат
+также умножается на 10 на каждой цифре.}
+\EN{Each digit is to be added to the final result (in ``rt'' variable), but final result
+is also multiplied by 10 at each digit.}
+\RU{Другими словами, на каждой итерации, результат сдвигается влево на одну позицию в десятичном виде.}
+\EN{In other word, result is shifted left by one position in decimal form on each iteration.}
+\RU{Самая последняя цифра прибавляется, но не сдвигается.}
+\EN{The very last digit is added, but not shifted.}
 
 \subsection{\Optimizing MSVC 2013 x64}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/26_atoi/atoi.asm.MSVC2013.x64.Ox}
 
-Character is loaded in two places: first character and all subsequent characters.
-This is done for loop regrouping.
+\RU{Символы загружаются в двух местах: первый символ и все последующие символы.}
+\EN{Character is loaded in two places: first character and all subsequent characters.}
+\RU{Это сделано для перегруппировки цикла.}\EN{This is done for loop regrouping.}
 \index{x86!\Instructions!LEA}
-There are no instruction for multiplication by 10, two LEA instruction do this instead.
+\RU{Здесь нет инструкции для умножения на 10, вместо этого две LEA делают это же.}
+\EN{There are no instruction for multiplication by 10, two LEA instruction do this instead.}
 \index{x86!\Instructions!ADD}
 \index{x86!\Instructions!SUB}
-MSVC sometimes use ADD instruction with negative constant instead of SUB.
-This is the case.
-I truly don't know why this is better then SUB.
-But MSVC does this often.
+\RU{MSVC иногда использует инструкцию ADD с отрицательной константой вместо SUB.}
+\EN{MSVC sometimes use ADD instruction with negative constant instead of SUB.}
+\RU{Это тот случай}\EN{This is the case}.
+\RU{Честно говоря, я не знаю, чем это лучше чем SUB.}
+\EN{I truly don't know why this is better then SUB.}
+\RU{Но MSVC делает так часто}\EN{But MSVC does this often}.
 
 \subsection{\Optimizing GCC 4.9.1 x64}
 
-\Optimizing GCC 4.9.1 is more concise, but there are one redundant RET instruction at the end.
-One would be enough.
+\Optimizing GCC 4.9.1 \RU{более краток, но здесь есть одна лишняя инструкция RET в конце.}
+\EN{is more concise, but there are one redundant RET instruction at the end.}
+\RU{Одной было бы достаточно}\EN{One would be enough}.
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/26_atoi/atoi.s.GCC491.O3.x64}
 
@@ -56,23 +72,31 @@ One would be enough.
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/26_atoi/atoi.s.thumb.O3}
 
-Interestingly, from school mathematics we may remember that order of addition and 
-subtraction operations doesn't matter.
-That's our case: first, $rt*10 - '0'$ expression is computed, then the input character value is added
-to it.
-Indeed, result is the same, but compiler probably did some regrouping.
+\RU{Интересно, из школьного курса математики мы можем помнить что порядок операций сложения и вычитания
+не играет роли.}
+\EN{Interestingly, from school mathematics we may remember that order of addition and 
+subtraction operations doesn't matter.}
+\RU{Это наш случай: в начале вычисляется выражение $rt*10 - '0'$, затем к нему прибавляется 
+значение входного символа.}
+\EN{That's our case: first, $rt*10 - '0'$ expression is computed, then the input character value 
+is added to it.}
+\RU{Действительно, результат тот же, но компилятор немного всё перегруппировал.}
+\EN{Indeed, result is the same, but compiler did some regrouping.}
 
 \subsection{\Optimizing GCC 4.9.1 ARM64}
 
-ARM64 compiler can use pre-increment instruction suffix:
+\RU{Компилятор для ARM64 может использовать суффикс инструкции задающий пре-инкремент:}
+\EN{ARM64 compiler can use pre-increment instruction suffix:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{patterns/26_atoi/atoi.s.GCC49.ARM64.O3}
 \fi
 
-\section{Slightly advanced example}
+\section{\RU{Немного расширенный пример}\EN{Slightly advanced example}}
 
-My new code snippet is more advanced, now it checks for minus sign at the very first character
-and reports about error if non-digit was found in the input string:
+\RU{Новый пример более расширенный, теперь здесь есть проверка знака ``минус'' в самом начале,
+и еще он может сообщать об ошибке если не-цифра была найдена во входной строке:}
+\EN{My new code snippet is more advanced, now it checks for ``minus'' sign at the very first character
+and reports about error if non-digit was found in the input string:}
 
 \lstinputlisting{patterns/26_atoi/atoi2.c}
 
@@ -81,49 +105,65 @@ and reports about error if non-digit was found in the input string:
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/26_atoi/atoi2.s.GCC491.O3.x64}
 
 \index{x86!\Instructions!NEG}
-If minus sign was encountered at the string begin, 
-NEG instruction will be executed at the end.
-It just negates a number.
+\RU{Если знак ``минус'' был найден в начале строки, инструкция NEG будет исполнена в конце.}
+\EN{If ``minus'' sign was encountered at the string begin, NEG instruction will be executed at the end.}
+\RU{Она просто меняет знак числа}\EN{It just negates a number}.
 
-There are also one thing to mention. 
-How common programmer would check if the character is not a digit?
-Just how I wrote in the source code:
+\RU{Еще кое-что надо отметить}\EN{There are also one thing to mention}.
+\RU{Как среднестатистический программист будет проверять, является ли символ цифрой?}
+\EN{How common programmer would check if the character is not a digit?}
+\RU{Так же, как я и написал в исходном коде}\EN{Just how I wrote in the source code}:
 
 \begin{lstlisting}
 if (*s<'0' || *s>'9')
     ...
 \end{lstlisting}
 
-There are two comparison operations.
-What is interesting is that we can replace both operations by single one: 
-just subtract '0' from character value,
-treat result as unsigned value (this is important) and check if it's greater than 9.
+\RU{Здесь две операции сравнения}\EN{There are two comparison operations}.
+\RU{Но что интересно, так это то что мы можем заменить обе операции на одну:}
+\EN{What is interesting is that we can replace both operations by single one:}
+\RU{просто вычитайте ``0'' из значения символа}\EN{just subtract ``0'' from character value},
+\RU{считается результат за беззнаковое знаение (это важно) и проверьте, не больше ли он чем 9.}
+\EN{treat result as unsigned value (this is important) and check if it's greater than 9.}
 
-As an example, let's say, user input contain dot character (``.'') which have \ac{ASCII} code 46.
-$46-48=-2$ if to treat result as signed number.
-Indeed, dot character is located two places earlier than ``0'' character in the \ac{ASCII} table.
-But it is \TT{0xFFFFFFFE} ($4294967294$) if to treat result as unsigned value, and that's definitely bigger than 9!
+\RU{Например, скажем, строка на входе имеет символ точки (``.''), которая имеет код 46 в таблице \ac{ASCII}.}
+\EN{As an example, let's say, user input contain dot character (``.'') which have \ac{ASCII} code 46.}
+$46-48=-2$ \RU{если считать результат за знаковое число}\EN{if to treat result as signed number}.
+\RU{Действительно, символ точки расположен на два места раньше чем символ ``0'' в таблице \ac{ASCII}.}
+\EN{Indeed, dot character is located two places earlier than ``0'' character in the \ac{ASCII} table.}
+\RU{Но это}\EN{But it is} \TT{0xFFFFFFFE} ($4294967294$) \RU{если считать результат за беззнаковое значение, 
+и это точно больше чем 9!}
+\EN{if to treat result as unsigned value, and that's definitely bigger than 9!}
 
-Compilers does this often, so it's important to recognize these tricks.
+\RU{Компиляторы часто так делают, важно распозновать эти трюки.}
+\EN{Compilers does this often, so it's important to recognize these tricks.}
 
-\Optimizing MSVC 2013 x64 does the same tricks.
+\Optimizing MSVC 2013 x64 \RU{применяет те же трюки}\EN{does the same tricks}.
 
 \ifdefined\IncludeARM
 \subsection{\OptimizingKeilVI (\ARMMode)}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),numbers=left]{patterns/26_atoi/atoi2.s.ARM.O3}
 
-There are no NEG instruction in 32-bit ARM, so ``Reverse Subtraction'' operation (line 31) 
-is used here.
-It is triggered if the result of CMP instruction (at line 29) was ``Not Equal'' (hence -NE suffix).
+\RU{В 32-битном ARM нет инструкции NEG, так что вместо этого используется операция ``Reverse Subtraction''
+(строка 31).}
+\EN{There are no NEG instruction in 32-bit ARM, so ``Reverse Subtraction'' operation (line 31) 
+is used here.}
+\RU{Она сработает если результат инструкции CMP (на строке 29) был ``Not Equal'' 
+(не равно, отсюда суффикс -NE suffix).}
+\EN{It is triggered if the result of CMP instruction (at line 29) was ``Not Equal'' (hence -NE suffix).}
 \index{ARM!\Instructions!RSB}
-So what RSBNE does is subtract resulting value from 0.
-It works just like regular subtraction operation, but swaps operands.
-Subtracting any number from 0 resulting negation: $0-x=-x$.
+\RU{Что делает RSBNE это просто вычитает результирующее значение из нуля.}
+\EN{So what RSBNE does is subtract resulting value from 0.}
+\RU{Она работает как и обычное вычитание, но меняет местами операнды.}
+\EN{It works just like regular subtraction operation, but swaps operands.}
+\RU{Вычитание любого числа из нуля это смена знака}
+\EN{Subtracting any number from 0 resulting negation}: $0-x=-x$.
 
-Thumb code is mostly the same.
+\RU{Код для режима Thumb почти такой же.}
+\EN{Thumb mode code is mostly the same.}
 
 \index{ARM!\Instructions!NEG}
-GCC 4.9 for ARM64 can use NEG instruction, available in ARM64.
-\fi
+GCC 4.9 \ForENRU ARM64 \RU{может использовать инструкцию NEG, доступную в}
+\EN{can use NEG instruction, available in} ARM64.
 \fi

@@ -242,29 +242,35 @@ is left in} \ST{0}.
 \end{figure}
 \fi
 
-\ifdefined\RUSSIAN
-\else
-\section{Calculating machine epsilon: x64 and SIMD}
+\section{\RU{Вычисление машинного эпсилона}\EN{Calculating machine epsilon}: x64 \AndENRU SIMD}
 \label{machine_epsilon_x64_and_SIMD}
 
-Let's revisit ``calculating machine epsilon'' example for \Tdouble \lstref{machine_epsilon_double_c} again.
+\RU{Вернемся к примеру ``вычисление машинного эпсилона'' для \Tdouble \lstref{machine_epsilon_double_c}.}
+\EN{Let's revisit ``calculating machine epsilon'' example for \Tdouble \lstref{machine_epsilon_double_c}.}
 
-Now we compile it for x64:
+\RU{Теперь скомпилируем его для x64}\EN{Now we compile it for x64}:
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/epsilon_double_MSVC_2012_x64_Ox.asm}
 
-There are no way to add 1 to 128-bit XMM register, so it must be placed into memory yet.
+\RU{Нет способа прибавить 1 к значению в 128-битном XMM-регистре, так что его нужно в начале поместить в память.}
+\EN{There are no way to add 1 to value in 128-bit XMM register, so it must be placed into memory yet.}
 
-There are, however, ADDSD instruction (\IT{Add Scalar Double-Precision Floating-Point Values}) 
+\RU{Впрочем, есть инструкция ADDSD (\IT{Add Scalar Double-Precision Floating-Point Values}),
+которая может прибавить значение к младшей 64-битной части XMM-регистра игнорируя старшую половину,
+но наверное MSVC 2012 пока недостаточно хорош для этого}
+\EN{There are, however, ADDSD instruction (\IT{Add Scalar Double-Precision Floating-Point Values}) 
 which can add a value to lowest 64-bit half of XMM register while ignoring highest one, 
-but MSVC 2012 probably is not that good yet
-\footnote{As an exercise, you may try to rework this code to eliminate local stack usage.}.
+but MSVC 2012 probably is not that good yet}
+\footnote{\RU{В качестве упражнения, вы можете попробовать переработать этот код, чтобы избавиться 
+от использования локального стека}\EN{As an exercise, you may try to rework this code to 
+eliminate local stack usage}.}.
 
-Nevertheless, the value is then reloaded to XMM register and subtraction is occurred.
-SUBSD is ``Subtract Scalar Double-Precision Floating-Point Values'', i.e., it operates
-on lowest 64-bit part of 128-bit XMM register.
-Result is returned in XMM0 register.
-\fi
+\RU{Так или иначе, значение затем перезагружается в XMM-регистр и происходит вычитание.}
+\EN{Nevertheless, the value is then reloaded to XMM register and subtraction is occurred.}
+SUBSD \RU{это}\EN{is} ``Subtract Scalar Double-Precision Floating-Point Values'', 
+\RU{т.е., операция производится над младшей 64-битной частью 128-битного XMM-регистра}
+\EN{i.e., it operates on lowest 64-bit part of 128-bit XMM register}.
+\RU{Результат возвращается в регистре XMM0}\EN{Result is returned in XMM0 register}.
 
 \section{\RU{Итог}\EN{Summary}}
 

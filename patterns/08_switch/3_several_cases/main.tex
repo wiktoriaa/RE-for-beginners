@@ -54,30 +54,41 @@ already discussed} (\ref{switch_lot_GCC}), \RU{используя только �
 GCC \RU{делает так, как уже обсуждалось}\EN{do the job like it was already discussed} 
 (\ref{switch_lot_GCC}), \RU{используя просто таблицу указателей}\EN{using just one table of pointers}.
 
-\ifx\RUSSIAN\undefined
 \subsection{ARM64: \Optimizing GCC 4.9.1}
 
-First of all, there are no code triggering if input value is 0, so GCC tries to make jumptable more compact
-and so it's started at the case of 1 as input value.
+\RU{Во-первых, здесь нет кода, срабатывающего в случае если входное значение --- 0, так что GCC пытается
+сделать таблицу переходов более компактной и начинает с случая когда входное значение --- 1.}
+\EN{First of all, there are no code triggering if input value is 0, so GCC tries to make jumptable more compact
+and so it's started at the case of 1 as input value.}
 
-GCC 4.9.1 for ARM64 uses even more clever trick.
-It's able to encode all offsets as 8-bit bytes.
-Let's remind us, all ARM64 instructions has size of 4 bytes.
-GCC is also use the fact that all offsets in my tiny example are in close proximity to each other.
-So the jumptable consisting of bytes of corresponding jumps.
+GCC 4.9.1 \ForENRU ARM64 \RU{использует даже более интересный трюк}\EN{uses even more clever trick}.
+\RU{Он может закодировать все смещения как 8-битные байты}\EN{It's able to encode all offsets as 8-bit bytes}.
+\RU{Вспомним что все инструкции в ARM64 имеют размер в 4 байта.}
+\EN{Let's remind ourselves, all ARM64 instructions has size of 4 bytes.}
+\RU{GCC также использует тот факт что все смещения в моем крохотном примере находятся достаточно близко 
+друг от друга.}
+\EN{GCC is also use the fact that all offsets in my tiny example are in close proximity to each other.}
+\RU{Так что таблица переходов состоит из байт.}\EN{So the jumptable consisting of bytes.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{patterns/08_switch/3_several_cases/ARM64_GCC491_O3.s}
 
-I just compiled my example to object file and opened it in IDA. Here is a jump table:
+\RU{Я скомпилировал мой пример как объектный файл и открыл его в IDA. Вот таблица переходов:}
+\EN{I just compiled my example to object file and opened it in IDA. Here is a jump table:}
 
 \lstinputlisting[caption=jumptable in IDA]{patterns/08_switch/3_several_cases/ARM64_GCC491_O3_IDA.lst}
 
-So in case of 1, 9 will be multiplied by 4 and added to the Lrtx4 label.
-In case of 22, 0 is to be multiplied by 4 resulting 0. 
-The place right after Lrtx4 label is L7 label, where the code printing ``22'' is.
-There are no jumptable in the code segment, it is allocated in separate .rodata section 
-(there are no special need to place it in code section).
+\RU{В случае 1, 9 будет умножено на 9 и прибавлено к адресу метки Lrtx4.}
+\EN{So in case of 1, 9 will be multiplied by 4 and added to the address of Lrtx4 label.}
+\RU{В случае 22, 0 будет умножено на 4, в результате это 0.}
+\EN{In case of 22, 0 is to be multiplied by 4 resulting 0. }
+\RU{Место сразу за метркой Lrtx4 это метка L7, где находится код выводящий ``22''.}
+\EN{The place right after Lrtx4 label is L7 label, where the code printing ``22'' is.}
+\RU{В сегменте кода нет таблицы переходов, место для нее выделено в отдельной секции .rodata
+(нет особой нужды располагать её в сегменте кода).}
+\EN{There are no jumptable in the code segment, a place for it is allocated in separate .rodata section 
+(there are no special need to place it in code section).}
 
-There are also negative bytes (0xF7), they are used for jumping back to the code printing ``default'' string 
-(at .L2).
-\fi
+\RU{Там есть также отрицательные байты (0xF7), они используются для перехода назад, на код выводящий
+строку ``default'' (на .L2).}
+\EN{There are also negative bytes (0xF7), they are used for jumping back to the code printing ``default'' string 
+(at .L2).}

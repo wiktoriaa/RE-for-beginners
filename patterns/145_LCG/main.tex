@@ -1,74 +1,103 @@
-\ifx\RUSSIAN\undefined
-\chapter{Linear congruential generator as random number generator}
+\chapter{\RU{Линейный конгруэнтный генератор как генератор псевдослучайных чисел}\EN{Linear congruential generator as pseudorandom number generator}}
 \index{\CStandardLibrary!rand()}
 \label{LCG_simple}
 
-Linear congruential generator is probably simplest possible way to generate random numbers.
-It's not in favour in modern times\footnote{Mersenne twister is better}, but it's so simple 
+\RU{Линейный конгруэнтный генератор, пожалуй, самый просто способ генерировать псевдослучайные числа.}
+\EN{Linear congruential generator is probably simplest possible way to generate random numbers.}
+\RU{Он не в почете в наше время\footnote{Вихрь Мерсенна куда лучше}, но он настолько прост
+(только одно умножение, одно сложение и одна операция ``И''),
+что мы можем использовать его в качестве примера.}
+\EN{It's not in favour in modern times\footnote{Mersenne twister is better}, but it's so simple 
 (just one multiplication, one addition and one AND operation), 
-so we can use it as an example.
+so we can use it as an example.}
 
 \lstinputlisting{patterns/145_LCG/rand.c}
 
-So there are two functions: one is used for internal state initialization, and the second one is called
-for random numbers generating.
+\RU{Так что здесь две ф-ции: одна используется для инициализации внутреннего состояния и вторая
+вызывается собственно для генерации псевдослучайных чисел.}
+\EN{So there are two functions: one is used for internal state initialization, and the second one is called
+for pseudorandom numbers generating.}
 
-We see two constants here used in algorithm.
-I defined it using \TT{\#define} \CCpp statement. It's a macro.
-The difference between \CCpp macro and constant is that all macros are replaced by its value by \CCpp preprocessor,
-and it's not holding any value in the memory.
-By contrast, constant is read-only variable.
-It's possible to take a pointer (or address) of constant variable, but impossible to do so with macro.
+\RU{Мы видим что в алгоритме применяются две константы}\EN{We see two constants here used in algorithm}.
+\RU{Я определил их используя выражение \CCpp \TT{\#define}. Это макрос.}
+\EN{I defined it using \TT{\#define} \CCpp statement. It's a macro.}
+\RU{Разница между макросом в \CCpp и константой в том что все макросы заменяются на значения препроцессором
+\CCpp, и они не занимают места в памяти как переменные.}
+\EN{The difference between \CCpp macro and constant is that all macros are replaced 
+by its value by \CCpp preprocessor,
+and it's not holding any value in the memory like variables.}
+\RU{А константы, напротив, это переменные только для чтения.}
+\EN{By contrast, constant is read-only variable.}
+\RU{Можно взять указатель (или адрес) переменной-константы, но это невозможно сделать с макросом.}
+\EN{It's possible to take a pointer (or address) of constant variable, but impossible to do so with macro.}
 
-The last AND operation is needed because by C-standard, \TT{my\_rand()} should return value in $0..32767$ range.
-If you want to get 32-bit random variables, just the last omit AND operation.
+\RU{Последняя операция ``И'' нужно из-за стандарта Си, \TT{my\_rand()} должна возвращать значение в пределах
+$0..32767$.}
+\EN{The last AND operation is needed because by C-standard, \TT{my\_rand()} should return value in 
+$0..32767$ range.}
+\RU{Если вы хотите получать 32-битные псевдослучайные значения, просто уберите последнюю операцию ``И''.}
+\EN{If you want to get 32-bit pseudorandom values, just the last omit AND operation.}
 
 \section{x86}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013]{patterns/145_LCG/rand_MSVC_2013_x86_Ox.asm}
 
-Here we see it: both constants are embedded into the code. There are no memory allocated for them.
-\TT{my\_srand()} function just copies input value into the internal \TT{rand\_state} variable.
+\RU{Вот мы это и видим: обе константы встроены в код.}
+\EN{Here we see it: both constants are embedded into the code.}
+\RU{Память для них не выделяется.}\EN{There are no memory allocated for them.}
+\RU{Ф-ция \TT{my\_srand()} просто копирует входное значение во внутреннюю переменную \TT{rand\_state}.}
+\EN{\TT{my\_srand()} function just copies input value into the internal \TT{rand\_state} variable.}
 
-\TT{my\_rand()} takes it, calculate next \TT{rand\_state}, cuts it and leaves it in the EAX register.
+\RU{\TT{my\_rand()} берет её, вычисляет следующее состояние \TT{rand\_state}, 
+обрезает его и оставляет в регистре EAX.}
+\EN{\TT{my\_rand()} takes it, calculate next \TT{rand\_state}, cuts it and leaves it in the EAX register.}
 
-Non-Optimized version is more verbose:
+\RU{Неоптимизирующая версия побольше}\EN{Non-Optimized version is more verbose}:
 
 \lstinputlisting[caption=\NonOptimizing MSVC 2013]{patterns/145_LCG/rand_MSVC_2013_x86.asm}
 
 \section{x64}
 
-x64 version is mostly the same and uses 32-bit registers instead of 64-bit ones 
-(because we work with \Tint values here).
-But my\_srand() function takes input argument from the ECX register rather than from stack:
+\RU{Версия для x64 почти такая же и использует 32-битные регистры вместо 64-битных
+(потому что мы работаем здесь с переменными типа \Tint).}
+\EN{x64 version is mostly the same and uses 32-bit registers instead of 64-bit ones 
+(because we work with \Tint values here).}
+\RU{Но ф-ция \TT{my\_srand()} берет входной аргумент из регистра ECX а не из стека:}
+\EN{But \TT{my\_srand()} function takes input argument from the ECX register rather than from stack:}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/145_LCG/rand_MSVC_2013_x64_Ox.asm}
 
-GCC compiler do mostly the same code.
+\RU{GCC делает почти такой же код}\EN{GCC compiler do mostly the same code}.
 
 \ifdefined\IncludeARM
 \section{32-bit ARM}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/145_LCG/rand.s_Keil_ARM_O3.s}
 
-It's not possible to embed 32-bit constants into ARM instructions, so Keil is ought to place them externally
-and load them additionally.
+\RU{В ARM инструкцию невозможно встроить 32-битную константу, так что Keil-у приходится размещать
+их отдельно и дополнительно загружать.}
+\EN{It's not possible to embed 32-bit constants into ARM instructions, so Keil is ought to place them externally
+and load them additionally.}
 
-One interesting thing is that it's not possible to embed 0x7FFF constant as well.
-So what Keil does is shifting rand\_state left by 17 bits and then shifting it right by 17 bits.
-This is analogous to $(rand\_state \ll 17) \gg 17$ statement. 
-Seems to be useless operation, but nevertheless,
-what it does is clearing high 17 bits, leaving low 15 bits intact, and that's our goal after all.\\
+\RU{Вот еще что интересно: константу 0x7FFF также нельзя встроить.}
+\EN{One interesting thing is that it's not possible to embed 0x7FFF constant as well.}
+\RU{Так что то что делает Keil это сдвигает \TT{rand\_state} влево на 17 бит и затем сдвигает вправо на 17 бит.}
+\EN{So what Keil does is shifting \TT{rand\_state} left by 17 bits and then shifting it right by 17 bits.}
+\RU{Это аналогично \CCpp{}-выражению $(rand\_state \ll 17) \gg 17$.}
+\EN{This is analogous to $(rand\_state \ll 17) \gg 17$ statement in \CCpp.}
+\RU{Выглядит как бессмысленная операция, но тем не менее, что она делает это очищает старшие 17 бит, оставляя
+младшие 15 бит нетронутыми, и это наша цель, в конце концов.}
+\EN{Seems to be useless operation, but nevertheless,
+what it does is clearing high 17 bits, leaving low 15 bits intact, and that's our goal after all.}\\
 \\
-\Optimizing Keil for thumb mode do mostly the same code.
+\Optimizing Keil \RU{для режима Thumb делает почти такой же код}\EN{for Thumb mode do mostly the same code}.
 \fi
 
 \ifdefined\IncludeMIPS
 \input{patterns/145_LCG/MIPS}
 \fi
 
-\section{Thread-safe version of the example}
+\section{\RU{Версия этого примера для многопоточной среды}\EN{Thread-safe version of the example}}
 
-Thread-safe version of the example is to be demonstrated later: \ref{LCG_TLS}.
-
-\fi
+\RU{Версия примера для многопоточной среды будет рассмотрена позже}
+\EN{Thread-safe version of the example is to be demonstrated later}: \ref{LCG_TLS}.
