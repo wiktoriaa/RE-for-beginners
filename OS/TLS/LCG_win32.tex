@@ -1,74 +1,110 @@
 \subsection{Win32}
 
-\subsubsection{Uninitialized \ac{TLS} data}
+\subsubsection{\RU{Неинициализированные данные в \ac{TLS}}\EN{Uninitialized \ac{TLS} data}}
 
-One solution is to add \TT{\_\_declspec( thread )} modifier to the global variable, now it will be allocated
-in \ac{TLS} (line 9):
+\RU{Одно из решений это добавить модификатор \TT{\_\_declspec( thread )} к глобальной переменной, и теперь
+она будет выделена в \ac{TLS} (строка 9):}
+\EN{One solution is to add \TT{\_\_declspec( thread )} modifier to the global variable, now it will be allocated
+in \ac{TLS} (line 9):}
 
-\lstinputlisting{OS/TLS/win32/rand_uninit.c}
+\lstinputlisting[numbers=left]{OS/TLS/win32/rand_uninit.c}
 
-Hiew shows us that there are new PE section in the executable file: \TT{.tls}.
+\RU{Hiew показывает что в исполняемом файле теперь есть новая PE-секция:}
+\EN{Hiew shows us that there are new PE section in the executable file:} \TT{.tls}.
+% TODO hiew screenshot?
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x86]{OS/TLS/win32/rand_x86_uninit.asm}
 
-\TT{rand\_state} is now in \ac{TLS} segment, and it is unique for each thread.
-Here is how it's accessed: load address of \ac{TIB} from FS:2Ch, then add additional index (if needed),
-then calculate address of \ac{TLS} segment.
+\RU{\TT{rand\_state} теперь в \ac{TLS}-сегменте и у каждого потка есть своя версия этой переменной.}
+\EN{\TT{rand\_state} is now in \ac{TLS} segment, and each thread has its own version of this variable.}
+\RU{Вот как к ней обращаться: загрузить адрес \ac{TIB} из FS:2Ch, затем прибавить дополнительный индекс 
+(если нужно), затем вычислить адрес \ac{TLS}-сегмента.}
+\EN{Here is how it's accessed: load address of \ac{TIB} from FS:2Ch, then add additional index (if needed),
+then calculate address of \ac{TLS} segment.}
 
-Then it's possible to access rand\_state variable through ECX register, which points to unique area
-in each thread.
+\RU{Затем можно обращаться к переменной \TT{rand\_state} через регистр ECX, который указывает на свою
+область в каждом потоке.}
+\EN{Then it's possible to access \TT{rand\_state} variable through ECX register, which points to unique area
+in each thread.}
 
 \index{x86!\Registers!FS}
-\TT{FS:} selector is familiar to any reverse engineer, it is specially used to walys point to \ac{TIB},
-so it would be fast to load thread-specific data.
+\RU{Селектор \TT{FS:} знаком любому reverse engineer-у, он всегда указывает на \ac{TIB}, чтобы всегда можно было
+загруждать данные специфичные для текущего потока.}
+\EN{\TT{FS:} selector is familiar to any reverse engineer, it is specially used to always point to \ac{TIB},
+so it would be fast to load thread-specific data.}
 
 \index{x86!\Registers!GS}
-\TT{GS:} selector used in Win64 and address of \ac{TLS} is 0x58:
+\RU{В Win64 используется селектор \TT{GS:} и адрес \ac{TLS} теперь 0x58:}
+\EN{\TT{GS:} selector used in Win64 and address of \ac{TLS} is 0x58:}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{OS/TLS/win32/rand_x64_uninit.asm}
 
-\subsubsection{Initialized \ac{TLS} data}
+\subsubsection{\RU{Инициализированные данные в \ac{TLS}}\EN{Initialized \ac{TLS} data}}
 
-Let's say, we want to set some fixed value to rand\_state so in case of forgetfulness of programmer,
-the \TT{rand\_state} variable would be initialized to some constant anyway (line 9):
+\RU{Скажем, мы хотим чтобы в переменной \TT{rand\_state} в самом начале было какое-то значение, 
+и если программист забудет инициализировать генератор, то \TT{rand\_state} все же будет инициализирована какой-то
+константой (строка 9):}
+\EN{Let's say, we want to set some fixed value to \TT{rand\_state} so in case of forgetfulness of programmer,
+the \TT{rand\_state} variable would be initialized to some constant anyway (line 9):}
 
-\lstinputlisting{OS/TLS/win32/rand_init.c}
+\lstinputlisting[numbers=left]{OS/TLS/win32/rand_init.c}
 
-The code is no differ from what we already saw, but what we see in IDA:
+\RU{Код ничем не отличается от того, что мы уже видели, но вот что мы видим в IDA:}
+\EN{The code is no differ from what we already saw, but what we see in IDA:}
 
 \lstinputlisting{OS/TLS/win32/rand_init_IDA.lst}
 
-1234 is there and while any new thread starting, new TLS will be allocated for the new thread, and all this
-data, including 1234, will be copied.
+\RU{Там 1234 и теперь, во время запуска каждого нового потока, новый \ac{TLS} будет выделен для нового потока,
+и все эти данные, включая 1234, будут туда скопированы.}
+\EN{1234 is there and while any new thread starting, new \ac{TLS} will be allocated for the new thread, 
+and all this data, including 1234, will be copied.}
 
-This is typical scenario:
+\RU{Вот типичный сценарий}\EN{This is typical scenario}:
 
 \begin{itemize}
-\item Thread A is started. TLS is created for it, 1234 is copied to rand\_state.
-\item my\_rand() function called several times in thread A. rand\_state is different from 1234.
-\item Thread B is started. TLS is created for it, 1234 is copied to rand\_state, 
-while thread A has some other value in this variable.
+\item \RU{Запустился поток А. \ac{TLS} создался для него, 1234 скопировалось в \TT{rand\_state}.}
+\EN{Thread A is started. \ac{TLS} is created for it, 1234 is copied to \TT{rand\_state}.}
+
+\item \RU{Ф-ция \TT{my\_rand()} была вызвана несколько раз в потоке А. 
+\TT{rand\_state} теперь содержит что-то неравное 1234.}
+\EN{\TT{my\_rand()} function called several times in thread A. \TT{rand\_state} is different from 1234.}
+
+\item 
+\RU{Запустился поток Б. \ac{TLS} создался для него, 1234 скопировалось в \TT{rand\_state}, 
+а в это же время, поток А имеет какое-то другое значение в этой переменной.}
+\EN{Thread B is started. \ac{TLS} is created for it, 1234 is copied to \TT{rand\_state}, 
+while thread A has some other value in this variable.}
 \end{itemize}
 
-\subsubsection{Understanding \ac{TLS} callbacks}
-\index{TLS!Callbacks}
+\subsubsection{\RU{ac{TLS}-коллбэки}\EN{\ac{TLS} callbacks}}
+\index{TLS!\RU{Коллбэки}\EN{Callbacks}}
 
-But what if TLS variables should be filled with some data that must be prepared in some unusual way?
-Let's say, we've got the following task:
-programmer may forget to call my\_srand() function to initialize \ac{PRNG}, but it should be initialized
-at start with something truly random, rather than 1234.
-Here is a moment when \ac{TLS} callbacks can be used.
+\RU{Но что если переменные в \ac{TLS} должны быть установлены в значения, которые должны быть подготовлены
+каким-то необычным образом?}
+\EN{But what if \ac{TLS} variables should be filled with some data that must be prepared in some unusual way?}
+\RU{Скажем, у нас есть следующая задача:
+программист может забыть вызвать ф-цию \TT{my\_srand()} для инициализации \ac{PRNG}, но генератор должен быть
+инициализирован на старте чем-то по-настоящему случайным а не 1234.}
+\EN{Let's say, we've got the following task:
+programmer may forget to call \TT{my\_srand()} function to initialize \ac{PRNG}, but generator should be 
+initialized at start with something truly random, rather than 1234.}
+\RU{Вот случай где можно применить \ac{TLS}-коллбэки}\EN{Here is a moment when \ac{TLS} callbacks can be used}.
 
-The following code is not very portable due to the hack, but nevertheless, you've got the idea.
-What we do here is define a function (tls\_callback()) which will be called \IT{before} process and/or thread 
-start.
-The function will initialize \ac{PRNG} with GetTickCount() value.
+\RU{Нижеследующий код не очень портабельный из-за хака, но тем не менее, вы поймете идею.}
+\EN{The following code is not very portable due to the hack, but nevertheless, you've got the idea.}
+\RU{Мы здесь добавляем ф-цию (\TT{tls\_callback()}), которая вызывается \IT{перед} стартом процесса и/или потока.}
+\EN{What we do here is define a function (\TT{tls\_callback()}) which will be called \IT{before} 
+process and/or thread start.}
+\RU{Ф-ция будет инициализировать \ac{PRNG} значением из GetTickCount().}
+\EN{The function will initialize \ac{PRNG} with GetTickCount() value.}
 
 \lstinputlisting{OS/TLS/win32/rand_TLS_callback.c}
 
-Let's see it in IDA:
+\RU{Посмотрим в}\EN{Let's see it in} IDA:
 
 \lstinputlisting[caption=\Optimizing MSVC 2013]{OS/TLS/win32/rand_TLS_callback.lst}
 
-TLS callback functions are sometimes used in unpacking routines to obscure its processings.
-Some people may be confused and be in the dark that some code was already executed right before \ac{OEP}.
+\RU{TLS-коллбэки иногда используются в процедурах распаковки для запутывания их работы.}
+\EN{TLS callback functions are sometimes used in unpacking routines to obscure its processings.}
+\RU{Некоторые люди могут быть в неведении что какой-то код уже был исполнен прямо перед \ac{OEP}.}
+\EN{Some people may be confused and be in the dark that some code was already executed right before \ac{OEP}.}

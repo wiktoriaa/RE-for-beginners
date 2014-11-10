@@ -1,4 +1,3 @@
-\ifx\RUSSIAN\undefined
 \subsection{MIPS}
 
 \subsubsection{\NonOptimizing GCC}
@@ -7,20 +6,26 @@
 
 \index{MIPS!\Instructions!SLL}
 \index{MIPS!\Instructions!SLLV}
-That verbose: all local variables are located in local stack and reloaded each time.
-SLLV instruction is ``Shift Word Left Logical Variable'', it's different from SLL only in that sense
-that shift amount is encoded in SLL instruction, but SLLV takes shift amount value from register.
+\RU{Это многословно: все локальные переменные расположены в локальном стеке и перезагружаются каждый раз,
+когда нужны.}
+\EN{That verbose: all local variables are located in local stack and reloaded each time it needed.}
+\RU{Инструкция SLLV это ``Shift Word Left Logical Variable'', она отличается от SLL только тем что
+количество бит для сдвига кодируется в SLL (и следовательно, фиксировано), а SLL берет количество из регистра.}
+\EN{SLLV instruction is ``Shift Word Left Logical Variable'', it's different from SLL only in that sense
+that shift amount is encoded in SLL instruction (and is fixed, as a consequence), 
+but SLLV takes shift amount value from register.}
 
 \subsubsection{\Optimizing GCC}
 
-That is more terse.
-There are two shifting instructions instead of single.
-Why?
-It's possible to replace first SLLV instruction with unconditional branch instruction, 
-jumping right to the second SLLV.
-But this is another branching instruction in function, and it's always favorable to get rid of them: 
+\RU{Это более сжато}\EN{That is more terse}.
+\RU{Здесь две инструкции сдвигов вместо одной.}\EN{There are two shifting instructions instead of single.}
+\RU{Почему}\EN{Why}?
+\RU{Можно заменить первую инструкцию SLLV на инструкцию безусловного перехода, передав управление прямо
+на вторую SLLV.}
+\EN{It's possible to replace first SLLV instruction with unconditional branch instruction, 
+jumping right to the second SLLV.}
+\RU{Но это еще одна инструкция перехода в ф-ции, а от них избавляться всегда выгодно}
+\EN{But this is another branching instruction in function, and it's always favorable to get rid of them}: 
 \ref{branch_predictors}.
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/14_bitfields/4_popcnt/MIPS_O3_IDA.lst}
-
-\fi

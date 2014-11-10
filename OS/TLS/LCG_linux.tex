@@ -1,19 +1,22 @@
 \subsection{Linux}
 
-Here is how thread-local global variable declared in GCC:
+\RU{Вот как глобальная переменная локальная для потока определяется в GCC:}
+\EN{Here is how thread-local global variable declared in GCC:}
 
 \begin{lstlisting}
 __thread uint32_t rand_state=1234;
 \end{lstlisting}
 
-This is not standard \CCpp modifier, but rather GCC-specific
+\RU{Этот модификатор не стандартный для \CCpp, он присутствует только в GCC}
+\EN{This is not standard \CCpp modifier, but rather GCC-specific}
 \footnote{\url{https://gcc.gnu.org/onlinedocs/gcc-3.3/gcc/C99-Thread-Local-Edits.html}}.
 
 \index{x86!\Registers!GS}
-\TT{GS:} selector is also used to \ac{TLS} access, but in some different way:
+\RU{Селектор \TT{GS:} также используется для доступа к \ac{TLS}, но немного иначе:}
+\EN{\TT{GS:} selector is also used to \ac{TLS} access, but in some different way:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.8.1 x86]{OS/TLS/linux/rand.lst}
 
-Uninitialized data is allocated in \TT{.tbss} section, initialized --- in \TT{.tdata} section.
+% ??? Uninitialized data is allocated in \TT{.tbss} section, initialized --- in \TT{.tdata} section.
 
-More about it: \cite{DrepperTLS}.
+\RU{Еще об этом}\EN{More about it}: \cite{DrepperTLS}.

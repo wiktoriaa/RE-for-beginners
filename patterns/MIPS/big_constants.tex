@@ -1,5 +1,4 @@
-﻿\ifx\RUSSIAN\undefined
-\section{\RU{Загрузка констант в регистр}\EN{Loading constants into register}}
+﻿\section{\RU{Загрузка констант в регистр}\EN{Loading constants into register}}
 
 \begin{lstlisting}
 unsigned int f()
@@ -8,13 +7,18 @@ unsigned int f()
 };
 \end{lstlisting}
 
-MIPS, just like ARM, has all instructions with size of 32-bit, so it's not possible to
-embed 32-bit constant into one instruction.
+\RU{В MIPS, так же как и в ARM, все инструкции имеют размер 32 бита, так что невозможно
+закодировать 32-битную константу в инструкцию.}
+\EN{MIPS, just like ARM, has all instructions with size of 32-bit, so it's not possible to
+embed 32-bit constant into one instruction.}
 \index{MIPS!\Instructions!LI}
 \index{MIPS!\Instructions!ORI}
-So this translates to at least two instructions: 
+\RU{Так что это транслируется в две инструкции:
+первая загружает старшую часть 32-битного числа и вторая применяет операцию ``ИЛИ'',
+эффект от которой в том, что она просто выставляет младшие 16 бит целевого регистра:}
+\EN{So this translates to at least two instructions: 
 first loads high part of 32-bit number and the second
-one apply OR operation which effectively sets low 16-bit part of the target register:
+one apply OR operation which effectively sets low 16-bit part of the target register:}
 
 \begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput)]
         li      $2,305397760                    # 0x12340000
@@ -22,8 +26,12 @@ one apply OR operation which effectively sets low 16-bit part of the target regi
         ori     $2,$2,0x5678 ; branch delay slot
 \end{lstlisting}
 
-\IDA is fully aware of such code patterns, so it shows the last ORI instruction as LI pseudoinstruction
-allegedly it loads full 32-bit number into V0 register --- for convenience.
+\IDA \RU{знает о таких часто встречающихся последовательностях, так что для удобства, 
+она показывает последнюю инструкцию ORI как псевдоинструкцию LI, 
+которая якобы загружает полное 32-битное значение в регистр \$V0.}
+\EN{is fully aware of such often encountering code patterns, 
+so, for convenience, it shows the last ORI instruction as LI pseudoinstruction,
+which allegedly loads full 32-bit number into \$V0 register.}
 
 \index{MIPS!\Instructions!LUI}
 
@@ -33,7 +41,7 @@ allegedly it loads full 32-bit number into V0 register --- for convenience.
          li      $v0, 0x12345678 ; branch delay slot
 \end{lstlisting}
 
-GCC assembly output has LI instruction, but in fact, LUI (``Load Upper Imeddiate'') there,
-which stores 16-bit value into high part of register.
-
-\fi
+\RU{В выводе на ассемблере от GCC есть псевдоинструкция LUI, но на самом деле, 
+там LUI (``Load Upper Imeddiate''), загружающая 16-битное значение в старшую часть регистра.}
+\EN{GCC assembly output has LI pseudoinstruction, but in fact, LUI (``Load Upper Imeddiate'') there,
+which stores 16-bit value into high part of register.}
