@@ -11,7 +11,6 @@
 \RU{Как видно, мы имеем два поля \Tchar (занимающий один байт) и еще два ~--- \Tint (по 4 байта).}
 \EN{As we see, we have two \Tchar fields (each is exactly one byte) and two more~---\Tint (each - 4 bytes).}
 
-
 % subsections:
 
 \input{patterns/15_structs/4_packing/x86}
@@ -22,3 +21,21 @@
 \ifdefined\IncludeMIPS
 \input{patterns/15_structs/4_packing/MIPS}
 \fi
+
+\subsection{\RU{Еще кое-что}\EN{One more word}}
+
+\EN{Passing structure as function argument (instead of passing pointer to structure) is the same
+as passing all structure fields one by one.}
+\RU{Передача структуры как аргумент ф-ции (вместо передачи указателя на структуру) это то же
+что и передача всех полей структуры по одному.}
+\EN{If structure fields packed by default, f() function can be rewritten as:}
+\RU{Если поля в структуре пакуются по умолчанию, то ф-цию f() можно переписать так:}
+
+\begin{lstlisting}
+void f(char a, int b, char c, int d)
+{
+    printf ("a=%d; b=%d; c=%d; d=%d\n", a, b, c, d);
+};
+\end{lstlisting}
+
+\RU{И в итоге будет такой же код}\EN{And that will result in the same code}.
