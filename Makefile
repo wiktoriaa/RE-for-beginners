@@ -21,7 +21,9 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/11_arith_optimizations/division_by_9/2.asm.ru patterns/11_arith_optimizations/division_by_9/2.asm.en \
 	patterns/15_structs/4_packing/packing.asm.ru patterns/15_structs/4_packing/packing.asm.en \
 	patterns/15_structs/4_packing/packing_msvc_Zp1.asm.ru patterns/15_structs/4_packing/packing_msvc_Zp1.asm.en \
-	patterns/15_structs/6_bitfields/float/float_en.c.ru patterns/15_structs/6_bitfields/float/float_en.c.en \
+	patterns/15_structs/6_bitfields/float/float.c.ru patterns/15_structs/6_bitfields/float/float.c.en \
+	patterns/15_structs/6_bitfields/float/float_gcc_O3.asm.ru patterns/15_structs/6_bitfields/float/float_gcc_O3.asm.en \
+	patterns/15_structs/6_bitfields/float/float_msvc.asm.ru patterns/15_structs/6_bitfields/float/float_msvc.asm.en \
 	patterns/205_floating_SIMD/pow_GCC446_x64_O3.s.ru patterns/205_floating_SIMD/pow_GCC446_x64_O3.s.en \
 	patterns/25_variadic_functions/arith.c.ru patterns/25_variadic_functions/arith.c.en \
 	patterns/25_variadic_functions/arith_GCC491_x64_O3.s.ru patterns/25_variadic_functions/arith_GCC491_x64_O3.s.en \

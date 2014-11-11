@@ -24,7 +24,7 @@ But will we able to work with these fields directly? Let's try with \Tfloat.}
 ( S\EMDASH{}\RU{знак}\EN{sign} )
 \end{center}
 
-\lstinputlisting{patterns/15_structs/6_bitfields/float/float_en.c.\LANG}
+\lstinputlisting{patterns/15_structs/6_bitfields/float/float.c.\LANG}
 
 \RU{Структура \TT{float\_as\_struct} занимает в памяти столько же места сколько и \Tfloat, 
 то есть 4 байта или 32 бита.}
@@ -39,7 +39,7 @@ we thereby multiplicating the whole number by \TT{$2^2$}, i.e., by 4.}
 \RU{Компилируем в MSVC 2008 без включенной оптимизации:}
 \EN{Let's compile in MSVC 2008 without optimization turned on:}
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2008]{patterns/15_structs/6_bitfields/float/float_msvc_\LANG.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2008]{patterns/15_structs/6_bitfields/float/float_msvc.asm.\LANG}
 
 \RU{Слегка избыточно. В версии скомпилированной с флагом \Ox нет вызовов \TT{memcpy()}, 
 там работа происходит сразу с переменной f. Но по неоптимизированной версии будет проще понять.}
@@ -50,7 +50,7 @@ But it is easier to understand it all by looking at unoptimized version.}
 
 \RU{А что сделает GCC 4.4.1 с опцией \Othree?}\EN{What GCC 4.4.1 with \Othree will do?}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.1]{patterns/15_structs/6_bitfields/float/float_gcc_O3_\LANG.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.4.1]{patterns/15_structs/6_bitfields/float/float_gcc_O3.asm.\LANG}
 
 \RU{Да, функция \ttf в целом понятна. Однако, что интересно, еще при компиляции, 
 не взирая на мешанину с полями структуры, GCC умудрился вычислить результат функции \TT{f(1.234)} еще
