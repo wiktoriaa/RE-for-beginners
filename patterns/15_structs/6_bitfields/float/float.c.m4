@@ -1,7 +1,7 @@
-include(`commons.m4')#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <memory.h>
+include(`commons.m4')`#'include <stdio.h>
+`#'include <assert.h>
+`#'include <stdlib.h>
+`#'include <memory.h>
 
 struct float_as_struct
 {

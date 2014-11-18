@@ -1,5 +1,5 @@
-include(`commons.m4')#include <stdio.h>
-#include <stdarg.h>
+include(`commons.m4')`#'include <stdio.h>
+`#'include <stdarg.h>
 
 int arith_mean(int v, ...)
 {

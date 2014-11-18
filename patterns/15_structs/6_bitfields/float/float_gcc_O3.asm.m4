@@ -9,14 +9,14 @@ arg_0  = dword ptr  8
        mov     ebp, esp
        sub     esp, 4
        mov     eax, [ebp+arg_0]
-       or      eax, 80000000h  ; _EN(`set minus sign ')_RU(`выставить знак минуса')
+       or      eax, 80000000h  ; _EN(`set minus sig ')_RU(`выставить знак минуса')
        mov     edx, eax
-       and     eax, 807FFFFFh  ; _EN(`leave only significand and exponent in EAX ')_RU(`оставить в EAX только знак и мантиссу')
-       shr     edx, 23         ; _EN(`prepare exponent ')_RU(`подготовить экспоненту')
-       add     edx, 2          ; _EN(`add 2 ')_RU(`прибавить 2')
-       movzx   edx, dl         ; _EN(`clear all bits except 7:0 in EAX ')_RU(`сбросить все биты кроме 7:0 в EAX в 0')
-       shl     edx, 23         ; _EN(`shift new calculated exponent to its place ')_RU(`подвинуть новую только что вычисленную экспоненту на свое место')
-       or      eax, edx        ; _EN(`add new exponent and original value without exponent ')_RU(`сложить новую экспоненту и оригинальное значение без экспоненты')
+       and     eax, 807FFFFFh  ; _EN(`leave only significand and exponent in EAX')_RU(`оставить в EAX только знак и мантиссу')
+       shr     edx, 23         ; _EN(`prepare exponent')_RU(`подготовить экспоненту')
+       add     edx, 2          ; _EN(`add 2')_RU(`прибавить 2')
+       movzx   edx, dl         ; _EN(`clear all bits except 7:0 in EAX')_RU(`сбросить все биты кроме 7:0 в EAX в 0')
+       shl     edx, 23         ; _EN(`shift new calculated exponent to its place')_RU(`подвинуть новую только что вычисленную экспоненту на свое место')
+       or      eax, edx        ; _EN(`add new exponent and original value without exponent')_RU(`сложить новую экспоненту и оригинальное значение без экспоненты')
        mov     [ebp+var_4], eax
        fld     [ebp+var_4]
        leave

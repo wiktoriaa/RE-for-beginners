@@ -16,15 +16,24 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/07_jcc/abs/abs_Keil_ARM_O3.s.ru patterns/07_jcc/abs/abs_Keil_ARM_O3.s.en \
 	patterns/07_jcc/abs/abs_Keil_thumb_O3.s.ru patterns/07_jcc/abs/abs_Keil_thumb_O3.s.en \
 	patterns/07_jcc/abs/abs_MSVC2012_Ox_x64.asm.ru patterns/07_jcc/abs/abs_MSVC2012_Ox_x64.asm.en \
+	patterns/11_arith_optimizations/division_by_9/2.asm.ru patterns/11_arith_optimizations/division_by_9/2.asm.en \
 	patterns/13_arrays/6_neg_arrays/neg_array.asm.ru patterns/13_arrays/6_neg_arrays/neg_array.asm.en \
 	patterns/13_arrays/6_neg_arrays/stack.txt.ru patterns/13_arrays/6_neg_arrays/stack.txt.en \
-	patterns/11_arith_optimizations/division_by_9/2.asm.ru patterns/11_arith_optimizations/division_by_9/2.asm.en \
+	patterns/14_bitfields/1_check/check2.asm.ru patterns/14_bitfields/1_check/check2.asm.en \
+	patterns/14_bitfields/2_set_reset/MIPS_O3_IDA.lst.ru patterns/14_bitfields/2_set_reset/MIPS_O3_IDA.lst.en \
+	patterns/145_LCG/MIPS_O3_IDA.lst.ru patterns/145_LCG/MIPS_O3_IDA.lst.en \
+	patterns/145_LCG/rand.s_Keil_ARM_O3.s.ru patterns/145_LCG/rand.s_Keil_ARM_O3.s.en \
+	patterns/145_LCG/rand_MSVC_2013_x64_Ox.asm.ru patterns/145_LCG/rand_MSVC_2013_x64_Ox.asm.en \
 	patterns/15_structs/4_packing/packing.asm.ru patterns/15_structs/4_packing/packing.asm.en \
 	patterns/15_structs/4_packing/packing_msvc_Zp1.asm.ru patterns/15_structs/4_packing/packing_msvc_Zp1.asm.en \
 	patterns/15_structs/6_bitfields/float/float.c.ru patterns/15_structs/6_bitfields/float/float.c.en \
 	patterns/15_structs/6_bitfields/float/float_gcc_O3.asm.ru patterns/15_structs/6_bitfields/float/float_gcc_O3.asm.en \
 	patterns/15_structs/6_bitfields/float/float_msvc.asm.ru patterns/15_structs/6_bitfields/float/float_msvc.asm.en \
+	patterns/17_unions/epsilon/double_GCC49_ARM64_O3.s.ru patterns/17_unions/epsilon/double_GCC49_ARM64_O3.s.en \
+	patterns/17_unions/epsilon/float_MSVC_2010_Ox.asm.ru patterns/17_unions/epsilon/float_MSVC_2010_Ox.asm.en \
 	patterns/205_floating_SIMD/pow_GCC446_x64_O3.s.ru patterns/205_floating_SIMD/pow_GCC446_x64_O3.s.en \
+	patterns/24_duff_device/duff.c.ru patterns/24_duff_device/duff.c.en \
+	patterns/24_duff_device/duff_MSVC2012_x64_Ox.asm.ru patterns/24_duff_device/duff_MSVC2012_x64_Ox.asm.en \
 	patterns/25_variadic_functions/arith.c.ru patterns/25_variadic_functions/arith.c.en \
 	patterns/25_variadic_functions/arith_GCC491_x64_O3.s.ru patterns/25_variadic_functions/arith_GCC491_x64_O3.s.en \
 	patterns/25_variadic_functions/arith_MSVC_2012_Ox_x64.asm.ru patterns/25_variadic_functions/arith_MSVC_2012_Ox_x64.asm.en \

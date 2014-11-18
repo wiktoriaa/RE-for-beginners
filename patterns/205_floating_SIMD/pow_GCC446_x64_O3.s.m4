@@ -5,7 +5,7 @@ main:
 	movsd	xmm1, QWORD PTR .LC0[rip]
 	movsd	xmm0, QWORD PTR .LC1[rip]
 	call	pow
-	; _EN(`result is now in ')_RU(`результат сейчас в ')XMM0
+	; _EN(`result is now in')_RU(`результат сейчас в') XMM0
 	mov	edi, OFFSET FLAT:.LC2
 	mov	eax, 1 ; _RU(`количество переданных векторных регистров')_EN(`number of vector registers passed')
 	call	printf
