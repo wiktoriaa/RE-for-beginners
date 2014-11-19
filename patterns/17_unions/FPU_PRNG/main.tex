@@ -1,4 +1,5 @@
 \section{\RU{Пример генератора случайных чисел}\EN{Pseudo-random number generator example}}
+\label{FPU_PRNG}
 
 \RU{Если нам нужны случайные значения с плавающей запятой в интервале от 0 до 1, самое простое это взять
 \ac{PRNG} вроде Mersenne twister.
@@ -42,7 +43,7 @@ Generated numbers will be in 1 to 2 interval, so we also must subtract 1 from it
 Генератор инициализируется текущим временем в стиле UNIX.}
 \EN{Very simple linear congruential random numbers generator is used in my 
 example\footnote{idea was taken from: \URLXOR}, produces 32-bit numbers. 
-The PRNG initializing by current time in UNIX-style.}
+The \ac{PRNG} initializing by current time in UNIX-style.}
 
 \RU{Далее, тип \Tfloat представляется в виде \IT{union} ~--- это конструкция \CCpp позволяющая 
 интерпретировать часть памти по-разному. В нашем случае, мы можем создать переменную типа \TT{union} 
@@ -53,9 +54,46 @@ In our case, we are able to create a variable
 of \TT{union} type and then access to it as it is \Tfloat or as it is \IT{uint32\_t}. 
 It can be said, it is just a hack. A dirty one.}
 
-\lstinputlisting{patterns/17_unions/FPU_PRNG.cpp}
+\RU{Код целочисленного \ac{PRNG} точно такой же, как мы уже рассматривали раннее:}
+\EN{The integer \ac{PRNG} code is the same as we already considered:} \ref{LCG_simple}.
+\RU{Так что и в скомпилированном виде этот код будет опущен.}
+\EN{So this code will be omitted in compiled form.}
 
-\lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/17_unions/FPU_PRNG_msvc_2010_Ox_\LANG.asm}
+\lstinputlisting{patterns/17_unions/FPU_PRNG/FPU_PRNG.cpp.\LANG}
 
-\RU{А результат GCC будет почти таким же.}\EN{GCC produces very similar code.}
+\subsection{x86}
 
+\lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/17_unions/FPU_PRNG/MSVC2010_Ox_Ob0.asm.\LANG}
+
+\EN{Function names are so strange here because I compiled this example as C++ and this is name mangling in C++,
+we will talk about it later:}
+\RU{Имена ф-ций такие странные, потому что я компилировал этот пример как Си++, и это манглинг имен в Си++, 
+мы будем рассматривать это позже:} \ref{namemangling}.
+
+\RU{Если скомпилировать это в MSVC 2012, компилятор будет использовать SIMD-инструкции для FPU, читайте об этом
+здесь:}
+\EN{If to compile this in MSVC 2012, it will use SIMD instructions for FPU, read more about it here:}
+\ref{FPU_PRNG_SIMD}.
+
+\subsection{MIPS}
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5]{patterns/17_unions/FPU_PRNG/MIPS_O3_IDA.lst.\LANG}
+
+\subsection{ARM (\ARMMode)}
+
+\lstinputlisting[caption=\Optimizing GCC 4.6.3 (IDA)]{patterns/17_unions/FPU_PRNG/raspberry_GCC_O3_IDA.lst.\LANG}
+
+\index{objdump}
+\index{binutils}
+\index{IDA}
+\RU{Я также сделал дамп в objdump и увидел что FPU-инструкции имеют немного другие имена чем в IDA.}
+\EN{I also made a dump in objdump and I saw that FPU-instructions has other names than in IDA.}
+\RU{Apparently, IDA and binutils developers used different manuals?}
+\RU{Наверное, разработчики IDA и binutils пользовались разной документацией?}
+\EN{I suppose, it would be good to know both instruction name variants.}
+\RU{Полагаю, будет полезно знать оба варианта названий инструкций.}
+
+\lstinputlisting[caption=\Optimizing GCC 4.6.3 (objdump)]{patterns/17_unions/FPU_PRNG/raspberry_GCC_O3_objdump.lst}
+
+\EN{Instructions at 5c in float\_rand() and at 38 in main() is random noise.}
+\RU{Инструкции по адресам 5c в float\_rand() и 38 в main() это случайный мусор.}

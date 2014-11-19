@@ -21,6 +21,7 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/13_arrays/6_neg_arrays/stack.txt.ru patterns/13_arrays/6_neg_arrays/stack.txt.en \
 	patterns/14_bitfields/1_check/check2.asm.ru patterns/14_bitfields/1_check/check2.asm.en \
 	patterns/14_bitfields/2_set_reset/MIPS_O3_IDA.lst.ru patterns/14_bitfields/2_set_reset/MIPS_O3_IDA.lst.en \
+	patterns/145_LCG/rand.c.ru patterns/145_LCG/rand.c.en \
 	patterns/145_LCG/MIPS_O3_IDA.lst.ru patterns/145_LCG/MIPS_O3_IDA.lst.en \
 	patterns/145_LCG/rand.s_Keil_ARM_O3.s.ru patterns/145_LCG/rand.s_Keil_ARM_O3.s.en \
 	patterns/145_LCG/rand_MSVC_2013_x64_Ox.asm.ru patterns/145_LCG/rand_MSVC_2013_x64_Ox.asm.en \
@@ -31,7 +32,12 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/15_structs/6_bitfields/float/float_msvc.asm.ru patterns/15_structs/6_bitfields/float/float_msvc.asm.en \
 	patterns/17_unions/epsilon/double_GCC49_ARM64_O3.s.ru patterns/17_unions/epsilon/double_GCC49_ARM64_O3.s.en \
 	patterns/17_unions/epsilon/float_MSVC_2010_Ox.asm.ru patterns/17_unions/epsilon/float_MSVC_2010_Ox.asm.en \
+	patterns/17_unions/FPU_PRNG/FPU_PRNG.cpp.ru patterns/17_unions/FPU_PRNG/FPU_PRNG.cpp.en \
+	patterns/17_unions/FPU_PRNG/MSVC2010_Ox_Ob0.asm.ru patterns/17_unions/FPU_PRNG/MSVC2010_Ox_Ob0.asm.en \
+	patterns/17_unions/FPU_PRNG/raspberry_GCC_O3_IDA.lst.ru patterns/17_unions/FPU_PRNG/raspberry_GCC_O3_IDA.lst.en \
+	patterns/17_unions/FPU_PRNG/MIPS_O3_IDA.lst.ru patterns/17_unions/FPU_PRNG/MIPS_O3_IDA.lst.en \
 	patterns/205_floating_SIMD/pow_GCC446_x64_O3.s.ru patterns/205_floating_SIMD/pow_GCC446_x64_O3.s.en \
+	patterns/205_floating_SIMD/FPU_PRNG/MSVC2012_Ox_Ob0.asm.ru patterns/205_floating_SIMD/FPU_PRNG/MSVC2012_Ox_Ob0.asm.en \
 	patterns/24_duff_device/duff.c.ru patterns/24_duff_device/duff.c.en \
 	patterns/24_duff_device/duff_MSVC2012_x64_Ox.asm.ru patterns/24_duff_device/duff_MSVC2012_x64_Ox.asm.en \
 	patterns/25_variadic_functions/arith.c.ru patterns/25_variadic_functions/arith.c.en \
