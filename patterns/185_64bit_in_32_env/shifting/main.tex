@@ -1,0 +1,34 @@
+﻿\section{\RU{Сдвиг вправо}\EN{Shifting right}}
+
+\lstinputlisting{patterns/185_64bit_in_32_env/shifting/3.c}
+
+\subsection{x86}
+
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob1]{patterns/185_64bit_in_32_env/shifting/3_MSVC.asm}
+
+\lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline]{patterns/185_64bit_in_32_env/shifting/3_GCC.asm}
+
+\index{x86!\Instructions!SHRD}
+\RU{Сдвиг происходит также в две операции: в начале сдвигается младшая часть, затем старшая}
+\EN{Shifting also occurring in two passes: first lower part is shifting, then higher part}.
+\RU{Но младшая часть сдвигается
+при помощи инструкции \TT{SHRD}, она сдвигает значение в \EDX{} на 7 бит, но подтягивает новые биты из \EAX{}, т.е., из старшей части}
+\EN{But the lower part is shifting with the help of \TT{SHRD} instruction, it shifting \EDX{} value by 7 bits, but pulling new bits
+from \EAX{}, i.e., from the higher part}.
+\RU{Старшая часть сдвигается более известной инструкцией \SHR{}: действительно, ведь освободившиеся биты в старшей части нужно
+просто заполнить нулями}\EN{Higher part is shifting using more popular \SHR{} instruction: indeed, freed bits in the higher part
+should be just filled with zeroes}.
+
+\ifdefined\IncludeARM
+\subsection{ARM}
+
+\RU{В ARM нет такой инструцкии как SHRD в x86, так что компилятору Keil приходится всё это делать
+используя простые сдвиги и операции ``ИЛИ'':}
+\EN{ARM doesn't have such instruction as SHRD in x86, so Keil compiler ought to do this using simple shifts
+and OR operations:}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/shifting/Keil_ARM_O3.s}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/185_64bit_in_32_env/shifting/Keil_thumb_O3.s}
+% TODO add explanation
+\fi

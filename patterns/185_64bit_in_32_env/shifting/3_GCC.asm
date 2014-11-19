@@ -1,4 +1,4 @@
-_f6:
+_f:
 	mov	edx, DWORD PTR [esp+8]
 	mov	eax, DWORD PTR [esp+4]
 	shrd	eax, edx, 7

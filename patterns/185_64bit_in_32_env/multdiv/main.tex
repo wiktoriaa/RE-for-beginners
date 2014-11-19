@@ -1,0 +1,35 @@
+﻿\section{\RU{Умножение, деление}\EN{Multiplication, division}}
+
+\lstinputlisting{patterns/185_64bit_in_32_env/multdiv/2.c}
+
+\subsection{x86}
+
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob1]{patterns/185_64bit_in_32_env/multdiv/2_MSVC.asm}
+
+\RU{Умножение и деление это более сложная операция, так что обычно, компилятор встраивает вызовы библиотечных ф-ций,
+делающих это}\EN{Multiplication and division is more complex operation, so usually, the compiler embedds calls to
+the library functions doing that}. \\
+\\
+\RU{Значение этих библиотечных ф-ций, здесь}\EN{These functions meaning are here}: \ref{sec:MSVC_library_func}.
+
+\lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline]{patterns/185_64bit_in_32_env/multdiv/2_GCC.asm}
+
+\RU{GCC делает почти то же самое, тем не менее,
+встраивает код умножения прямо в ф-цию, посчитав что так будет эффективнее}\EN{GCC doing almost the same, but multiplication
+code is inlined right in the function, thinking it could be more efficient}.
+\RU{У GCC другие имена библиотечных ф-ций}\EN{GCC has different library function names}: \ref{sec:GCC_library_func}.
+
+\ifdefined\IncludeARM
+\subsection{ARM}
+
+\RU{Keil для режима thumb вставляет вызовы библиотечных ф-ций:}
+\EN{Keil for thumb mode inserts library subroutine calls:}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/185_64bit_in_32_env/multdiv/Keil_thumb_O3.s}
+
+\RU{Keil для режима ARM, тем не менее, может сгенерировать код для умножения 64-битных чисел:}
+\EN{Keil for ARM mode, nevertheless, is able to produce 64-bit multiplication code:}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/multdiv/Keil_ARM_O3.s}
+% TODO add explanation
+\fi

@@ -1,0 +1,48 @@
+﻿\section{\RU{Конвертирование 32-битного значения в 64-битное}\EN{Converting 32-bit value into 64-bit one}}
+\label{subsec:sign_extending_32_to_64}
+
+\lstinputlisting{patterns/185_64bit_in_32_env/conversion/4.c}
+
+\subsection{x86}
+
+\lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/185_64bit_in_32_env/conversion/MSVC2012_Ox.asm}
+
+\RU{Здесь появляется необходимость расширить 32-битное знаковое значение в 64-битное знаковое.}
+\EN{Here we also run into necessity to extend 32-bit signed value into 64-bit signed.}
+\RU{Конвертировать беззнаковые значения очень просто: нужно просто выставить в 0 все биты в старшей части}
+\EN{Unsigned values are converted straightforwardly: all bits in higher part must be set to 0}.
+\RU{Но для знаковых типов это не подходит: знак числа должен быть скопирован в старшую часть числа-результата}
+\EN{But it is not appropriate for signed data types: sign should be copied into higher part of resulting number}.
+\index{x86!\Instructions!CDQ}
+\RU{Здесь это делает инструкция \TT{CDQ}, она берет входное значение в \EAX{}, расширяет его до 64-битного,
+и оставляет его в паре регистров \EDX{}:\EAX{}}
+\EN{\TT{CDQ} instruction doing that here, it takes input value in \EAX{}, extending it to 64-bit and leaving it
+in the \EDX{}:\EAX{} registers pair}.
+\RU{Иными словами, инструкция \TT{CDQ} узнает знак числа в \EAX{} (просто берет самый старший бит в \EAX{}) и в зависимости от этого,
+выставляет все 32 бита в \EDX{} в 0 или в 1}\EN{In other words, \TT{CDQ} instruction gets number sign in \EAX{} (by getting just
+most significant bit in \EAX{}), and depending of it, setting all 32-bits in \EDX{} to 0 or 1}.
+\RU{Её работа в каком-то смысле напоминает работу инструкции \MOVSX{}}\EN{Its operation is somewhat
+similar to the \MOVSX{} instruction}.
+
+\ifdefined\IncludeARM
+\subsection{ARM}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/conversion/Keil_ARM_O3.s}
+
+\RU{Keil для ARM работает иначе: он просто сдвигает (арифметически) входное значение на 31 бит вправо.}
+\EN{Keil for ARM is different: it just arithmetically shifts input value by 31 bit right.}
+\RU{Как мы знаем, бит знака это \ac{MSB}, и арифметический сдвиг копирует бит знака в ``появляющихся'' битах.}
+\EN{As we know, sign bit is \ac{MSB}, and arithmetical shift copies sign bit into ``emerged'' bits.}
+\RU{Так что после инструкции ``ASR r1,r0,\#31'', R1 будет содержать 0xFFFFFFFF если входное значение
+было отрицательным, или 0 в противном случае.}
+\EN{So after ``ASR r1,r0,\#31'' instruction, R1 will contain 0xFFFFFFFF if input value was negative
+and 0 otherwise.}
+\RU{R1 содержит старшую часть возвращаемого 64-битного значения.}
+\EN{R1 contain high part of resulting 64-bit value.}
+
+\RU{Другими словами, этот код просто копирует \ac{MSB} (бит знака) из входного значения в R0 во все
+биты старшей 32-битной части итогового 64-битного значения.}
+\EN{In other words, this code just copies \ac{MSB} (sign bit) from input value in R0 into all bits
+of high 32-bit part of resulting 64-bit value.}
+
+\fi
