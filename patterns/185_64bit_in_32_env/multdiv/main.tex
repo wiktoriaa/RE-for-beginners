@@ -33,3 +33,20 @@ code is inlined right in the function, thinking it could be more efficient}.
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/multdiv/Keil_ARM_O3.s}
 % TODO add explanation
 \fi
+
+\ifdefined\IncludeMIPS
+\subsection{MIPS}
+
+\Optimizing GCC \ForENRU MIPS 
+\EN{can generate 64-bit multiplication code, but have to call library routine for 64-bit division:}
+\RU{может генерировать код для 64-битного умножения, но для 64-битного деления приходится вызывать библиотечную ф-цию:}
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/185_64bit_in_32_env/multdiv/MIPS_O3_IDA.lst}
+
+\RU{Тут также много \ac{NOP}-ов, это возможно заполнение delay slot-ов после инструкции умножения (она ведь работает
+медленнее прочих инструкций), но я не однозначно уверен.}
+\EN{There are a lot of \ac{NOP}s, they are probably delay slots filled after multiplication instruction (it's slow
+than other instructions, after all), but I'm not completely sure.}
+
+% TODO add explanation
+\fi

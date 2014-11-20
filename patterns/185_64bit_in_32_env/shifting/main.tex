@@ -12,9 +12,9 @@
 \RU{Сдвиг происходит также в две операции: в начале сдвигается младшая часть, затем старшая}
 \EN{Shifting also occurring in two passes: first lower part is shifting, then higher part}.
 \RU{Но младшая часть сдвигается
-при помощи инструкции \TT{SHRD}, она сдвигает значение в \EDX{} на 7 бит, но подтягивает новые биты из \EAX{}, т.е., из старшей части}
+при помощи инструкции \TT{SHRD}, она сдвигает значение в \EDX{} на 7 бит, но подтягивает новые биты из \EAX{}, т.е., из старшей части.}
 \EN{But the lower part is shifting with the help of \TT{SHRD} instruction, it shifting \EDX{} value by 7 bits, but pulling new bits
-from \EAX{}, i.e., from the higher part}.
+from \EAX{}, i.e., from the higher part.}
 \RU{Старшая часть сдвигается более известной инструкцией \SHR{}: действительно, ведь освободившиеся биты в старшей части нужно
 просто заполнить нулями}\EN{Higher part is shifting using more popular \SHR{} instruction: indeed, freed bits in the higher part
 should be just filled with zeroes}.
@@ -30,5 +30,16 @@ and OR operations:}
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/shifting/Keil_ARM_O3.s}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/185_64bit_in_32_env/shifting/Keil_thumb_O3.s}
+% TODO add explanation
+\fi
+
+\ifdefined\IncludeMIPS
+\subsection{MIPS}
+
+\EN{GCC for MIPS follows the same algorithm as Keil did for thumb mode:}
+\RU{GCC для MIPS реализует тот же алгоритм, что сделал Keil для режима thumb:}
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/185_64bit_in_32_env/shifting/MIPS_O3_IDA.lst}
+
 % TODO add explanation
 \fi

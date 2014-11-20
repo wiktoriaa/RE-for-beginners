@@ -36,6 +36,7 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/17_unions/FPU_PRNG/MSVC2010_Ox_Ob0.asm.ru patterns/17_unions/FPU_PRNG/MSVC2010_Ox_Ob0.asm.en \
 	patterns/17_unions/FPU_PRNG/raspberry_GCC_O3_IDA.lst.ru patterns/17_unions/FPU_PRNG/raspberry_GCC_O3_IDA.lst.en \
 	patterns/17_unions/FPU_PRNG/MIPS_O3_IDA.lst.ru patterns/17_unions/FPU_PRNG/MIPS_O3_IDA.lst.en \
+	patterns/185_64bit_in_32_env/passing_add_sub/MIPS_O3_IDA.lst.ru patterns/185_64bit_in_32_env/passing_add_sub/MIPS_O3_IDA.lst.en \
 	patterns/205_floating_SIMD/pow_GCC446_x64_O3.s.ru patterns/205_floating_SIMD/pow_GCC446_x64_O3.s.en \
 	patterns/205_floating_SIMD/FPU_PRNG/MSVC2012_Ox_Ob0.asm.ru patterns/205_floating_SIMD/FPU_PRNG/MSVC2012_Ox_Ob0.asm.en \
 	patterns/24_duff_device/duff.c.ru patterns/24_duff_device/duff.c.en \

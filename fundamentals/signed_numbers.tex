@@ -78,14 +78,29 @@ and unsigned (\JA, \JB) operations.} \\
 \RU{Для простоты, вот что нужно знать}\EN{For the sake of simplicity, that is what one need to know}:
 \begin{itemize}
 \item \RU{Числа бывают знаковые и беззнаковые}\EN{Number can be signed or unsigned}.
+
 \item \RU{Знаковые типы в \CCpp}\EN{\CCpp signed types}:
-	\Tint (-2147483646..2147483647 \OrENRU \TT{0x80000000..0x7FFFFFFF}),
-	\Tchar (-127..128 \OrENRU \TT{0x7F..0x80}).
-	\RU{Беззнаковые}\EN{Unsigned}: \TT{unsigned int} (0..4294967295 \OrENRU \TT{0..0xFFFFFFFF}),
-	\TT{unsigned char} (0..255 \OrENRU \TT{0..0xFF}), 
-	\TT{size\_t}.
+  \begin{itemize}
+    \item \TT{int64\_t} (-9223372036854775806..9223372036854775807) \OrENRU \\
+                \TT{0x8000000000000000..0x7FFFFFFFFFFFFFFF}),
+    \item \Tint (-2147483646..2147483647 \OrENRU \TT{0x80000000..0x7FFFFFFF}),
+    \item \Tchar (-127..128 \OrENRU \TT{0x7F..0x80}),
+    \item \TT{ssize\_t}.
+   \end{itemize}
+
+	\RU{Беззнаковые}\EN{Unsigned}: 
+  \begin{itemize}
+   \item \TT{uint64\_t} (0..18446744073709551615 \OrENRU \TT{0..0xFFFFFFFFFFFFFFFF}),
+   \item \TT{unsigned int} (0..4294967295 \OrENRU \TT{0..0xFFFFFFFF}),
+   \item \TT{unsigned char} (0..255 \OrENRU \TT{0..0xFF}), 
+   \item \TT{size\_t}.
+  \end{itemize}
+
 \item \RU{У знаковых чисел знак определяется самым старшим битом: 1 означает ``минус'', 0 означает ``плюс''}
 	\EN{Signed types has sign in the most significant bit: 1 mean ``minus'', 0 mean ``plus''}.
+
+\item \EN{Promoting to larger data types is simple:}
+      \RU{Преобразование в б\'{о}льшие типы данных обходится легко:} \ref{subsec:sign_extending_32_to_64}.
 
 \item \EN{Negation is simple: just invert all bits and add 1.}
 \RU{Изменить знак легко: просто инвертируйте все биты и прибавьте 1.}

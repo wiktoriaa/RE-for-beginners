@@ -1,4 +1,4 @@
-||f3|| PROC
+||f_mul|| PROC
         PUSH     {r4,lr}
         UMULL    r12,r4,r0,r2
         MLA      r1,r2,r1,r4
@@ -7,13 +7,13 @@
         POP      {r4,pc}
         ENDP
 
-||f4|| PROC
+||f_div|| PROC
         PUSH     {r4,lr}
         BL       __aeabi_uldivmod
         POP      {r4,pc}
         ENDP
 
-||f5|| PROC
+||f_rem|| PROC
         PUSH     {r4,lr}
         BL       __aeabi_uldivmod
         MOV      r0,r2

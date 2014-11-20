@@ -1,4 +1,4 @@
-_f3:
+_f_mul:
 	push	ebx
 	mov	edx, DWORD PTR [esp+8]
 	mov	eax, DWORD PTR [esp+16]
@@ -12,7 +12,7 @@ _f3:
 	pop	ebx
 	ret
 
-_f4:
+_f_div:
 	sub	esp, 28
 	mov	eax, DWORD PTR [esp+40]
 	mov	edx, DWORD PTR [esp+44]
@@ -26,7 +26,7 @@ _f4:
 	add	esp, 28
 	ret
 
-_f5:
+_f_rem:
 	sub	esp, 28
 	mov	eax, DWORD PTR [esp+40]
 	mov	edx, DWORD PTR [esp+44]

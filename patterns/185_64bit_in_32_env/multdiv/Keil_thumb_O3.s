@@ -1,16 +1,16 @@
-||f3|| PROC
+||f_mul|| PROC
         PUSH     {r4,lr}
         BL       __aeabi_lmul
         POP      {r4,pc}
         ENDP
 
-||f4|| PROC
+||f_div|| PROC
         PUSH     {r4,lr}
         BL       __aeabi_uldivmod
         POP      {r4,pc}
         ENDP
 
-||f5|| PROC
+||f_rem|| PROC
         PUSH     {r4,lr}
         BL       __aeabi_uldivmod
         MOVS     r0,r2
