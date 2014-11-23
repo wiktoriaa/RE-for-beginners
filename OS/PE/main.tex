@@ -110,7 +110,7 @@ and each virtual addresses in the second DLL will be corrected.} \\
 \RU{Очень часто линкер в}\EN{Often,} \ac{MSVC} \RU{генерирует .exe-файлы с базовым адресом}
 \EN{linker generates an .exe-files with the base address} \TT{0x400000}
 \footnote{\RU{Причина выбора такого адреса описана здесь}
-\EN{The origin of this address choice is described here}: \url{http://blogs.msdn.com/b/oldnewthing/archive/2014/10/03/10562176.aspx}},
+\EN{The origin of this address choice is described here}: \url{http://go.yurichev.com/17041}},
 \RU{и с секцией кода начинающейся с}\EN{and with the code section started at} \TT{0x401000}.
 \RU{Это значит, что}\EN{This mean} \ac{RVA} \RU{начала секции кода ~---}\EN{of code section start is} \TT{0x1000}.
 \RU{А \ac{DLL} часто генерируются MSVC-линкером с базовым адресом}
@@ -122,9 +122,7 @@ and each virtual addresses in the second DLL will be corrected.} \\
 по случайным}
 \EN{There is also another reason to load modules at various base addresses, rather at random ones}.
 
-\RU{Это}\EN{It is} \ac{ASLR}
-\footnote{\RU{\url{https://ru.wikipedia.org/wiki/Address_Space_Layout_Randomization}}
-\EN{\url{https://en.wikipedia.org/wiki/Address_space_layout_randomization}}}.
+\RU{Это}\EN{It is} \ac{ASLR}\footnote{\RU{\url{http://go.yurichev.com/17042}}\EN{\url{http://go.yurichev.com/17140}}}.
 
 \index{Shellcode}
 \RU{Дело в том, что некий шеллкод, пытающийся исполниться на зараженной системе, 
@@ -163,7 +161,7 @@ fixed and shellcode can call it directly}.
 \EN{A PE-file also specify minimal Windows version needed in order to load it.}
 \RU{Соответствие номеров версий в файле и кодовых наименований Windows, можно посмотреть}
 \EN{The table of version numbers stored in PE-file and corresponding Windows codenames is}
-\RU{здесь}\EN{here}\footnote{\url{https://en.wikipedia.org/wiki/Windows_NT#Releases}}.
+\RU{здесь}\EN{here}\footnote{\url{http://go.yurichev.com/17044}}.
 
 \index{Windows!Windows NT4}
 \index{Windows!Windows 2000}
@@ -177,12 +175,12 @@ fixed and shellcode can call it directly}.
 \RU{\ac{MSVC} 2012 по умолчанию генерирует .exe-файлы версии 6.00, для запуска нужна как минимум 
 Windows Vista. 
 Хотя, изменив настройки компиляции
-\footnote{\url{http://blogs.msdn.com/b/vcblog/archive/2012/10/08/10357555.aspx}},
+\footnote{\url{http://go.yurichev.com/17045}},
 можно заставить генерировать и под Windows XP.}
 \EN{\ac{MSVC} 2012 generates .exe-files of version 6.00 by default, 
 targeting at least Windows Vista. 
 However, by changing compiler's options
-\footnote{\url{http://blogs.msdn.com/b/vcblog/archive/2012/10/08/10357555.aspx}},
+\footnote{\url{http://go.yurichev.com/17045}},
 it is possible to force it to compile for Windows XP.}
 
 \subsection{\RU{Секции}\EN{Sections}}
@@ -245,7 +243,7 @@ it is not very important}.
 
 \RU{В \ac{MSVC} можно объявлять данные в произвольно названной секции}
 \EN{\ac{MSVC} allows to declare data in arbitrarily named section}
-\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/cc307397.aspx}}.
+\footnote{\url{http://go.yurichev.com/17047}}.
 
 \RU{Некоторые компиляторы и линкеры могут добавлять также секцию с отладочными символами 
 и вообще отладочной информацией (например, MinGW).}
@@ -275,7 +273,7 @@ typedef struct _IMAGE_SECTION_HEADER {
   DWORD Characteristics;
 } IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;
 \end{lstlisting}
-\footnote{\url{http://msdn.microsoft.com/en-us/library/windows/desktop/ms680341(v=vs.85).aspx}}
+\footnote{\url{http://go.yurichev.com/17048}}
 
 \index{Hiew}
 \RU{Еще немного терминологии}\EN{A word about terminology}:
@@ -502,7 +500,7 @@ but it's not to be created by default.} \\
 не обязательно может быть в секции \ac{IAT}}\EN{By the way, an array of function addresses to which FirstThunk is
 pointing is not necessary to be located in \ac{IAT} section}.
 \RU{К примеру, я написал утилиту}\EN{For example, I once wrote the}
-PE\_add\_import\footnote{\url{http://yurichev.com/PE_add_imports.html}} 
+PE\_add\_import\footnote{\url{http://go.yurichev.com/17049}} 
 \RU{для добавления импорта в уже существующий .exe-файл}\EN{utility for adding import to an existing .exe-file}.
 \RU{Раньше, в прошлых версиях утилиты, на месте ф-ции, вместо которой вы хотите подставить вызов в другую DLL,
 моя утилита вписывала такой код:}
@@ -544,7 +542,7 @@ is it possible to speed up loading process?}
 \RU{И если они равны, то загрузчик больше ничего не делает, и загрузка будет происходить быстрее}
 \EN{If the values are equal to each other, then the loader is not do anything, and loading process will be faster}.
 \RU{Это называется}\EN{This is what called} ``old-style binding''
-\footnote{\url{http://blogs.msdn.com/b/oldnewthing/archive/2010/03/18/9980802.aspx}.
+\footnote{\url{http://go.yurichev.com/17050}.
 \RU{Существует также}\EN{There is also} ``new-style binding'',
 \RU{про него напишу позже}\EN{I will write about it in future}}.
 \index{BIND.EXE}
@@ -613,7 +611,7 @@ jmp         mscoree.dll!_CorExeMain
 .NET-файл и запускает его не исполняя этой инструкции \JMP}
 \EN{It was so in pre-Windows XP \ac{OS}. Starting from XP, \ac{OS}-loader able to detect the .NET-file
 and run it without execution of that \JMP instruction}
-\footnote{\url{http://msdn.microsoft.com/en-us/library/xh0859k0(v=vs.110).aspx}}.
+\footnote{\url{http://go.yurichev.com/17051}}.
 
 \index{TLS}
 \subsection{TLS}
@@ -647,24 +645,24 @@ Hiew(\ref{Hiew}) \RU{как редактор}\EN{as editor}.
 
 \item
 pefile --- Python-\RU{библиотека для работы с PE-файлами}\EN{library for PE-file processing}
-\footnote{\url{https://code.google.com/p/pefile/}}.
+\footnote{\url{http://go.yurichev.com/17052}}.
 
 \item
 \label{ResHack}
 ResHack \acs{AKA} Resource Hacker --- \RU{редактор ресурсов}\EN{resources editor}
-\footnote{\url{http://www.angusj.com/resourcehacker/}}.
+\footnote{\url{http://go.yurichev.com/17052}}.
 
 \item
-PE\_add\_import\footnote{\url{http://yurichev.com/PE_add_imports.html}} ---
+PE\_add\_import\footnote{\url{http://go.yurichev.com/17049}} ---
 \RU{простая утилита для добавления символа/-ов в таблицу импортов PE-файла}
 \EN{simple tool for adding symbol(s) to PE executable import table}.
 
 \item
-PE\_patcher\footnote{\url{http://yurichev.com/PE_patcher.html}} --- 
+PE\_patcher\footnote{\url{http://go.yurichev.com/17054}} --- 
 \RU{простая утилита для модификации PE-файлов}\EN{simple tool for patching PE executables}.
 
 \item
-PE\_search\_str\_refs\footnote{\url{http://yurichev.com/PE_search_str_refs.html}} --- 
+PE\_search\_str\_refs\footnote{\url{http://go.yurichev.com/17055}} --- 
 \RU{простая утилита для поиска ф-ции в PE-файле, где используется некая текстовая строка}
 \EN{simple tool for searching for a function in PE executables which use some text string}.
 \end{itemize}
@@ -674,6 +672,6 @@ PE\_search\_str\_refs\footnote{\url{http://yurichev.com/PE_search_str_refs.html}
 % FIXME: bibliography per chapter or section
 \begin{itemize}
 \item
-Daniel Pistelli --- The .NET File Format \footnote{\url{http://www.codeproject.com/Articles/12585/The-NET-File-Format}}
+Daniel Pistelli --- The .NET File Format \footnote{\url{http://go.yurichev.com/17056}}
 \end{itemize}
 
