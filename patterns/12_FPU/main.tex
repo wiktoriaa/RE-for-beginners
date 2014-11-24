@@ -1,8 +1,6 @@
 \chapter{\FPUChapterName}
 \label{sec:FPU}
 
-% TODO rewrite this!
-
 \newcommand{\FNURLSTACK}{\footnote{\url{http://go.yurichev.com/17123}}}
 \newcommand{\FNURLFORTH}{\footnote{\url{http://go.yurichev.com/17124}}}
 \newcommand{\FNURLIEEE}{\footnote{\url{http://go.yurichev.com/17125}}}
@@ -13,15 +11,21 @@
 \ac{FPU}\EMDASH\RU{блок в процессоре работающий с числами с плавающей запятой.}
 \EN{is a device within main \ac{CPU} specially designed to deal with floating point numbers.}\\
 \\
-\RU{Раньше он назывался сопроцессором. Он немного похож на программируемый калькулятор и 
-стоит немного в стороне от \ac{CPU}.}
-\EN{It was called coprocessor in past.
-It stay aside of the main \ac{CPU} and looks like programmable calculator
-in some way.}\\
-\\
-\RU{Перед изучением \ac{FPU} полезно ознакомиться с тем как работают стековые машины\FNURLSTACK, 
+\RU{Раньше он назывался сопроцессором, и стоит немного в стороне от \ac{CPU}.}
+\EN{It was called coprocessor in past and it stay aside of the main \ac{CPU}.}
+
+\section{IEEE 754}
+
+\RU{Число с плавающей точкой в формате IEEE 754 состоит из \IT{знака}, \IT{мантиссы}\footnote{\IT{significand} или \IT{fraction} 
+в англоязычной литературе} и \IT{экспоненты}.}
+\EN{Number in IEEE 754 format consisting of \IT{sign}, \IT{significand} (also called \IT{fraction}) and \IT{exponent}.}
+
+\section{x86}
+
+\RU{Перед изучением \ac{FPU} в x86 полезно ознакомиться с тем как работают стековые машины\FNURLSTACK, 
 или ознакомиться с основами языка Forth\FNURLFORTH.}
-\EN{It is worth to study stack machines\FNURLSTACK{} before \ac{FPU} studying, or learn Forth language basics\FNURLFORTH.}\\
+\EN{It is worth to study stack machines\FNURLSTACK{} before \ac{FPU} in x86 studying, 
+or learn Forth language basics\FNURLFORTH.}\\
 \\
 \index{Intel!80486}
 \index{Intel!FPU}
@@ -59,7 +63,16 @@ in IEEE 754\FNURLIEEE format.}
 что в некоторых учебниках и документациях означает ``Stack Top'' (``вершина стека'').}
 \EN{They are \ST{0}..\ST{7}. For brevity, IDA and \olly shows \ST{0} as \TT{ST}, 
 which is represented in some textbooks and manuals as ``Stack Top''.}
-\\
+
+\section{ARM, MIPS, x86/x64 SIMD}
+
+\RU{В ARM и MIPS, FPU это не стек, а просто набор регистров.}
+\EN{FPU in ARM and MIPS is not a stack, it's just registers set.}
+\RU{Такая же идеология применяется в расширениях SIMD в процессорах x86/x64.}
+\EN{The same ideology is used in SIMD extensions of x86/x64 CPUs.}
+
+\section{\CCpp}
+
 \index{float}
 \index{double}
 \RU{В стандартных \CCpp имеются два типа для работы с числами с плавающей запятой, 
@@ -79,11 +92,7 @@ and \Tdouble (\IT{double-precision}\FNURLDP, 64 bits).}\\
 \RU{Не смотря на то что \Tfloat занимает столько же места сколько \Tint на 32-битной архитектуре, 
 представление чисел, разумеется, совершенно другое.}
 \EN{\Tfloat type requires the same number of bits as \Tint type in 32-bit environment, 
-but number representation is completely different.}\\
-\\
-\RU{Число с плавающей точкой в формате IEEE 754 состоит из \IT{знака}, \IT{мантиссы}\footnote{\IT{significand} или \IT{fraction} 
-в англоязычной литературе} и \IT{экспоненты}.}
-\EN{Number in IEEE 754 format consisting of \IT{sign}, \IT{significand} (also called \IT{fraction}) and \IT{exponent}.}
+but number representation is completely different.}
 
 \input{patterns/12_FPU/1_simple/main}
 \input{patterns/12_FPU/2_passing_floats/main}

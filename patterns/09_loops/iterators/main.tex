@@ -6,7 +6,7 @@
 
 \RU{Вот очень простой пример}\EN{Here is very simple example}:
 
-\lstinputlisting{patterns/09_loops/iterators/iterators.c}
+\lstinputlisting{patterns/09_loops/iterators/iterators.c.\LANG}
 
 \RU{Здесь два умножения на каждой итерации, а это дорогая операция.}
 \EN{There are two multiplications at each iteration and this is costly operation.}
@@ -18,7 +18,7 @@ multiplication.}
 
 \subsection{\RU{Три итератора}\EN{Three iterators}}
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/09_loops/iterators/MSVC_2013_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/09_loops/iterators/MSVC_2013_x64_Ox.asm.\LANG}
 
 \RU{Теперь здесь три итератора: переменная \IT{cnt} и два индекса, они увеличиваются на 12 и 28 на каждой
 итерации, указывая на новые элементы массивов.}
@@ -27,7 +27,7 @@ each iteration,
 pointing to new array elements.}
 \RU{Мы можем переписать этот код на}\EN{We can rewrite this code in} \CCpp:
 
-\lstinputlisting{patterns/09_loops/iterators/iterators3.c}
+\lstinputlisting{patterns/09_loops/iterators/iterators3.c.\LANG}
 
 \RU{Так что, ценой модификации трех итераторов на каждой итерации вместо одного, 
 мы избавлены от двух операций умножения.}
@@ -39,7 +39,7 @@ two multiplication operations are dropped.}
 \RU{GCC 4.9 сделал еще больше, оставив только 2 итератора:}
 \EN{GCC 4.9 did even more, leaving only 2 iterators:}
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 x64]{patterns/09_loops/iterators/GCC491_x64_O3.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.9 x64]{patterns/09_loops/iterators/GCC491_x64_O3.asm.\LANG}
 
 \RU{Здесь больше нет переменной-\IT{счетчика}: GCC рассудил, что она не нужна.}
 \EN{There are no \IT{counter} variable: GCC concluded it not needed.}
@@ -56,14 +56,14 @@ and that's how loop will be stopped: just iterate until second index not reached
 \RU{Этот код можно переписать на \CCpp вот так:}
 \EN{This code can be rewritten into \CCpp like that:}
 
-\lstinputlisting{patterns/09_loops/iterators/iterators2.c}
+\lstinputlisting{patterns/09_loops/iterators/iterators2.c.\LANG}
 
 \ifdefined\IncludeARM
 GCC (Linaro) 4.9 \ForENRU ARM64 \RU{делает тоже самое, только предвычисляет последний индекс массива \IT{a1} вместо
 \IT{a2}, а это, конечно, имеет тот же эффект}\EN{do the same, but precalculates last index of \IT{a1} 
 array instead of \IT{a2}, and this has the same effect, of course}:
 
-\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64,label=GCC_no_number_sign]{patterns/09_loops/iterators/ARM64_GCC_49_O3.s}
+\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64,label=GCC_no_number_sign]{patterns/09_loops/iterators/ARM64_GCC_49_O3.s.\LANG}
 
 % FIXME -> post-increment
 \fi
@@ -71,7 +71,7 @@ array instead of \IT{a2}, and this has the same effect, of course}:
 \ifdefined\IncludeMIPS
 GCC 4.4.5 \ForENRU MIPS \RU{делает то же самое}\EN{do the same}:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 \ForENRU MIPS (IDA)]{patterns/09_loops/iterators/MIPS_O3_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 \ForENRU MIPS (IDA)]{patterns/09_loops/iterators/MIPS_O3_IDA.lst.\LANG}
 \fi
 
 \ifx\LITE\undefined

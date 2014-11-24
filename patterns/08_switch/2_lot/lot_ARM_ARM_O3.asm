@@ -61,4 +61,3 @@
 000001BC                          ; f2+8
 000001BC D4 00 8F E2     ADR     R0, aSomethingUnkno ; jumptable 00000178 default case
 000001C0 FC FF FF EA     B       loc_1B8
-000001C0             ; End of function f2

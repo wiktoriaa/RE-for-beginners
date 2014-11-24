@@ -1,10 +1,10 @@
-; RDI=a1
+include(`commons.m4'); RDI=a1
 ; RSI=a2
 ; RDX=cnt
 f:
-	test	rdx, rdx  ; cnt==0? exit then
+	test	rdx, rdx  ; cnt==0? _EN(`exit then')_RU(`тогда выйти')
 	je	.L1
-; calculate last element address in a2 and leave it in RDX
+; _EN(`calculate last element address in "a2" and leave it in RDX')_RU(`вычислить адрес последнего элемента в "a2" и оставить его в RDX')
 	lea	rax, [0+rdx*4]
 ; RAX=RDX*4=cnt*4
 	sal	rdx, 5

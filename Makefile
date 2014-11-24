@@ -12,10 +12,26 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/obfuscation/1.asm.ru patterns/obfuscation/1.asm.en \
 	patterns/obfuscation/2.asm.ru patterns/obfuscation/2.asm.en \
 	patterns/obfuscation/3.asm.ru patterns/obfuscation/3.asm.en \
+	patterns/05_passing_arguments/MIPS_O3_IDA.lst.ru patterns/05_passing_arguments/MIPS_O3_IDA.lst.en \
 	patterns/07_jcc/abs/abs_GCC49_ARM64_O0.s.ru patterns/07_jcc/abs/abs_GCC49_ARM64_O0.s.en \
 	patterns/07_jcc/abs/abs_Keil_ARM_O3.s.ru patterns/07_jcc/abs/abs_Keil_ARM_O3.s.en \
 	patterns/07_jcc/abs/abs_Keil_thumb_O3.s.ru patterns/07_jcc/abs/abs_Keil_thumb_O3.s.en \
 	patterns/07_jcc/abs/abs_MSVC2012_Ox_x64.asm.ru patterns/07_jcc/abs/abs_MSVC2012_Ox_x64.asm.en \
+	patterns/07_jcc/abs/MIPS_O3_IDA.lst.ru patterns/07_jcc/abs/MIPS_O3_IDA.lst.en \
+	patterns/08_switch/1_few/ARM64_GCC_O0.lst.ru patterns/08_switch/1_few/ARM64_GCC_O0.lst.en \
+	patterns/08_switch/1_few/ARM64_GCC_O3.lst.ru patterns/08_switch/1_few/ARM64_GCC_O3.lst.en \
+	patterns/08_switch/1_few/MIPS_O3_IDA.lst.ru patterns/08_switch/1_few/MIPS_O3_IDA.lst.en \
+	patterns/08_switch/2_lot/lot_msvc.asm.ru patterns/08_switch/2_lot/lot_msvc.asm.en \
+	patterns/08_switch/2_lot/MIPS_O3_IDA.lst.ru patterns/08_switch/2_lot/MIPS_O3_IDA.lst.en \
+	patterns/08_switch/3_several_cases/ARM64_GCC491_O3.s.ru patterns/08_switch/3_several_cases/ARM64_GCC491_O3.s.en \
+	patterns/08_switch/4_fallthrough/fallthrough_ARM64.s.ru patterns/08_switch/4_fallthrough/fallthrough_ARM64.s.en \
+	patterns/09_loops/iterators/ARM64_GCC_49_O3.s.ru patterns/09_loops/iterators/ARM64_GCC_49_O3.s.en \
+	patterns/09_loops/iterators/GCC491_x64_O3.asm.ru patterns/09_loops/iterators/GCC491_x64_O3.asm.en \
+	patterns/09_loops/iterators/iterators.c.ru patterns/09_loops/iterators/iterators.c.en \
+	patterns/09_loops/iterators/iterators2.c.ru patterns/09_loops/iterators/iterators2.c.en \
+	patterns/09_loops/iterators/iterators3.c.ru patterns/09_loops/iterators/iterators3.c.en \
+	patterns/09_loops/iterators/MIPS_O3_IDA.lst.ru patterns/09_loops/iterators/MIPS_O3_IDA.lst.en \
+	patterns/09_loops/iterators/MSVC_2013_x64_Ox.asm.ru patterns/09_loops/iterators/MSVC_2013_x64_Ox.asm.en \
 	patterns/11_arith_optimizations/division_by_9/2.asm.ru patterns/11_arith_optimizations/division_by_9/2.asm.en \
 	patterns/13_arrays/6_neg_arrays/neg_array.asm.ru patterns/13_arrays/6_neg_arrays/neg_array.asm.en \
 	patterns/13_arrays/6_neg_arrays/stack.txt.ru patterns/13_arrays/6_neg_arrays/stack.txt.en \
@@ -48,7 +64,11 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/25_variadic_functions/die_MSVC2010_Ox.asm.ru patterns/25_variadic_functions/die_MSVC2010_Ox.asm.en \
 	patterns/25_variadic_functions/die_MSVC2012_x64_Ox.asm.ru patterns/25_variadic_functions/die_MSVC2012_x64_Ox.asm.en \
 	patterns/27_abs_branchless/abs_GCC49_ARM64_O3.s.ru patterns/27_abs_branchless/abs_GCC49_ARM64_O3.s.en \
-	patterns/27_abs_branchless/abs_GCC491_x64_O3.asm.ru patterns/27_abs_branchless/abs_GCC491_x64_O3.asm.en
+	patterns/27_abs_branchless/abs_GCC491_x64_O3.asm.ru patterns/27_abs_branchless/abs_GCC491_x64_O3.asm.en \
+	examples/demos/10print/10print_27.lst.ru examples/demos/10print/10print_27.lst.en \
+	examples/demos/10print/10print_42.lst.ru examples/demos/10print/10print_42.lst.en \
+	examples/demos/10print/ferrie_10.lst.ru examples/demos/10print/ferrie_10.lst.en \
+	examples/demos/10print/herm1t_11.lst.ru examples/demos/10print/herm1t_11.lst.en
 define compile
 	rm -f *.fls
 	rm -f *.bbl

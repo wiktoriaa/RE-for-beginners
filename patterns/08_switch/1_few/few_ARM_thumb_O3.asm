@@ -23,4 +23,3 @@
 .text:000000F0                                      ; f1+14
 .text:000000F0 06 F0 7E F8  BL      __2printf
 .text:000000F4 10 BD        POP     {R4,PC}
-.text:000000F4              ; End of function f1
