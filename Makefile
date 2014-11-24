@@ -32,6 +32,26 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/09_loops/iterators/iterators3.c.ru patterns/09_loops/iterators/iterators3.c.en \
 	patterns/09_loops/iterators/MIPS_O3_IDA.lst.ru patterns/09_loops/iterators/MIPS_O3_IDA.lst.en \
 	patterns/09_loops/iterators/MSVC_2013_x64_Ox.asm.ru patterns/09_loops/iterators/MSVC_2013_x64_Ox.asm.en \
+	patterns/09_loops/memcpy/memcpy_GCC49_ARM64_Os.s.ru patterns/09_loops/memcpy/memcpy_GCC49_ARM64_Os.s.en \
+	patterns/09_loops/memcpy/memcpy_GCC49_x64_Os.s.ru patterns/09_loops/memcpy/memcpy_GCC49_x64_Os.s.en \
+	patterns/09_loops/memcpy/memcpy_Keil_ARM_O3.s.ru patterns/09_loops/memcpy/memcpy_Keil_ARM_O3.s.en \
+	patterns/09_loops/memcpy/memcpy_Keil_Thumb_O3.s.ru patterns/09_loops/memcpy/memcpy_Keil_Thumb_O3.s.en \
+	patterns/09_loops/memcpy/memcpy_MIPS_Os_IDA.lst.ru patterns/09_loops/memcpy/memcpy_MIPS_Os_IDA.lst.en \
+	patterns/09_loops/simple/ARM/ARM64_GCC491_O0.s.ru patterns/09_loops/simple/ARM/ARM64_GCC491_O0.s.en \
+	patterns/09_loops/simple/ARM/ARM64_GCC491_O3.s.ru patterns/09_loops/simple/ARM/ARM64_GCC491_O3.s.en \
+	patterns/09_loops/simple/1_GCC.asm.ru patterns/09_loops/simple/1_GCC.asm.en \
+	patterns/09_loops/simple/2_GCC.asm.ru patterns/09_loops/simple/2_GCC.asm.en \
+	patterns/09_loops/simple/1_MSVC.asm.ru patterns/09_loops/simple/1_MSVC.asm.en \
+	patterns/09_loops/simple/loops_1.c.en patterns/09_loops/simple/loops_1.c.ru \
+	patterns/09_loops/simple/loops_3.c.en patterns/09_loops/simple/loops_3.c.ru \
+	patterns/09_loops/simple/MIPS_O0_IDA.lst.en patterns/09_loops/simple/MIPS_O0_IDA.lst.ru \
+	patterns/09_loops/skeleton_x86_2_9_optimized.lst.en patterns/09_loops/skeleton_x86_2_9_optimized.lst.ru \
+	patterns/09_loops/skeleton_x86_2_9.lst.en patterns/09_loops/skeleton_x86_2_9.lst.ru \
+	patterns/09_loops/skeleton_x86_2_9_reg.lst.en patterns/09_loops/skeleton_x86_2_9_reg.lst.ru \
+	patterns/09_loops/skeleton_x86_2_9_order.lst.en patterns/09_loops/skeleton_x86_2_9_order.lst.ru \
+	patterns/09_loops/skeleton_x86_2_9_reorder.lst.en patterns/09_loops/skeleton_x86_2_9_reorder.lst.ru \
+	patterns/09_loops/skeleton_x86_loop.lst.en patterns/09_loops/skeleton_x86_loop.lst.ru \
+	patterns/09_loops/skeleton_ARM.lst.en patterns/09_loops/skeleton_ARM.lst.ru \
 	patterns/11_arith_optimizations/division_by_9/2.asm.ru patterns/11_arith_optimizations/division_by_9/2.asm.en \
 	patterns/13_arrays/6_neg_arrays/neg_array.asm.ru patterns/13_arrays/6_neg_arrays/neg_array.asm.en \
 	patterns/13_arrays/6_neg_arrays/stack.txt.ru patterns/13_arrays/6_neg_arrays/stack.txt.en \
