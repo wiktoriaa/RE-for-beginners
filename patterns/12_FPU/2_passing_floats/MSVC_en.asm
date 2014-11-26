@@ -6,10 +6,10 @@ CONST    ENDS
 _main    PROC
     push   ebp
     mov    ebp, esp
-    sub    esp, 8  ; allocate place for the first variable
+    sub    esp, 8  ; allocate space for the first variable
     fld    QWORD PTR __real@3ff8a3d70a3d70a4
     fstp   QWORD PTR [esp]
-    sub    esp, 8  ; allocate place for the second variable
+    sub    esp, 8  ; allocate space for the second variable
     fld    QWORD PTR __real@40400147ae147ae1
     fstp   QWORD PTR [esp]
     call   _pow

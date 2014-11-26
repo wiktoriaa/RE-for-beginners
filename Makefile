@@ -9,6 +9,10 @@ all:    russian english russian-A5 english-A5
 #	russian-lite english-lite russian-A5-lite english-A5-lite
 
 listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.en \
+	patterns/01_helloworld/MIPS/hw_O0.s.ru patterns/01_helloworld/MIPS/hw_O0.s.en\
+	patterns/01_helloworld/MIPS/hw_O3.s.ru patterns/01_helloworld/MIPS/hw_O3.s.en\
+	patterns/01_helloworld/MIPS/hw_O0_IDA.lst.ru patterns/01_helloworld/MIPS/hw_O0_IDA.lst.en \
+	patterns/01_helloworld/MIPS/hw_O3_IDA.lst.ru patterns/01_helloworld/MIPS/hw_O3_IDA.lst.en \
 	patterns/obfuscation/1.asm.ru patterns/obfuscation/1.asm.en \
 	patterns/obfuscation/2.asm.ru patterns/obfuscation/2.asm.en \
 	patterns/obfuscation/3.asm.ru patterns/obfuscation/3.asm.en \
@@ -52,6 +56,12 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/09_loops/skeleton_x86_2_9_reorder.lst.en patterns/09_loops/skeleton_x86_2_9_reorder.lst.ru \
 	patterns/09_loops/skeleton_x86_loop.lst.en patterns/09_loops/skeleton_x86_loop.lst.ru \
 	patterns/09_loops/skeleton_ARM.lst.en patterns/09_loops/skeleton_ARM.lst.ru \
+	patterns/10_strings/1_strlen/10_1_msvc.asm.ru patterns/10_strings/1_strlen/10_1_msvc.asm.en \
+	patterns/10_strings/1_strlen/10_2.asm.ru patterns/10_strings/1_strlen/10_2.asm.en \
+	patterns/10_strings/1_strlen/MIPS_O3_IDA.lst.ru patterns/10_strings/1_strlen/MIPS_O3_IDA.lst.en \
+	patterns/10_strings/1_strlen/ARM/xcode_ARM_O0.asm.ru patterns/10_strings/1_strlen/ARM/xcode_ARM_O0.asm.en \
+	patterns/10_strings/1_strlen/ARM/ARM64_GCC_O0.lst.ru patterns/10_strings/1_strlen/ARM/ARM64_GCC_O0.lst.en \
+	patterns/10_strings/1_strlen/ARM/ARM64_GCC_O3.lst.ru patterns/10_strings/1_strlen/ARM/ARM64_GCC_O3.lst.en \
 	patterns/11_arith_optimizations/division_by_9/2.asm.ru patterns/11_arith_optimizations/division_by_9/2.asm.en \
 	patterns/13_arrays/6_neg_arrays/neg_array.asm.ru patterns/13_arrays/6_neg_arrays/neg_array.asm.en \
 	patterns/13_arrays/6_neg_arrays/stack.txt.ru patterns/13_arrays/6_neg_arrays/stack.txt.en \
@@ -75,6 +85,9 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/185_64bit_in_32_env/passing_add_sub/MIPS_O3_IDA.lst.ru patterns/185_64bit_in_32_env/passing_add_sub/MIPS_O3_IDA.lst.en \
 	patterns/205_floating_SIMD/pow_GCC446_x64_O3.s.ru patterns/205_floating_SIMD/pow_GCC446_x64_O3.s.en \
 	patterns/205_floating_SIMD/FPU_PRNG/MSVC2012_Ox_Ob0.asm.ru patterns/205_floating_SIMD/FPU_PRNG/MSVC2012_Ox_Ob0.asm.en \
+	patterns/207_fahrenheit/f_MSVC_2010_x86_Ox.asm.ru patterns/207_fahrenheit/f_MSVC_2010_x86_Ox.asm.en \
+	patterns/207_fahrenheit/f_MSVC_2012_x86_Ox.asm.ru patterns/207_fahrenheit/f_MSVC_2012_x86_Ox.asm.en \
+	patterns/207_fahrenheit/i_MSVC_2012_Ox_x86.asm.ru patterns/207_fahrenheit/i_MSVC_2012_Ox_x86.asm.en \
 	patterns/24_duff_device/duff.c.ru patterns/24_duff_device/duff.c.en \
 	patterns/24_duff_device/duff_MSVC2012_x64_Ox.asm.ru patterns/24_duff_device/duff_MSVC2012_x64_Ox.asm.en \
 	patterns/25_variadic_functions/arith.c.ru patterns/25_variadic_functions/arith.c.en \
@@ -88,7 +101,12 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	examples/demos/10print/10print_27.lst.ru examples/demos/10print/10print_27.lst.en \
 	examples/demos/10print/10print_42.lst.ru examples/demos/10print/10print_42.lst.en \
 	examples/demos/10print/ferrie_10.lst.ru examples/demos/10print/ferrie_10.lst.en \
-	examples/demos/10print/herm1t_11.lst.ru examples/demos/10print/herm1t_11.lst.en
+	examples/demos/10print/herm1t_11.lst.ru examples/demos/10print/herm1t_11.lst.en \
+	examples/demos/mandelbrot/algo_cplx.lst.ru examples/demos/mandelbrot/algo_cplx.lst.en \
+	examples/demos/mandelbrot/algo_int.lst.ru examples/demos/mandelbrot/algo_int.lst.en \
+	examples/demos/mandelbrot/Microbrot_commented.asm.ru examples/demos/mandelbrot/Microbrot_commented.asm.en \
+	examples/demos/mandelbrot/my_version.asm.ru examples/demos/mandelbrot/my_version.asm.en
+
 define compile
 	rm -f *.fls
 	rm -f *.bbl

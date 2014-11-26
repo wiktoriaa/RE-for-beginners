@@ -1,7 +1,7 @@
 _strlen
            MOV       R1, R0
 
-loc_2DF6                     ; CODE XREF: _strlen+8
+loc_2DF6
            LDRB.W    R2, [R1],#1
            CMP       R2, #0
            BNE       loc_2DF6
