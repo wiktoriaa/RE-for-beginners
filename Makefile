@@ -63,6 +63,16 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/10_strings/1_strlen/ARM/ARM64_GCC_O0.lst.ru patterns/10_strings/1_strlen/ARM/ARM64_GCC_O0.lst.en \
 	patterns/10_strings/1_strlen/ARM/ARM64_GCC_O3.lst.ru patterns/10_strings/1_strlen/ARM/ARM64_GCC_O3.lst.en \
 	patterns/11_arith_optimizations/division_by_9/2.asm.ru patterns/11_arith_optimizations/division_by_9/2.asm.en \
+	patterns/12_FPU/1_simple/ARM/ARM64_GCC_O0.s.ru patterns/12_FPU/1_simple/ARM/ARM64_GCC_O0.s.en \
+	patterns/12_FPU/1_simple/ARM/ARM64_GCC_O3.s.ru patterns/12_FPU/1_simple/ARM/ARM64_GCC_O3.s.en \
+	patterns/12_FPU/1_simple/ARM/Keil_O3_thumb.asm.ru patterns/12_FPU/1_simple/ARM/Keil_O3_thumb.asm.en \
+	patterns/12_FPU/1_simple/ARM/Xcode_ARM_O3.asm.ru patterns/12_FPU/1_simple/ARM/Xcode_ARM_O3.asm.en \
+	patterns/12_FPU/1_simple/GCC.asm.ru patterns/12_FPU/1_simple/GCC.asm.en \
+	patterns/12_FPU/1_simple/MIPS_O3_IDA.lst.ru patterns/12_FPU/1_simple/MIPS_O3_IDA.lst.en \
+	patterns/12_FPU/1_simple/MSVC.asm.ru patterns/12_FPU/1_simple/MSVC.asm.en \
+	patterns/12_FPU/2_passing_floats/ARM64.s.ru patterns/12_FPU/2_passing_floats/ARM64.s.en \
+	patterns/12_FPU/2_passing_floats/MIPS_O3_IDA.lst.ru patterns/12_FPU/2_passing_floats/MIPS_O3_IDA.lst.en \
+	patterns/12_FPU/2_passing_floats/MSVC.asm.ru patterns/12_FPU/2_passing_floats/MSVC.asm.en \
 	patterns/13_arrays/6_neg_arrays/neg_array.asm.ru patterns/13_arrays/6_neg_arrays/neg_array.asm.en \
 	patterns/13_arrays/6_neg_arrays/stack.txt.ru patterns/13_arrays/6_neg_arrays/stack.txt.en \
 	patterns/14_bitfields/1_check/check2.asm.ru patterns/14_bitfields/1_check/check2.asm.en \
