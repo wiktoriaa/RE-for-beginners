@@ -1,6 +1,6 @@
-﻿\subsection{x64: \Optimizing MSVC 2013}
+﻿\section{x64: \Optimizing MSVC 2013}
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/10_strings/4_trim/MSVC2013_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/28_string_trim/MSVC2013_x64_Ox.asm.\LANG}
 
 \RU{В начале, MSVC вставил тело ф-ции \strlen{} прямо в код, потому что решил, что так будет
 быстрее чем обычная работа \strlen{} + время на вызов её и возврат из нее.}
@@ -26,13 +26,13 @@ in two's complement arithmetics: \ref{sec:signednumbers}.}
 \RU{Вследствии оптимизации, конечно}\EN{Due to optimizations, of course}.
 \RU{Вот что сделал MSVC}\EN{Here is the code MSVC did}:
 
-\lstinputlisting[caption=\RU{Вставленная \strlen{} сгенерированная}\EN{Inlined \strlen{} by} MSVC 2013 x64]{patterns/10_strings/4_trim/strlen_MSVC.asm}
+\lstinputlisting[caption=\RU{Вставленная \strlen{} сгенерированная}\EN{Inlined \strlen{} by} MSVC 2013 x64]{patterns/28_string_trim/strlen_MSVC.asm.\LANG}
 
 \RU{Попробуйте написать короче, если хотите инициализировать счетчик нулем!}
 \EN{Try to write shorter if you want to initialize counter at 0!}
 \RU{Вот моя попытка}\EN{Here is my attempt}:
 
-\lstinputlisting[caption=\RU{Моя версия}\EN{My version of} \strlen{}]{patterns/10_strings/4_trim/my_strlen.asm}
+\lstinputlisting[caption=\RU{Моя версия}\EN{My version of} \strlen{}]{patterns/28_string_trim/my_strlen.asm.\LANG}
 
 \RU{У меня не получилось. Нам придется вводить дополнительную инструкцию JMP!}
 \EN{I failed. We ought to use additional JMP instruction anyway!}
@@ -69,9 +69,9 @@ finish.}
 \EN{Read more, why it's important to do the job without conditional jumps, 
 if possible:} \ref{branch_predictors}.
 
-\subsection{x64: \NonOptimizing GCC 4.9.1}
+\section{x64: \NonOptimizing GCC 4.9.1}
 
-\lstinputlisting{patterns/10_strings/4_trim/GCC491_x64_O0.asm}
+\lstinputlisting{patterns/28_string_trim/GCC491_x64_O0.asm.\LANG}
 
 \RU{Я добавил комментариев}\EN{I added my comments}.
 \RU{После исполнения \strlen{}, управление передается на метку L2,
@@ -100,10 +100,10 @@ and there are two clauses are checked, one after one.}
 \item return s
 \end{itemize}
 
-\subsection{x64: \Optimizing GCC 4.9.1}
+\section{x64: \Optimizing GCC 4.9.1}
 \label{string_trim_GCC_x64_O3}
 
-\lstinputlisting{patterns/10_strings/4_trim/GCC491_x64_O3.asm}
+\lstinputlisting{patterns/28_string_trim/GCC491_x64_O3.asm.\LANG}
 
 \RU{Тут более сложный результат}\EN{Now this is more complex}.
 \RU{Код перед циклом исполняется только один раз, но также содержит проверку символов

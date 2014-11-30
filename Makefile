@@ -118,6 +118,17 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/25_variadic_functions/die_MSVC2012_x64_Ox.asm.ru patterns/25_variadic_functions/die_MSVC2012_x64_Ox.asm.en \
 	patterns/27_abs_branchless/abs_GCC49_ARM64_O3.s.ru patterns/27_abs_branchless/abs_GCC49_ARM64_O3.s.en \
 	patterns/27_abs_branchless/abs_GCC491_x64_O3.asm.ru patterns/27_abs_branchless/abs_GCC491_x64_O3.asm.en \
+	patterns/28_string_trim/GCC49_ARM64_O0.s.ru patterns/28_string_trim/GCC49_ARM64_O0.s.en \
+	patterns/28_string_trim/GCC49_ARM64_O3.s.ru patterns/28_string_trim/GCC49_ARM64_O3.s.en \
+	patterns/28_string_trim/GCC491_x64_O0.asm.ru patterns/28_string_trim/GCC491_x64_O0.asm.en \
+	patterns/28_string_trim/GCC491_x64_O3.asm.ru patterns/28_string_trim/GCC491_x64_O3.asm.en \
+	patterns/28_string_trim/Keil_ARM_O3.s.ru patterns/28_string_trim/Keil_ARM_O3.s.en \
+	patterns/28_string_trim/Keil_thumb_O3.s.ru patterns/28_string_trim/Keil_thumb_O3.s.en \
+	patterns/28_string_trim/MIPS_O3_IDA.lst.ru patterns/28_string_trim/MIPS_O3_IDA.lst.en \
+	patterns/28_string_trim/MSVC2013_x64_Ox.asm.ru patterns/28_string_trim/MSVC2013_x64_Ox.asm.en \
+	patterns/28_string_trim/my_strlen.asm.ru patterns/28_string_trim/my_strlen.asm.en \
+	patterns/28_string_trim/strlen_MSVC.asm.ru patterns/28_string_trim/strlen_MSVC.asm.en \
+	patterns/28_string_trim/strtrim.c.ru patterns/28_string_trim/strtrim.c.en \
 	examples/demos/10print/10print_27.lst.ru examples/demos/10print/10print_27.lst.en \
 	examples/demos/10print/10print_42.lst.ru examples/demos/10print/10print_42.lst.en \
 	examples/demos/10print/ferrie_10.lst.ru examples/demos/10print/ferrie_10.lst.en \
