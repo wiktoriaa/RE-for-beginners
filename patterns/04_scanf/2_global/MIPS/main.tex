@@ -1,6 +1,6 @@
 \subsection{MIPS}
 
-\subsubsection{Uninitialized global variable}
+\subsubsection{\EN{Uninitialized global variable}\RU{Неинициализированная глобальная переменная}}
 
 \RU{Так что теперь переменная $x$ глобальная.}
 \EN{So now $x$ variable is global.}
@@ -11,13 +11,13 @@
 \EN{IDA shows presence of $x$ variable in .sbss ELF section (remember about ``Global Pointer''? \ref{MIPS_GP}),
 since variable is not initialized at the very start.}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/04_scanf/2_global/MIPS/O3_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/04_scanf/2_global/MIPS/O3_IDA.lst.\LANG}
 
 \RU{IDA уменьшает количество информации, так что я также сделал листинг используя objdump и добавил туда
 своих комментариев:}
 \EN{IDA reduces amount of information, so I also made a listing using objdump and added my comments to it:}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump),numbers=left]{patterns/04_scanf/2_global/MIPS/O3_objdump.txt}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump),numbers=left]{patterns/04_scanf/2_global/MIPS/O3_objdump.txt.\LANG}
 
 \RU{Теперь мы видим как адрес переменной $x$ берется из буфера 64KiB, используя GP и прибавление
 к нему отрицательного смещения (строка 18).}
@@ -45,12 +45,12 @@ this is idle instruction), in order to align next function's start on 16-byte bo
 \RU{Немного изменим наш пример и сделам чтобы у $x$ было значение по умолчанию:}
 \EN{Let's alter our example to make $x$ variable some default value:}
 
-\lstinputlisting{patterns/04_scanf/2_global/MIPS/default_value_\LANG.c}
+\lstinputlisting{patterns/04_scanf/2_global/default_value.c.\LANG}
 
 \RU{Теперь IDA показывает что переменная $x$ располагается в секции .data:}
 \EN{Now IDA shows that $x$ variable is residing in .data section:}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/04_scanf/2_global/MIPS/O3_IDA_init.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/04_scanf/2_global/MIPS/O3_IDA_init.lst.\LANG}
 
 \RU{Почему не .sdata? Не знаю, может быть, нужно было указать какую-то опцию в GCC?}
 \EN{Why not .sdata? I don't know, I probably should specify some GCC option?}
@@ -70,7 +70,7 @@ ADDIU (``Add Immediate Unsigned Word'' --- прибавить значение).
 \RU{Вот так же листинг сгенерированный objdump-ом для л\'{у}чшего рассмотрения:}
 \EN{Here is also objdump listing for close inspection:}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump)]{patterns/04_scanf/2_global/MIPS/O3_objdump_init.txt}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump)]{patterns/04_scanf/2_global/MIPS/O3_objdump_init.txt.\LANG}
 
 \index{MIPS!\Instructions!LUI}
 \index{MIPS!\Instructions!ADDIU}

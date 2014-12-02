@@ -13,6 +13,40 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/01_helloworld/MIPS/hw_O3.s.ru patterns/01_helloworld/MIPS/hw_O3.s.en\
 	patterns/01_helloworld/MIPS/hw_O0_IDA.lst.ru patterns/01_helloworld/MIPS/hw_O0_IDA.lst.en \
 	patterns/01_helloworld/MIPS/hw_O3_IDA.lst.ru patterns/01_helloworld/MIPS/hw_O3_IDA.lst.en \
+	patterns/03_printf/ARM/ARM3_O0.lst.ru patterns/03_printf/ARM/ARM3_O0.lst.en \
+	patterns/03_printf/ARM/ARM8_O0.lst.ru patterns/03_printf/ARM/ARM8_O0.lst.en \
+	patterns/03_printf/MIPS/printf3.O0.s.ru patterns/03_printf/MIPS/printf3.O0.s.en \
+	patterns/03_printf/MIPS/printf3.O0.IDA.lst.ru patterns/03_printf/MIPS/printf3.O0.IDA.lst.en \
+	patterns/03_printf/MIPS/printf3.O3.s.ru patterns/03_printf/MIPS/printf3.O3.s.en \
+	patterns/03_printf/MIPS/printf3.O3.IDA.lst.ru patterns/03_printf/MIPS/printf3.O3.IDA.lst.en \
+	patterns/03_printf/MIPS/printf8.O0.s.ru patterns/03_printf/MIPS/printf8.O0.s.en \
+	patterns/03_printf/MIPS/printf8.O0.IDA.lst.ru patterns/03_printf/MIPS/printf8.O0.IDA.lst.en \
+	patterns/03_printf/MIPS/printf8.O3.s.ru patterns/03_printf/MIPS/printf8.O3.s.en \
+	patterns/03_printf/MIPS/printf8.O3.IDA.lst.ru patterns/03_printf/MIPS/printf8.O3.IDA.lst.en \
+	patterns/03_printf/x86/2_MSVC_x64.asm.ru patterns/03_printf/x86/2_MSVC_x64.asm.en \
+	patterns/03_printf/skel1.lst.ru patterns/03_printf/skel1.lst.en \
+	patterns/03_printf/skel2.lst.ru patterns/03_printf/skel2.lst.en \
+	patterns/03_printf/skel3.lst.ru patterns/03_printf/skel3.lst.en \
+	patterns/03_printf/skel4.lst.ru patterns/03_printf/skel4.lst.en \
+	patterns/03_printf/skel5.lst.ru patterns/03_printf/skel5.lst.en \
+	patterns/03_printf/skel_MIPS.lst.ru patterns/03_printf/skel_MIPS.lst.en \
+	patterns/03_printf/x86/2_GCC_x64.s.ru patterns/03_printf/x86/2_GCC_x64.s.en \
+	patterns/04_scanf/1_simple/MIPS/ex1.O3.s.ru patterns/04_scanf/1_simple/MIPS/ex1.O3.s.en \
+	patterns/04_scanf/1_simple/MIPS/ex1.O3.IDA.lst.ru patterns/04_scanf/1_simple/MIPS/ex1.O3.IDA.lst.en \
+	patterns/04_scanf/1_simple/ARM64_GCC491_O0.s.ru patterns/04_scanf/1_simple/ARM64_GCC491_O0.s.en \
+	patterns/04_scanf/1_simple/ex1_GCC_x64.s.ru patterns/04_scanf/1_simple/ex1_GCC_x64.s.en \
+	patterns/04_scanf/1_simple/ex1_MSVC.asm.ru patterns/04_scanf/1_simple/ex1_MSVC.asm.en \
+	patterns/04_scanf/1_simple/ex1_MSVC_x64.asm.ru patterns/04_scanf/1_simple/ex1_MSVC_x64.asm.en \
+	patterns/04_scanf/2_global/default_value.c.ru patterns/04_scanf/2_global/default_value.c.en \
+	patterns/04_scanf/2_global/ARM64_GCC491_O0.s.ru patterns/04_scanf/2_global/ARM64_GCC491_O0.s.en \
+	patterns/04_scanf/2_global/ex2.c.ru patterns/04_scanf/2_global/ex2.c.en \
+	patterns/04_scanf/2_global/ex2_MSVC_x64.asm.ru patterns/04_scanf/2_global/ex2_MSVC_x64.asm.en \
+	patterns/04_scanf/2_global/MIPS/O3_IDA.lst.ru patterns/04_scanf/2_global/MIPS/O3_IDA.lst.en \
+	patterns/04_scanf/2_global/MIPS/O3_IDA_init.lst.ru patterns/04_scanf/2_global/MIPS/O3_IDA_init.lst.en \
+	patterns/04_scanf/2_global/MIPS/O3_objdump.txt.ru patterns/04_scanf/2_global/MIPS/O3_objdump.txt.en \
+	patterns/04_scanf/2_global/MIPS/O3_objdump_init.txt.ru patterns/04_scanf/2_global/MIPS/O3_objdump_init.txt.en \
+	patterns/04_scanf/3_checking_retval/ARM64_GCC491_O0.s.ru patterns/04_scanf/3_checking_retval/ARM64_GCC491_O0.s.en \
+	patterns/04_scanf/3_checking_retval/ex3_MSVC_x64.asm.ru patterns/04_scanf/3_checking_retval/ex3_MSVC_x64.asm.en \
 	patterns/obfuscation/1.asm.ru patterns/obfuscation/1.asm.en \
 	patterns/obfuscation/2.asm.ru patterns/obfuscation/2.asm.en \
 	patterns/obfuscation/3.asm.ru patterns/obfuscation/3.asm.en \

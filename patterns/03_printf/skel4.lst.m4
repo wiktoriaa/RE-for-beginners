@@ -1,0 +1,7 @@
+﻿include(`commons.m4')MOV R0, _EN(`1st argument')_RU(`1-й аргумент')
+MOV R1, _EN(`2nd argument')_RU(`2-й аргумент')
+MOV R2, _EN(`3rd argument')_RU(`3-й аргумент')
+MOV R3, _EN(`4th argument')_RU(`4-й аргумент')
+; _EN(``pass 5th, 6th argument, etc, in stack (if needed)'')_RU(``передать 5-й, 6-й аргумент, итд, в стеке (если нужно)'')
+BL _EN(`function')_RU(`функция')
+; _EN(`modify stack pointer (if needed)')_RU(`модифицировать указатель стека (если нужно)')
