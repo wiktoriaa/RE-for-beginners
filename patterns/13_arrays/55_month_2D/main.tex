@@ -11,11 +11,11 @@ consisting of month name.}
 \RU{На самом деле, да, если представить список строк как двухмерный массив:}
 \EN{In fact yes, if to represent list of strings as a two-dimensional array:}
 
-\lstinputlisting{patterns/13_arrays/55_month_2D/month2.c}
+\lstinputlisting{patterns/13_arrays/55_month_2D/month2.c.\LANG}
 
 \RU{Вот что получаем:}\EN{Here is what we've got:}
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/13_arrays/55_month_2D/MSVC2013_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/13_arrays/55_month_2D/MSVC2013_x64_Ox.asm.\LANG}
 
 \RU{Здесь нет обращений к памяти вообще}\EN{There are no memory access at all}.
 \RU{Всё что делает эта ф-ция это вычисляет место, где находится первый символ названия месяца:}
@@ -49,33 +49,12 @@ calculated easily.}
 \RU{Неоптимизирующие компиляторы делают умножение по-разному.}
 \EN{Non-optimizing compilers do multiplication differently.}
 
-% FIXME translation
-\begin{lstlisting}[caption=\NonOptimizing GCC 4.9 x64]
-get_month2:
-	push	rbp
-	mov	rbp, rsp
-	mov	DWORD PTR [rbp-4], edi
-	mov	eax, DWORD PTR [rbp-4]
-	movsx	rdx, eax
-; RDX = sign-extended input value
-	mov	rax, rdx
-; RAX = month
-	sal	rax, 2
-; RAX = month<<2 = month*4
-	add	rax, rdx
-; RAX = RAX+RDX = month*4+month = month*5
-	add	rax, rax
-; RAX = RAX*2 = month*5*2 = month*10
-	add	rax, OFFSET FLAT:month2
-; RAX = month*10 + pointer to the table
-	pop	rbp
-	ret
-\end{lstlisting}
+\lstinputlisting[caption=\NonOptimizing GCC 4.9 x64]{patterns/13_arrays/55_month_2D/x64_GCC49_O0.asm.\LANG}
 
 \NonOptimizing MSVC \RU{просто использует инструкцию IMUL}\EN{just use IMUL instruction}:
 \index{x86!\Instructions!IMUL}
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2013 x64]{patterns/13_arrays/55_month_2D/MSVC2013_x64.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2013 x64]{patterns/13_arrays/55_month_2D/MSVC2013_x64.asm.\LANG}
 
 \index{\CompilerAnomaly}
 \label{MSVC2013_anomaly}
@@ -96,48 +75,16 @@ that sometimes one shouldn't puzzle over such compiler's artifacts.}
 \Optimizing Keil \RU{для режима Thumb использует инструкцию умножения}
 \EN{for Thumb mode use multiplication instruction} MULS:
 
-\begin{lstlisting}[caption=\OptimizingKeilVI (\ThumbMode)]
-; R0 = month
-        MOVS     r1,#0xa
-; R1 = 10
-        MULS     r0,r1,r0
-; R0 = R1*R0 = 10*month
-        LDR      r1,|L0.68|
-; R1 = pointer to the table
-        ADDS     r0,r0,r1
-; R0 = R0+R1 = 10*month + pointer to the table
-        BX       lr
-\end{lstlisting}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/13_arrays/55_month_2D/Keil_O3_thumb.asm.\LANG}
 
 \Optimizing Keil \RU{для режима ARM использует операции сложения и сдвига}\EN{for ARM mode use add and 
 shift operations}:
 
-\begin{lstlisting}[caption=\OptimizingKeilVI (\ARMMode)]
-; R0 = month
-        LDR      r1,|L0.104|
-; R1 = pointer to the table
-        ADD      r0,r0,r0,LSL #2
-; R0 = R0+R0<<2 = R0+R0*4 = month*5
-        ADD      r0,r1,r0,LSL #1
-; R0 = R1+R0<<2 = pointer to the table + month*5*2 = pointer to the table + month*10
-        BX       lr
-\end{lstlisting}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/13_arrays/55_month_2D/Keil_O3_ARM.asm.\LANG}
 
 \subsection{ARM64}
 
-\begin{lstlisting}[caption=\Optimizing GCC 4.9 ARM64]
-; W0 = month
-	sxtw	x0, w0
-; X0 = sign-extended input value
-	adrp	x1, .LANCHOR1
-	add	x1, x1, :lo12:.LANCHOR1
-; X1 = pointer to the table
-	add	x0, x0, x0, lsl 2
-; X0 = X0+X0<<2 = X0+X0*4 = X0*5
-	add	x0, x1, x0, lsl 1
-; X0 = X1+X0<<1 = X1+X0*2 = pointer to the table + X0*10
-	ret
-\end{lstlisting}
+\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64]{patterns/13_arrays/55_month_2D/GCC49_ARM64.asm.\LANG}
 
 \index{ARM!\Instructions!SXTW}
 \index{ARM!\Instructions!ADRP/ADD pair}
@@ -152,7 +99,7 @@ shift operations}:
 
 \ifdefined\IncludeMIPS
 \subsection{MIPS}
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/13_arrays/55_month_2D/MIPS_O3_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/13_arrays/55_month_2D/MIPS_O3_IDA.lst.\LANG}
 \fi
 
 \subsection{\Conclusion{}}

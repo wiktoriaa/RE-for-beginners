@@ -125,6 +125,33 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/12_FPU/3_comparison/x86/GCC481_O3.s.ru patterns/12_FPU/3_comparison/x86/GCC481_O3.s.en \
 	patterns/12_FPU/3_comparison/x86/GCC.asm.ru patterns/12_FPU/3_comparison/x86/GCC.asm.en \
 	patterns/12_FPU/3_comparison/x86/GCC_O3.asm.ru patterns/12_FPU/3_comparison/x86/GCC_O3.asm.en \
+	patterns/13_arrays/1_simple/ARM64_GCC491_O0.s.ru patterns/13_arrays/1_simple/ARM64_GCC491_O0.s.en \
+	patterns/13_arrays/1_simple/MIPS_O3_IDA.lst.ru patterns/13_arrays/1_simple/MIPS_O3_IDA.lst.en \
+	patterns/13_arrays/1_simple/simple_Keil_ARM_O0.asm.ru patterns/13_arrays/1_simple/simple_Keil_ARM_O0.asm.en \
+	patterns/13_arrays/1_simple/simple_Keil_thumb_O3.asm.ru patterns/13_arrays/1_simple/simple_Keil_thumb_O3.asm.en \
+	patterns/13_arrays/2_BO/w.asm.ru patterns/13_arrays/2_BO/w.asm.en \
+	patterns/13_arrays/3_BO_protection/gcc_canary.asm.ru patterns/13_arrays/3_BO_protection/gcc_canary.asm.en \
+	patterns/13_arrays/3_BO_protection/simple_Xcode_thumb_O3.asm.ru patterns/13_arrays/3_BO_protection/simple_Xcode_thumb_O3.asm.en \
+	patterns/13_arrays/45_month_1D/month1.c.ru patterns/13_arrays/45_month_1D/month1.c.en \
+	patterns/13_arrays/45_month_1D/MIPS_O3_IDA.lst.ru patterns/13_arrays/45_month_1D/MIPS_O3_IDA.lst.en \
+	patterns/13_arrays/5_multidimensional/2D_as_1D.c.ru patterns/13_arrays/5_multidimensional/2D_as_1D.c.en \
+	patterns/13_arrays/5_multidimensional/2D_as_1D_GCC49_x64_O3.s.ru patterns/13_arrays/5_multidimensional/2D_as_1D_GCC49_x64_O3.s.en \
+	patterns/13_arrays/5_multidimensional/2D_as_1D_MSVC_2013_Ox_x64.asm.ru patterns/13_arrays/5_multidimensional/2D_as_1D_MSVC_2013_Ox_x64.asm.en \
+	patterns/13_arrays/5_multidimensional/multi_gcc.asm.ru patterns/13_arrays/5_multidimensional/multi_gcc.asm.en \
+	patterns/13_arrays/5_multidimensional/multi_MIPS_O3_IDA.lst.ru patterns/13_arrays/5_multidimensional/multi_MIPS_O3_IDA.lst.en \
+	patterns/13_arrays/5_multidimensional/multi_msvc.asm.ru patterns/13_arrays/5_multidimensional/multi_msvc.asm.en \
+	patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O0.asm.ru patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O0.asm.en \
+	patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O3.asm.ru patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O3.asm.en \
+	patterns/13_arrays/5_multidimensional/two1.c.ru patterns/13_arrays/5_multidimensional/two1.c.en \
+	patterns/13_arrays/5_multidimensional/two2.c.ru patterns/13_arrays/5_multidimensional/two2.c.en \
+	patterns/13_arrays/55_month_2D/x64_GCC49_O0.asm.ru patterns/13_arrays/55_month_2D/x64_GCC49_O0.asm.en \
+	patterns/13_arrays/55_month_2D/Keil_O3_thumb.asm.ru patterns/13_arrays/55_month_2D/Keil_O3_thumb.asm.en \
+	patterns/13_arrays/55_month_2D/Keil_O3_ARM.asm.ru patterns/13_arrays/55_month_2D/Keil_O3_ARM.asm.en \
+	patterns/13_arrays/55_month_2D/GCC49_ARM64.asm.ru patterns/13_arrays/55_month_2D/GCC49_ARM64.asm.en \
+	patterns/13_arrays/55_month_2D/MIPS_O3_IDA.lst.ru patterns/13_arrays/55_month_2D/MIPS_O3_IDA.lst.en \
+	patterns/13_arrays/55_month_2D/month2.c.ru patterns/13_arrays/55_month_2D/month2.c.en \
+	patterns/13_arrays/55_month_2D/MSVC2013_x64.asm.ru patterns/13_arrays/55_month_2D/MSVC2013_x64.asm.en \
+	patterns/13_arrays/55_month_2D/MSVC2013_x64_Ox.asm.ru patterns/13_arrays/55_month_2D/MSVC2013_x64_Ox.asm.en \
 	patterns/13_arrays/6_neg_arrays/neg_array.asm.ru patterns/13_arrays/6_neg_arrays/neg_array.asm.en \
 	patterns/13_arrays/6_neg_arrays/stack.txt.ru patterns/13_arrays/6_neg_arrays/stack.txt.en \
 	patterns/14_bitfields/1_check/check2.asm.ru patterns/14_bitfields/1_check/check2.asm.en \

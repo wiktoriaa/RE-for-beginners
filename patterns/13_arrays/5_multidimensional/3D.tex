@@ -13,7 +13,7 @@
 
 \RU{В итоге}\EN{We got} (MSVC 2010):
 
-\lstinputlisting[caption=MSVC 2010]{patterns/13_arrays/5_multidimensional/multi_msvc.asm}
+\lstinputlisting[caption=MSVC 2010]{patterns/13_arrays/5_multidimensional/multi_msvc.asm.\LANG}
 
 \RU{В принципе, ничего удивительного. В \TT{insert()} для вычисления адреса нужного элемента массива, 
 три входных аргумента перемножаются по формуле $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$, 
@@ -24,7 +24,7 @@ by formula $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$ to represent 
 Do not forget the \Tint type is 32-bit (4 bytes),
 so all coefficients must be multiplied by 4.}
 
-\lstinputlisting[caption=GCC 4.4.1]{patterns/13_arrays/5_multidimensional/multi_gcc.asm}
+\lstinputlisting[caption=GCC 4.4.1]{patterns/13_arrays/5_multidimensional/multi_gcc.asm.\LANG}
 
 \RU{Компилятор GCC решил всё сделать немного иначе}\EN{GCC compiler does it differently}.
 \RU{Для вычисления одной из операций ($30y$), GCC создал код, где нет самой операции умножения.}
@@ -39,7 +39,7 @@ used, one bitwise shift operation and one subtraction operation.}
 \ifdefined\IncludeARM
 \subsubsection{ARM + \NonOptimizingXcodeIV (\ThumbMode)}
 
-\lstinputlisting[caption=\NonOptimizingXcodeIV (\ThumbMode)]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O0_\LANG.asm}
+\lstinputlisting[caption=\NonOptimizingXcodeIV (\ThumbMode)]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O0.asm.\LANG}
 
 \NonOptimizing LLVM \RU{сохраняет все переменные в локальном стеке, хотя это и избыточно.}
 \EN{saves all variables in local stack, however, it is redundant.}
@@ -48,7 +48,7 @@ used, one bitwise shift operation and one subtraction operation.}
 
 \subsubsection{ARM + \OptimizingXcodeIV (\ThumbMode)}
 
-\lstinputlisting[caption=\OptimizingXcodeIV (\ThumbMode)]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O3_\LANG.asm}
+\lstinputlisting[caption=\OptimizingXcodeIV (\ThumbMode)]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O3.asm.\LANG}
 
 \RU{Тут используются уже описанные трюки для замены умножения на операции сдвига, сложения и вычитания.}
 \EN{Tricks for replacing multiplication by shift, addition and subtraction which we already considered
@@ -88,6 +88,6 @@ are also present here.}
 \index{MIPS!Global Pointer}
 My example is tiny, so GCC compiler decided to put $a$ table into 64KiB area addressable by Global Pointer.
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/13_arrays/5_multidimensional/multi_MIPS_O3_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/13_arrays/5_multidimensional/multi_MIPS_O3_IDA.lst.\LANG}
 
 \fi
