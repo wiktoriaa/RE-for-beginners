@@ -56,6 +56,14 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/07_jcc/abs/abs_Keil_thumb_O3.s.ru patterns/07_jcc/abs/abs_Keil_thumb_O3.s.en \
 	patterns/07_jcc/abs/abs_MSVC2012_Ox_x64.asm.ru patterns/07_jcc/abs/abs_MSVC2012_Ox_x64.asm.en \
 	patterns/07_jcc/abs/MIPS_O3_IDA.lst.ru patterns/07_jcc/abs/MIPS_O3_IDA.lst.en \
+	patterns/07_jcc/cond_operator/ARM64_GCC_O3.s.ru patterns/07_jcc/cond_operator/ARM64_GCC_O3.s.en \
+	patterns/07_jcc/cond_operator/cond2_GCC_O3.s.ru patterns/07_jcc/cond_operator/cond2_GCC_O3.s.en \
+	patterns/07_jcc/cond_operator/Keil_ARM_O3.s.ru patterns/07_jcc/cond_operator/Keil_ARM_O3.s.en \
+	patterns/07_jcc/cond_operator/Keil_thumb_O3.s.ru patterns/07_jcc/cond_operator/Keil_thumb_O3.s.en \
+	patterns/07_jcc/cond_operator/MIPS_O3.s.ru patterns/07_jcc/cond_operator/MIPS_O3.s.en \
+	patterns/07_jcc/cond_operator/MSVC2008.asm.ru patterns/07_jcc/cond_operator/MSVC2008.asm.en \
+	patterns/07_jcc/cond_operator/MSVC2008_Ox.asm.ru patterns/07_jcc/cond_operator/MSVC2008_Ox.asm.en \
+	patterns/07_jcc/cond_operator/MSVC2012_Ox_x64.asm.ru patterns/07_jcc/cond_operator/MSVC2012_Ox_x64.asm.en \
 	patterns/08_switch/1_few/ARM64_GCC_O0.lst.ru patterns/08_switch/1_few/ARM64_GCC_O0.lst.en \
 	patterns/08_switch/1_few/ARM64_GCC_O3.lst.ru patterns/08_switch/1_few/ARM64_GCC_O3.lst.en \
 	patterns/08_switch/1_few/MIPS_O3_IDA.lst.ru patterns/08_switch/1_few/MIPS_O3_IDA.lst.en \
