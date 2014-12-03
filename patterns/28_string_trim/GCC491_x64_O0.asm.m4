@@ -41,7 +41,7 @@ include(`commons.m4')str_trim:
 	jne	.L5                      ; _EN(`yes? exit then')_RU(`да? тогда на выход')
 ; _EN(`for() second part ends here')_RU(`здесь заканчивается вторая часть for()')
 .L4:
-; _EN(`return')_RU(`возврат') "s"
+; _return "s"
 	mov	rax, QWORD PTR [rbp-24]  
 	leave
 	ret

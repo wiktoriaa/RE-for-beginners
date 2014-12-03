@@ -40,7 +40,7 @@ include(`commons.m4')str_trim:
 	cmp	cl, 13                   ; _EN(`is it')_RU(`это') '\r'?
 	je	.L12
 .L9:
-; _EN(`return')_RU(`возврат') "s"
+; _return "s"
 	mov	rax, rbx
 	pop	rbx
 	ret

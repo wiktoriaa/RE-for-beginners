@@ -1,7 +1,7 @@
 include(`commons.m4')f:
 	sub	sp, sp, #16
-	str	d0, [sp,8]	; _EN(`save')_RU(`сохранить') "a" _EN(`in')_RU(`в') Register Save Area
-	str	d1, [sp]	; _EN(`save')_RU(`сохранить') "b" _EN(`in')_RU(`в') Register Save Area
+	str	d0, [sp,8]	; _EN(`save')_RU(`сохранить') "a" _in Register Save Area
+	str	d1, [sp]	; _EN(`save')_RU(`сохранить') "b" _in Register Save Area
 	ldr	x1, [sp,8]
 ; X1 = a
 	ldr	x0, .LC25

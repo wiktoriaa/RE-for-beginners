@@ -25,6 +25,6 @@ include(`commons.m4').text:00000000 main:
 .text:00000030                 lw      $ra, 0x20+var_4($sp)
 ; _EN(`set return value to')_RU(`установить возвращаемое значение в') 0:
 .text:00000034                 move    $v0, $zero
-; _EN(`return')_RU(`возврат')
+; _return
 .text:00000038                 jr      $ra
 .text:0000003C                 addiu   $sp, 0x20 ; branch delay slot

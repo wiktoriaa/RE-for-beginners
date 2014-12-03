@@ -28,7 +28,7 @@ include(`commons.m4').text:004006C0 main:
 ; _EN(`get address of')_RU(`взять адрес') x:
 .text:00400704                 la      $v0, x
 .text:00400708                 la      $t9, printf
-; _EN(`load value from "x" variable and pass it to')_RU(`загрузить значение из переменной "x" и передать его в') printf() _EN(`in')_RU(`в') $a1:
+; _EN(`load value from "x" variable and pass it to')_RU(`загрузить значение из переменной "x" и передать его в') printf() _in $a1:
 .text:0040070C                 lw      $a1, (x - 0x41099C)($v0)
 .text:00400710                 jalr    $t9 ; printf
 .text:00400714                 la      $a0, aYouEnteredD___  # "You entered %d...\n" ; branch delay slot

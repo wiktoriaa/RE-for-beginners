@@ -64,6 +64,17 @@ listings: patterns/01_helloworld/GCC_x64.s.ru patterns/01_helloworld/GCC_x64.s.e
 	patterns/07_jcc/cond_operator/MSVC2008.asm.ru patterns/07_jcc/cond_operator/MSVC2008.asm.en \
 	patterns/07_jcc/cond_operator/MSVC2008_Ox.asm.ru patterns/07_jcc/cond_operator/MSVC2008_Ox.asm.en \
 	patterns/07_jcc/cond_operator/MSVC2012_Ox_x64.asm.ru patterns/07_jcc/cond_operator/MSVC2012_Ox_x64.asm.en \
+	patterns/07_jcc/simple/GCC_O3_unsigned.asm.ru patterns/07_jcc/simple/GCC_O3_unsigned.asm.en \
+	patterns/07_jcc/simple/O0_MIPS_signed_IDA.lst.ru patterns/07_jcc/simple/O0_MIPS_signed_IDA.lst.en \
+	patterns/07_jcc/simple/ARM/ARM64_GCC_O3_signed.lst.ru patterns/07_jcc/simple/ARM/ARM64_GCC_O3_signed.lst.en \
+	patterns/07_jcc/simple/ARM/ARM64_GCC_O3_unsigned.lst.ru patterns/07_jcc/simple/ARM/ARM64_GCC_O3_unsigned.lst.en \
+	patterns/07_jcc/minmax/minmax_GCC481_O3.s.ru patterns/07_jcc/minmax/minmax_GCC481_O3.s.en \
+	patterns/07_jcc/minmax/minmax_Keil_ARM_O3.s.ru patterns/07_jcc/minmax/minmax_Keil_ARM_O3.s.en \
+	patterns/07_jcc/minmax/minmax_Keil_Thumb_O3.s.ru patterns/07_jcc/minmax/minmax_Keil_Thumb_O3.s.en \
+	patterns/07_jcc/minmax/minmax_MIPS_O3_IDA.lst.ru patterns/07_jcc/minmax/minmax_MIPS_O3_IDA.lst.en \
+	patterns/07_jcc/minmax/minmax_MSVC_2013.asm.ru patterns/07_jcc/minmax/minmax_MSVC_2013.asm.en \
+	patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O3.s.ru patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O3.s.en \
+	patterns/07_jcc/minmax/minmax64_GCC_49_x64_O3.s.ru patterns/07_jcc/minmax/minmax64_GCC_49_x64_O3.s.en \
 	patterns/08_switch/1_few/ARM64_GCC_O0.lst.ru patterns/08_switch/1_few/ARM64_GCC_O0.lst.en \
 	patterns/08_switch/1_few/ARM64_GCC_O3.lst.ru patterns/08_switch/1_few/ARM64_GCC_O3.lst.en \
 	patterns/08_switch/1_few/MIPS_O3_IDA.lst.ru patterns/08_switch/1_few/MIPS_O3_IDA.lst.en \

@@ -27,7 +27,7 @@ main:
 	cmp	w19, 10
 ; _EN(``no, jump to the loop body begin'')_RU(``нет, перейти на начало тела цикла''):
 	bne	.L3
-; _EN(`return')_RU(`возврат') 0
+; _return 0
 	mov	w0, 0
 ; _EN(`restore contents of X19 register')_RU(`восстановить содержимое регистра X19'):
 	ldr	x19, [sp,16]

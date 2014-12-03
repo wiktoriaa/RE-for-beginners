@@ -56,7 +56,7 @@ include(`commons.m4')str_trim:
 ; _EN(``goto exit, if it's zero or to L5 if it's not'')_RU(``перейти на конец, если это ноль, или на L5, если нет'')
 	bne	.L5
 .L4:
-; _EN(`return')_RU(`вернуть') s
+; _return s
 	ldr	x0, [x29,24]
 	ldp	x29, x30, [sp], 48
 	ret

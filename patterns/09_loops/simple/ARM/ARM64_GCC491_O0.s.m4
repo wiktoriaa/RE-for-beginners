@@ -47,7 +47,7 @@ main:
 ; _EN(`less or equal? then jump to loop body begin:')_RU(`меньше или равно? тогда перейти на начало тела цикла:')
 ; _EN(`do nothing otherwise')_RU(`иначе ничего не делаем').
 	ble	.L4
-; _EN(`return')_RU(`возврат') 0
+; _return 0
 	mov	w0, 0
 ; _EN(`restore FP and LR values')_RU(`восстановить значения FP и LR'):
 	ldp	x29, x30, [sp], 32

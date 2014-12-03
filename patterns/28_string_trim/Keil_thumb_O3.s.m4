@@ -13,7 +13,7 @@ include(`commons.m4')str_trim PROC
         CMP      r1,`#'0xa       ; _EN(`is loaded byte')_RU(`загруженный байт это') '\n'?
         BNE      |L0.38|       ; _EN(``jump to exit, if no'')_RU(``перейти на выход, если нет'')
 |L0.20|
-        SUBS     r0,r0,`#'1      ; R0-- _EN(`or')_RU(`или') str_len--
+        SUBS     r0,r0,`#'1      ; R0-- _or str_len--
         STRB     r3,[r2,`#'0x1f] ; _EN(`store')_RU(`записать') 0 _EN(`at address')_RU(`по адресу') R2+0x1F=s+str_len-0x20+0x1F=s+str_len-1
 |L0.24|
         CMP      r0,`#'0         ; str_len==0?
@@ -24,7 +24,7 @@ include(`commons.m4')str_trim PROC
         CMP      r1,`#'0         ; _EN(`is loaded byte')_RU(`загруженный байт это') 0?
         BNE      |L0.12|       ; _EN(``jump to loop begin, if it's not 0'')_RU(``перейти на начало цикла, если это не 0'')
 |L0.38|
-; _EN(`return')_RU(`возврат') "s"
+; _return "s"
         MOVS     r0,r4
         POP      {r4,pc}
         ENDP

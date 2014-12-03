@@ -4,7 +4,7 @@ include(`commons.m4')f:
 	ldr	d1, .LC1 ; _EN(`load')_RU(`загрузить') 1.54 _EN(`into')_RU(`в') D1
 	ldr	d0, .LC0 ; _EN(`load')_RU(`загрузить') 32.01 _EN(`into')_RU(`в') D0
 	bl	pow
-; _EN(`result of')_RU(`результат') pow() _EN(`in')_RU(`в') D0
+; _EN(`result of')_RU(`результат') pow() _in D0
 	adrp	x0, .LC2
 	add	x0, x0, :lo12:.LC2
 	bl	printf

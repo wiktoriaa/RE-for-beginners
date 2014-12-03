@@ -36,7 +36,7 @@ $LN2@str_trim:
 	test	edx, edx
 	jmp	SHORT $LN18@str_trim
 $LN15@str_trim:
-; _EN(`return')_RU(`возврат') "s"
+; _return "s"
 	mov	rax, rcx
 	ret	0
 str_trim ENDP

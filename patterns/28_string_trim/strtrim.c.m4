@@ -6,7 +6,7 @@ char* str_trim (char *s)
 	char c;
 	size_t str_len;
 	
-	// _EN(`work as long as')_RU(``работать до тех пор, пока'') \r _EN(`or')_RU(`или') \n _EN(`is at the end of string')_RU(`находятся в конце строки')
+	// _EN(`work as long as')_RU(``работать до тех пор, пока'') \r _or \n _EN(`is at the end of string')_RU(`находятся в конце строки')
 	// _EN(``stop if some other character there or it's an empty string'')_RU(``остановиться, если там какой-то другой символ, или если строка пустая'')
 	// (_EN(`at start or due to our operation')_RU(``на старте, или в результате наших действий''))
 	for (str_len=strlen(s); str_len>0 && (c=s[str_len-1]); str_len--)

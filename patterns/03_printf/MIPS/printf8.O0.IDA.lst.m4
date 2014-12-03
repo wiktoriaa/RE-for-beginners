@@ -54,6 +54,6 @@ include(`commons.m4').text:00000000 main:
 .text:0000007C                 lw      $ra, 0x38+var_4($sp)
 .text:00000080                 lw      $fp, 0x38+var_8($sp)
 .text:00000084                 addiu   $sp, 0x38
-; _EN(`return')_RU(`возврат')
+; _return
 .text:00000088                 jr      $ra
 .text:0000008C                 or      $at, $zero ; NOP

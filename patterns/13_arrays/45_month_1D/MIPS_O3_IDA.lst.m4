@@ -7,7 +7,7 @@ include(`commons.m4')get_month1:
                 addu    $a0, $v0
 ; _EN(`load table element at this address into')_RU(`загрузить элемент таблицы по этому адресу в') $v0:
                 lw      $v0, 0($a0)
-; _EN(`return')_RU(`возврат')
+; _return
                 jr      $ra
                 or      $at, $zero ; branch delay slot, NOP
 

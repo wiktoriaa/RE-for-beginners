@@ -16,7 +16,7 @@ main:
 	mov	DWORD PTR [rsp], 6
 	call	printf
 
-	; _EN(`return')_RU(`возврат') 0
+	; _return 0
 
 	xor	eax, eax
 	add	rsp, 40

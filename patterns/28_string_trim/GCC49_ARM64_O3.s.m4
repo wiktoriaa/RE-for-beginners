@@ -33,7 +33,7 @@ include(`commons.m4')str_trim:
 	cmp	w2, 13         ; _EN(`is it')_RU(`это') '\r'?
 	beq	.L12           ; _EN(``yes, jump to the loop body begin'')_RU(``да, перейти на начало тела цикла'')
 .L9:
-; _EN(`return')_RU(`возврат') "s"
+; _return "s"
 	mov	x0, x19
 	ldr	x19, [sp,16]
 	ldp	x29, x30, [sp], 32

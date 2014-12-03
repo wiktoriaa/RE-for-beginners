@@ -35,6 +35,6 @@ main:
 	lw	$31,28($sp)
 	lw	$fp,24($sp)
 	addiu	$sp,$sp,32
-; _EN(`return')_RU(`возврат')
+; _return
 	j	$31
 	nop

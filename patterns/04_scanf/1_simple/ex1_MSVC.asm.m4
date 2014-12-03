@@ -27,7 +27,7 @@ _main    PROC
     call   _printf
     add    esp, 8
 
-    ; _EN(`return')_RU(`возврат') 0
+    ; _return 0
     xor    eax, eax
     mov    esp, ebp
     pop    ebp

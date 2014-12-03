@@ -36,7 +36,7 @@ var_4           = -4
                 la      $a0, ($LC2 & 0xFFFF)  # "32.01 ^ 1.54 = %lf\n"
 ; _EN(`function epilogue')_RU(`эпилог функции'):
                 lw      $ra, 0x20+var_4($sp)
-; _EN(`return')_RU(`вернуть') 0:
+; _return 0:
                 move    $v0, $zero
                 jr      $ra
                 addiu   $sp, 0x20

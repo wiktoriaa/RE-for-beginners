@@ -24,6 +24,6 @@ main:
 	lw	$31,28($sp)
 ; _EN(`set return value to')_RU(`установить возвращаемое значение в') 0:
 	move	$2,$0
-; _EN(`return')_RU(`возврат')
+; _return
 	j	$31
 	addiu	$sp,$sp,32 ; branch delay slot

@@ -31,7 +31,7 @@ f4:
 	adrp	x0, .LC2
 	add	x0, x0, :lo12:.LC2
 	bl	printf
-; _EN(`return')_RU(`возврат') 0
+; _return 0
 	mov	w0, 0
 ; _EN(`restore FP and LR')_RU(`восстановить FP и LR'):
 	ldp	x29, x30, [sp], 32

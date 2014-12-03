@@ -1,3 +1,7 @@
 divert(-1)define(`_RU', `ifelse(lang,`ru',§$1§)')
 define(`_EN', `ifelse(lang,`en',§$1§)')
+define(`_if',`_EN(`if')_RU(`если')')
+define(`_or',`_EN(`or')_RU(`или')')
+define(`_in',`_EN(`in')_RU(`в')')
+define(`_return',`_EN(`return')_RU(`возврат')')
 divert(0)

@@ -47,6 +47,6 @@ main:
 	lw	$31,52($sp)
 	lw	$fp,48($sp)
 	addiu	$sp,$sp,56
-; _EN(`return')_RU(`возврат')
+; _return
 	j	$31
 	nop

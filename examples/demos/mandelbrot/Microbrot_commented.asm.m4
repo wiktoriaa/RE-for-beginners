@@ -19,7 +19,7 @@ mov al,13h
 int 10h
 ; _EN(`initial BX is 0')_RU(`в самом начале BX равен 0')
 ; _EN(`initial DI is 0xFFFE')_RU(`в самом начале DI равен 0xFFFE')
-; DS:BX (_EN(`or')_RU(`или') DS:0) _EN(`is pointing to')_RU(`указывает на') Program Segment Prefix _EN(`at this moment')_RU(`в этот момент')
+; DS:BX (_or DS:0) _EN(`is pointing to')_RU(`указывает на') Program Segment Prefix _EN(`at this moment')_RU(`в этот момент')
 ; ... _EN(`first 4 bytes of which are')_RU(`первые 4 байта которого этого') CD 20 FF 9F
 les ax,[bx]
 ; ES:AX=9FFF:20CD
@@ -37,7 +37,7 @@ div cx
 ; DX (start_X) - _EN(`remainder')_RU(`остаток') (_EN(`column')_RU(`столбец'): 0..319); AX - _EN(`result')_RU(`результат') (_EN(`row')_RU(`строка'): 0..199)
 sub ax,100
 ; AX=AX-100, _EN(`so')_RU(`так что') AX (start_Y) _EN(`now is in range')_RU(`сейчас в пределах') -100..99
-; DX _EN(`is in range')_RU(`в пределах') 0..319 _EN(`or')_RU(`или') 0x0000..0x013F
+; DX _EN(`is in range')_RU(`в пределах') 0..319 _or 0x0000..0x013F
 dec dh
 ; DX _EN(`now is in range')_RU(`сейчас в пределах') 0xFF00..0x003F (-256..63)
 

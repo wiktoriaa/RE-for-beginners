@@ -24,7 +24,7 @@ include(`commons.m4')004006c0 <main>:
 ; _EN(`get address of')_RU(`взять адрес') x:
   400704:       8f828044        lw      v0,-32700(gp)
   400708:       8f99803c        lw      t9,-32708(gp)
-; _EN(`load value from "x" variable and pass it to')_RU(`загрузить значение из переменной "x" и передать его в') printf() _EN(`in')_RU(`в') $a1:
+; _EN(`load value from "x" variable and pass it to')_RU(`загрузить значение из переменной "x" и передать его в') printf() _in $a1:
   40070c:       8c450000        lw      a1,0(v0)
   400710:       0320f809        jalr    t9
   400714:       24840900        addiu   a0,a0,2304 ; branch delay slot

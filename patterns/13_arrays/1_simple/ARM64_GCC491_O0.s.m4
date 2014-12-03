@@ -61,7 +61,7 @@ main:
 	cmp	w0, 19
 ; _EN(`jump to the loop body begin if not')_RU(``перейти на начало тела цикла, если нет''):
 	ble	.L5
-; _EN(`return')_RU(`возврат') 0
+; _return 0
 	mov	w0, 0
 ; _EN(`restore FP and LR')_RU(`восстановить FP и LR'):
 	ldp	x29, x30, [sp], 112

@@ -21,7 +21,7 @@ loc_80484D0:
                 cmp     ebx, 64h  ; i==100?
                 jnz     short loc_80484D0 ; _EN(``if not, continue'')_RU(``если нет, продолжать'')
                 add     esp, 1Ch
-                xor     eax, eax  ; _EN(`return')_RU(`вернуть') 0
+                xor     eax, eax  ; _return 0
                 pop     ebx
                 mov     esp, ebp
                 pop     ebp

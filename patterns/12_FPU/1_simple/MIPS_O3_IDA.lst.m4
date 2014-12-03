@@ -8,7 +8,7 @@ include(`commons.m4')f:
 ; _EN(`load high 32-bit part of 3.14 constant to')_RU(`загрузить старшую 32-битную часть константы 3.14 в') $f1:
                 lwc1    $f1, $LC0
                 lui     $v0, ($LC1 >> 16)     ; ?
-; A _EN(`in')_RU(`в') $f12-$f13, _EN(`3.14 constant in')_RU(`константа 3.14 в') $f0-$f1, _EN(`do division')_RU(`произвести деление'):
+; A _in $f12-$f13, _EN(`3.14 constant in')_RU(`константа 3.14 в') $f0-$f1, _EN(`do division')_RU(`произвести деление'):
                 div.d   $f0, $f12, $f0
 ; $f0-$f1=A/3.14
 ; _EN(`load low 32-bit part of 4.1 to')_RU(`загрузить младшую 32-битную часть константы 4.1 в') $f2:
@@ -17,7 +17,7 @@ include(`commons.m4')f:
 ; _EN(`load high 32-bit part of 4.1 to')_RU(`загрузить страшую 32-битную часть константы 4.1 в') $f3:
                 lwc1    $f3, $LC1
                 or      $at, $zero            ; load delay slot, NOP
-; B _EN(`in')_RU(`в') $f14-$f15, _EN(`4.1 constant in')_RU(`константа 4.1 в') $f2-$f3, _EN(`do multiplication')_RU(`произвести умножение'):
+; B _in $f14-$f15, _EN(`4.1 constant in')_RU(`константа 4.1 в') $f2-$f3, _EN(`do multiplication')_RU(`произвести умножение'):
                 mul.d   $f2, $f14, $f2
 ; $f2-$f3=B*4.1
                 jr      $ra
