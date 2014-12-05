@@ -1,0 +1,34 @@
+\section{\RU{Случай с функцией \IT{vprintf()}}\EN{\IT{vprintf()} function case}}
+\index{\CStandardLibrary!vprintf}
+\index{\CStandardLibrary!va\_list}
+
+\RU{Многие программисты определяют свою собственную ф-цию для записи в лог, которая берет строку формата 
+вида \printf + переменное количество аргументов.}
+\EN{Many programmers define their own logging functions which takes printf-like format string + 
+variable number of arguments.}
+
+\RU{Еще один популярный пример это ф-ция die(), которая выводит некоторое сообщение и заканчивает работу.}
+\EN{Another popular example is die() function, which prints some message and exits.}
+\RU{Нам нужен какой-то способ запаковать входные аргументы неизвестного количества и передать их в ф-цию \printf.}
+\EN{We need some way to pack input arguments of unknown number and pass them to \printf function.}
+\RU{Но как}\EN{But how}?
+\RU{Вот зачем нужны ф-ции с ``v'' в названии.}
+\EN{That's why there are functions with ``v'' in name.}
+\RU{Одна из них это \IT{vprintf()}: она берет строку формата и указатель на переменную типа \TT{va\_list}:}
+\EN{One of them is \IT{vprintf()}: it takes format-string and pointer of variable of \TT{va\_list} type:}
+
+\lstinputlisting{\CURPATH/die.c}
+
+\RU{При ближайшем рассмотрении, мы можем увидеть что \TT{va\_list} это указатель на массив.}
+\EN{By closer examination, we may see that \TT{va\_list} is a pointer to an array.}
+\RU{Скомпилируем}\EN{Let's compile}:
+
+\lstinputlisting[caption=\Optimizing MSVC 2010]{\CURPATH/die_MSVC2010_Ox.asm.\LANG}
+
+\RU{Мы видим что всё что наша ф-ция делает это просто берет указатель на аргументы, передает его в \IT{vprintf()},
+и эта ф-ция будет работать с ним как с бесконечным массивом аргументов!}
+\EN{We see that all our function does is just takes a pointer to arguments, 
+passes it to \IT{vprintf()} and that function will
+treat it like an infinite array of arguments!}
+
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{\CURPATH/die_MSVC2012_x64_Ox.asm.\LANG}

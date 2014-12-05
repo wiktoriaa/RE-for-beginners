@@ -1,0 +1,90 @@
+\section{\RU{Вычисление среднего}\EN{арифметического Computing arithmetic mean}}
+
+\RU{Представим что нам нужно вычислить \glslink{arithmetic mean}{среднее арифметическое}, 
+и по какой-то странной причине, 
+нам нужно задать все числа в аргументах ф-ции.}
+\EN{Let's imagine, we need to calculate \gls{arithmetic mean}, and by some weird reason, 
+we need to specify all values in function arguments.}
+
+\RU{Но в \CCpp ф-ции с переменным кол-вом аргументов невозможно определить кол-во аргуметов,
+так что обозначим значение $-1$ как конец списка.}
+\EN{But it's impossible to get number of arguments in variadic function in \CCpp, so I'll denote 
+value of $-1$ as a terminator.}
+
+\RU{Имеется стандартный заголовочный файл stdarg.h, который определяет макросы для работы с такими аргументами.}
+\EN{There are standard stdarg.h header file which define macros for dealing such type of arguments.}
+\RU{Их так же используют ф-ции \printf и \scanf.}
+\EN{\printf and \scanf functions use them as well.}
+
+\lstinputlisting{\CURPATH/arith.c.\LANG}
+
+\RU{Самый первый аргумент должен трактоваться как обычный аргумент.}
+\EN{The very first argument should be treated just like usual argument.}
+\index{\CStandardLibrary!va\_arg}
+\RU{Остальные аргументы загружаются используя макрос \TT{va\_arg}, и затем суммируются.}
+\EN{All other arguments are loaded using \TT{va\_arg} macro and then summed.}
+
+\RU{Так что внутри}\EN{So what is inside}?
+
+\subsection{\RU{Соглашение о вызовах \IT{cdecl}}\EN{\IT{cdecl} calling conventions}}
+
+\lstinputlisting[caption=\Optimizing MSVC 6.0]{\CURPATH/arith_MSVC60_Ox.asm.\LANG}
+
+\RU{Аргументы, как мы видим, передаются в \main один за одним.}
+\EN{The arguments, as we may see, are passed to the \main one-by-one.}
+\RU{Первый аргумент заталкивается в локальный стек первым.}
+\EN{The first argument is pushed into local stack as first.}
+\RU{Терминатор (оконечивающее значение $-1$) заталкивается последним.}
+\EN{Terminator value ($-1$) pushed last.}
+
+\RU{Ф-ция \TT{arith\_mean()} берет первый аргумент и сохраняет его значение в переменной $sum$.}
+\EN{\TT{arith\_mean()} function takes value of first argument and stores it to $sum$ variable.}
+\RU{Затем, она записывает адрес второго аргумента в регистр \EDX, берет значение оттуда, прибавляет к $sum$,
+и делает это в бесконечном цикле, до тех пор пока не встретится $-1$.}
+\EN{Then, it sets \EDX register to the address of the second argument, takes value from it, adds to $sum$,
+and do this in infinite loop, until $-1$ is met.}
+
+\RU{Когда встретится, сумма делится на число всех значений (исключая $-1$) и \glslink{quotient}{частное} 
+возвращается.}
+\EN{When it's met, sum is divided by number of all values (excluding $-1$) and the \gls{quotient} is returned.}
+
+\RU{Так что, другими словами, я бы сказал, ф-ция обходится с фрагментом стека как с массивом целочисленных
+значений, бесконечной длины.}
+\EN{So, in other words, I would say, the function treat stack fragment as an array of integer values of infinite
+length.}
+\RU{Теперь нам легче понять почему в соглашениях о вызовах \IT{cdecl} первый аргумент 
+заталкивается в стек последним.}
+\EN{Now we can understand why \IT{cdecl} calling convention forcing to push the first argument 
+into stack as last.}
+\RU{Потому что иначе будет невозможно найти первый аргумент, или, для ф-ции вроде \printf, невозможно
+будет найти строку формата.}
+\EN{Because otherwise, it would not be possible to find the first argument, 
+or, for printf-like functions, it would not be possible to find address of the format-string.}
+
+\subsection{\RU{Соглашения о вызовах на основе регистров}\EN{Register-based calling conventions}}
+\label{variadic_arith_registers}
+
+\RU{Наблюдательный читатель может спросить, что насчет тех соглашений о вызовах, где первые аргументы передаются
+в регистрах?}
+\EN{Observant reader may ask, what about calling conventions where first arguments are passed in registers?}
+\RU{Посмотрим}\EN{Let's see}:
+
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{\CURPATH/arith_MSVC_2012_Ox_x64.asm.\LANG}
+
+\RU{Мы видим что первые 4 аргумента передаются в регистрах и еще два --- в стеке.}
+\EN{We see that first 4 arguments are passed in registers and two more --- in stack.}
+\RU{Ф-ция \TT{arith\_mean()} в начале сохраняет эти 4 аргумента в \IT{Shadow Space} и затем обходится
+с \IT{Shadow Space} и стеком за ним как с единым непрерывным массивом!}
+\EN{\TT{arith\_mean()} function first place these 4 arguments into \IT{Shadow Space} and then treat
+\IT{Shadow Space} and stack behind it as a single continuous array!}
+
+\RU{Что насчет GCC? Тут немного неуклюже всё, потому что ф-ция делится на две части: первая часть
+сохраняет регистры в ``red zone'', обрабатывает это пространство, а вторая часть ф-ции обрабатывает стек:}
+\EN{What about GCC? Things are slightly clumsy here, because now the function is divided by two parts:
+first part is saving registers into ``red zone'', workout that space, and the second part of function working out
+the stack:}
+
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{\CURPATH/arith_GCC491_x64_O3.s.\LANG}
+
+\EN{By the way, similar usage of \IT{Shadow Space} is also considered here}
+\RU{Кстати, похожее использование \IT{Shadow Space} разбирается здесь}: \ref{pointer_to_argument}.

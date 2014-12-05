@@ -1,7 +1,7 @@
-﻿include(`commons.m4')MOV X0, _EN(`1st argument')_RU(`1-й аргумент')
-MOV X1, _EN(`2nd argument')_RU(`2-й аргумент')
-MOV X2, _EN(`3rd argument')_RU(`3-й аргумент')
-MOV X3, _EN(`4th argument')_RU(`4-й аргумент')
+﻿include(`commons.m4')MOV X0, _arg1
+MOV X1, _arg2
+MOV X2, _arg3
+MOV X3, _arg4
 MOV X4, _EN(`5th argument')_RU(`5-й аргумент')
 MOV X5, _EN(`6th argument')_RU(`6-й аргумент')
 MOV X6, _EN(`7th argument')_RU(`7-й аргумент')

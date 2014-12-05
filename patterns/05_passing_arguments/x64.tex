@@ -10,7 +10,7 @@ instead of stack}.
 
 \Optimizing MSVC:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/05_passing_arguments/x64_MSVC_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/05_passing_arguments/x64_MSVC_Ox.asm.\LANG}
 
 \RU{Как видно, очень компактная ф-ция \ttf, берет аргументы прямо из регистров}
 \EN{As we can see, very compact \ttf function takes arguments right from the registers}.
@@ -27,7 +27,7 @@ thinks that it will work faster than usual value loading to the register using \
 \RU{Попробуем посмотреть вывод неоптимизирующего MSVC}\EN{Let's try to take a look on output of
 non-optimizing MSVC}:
 
-\lstinputlisting[caption=MSVC 2012 x64]{patterns/05_passing_arguments/x64_MSVC_IDA.asm}
+\lstinputlisting[caption=MSVC 2012 x64]{patterns/05_passing_arguments/x64_MSVC_IDA.asm.\LANG}
 
 \RU{Немного путаннее: все 3 аргумента из регистров зачем-то сохраняются в стеке}
 \EN{Somewhat puzzling: all 3 arguments from registers are saved to the stack for some reason}.
@@ -58,11 +58,11 @@ of \gls{caller} to allocate ``shadow space'' in stack}.
 
 \Optimizing GCC \RU{также делает понятный код}\EN{does more or less understandable code}:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/05_passing_arguments/x64_GCC_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/05_passing_arguments/x64_GCC_O3.s.\LANG}
 
 \NonOptimizing GCC:
 
-\lstinputlisting[caption=GCC 4.4.6 x64]{patterns/05_passing_arguments/x64_GCC.s}
+\lstinputlisting[caption=GCC 4.4.6 x64]{patterns/05_passing_arguments/x64_GCC.s.\LANG}
 
 \index{Shadow space}
 \RU{В соглашении о вызовах System V *NIX\cite{SysVABI} нет ``shadow space'', но \gls{callee} тоже иногда
@@ -81,7 +81,7 @@ in order to use 64-bit values}:
 
 \lstinputlisting{patterns/05_passing_arguments/ex64.c}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/05_passing_arguments/ex64_GCC_O3_IDA.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/05_passing_arguments/ex64_GCC_O3_IDA.asm.\LANG}
 
 \RU{Собствено, всё то же самое, только используются регистры \IT{целиком}, с префиксом \TT{R-}}
 \EN{The code is very same, but registers (prefixed by \TT{R-}) are \IT{used as a whole}}.

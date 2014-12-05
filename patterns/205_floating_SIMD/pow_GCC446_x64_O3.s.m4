@@ -7,7 +7,7 @@ main:
 	call	pow
 	; _EN(`result is now in')_RU(`результат сейчас в') XMM0
 	mov	edi, OFFSET FLAT:.LC2
-	mov	eax, 1 ; _RU(`количество переданных векторных регистров')_EN(`number of vector registers passed')
+	mov	eax, 1 ; _numvecreg
 	call	printf
 	xor	eax, eax
 	add	rsp, 8

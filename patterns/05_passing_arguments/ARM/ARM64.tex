@@ -15,32 +15,7 @@
 \EN{The result is returned in \TT{W0}.}
 \RU{Результат возвращается в \TT{W0}.}
 
-\begin{lstlisting}
-f:
-	madd	w0, w0, w1, w2
-	ret
-
-main:
-; save FP and LR to stack frame:
-	stp	x29, x30, [sp, -16]!
-	mov	w2, 3
-	mov	w1, 2
-	add	x29, sp, 0
-	mov	w0, 1
-	bl	f
-	mov	w1, w0
-	adrp	x0, .LC7
-	add	x0, x0, :lo12:.LC7
-	bl	printf
-; return 0
-	mov	w0, 0
-; restore FP and LR
-	ldp	x29, x30, [sp], 16
-	ret
-
-.LC7:
-	.string	"%d\n"
-\end{lstlisting}
+\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9]{patterns/05_passing_arguments/ARM/ARM64_O3.s.\LANG}
 
 \EN{I also extended all data types to 64-bit \TT{uint64\_t} and tried it:}
 \RU{Я также расширил все типы данных до 64-битных \TT{uint64\_t} и попробовал:}

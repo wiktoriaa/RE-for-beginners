@@ -1,7 +1,7 @@
-﻿include(`commons.m4')MOV RDI, _EN(`1st argument')_RU(`1-й аргумент')
-MOV RSI, _EN(`2nd argument')_RU(`2-й аргумент')
-MOV RDX, _EN(`3rd argument')_RU(`3-й аргумент')
-MOV RCX, _EN(`4th argument')_RU(`4-й аргумент')
+﻿include(`commons.m4')MOV RDI, _arg1
+MOV RSI, _arg2
+MOV RDX, _arg3
+MOV RCX, _arg4
 MOV R8, _EN(`5th argument')_RU(`5-й аргумент')
 MOV R9, _EN(`6th argument')_RU(`6-й аргумент')
 ...

@@ -1,0 +1,39 @@
+\chapter{\RU{Обрезка строк}\EN{Strings trimming}}
+\newcommand{\CRLF}{\ac{CR}/\ac{LF}}
+
+\RU{Весьма востребованная операция со строками это удаление некоторых символов в начале и/или конце
+строки.}
+\EN{Very common strings processing task is to remove some characters at begin and/or end.}
+
+\RU{В этом примере, мы будем работать с ф-цией, удаляющей все символы перевода строки 
+(\CRLF{}) в конце входной строки:}
+\EN{In this example, we will work with a function which removes all newline characters 
+(\CRLF{}) at the input string end:}
+
+\lstinputlisting{\CURPATH/strtrim.c.\LANG}
+
+\RU{Входной аргумент всегда возвращается на выходе, это удобно, когда вам нужно объеденять
+ф-ции обработки строк в цепочки, как это сделано здесь в ф-ции \main.}
+\EN{Input argument is always returned on exit, this is convenient when you need to chain 
+string processing functions, like it was done here in the \main function.}
+
+\RU{Вторая часть for() (\TT{str\_len>0 \&\& (c=s[str\_len-1])}) называется в \CCpp ``short-circuit'' 
+(короткое замыкание) и это очень удобно: \cite[1.3.8]{CBook}.}
+\EN{The second part of for() (\TT{str\_len>0 \&\& (c=s[str\_len-1])}) is so called ``short-circuit'' 
+in \CCpp and is very convenient \cite[1.3.8]{CBook}.}
+\RU{Компиляторы \CCpp гарантируют последовательное вычисление слева направо.}
+\EN{\CCpp compilers guarantee evaluation sequence from left to right.}
+\RU{Так что если первое условие не истинно после вычисления, второе никогда не будет
+вычисляться.}
+\EN{So if the first clause is false after evaluation, second will never be evaluated.}
+
+% subsections
+\input{\CURPATH/x64}
+\ifdefined\IncludeARM
+\input{\CURPATH/ARM64}
+\input{\CURPATH/ARM}
+\fi
+\ifdefined\IncludeMIPS
+\input{\CURPATH/MIPS}
+\fi
+

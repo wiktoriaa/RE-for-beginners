@@ -5,7 +5,7 @@ include(`commons.m4')f:
                 bnez    $v0, loc_24
                 la      $gp, (__gnu_local_gp & 0xFFFF) ; branch delay slot
 ; _EN(`input value is greater or equal to 5.')_RU(`входное значение больше или равно 5')
-; _EN(`print')_RU(`вывести') "something unknown" _EN(`and finish')_RU(`и закончить'):
+; _print "something unknown" _EN(`and finish')_RU(`и закончить'):
                 lui     $a0, ($LC5 >> 16)  # "something unknown"
                 lw      $t9, (puts & 0xFFFF)($gp)
                 or      $at, $zero ; NOP
@@ -28,7 +28,7 @@ loc_24:                                  # CODE XREF: f+8
                 or      $at, $zero ; branch delay slot, NOP
 
 sub_44:                                  # DATA XREF: .rodata:0000012C
-; _EN(`print')_RU(`вывести') "three" _EN(`and finish')_RU(`и закончить')
+; _print "three" _EN(`and finish')_RU(`и закончить')
                 lui     $a0, ($LC3 >> 16)  # "three"
                 lw      $t9, (puts & 0xFFFF)($gp)
                 or      $at, $zero ; NOP
@@ -36,7 +36,7 @@ sub_44:                                  # DATA XREF: .rodata:0000012C
                 la      $a0, ($LC3 & 0xFFFF)  # "three" ; branch delay slot
 
 sub_58:                                  # DATA XREF: .rodata:00000130
-; _EN(`print')_RU(`вывести') "four" _EN(`and finish')_RU(`и закончить')
+; _print "four" _EN(`and finish')_RU(`и закончить')
                 lui     $a0, ($LC4 >> 16)  # "four"
                 lw      $t9, (puts & 0xFFFF)($gp)
                 or      $at, $zero ; NOP
@@ -44,7 +44,7 @@ sub_58:                                  # DATA XREF: .rodata:00000130
                 la      $a0, ($LC4 & 0xFFFF)  # "four" ; branch delay slot
 
 sub_6C:                                  # DATA XREF: .rodata:off_120
-; _EN(`print')_RU(`вывести') "zero" _EN(`and finish')_RU(`и закончить')
+; _print "zero" _EN(`and finish')_RU(`и закончить')
                 lui     $a0, ($LC0 >> 16)  # "zero"
                 lw      $t9, (puts & 0xFFFF)($gp)
                 or      $at, $zero ; NOP
@@ -52,7 +52,7 @@ sub_6C:                                  # DATA XREF: .rodata:off_120
                 la      $a0, ($LC0 & 0xFFFF)  # "zero" ; branch delay slot
 
 sub_80:                                  # DATA XREF: .rodata:00000124
-; _EN(`print')_RU(`вывести') "one" _EN(`and finish')_RU(`и закончить')
+; _print "one" _EN(`and finish')_RU(`и закончить')
                 lui     $a0, ($LC1 >> 16)  # "one"
                 lw      $t9, (puts & 0xFFFF)($gp)
                 or      $at, $zero ; NOP
@@ -60,7 +60,7 @@ sub_80:                                  # DATA XREF: .rodata:00000124
                 la      $a0, ($LC1 & 0xFFFF)  # "one" ; branch delay slot
 
 sub_94:                                  # DATA XREF: .rodata:00000128
-; _EN(`print')_RU(`вывести') "two" _EN(`and finish')_RU(`и закончить')
+; _print "two" _EN(`and finish')_RU(`и закончить')
                 lui     $a0, ($LC2 >> 16)  # "two"
                 lw      $t9, (puts & 0xFFFF)($gp)
                 or      $at, $zero ; NOP

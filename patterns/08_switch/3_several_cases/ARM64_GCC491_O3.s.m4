@@ -5,7 +5,7 @@ include(`commons.m4')f14:
 ; _EN(`branch if less or equal (unsigned):')_RU(`переход если меньше или равно (беззнаковое):')
 	bls	.L9
 .L2:
-; _EN(`print')_RU(`вывести') "default":
+; _print "default":
 	adrp	x0, .LC4
 	add	x0, x0, :lo12:.LC4
 	b	puts
@@ -52,22 +52,22 @@ include(`commons.m4')f14:
 	.text
 ; _EN(`everything after ".text" statement is allocated in the code (text) segment:')_RU(`всё после выражения ".text" выделяется в сегменте кода (text):')
 .L7:
-; _EN(`print')_RU(`вывести') "22"
+; _print "22"
 	adrp	x0, .LC3
 	add	x0, x0, :lo12:.LC3
 	b	puts
 .L6:
-; _EN(`print')_RU(`вывести') "8, 9, 21"
+; _print "8, 9, 21"
 	adrp	x0, .LC2
 	add	x0, x0, :lo12:.LC2
 	b	puts
 .L5:
-; _EN(`print')_RU(`вывести') "3, 4, 5"
+; _print "3, 4, 5"
 	adrp	x0, .LC1
 	add	x0, x0, :lo12:.LC1
 	b	puts
 .L3:
-; _EN(`print')_RU(`вывести') "1, 2, 7, 10"
+; _print "1, 2, 7, 10"
 	adrp	x0, .LC0
 	add	x0, x0, :lo12:.LC0
 	b	puts
