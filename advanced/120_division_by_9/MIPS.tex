@@ -1,35 +1,37 @@
 ﻿\section{MIPS}
 
-By some reason, optimizing GCC 4.4.5 generate just division instruction:
+\EN{By some reason, optimizing GCC 4.4.5 generate just division instruction:}
+\RU{По какой-то причине, оптимизирующий GCC 4.4.5 сгенерировал просто инструкцию деления:}
 
-\begin{lstlisting}[caption=\Optimizing GCC 4.4.5 (IDA)]
-f:
-                li      $v0, 9
-                bnez    $v0, loc_10
-                div     $a0, $v0 ; branch delay slot
-                break   0x1C00   ; "break 7" in assembly output and objdump
-
-loc_10:
-                mflo    $v0
-                jr      $ra
-                or      $at, $zero ; branch delay slot, NOP
-\end{lstlisting}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{\CURPATH/MIPS_O3_IDA.lst.\LANG}
 
 \index{MIPS!\Instructions!BREAK}
-Oh, we see here new instruction: BREAK. It just raises exception.
-In this case, exception is raised if divisor is zero (it's not possible to divide by zero in conventional
-math).
-But GCC probably not very well did optimization job and did not see that \$V0 is never zero.
-But there are still check.
-So if \$V0 is zero somehow, BREAK will be executed, signalling to \ac{OS} about exception.
+\EN{Oh, we see here new instruction: BREAK. It just raises exception.}
+\RU{И кстати, мы видим новую инструкцию: BREAK. Она просто генерирует исключение.}
+\EN{In this case, exception is raised if divisor is zero (it's not possible to divide by zero 
+in conventional math).}
+\RU{В этом случае, исключение генерируется если делитель 0 (потому что в обычной математике нельзя
+делить на ноль).}
+\EN{But GCC probably not very well did optimization job and did not see that \$V0 is never zero.}
+\RU{Но компилятор GCC наверное не очень хорошо оптимизировал код, и не заметил что \$V0 не бывает нулем.}
+\EN{So the check is left here}\RU{Так что проверка осталась здесь}.
+\EN{So if \$V0 is zero somehow, BREAK will be executed, signalling to \ac{OS} about exception.}
+\RU{Так что если \$V0 будет каким-то образом 0, будет исполнена BREAK, сигнализирующая в \ac{OS} 
+об исключении.}
 \index{MIPS!\Instructions!MFLO}
-Otherwise, MFLO executes, which takes result of division from LO register and places it in \$V0.
+\EN{Otherwise, MFLO executes, which takes result of division from LO register and copies it in \$V0.}
+\RU{В противном случае, исполняется MFLO, берущая результат деления из регистра LO и копирующая его в \$V0.}
 
 \index{MIPS!\Registers!LO}
 \index{MIPS!\Registers!HI}
-By the way, as we may know, MUL instruction leaves high 32-bit of result in HI register and low 32-bit
-in LO register.
-DIV leaves result in LO register, and remainder in HI register.
+\EN{By the way, as we may know, MUL instruction leaves high 32 bit of 
+result in HI register and low 32 bit in LO register.}
+\RU{Кстати, как мы уже можем знать, инструкция MUL оставляет старшую 32-битную часть результата
+в регистре HI и младшую 32-битную часть в LO.}
+\EN{DIV leaves result in LO register, and remainder in HI register.}
+\RU{DIV оставляет результат в регистре LO и остаток в HI.}
 
 \index{MIPS!\Instructions!MFHI}
-If to alter statement to ``a \% 9'', MFHI instruction will be used instead of MFLO at the place.
+\EN{If to alter statement to}\RU{Если изменить выражение на} ``a \% 9'', 
+\EN{MFHI instruction will be used instead of MFLO at the place.}
+\RU{вместо инструкции MFLO будет использована MFHI.}
