@@ -1,11 +1,11 @@
-my_atoi PROC
+include(`commons.m4')my_atoi PROC
         PUSH     {r4-r6,lr}
         MOV      r4,r0
         LDRB     r0,[r0,#0]
         MOV      r6,#0
         MOV      r5,r6
         CMP      r0,#0x2d '-'
-; R6 will contain 1 if minus was encountered, 0 if otherwise
+; R6 _EN(``will contain 1 if minus was encountered, 0 if otherwise'')_RU(``будет содержать 1 если минус был встречен, или 0 в противном случае'')
         MOVEQ    r6,#1
         ADDEQ    r4,r4,#1
         B        |L0.80|
@@ -27,7 +27,7 @@ my_atoi PROC
         CMP      r1,#0
         BNE      |L0.36|
         CMP      r6,#0
-; negate result
+; _EN(`negate result')_RU(`поменять знак в переменной результата')
         RSBNE    r0,r5,#0
         MOVEQ    r0,r5
         POP      {r4-r6,pc}
