@@ -1,4 +1,4 @@
-f:
+include(`commons.m4')f:
 	push	rbp
 	mov	rbp, rsp
 	mov	QWORD PTR [rbp-24], rdi	; a
@@ -18,15 +18,15 @@ f:
 	and	eax, 1
 ; EAX = EAX&1 = (a>>i)&1
 	test	rax, rax
-; the last bit is zero?
-; skip the next ADD instruction, if it's so.
+; _EN(`the last bit is zero')_RU(`последний бит был нулевым')?
+; _EN(``skip the next ADD instruction, if it was so'')_RU(``пропустить следующую инструкцию ADD, если это было так'').
 	je	.L3	
 	add	DWORD PTR [rbp-12], 1	; rt++
 .L3:
 	add	QWORD PTR [rbp-8], 1	; i++
 .L2:
 	cmp	QWORD PTR [rbp-8], 63	; i<63?
-	jbe	.L4			; jump to the loop body begin, if so
-	mov	eax, DWORD PTR [rbp-12]	; return rt
+	jbe	.L4			; _EN(``jump to the loop body begin, if so'')_RU(``перейти на начало тела цикла, если это так'')
+	mov	eax, DWORD PTR [rbp-12]	; _return rt
 	pop	rbp
 	ret

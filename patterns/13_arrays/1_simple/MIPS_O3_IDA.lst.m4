@@ -47,7 +47,7 @@ loc_54:                                  # CODE XREF: main+70
                 move    $a1, $s0
                 move    $a0, $s3
                 jalr    $t9
-; _EN(`increment')_RU(`инкремент') "i":
+; _increment "i":
                 addiu   $s0, 1
                 lw      $gp, 0x80+var_70($sp)
 ; _EN(`jump to loop body if end is not reached')_RU(``перейти на начало тела цикла, если конец еще не достигнут''):

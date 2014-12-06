@@ -10,7 +10,7 @@ include(`commons.m4')my_strlen:
 .L62:
 ; eos++
 	ldr	x0, [sp,24]  ; _EN(`load')_RU(`загрузить') "eos" _EN(`to')_RU(`в') X0
-	add	x1, x0, 1    ; _EN(`increment')_RU(`инкремент') X0
+	add	x1, x0, 1    ; _increment X0
 	str	x1, [sp,24]  ; _EN(`save')_RU(`сохранить') X0 _EN(`to')_RU(`в') "eos"
 ; _EN(`load byte from memory at address in X0 to W0')_RU(`загрузить байт из памяти по адресу в X0 в W0')
 	ldrb	w0, [x0]

@@ -1,18 +1,6 @@
 \subsection{ARM + \OptimizingXcodeIV (\ARMMode)}
 
-\begin{lstlisting}[caption=\OptimizingXcodeIV (\ARMMode),label=ARM_leaf_example4]
-                MOV             R1, R0
-                MOV             R0, #0
-                MOV             R2, #1
-                MOV             R3, R0
-loc_2E54
-                TST             R1, R2,LSL R3 ; set flags according to R1 & (R2<<R3)
-                ADD             R3, R3, #1    ; R3++
-                ADDNE           R0, R0, #1    ; if ZF flag is cleared by TST, R0++
-                CMP             R3, #32
-                BNE             loc_2E54
-                BX              LR
-\end{lstlisting}
+\lstinputlisting[caption=\OptimizingXcodeIV (\ARMMode),label=ARM_leaf_example4]{patterns/14_bitfields/4_popcnt/ARM_Xcode_O3.lst.\LANG}
 
 \index{ARM!\Instructions!TST}
 \TT{TST} \RU{это то же что и}\EN{is the same things as} \TEST \InENRU x86.
@@ -81,7 +69,7 @@ loc_2F7A
 \RU{Я взял 64-битный пример, который уже использовал}\EN{I took 64-bit example I already used}: 
 \ref{popcnt_x64_example}.
 
-\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.8]{patterns/14_bitfields/4_popcnt/ARM64_GCC_O3.s}
+\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.8]{patterns/14_bitfields/4_popcnt/ARM64_GCC_O3.s.\LANG}
 
 \RU{Результат очень похож на тот, что GCC сгенерировал для x64}\EN{The result is very similar to what GCC 
 generated for x64}: \ref{shifts64_GCC_O3}.
@@ -99,4 +87,4 @@ example I already used}: \ref{popcnt_x64_example}.
 
 \RU{Код более многословный, как обычно}\EN{The code is more verbose, as usual}.
 
-\lstinputlisting[caption=\NonOptimizing GCC (Linaro) 4.8]{patterns/14_bitfields/4_popcnt/ARM64_GCC_O0.s}
+\lstinputlisting[caption=\NonOptimizing GCC (Linaro) 4.8]{patterns/14_bitfields/4_popcnt/ARM64_GCC_O0.s.\LANG}

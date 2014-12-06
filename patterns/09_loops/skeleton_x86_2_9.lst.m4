@@ -4,7 +4,7 @@ body:
     ; _EN(`loop body')_RU(`тело цикла')
     ; _EN(`do something here')_RU(`делаем тут что-нибудь')
     ; _EN(`use counter variable in local stack')_RU(`используем переменную счетчика в локальном стеке')
-    MOV REG, [counter] ; _EN(`increment')_RU(`инкремент')
+    MOV REG, [counter] ; _increment
     INC REG 
     MOV [counter], REG
 check:

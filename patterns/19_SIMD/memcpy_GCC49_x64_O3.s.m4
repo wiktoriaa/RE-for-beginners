@@ -1,7 +1,7 @@
-my_memcpy:
-; RDI = destination address
-; RSI = source address
-; RDX = size of block
+include(`commons.m4')my_memcpy:
+; RDI = _EN(`destination address')_RU(`адрес назначения')
+; RSI = _EN(`source address')_RU(`исходный адрес')
+; RDX = _EN(`size of block')_RU(`размер блока')
 	test	rdx, rdx
 	je	.L41
 	lea	rax, [rdi+16]

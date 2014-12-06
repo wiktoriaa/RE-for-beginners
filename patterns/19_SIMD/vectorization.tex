@@ -81,7 +81,7 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 
 \RU{Имеем такое (в \IDA):}\EN{We got (in \IDA):}
 
-\lstinputlisting{patterns/19_SIMD/18_1_en.asm}
+\lstinputlisting{patterns/19_SIMD/18_1.asm.\LANG}
 
 \RU{Инструкции, имеющие отношение к SSE2 это:}\EN{SSE2-related instructions are:}
 \index{x86!\Instructions!MOVDQA}
@@ -136,12 +136,7 @@ movdqa  xmmword ptr [eax+edi*4], xmm0 ; ar3+i*4
 \EN{Otherwise, value from \TT{ar2} will be loaded into \XMM{0} using \MOVDQU,
 it does not require aligned pointer, but may work slower:}
 
-\begin{lstlisting}
-movdqu  xmm1, xmmword ptr [ebx+edi*4] ; ar1+i*4
-movdqu  xmm0, xmmword ptr [esi+edi*4] ; ar2+i*4 is not 16-byte aligned, so load it to xmm0
-paddd   xmm1, xmm0
-movdqa  xmmword ptr [eax+edi*4], xmm1 ; ar3+i*4
-\end{lstlisting}
+\lstinputlisting{patterns/19_SIMD/18_1_excerpt.asm.\LANG}
 
 \RU{А во всех остальных случаях, будет исполняться код, который был бы, как если бы не была 
 включена поддержка SSE2.}
@@ -174,4 +169,4 @@ if to use \Othree option and to turn on SSE2 support: \TT{-msse2}.}
 \RU{И вот что делает оптимизирующий GCC 4.9.1:}
 \EN{And that's what optimizing GCC 4.9.1 did:}
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/19_SIMD/memcpy_GCC49_x64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/19_SIMD/memcpy_GCC49_x64_O3.s.\LANG}

@@ -13,7 +13,7 @@ $LN2@strlen_:
 
     movsx   edx, BYTE PTR [ecx]             
     mov     eax, DWORD PTR _eos$[ebp]  ; EAX=eos
-    add     eax, 1                     ; _EN(`increment')_RU(`инкремент') EAX
+    add     eax, 1                     ; _increment EAX
     mov     DWORD PTR _eos$[ebp], eax  ; _EN(`place EAX back to')_RU(`положить eax назад в') "eos"
     test    edx, edx                   ; EDX _EN(`is zero')_RU(`ноль')?
     je      SHORT $LN1@strlen_         ; _EN(``yes, then finish loop'')_RU(``да, то что лежит в EDX это ноль, выйти из цикла'')

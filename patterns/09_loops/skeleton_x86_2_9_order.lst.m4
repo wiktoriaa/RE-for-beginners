@@ -1,7 +1,7 @@
 ﻿include(`commons.m4')    MOV [counter], 2 ; _EN(`initialization')_RU(`инициализация')
     JMP label_check
 label_increment:
-    ADD [counter], 1 ; _EN(`increment')_RU(`инкремент')
+    ADD [counter], 1 ; _increment
 label_check:
     CMP [counter], 10
     JGE exit
