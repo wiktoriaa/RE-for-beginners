@@ -38,27 +38,7 @@ summing value in \EAX and what is stored in \TT{\_c}.}
 Now return to \gls{caller}~---it will take value from the \EAX and used it as \printf argument.}
 
 \ifdefined\IncludeOlly
-\subsection{MSVC + \olly}
-\index{\olly}
-\RU{Проиллюстрируем всё это в}\EN{Let's illustrate this in} \olly.
-\RU{Когда мы протрассируем до первой инструкции в \ttf, которая использует какой-то из аргументов
-(первый), мы увидим что \EBP указывает на \glslink{stack frame}{фрейм стека}, 
-я отметил его начало красной стрелкой}\EN{When 
-we trace until the very first instruction in \ttf that uses one of the arguments (first one),
-we see that \EBP is pointing to the \gls{stack frame}, I marked its begin with red arrow}.
-\RU{Самый первый элемент \glslink{stack frame}{фрейма стека} это сохраненное значение \EBP, 
-затем \ac{RA}, третий элемент это
-первый аргумент ф-ции, затем второй аргумент и третий}\EN{The first element of \gls{stack frame} is saved \EBP value, 
-second is \ac{RA}, third is first function argument, then second argument and third one}.
-\RU{Для доступа к первому аргументу ф-ции, нужно прибавить к \EBP аккурат 8 (2 32-битных слова)}
-\EN{To access the first function argument, one need to add exactly 8 (2 32-bit words) to \EBP}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/05_passing_arguments/olly.png}
-\caption{\olly: \RU{внутри ф-ции}\EN{inside of} \ttf{}\EN{ function}}
-\label{fig:passing_arguments_olly}
-\end{figure}
+\input{patterns/05_passing_arguments/olly.tex}
 \fi
 
 \subsection{GCC}
