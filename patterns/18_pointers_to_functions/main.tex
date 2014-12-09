@@ -122,54 +122,8 @@ big problem~---big problem is to determine a reason of crashing~---because compi
 silent about potential trouble while compiling.}
 
 \ifdefined\IncludeOlly
-\clearpage
-\subsection{MSVC + \olly}
-\index{\olly}
-
-\RU{Загрузим наш пример в \olly и установим брякпойнт на ф-ции \comp}
-\EN{Let's load our example into \olly and set breakpoint on \comp function}.
-
-\RU{Как значения сравниваются, мы можем увидеть во время самого первого вызова \comp}
-\EN{How values are compared we can see at the very first \comp call}:
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/18_pointers_to_functions/olly1.png}
-\caption{\olly: \RU{первый вызов}\EN{first call of} \comp}
-\label{fig:qsort_olly1}
-\end{figure}
-
-\RU{Для удобства, }\olly \RU{показывает сравниваемые значения в окне под окном кода}
-\EN{shows compared values in the window under code window, for convenience}.
-\RU{Мы можем так же увидеть что}\EN{We can also see that the} \ac{SP} \RU{указывает на}\EN{pointing to} 
-\ac{RA} \RU{где находится место в ф-ции}\EN{where the place in} 
-\qsort \EN{function is }(\RU{на самом деле, находится в}\EN{actually located in} \TT{MSVCR100.DLL}).
-
-\clearpage
-\RU{Трассируя}\EN{By tracing} (F8) \RU{до инструкции}\EN{until} \TT{RETN} 
-\RU{и нажав F8 еще один раз, мы возвращаемся в ф-цию}\EN{instruction, and pressing F8 one more time, 
-we returning into} \qsort\EN{ function}:
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/18_pointers_to_functions/olly2.png}
-\caption{\olly: \RU{код в}\EN{the code in} \qsort \RU{сразу после вызова}\EN{right after} \comp\EN{ call}}
-\label{fig:qsort_olly2}
-\end{figure}
-
-\RU{Это был вызов ф-ции сравнения}\EN{That was a call to comparison function}.
-
-\clearpage
-\RU{Вот также скриншот момента второго вызова ф-ции}\EN{Here is also screenshot of the moment of the 
-second call of} \comp\EMDASH{}\RU{теперь сравниваемые значения другие}
-\EN{now values to be compared are different}:
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=\FigScale]{patterns/18_pointers_to_functions/olly3.png}
-\caption{\olly: \RU{второй вызов}\EN{second call of} \comp}
-\label{fig:qsort_olly3}
-\end{figure}
+\input{patterns/18_pointers_to_functions/olly.tex}
+\fi
 
 \subsection{MSVC + tracer}
 \index{tracer}
@@ -291,8 +245,6 @@ points is 4---indeed, 32-bit values are stored in the array}.
 (\RU{они и остались белыми}\EN{so they leaved as white}): 
 \RU{действительно, ф-ция}\EN{indeed,} \comp \RU{никогда не возвращала 0,
 потому что в массиве нет одинаковых элементов}\EN{was never returned 0, because there no equal elements in array}.
-
-\fi
 
 \section{GCC}
 
