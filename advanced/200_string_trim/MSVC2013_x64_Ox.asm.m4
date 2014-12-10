@@ -1,7 +1,7 @@
 include(`commons.m4')s$ = 8
 str_trim PROC
 
-; RCX _EN(`is the first function argument and it always holds pointer to the string')_RU(`это первый аргумент функции и он всегда будет указывать на строку')
+; RCX _EN(`is the first function argument and it always holds pointer to the string')_RU(``это первый аргумент функции, и он всегда будет указывать на строку'')
 
 ; _EN(`this is strlen() function inlined right here')_RU(`это функция strlen() встроенная в код прямо здесь'):
 ; _EN(`set')_RU(`установить') RAX _EN(`to')_RU(`в') 0xFFFFFFFFFFFFFFFF (-1)

@@ -16,7 +16,7 @@ include(`commons.m4')main            proc near
                 mov     [esp], eax      ; timer
                 call    _localtime_r
                 lea     esi, [esi+0]	; NOP
-; _EN(``ESI here is the pointer to structure in local stack. EDI is the pointer to structure end.'')_RU(``ESI здесь это указатель на структу в локальном стеке. EDI это указатель на конец структуры.'')
+; _EN(``ESI here is the pointer to structure in local stack. EDI is the pointer to structure end.'')_RU(``ESI здесь это указатель на структуру в локальном стеке. EDI это указатель на конец структуры.'')
 loc_8048408:
                 xor     ebx, ebx        ; j=0
 

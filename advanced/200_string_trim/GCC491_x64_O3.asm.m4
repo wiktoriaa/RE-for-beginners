@@ -19,7 +19,7 @@ include(`commons.m4')str_trim:
 	jne	.L9
 .L4:
 ; _EN(`this is weird instruction. we need RSI=s-1 here.')_RU(`это странная инструкция. нам здесь нужно RSI=s-1')
-; _EN(``it's possible to get it by'')_RU(`это можно сделать используя') MOV RSI, EBX / DEC RSI
+; _EN(``it's possible to get it by'')_RU(``это можно сделать, используя'') MOV RSI, EBX / DEC RSI
 ; _EN(`but this is two instructions instead of one')_RU(`но это две инструкции между одной')
 	sub	rsi, rax
 ; RSI = s+str_len-1-str_len = s-1

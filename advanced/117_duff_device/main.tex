@@ -18,7 +18,7 @@ Duff's device
 \EN{Someone can think about simple loop, clearing byte per byte.}
 \RU{Это, очевидно, медленно, так как все современные компьютеры имеют намного более широкую шину памяти.}
 \EN{It's obviously slow, since all modern computers has much wider memory bus.}
-\RU{Так что более правильный способ это очищать регион в памяти блоками по 4 или 8 байт.}
+\RU{Так что более правильный способ --- это очищать регион в памяти блоками по 4 или 8 байт.}
 \EN{So the more right way is to clear memory region by 4 or 8 byte blocks.}
 \RU{Так как мы будем работать с 64-битным примером, мы будем очищать память блоками по 8 байт.}
 \EN{Since we will work with 64-bit example here, we will clear memory by 8 byte blocks.}
@@ -37,7 +37,7 @@ Duff's device
 \EN{calculate size of tale, clear it using 1-byte memory accesses.}
 \end{itemize}
 
-\RU{Второй шаг можно реализовать используя простой цикл}\EN{The second step can be implemented using simple loop}.
+\RU{Второй шаг можно реализовать, используя простой цикл}\EN{The second step can be implemented using simple loop}.
 \RU{Но давайте реализуем его используя развернутый цикл}\EN{But let's implement it as an unrolled loop}:
 
 \lstinputlisting{\CURPATH/duff.c.\LANG}
@@ -100,7 +100,7 @@ although may not use them, should nevertheless understand them.}
 в память.}
 \EN{So the first part is simple: get number of 8-byte blocks and write 64-bit zero values to memory.}
 
-\RU{Вторая часть это развернутый цикл реализованный как fallthrough-выражение switch().}
+\RU{Вторая часть --- это развернутый цикл реализованный как fallthrough-выражение switch().}
 \EN{The second part is unrolled loop implemented as fallthrough switch() statement.}
 \RU{В начале, выразим на обычном русском языке, что мы хотим сделать.}
 \EN{First, let's express in plain English, what we should do here.}
@@ -126,13 +126,13 @@ modern CPUs works better on short loops then on unrolled ones).}
 \RU{Может быть, это всё еще может иметь смысл на современных маломощных дешевых \ac{MCU}.}
 \EN{Maybe it's still can be good on the modern low-cost embedded \ac{MCU}s.}
 
-\RU{Посмотрим что сделает оптимизирующий MSVC 2012}\EN{Let's see what optimizing MSVC 2012 does}:
+\RU{Посмотрим, что сделает оптимизирующий MSVC 2012}\EN{Let's see what optimizing MSVC 2012 does}:
 
 \lstinputlisting{\CURPATH/duff_MSVC2012_x64_Ox.asm.\LANG}
 
 \RU{Первая часть ф-ции выглядит для нас предсказуемо.}
 \EN{First part of the function is predictable to us.}
-\RU{Вторая часть это просто развернутый цикл и переход передает управление на нужную инструкцию
+\RU{Вторая часть --- это просто развернутый цикл и переход передает управление на нужную инструкцию
 внутри него.}
 \EN{The second part is just unrolled loop and a jump passing flow to the correct instruction
 inside of it.}
@@ -141,7 +141,7 @@ inside of it.}
 \EN{There are no other code between \TT{MOV}/\TT{INC} instruction pairs, 
 so execution will fall till the very end, executing as many pairs, as needed.}
 
-\RU{Кстати, мы можем заметить что пара \TT{MOV}/\TT{INC} занимает какое-то фиксированное количество
+\RU{Кстати, мы можем заметить, что пара \TT{MOV}/\TT{INC} занимает какое-то фиксированное количество
 байт (3+3).}
 \EN{By the way, we may observe that \TT{MOV}/\TT{INC} pair consumes some fixed number of bytes (3+3).}
 \RU{Так что пара занимает 6 байт}\EN{So the pair consumes 6 bytes}.

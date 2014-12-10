@@ -32,14 +32,14 @@ _OracleThreadStart@  CALLrel  _opimai()            2 EB1FF6C 7C88A7F4 EB1FC34 0
 \end{lstlisting}
 
 \RU{Но конечно, для этого исполняемые файлы \oracle должны содержать некоторую отладочную информацию,
-либо map-файлы с инфомрацией о символах или что-то в этом роде.}
+либо map-файлы с информацией о символах или что-то в этом роде.}
 \EN{But of course, \oracle executables must have some kind of debug information or map files with symbol
 information included or something like that.}
 
 \RU{\oracle для Windows NT содержит информацию о символах в файлах с расширением .SYM, но его формат закрыт.}
 \EN{Windows NT \oracle have symbol information in files with .SYM extension, but the format is proprietary.}
 \EN{(Plain text files are good, but needs additional parsing, hence offer slower access.)}
-\RU{(Простые текстовые файлы это хорошо, но они требуют дополнительной обработки (парсинга), и из-за этого доступ
+\RU{(Простые текстовые файлы --- это хорошо, но они требуют дополнительной обработки (парсинга), и из-за этого доступ
 к ним медленнее.)}
 
 \RU{Посмотрим, сможем ли мы разобрать его формат}\EN{Let's see if we can understand its format}.
@@ -58,15 +58,15 @@ ancient \oracle version intentionally due to smaller size of its modules}}.
 \label{fig:oracle_SYM_whole1}
 \end{figure}
 
-\RU{Сравнивая этот файл с другими .SYM-файлами, мы можем быстро заметить что \TT{OSYM} всегда является
-заголовком (и концом), так что это наверное сигнатура файла.}
+\RU{Сравнивая этот файл с другими .SYM-файлами, мы можем быстро заметить, что \TT{OSYM} всегда является
+заголовком (и концом), так что это, наверное, сигнатура файла.}
 \EN{By comparing the file with other .SYM files, we can quickly see that \TT{OSYM} is always header (and footer),
 so this is maybe file signature.}
 
 \RU{Мы также видим, что в общем-то, формат файла это: OSYM + какие-то бинарные данные + 
 текстовые строки разделенные нулем + OSYM.}
 \EN{We also see that basically, file format is: OSYM + some binary data + zero delimited text strings + OSYM.}
-\RU{Строки это, очевидно, имена ф-ций и глобальных переменных}\EN{Strings are, obviously, function and global 
+\RU{Строки --- это, очевидно, имена ф-ций и глобальных переменных}\EN{Strings are, obviously, function and global 
 variable names}.
 
 \clearpage
@@ -107,7 +107,7 @@ strings strings_block | wc -l
 \EN{Of course, 0x42 here is not a byte, but most likely a 32-bit value, packed as little-endian, hence we see
 0x42 and then at least 3 zero bytes.}
 
-\RU{Почему я думаю что оно 32-битное}\EN{Why I think it's 32-bit}?
+\RU{Почему я думаю, что оно 32-битное}\EN{Why I think it's 32-bit}?
 \RU{Потому что файлы с символами в \oracle могут быть очень большими}\EN{Because, \oracle symbol 
 files may be pretty big}.
 \RU{oracle.sym для главного исполняемого файла oracle.exe (версия 10.2.0.4) содержит \TT{0x3A38E} (238478) 
@@ -169,7 +169,7 @@ so started by 0x10 and 0 bytes.}
 
 \RU{Посмотрим на этот блок как на массив 32-битных значений}\EN{Let's dump the block as 32-bit values array}:
 
-\lstinputlisting[caption=\RU{первый столбец это адрес}\EN{first column is address}]{ff/Oracle_SYM/dump2.txt}
+\lstinputlisting[caption=\RU{первый столбец --- это адрес}\EN{first column is address}]{ff/Oracle_SYM/dump2.txt}
 
 \RU{Здесь 132 значения, а это 66*2}\EN{There are 132 values, that's 66*2}.
 \RU{Может быть здесь 2 32-битных значения на каждый символ, а может быть здесь два массива}\EN{Probably, 
@@ -261,16 +261,16 @@ block is \TT{10001080}.}
 \RU{Так что это адрес, но для DLL с базовым адресом по умолчанию}\EN{So this is address, 
 but for the DLL with default base address}.
 
-\RU{Я могу быстро проверить и убедиться что первые 66 значений в массиве (т.е., первая половина)
+\RU{Я могу быстро проверить и убедиться, что первые 66 значений в массиве (т.е., первая половина)
 это просто адреса ф-ций в DLL, включая некоторые метки, и т.д.}
 \EN{I can quickly check and be sure that first 66 values in array (i.e., first half of array) 
 are just function addresses in DLL, including some labels, etc.}
 \RU{Хорошо, что же тогда остальная часть массива}\EN{Well, what's then other part of array}? 
 \RU{Остальные 66 значений, начинающиеся с}\EN{Other 66 values starting at} \TT{0x0000}? 
 \RU{Они похоже в пределах}\EN{These are seems to be in range} \TT{[0...0x3F8]}. 
-\RU{И не похоже что это битовые поля: ряд чисел возрастает}\EN{And they are not looks like bitfields: 
+\RU{И не похоже, что это битовые поля: ряд чисел возрастает}\EN{And they are not looks like bitfields: 
 sequence of numbers is growing}.
-\RU{Последняя шестнадцатеричная цифра выглядит как случайная, так что, не похоже что это
+\RU{Последняя шестнадцатеричная цифра выглядит как случайная, так что, не похоже, что это
 адрес чего-либо (в противном случае, он бы делился, может быть, на 4 или 8 или 0x10).}
 \EN{The last hexadecimal digit is seems to be random, so, it's unlikely an address of something 
 (it would be divisible by 4 or maybe 8 or 0x10 otherwise).}
@@ -279,7 +279,7 @@ sequence of numbers is growing}.
 \EN{Let's ask ourselves: what else \oracle developers would save here, in this file?}
 \RU{Случайная догадка: это может быть адрес текстовой строки (название ф-ции).}
 \EN{Quick wild guess: it could be an address of the text string (function name).}
-\RU{Это можно легко проверить, и да, каждое число это просто позиция первого символа в блоке строк.}
+\RU{Это можно легко проверить, и да, каждое число --- это просто позиция первого символа в блоке строк.}
 \EN{It can be quickly checked, and yes, each number is just position of the first character in the strings block.}
 
 \RU{Вот и всё! Всё закончено.}\EN{This is it! All done.}

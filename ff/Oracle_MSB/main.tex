@@ -3,7 +3,7 @@
 \EN{\epigraph{When working toward the solution of a problem, it always helps if you know the answer.}{Murphy's Laws, Rule of Accuracy}}
 \RU{\epigraph{Работая над решением задачи, всегда полезно знать ответ.}{Законы Мерфи, правило точности}}
 
-\RU{Это бинарный файл содержащий сообщения об ошибках вместе с их номерами.}
+\RU{Это бинарный файл, содержащий сообщения об ошибках вместе с их номерами.}
 \EN{This is a binary file containing error messages with corresponding numbers.}
 \RU{Давайте попробуем понять его формат и найти способ распаковать его}\EN{Let's try to understand 
 its format and find a way to unpack it}.
@@ -38,7 +38,7 @@ with irrelevant comments stripped}:
 ...
 \end{lstlisting}
 
-\RU{Первое число это код ошибки}\EN{The first number is error code}.
+\RU{Первое число --- это код ошибки}\EN{The first number is error code}.
 \RU{Второе это может быть дополнительные флаги, но я не уверен}\EN{The second is maybe some additional flags, 
 but I'm not sure}.
 
@@ -83,7 +83,7 @@ a length of each error message must be coded somehow}.
 \RU{Я нашел эти числа в начале блока и отметил их красными линиями}\EN{I found these numbers in the beginning 
 of block and marked them with red lines}.
 \RU{Период между кодами ошибок 6 байт}\EN{The period between error codes is 6 bytes}.
-\RU{Это значит, здесь наверное 6 байт информации выделено для каждого сообщения об ошибке}\EN{This mean, 
+\RU{Это значит, здесь, наверное, 6 байт информации выделено для каждого сообщения об ошибке}\EN{This mean, 
 there are probably 6 bytes of information allocated for each error message}.
 
 \RU{Первое 16-битное значение (здесь 0xA или 10) означает количество сообщений в блоке: я проверил это
@@ -133,7 +133,7 @@ with zero error number and starting position beyond the last error message last 
 \RU{Может быть именно так и определяется длина сообщения}\EN{Probably that's how text message length is 
 determined}?
 \RU{Мы просто перебираем 6-байтные блоки в поисках нужного номера ошибки, затем
-мы узнаем позицию текстоврой строки, затем мы узнаем позицию следующей текстовой строки глядя на
+мы узнаем позицию текстовой строки, затем мы узнаем позицию следующей текстовой строки глядя на
 следующий 6-байтный блок!}\EN{We just enumerate 6-byte blocks to find error number
 we need, then we get text string position, then we get position of the text string by looking onto next
 6-byte block!}
@@ -176,7 +176,7 @@ table came after header which probably contain 16-bit values}:
 
 \RU{Их длина может быть определена визуально (я нарисовал красных линий)}\EN{Their size can be determined 
 visually (I draw red lines)}.
-\RU{Когда я сдампил эти значения, я обнаружил, что каждое 16-битное число это последний код ошибки для
+\RU{Когда я сдампил эти значения, я обнаружил, что каждое 16-битное число --- это последний код ошибки для
 каждого блока}\EN{When I'm dumping these values, I found that each 16-bit number is a last error 
 code for each block}.\\
 \\
@@ -185,11 +185,11 @@ code for each block}.\\
 \begin{itemize}
 \item \RU{загружает таблицу, которую я назвал}\EN{load a table I called} last\_errnos 
 (\RU{содержащую последний номер ошибки для каждого блока}\EN{containing last error number for each block});
-\item \RU{находит блок содержающий код ошибки, полагая что все коды ошибок увеличиваются и внутри каждого блока
+\item \RU{находит блок содержащий код ошибки, полагая что все коды ошибок увеличиваются и внутри каждого блока
 и также в файле}\EN{find a block containing error code we need, assuming all error codes 
 increasing across each block and the file as well};
 \item \RU{загружает соответствующий блок}\EN{load specific block};
-\item \RU{перебирает 6-байтные структуры, пока не найдется соответсвующий номер ошибки}\EN{enumerate 6-byte 
+\item \RU{перебирает 6-байтные структуры, пока не найдется соответствующий номер ошибки}\EN{enumerate 6-byte 
 structures until specific error number is found};
 \item \RU{находит позицию первого символа из текущего 6-байтного блока}\EN{get a position of the first 
 character from current 6-byte block};
@@ -209,7 +209,7 @@ unpacks .MSB-files}:
 
 \section{\RU{Вывод}\EN{Summary}}
 
-\RU{Этот метод наверное слишком олд-скульный для современных компьютеров}\EN{The method is probably too 
+\RU{Этот метод, наверное, слишком олд-скульный для современных компьютеров}\EN{The method is probably too 
 old-school for modern computers}.
 \RU{Возможно, формат этого файла был разработан в середине 1980-х кем-то, кто программировал для мейнфреймов,
 учитывая экономию памяти и места на дисках}\EN{Supposedly, this file format was developed in the mid-80's by 

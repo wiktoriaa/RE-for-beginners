@@ -6,14 +6,14 @@
 
 \section{\RU{Простой пример}\EN{Simple example}}
 
-\RU{Это самый простой способ прочитать число представленное в кодировке \ac{ASCII}.}
+\RU{Это самый простой способ прочитать число, представленное в кодировке \ac{ASCII}.}
 \EN{Here is simplest possible way to read number represented in \ac{ASCII} encoding.}
 \RU{Он не защищен от ошибок: символ отличный от цифры приведет к неверному результату.}
 \EN{It's not error-prone: character other than digit will lead to incorrect result.}
 
 \lstinputlisting{\CURPATH/atoi.c}
 
-\RU{То что делает алгоритм это просто считывает цифры слева направо.}
+\RU{То, что делает алгоритм это просто считывает цифры слева направо.}
 \EN{So what the algorithm does is just reads digits from left to right.}
 \RU{Символ нуля в \ac{ASCII} вычитается из каждой цифры.}
 \EN{A zero \ac{ASCII} character is subtracted from each digit. }
@@ -21,7 +21,7 @@
 и не знать точного значения символа ``0''.}
 \EN{Digits from ``0'' to ``9'' are came subsequently in the \ac{ASCII} table, so, 
 we may not even know exact ``0'' character value.}
-\RU{Всё что нам нужно знать это то что ``0'' минус ``0'' это 0, а ``9'' минус ``0'' это 9, и т.д.}
+\RU{Всё что нам нужно знать это то что ``0'' минус ``0'' --- это 0, а ``9'' минус ``0'' это 9, и т.д.}
 \EN{All we need to know is that ``0'' minus ``0'' is 0, ``9'' minus ``0'''is 9 and so on.}
 \RU{Вычитание ``0'' от каждого символа в итоге дает число от 0 до 9 включительно.}
 \EN{Subtracting ``0'' from each character resulting a number from 0 to 9 inclusive.}
@@ -51,7 +51,7 @@ is also multiplied by 10 at each digit.}
 \RU{MSVC иногда использует инструкцию ADD с отрицательной константой вместо SUB.}
 \EN{MSVC sometimes use ADD instruction with negative constant instead of SUB.}
 \RU{Это тот случай}\EN{This is the case}.
-\RU{Честно говоря, я не знаю, чем это лучше чем SUB.}
+\RU{Честно говоря, я не знаю, чем это лучше, чем SUB.}
 \EN{I truly don't know why this is better then SUB.}
 \RU{Но MSVC делает так часто}\EN{But MSVC does this often}.
 
@@ -85,7 +85,7 @@ is added to it.}
 
 \subsection{\Optimizing GCC 4.9.1 ARM64}
 
-\RU{Компилятор для ARM64 может использовать суффикс инструкции задающий пре-инкремент:}
+\RU{Компилятор для ARM64 может использовать суффикс инструкции, задающий пре-инкремент:}
 \EN{ARM64 compiler can use pre-increment instruction suffix:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{\CURPATH/atoi.s.GCC49.ARM64.O3.\LANG}
@@ -123,13 +123,13 @@ if (*s<'0' || *s>'9')
 \RU{Но что интересно, так это то что мы можем заменить обе операции на одну:}
 \EN{What is interesting is that we can replace both operations by single one:}
 \RU{просто вычитайте ``0'' из значения символа}\EN{just subtract ``0'' from character value},
-\RU{считается результат за беззнаковое знаение (это важно) и проверьте, не больше ли он чем 9.}
+\RU{считается результат за беззнаковое значение (это важно) и проверьте, не больше ли он чем 9.}
 \EN{treat result as unsigned value (this is important) and check if it's greater than 9.}
 
 \RU{Например, скажем, строка на входе имеет символ точки (``.''), которая имеет код 46 в таблице \ac{ASCII}.}
 \EN{As an example, let's say, user input contain dot character (``.'') which have \ac{ASCII} code 46.}
 $46-48=-2$ \RU{если считать результат за знаковое число}\EN{if to treat result as signed number}.
-\RU{Действительно, символ точки расположен на два места раньше чем символ ``0'' в таблице \ac{ASCII}.}
+\RU{Действительно, символ точки расположен на два места раньше, чем символ ``0'' в таблице \ac{ASCII}.}
 \EN{Indeed, dot character is located two places earlier than ``0'' character in the \ac{ASCII} table.}
 \RU{Но это}\EN{But it is} \TT{0xFFFFFFFE} ($4294967294$) \RU{если считать результат за беззнаковое значение, 
 и это точно больше чем 9!}
@@ -155,7 +155,7 @@ is used here.}
 \index{ARM!\Instructions!RSB}
 \RU{Что делает RSBNE это просто вычитает результирующее значение из нуля.}
 \EN{So what RSBNE does is subtract resulting value from 0.}
-\RU{Она работает как и обычное вычитание, но меняет местами операнды.}
+\RU{Она работает, как и обычное вычитание, но меняет местами операнды.}
 \EN{It works just like regular subtraction operation, but swaps operands.}
 \RU{Вычитание любого числа из нуля это смена знака}
 \EN{Subtracting any number from 0 resulting negation}: $0-x=-x$.

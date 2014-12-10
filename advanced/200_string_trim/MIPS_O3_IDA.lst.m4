@@ -27,7 +27,7 @@ saved_RA           = -4
 ; _EN(`load byte at address')_RU(`загрузить байт по адресу') $a1:
                 lb      $a0, 0($a1)
                 or      $at, $zero ; load delay slot, NOP
-; _EN(``loaded byte is zero? jump to exit if it's so'')_RU(``загруженный байт это ноль? перейти на выход, если это так''):
+; _EN(``loaded byte is zero? jump to exit if it's so'')_RU(``загруженный байт - это ноль? перейти на выход, если это так''):
                 beqz    $a0, exit
                 or      $at, $zero ; branch delay slot, NOP
                 addiu   $v1, $v0, -2
@@ -43,16 +43,16 @@ loc_5C:
                 lb      $a0, 0($v1)
                 move    $a1, $v1
 ; $a1=s+str_len-2
-; _EN(`jump to exit if loaded byte is zero')_RU(``перейти на выход, если загруженный байт это ноль''):
+; _EN(`jump to exit if loaded byte is zero')_RU(``перейти на выход, если загруженный байт - это ноль''):
                 beqz    $a0, exit
 ; _EN(`decrement')_RU(`декремент') str_len:
                 addiu   $v1, -1    ; branch delay slot
 loc_6C:
 ; _EN(`at this moment')_RU(`в этот момент'), $a0=_EN(`loaded byte')_RU(`загруженный байт'), $a2=0xD (_EN(`CR symbol')_RU(`символ CR')) _EN(`and')_RU(`и') $a3=0xA (_EN(`LF symbol')_RU(`символ LF'))
-; _EN(`loaded byte is CR? jump to loc\_7C then')_RU(`загруженный байт это CR? тогда перейти на loc\_7C'):
+; _EN(`loaded byte is CR? jump to loc\_7C then')_RU(`загруженный байт - это CR? тогда перейти на loc\_7C'):
                 beq     $a0, $a2, loc_7C
                 addiu   $v0, -1    ; branch delay slot
-; _EN(``loaded byte is LF? jump to exit if it's not LF'')_RU(``загруженный байт это LF? перейти на выход, если это не LF''):
+; _EN(``loaded byte is LF? jump to exit if it's not LF'')_RU(``загруженный байт - это LF? перейти на выход, если это не LF''):
                 bne     $a0, $a3, exit
                 or      $at, $zero ; branch delay slot, NOP
 loc_7C:

@@ -20,7 +20,7 @@ include(`commons.m4')define(`_input_digit',`_EN(`input digit')_RU(`входна�
 ; W0=W0+W0<<2=W0+W0*4=rt*5
 	add	w0, w3, w0, lsl 1
 ; W0=_input_digit + W0<<1 = _input_digit + rt*5*2 = _input_digit + rt*10
-; _EN(``if the character we just loaded is not null byte, jump to the loop begin'')_RU(``если только что загруженный символ это нулевой байт, перейти на начало цикла'')
+; _EN(``if the character we just loaded is not null byte, jump to the loop begin'')_RU(``если только что загруженный символ - это нулевой байт, перейти на начало цикла'')
 	cbnz	w1, .L3
 ; _EN(``variable to be returned (rt) is in W0, ready to be used in caller function'')_RU(``значение для возврата (rt) в W0, готовое для использования в вызывающей ф-ции'')
 	ret

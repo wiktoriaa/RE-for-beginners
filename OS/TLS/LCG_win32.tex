@@ -2,7 +2,7 @@
 
 \subsubsection{\RU{Неинициализированные данные в \ac{TLS}}\EN{Uninitialized \ac{TLS} data}}
 
-\RU{Одно из решений это добавить модификатор \TT{\_\_declspec( thread )} к глобальной переменной, и теперь
+\RU{Одно из решений --- это добавить модификатор \TT{\_\_declspec( thread )} к глобальной переменной, и теперь
 она будет выделена в \ac{TLS} (строка 9):}
 \EN{One solution is to add \TT{\_\_declspec( thread )} modifier to the global variable, now it will be allocated
 in \ac{TLS} (line 9):}
@@ -15,7 +15,7 @@ in \ac{TLS} (line 9):}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x86]{OS/TLS/win32/rand_x86_uninit.asm}
 
-\RU{\TT{rand\_state} теперь в \ac{TLS}-сегменте и у каждого потка есть своя версия этой переменной.}
+\RU{\TT{rand\_state} теперь в \ac{TLS}-сегменте и у каждого потока есть своя версия этой переменной.}
 \EN{\TT{rand\_state} is now in \ac{TLS} segment, and each thread has its own version of this variable.}
 \RU{Вот как к ней обращаться: загрузить адрес \ac{TIB} из FS:2Ch, затем прибавить дополнительный индекс 
 (если нужно), затем вычислить адрес \ac{TLS}-сегмента.}
@@ -41,7 +41,7 @@ so it would be fast to load thread-specific data.}
 
 \subsubsection{\RU{Инициализированные данные в \ac{TLS}}\EN{Initialized \ac{TLS} data}}
 
-\RU{Скажем, мы хотим чтобы в переменной \TT{rand\_state} в самом начале было какое-то значение, 
+\RU{Скажем, мы хотим, чтобы в переменной \TT{rand\_state} в самом начале было какое-то значение, 
 и если программист забудет инициализировать генератор, то \TT{rand\_state} все же будет инициализирована какой-то
 константой (строка 9):}
 \EN{Let's say, we want to set some fixed value to \TT{rand\_state} so in case of forgetfulness of programmer,

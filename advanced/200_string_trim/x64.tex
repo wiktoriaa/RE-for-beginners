@@ -10,7 +10,7 @@ will be faster then usual \strlen{} work + cost of calling it and returning from
 
 \index{x86!\Instructions!OR}
 \index{\CStandardLibrary!strlen()}
-\RU{Первая инструкия ф-ции \strlen{} вставленная здесь, это}\EN{First instruction of 
+\RU{Первая инструкция ф-ции \strlen{} вставленная здесь, это}\EN{First instruction of 
 inlined \strlen{} is} \TT{OR RAX, 0xFFFFFFFFFFFFFFFF}. 
 \RU{Я не знаю, почему MSVC использовала \TT{OR} вместо \TT{MOV RAX, 0xFFFFFFFFFFFFFFFF}, 
 но он делает это часто.}
@@ -23,7 +23,7 @@ in two's complement arithmetics: \ref{sec:signednumbers}.}
 
 \RU{Кто-то мог бы спросить, зачем вообще нужно использовать число -1 в ф-ции \strlen{}?}
 \EN{Why would -1 number be used in \strlen{}, one might ask?}
-\RU{Вследствии оптимизации, конечно}\EN{Due to optimizations, of course}.
+\RU{Вследствие оптимизации, конечно}\EN{Due to optimizations, of course}.
 \RU{Вот что сделал MSVC}\EN{Here is the code MSVC did}:
 
 \lstinputlisting[caption=\RU{Вставленная \strlen{} сгенерированная}\EN{Inlined \strlen{} by} MSVC 2013 x64]{\CURPATH/strlen_MSVC.asm.\LANG}
@@ -112,7 +112,7 @@ and there are two clauses are checked, one after one.}
 characters check too!}
 \RU{Зачем нужна это дублирование кода}\EN{What this code duplication is for}?
 
-\RU{Обычная реализация главного цикла это, наверное, такая:}
+\RU{Обычная реализация главного цикла это --- наверное, такая:}
 \EN{Common way to implement main loop is probably this:}
 
 \begin{itemize}
@@ -142,7 +142,7 @@ characters check too!}
 \RU{Код не использует переменную str\_len, но str\_len-1.}
 \EN{The code doesn't use str\_len variable, but str\_len-1.}
 \RU{Так что это больше похоже на индекс в буфере}\EN{So this is more like index in buffer}.
-\RU{Должно быть, GCC заметил что выражение str\_len-1 используется дважды.}
+\RU{Должно быть, GCC заметил, что выражение str\_len-1 используется дважды.}
 \EN{Apparently, GCC notices that str\_len-1 statement is used twice.}
 \RU{Так что будет лучше выделить переменную, которая всегда содержит значение равное 
 текущей длине строки минус 1, и уменьшать его на 1 (это тот же эффект, что и уменьшать

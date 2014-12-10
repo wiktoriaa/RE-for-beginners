@@ -27,7 +27,7 @@
 \lstinputlisting{examples/demos/10print/10print_42.lst.\LANG}
 
 \index{Intel!8253}
-\RU{Псевдослучайное число на самом деле это время прошедшее со старта системы, получаемое из чипа таймера 8253, 
+\RU{Псевдослучайное число на самом деле это время, прошедшее со старта системы, получаемое из чипа таймера 8253, 
 это значение
 увеличивается на единицу 18.2 раза в секунду}\EN{Pseudo-random value here is in fact the time 
 passed from the system boot, taken from 8253 time chip, the value increases by one 18.2 times per second}.
@@ -49,7 +49,7 @@ use \TT{IN} instruction with other registers instead of} \TT{AL}, \RU{поэто
 \subsection{\RU{Моя попытка укоротить версию Trixter: 27 байт}
 \EN{My attempt to reduce Trixter's version: 27 bytes}}
 
-\RU{Мы можем сказать, что мы используем таймер не для того чтобы получить точное время, но псевдо-случайное число,
+\RU{Мы можем сказать, что мы используем таймер не для того чтобы получить точное время, но псевдослучайное число,
 так что мы можем не тратить время (и код) на запрещение прерываний}\EN{We can say that since we use timer not 
 to get precise time value, but pseudo-random one, so we may not
 spent time (and code) to disable interrupts}.
@@ -80,7 +80,7 @@ if register values are not setted up, let it read 1) random bytes; 2) from rando
 \RU{вместо, потому что она выставляет флаги в соответствии с прочитанным значением}
 \EN{instruction can be used instead, because it sets flag according to the byte it read}.
 
-\RU{Еще одна идея насчет минимизации кода это использовать прерывание DOS}
+\RU{Еще одна идея насчет минимизации кода --- это использовать прерывание DOS}
 \EN{Another idea to minimize code is to use} \TT{INT 29h} \RU{которое просто печатает символ на экране
 из регистра}\EN{DOS syscall, which just prints character stored in} \TT{AL}\EN{ register}.
 
@@ -92,7 +92,7 @@ if register values are not setted up, let it read 1) random bytes; 2) from rando
 
 \index{x86!\Instructions!SCASB}
 \TT{SCASB} \RU{также использует значение в регистре}\EN{also use value in} \TT{AL}\RU{, она вычитает значение
-слайчного байта в памяти из}
+случайного байта в памяти из}
 \EN{ register, it subtract random memory byte value from} \TT{5Ch} \RU{в}\EN{value in} \TT{AL}.
 \index{x86!\Instructions!JP}
 \TT{JP} \RU{это редкая инструкция, здесь она используется для проверки флага четности (PF),
@@ -117,7 +117,7 @@ make this even shorter by using undocumented x86 instruction} \TT{SALC} (\ac{AKA
 \RU{Так что можно избавиться и от условных переходов}\EN{So it is possible to get rid of conditional jumps at all}.
 \EN{The }\ac{ASCII}\RU{-код обратного слэща}\EN{ code of backslash} (``\textbackslash{}'') 
 \RU{это}\EN{is} \TT{0x5C} \AndENRU \TT{0x2F} \RU{для слэша}\EN{for slash} (``/'').
-\RU{Так что нам нужно конвертировать один (псевдо-случайный) бит из флага}\EN{So we need to convert one 
+\RU{Так что нам нужно конвертировать один (псевдослучайный) бит из флага}\EN{So we need to convert one 
 (pseudo-random) bit in} \TT{CF} \RU{в значение}\EN{flag to} \TT{0x5C} \OrENRU \TT{0x2F}\EN{ value}.
 
 \RU{Это делается легко: применяя операцию ``И'' ко всем битам в}\EN{This is done easily: by \TT{AND}-ing all 

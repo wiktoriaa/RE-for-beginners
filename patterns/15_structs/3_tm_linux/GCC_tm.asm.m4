@@ -3,7 +3,7 @@ include(`commons.m4')main proc near
      mov     ebp, esp
      and     esp, 0FFFFFFF0h
      sub     esp, 40h
-     mov     dword ptr [esp], 0 ; _EN(`first argument for')_RU(`первый агрумент для') time()
+     mov     dword ptr [esp], 0 ; _EN(`first argument for')_RU(`первый аргумент для') time()
      call    time
      mov     [esp+3Ch], eax
      lea     eax, [esp+3Ch]  ; _EN(`take pointer to what time() returned')_RU(`берем указатель на то что вернула time()')

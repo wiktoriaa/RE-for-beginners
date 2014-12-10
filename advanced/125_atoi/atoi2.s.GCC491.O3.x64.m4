@@ -13,7 +13,7 @@ my_atoi:
 .L10:
 ; ESI=0 _EN(`here if there was no minus sign and 1 if it was')_RU(``здесь, если знака минуса не было, или 1 в противном случае'')
 	lea	eax, [rdx-48]
-; _EN(`any character other than digit will result unsigned number greater than 9 after subtraction')_RU(``любой символ отличающийся от цифры в результате даст беззнаковое число больше 9 после вычитания'')
+; _EN(`any character other than digit will result unsigned number greater than 9 after subtraction')_RU(``любой символ, отличающийся от цифры в результате даст беззнаковое число больше 9 после вычитания'')
 ; _EN(``so if it is not digit, jump to L4, where error will be reported:'')_RU(``так что если это не число, перейти на L4, где будет просигнализировано об ошибке:'')
 	cmp	al, 9
 	ja	.L4

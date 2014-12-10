@@ -3,7 +3,7 @@ include(`commons.m4')my_atoi:
 	movsx	edx, BYTE PTR [rdi]
 ; EAX _EN(`is allocated for "rt" variable')_RU(`выделен для переменной "rt"')
 	xor	eax, eax
-; _EN(``exit, if loaded character is null byte'')_RU(``выйти, если загруженный символ это нулевой байт'')
+; _EN(``exit, if loaded character is null byte'')_RU(``выйти, если загруженный символ - это нулевой байт'')
 	test	dl, dl
 	je	.L4
 .L3:
@@ -15,7 +15,7 @@ include(`commons.m4')my_atoi:
 ; EAX=_EN(`input character')_RU(`входной символ') - 48 + RAX*2 = _EN(`input character')_RU(`входной символ') - '0' + rt*10
 ; _EN(`load next character')_RU(`загрузить следующий символ'):
 	movsx	edx, BYTE PTR [rdi]
-; _EN(``goto loop begin, if loaded character is not null byte'')_RU(``перейти на начало цикла, если загруженный символ это не нулевой байт'')
+; _EN(``goto loop begin, if loaded character is not null byte'')_RU(``перейти на начало цикла, если загруженный символ - это не нулевой байт'')
 	test	dl, dl
 	jne	.L3
 	rep ret

@@ -1,6 +1,6 @@
 include(`commons.m4')_v$ = 8
 _arith_mean PROC NEAR
-	mov	eax, DWORD PTR _v$[esp-4] ; _RU(`загрузить первый агрумент в')_EN(`load 1st argument into') sum
+	mov	eax, DWORD PTR _v$[esp-4] ; _RU(`загрузить первый аргумент в')_EN(`load 1st argument into') sum
 	push	esi
 	mov	esi, 1		          ; count=1
 	lea	edx, DWORD PTR _v$[esp]   ; _RU(`адрес первого аргумента')_EN(`address of the 1st argument')
