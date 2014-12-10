@@ -24,7 +24,7 @@ single instruction (because 16 bit of signed offset could be encoded in single i
 \RU{Выделенный регистр называется ``глобальный указатель'' (``global pointer'') и он указывает на середину
 области 64KiB.}
 \EN{Allocated register is called ``global pointer'' and it points to the middle of the 64KiB area.}
-\RU{Эта область обычно содержит глоабльные переменные и адреса импортированных ф-ций вроде \printf,
+\RU{Эта область обычно содержит глобальные переменные и адреса импортированных ф-ций вроде \printf,
 потому что разработчики GCC решили что получение адреса ф-ции должно быть как можно более быстрой операцией,
 чтобы она исполнялась со скоростью исполнения одной инструкции вместо двух.}
 \EN{This area usually contains global variables and addresses of imported functions like \printf, 
@@ -35,7 +35,7 @@ execution instead of two.}
 \EN{In ELF file, this 64KiB area is located partly in .sbss (``small \ac{BSS}'', for not initialized data) and 
 .sdata (``small data'', for initialized data) sections.}
 
-\RU{Это значит что программист может выбирать, к чему нужен как можно более быстрый доступ, и затем расположить
+\RU{Это значит, что программист может выбирать, к чему нужен как можно более быстрый доступ, и затем расположить
 это в секциях .sdata/.sbss.}
 \EN{This means, programmer may choose, what data he/she wants to be accessed fast and place them into 
 .sdata/.sbss.}
@@ -85,7 +85,7 @@ is available in the appendix}: \ref{MIPS_registers_ref}}.
 \EN{JALR (``Jump and Link Register'') jumps to the address in \$25 register (address of \puts is there) 
 while saving address of the next instruction (LW) in \ac{RA}.}
 \RU{Это так же как и в ARM}\EN{This is very similar to ARM}.
-\RU{И еще одна важная вещь это то что адрес сохраняемый в \ac{RA} это адрес не следующей инструцкии (потому что
+\RU{И еще одна важная вещь это то что адрес сохраняемый в \ac{RA} это адрес не следующей инструкции (потому что
 это \IT{delay slot} и исполняется перед инструкцией перехода),
 но адрес инструкции после нее (после \IT{delay slot}).}
 \EN{Oh, and one important thing is that address saved in \ac{RA} is not address of the next instruction (because,
@@ -114,7 +114,7 @@ so let's use just \$0 register every time zero is needed.}
 \EN{Another interesting fact is that MIPS lacks instruction which transfers data between registers.}
 \RU{На самом деле}\EN{In fact}, \TT{MOVE DST, SRC} \RU{это}\EN{is} \TT{ADD DST, SRC, \$ZERO} ($DST=SRC+0$), 
 \RU{которая делает тоже самое}\EN{which does the same}.
-\RU{Очевидно, разработчики MIPS хотели сделать как можно более комактную таблицу опкодов.}
+\RU{Очевидно, разработчики MIPS хотели сделать как можно более компактную таблицу опкодов.}
 \EN{Apparently, MIPS developers wanted to have compact opcode table.}
 \RU{Это не значит что сложение происходит во время каждой инструкции MOVE.}
 \EN{This is not mean actual addition happens at each MOVE instruction.}
@@ -134,7 +134,7 @@ and is part of function epilogue.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),numbers=left]{patterns/01_helloworld/MIPS/hw_O3_IDA.lst.\LANG}
 
-\RU{Инструкция на строке 15 сохраняет GP в локальном стеке, и эта инструкция мистическим образом осутствует
+\RU{Инструкция на строке 15 сохраняет GP в локальном стеке, и эта инструкция мистическим образом отсутствует
 в листинге от GCC, может быть из-за ошибки в самом GCC\footnote{Очевидно, ф-ция вывода листингов не так критична
 для пользователей GCC, поэтому там вполне могут быть неисправленные ошибки.}.}
 \EN{An instruction at line 15 saves GP value into local stack, and this instruction is mystically missing
@@ -154,7 +154,7 @@ are not so critical to GCC users, so some unfixed errors may still be there.}.}
 \lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (\assemblyOutput),numbers=left]{patterns/01_helloworld/MIPS/hw_O0.s.\LANG}
 
 \NonOptimizing GCC \RU{более многословный}\EN{is more verbose}.
-\RU{Мы видим что регистр FP используется как указатель на фрейм стека.}
+\RU{Мы видим, что регистр FP используется как указатель на фрейм стека.}
 \EN{We see here that FP register is used as a pointer to stack frame.}
 \RU{Мы также видим 3 \ac{NOP}-а.}\EN{We also see 3 \ac{NOP}s.}
 \RU{Второй и третий следуют за инструкциями перехода.}
@@ -176,7 +176,7 @@ instructions and then, if optimization is turned on, may elimiate them.}
 LA (``Load Address'') в строке 11.}
 \EN{Interestingly, IDA recognized LUI/ADDIU instructions pair and coalesce them into one 
 LA (``Load Address'') pseudoinstruction at line 11.}
-\RU{Мы также видим что размер этой псевдоинструкции 8 байт!}
+\RU{Мы также видим, что размер этой псевдоинструкции 8 байт!}
 \EN{We may also see that this pseudoinstruction has size of 8 bytes!}
 \RU{Это псевдоинструкция (или \IT{макрос}) потому что это не настоящая инструкция MIPS, но скорее
 просто удобное имя для пары инструкций.}
