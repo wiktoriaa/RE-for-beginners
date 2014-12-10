@@ -18,7 +18,7 @@ include(`commons.m4')f14:
 	ldrb	w0, [x1,w0,uxtw]
 ; _EN(`load address of the Lrtx label:')_RU(`загрузить адрес метки Lrtx:')
 	adr	x1, .Lrtx4
-; _EN(`multiply table element by 4 (by shifting 2 bits left) and add (or subtract) to the address of Lrtx:')_RU(`умножить элемент из таблицы на 4 (сдвинув на 2 бита влево) и прибавть (или вычесть) к адресу Lrtx:')
+; _EN(`multiply table element by 4 (by shifting 2 bits left) and add (or subtract) to the address of Lrtx:')_RU(`умножить элемент из таблицы на 4 (сдвинув на 2 бита влево) и прибавить (или вычесть) к адресу Lrtx:')
 	add	x0, x1, w0, sxtb #2
 ; _EN(`jump to the calculated address')_RU(`перейти на вычисленный адрес'):
 	br	x0

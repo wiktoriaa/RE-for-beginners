@@ -3,7 +3,7 @@
 \index{x86!\Instructions!LOOP}
 \RU{Для организации циклов, в архитектуре x86 есть старая инструкция \LOOP, 
 она проверяет значение регистра \ECX и если оно не $0$, делает \glslink{decrement}{декремент} \ECX 
-и переход по метке указанной в операнде. 
+и переход по метке, указанной в операнде. 
 Возможно, эта инструкция не слишком удобная, поэтому я не видел современных компиляторов, 
 которые использовали бы её. Так что, если вы видите где-то \LOOP, то это, с большой вероятностью, 
 вручную написанный код на ассемблере.}
@@ -122,7 +122,7 @@ just like here in the \main function.}
 \label{fig:loops_olly_1}
 \end{figure}
 
-\RU{Трассируя}\EN{By tracing} (F8 (\stepover)) \RU{мы видим как}\EN{we see how} \ESI \RU{увеличивается на 1}
+\RU{Трассируя}\EN{By tracing} (F8 (\stepover)) \RU{мы видим, как}\EN{we see how} \ESI \RU{увеличивается на 1}
 \EN{\glslink{increment}{incrementing}}.
 \RU{Например, здесь}\EN{Here, for instance,} $ESI=i=6$:
 
@@ -147,7 +147,7 @@ $9$ \RU{это последнее значение цикла}\EN{is a last loop
 \subsection{x86: tracer}
 \index{tracer}
 
-\RU{Как видно, трассировать вручную цикл в отладчике это не очень удобно}\EN{As we might see, it is not very
+\RU{Как видно, трассировать вручную цикл в отладчике --- это не очень удобно}\EN{As we might see, it is not very
 convenient to trace in debugger manually}.
 \RU{Это одна из причин, почему я писал}\EN{That's one of the reasons I wrote} \tracer \RU{для себя}
 \EN{for myself}.
@@ -168,7 +168,7 @@ tracer.exe -l:loops_2.exe bpx=loops_2.exe!0x00401026
 
 \lstinputlisting{patterns/09_loops/simple/tracer.log}
 
-\RU{Видно как значение}\EN{We see how value of} \ESI \RU{последовательно изменяется от 2 до 9}
+\RU{Видно, как значение}\EN{We see how value of} \ESI \RU{последовательно изменяется от 2 до 9}
 \EN{register is changed from 2 to 9}.
 
 \RU{И дажее более того, в \tracer можно собирать значения регистров по всем адресам внутри ф-ции}
@@ -200,7 +200,7 @@ tracer.exe -l:loops_2.exe bpf=loops_2.exe!0x00401020,trace:cc
 \label{fig:loops_IDA_tracer}
 \end{figure}
 
-\RU{Видно что}\EN{We see that} \ESI \RU{бывает от 2 до 9 в начале тела цикла, но после 
+\RU{Видно, что}\EN{We see that} \ESI \RU{бывает от 2 до 9 в начале тела цикла, но после 
 \glslink{increment}{инкремента} он в пределах [3..0xA]}\EN{can be from 2 to 9 at the begin of loop body,
 but from 3 to 0xA (10) after increment}.
 \RU{Видно также что ф-ция}\EN{We can also see that} \main \RU{заканчивается с 0 в}\EN{is finishing with 0 in} \EAX.

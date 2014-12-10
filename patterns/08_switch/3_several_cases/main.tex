@@ -46,7 +46,7 @@ Because there are no need to allocate table element for $a=0$.}
 \RU{Почему нельзя сделать так, как уже обсуждалось}\EN{Why it's not possible to make it as it was 
 already discussed} (\ref{switch_lot_GCC}), \RU{используя только одну таблицу, содержащую указатели на 
 блоки}\EN{just with one table, consisting of block pointers}?
-\RU{Причина в том что элементы в таблице индексов занимают только по 8-битному байту, поэтому всё это более 
+\RU{Причина в том, что элементы в таблице индексов занимают только по 8-битному байту, поэтому всё это более 
 компактно}\EN{The reason is because elements in index table has 8-bit byte type, hence it's all more compact}.
 
 \subsection{GCC}
@@ -57,7 +57,7 @@ GCC \RU{делает так, как уже обсуждалось}\EN{do the job
 \subsection{ARM64: \Optimizing GCC 4.9.1}
 
 \RU{Во-первых, здесь нет кода, срабатывающего в случае если входное значение --- 0, так что GCC пытается
-сделать таблицу переходов более компактной и начинает с случая когда входное значение --- 1.}
+сделать таблицу переходов более компактной и начинает с случая, когда входное значение --- 1.}
 \EN{First of all, there are no code triggering if input value is 0, so GCC tries to make jumptable more compact
 and so it's started at the case of 1 as input value.}
 
@@ -65,7 +65,7 @@ GCC 4.9.1 \ForENRU ARM64 \RU{использует даже более интер
 \RU{Он может закодировать все смещения как 8-битные байты}\EN{It's able to encode all offsets as 8-bit bytes}.
 \RU{Вспомним что все инструкции в ARM64 имеют размер в 4 байта.}
 \EN{Let's remind ourselves, all ARM64 instructions has size of 4 bytes.}
-\RU{GCC также использует тот факт что все смещения в моем крохотном примере находятся достаточно близко 
+\RU{GCC также использует тот факт, что все смещения в моем крохотном примере находятся достаточно близко 
 друг от друга.}
 \EN{GCC is also use the fact that all offsets in my tiny example are in close proximity to each other.}
 \RU{Так что таблица переходов состоит из байт.}\EN{So the jumptable consisting of bytes.}
@@ -81,7 +81,7 @@ GCC 4.9.1 \ForENRU ARM64 \RU{использует даже более интер
 \EN{So in case of 1, 9 will be multiplied by 4 and added to the address of Lrtx4 label.}
 \RU{В случае 22, 0 будет умножено на 4, в результате это 0.}
 \EN{In case of 22, 0 is to be multiplied by 4 resulting 0. }
-\RU{Место сразу за метркой Lrtx4 это метка L7, где находится код выводящий ``22''.}
+\RU{Место сразу за меткой Lrtx4, это метка L7, где находится код выводящий ``22''.}
 \EN{The place right after Lrtx4 label is L7 label, where the code printing ``22'' is.}
 \RU{В сегменте кода нет таблицы переходов, место для нее выделено в отдельной секции .rodata
 (нет особой нужды располагать её в сегменте кода).}

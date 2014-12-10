@@ -4,7 +4,7 @@
 	mov	DWORD PTR [rbp-4], edi
 	mov	eax, DWORD PTR [rbp-4]
 	movsx	rdx, eax
-; RDX = _EN(`sign-extended input value')_RU(`входное значение расширенное учитывая знак')
+; RDX = _EN(`sign-extended input value')_RU(`входное значение, расширенное учитывая знак')
 	mov	rax, rdx
 ; RAX = _EN(`month')_RU(`месяц')
 	sal	rax, 2
