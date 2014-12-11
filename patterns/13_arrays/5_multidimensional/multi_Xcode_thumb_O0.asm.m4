@@ -27,6 +27,6 @@ ADD     R2, R3
 LSLS    R1, R1, #2 ; R1=R1<<2
 ADD     R1, R2
 STR     R0, [R1]   ; R1 - _EN(`address of array element')_RU(`адрес элемента массива')
-; _EN(``deallocate place in local stack, allocated for 4 values of int type'')_RU(``освободить место в локальном стеке, выделенное для 4 переменных'')
+; _EN(``deallocate chunk in local stack, allocated for 4 values of int type'')_RU(``освободить блок в локальном стеке, выделенное для 4 переменных'')
 ADD     SP, SP, #0x10
 BX      LR

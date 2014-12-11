@@ -1,6 +1,6 @@
 include(`commons.m4')my_strlen:
 	mov	x1, x0
-	; X1 _EN(``is now temporary pointer (eos), actring like cursor'')_RU(``теперь временный регистр (eos), работающий, как курсор'')
+	; X1 _EN(``is now temporary pointer (eos), acting like cursor'')_RU(``теперь временный регистр (eos), работающий, как курсор'')
 .L58:
 	; _EN(``load byte from X1 to W2, increment X1 (post-index)'')_RU(``загрузить байт из X1 в W2, инкремент X1 (пост-индекс)'')
 	ldrb	w2, [x1],1

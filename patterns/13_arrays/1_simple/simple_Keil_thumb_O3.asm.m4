@@ -29,6 +29,6 @@ loc_1DC
           CMP     R4, #20         ; i<20?
           BLT     loc_1DC         ; _EN(``yes, i<20, run loop body again'')_RU(``да, i<20, запустить тело цикла снова'')
           MOVS    R0, `#'0          ; _EN(`value to return')_RU(`значение для возврата')
-; _EN(``deallocate place, allocated for 20 int variables + one more variable'')_RU(``освободить место в стеке, выделенное для 20-и переменных типа int и еще одной переменной'')
+; _EN(``deallocate chunk, allocated for 20 int variables + one more variable'')_RU(``освободить блок в стеке, выделенное для 20-и переменных типа int и еще одной переменной'')
           ADD     SP, SP, #0x54   
           POP     {R4,R5,PC}

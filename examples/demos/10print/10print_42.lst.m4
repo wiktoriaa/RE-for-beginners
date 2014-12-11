@@ -1,6 +1,6 @@
-include(`commons.m4')00000000: B001         mov         al,1        ; _EN(`set 40x25 videomode')_RU(`установить видеорежим 40x25')
+include(`commons.m4')00000000: B001         mov         al,1        ; _EN(`set 40x25 video mode')_RU(`установить видеорежим 40x25')
 00000002: CD10         int         010
-00000004: 30FF         xor         bh,bh       ; _EN(`set videopage for int 10h call')_RU(`установить видеостраницу для вызова int 10h')
+00000004: 30FF         xor         bh,bh       ; _EN(`set video page for int 10h call')_RU(`установить видеостраницу для вызова int 10h')
 00000006: B9D007       mov         cx,007D0    ; _EN(`2000 characters to output')_RU(`вывод 2000 символов')
 00000009: 31C0         xor         ax,ax
 0000000B: 9C           pushf                   ; _EN(`push flags')_RU(`сохранить флаги')

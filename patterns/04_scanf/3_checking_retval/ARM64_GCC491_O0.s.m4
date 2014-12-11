@@ -34,7 +34,7 @@ f6:
 	adrp	x0, .LC2
 	add	x0, x0, :lo12:.LC2
 	bl	printf
-; _EN(`skip the code which print the')_RU(``пропустить код, печатающий строку'') "What you entered? Huh?" _EN(`string'):
+; _EN(``skip the code, which print the'')_RU(``пропустить код, печатающий строку'') "What you entered? Huh?" _EN(`string'):
 	b	.L3
 .L2:
 ; _EN(`load pointer to the')_RU(`загрузить указатель на строку') "What you entered? Huh?" _EN(`string'):

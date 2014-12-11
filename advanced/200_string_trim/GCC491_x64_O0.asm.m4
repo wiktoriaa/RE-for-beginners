@@ -27,7 +27,7 @@ include(`commons.m4')str_trim:
 	sub	QWORD PTR [rbp-8], 1     ; str_len--
 ; _EN(`for() third part ends here')_RU(`здесь заканчивается третья часть for()')
 .L2:
-; _EN(`for() second part begins here')_EN(`здесь начинается вторая часть for()')
+; _EN(`for() second part begins here')_RU(`здесь начинается вторая часть for()')
 	cmp	QWORD PTR [rbp-8], 0     ; str_len==0?
 	je	.L4                      ; _EN(`exit then')_RU(`тогда на выход')
 ; _EN(``check second clause, and load "c"'')_RU(``проверить второе условие, и загрузить "c"'')

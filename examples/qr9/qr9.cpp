@@ -197,7 +197,7 @@ void decrypt_file(char *fin, char* fout, char *pw)
 
 	if (memcmp (buf, "QR9", 3)!=0)
 	{
-		printf ("File is not crypted!\n");
+		printf ("File is not encrypted!\n");
 		return;
 	};
 

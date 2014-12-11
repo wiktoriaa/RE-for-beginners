@@ -15,7 +15,7 @@ hash            = dword ptr  0Ch
                 mov     eax, ebx
                 jz      short loc_80484D3
                 nop                     ; _EN(`padding')_RU(`выравнивание')
-                lea     esi, [esi+0]    ; _EN(`padding; works as NOP (ESI doesn't changing here)')_RU(`выравнивание; работает как NOP (ESI не меняется здесь)')
+                lea     esi, [esi+0]    ; _EN(`padding; works as NOP (ESI does not changing here)')_RU(`выравнивание; работает как NOP (ESI не меняется здесь)')
 
 loc_80484B8:
                 mov     ecx, eax        ; _EN(`save previous state of hash to ECX')_RU(`сохранить предыдущее состояние хеша в ECX')

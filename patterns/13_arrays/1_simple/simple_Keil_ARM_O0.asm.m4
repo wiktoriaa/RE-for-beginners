@@ -31,5 +31,5 @@ loc_4C4
             CMP     R4, #20            ; i<20?
             BLT     loc_4B0            ; _EN(``yes, run loop body again'')_RU(``да, запустить тело цикла снова'')
             MOV     R0, `#'0             ; _EN(`value to return')_RU(`значение для возврата')
-            ADD     SP, SP, `#'0x50      ; _EN(``deallocate place, allocated for 20 int variables'')_RU(``освободить место в стеке, выделенное для 20 переменных'')
+            ADD     SP, SP, `#'0x50      ; _EN(``deallocate chunk, allocated for 20 int variables'')_RU(``освободить блок в стеке, выделенное для 20 переменных'')
             LDMFD   SP!, {R4,PC}

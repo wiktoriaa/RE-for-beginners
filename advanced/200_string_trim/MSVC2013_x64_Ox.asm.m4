@@ -15,7 +15,7 @@ $LL14@str_trim:
 $LN18@str_trim:
 	je	SHORT $LN15@str_trim
 ; RAX _EN(`holds string length')_RU(`содержит длину строки')
-; _EN(``here is probably disassembler (or sassembler printing routine) error,'')_RU(``это похоже на ошибку дизассемблера (или ф-ции вывода в ассемблере),'')
+; _EN(``here is probably disassembler (or assembler printing routine) error,'')_RU(``это похоже на ошибку дизассемблера (или ф-ции вывода в ассемблере),'')
 ; _EN(``LEA RDX... should be here instead of LEA EDX...'')_RU(``здесь должно быть LEA RDX... вместо LEA EDX...'')
 	lea	edx, DWORD PTR [rax-1]
 ; _EN(``idle instruction: EAX will be reset at the next instruction's execution'')_RU(``бессмысленная инструкция: EAX будет сброшен следующей инструкцией'')

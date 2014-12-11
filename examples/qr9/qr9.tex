@@ -145,7 +145,7 @@ File opening result is being checked though.}
 .text:005413DC                 call    _fwrite         ; write original file size
 \end{lstlisting}
 
-\RU{Записываем шифрованный буфер}\EN{Write crypted buffer}:
+\RU{Записываем шифрованный буфер}\EN{Write encrypted buffer}:
 
 \begin{lstlisting}
 .text:005413E1                 push    edi             ; File
@@ -285,7 +285,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 \RU{Сообщить об ошибке если сигнатура отсутствует}\EN{Report an error if signature is absent}:
 
 \begin{lstlisting}
-.text:00541477                 push    offset aFileIsNotCrypt ; "File is not crypted!\n"
+.text:00541477                 push    offset aFileIsNotCrypt ; "File is not encrypted!\n"
 .text:0054147C                 call    _printf
 .text:00541481                 add     esp, 4
 .text:00541484                 pop     edi
@@ -360,7 +360,7 @@ void decrypt_file(char *fin, char* fout, char *pw)
 
 	if (memcmp (buf, "QR9", 3)!=0)
 	{
-		printf ("File is not crypted!\n");
+		printf ("File is not encrypted!\n");
 		return;
 	};
 
@@ -423,7 +423,7 @@ void decrypt_file(char *fin, char* fout, char *pw)
 \end{lstlisting}
 
 \RU{Скопировать зашифрованное содержимое из ``cube64'' назад в буфер}
-\EN{Copy crypted contents back from ``cube64'' to buffer}:
+\EN{Copy encrypted contents back from ``cube64'' to buffer}:
 
 \begin{lstlisting}
 .text:00541284                 mov     eax, [esp+18h+arg_4]
@@ -433,7 +433,7 @@ void decrypt_file(char *fin, char* fout, char *pw)
 .text:00541290                 mov     ecx, 10h
 .text:00541295                 mov     esi, offset cube64
 .text:0054129A                 add     ebx, 40h  ; add 64 to input buffer pointer
-.text:0054129D                 cmp     ebp, eax  ; EBP contain amount of crypted data.
+.text:0054129D                 cmp     ebp, eax  ; EBP contain amount of encrypted data.
 .text:0054129F                 rep movsd
 \end{lstlisting}
 
@@ -513,8 +513,8 @@ is called too), number is 3.}
 \RU{Хмм, если пароль содержит символ не из латинского алфавита, он пропускается!
 Действительно, если мы запускаем утилиту для шифрования используя символы не латинского алфавита, 
 похоже, они просто игнорируются.}
-\EN{Hmm, if password contains non-alphabetical latin character, it is skipped! 
-Indeed, if we run crypting utility and try non-alphabetical latin characters in password, 
+\EN{Hmm, if password contains non-alphabetical Latin character, it is skipped! 
+Indeed, if we run crypting utility and try non-alphabetical Latin characters in password, 
 they seem to be ignored.}
 
 \begin{lstlisting}
@@ -1045,7 +1045,7 @@ switch (remainder)
 \RU{Алгоритм очевидно слаб: в случае коротких паролей, в бинарном редакторе файлов можно будет увидеть, 
 что в зашифрованных файлах остались незашифрованные символы.}
 \EN{The algorithm is clearly weak: in case of short passwords, one can see,
-that in crypted file there are 
+that in encrypted file there are 
 an original bytes of the original file in binary files editor.}
 
 \RU{Весь исходный код в реконструированном виде:}\EN{Here is reconstructed whole source code:}

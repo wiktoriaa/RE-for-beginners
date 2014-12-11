@@ -1,6 +1,6 @@
 include(`commons.m4'); _EN(`AL is random at this point')_RU(`AL в этом месте имеет случайное значение')
 00000000: AE         scasb
-; _EN(`CF is set accoring subtracting random memory byte from AL.')_RU(`CF устанавливается по результату вычитания случайного байта памяти из AL.')
+; _EN(`CF is set according subtracting random memory byte from AL.')_RU(`CF устанавливается по результату вычитания случайного байта памяти из AL.')
 ; _EN(`so it is somewhat random at this point')_RU(``так что он здесь случаен, в каком-то смысле'')
 00000001: D6         setalc
 ; _EN(`AL is set to 0xFF if CF=1 or to 0 if otherwise')_RU(`AL выставляется в 0xFF если CF=1 или в 0 если наоборот')
