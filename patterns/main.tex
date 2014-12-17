@@ -20,7 +20,7 @@ Perhaps this technique may be helpful for someone else so I will try to describe
 
 \RU{Иногда я использую достаточно древние компиляторы, 
 чтобы получить самый короткий (или простой) фрагмент кода.}
-\EN{Sometimes, I use ancient compilers, in order to get shortest (or simplest) possible
+\EN{Sometimes I use ancient compilers, in order to get shortest (or simplest) possible
 code snippet.}
 
 \ifdefined\IncludeExercises
@@ -28,8 +28,8 @@ code snippet.}
 
 \RU{Когда я учил ассемблер, я также часто компилировал короткие ф-ции на Си и затем постепенно 
 переписывал их на ассемблер, с целью получить как можно более короткий код.}
-\EN{When I learned assembly language, I also often compile small C-functions and then rewrite
-them gradually to assembly, trying to make as short as possible code.}
+\EN{When I studied assembly language, I also often compiled small C-functions and then rewrote
+them gradually to assembly, trying to make their code as short as possible.}
 \RU{Наверное, этим не стоит заниматься в наше время на практике (потому что конкурировать с современными
 компиляторами в плане эффективности очень трудно), но это очень хороший способ разобраться в ассемблере
 лучше.}
@@ -37,7 +37,7 @@ them gradually to assembly, trying to make as short as possible code.}
 (because it's hard to compete with modern compilers on efficiency), 
 but it's a very good method to learn assembly better.}
 \RU{Так что вы можете взять любой фрагмент кода на ассемблере в этой книге и постараться сделать его короче.}
-\EN{Therefore, you can try to take any assembly code from this book and try to make it shorter.}
+\EN{Therefore, you can take any assembly code from this book and try to make it shorter.}
 \RU{Но не забывайте о тестировании своих результатов!}
 \EN{However, please also do not forget about testing your results!}
 \fi
@@ -45,15 +45,15 @@ but it's a very good method to learn assembly better.}
 \section*{\RU{Разница между неоптимизирующей (debug) и оптимизирующей (release) версиями}\EN{Difference between non-optimized (debug) and optimized (release) versions}}
 
 \RU{Неоптимизирующий компилятор работает быстрее, генерирует более понятный (хотя и более объемный) код.}
-\EN{Non-optimizing compiler work faster and produce more understandable (verbose, though) code.}
+\EN{A non-optimizing compiler works faster and produces more understandable (verbose, though) code.}
 
 \RU{Оптимизирующий (release) компилятор работает медленнее и старается сгенерировать более быстрый (хотя
 и не обязательно краткий) код.}
-\EN{Optimizing (release) compiler work slower and try to produce faster (but not necessarily smaller) code.}
+\EN{An optimizing (release) compiler works slower and tries to produce faster (but not necessarily smaller) code.}
 
 \RU{Одна очень важная черта отладочного кода в том, что он может содержать отладочную информацию, хранящую
 связи между каждой строкой в исходном коде и адресом в машинном коде.}
-\EN{One important feature of debugging code is that there might be debugging information showing connections
+\EN{One important feature of the debugging code is that there might be debugging information showing connections
 between each line in source code and address in machine code.}
 \RU{Оптимизирующие компиляторы обычно генерируют код где целые строки из исходного кода могут быть соптимизированы
 и не присутствовать в итоговом машинном коде.}
@@ -62,7 +62,7 @@ and not present in resulting machine code.}
 
 \RU{Практикующий reverse engineer обычно сталкивается с обоими версиями, потому что некоторые разработчики
 включают оптимизацию, некоторые другие --- нет.}
-\EN{When practicing reverse engineering you will usually encounter both versions, 
+\EN{A practicing reverse engineering will usually encounter both versions,
 because some developers turn on optimization switches, some others do not.}
 
 \RU{Вот почему я стараюсь дать примеры для обоих версий.}
@@ -121,10 +121,10 @@ to do it without making a huge amount of annoying mistakes}.
 \RU{x86 всегда был архитектурой с опкодами переменной длины, так что когда пришла 64-битная эра,
 расширения x64 не очень сильно повлияли на \ac{ISA}.}
 \EN{x86 was always an \ac{ISA} with variable-length opcodes, so when the 64-bit era came, 
-x64 extensions did not affect \ac{ISA} very much.}
+the x64 extensions did not affect the \ac{ISA} very much.}
 \RU{В x86 до сих пор есть масса инструкций появившихся в 16-битном 8086 и присутствующих в самых последних
 процессорах.}
-\EN{x86 have a lot of instructions that appeared in 16-bit 8086 CPU and are still present in latest CPUs.}\\
+\EN{x86 has a lot of instructions that appeared in 16-bit 8086 CPU and are still present in latest CPUs.}\\
 \\
 \index{ARM!\ARMMode}
 \index{ARM!\ThumbMode}
@@ -133,7 +133,7 @@ x64 extensions did not affect \ac{ISA} very much.}
 в прошлом.}
 \EN{ARM is a \ac{RISC} \ac{CPU} designed with constant opcode length in mind, which had some advantages in the past.}
 \RU{Так что в самом начале, все инструкции ARM кодировались 4-мя байтами}
-\EN{So at the very start, ARM has all instructions encoded in 4 bytes}\footnote{\RU{Кстати, 
+\EN{So at the very start, ARM had all instructions encoded in 4 bytes}\footnote{\RU{Кстати,
 инструкции фиксированного размера удобны тем, что всегда можно легко узнать адрес 
 следующей (или предыдущей) инструкции. Эта особенность будет рассмотрена в секции о 
 switch()~(\ref{sec:SwitchARMLot}).}
@@ -142,53 +142,53 @@ instruction's address without effort. This feature will be discussed in switch()
 }.
 \RU{Это то что сейчас называется ``режим ARM''}\EN{This is now called ``ARM mode''}.
 
-\RU{Потом они подумали что это не очень экономично}\EN{Then they thought it's not very frugal}.
+\RU{Потом они подумали что это не очень экономично}\EN{Then they thought it wasn't very frugal}.
 \RU{На самом деле, самые используемые инструкции\footnote{А это MOV/PUSH/CALL/Jcc} процессора на практике могут быть закодированы
 используя меньшее количество информации.}
 \EN{In fact, most used \ac{CPU} instructions\footnote{These are MOV/PUSH/CALL/Jcc} in real world applications can be encoded using 
-lesser amount of information.}
+less information.}
 \RU{Так что они добавили другую \ac{ISA} с названием Thumb, где каждая инструкция кодируется всего лишь
 2-мя байтами.}
-\EN{So they added another \ac{ISA} called Thumb, where each instruction encoded in just 2 bytes.}
+\EN{So they added another \ac{ISA} called Thumb, where each instruction was encoded in just 2 bytes.}
 \RU{Теперь это называется ``режим Thumb''}\EN{Now this is called ``Thumb mode''}.
 \RU{Но не все инструкции ARM могут быть закодированы в двух байтах, так что набор инструкций Thumb ограниченный.}
-\EN{However, not all ARM instructions could be encoded in just 2 bytes, so Thumb instruction set is somewhat limited.}
+\EN{However, not all ARM instructions can be encoded in just 2 bytes, so Thumb instruction set is somewhat limited.}
 \RU{Код скомпилированный для режима ARM и Thumb может сосуществовать в одной программе, конечно.}
 \EN{Code compiled for ARM mode and Thumb mode may coexist in one program, of course.}
 
 \RU{Затем создатели ARM решили что Thumb можно расширить: так появился Thumb-2 (в ARMv7).}
-\EN{Then ARM creators thought Thumb could be extended: Thumb-2 was appeared (in ARMv7). }
+\EN{Then ARM creators thought Thumb could be extended: Thumb-2 appeared (in ARMv7). }
 \RU{Thumb-2 это все еще двухбайтные инструкции, но некоторые новые инструкции имеют длину 4 байта.}
 \EN{Thumb-2 is still 2-byte instructions, but some new instructions have a size of 4 bytes.}
 \RU{Распространено заблуждение, что thumb-2 ~--- это смесь ARM и thumb. Это не верно. Просто thumb-2 был дополнен до
 более полной поддержки возможностей процессора, что теперь может легко конкурировать с режимом ARM.}
 \EN{There is a common misconception that thumb-2 is a mix of ARM and thumb. This is not correct. 
-Rather, thumb-2 was extended to fully support processor features so it could
+Rather, thumb-2 was extended to fully support all processor features so it could
 compete with ARM mode.}
 \RU{По поводу богатства возможностей, Thumb-2 теперь может конкурировать с режимом ARM.}
-\EN{On instruction richness, Thumb-2 can compete with original ARM mode.}
+\EN{On instruction set richness, Thumb-2 can now compete with the original ARM mode.}
 \RU{Основное количество приложений для \idevices скомпилировано для набора инструкций thumb-2, потому что Xcode
 делает так по умолчанию}
 \EN{The majority of \idevices applications are compiled for the thumb-2 instruction set because Xcode does this by default}.
 
 \RU{Потом появился 64-битный ARM, это \ac{ISA} снова с 4-хбайтными опкодами, без дополнительного режима Thumb.}
-\EN{Then 64-bit ARM came, this \ac{ISA} has 4-byte opcodes again, without any additional Thumb mode.}
+\EN{Then the 64-bit ARM came, this \ac{ISA} has 4-byte opcodes again, without any additional Thumb mode.}
 \RU{Но 64-битные требования повлияли на \ac{ISA}, так что, подводя итог, теперь у нас 3 набора инструкций ARM:
 режим ARM, режим Thumb (включая Thumb-2) и ARM64.}
-\EN{But 64-bit requirements affected \ac{ISA}, so, summarizing, we now have 3 ARM instruction sets: ARM mode, 
+\EN{But the 64-bit requirements affected \ac{ISA}, so, summarizing, we now have 3 ARM instruction sets: ARM mode,
 Thumb mode (including Thumb-2) and ARM64.}
 \RU{Эти наборы инструкций частично пересекаются, но я бы сказал, это скорее разные наборы, нежели
 вариации одного.}
-\EN{These \ac{ISA}'s intersects partially, but I would say, they are much more different
-\ac{ISA}'s than variations of one.}
+\EN{These \ac{ISA}s intersect partially, but I would say that they are more different
+\ac{ISA}s than variations of one.}
 \RU{Следовательно, в этой книге я стараюсь добавлять фрагменты кода на всех трех ARM \ac{ISA}.}
-\EN{Therefore, I try to add fragments of code in all 3 ARM \ac{ISA}'s in this book.}\\
+\EN{Therefore, I try to add fragments of code in all 3 ARM \ac{ISA}s in this book.}\\
 \\
 \index{PowerPC}
 \index{MIPS}
 \index{Alpha AXP}
 \RU{Существует еще много \ac{RISC} \ac{ISA} с опкодами фиксированной 32-битной длины, это как минимум}
-\EN{There are more \ac{RISC} \ac{ISA}s with fixed length 32-bit opcodes, these are at least} 
+\EN{There are more \ac{RISC} \ac{ISA}s with fixed length 32-bit opcodes, for example}
 MIPS, PowerPC \AndENRU Alpha AXP.
 
 % chapters
