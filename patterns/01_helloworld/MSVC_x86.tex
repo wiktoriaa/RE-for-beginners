@@ -32,7 +32,7 @@ _TEXT	ENDS
 
 \RU{MSVC выдает листинги в Intel-овском синтаксисе.}\EN{MSVC produces assembly listings in Intel-syntax.} 
 \RU{Разница между Intel-синтаксисом и AT\&T будет рассмотрена немного позже:}
-\EN{The difference between Intel-syntax and AT\&T-syntax will be discussed hereafter:} 
+\EN{The difference between Intel-syntax and AT\&T-syntax will be discussed in} 
 \ref{ATT_syntax}.
 
 \RU{Компилятор сгенерировал файл \TT{1.obj}, который впоследствии будет слинкован линкером в \TT{1.exe}.} 
@@ -57,7 +57,7 @@ however it does not have its own name.}
 
 \RU{Вернемся к листингу на ассемблере. Как видно, строка заканчивается нулевым байтом ~--- 
 это требования стандарта \CCpp для строк}
-\EN{Let's back to the assembly listing. 
+\EN{Let's go back to the assembly listing. 
 As we can see, the string is terminated by a zero byte, which is standard for \CCpp strings}.
 \RU{Больше о строках в Си}\EN{More about C strings}: \ref{C_strings}.
 
@@ -67,7 +67,7 @@ As we can see, the string is terminated by a zero byte, which is standard for \C
 \RU{Функция \main, как и практически все функции, начинается с пролога и заканчивается эпилогом}
 \EN{The function \main starts with prologue code and ends with epilogue code (like almost any function)}
 \footnote{\RU{Об этом смотрите подробнее в разделе о прологе и эпилоге функции}
-\EN{Read more about it in section about function prolog and epilog}
+\EN{You can read more about it in section about function prolog and epilog}
 ~(\ref{sec:prologepilog}).}.
 
 \index{x86!\Instructions!CALL}
@@ -79,10 +79,10 @@ As we can see, the string is terminated by a zero byte, which is standard for \C
 \EN{Before the call the string address (or a pointer to it) containing our greeting is placed on the stack with the help of the \PUSH instruction.}
 
 \RU{После того, как функция \printf возвращает управление в функцию \main, адрес строки (или указатель на неё) всё еще лежит в стеке.}
-\EN{When the \printf function returns flow control to the \main function, string address (or a pointer to it) is still on stack.}
+\EN{When the \printf function returns flow control to the \main function, the string address (or a pointer to it) is still on stack.}
 
 \RU{Так как он больше не нужен, то \glslink{stack pointer}{указатель стека} (регистр \ESP) корректируется.} 
-\EN{Since we do not need it anymore the \gls{stack pointer} (the \ESP register) needs to be corrected.}
+\EN{Since we do not need it anymore, the \gls{stack pointer} (the \ESP register) needs to be corrected.}
 
 \index{x86!\Instructions!ADD}
 \TT{ADD ESP, 4} \RU{означает прибавить 4 к значению в регистре \ESP.}
@@ -103,8 +103,8 @@ It is 8 bytes in x64-code.}
 \RU{Некоторые компиляторы, например, Intel C++ Compiler, в этой же ситуации могут вместо 
 \ADD сгенерировать \TT{POP ECX} (подобное можно встретить, например, в коде \oracle{}, им скомпилированном),
 что почти то же самое, только портится значение в регистре \ECX.}
-\EN{Some compilers (like Intel C++ Compiler) in the same situation may emit \TT{POP ECX} 
-instead of \ADD (e.g., such a pattern can be observed in the \oracle{} code as it is compiled by Intel C++ compiler).
+\EN{Some compilers (like the Intel C++ Compiler) in the same situation may emit \TT{POP ECX} 
+instead of \ADD (e.g., such a pattern can be observed in the \oracle{} code as it is compiled by the Intel C++ compiler).
 This instruction has almost the same effect but the \ECX register contents will be rewritten.}
 \RU{Возможно, компилятор применяет \TT{POP ECX}, потому что эта инструкция короче (1 байт против 3).}
 \EN{The Intel C++ compiler probably uses \TT{POP ECX} since this instruction's opcode is shorter then 
@@ -129,14 +129,14 @@ This instruction has almost the same effect but the \ECX register contents will 
 
 \index{x86!\Instructions!XOR}
 \RU{В сгенерированном коде это обеспечивается инструкцией}
-\EN{In the generated code this is implemented by instruction} \TT{XOR EAX, EAX} 
+\EN{In the generated code this is implemented by the instruction} \TT{XOR EAX, EAX} 
 
 \index{x86!\Instructions!MOV}
 \RU{\XOR, на самом деле, как легко догадаться, ``исключающее ИЛИ''}
 \EN{\XOR is in fact, just ``eXclusive OR''}
 \footnote{\href{http://go.yurichev.com/17118}{wikipedia}}
 \RU{, но компиляторы часто используют его вместо простого}
-\EN{but compilers often use it instead of}
+\EN{but the compilers often use it instead of}
 \TT{MOV EAX, 0}\RU{ ~--- снова потому, что опкод короче (2 байта против 5).}
 \EN{~---again because it is a slightly shorter opcode (2 bytes against 5).}
 
@@ -144,7 +144,7 @@ This instruction has almost the same effect but the \ECX register contents will 
 \RU{Бывает так, что некоторые компиляторы генерируют}\EN{Some compilers emit}
 \TT{SUB EAX, EAX}, 
 \RU{что значит \IT{отнять значение в \EAX от значения в \EAX}, что в любом случае даст 0 в результате.}
-\EN{which means \IT{SUBtract the value in the \EAX from the value in \EAX}, which in any case will result zero.}
+\EN{which means \IT{SUBtract the value in the \EAX from the value in \EAX}, which in any case will result in zero.}
 
 \index{x86!\Instructions!RET}
 \RU{Самая последняя инструкция \RET возвращает управление в вызывающую функцию.
