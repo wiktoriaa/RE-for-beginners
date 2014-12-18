@@ -6,23 +6,23 @@
 \lstinputlisting[caption=MSVC 2012 x64]{patterns/01_helloworld/MSVC_x64.asm}
 
 \RU{В x86-64 все регистры были расширены до 64-х бит и теперь имеют префикс \TT{R-}}
-\EN{As of x86-64, all registers were extended to 64-bit and now have an \TT{R-} prefix}.
+\EN{In x86-64, all registers were extended to 64-bit and now have an \TT{R-} prefix}.
 \index{fastcall}
 \RU{Чтобы поменьше задействовать стек (иными словами, поменьше обращаться к внешней памяти/кэшу), уже давно имелся
 довольно популярный метод передачи аргументов ф-ции через регистры}
 \EN{In order to use the stack less often (in other words, to access external memory/cache less often), there exists
 a popular way to pass function arguments via registers} (fastcall: \ref{fastcall}).
-\RU{Т.е., часть аргументов ф-ции передается через регистры и часть}\EN{I.e., one part
-of function arguments are passed in registers, other part}\EMDASH{}\RU{через стек}\EN{via stack}.
+\RU{Т.е., часть аргументов ф-ции передается через регистры и часть}\EN{I.e., a part
+of the function arguments are passed in registers, the rest}\EMDASH{}\RU{через стек}\EN{via the stack}.
 \RU{В Win64 первые 4 аргумента ф-ции передаются через регистры}\EN{In Win64, 4 function arguments
 are passed in} \RCX, \RDX, \Reg{8}, \Reg{9}\EN{ registers}.
 \RU{Это мы здесь и видим: указатель на строку в \printf теперь передается не через стек, а через регистр \RCX}
 \EN{That is what we see here: a pointer to the string for \printf is now passed not in stack, but in the \RCX register}.
 
 \RU{Указатели теперь 64-битные, так что они передаются через 64-битные части регистров (имеющие префикс \TT{R-})}
-\EN{Pointers are 64-bit now, so they are passed in the 64-bit part of registers (which have the \TT{R-} prefix)}.
+\EN{The pointers are 64-bit now, so they are passed in the 64-bit part of registers (which have the \TT{R-} prefix)}.
 \RU{Но для обратной совместимости, к регистрам можно обращаться и к 32-битным частям, используя префикс \TT{E-}}
-\EN{However, for backward compatibility, it is still possible to access 32-bit parts, using the \TT{E-} prefix}.
+\EN{However, for backward compatibility, it is still possible to access the 32-bit parts, using the \TT{E-} prefix}.
 
 \RU{Вот, например, как выглядит регистр}\EN{This is how} \RAX/\EAX/\AX/\AL 
 \RU{в 64-битных x86-совместимых \ac{CPU}}\EN{looks like in 64-bit x86-compatible \ac{CPU}s}:
