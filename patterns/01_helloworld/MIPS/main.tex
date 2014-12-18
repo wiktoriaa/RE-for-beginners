@@ -10,20 +10,20 @@
 закодировать 32-битный адрес внутри одной инструкции: вместо этого нужно использовать пару инструкций
 (как это сделал GCC для загрузки адреса текстовой строки в нашем примере).}
 \EN{As we may already know, each MIPS instruction has size of 32 bits, so it's impossible to embed 32-bit
-address into one instruction: pair should be used for this 
+address into one instruction: a pair should be used for this 
 (like GCC did in our example for the text string address loading).}
 
 \RU{С другой стороны, используя только одну инструкцию, 
 возможно загружать данные по адресам в пределах $register-32768...register+32767$ (потому что 16 бит
 знакового смещения можно закодировать водной инструкции).}
 \EN{It's possible, however, to load data from the address in range of $register-32768...register+32767$ using one
-single instruction (because 16 bit of signed offset could be encoded in single instruction).}
+single instruction (because 16 bits of signed offset could be encoded in single instruction).}
 \RU{Так мы можем выделить какой-то регистр для этих целей и еще выделить буфер в 64KiB для самых 
 чаще всего используемых данных.}
 \EN{So we can allocate some register for this purpose and also allocate 64KiB area of most used data.}
 \RU{Выделенный регистр называется ``глобальный указатель'' (``global pointer'') и он указывает на середину
 области 64KiB.}
-\EN{Allocated register is called ``global pointer'' and it points to the middle of the 64KiB area.}
+\EN{This allocated register is called ``global pointer'' and it points to the middle of the 64KiB area.}
 \RU{Эта область обычно содержит глобальные переменные и адреса импортированных ф-ций вроде \printf,
 потому что разработчики GCC решили что получение адреса ф-ции должно быть как можно более быстрой операцией,
 чтобы она исполнялась со скоростью исполнения одной инструкции вместо двух.}
@@ -32,18 +32,18 @@ because GCC developers decided that getting address of some function must be as 
 execution instead of two.}
 \RU{В ELF-файле, эта 64KiB-область находится частично в секции .sbss (``small \ac{BSS}'', для неинициализированных
 данных) и в секции .sdata (``small data'', для инициализированных данных).}
-\EN{In ELF file, this 64KiB area is located partly in .sbss (``small \ac{BSS}'', for not initialized data) and 
+\EN{In an ELF file this 64KiB area is located partly in .sbss (``small \ac{BSS}'', for not initialized data) and 
 .sdata (``small data'', for initialized data) sections.}
 
 \RU{Это значит, что программист может выбирать, к чему нужен как можно более быстрый доступ, и затем расположить
 это в секциях .sdata/.sbss.}
-\EN{This means, programmer may choose, what data he/she wants to be accessed fast and place them into 
+\EN{This means that the programmer may choose what data he/she wants to be accessed fast and place it into 
 .sdata/.sbss.}
 
 \RU{Некоторые олд-скульные программисты могут вспомнить модель памяти в MS-DOS \ref{8086_memory_model} 
 или в менеджерах памяти вроде XMS/EMS, где вся память делилась на блоки по 64KiB.}
-\EN{Some old-school programmers may recall MS-DOS memory model \ref{8086_memory_model} 
-or MS-DOS memory managers like XMS/EMS where all memory was divided by 64KiB blocks.}
+\EN{Some old-school programmers may recall the MS-DOS memory model \ref{8086_memory_model} 
+or the MS-DOS memory managers like XMS/EMS where all memory was divided in 64KiB blocks.}
 
 \index{PowerPC}
 \RU{Эта концепция применяется не только в MIPS. По крайней мере PowerPC также использует эту технику.}
@@ -54,46 +54,46 @@ or MS-DOS memory managers like XMS/EMS where all memory was divided by 64KiB blo
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),numbers=left]{patterns/01_helloworld/MIPS/hw_O3.s.\LANG}
 
 \RU{Так что регистр \$GP в прологе ф-ции выставляется в середину этой области.}
-\EN{So the \$GP register is set in function prologue to be in the middle of this area.}
+\EN{The \$GP register is set in function prologue to be in the middle of this area.}
 \RU{Регистр \ac{RA} также сохраняется в локальном стеке.}
-\EN{\ac{RA} register is also saved in the local stack.}
+\EN{The \ac{RA} register is also saved in the local stack.}
 \RU{Здесь также используется \puts вместо \printf.}
 \EN{\puts is also used here instead of \printf.}
 \index{MIPS!\Instructions!LW}
 \RU{Адрес ф-ции \puts загружается в \$25 используя инструкцию LW (``Load Word'').}
-\EN{Address of \puts function is loaded into \$25 using LW instruction (``Load Word'').}
+\EN{The address of the \puts function is loaded into \$25 using LW the instruction (``Load Word'').}
 \index{MIPS!\Instructions!LUI}
 \index{MIPS!\Instructions!ADDIU}
 \RU{Затем адрес текстовой строки загружается в \$4 используя пару инструкций: LUI (``Load Upper Immediate'') и
 ADDIU (``Add Immediate Unsigned Word'').}
-\EN{Then address of the text string is loaded to \$4 using LUI (``Load Upper Immediate'') and 
-ADDIU (``Add Immediate Unsigned Word'') instructions pair.}
+\EN{Then the address of the text string is loaded to \$4 using LUI (``Load Upper Immediate'') and 
+ADDIU (``Add Immediate Unsigned Word'') instruction pair.}
 \RU{LUI устанавливает старшие 16 бит регистра (поэтому в имени инструкции присутствует ``upper'') и ADDIU
 прибавляет младшие 16 бит к адресу.}
-\EN{LUI sets high 16 bits of the register (hence ``upper'' word in instruction name) and ADDIU adds
-lower 16 bits of the address.}
+\EN{LUI sets the high 16 bits of the register (hence ``upper'' word in instruction name) and ADDIU adds
+the lower 16 bits of the address.}
 \RU{ADDIU следует за JALR (помните о \IT{branch delay slots}?).}
-\EN{ADDIU is coming after JALR (remember \IT{branch delay slots}?).}
+\EN{ADDIU follows after JALR (remember \IT{branch delay slots}?).}
 \RU{Регистр \$4 также называется \$A0, который используется для передачи первого аргумента ф-ции}
-\EN{The register \$4 is also called \$A0, which is used for passing first function argument}
-\footnote{\RU{Таблица регистров в MIPS доступна в приложении}\EN{MIPS registers table 
-is available in the appendix}: \ref{MIPS_registers_ref}}.
+\EN{The register \$4 is also called \$A0, which is used for passing the first function argument}
+\footnote{\RU{Таблица регистров в MIPS доступна в приложении}\EN{The MIPS registers table 
+is available in appendix} \ref{MIPS_registers_ref}}.
 
 \index{MIPS!\Instructions!JALR}
 \RU{JALR (``Jump and Link Register'') делает переход по адресу в регистре \$25 (там адрес \puts) 
 при этом сохраняя адрес следующей инструкции (LW) в \ac{RA}.}
-\EN{JALR (``Jump and Link Register'') jumps to the address in \$25 register (address of \puts is there) 
-while saving address of the next instruction (LW) in \ac{RA}.}
+\EN{JALR (``Jump and Link Register'') jumps to the address stored in the \$25 register (address of \puts) 
+while saving the address of the next instruction (LW) in \ac{RA}.}
 \RU{Это так же как и в ARM}\EN{This is very similar to ARM}.
 \RU{И еще одна важная вещь это то что адрес сохраняемый в \ac{RA} это адрес не следующей инструкции (потому что
 это \IT{delay slot} и исполняется перед инструкцией перехода),
 но адрес инструкции после нее (после \IT{delay slot}).}
-\EN{Oh, and one important thing is that address saved in \ac{RA} is not address of the next instruction (because,
-it's \IT{delay slot} and is executed before jump instruction),
-but address of the instruction after the next one (after \IT{delay slot}).}
+\EN{Oh, and one important thing is that address saved in \ac{RA} is not the address of the next instruction (because
+it's in a \IT{delay slot} and is executed before the jump instruction),
+but the address of the instruction after the next one (after the \IT{delay slot}).}
 \RU{Таким образом, во время исполнения \TT{JALR}, в \ac{RA} записывается $PC + 8$, и в нашем случае, это адрес
 инструкции LW следующей после ADDIU.}
-\EN{Hence, $PC + 8$ is written to \ac{RA} during execution of \TT{JALR}, in our case, this is address of the LW
+\EN{Hence, $PC + 8$ is written to \ac{RA} during the execution of \TT{JALR}, in our case, this is the address of the LW
 instruction next to ADDIU.}
 
 \RU{LW (``Load Word'') в строке 19 восстанавливает \ac{RA} из локального стека 
@@ -103,23 +103,23 @@ instruction next to ADDIU.}
 
 \index{MIPS!\Pseudoinstructions!MOVE}
 \RU{MOVE на строке 22 копирует значение из регистра \$0 (\$ZERO) в \$2 (\$V0).}
-\EN{MOVE at line 22 copies value from \$0 (\$ZERO) register to \$2 (\$V0).}
+\EN{MOVE at line 22 copies the value from \$0 (\$ZERO) register to \$2 (\$V0).}
 \RU{В MIPS есть \IT{константный} регистр, всегда содержащий ноль.}
-\EN{The MIPS has a \IT{constant} register, which always holds zero.}
+\EN{MIPS has a \IT{constant} register, which always holds zero.}
 \RU{Должно быть, разработчики MIPS решили что 0 это самая востребованная константа в программировании,
 так что пусть будет использоваться регистр \$0, всякий раз, когда будет нужен 0.}
-\EN{Apparently, MIPS developers came with idea that zero in fact is busiest constant in computer programming,
+\EN{Apparently, the MIPS developers came with idea that zero in fact is busiest constant in computer programming,
 so let's use just \$0 register every time zero is needed.}
 \RU{Другой интересный факт: в MIPS нет инструкции копирующей значения из регистра в регистр.}
-\EN{Another interesting fact is that MIPS lacks instruction, which transfers data between registers.}
+\EN{Another interesting fact is that MIPS lacks instruction which transfers data between registers.}
 \RU{На самом деле}\EN{In fact}, \TT{MOVE DST, SRC} \RU{это}\EN{is} \TT{ADD DST, SRC, \$ZERO} ($DST=SRC+0$), 
 \RU{которая делает тоже самое}\EN{which does the same}.
 \RU{Очевидно, разработчики MIPS хотели сделать как можно более компактную таблицу опкодов.}
 \EN{Apparently, MIPS developers wanted to have compact opcode table.}
 \RU{Это не значит что сложение происходит во время каждой инструкции MOVE.}
-\EN{This is not mean actual addition happens at each MOVE instruction.}
+\EN{This does not mean actual addition happens at each MOVE instruction.}
 \RU{Скорее всего, эти псевдоинструкции оптимизируются в \ac{CPU} и \ac{ALU} никогда не используется.}
-\EN{Most likely, \ac{CPU} optimizes these pseudoinstructions and \ac{ALU} is never used.}
+\EN{Most likely, the \ac{CPU} optimizes these pseudoinstructions and \ac{ALU} is never used.}
 
 \index{MIPS!\Instructions!J}
 \RU{J в строке 24 делает переход по адресу в \ac{RA}, и это работает как выход из ф-ции.}
@@ -137,17 +137,17 @@ and is part of function epilogue.}
 \RU{Инструкция на строке 15 сохраняет GP в локальном стеке, и эта инструкция мистическим образом отсутствует
 в листинге от GCC, может быть из-за ошибки в самом GCC\footnote{Очевидно, ф-ция вывода листингов не так критична
 для пользователей GCC, поэтому там вполне могут быть неисправленные ошибки.}.}
-\EN{An instruction at line 15 saves GP value into local stack, and this instruction is mystically missing
-from GCC output listing, maybe by GCC error\footnote{Apparently, functions which generate listings 
+\EN{The instruction at line 15 saves GP value into the local stack, and this instruction is mystically missing
+from the GCC output listing, maybe by GCC error\footnote{Apparently, functions which generate listings 
 are not so critical to GCC users, so some unfixed errors may still be there.}.}
 \RU{Значение GP должно быть сохранено, потому что всякая ф-ция может работать со своим собственным окном данных
 размером 64KiB.}
-\EN{GP value should be saved indeed, because each function can use its own 64KiB data window.}
+\EN{The GP value should be saved indeed, because each function can use its own 64KiB data window.}
 
 \RU{Регистр, содержащий адрес ф-ции \puts называется \$T9, потому что регистры с префиксом T- называются
 ``temporaries'' и их содержимое можно не сохранять.}
-\EN{The register, which contain address of \puts, is called \$T9, because registers prefixed with T- are called
-``temporaries'' and its contents may not be preserved.}
+\EN{The register which contain address of \puts is called \$T9, because registers prefixed with T- are called
+``temporaries'' and their contents may not be preserved.}
 
 \subsection{\NonOptimizing GCC}
 
@@ -155,15 +155,15 @@ are not so critical to GCC users, so some unfixed errors may still be there.}.}
 
 \NonOptimizing GCC \RU{более многословный}\EN{is more verbose}.
 \RU{Мы видим, что регистр FP используется как указатель на фрейм стека.}
-\EN{We see here that FP register is used as a pointer to stack frame.}
+\EN{We see here that register FP is used as a pointer to stack frame.}
 \RU{Мы также видим 3 \ac{NOP}-а.}\EN{We also see 3 \ac{NOP}s.}
 \RU{Второй и третий следуют за инструкциями перехода.}
-\EN{The second and third are came after branch instructions.}
+\EN{The second and third follow the branch instructions.}
 
 \RU{Я полагаю (хотя и не уверен), компилятор GCC всегда добавляет \ac{NOP}-ы (из-за \IT{branch delay slots})
 после инструкций переходов и затем, если включена оптимизация, от них может избавляться.}
-\EN{I guess (not sure, though), GCC compiler always add \ac{NOP}s (because of \IT{branch delay slots}) after branch
-instructions and then, if optimization is turned on, may eliminate them.}
+\EN{I guess (not sure, though) that the GCC compiler always adds \ac{NOP}s (because of \IT{branch delay slots}) after branch
+instructions and then, if optimization is turned on, maybe eliminates them.}
 \RU{Так что они остались здесь}\EN{So they are left here}.
 
 \RU{Вот также листинг от IDA:}
@@ -174,39 +174,39 @@ instructions and then, if optimization is turned on, may eliminate them.}
 \index{MIPS!\Pseudoinstructions!LA}
 \RU{Интересно, IDA распознала пару инструкций LUI/ADDIU и собрала их в одну псевдоинструкцию 
 LA (``Load Address'') в строке 11.}
-\EN{Interestingly, IDA recognized LUI/ADDIU instructions pair and coalesce them into one 
+\EN{Interestingly, IDA recognized LUI/ADDIU instructions pair and coalesces them into one 
 LA (``Load Address'') pseudoinstruction at line 11.}
 \RU{Мы также видим, что размер этой псевдоинструкции 8 байт!}
 \EN{We may also see that this pseudoinstruction has size of 8 bytes!}
 \RU{Это псевдоинструкция (или \IT{макрос}) потому что это не настоящая инструкция MIPS, но скорее
 просто удобное имя для пары инструкций.}
-\EN{This is pseudoinstruction (or \IT{macro}) because it's not a real MIPS instruction, but rather
-handy name for instruction pair.}
+\EN{This is a pseudoinstruction (or \IT{macro}) because it's not a real MIPS instruction, but rather
+handy name for an instruction pair.}
 
 \index{MIPS!\Pseudoinstructions!NOP}
 \index{MIPS!\Instructions!OR}
 \RU{Еще кое что: IDA не распознала \ac{NOP}-инструкции на строках 16, 19 и 27.}
-\EN{Another thing is that IDA doesn't recognize \ac{NOP} instructions, so here are they at lines 16, 19 and 27.}
+\EN{Another thing is that IDA doesn't recognize \ac{NOP} instructions, so here they are at lines 16, 19 and 27.}
 \RU{Это}\EN{It is} \TT{OR \$AT, \$ZERO}.
 \RU{По своей сути, это инструкция выполняющая операцию ИЛИ к содержимому регистра \$AT с нулем, что,
 конечно же, холостая операция.}
 \EN{Essentially, this instruction applies OR operation to contents of \$AT register
 with zero, which is, of course, idle instruction.}
 \RU{MIPS, как и многие другие \ac{ISA}, не имеет отдельной \ac{NOP}-инструкции.}
-\EN{MIPS, like many other \ac{ISA}s, doesn't have separate \ac{NOP} instruction.}
+\EN{MIPS, like many other \ac{ISA}s, doesn't have a separate \ac{NOP} instruction.}
 
-\subsection{\RU{Роль стекового фрейма в этом примере}\EN{Role of stack frame in this example}}
+\subsection{\RU{Роль стекового фрейма в этом примере}\EN{Role of the stack frame in this example}}
 
 \RU{Адрес текстовой строки передается в регистре.}
-\EN{Address of the text string is passed in register.}
-\RU{Так зачем устанавливать локальный стек?}\EN{Why to setup local stack anyway?}
+\EN{The address of the text string is passed in register.}
+\RU{Так зачем устанавливать локальный стек?}\EN{Why setup local stack anyway?}
 \RU{Причина в том, что значения регистров \ac{RA} и GP должны быть сохранены где-то
 (потому что вызывается \printf) и для этого используется локальный стек.}
-\EN{The reason of this lies in the fact that \ac{RA} and GP register's values should be saved somewhere 
-(because \printf is called), and local stack is used for it.}
+\EN{The reason for this lies in the fact that registers \ac{RA} and GP's values should be saved somewhere 
+(because \printf is called), and the local stack is used for it.}
 \RU{Если бы это была \gls{leaf function}, тогда можно было бы избавиться от пролога и эпилога ф-ции,
 например:}
-\EN{If this would be \gls{leaf function}, it's then possible to get rid of function prologue and epilogue,
+\EN{If this was a \gls{leaf function}, it would have been possible to get rid of function prologue and epilogue,
 for example:} \ref{MIPS_leaf_function_ex1}.
 
 \subsection{\Optimizing GCC: \RU{загрузим в}\EN{load it into} GDB}

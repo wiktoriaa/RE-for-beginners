@@ -44,14 +44,14 @@ actually shows the} \TT{``PUSH \{r4,lr\}''}\EN{ instruction}.
 \RU{Но это не совсем точно, инструкция \PUSH доступна только в режиме thumb, поэтому,
 во избежание путаницы, я предложил работать в \IDA}
 \EN{But it is not quite precise. The \PUSH instruction is only available in thumb mode.
-So, to make things less messy, that is why I suggested working in \IDA}.
+So, to make things less messy, we're doing this in \IDA}.
 
 \RU{Итак, эта инструкция уменьшает \ac{SP}, чтобы он указывал на место в стеке, свободное для записи
 новых значений, затем записывает значения регистров \Reg{4} и \ac{LR} 
 по адресу в памяти, на который указывает измененный регистр \ac{SP}}
 \EN{This instruction first \glspl{decrement} \ac{SP} so it will point to the place in the stack
 that is free for new entries, then it writes the values of the \Reg{4} and \ac{LR} registers at the address
-in changed \ac{SP}}.
+stored in the modified \ac{SP}}.
 
 \RU{Эта инструкция, как и инструкция \PUSH в режиме thumb, может сохранить в стеке одновременно несколько значений регистров, что может быть очень удобно}
 \EN{This instruction (like the \PUSH instruction in thumb mode) is able to save several register values at once and this may be useful}. 
@@ -60,7 +60,7 @@ in changed \ac{SP}}.
 \EN{It can also be noted that the \TT{STMFD} instruction is a generalization 
 of the \PUSH instruction (extending its features), since it can work with any register, not just with \ac{SP}.}
 \RU{Другими словами, \TT{STMFD} можно использовать для записи набора регистров в указанном месте памяти.}
-\EN{In other words, \TT{STMFD} may be used for storing pack of registers at the specified memory place.}
+\EN{In other words, \TT{STMFD} may be used for storing pack of registers at the specified memory address.}
 
 \index{\PICcode}
 \index{ARM!\Instructions!ADR}

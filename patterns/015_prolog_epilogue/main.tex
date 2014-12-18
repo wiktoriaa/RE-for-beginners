@@ -16,21 +16,21 @@ code fragment:}
 
 \RU{Эти инструкции делают следующее: сохраняют значение регистра \EBP на будущее, выставляют \EBP равным \ESP, 
 затем подготавливают место в стеке для хранения локальных переменных.}
-\EN{What these instruction do: saves the value in the \EBP register,
-sets the value of the \EBP register to the value of the \ESP and then allocates space on the stack 
+\EN{What these instruction do: save the value in the \EBP register,
+sets the value of the \EBP register to the value of the \ESP and then allocate space on the stack 
 for local variables.}
 
 \RU{\EBP сохраняет свое значение на протяжении всей функции, он будет использоваться здесь для доступа 
 к локальным переменным и аргументам. Можно было бы использовать и \ESP, но он постоянно меняется и 
 это не очень удобно.}
-\EN{The value in the \EBP is fixed over a period of function execution and it is to be used for local variables and 
+\EN{The value in the \EBP is fixed over the period of the function execution and is to be used for local variables and 
 arguments access. 
-One can use \ESP, but it is changing over time and it is not convenient.}
+One can use \ESP, but it changes over time and it is not convenient.}
 
 \RU{Эпилог функции аннулирует выделенное место в стеке, возвращает значение \EBP на то что было и возвращает 
 управление в вызывающую функцию:}
 \EN{The function epilogue frees allocated space in the stack, returns the value in the \EBP register back to initial state 
-and returns the control flow to \gls{callee}:}
+and returns the control flow to the \gls{callee}:}
 
 \begin{lstlisting}
     mov    esp, ebp
@@ -40,7 +40,7 @@ and returns the control flow to \gls{callee}:}
 
 \RU{Пролог и эпилог ф-ции обычно находятся в в дизассемблерах для размежевания ф-ций 
 друг от друга}\EN{Function prologues and epilogues are usually detected in disassemblers for function
-delimitation from each other}.
+delimitation}.
 
 \section{\Recursion}
 
@@ -53,7 +53,7 @@ delimitation from each other}.
 все это работало в несколько раз медленнее чем та же функция, но без рекурсии.}
 \EN{For example, once upon a time I wrote a function to seek the correct node in a binary tree. 
 As a recursive function it would look stylish but since additional time
-is to be spend at each function call
+was to be spent at each function call
 for the prologue/epilogue, it was working a couple of times slower than an iterative (recursion-free)
 implementation.}
 
