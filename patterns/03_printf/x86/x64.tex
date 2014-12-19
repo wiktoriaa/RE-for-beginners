@@ -24,25 +24,25 @@ to the stack in a straightforward manner}.
 
 \RU{Наблюдательный читатель может спросить, почему для значений типа \Tint отводится 8 байт,
 ведь нужно только 4?}
-\EN{Observant reader may ask, what 8 bytes are allocated for \Tint values, while 4 is enough?}
+\EN{The observant reader may ask why are 8 bytes allocated for \Tint values, when 4 is enough?}
 \RU{Да, это нужно запомнить: для значений всех типов более коротких чем 64-бита, отводится 8 байт.}
 \EN{Yes, this should be memorized: 8 bytes are allocated for any data type shorter than 64 bits.}
 \RU{Это сделано для удобства: так всегда легко рассчитать адрес того или иного аргумента.}
-\EN{It's done for convenience: it's always easy to calculate address of this or that argument.}
+\EN{It's done for convenience: it makes it easy to calculate the address of this or that argument.}
 \RU{К тому же, все они расположены по выровненным адресам в памяти.}
-\EN{Besides, all they are located at aligned memory addresses.}
+\EN{Besides, they are all located at aligned memory addresses.}
 % also for local variables?
 \RU{В 32-битных средах точно также: для всех типов резервируется 4 байта в стеке.}
-\EN{The same story in 32-bit environments: 4 bytes are reserved for all data types.}
+\EN{It's the same in 32-bit environments: 4 bytes are reserved for all data types.}
 
 \subsubsection{GCC}
 
 \RU{В *NIX-системах для x86-64 ситуация похожая, вот только первые 6 аргументов передаются через}
-\EN{In *NIX OS-es, it's the same story for x86-64, except that the first 6 arguments are passed in the} \RDI, \RSI,
+\EN{In *NIX OS-es, it's the same for x86-64, except that the first 6 arguments are passed in the} \RDI, \RSI,
 \RDX, \RCX, \Reg{8}, \Reg{9}\EN{ registers}.
 \RU{Остальные --- через стек}\EN{All the rest---via the stack}.
 \RU{GCC генерирует код записывающий указатель на строку в \EDI вместо \RDI --- 
-это мы уже рассмотрели чуть раньше}\EN{GCC generates the code writing string pointer into \EDI instead if \RDI{}---we
+это мы уже рассмотрели чуть раньше}\EN{GCC generates the code that writes the string pointer into \EDI instead of \RDI{}---we
 saw this thing before}: \ref{hw_EDI_instead_of_RDI}.
 
 \RU{Почему перед вызовом \printf очищается регистр \EAX, мы уже рассмотрели раннее}
@@ -85,8 +85,8 @@ Breakpoint 1, __printf (format=0x400628 "a=%d; b=%d; c=%d; d=%d; e=%d; f=%d; g=%
 \end{lstlisting}
 
 \RU{В регистрах}\EN{Registers} \RSI/\RDX/\RCX/\Reg{8}/\Reg{9} 
-\RU{всё предсказуемо}\EN{has the values which are should be there}.
-\RU{А }\RIP \RU{содержит адрес самой первой инструкции ф-ции}\EN{has an address of the very first instruction
+\RU{всё предсказуемо}\EN{have the values which should be there}.
+\RU{А }\RIP \RU{содержит адрес самой первой инструкции ф-ции}\EN{has the address of the very first instruction
 of the} \printf\EN{ function}.
 
 \begin{lstlisting}
@@ -132,14 +132,14 @@ rip            0x7ffff7a65f60	0x7ffff7a65f60 <__printf>
 just like in the previous case, is the} \ac{RA}.
 \RU{Через стек также передаются 3 значения}\EN{3 values are also passed in stack}: 6, 7, 8.
 \RU{Видно, что 8 передается с не очищенной старшей 32-битной частью}\EN{We also see that 8 is passed
-with high 32-bits not cleared}: \TT{0x00007fff00000008}.
+with the high 32-bits not cleared}: \TT{0x00007fff00000008}.
 \RU{Это нормально, ведь передаются числа типа \Tint, а они 32-битные}\EN{That's OK, because the values have
-\Tint type, which is 32-bit type}.
+\Tint type, which is 32-bit}.
 \RU{Так что в старшей части регистра или памяти стека остался ``случайный мусор''}\EN{So, the high register
 or stack element part may contain ``random garbage''}.
 
 \RU{\ac{GDB} показывает всю ф-цию \main, если попытаться посмотреть, куда возвратится управление после
-исполнения \printf}\EN{If you take a look at where control flow will return after \printf execution,
+исполнения \printf}\EN{If you take a look at where control flow will return after the execution of \printf,
 \ac{GDB} will show the whole \main function}:
 
 \begin{lstlisting}
