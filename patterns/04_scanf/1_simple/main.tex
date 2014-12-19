@@ -6,64 +6,64 @@
 не самая хорошая идея.
 Но я хотел проиллюстрировать передачу указателя на переменную типа \Tint.}
 \EN{OK, I agree, it is not clever to use \scanf for user interactions today. 
-But I wanted to illustrate passing pointer to \Tint type variable.}
+But I want to illustrate passing a pointer to an \Tint type variable.}
 
 \subsection{\RU{Об указателях}\EN{About pointers}}
 \index{\CLanguageElements!\Pointers}
 
-\RU{Это одна из фундаментальных вещей в компьютерных науках.}\EN{It is one of the most fundamental things in computer
+\RU{Это одна из фундаментальных вещей в компьютерных науках.}\EN{They are one of the most fundamental things in computer
 science.}
 \RU{Часто большой массив, структуру или объект передавать в другую функцию никак не выгодно, 
 а передать её адрес куда проще.}
-\EN{Often, large array, structure or object, it is too costly to pass to other function, 
-while passing its address is much easier.}
+\EN{Often, it is too costly too pass a large array, structure or object to another function, 
+while passing their address is much cheaper.}
 \RU{К тому же, если вызываемая функция должна изменить что-то в этом большом массиве или структуре,
 то возвращать её полностью ~--- это так же абсурдно.}
-\EN{More than that: if calling function must modify something in the large array or structure,
-to return it as a whole is absurd as well.}
+\EN{More than that: if the calling function must modify something in the large array or structure,
+to return the whole thing is absurd as well.}
 \RU{Так что самое простое, что можно сделать, это передать в функцию-\gls{callee} адрес массива или структуры,
 и пусть \gls{callee} что-то там изменит.}
-\EN{So the simplest thing to do is to pass an address of array or structure to \gls{callee} function,
-and let \gls{callee} change what must be changed.}
+\EN{So the simplest thing to do is to pass the address of the array or structure to the \gls{callee} function,
+and let it change what needs to be changed.}
 
 \RU{Указатель в}\EN{In} \CCpp \RU{ ~--- это просто адрес какого-либо места в памяти.}
-\EN{it is just an address of some point in memory.}
+\EN{they are just an address of some point in memory.}
 
 \index{x86-64}
 \RU{В x86 адрес представляется в виде 32-битного числа (т.е., занимает 4 байта), а в x86--64 как 64-битное число 
 (занимает 8 байт).}
-\EN{In x86, address is represented as 32-bit number (i.e., occupying 4 bytes), while in x86--64 it is 64-bit number
+\EN{In x86, the address is represented as a 32-bit number (i.e., occupying 4 bytes), while in x86--64 it is a 64-bit number
 (occupying 8 bytes).}
 \RU{Кстати, отсюда негодование некоторых людей, связанное с переходом на x86-64 ~--- на этой архитектуре все указатели
 занимают в 2 раза больше места.}
 \EN{By the way, that is the reason of some people's indignation related to switching to x86-64~---all pointers
-on x64-architecture require twice as more space.}
+on the x64-architecture require twice as more space.}
 
 \index{\CStandardLibrary!memcpy()}
 \RU{При некотором упорстве можно работать только с безтиповыми указателями (\TT{void*})}\EN{With some effort,
 it is possible to work with untyped pointers only}; \RU{например,}\EN{e.g.} 
-\RU{стандартная функция Си}\EN{standard C function} \TT{memcpy()},
-\RU{копирующая блок из одного места памяти в другое}\EN{copying a block from one place in memory to another}, 
-\RU{принимает на вход 2 указателя типа}\EN{takes 2 pointers of} \TT{void*}\EN{ type on input}, 
+\RU{стандартная функция Си}\EN{the standard C function} \TT{memcpy()},
+\RU{копирующая блок из одного места памяти в другое}\EN{that copies a block from one place in memory to another}, 
+\RU{принимает на вход 2 указателя типа}\EN{takes 2 pointers of} \TT{void*}\EN{ type for input}, 
 \RU{потому что нельзя
 заранее предугадать, какого типа блок вы собираетесь копировать. 
 Да в общем, тип данных не важен, важен только размер блока.}
-\EN{since it is impossible to predict block data type you would like to copy. 
-Data types is not even important to know, only block size matters.}
+\EN{since it is impossible to predict the type of the data you would like to copy. 
+Data types are not important, only block size matters.}
 
 \RU{Также указатели широко используются, когда функции нужно вернуть более одного значения}
-\EN{Also pointers are widely used when function needs to return more than one value}
-(\RU{мы еще вернемся к этому в будущем}\EN{we will back to this further}~(\ref{label_pointers})).
+\EN{Also, pointers are widely used when a function needs to return more than one value}
+(\RU{мы еще вернемся к этому в будущем}\EN{we will get back to this later}~(\ref{label_pointers})).
 \IT{scanf()} \RU{ ~--- это как раз такой случай}\EN{is just that case}. 
 \RU{Помимо того, что этой функции нужно показать, сколько значений
 было прочитано успешно, ей еще и нужно вернуть сами значения.}
 \EN{In addition to the function's need to show how many values were read successfully, 
-it also should return all these values.}
+it also needs to return all these values.}
 
 \RU{Тип указателя в}\EN{In} \CCpp \RU{нужен для проверки типов на стадии компиляции.}
-\EN{pointer type is needed only for type checking on compiling stage.}
+\EN{the pointer type is needed only for type checking at the compiling stage.}
 \RU{Внутри, в скомпилированном коде, никакой информации о типах указателей нет вообще.}
-\EN{Internally, in compiled code, there is no information about pointer types at all.}
+\EN{Internally, in the compiled code there is no information about pointer types at all.}
 
 \input{patterns/04_scanf/1_simple/x86}
 \input{patterns/04_scanf/1_simple/x64}

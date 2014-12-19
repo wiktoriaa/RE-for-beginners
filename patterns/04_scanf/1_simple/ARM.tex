@@ -23,35 +23,35 @@
 \index{\CLanguageElements!\Pointers}
 \RU{Чтобы \scanf мог вернуть значение, ему нужно передать указатель на переменную типа \Tint.}
 \EN{A pointer
-to a \Tint-typed variable must be passed to a \scanf so it can return value via it.}
+to an \Tint-typed variable must be passed to \scanf so it can return value via it.}
 \Tint \RU{~--- 32-битное значение, для его хранения нужно только 4 байта, и оно помещается в 
 32-битный регистр.}
-\EN{is 32-bit value, so we need 4 bytes for storing it somewhere in memory, and it fits exactly 
-in 32-bit register.}
+\EN{is 32-bit, so we need 4 bytes to store it somewhere in memory, and it fits exactly 
+in a 32-bit register.}
 \index{IDA!var\_?}
 \RU{Место для локальной переменной \TT{x} выделяется в стеке, \IDA наименовала её \IT{var\_8}, 
 впрочем, место для нее выделять не обязательно, т.к., \glslink{stack pointer}{указатель стека} \ac{SP} уже указывает на место, 
 свободное для использования сразу же.}\EN{A place for the local variable \TT{x} is allocated in the stack and \IDA
-named it \IT{var\_8}, however, it is not necessary to allocate it since \ac{SP} \gls{stack pointer}
-is already pointing to the space may be used instantly.}
+has named it \IT{var\_8}, however, it is not necessary to allocate it since \ac{SP} (\gls{stack pointer})
+is already pointing to the space and it can be used directly.}
 \RU{Так что значение указателя \ac{SP} копируется в регистр \Reg{1}, и вместе с format-строкой, 
 передается в \scanf.}
-\EN{So, \ac{SP} \gls{stack pointer} value is copied to the \Reg{1} register and, together with format-string, passed
-into \scanf.}
+\EN{So, \ac{SP}'s value is copied to the \Reg{1} register and, together with the format-string, passed
+to \scanf.}
 \index{ARM!\Instructions!LDR}
 \RU{Позже, при помощи инструкции \TT{LDR}, это значение перемещается из стека в регистр \Reg{1}, 
 чтобы быть переданным в \printf.}\EN{Later, with the help of the \TT{LDR} instruction, this value is moved
-from stack into the \Reg{1} register in order to be passed into \printf.}
+from the stack to the \Reg{1} register in order to be passed to \printf.}
 
 \subsubsection{ARM64}
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.9.1 ARM64,numbers=left]{patterns/04_scanf/1_simple/ARM64_GCC491_O0.s.\LANG}
 
 \RU{Самая интересная часть --- это поиск места под переменную $x$ в стековом фрейме (строка 22).}
-\EN{Most interesting part is finding space for $x$ variable in the stack frame (line 22).}
+\EN{The most interesting part is finding space for the $x$ variable in the stack frame (line 22).}
 \RU{Адрес передается потом в \scanf, которая просто сохраняет значение введенное пользователем в памяти
 по этому адресу.}
-\EN{The address is passed to \scanf then, which just stores value user entered to the memory at this address.}
-\RU{Это 32-битное значение типа \Tint}\EN{This is 32-bit value of \Tint type}.
+\EN{The address is passed to \scanf, which just stores value the user entered in the memory at this address.}
+\RU{Это 32-битное значение типа \Tint}\EN{This is 32-bit value of type \Tint}.
 \RU{Значение загружается в строке 27 и затем передается в \printf.}
-\EN{Value is fetched at line 27 and then passed to \printf.}
+\EN{The value is fetched at line 27 and then passed to \printf.}
