@@ -4,15 +4,15 @@
 
 \RU{Попробуем этот же пример в}\EN{Let's try this example in} \olly.
 \RU{Загружаем, нажимаем F8 (\stepover) до тех пор, пока не окажемся в своем исполняемом файле,
-а не в}\EN{Let's load, press F8 (\stepover) until we get into our executable file
+а не в}\EN{Let's load it, press F8 (\stepover) until we get into our executable file
 instead of} \TT{ntdll.dll}.
 \RU{Скроллим вверх, до тех пока не найдем \main}\EN{Scroll up until \main appears}.
 \RU{Кликаем на первой инструкции}\EN{Let's click on the first instruction} (\TT{PUSH EBP}), 
 \RU{нажимаем}\EN{press} F2, \RU{затем}\EN{then} F9 (Run) \RU{и брякпойнт срабатывает
-на начале \main}\EN{and breakpoint triggers on the \main begin}.
+на начале \main}\EN{and a breakpoint will trigger when \main begins}.
 
 \RU{Трассируем до того места, где готовится адрес переменной $x$}
-\EN{Let's trace to the place where the address of $x$ variable is prepared}:
+\EN{Let's trace to the place where the address of variable $x$ is prepared}:
 
 \begin{figure}[H]
 \centering
@@ -22,15 +22,14 @@ instead of} \TT{ntdll.dll}.
 \end{figure}
 
 \RU{На \EAX в окне регистров можно нажать правой кнопкой и далее}
-\EN{It is possible to right-click on \EAX in registers window and then} ``Follow in stack''.
-\RU{Этот адрес покажется в окне стека}\EN{This address will appear in stack window}.
+\EN{It is possible to right-click on \EAX in the registers window and then} ``Follow in stack''.
+\RU{Этот адрес покажется в окне стека}\EN{This address will appear in the stack window}.
 \RU{Смотрите, это переменная в локальном стеке}\EN{Look, this is a variable in the local stack}.
 \RU{Я нарисовал там красную стрелку}\EN{I drew a red arrow there}.
-\RU{И там сейчас какой-то мусор}\EN{And there are some garbage} (\TT{0x6E494714}).
+\RU{И там сейчас какой-то мусор}\EN{And there is some garbage} (\TT{0x6E494714}).
 \RU{Адрес этого элемента стека сейчас, при помощи \PUSH, запишется в этот же стек, рядом}
-\EN{Now address of the stack element, with the help of \PUSH, will be written to the same stack, nearly}.
-\RU{Трассируем при помощи F8 вплоть до конца исполнения \scanf}\EN{Let's trace by F8 until \scanf 
-execution finished}.
+\EN{Now the address of the stack element with the help of \PUSH will be written to the same stack, next to it}.
+\RU{Трассируем при помощи F8 вплоть до конца исполнения \scanf}\EN{Let's trace with F8 until the execution of \scanf finishes}.
 \RU{А пока \scanf исполняется, в консольном окне, вводим, например, 123}
 \EN{During the moment of \scanf execution, we enter, for example, 123, in the console window}:
 
@@ -52,13 +51,13 @@ execution finished}.
 \end{figure}
 
 \scanf \RU{вернул}\EN{returns} $1$ \InENRU \EAX, \RU{что означает, что он успешно прочитал одно 
-значение}\EN{which means, it have read one value successfully}.
+значение}\EN{which means that it has read one value successfully}.
 \RU{В наблюдаемом нами элементе стека теперь}\EN{The element of 
-stack of our attention now contain} \TT{0x7B} (123).
+stack we are looking at now contains} \TT{0x7B} (123).
 
 \clearpage
 \RU{Чуть позже, это значение копируется из стека в регистр \ECX и передается в \printf}
-\EN{Further, this value is copied from the stack to the \ECX register and passed into \printf}:
+\EN{Further, this value is copied from the stack to the \ECX register and passed to \printf}:
 
 \begin{figure}[H]
 \centering

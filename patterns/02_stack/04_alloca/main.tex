@@ -12,13 +12,14 @@
   \TT{C:\textbackslash{}Program Files (x86)\textbackslash{}Microsoft Visual Studio 10.0\textbackslash{}VC\textbackslash{}crt\textbackslash{}src\textbackslash{}intel}}. 
 
 \RU{Эта функция работает как \TT{malloc()}, но выделяет память прямо в стеке.} 
-\EN{This function works like \TT{malloc()} but allocates memory just on the stack.}
+\EN{This function works like \TT{malloc()}, but allocates memory just on the stack.}
 
 \RU{Память освобождать через \TT{free()} не нужно, так как эпилог функции~(\ref{sec:prologepilog})
 вернет \ESP назад в изначальное состояние и выделенная память просто аннулируется.}
 \EN{The allocated memory chunk does not need to be freed via a \TT{free()} function call, since the 
 function epilogue~(\ref{sec:prologepilog}) will return \ESP back to its initial state and 
 the allocated memory will be just annulled.} 
+% "annuled" (and "аннулируется") sound like it will be zeroed, which is wrong, maybe another word is needed?
 
 \RU{Интересна реализация функции \TT{alloca()}.}
 \EN{It is worth noting how \TT{alloca()} is implemented.}
@@ -36,7 +37,7 @@ need and sets \ESP as a pointer to the \IT{allocated} block.}
 записывает его в буфер \TT{buf}. \puts выдает содержимое буфера \TT{buf} в \gls{stdout}. Конечно, можно было бы
 заменить оба этих вызова на один \printf, но мне нужно проиллюстрировать использование небольшого буфера.)}
 \EN{(\TT{\_snprintf()} function works just like \printf, but instead of dumping the result into \gls{stdout} (e.g., to terminal or 
-console), it writes to the \TT{buf} buffer. \puts copies \TT{buf} contents to \gls{stdout}. Of course, these two
+console), it writes it to the \TT{buf} buffer. \puts copies \TT{buf} contents to \gls{stdout}. Of course, these two
 function calls might be replaced by one \printf call, but I would like to illustrate small buffer usage.)}
 
 \subsubsection{MSVC}
@@ -47,17 +48,17 @@ function calls might be replaced by one \printf call, but I would like to illust
 
 \index{Compiler intrinsic}
 \RU {Единственный параметр в \TT{alloca()} передается через \EAX, а не как обычно через стек}
-\EN{The sole \TT{alloca()} argument is passed via \EAX (instead of pushing into stack)}
+\EN{The sole \TT{alloca()} argument is passed via \EAX (instead of pushing it into the stack)}
 \footnote{
 \RU{Это потому, что alloca() ~--- это не сколько функция, сколько т.н. \IT{compiler intrinsic} (\ref{sec:compiler_intrinsic})}
-\EN{It is because alloca() is rather compiler intrinsic (\ref{sec:compiler_intrinsic}) than usual function}.
+\EN{It is because alloca() is rather a compiler intrinsic (\ref{sec:compiler_intrinsic}) than a normal function}.
 
 \RU{Одна из причин, почему здесь нужна именно функция, а не несколько инструкций прямо в коде в том, что в реализации 
 функции alloca() от \ac{MSVC}
 есть также код, читающий из только что выделенной памяти, чтобы \ac{OS} подключила физическую память к этому региону \ac{VM}.}
-\EN{One of the reason there is a separate function instead of couple instructions just in the code,
-because \ac{MSVC} implementation
-of the alloca() function also has a code, which reads from the memory just allocated, in order to let \ac{OS} to map
+\EN{One of the reason there is a separate function instead of just a couple instructions in the code,
+is because the \ac{MSVC} implementation
+of the alloca() function also has code which reads from the memory just allocated, in order to let the \ac{OS} map
 physical memory to this \ac{VM} region.}
 }.
 \RU{После вызова \TT{alloca()}, \ESP теперь указывает на блок в 600 байт, который 
@@ -68,7 +69,7 @@ use it as memory for the \TT{buf} array.}
 \subsubsection{GCC + \IntelSyntax}
 
 \RU{А GCC 4.4.1 обходится без вызова других функций:}
-\EN{GCC 4.4.1 can do the same without calling external functions:}
+\EN{GCC 4.4.1 does the same without calling external functions:}
 
 \lstinputlisting[caption=GCC 4.7.3]{patterns/02_stack/04_alloca/2_1_gcc_intel_O3.asm.\LANG}
 

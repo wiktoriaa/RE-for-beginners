@@ -1,10 +1,10 @@
 \section{\RU{Мусор в стеке}\EN{Noise in stack}}
 
 \RU{Часто в этой книге я говорю о ``шуме'' или ``мусоре'' в стеке или памяти.}
-\EN{Often in this book, I write about ``noise'' or ``garbage'' values in stack or memory.}
-\RU{Откуда он берется}\EN{Where are they came from}?
+\EN{Often in this book I write about ``noise'' or ``garbage'' values in stack or memory.}
+\RU{Откуда он берется}\EN{Where do they come from}?
 \RU{Это то, что осталось там после исполнения предыдущих ф-ций.}
-\EN{These are what was left in there after other function's executions.}
+\EN{These are what was left in there after other functions' executions.}
 \RU{Короткий пример}\EN{Short example}:
 
 \lstinputlisting{patterns/02_stack/08_noise/st.c}
@@ -31,7 +31,7 @@ Copyright (C) Microsoft Corporation.  All rights reserved.
 st.obj
 \end{lstlisting}
 
-\RU{Но когда я запускаю}\EN{But when I run}\dots
+\RU{Но когда я запускаю}\EN{But when I run it}\dots
 
 \begin{lstlisting}
 c:\Polygon\c>st
@@ -53,12 +53,12 @@ What a weird thing. We did not set any variables in} \TT{f2()}.
 \label{fig:stack_noise_olly1}
 \end{figure}
 
-\RU{Когда}\EN{When} \TT{f1()} \RU{заполняет переменные}\EN{writes to} $a$, $b$ \AndENRU $c$ 
-\RU{они сохраняются по адресу}\EN{variables, they are stored at the address} \TT{0x14F85C} 
+\RU{Когда}\EN{When} \TT{f1()} \RU{заполняет переменные}\EN{writes to variables} $a$, $b$ \AndENRU $c$ 
+\RU{они сохраняются по адресу}\EN{, they are stored at the address} \TT{0x14F85C} 
 \RU{и т.д.}\EN{and so on.}
 
 \clearpage
-\RU{А когда исполняется}\EN{And when} \TT{f2()}\EN{ executed}:
+\RU{А когда исполняется}\EN{And when} \TT{f2()}\EN{ executes}:
 
 \begin{figure}[H]
 \centering
@@ -70,23 +70,23 @@ What a weird thing. We did not set any variables in} \TT{f2()}.
 ... $a$, $b$ \AndENRU $c$ \RU{в ф-ции}\EN{of} \TT{f2()} \RU{находятся по тем же адресам!}
 \EN{are located at the same address!}
 \RU{Пока никто не перезаписал их, так что они здесь в нетронутом виде.}
-\EN{No one overwritten values yet, so they are still untouched here.}
+\EN{No one has overwritten the values yet, so they are still untouched here.}
 
 \RU{Так что, для такой странной ситуации, несколько ф-ций должны исполняться друг за другом,
 и \ac{SP} должен быть таким же при входе в ф-цию (т.е., у них должно быть равное кол-во
 аргументов). Тогда, локальные переменные будут расположены в том же месте стека.}
 \EN{So, for this weird situation, several functions should be called one after another and
 \ac{SP} should be the same at each function entry (i.e., they should has same number
-of arguments). Then, local variables will be located at the same point of stack.}
+of arguments). Then the local variables will be located at the same point of stack.}
 
 \RU{Подводя итоги, все значения в стеке (да и памяти вообще) это значения оставшиеся от 
 исполнения предыдущих ф-ций}\EN{Summarizing, all values in stack (and memory cells at all) 
-has values left there from previous function executions}.
+have values left there from previous function executions}.
 \RU{Строго говоря, они не случайны, они скорее непредсказуемы}\EN{They are not 
-random in strict sense, but rather has unpredictable values}.
+random in the strict sense, but rather have unpredictable values}.
 
 \RU{А как иначе}\EN{How else}?
 \RU{Вероятно, было бы возможным очищать части стека перед исполнением каждой ф-ции,
 но это слишком много лишней (и ненужной) работы.}
-\EN{Probably, it would be possible to clear stack portions before each function execution,
+\EN{Probably, it would be possible to clear portions of the stack before each function execution,
 but that's too much extra (and needless) work.}
