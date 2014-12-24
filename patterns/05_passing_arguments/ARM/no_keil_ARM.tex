@@ -20,52 +20,52 @@
 \end{lstlisting}
 
 \RU{В функции \main просто вызываются две функции, в первую (\TT{f}) передается три значения.}
-\EN{In \main function, two other functions are simply called, and three values are passed to the 
+\EN{In function \main, two other functions are called, and three values are passed to the 
 first one (\TT{f}).}
 
 \RU{Как я уже упоминал, первые 4 значения, в ARM обычно передаются в 
 первых 4-х регистрах (\Reg{0}-\Reg{3}).}
-\EN{As I mentioned before, first 4 values are usually passed in 
-first 4 registers (\Reg{0}-\Reg{3}) in ARM.}
+\EN{As I mentioned before, the first 4 values are usually passed in 
+the first 4 registers (\Reg{0}-\Reg{3}) in ARM.}
 
-\RU{Функция }\TT{f}\RU{, как видно, использует три первых регистра (\Reg{0}-\Reg{2}) как аргументы.}
-\EN{function, as it seems, use first 3 registers (\Reg{0}-\Reg{2}) as arguments.}
+\EN{The }\RU{Функция }\TT{f}\RU{, как видно, использует три первых регистра (\Reg{0}-\Reg{2}) как аргументы.}
+\EN{function, as it seems, uses the first 3 registers (\Reg{0}-\Reg{2}) as arguments.}
 
 \index{ARM!\Instructions!MLA}
-\RU{Инструкция }\TT{MLA} (\IT{Multiply Accumulate}) \RU{перемножает два первых операнда (\Reg{3} и \Reg{1}), 
+\EN{The }\RU{Инструкция }\TT{MLA} (\IT{Multiply Accumulate}) \RU{перемножает два первых операнда (\Reg{3} и \Reg{1}), 
 прибавляет к произведению
 третий операнд (\Reg{2}) и помещает результат в нулевой регистр (\Reg{0}), через который, по стандарту, 
 возвращаются значения функций.}
-\EN{instruction multiplicate two first operands (\Reg{3} and \Reg{1}), adds third operand (\Reg{2}) to product and places
-result into zeroth register (\Reg{0}), via which, by standard, values are returned from functions.}
+\EN{instruction multiplicates its two first operands (\Reg{3} and \Reg{1}), adds the third operand (\Reg{2}) to the product and places
+the result into the zeroth register (\Reg{0}), via which, by standard, values are returned from functions.}
 
 \index{Fused multiply–add}
 \RU{Умножение и сложение одновременно}\EN{Multiplication and addition at once}\footnote{\WPMAO} 
 (\IT{Fused multiply–add}) \RU{это много где применяемая операция, кстати, аналогичной
 инструкции в x86 не было до появления FMA-инструкций в SIMD}
-\EN{is very useful operation, by the way, there was no such instruction in x86 
-before FMA-instructions appearance in SIMD}
+\EN{is a very useful operation, by the way, there was no such instruction in x86 
+before FMA-instructions appeared in SIMD}
 \footnote{\href{http://go.yurichev.com/17103}{wikipedia}}.
 
 \RU{Самая первая инструкция}\EN{The very first} \TT{MOV R3, R0}, \RU{по-видимому, избыточна (можно было бы обойтись только одной инструкцией \TT{MLA})}
-\EN{instruction, apparently, redundant (single \TT{MLA} instruction could be used here instead)}, 
-\RU{компилятор не оптимизировал её, ведь, это компиляция без оптимизации}\EN{compiler was not optimized it,
+\EN{instruction is, apparently, redundant (a single \TT{MLA} instruction could be used here instead)}, 
+\RU{компилятор не оптимизировал её, ведь, это компиляция без оптимизации}\EN{the compiler was not optimized it,
 since this is non-optimizing compilation}.
 
 \index{ARM!\RU{Переключение режимов}\EN{Mode switching}}
 \index{ARM!\Instructions!BX}
 \RU{Инструкция \TT{BX} возвращает управление по адресу, записанному в \ac{LR} и, если нужно, 
 переключает режимы процессора с thumb на ARM или наоборот.}
-\EN{\TT{BX} instruction returns control to the address stored in the \ac{LR} register and, if it is necessary, 
+\EN{The \TT{BX} instruction returns control to the address stored in the \ac{LR} register and, if necessary, 
 switches processor mode from thumb to ARM or vice versa.}
 \RU{Это может быть необходимым потому, что, как мы видим, 
 функции \TT{f} неизвестно, из какого кода она будет вызываться, из ARM или thumb.}
-\EN{This can be necessary since, as we can see, \TT{f} function is not aware, from which code it may be
-called, from ARM or thumb.}
+\EN{This can be necessary since, as we can see, function \TT{f} is not aware from what kind of code it may be
+called, ARM or thumb.}
 \RU{Поэтому, если она будет вызываться из кода thumb, \TT{BX} не только вернет
 управление в вызывающую функцию, но также переключит процессор в режим thumb.}
-\EN{This, if it will be called from thumb code, \TT{BX} will not only return control to the calling function,
-but also will switch processor mode to thumb mode.}
+\EN{Thus, if it gets called from thumb code, \TT{BX} will not only return control to the calling function,
+but also will switch the processor mode to thumb.}
 \RU{Либо не переключит, если функция вызывалась из кода для режима ARM: \cite[A2.3.2]{ARMref}.}
 \EN{Or not switch, if the function was called from ARM code \cite[A2.3.2]{ARMref}.}
 % look for "BXWritePC()" in manual

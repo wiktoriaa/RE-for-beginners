@@ -3,28 +3,28 @@
 \lstinputlisting[caption=\Optimizing GCC 4.4.5]{patterns/05_passing_arguments/MIPS_O3_IDA.lst.\LANG}
 
 \RU{Первые 4 аргумента ф-ции передаются в четырех регистрах с префиксами A-.}
-\EN{First four function arguments are passed in four registers prefixed by A-.}
+\EN{The first four function arguments are passed in four registers prefixed by A-.}
 
 \index{MIPS!\Instructions!MULT}
 \RU{В MIPS есть два специальных регистра: HI и LO, которые выставляются в 64-битный результат умножения
 во время исполнения инструкции \TT{MULT}.}
-\EN{There are two special registers in MIPS: HI and LO which are filled by 64-bit result of multiplication while
-execution of \TT{MULT} instruction.}
+\EN{There are two special registers in MIPS: HI and LO which are filled by 64-bit result of multiplication during
+the execution of the \TT{MULT} instruction.}
 \index{MIPS!\Instructions!MFLO}
 \index{MIPS!\Instructions!MFHI}
 \RU{К регистрам можно обращаться только используя инструкции \TT{MFLO} и \TT{MFHI}.}
-\EN{Registers are accessible only using \TT{MFLO} and \TT{MFHI} instructions.}
+\EN{These registers are accessible only using the \TT{MFLO} and \TT{MFHI} instructions.}
 \RU{Здесь, \TT{MFLO} берет младшую часть результата умножения и записывает в \$V0.}
-\EN{\TT{MFLO} here is taking low-part of result of multiplication and putting it into \$V0.}
+\EN{\TT{MFLO} here is takes the low-part of the result of multiplication and puts it into \$V0.}
 
 \RU{Так что старшая 32-битная часть результата игнорируется (содержимое регистра HI не используется).}
-\EN{So high 32-bit part of multiplication result is dropped (contents of HI register is not used).}
+\EN{So the high 32-bit part of the multiplication result is dropped (the contents of register HI are not used).}
 \RU{Действительно: мы ведь работаем с 32-битным типом \Tint.}
-\EN{Indeed: we work with 32-bit \Tint data type here.}
+\EN{Indeed: we work with 32-bit \Tint data types here.}
 
 \index{MIPS!\Instructions!ADDU}
 \RU{И наконец, \TT{ADDU} (``Add Unsigned'') прибавляет значение третьего аргумента к результату.}
-\EN{Finally, \TT{ADDU} (``Add Unsigned'') adds value of the third argument to the result.}
+\EN{Finally, \TT{ADDU} (``Add Unsigned'') adds the value of the third argument to the result.}
 
 \index{MIPS!\Instructions!ADD}
 \index{MIPS!\Instructions!ADDU}
@@ -35,24 +35,24 @@ execution of \TT{MULT} instruction.}
 \RU{На самом деле, дело не в знаковых числах, но в исключениях: \TT{ADD} может вызвать исключение
 во время переполнения, а это иногда полезно\footnote{\url{http://go.yurichev.com/17326}} и поддерживается,
 например, в \ac{PL} Ada.}
-\EN{In fact, it's not about signedness, but about exceptions: \TT{ADD} can raise exception on overflow,
+\EN{It's not about signedness, but about exceptions: \TT{ADD} can raise an exception on overflow,
 which is sometimes useful\footnote{\url{http://go.yurichev.com/17326}} and supported in Ada \ac{PL}, 
 for instance.}
 \TT{ADDU} \RU{не вызывает исключения во время переполнения}\EN{do not raise exceptions on overflow}.
 \RU{А так как \CCpp не поддерживает всё это, мы видим здесь \TT{ADDU} вместо \TT{ADD}.}
-\EN{Since, \CCpp doesn't support this, here we see \TT{ADDU} instead of \TT{ADD}.}
+\EN{Since \CCpp doesn't support this, here we see \TT{ADDU} instead of \TT{ADD}.}
 
-\RU{32-битный результат оставляется в}\EN{32-bit result is leaved in} \$V0.
+\RU{32-битный результат оставляется в}\EN{The32-bit result is left in} \$V0.
 
 \index{MIPS!\Instructions!JAL}
 \index{MIPS!\Instructions!JALR}
 \RU{В \main есть новая для нас инструкция:}
-\EN{There are new instruction for us in \main:} \TT{JAL} (``Jump and Link''). 
+\EN{There is a new instruction for us in \main:} \TT{JAL} (``Jump and Link''). 
 \RU{Разница между JAL и JALR в том, что относительное смещение кодируется в первой инструкции,
 а JALR переходит по абсолютному адресу, записанному в регистр (``Jump and Link Register'').}
-\EN{Difference between JAL and JALR is that relative offset is encoded in first instruction, 
-while JALR jumping to the absolute address stored in register (``Jump and Link Register'').}
+\EN{The difference between JAL and JALR is that a relative offset is encoded in the first instruction, 
+while JALR jumps to the absolute address stored in a register (``Jump and Link Register'').}
 \RU{Обе ф-ции \ttf и \main расположены в одном объектном файле, так что относительный адрес
 \ttf известен и фиксирован.}
-\EN{Both \ttf and \main functions are located in the same object file, so relative address of \ttf 
+\EN{Both \ttf and \main functions are located in the same object file, so the relative address of \ttf 
 is known and fixed.}
