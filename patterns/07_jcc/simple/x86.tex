@@ -7,47 +7,47 @@
 \lstinputlisting[caption=\NonOptimizing MSVC 2010]{patterns/07_jcc/simple/signed_MSVC.asm}
 
 \index{x86!\Instructions!JLE}
-\RU{Первая инструкция}\EN{First instruction} \JLE \RU{значит}\EN{means} \IT{Jump if Less or Equal}. 
+\RU{Первая инструкция}\EN{The first instruction,} \JLE \RU{значит}\EN{, means} \IT{Jump if Less or Equal}. 
 \RU{То есть, если второй операнд больше первого или 
 равен ему, произойдет переход туда, где будет следующая проверка.}
-\EN{In other words, if second operand is 
+\EN{In other words, if the second operand is 
 larger than first or equal, control flow will be passed to address or label mentioned in instruction.}
 \RU{А если это условие не срабатывает, то есть второй операнд меньше первого, то перехода не будет, 
 и сработает первый \printf.}
-\EN{But if this condition will not trigger (second operand less than first), control flow will 
-not be altered and first \printf will be called.}
+\EN{If this condition does not trigger (second operand smaller than first), the control flow will 
+not be altered and the first \printf will be called.}
 \index{x86!\Instructions!JNE}
 \RU{Вторая проверка это}\EN{The second check is} \JNE: \IT{Jump if Not Equal}.
-\RU{Переход не произойдет, если операнды равны}\EN{Control flow will not altered if operands are 
-equals to each other}.
+\RU{Переход не произойдет, если операнды равны}\EN{Control flow will not change if the operands are 
+equal}.
 \index{x86!\Instructions!JGE}
 \RU{Третья проверка}\EN{The third check is} \JGE: \IT{Jump if Greater or Equal}\EMDASH{}\RU{переход 
 если первый операнд больше второго или равен ему}\EN{jump if the first operand is larger than 
-the second or if they are equals to each other}.
+the second or if they are equal}.
 \RU{Кстати, если все три условных перехода сработают, ни один \printf не вызовется. 
 Но, без внешнего вмешательства, это невозможно.}
-\EN{By the way, if all three conditional jumps are triggered, no \printf will be called whatsoever. 
-But, without special intervention, it is impossible.}
+\EN{So, if all three conditional jumps are triggered, no \printf will be called whatsoever. 
+But it is impossible without special intervention.}
 
-\RU{Функция }\TT{f\_unsigned()} \RU{точно такая же, за тем исключением, что используются инструкции 
+\EN{The}\RU{Функция} \TT{f\_unsigned()} \RU{точно такая же, за тем исключением, что используются инструкции 
 \JBE и \JAE вместо \JLE и \JGE, об этом читайте ниже}
-\EN{function is likewise, with the exception the \JBE and \JAE instructions
+\EN{function is the same, with the exception that the \JBE and \JAE instructions
 are used here instead of 
-\JLE and \JGE, see below about it}:
+\JLE and \JGE, see below}:
 
 \RU{Далее функция \TT{f\_unsigned()}}
-\EN{Now let's take a look to the \TT{f\_unsigned()} function}
+\EN{Now let's take a look at the \TT{f\_unsigned()} function}
 
 \lstinputlisting[caption=GCC]{patterns/07_jcc/simple/unsigned_MSVC.asm}
 
 \index{x86!\Instructions!JBE}
 \index{x86!\Instructions!JAE}
 \RU{Здесь все то же самое, только инструкции условных переходов немного другие}
-\EN{Almost the same, with exception of instructions}:
+\EN{Almost the same, with these different instructions}:
 \JBE\EMDASH{}\IT{Jump if Below or Equal} \AndENRU \JAE\EMDASH{}\IT{Jump if Above or Equal}.
-\RU{Эти инструкции}\EN{These instructions} (\JA/\JAE/\JB/\JBE) 
-\RU{отличаются от}\EN{are distinct from} \JG/\JGE/\JL/\JLE \RU{тем}\EN{in that way}, 
-\RU{что работают с беззнаковыми переменными}\EN{they works with unsigned numbers}.
+\RU{Эти инструкции}\EN{The difference in these instructions} (\JA/\JAE/\JB/\JBE) 
+\RU{отличаются от} \JG/\JGE/\JL/\JLE \RU{тем, что работают с беззнаковыми переменными}
+\EN{is that they work with unsigned numbers}.
 
 \index{x86!\Instructions!JA}
 \index{x86!\Instructions!JB}
@@ -55,15 +55,15 @@ are used here instead of
 \index{x86!\Instructions!JL}
 \index{Signed numbers}
 \RU{Отступление: смотрите также секцию о представлении знака в числах}
-\EN{See also section about signed number representations}~(\ref{sec:signednumbers}).
+\EN{See also the section about signed number representations}~(\ref{sec:signednumbers}).
 \RU{Таким образом, увидев где используется \JG/\JL вместо \JA/\JB и наоборот, 
 можно сказать почти уверенно насчет того, 
 является ли тип переменной знаковым (signed) или беззнаковым (unsigned).}
-\EN{So, where we see usage of \JG/\JL instead of \JA/\JB or otherwise, 
-we can almost be sure about signed or unsigned type of variable.}
+\EN{So, where we see \JG/\JL instead of \JA/\JB or vice-versa, 
+we can almost be sure that the variables are signed or unsigned, respectively.}
 
 \RU{Далее функция \main, где ничего нового для нас нет}
-\EN{Here is also \main function, where nothing much new to us}:
+\EN{Here is also the \main function, where there is nothing much new to us}:
 
 \lstinputlisting[caption=\main]{patterns/07_jcc/simple/main_MSVC.asm}
 
@@ -75,8 +75,8 @@ we can almost be sure about signed or unsigned type of variable.}
 \subsubsection{x86 + MSVC + Hiew}
 \index{Hiew}
 
-\RU{Можем попробовать модифицировать исполняемый файл так}\EN{We can try patch executable file in that way}, 
-\RU{чтобы ф-ция}\EN{that} \TT{f\_unsigned()} \RU{всегда показывала}\EN{function will always print} ``a==b'', 
+\RU{Можем попробовать модифицировать исполняемый файл так,}\EN{We can try to patch the executable file in a way} 
+\RU{чтобы ф-ция}\EN{that the} \TT{f\_unsigned()} \RU{всегда показывала}\EN{function will always print} ``a==b'', 
 \RU{при любых входящих значениях}\EN{for any input values}.
 
 \RU{Вот как она выглядит в}\EN{Here is how it looks in} Hiew:
@@ -90,32 +90,32 @@ we can almost be sure about signed or unsigned type of variable.}
 
 \RU{Собственно, задаче три}\EN{Essentially, we've got three tasks}:
 \begin{itemize}
-\item \RU{заставить первый переход срабатывать всегда}\EN{force first jump to be always triggered};
-\item \RU{заставить второй переход не срабатывать никогда}\EN{force second jump to be never triggered};
-\item \RU{заставить третий переход срабатывать всегда}\EN{force third jump to be always triggered}.
+\item \RU{заставить первый переход срабатывать всегда}\EN{force the first jump to always trigger};
+\item \RU{заставить второй переход не срабатывать никогда}\EN{force the second jump to never trigger};
+\item \RU{заставить третий переход срабатывать всегда}\EN{force the third jump to always trigger}.
 \end{itemize}
 
-\RU{Так мы направим путь исполнения кода (code flow) во второй}\EN{Thus we can point code flow
-into the second} \printf,
+\RU{Так мы направим путь исполнения кода (code flow) во второй}\EN{Thus we can point the code flow
+to the second} \printf,
 \RU{и он всегда будет срабатывать и выводить на консоль}\EN{and it always print} ``a==b''.
 
 \RU{Для этого нужно пропатчить три инструкции (или байта)}\EN{Three instructions (or bytes) should be patched}:
 
 \begin{itemize}
 \item \RU{Первый переход теперь будет}\EN{The first jump will now be} \JMP, \RU{но смещение перехода 
-(\gls{jump offset}) останется прежним}\EN{but \gls{jump offset} will be same}.
+(\gls{jump offset}) останется прежним}\EN{but the \gls{jump offset} will be same}.
 
 \item \RU{Второй переход может быть и будет срабатывать иногда, но в любом случае он будет совершать переход
 только на следующую инструкцию, потому что мы выставляем смещение перехода (\gls{jump offset}) в 0}
 \EN{The second jump may be triggered sometimes, but in any case it will jump to the next
-instruction, because, we set \gls{jump offset} to 0}.
+instruction, because, we set the \gls{jump offset} to 0}.
 \RU{В этих инструкциях, смещение перехода просто прибавляется к адресу следующей инструкции}
-\EN{\Gls{jump offset} is just to be added to the address of the next instruction in these instructions}.
-\RU{И когда смещение 0, то тогда и переход будет на следующую инструкцию}\EN{So if offset is 0,
-jump will be done to the next instruction}.
+\EN{\Gls{jump offset} is just gets added to the address for the next instruction in these instructions}.
+\RU{И когда смещение 0, то тогда и переход будет на следующую инструкцию}\EN{So if the offset is 0,
+the jump will be to the next instruction}.
 
 \item \RU{Третий переход конвертируем в \JMP точно так же, как и первый, он будет срабатывать всегда}
-\EN{The third jump we convert into \JMP just as the first one, so it will be triggered always}.
+\EN{The third jump we convert into \JMP just as the first one, so it will always trigger}.
 \end{itemize}
 
 \clearpage
@@ -124,28 +124,28 @@ jump will be done to the next instruction}.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/07_jcc/simple/hiew_unsigned2.png}
-\caption{Hiew: \RU{модифицируем функцию}\EN{let's modify} \TT{f\_unsigned()}\EN{ function}}
+\caption{Hiew: \RU{модифицируем функцию}\EN{let's modify the} \TT{f\_unsigned()}\EN{ function}}
 \label{fig:jcc_hiew_2}
 \end{figure}
 
 \RU{Если забыть про какой-то из переходов, то тогда будет срабатывать несколько вызовов \printf, 
 а нам ведь нужно чтобы исполнялся только один.}
-\EN{If we could forget about any of these jumps, then several
-\printf calls may execute, but this is not behaviour we're need.}
+\EN{If we forget about any of these jumps, then several
+\printf calls may execute, but we want just one.}
 
 \subsubsection{\NonOptimizing GCC}
 
 \index{puts() \RU{вместо}\EN{instead of} printf()}
 \NonOptimizing GCC 4.4.1 \RU{производит почти такой же код, за исключением}
-\EN{produce almost the same code, but with} \puts~(\ref{puts}) \RU{вместо}\EN{instead of} \printf.
+\EN{produces almost the same code, but with} \puts~(\ref{puts}) \RU{вместо}\EN{instead of} \printf.
 
 \subsubsection{\Optimizing GCC}
 
 \RU{Наблюдательный читатель может спросить, зачем исполнять \CMP так много раз,
-если флаги всегда одни и те же}\EN{Observant reader may ask, why to execute \CMP several times, 
-if flags are same after each execution}?
+если флаги всегда одни и те же}\EN{An observant reader may ask, why execute \CMP several times, 
+if the flags are same after each execution}?
 \RU{По видимому, оптимизирующий MSVC не может этого делать, но GCC 4.8.1 делает больше оптимизаций:}
-\EN{Perhaps, optimizing MSVC can't do this, but optimizing GCC 4.8.1 can optimize more deeply:}
+\EN{Perhaps optimizing MSVC can't do this, but optimizing GCC 4.8.1 can go deeper:}
 
 \lstinputlisting[caption=GCC 4.8.1 f\_signed()]{patterns/07_jcc/simple/GCC_O3_signed.asm}
 
@@ -153,16 +153,16 @@ if flags are same after each execution}?
 \RU{Мы здесь также видим}\EN{We also see} \TT{JMP puts} \RU{вместо}\EN{here instead of} \TT{CALL puts / RETN}.
 \RU{Этот прием будет описан немного позже}\EN{This kind of trick will be described later}: \ref{JMP_instead_of_RET}.
 
-\RU{Нужно сказать, что x86-код такого типа редок}\EN{Needless to say, that this type of x86 code 
+\RU{Нужно сказать, что x86-код такого типа редок}\EN{This type of x86 code 
 is somewhat rare}.
 MSVC 2012, \RU{как видно, не может генерировать подобное}\EN{as it seems, can't generate such code}.
 \RU{С другой стороны, программисты на ассемблере прекрасно осведомлены о том, что инструкции}\EN{On the other hand, 
 assembly language programmers are fully aware of the fact that} \TT{Jcc} \RU{можно располагать последовательно}
 \EN{instructions can be stacked}.
 \RU{Так что если вы видите это где-то, имеется немалая вероятность, что этот фрагмент кода был написан вручную}
-\EN{So if you see it somewhere, it may be a good probability that the code is hand-written}.
+\EN{So if you see it somewhere, there is a good probability that the code was hand-written}.
 
-\RU{Ф-ция }\TT{f\_unsigned()} \RU{получилась не настолько эстетически короткой}\EN{function is not that 
+\EN{The}\RU{Ф-ция} \TT{f\_unsigned()} \RU{получилась не настолько эстетически короткой}\EN{function is not that 
 \ae{}sthetically short}:
 
 \lstinputlisting[caption=GCC 4.8.1 f\_unsigned()]{patterns/07_jcc/simple/GCC_O3_unsigned.asm.\LANG}
@@ -170,5 +170,5 @@ assembly language programmers are fully aware of the fact that} \TT{Jcc} \RU{м�
 \RU{Но тем не менее, здесь 2 инструкции \TT{CMP} вместо трех.}
 \EN{But nevertheless, there are two \TT{CMP} instructions instead of three.}
 \RU{Так что, алгоритмы оптимизации GCC 4.8.1, наверное, еще пока не идеальны.}
-\EN{So, optimization algorithms of GCC 4.8.1 are probably not always perfect yet.} 
+\EN{So optimization algorithms of GCC 4.8.1 are probably not perfect yet.} 
 
