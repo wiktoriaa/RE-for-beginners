@@ -9,7 +9,7 @@
 \index{x86!\Instructions!MOVSX}
 \index{x86!\Instructions!TEST}
 \RU{Здесь две новых инструкции: \MOVSX и \TEST.}
-\EN{Two new instructions here: \MOVSX and \TEST.}
+\EN{We get two new instructions here: \MOVSX and \TEST.}
 
 \label{MOVSX}
 \RU{О первой: \MOVSX предназначен для того чтобы взять байт из какого-либо места в памяти и положить его, 
@@ -17,12 +17,12 @@
 Но регистр \EDX ~--- 32-битный. \MOVSX означает \IT{MOV with Sign-Extend}. 
 Оставшиеся биты с 8-го по 31-й \MOVSX сделает единицей, если исходный байт в памяти имеет знак \IT{минус}, 
 или заполнит нулями, если знак \IT{плюс}.}
-\EN{About first: \MOVSX is intended to take byte from a point in memory and store value in a 32-bit register. 
-\MOVSX meaning \IT{MOV with Sign-Extend}. 
-Rest bits starting at 8th till 31th \MOVSX will set to $1$ if source byte in memory has \IT{minus} 
-sign or to 0 if \IT{plus}.}
+\EN{The first one ~--- \MOVSX ~---  takes a byte from an address in memory and stores the value in a 32-bit register. 
+\MOVSX means \IT{MOV with Sign-Extend}. 
+\MOVSX will set the rest of the bits, from the 8th to the 31th, to $1$ if the source byte is \IT{negative} 
+or to 0 if is \IT{positive}.}
 
-\RU{И вот зачем все это.}\EN{And here is why all this.}
+\RU{И вот зачем все это.}\EN{And here is why.}
 
 \RU{По умолчанию, в MSVC и GCC, тип \Tchar ~--- знаковый. Если у нас есть две переменные, одна \Tchar, а другая \Tint 
 (\Tint тоже знаковый), и если в первой переменной лежит $-2$ (что кодируется как \TT{0xFE}) и мы просто 
@@ -32,29 +32,29 @@ $-2$ в переменной \Tint кодируется как \TT{0xFFFFFFFE}. 
 \Tchar переложить 
 в знаковый \Tint с сохранением всего, нужно узнать его знак, и затем заполнить остальные биты. 
 Это делает \MOVSX.}
-\EN{By default, \Tchar type as signed in MSVC and GCC. If we have two values, one is \Tchar 
-and another is \Tint, (\Tint is signed too), and if first value contain $-2$ (it is coded as \TT{0xFE}) 
-and we just copying this byte into \Tint container, there will be \TT{0x000000FE}, and this, 
+\EN{By default, the \Tchar type is signed in MSVC and GCC. If we have two values of which one is \Tchar 
+and the other is \Tint, (\Tint is signed too), and if the first value contain $-2$ (coded as \TT{0xFE}) 
+and we just copy this byte into the \Tint container, it will result in \TT{0x000000FE}, and this 
 from the point of signed \Tint view is $254$, but not $-2$. In signed int, $-2$ is coded as \TT{0xFFFFFFFE}. 
-So if we need to transfer \TT{0xFE} value from variable of \Tchar type to \Tint, 
+So if we need to transfer \TT{0xFE} from a variable of \Tchar type to \Tint, 
 we need to identify its sign and extend it. That is what \MOVSX does.}
 
 \RU{См. также об этом раздел}
-\EN{Also read about it in} ``\IT{\SignedNumbersSectionName}''\EN{ section}~(\ref{sec:signednumbers}).
+\EN{You can also read about it in} ``\IT{\SignedNumbersSectionName}''\EN{ section}~(\ref{sec:signednumbers}).
 
 \RU{Хотя, конкретно здесь, компилятору вряд ли была особая надобность хранить значение \Tchar в регистре \EDX 
 а не его восьмибитной части, скажем, \DL. Но получилось, как получилось: должно быть, 
 \gls{register allocator} компилятора сработал именно так.}
-\EN{I'm not sure if the compiler needs to store \Tchar variable in the \EDX, it could take 8-bit register part 
-(let's say \DL). Apparently, compiler's \gls{register allocator} works like that.}
+\EN{I'm not sure if the compiler needs to store a \Tchar variable in \EDX, it could just take a 8-bit register part 
+(for example \DL). Apparently, the compiler's \gls{register allocator} works like that.}
 
 \index{ARM!\Instructions!TEST}
 \RU{Позже выполняется \TT{TEST EDX, EDX}. 
 Об инструкции \TEST читайте в разделе о битовых полях~(\ref{sec:bitfields}).
 Но конкретно здесь, эта инструкция просто проверяет состояние регистра \EDX на $0$.}
 \EN{Then we see \TT{TEST EDX, EDX}. 
-About \TEST instruction, read more in section about bit fields~(\ref{sec:bitfields}).
-But here, this instruction just checking value in the \EDX, if it is equals to $0$.}
+You can read more about the \TEST instruction in the section about bit fields~(\ref{sec:bitfields}).
+Here this instruction just checks if the value in \EDX equals to $0$.}
 
 \subsubsection{\NonOptimizing GCC}
 
@@ -69,10 +69,10 @@ But here, this instruction just checking value in the \EDX, if it is equals to $
 в регистр и остальные биты выставляет в $0$.
 Фактически, преимущество этой инструкции только в том, что она позволяет 
 заменить две инструкции сразу: \TT{xor eax, eax / mov al, [...]}.}
-\EN{The result almost the same as MSVC did, but here we see \MOVZX instead of \MOVSX. 
+\EN{The result is almost the same as in MSVC, but here we see \MOVZX instead of \MOVSX. 
 \MOVZX means \IT{MOV with Zero-Extend}. 
-This instruction copies 8-bit or 16-bit value into 32-bit register and sets the rest bits to $0$. 
-In fact, this instruction is convenient only since it enable us to replace two instructions at once: 
+This instruction copies a 8-bit or 16-bit value into a 32-bit register and sets the rest of the bits to $0$. 
+In fact, this instruction is convenient only because it enable us to replace this instruction pair: 
 \TT{xor eax, eax / mov al, [...]}.}
 
 \RU{С другой стороны, нам очевидно, что здесь можно было бы написать вот так: 
@@ -80,11 +80,11 @@ In fact, this instruction is convenient only since it enable us to replace two i
 Но, будем считать, что это погрешность компилятора ~--- 
 он не смог сделать код более экономным или более понятным. 
 Строго говоря, компилятор вообще не нацелен на то чтобы генерировать понятный (для человека) код.}
-\EN{On the other hand, it is obvious to us the compiler could produce the code: 
+\EN{On the other hand, it is obvious that the compiler could produce this code: 
 \TT{mov al, byte ptr [eax] / test al, al}~---it is almost the same, however, 
-the highest \EAX register bits will contain random noise. 
+the highest bits of the \EAX register will contain random noise. 
 But let's think it is compiler's drawback~---it cannot produce more understandable code. 
-Strictly speaking, compiler is not obliged to emit understandable (to humans) code at all.}
+Strictly speaking, the compiler is not obliged to emit understandable (to humans) code at all.}
 
 \index{x86!\Instructions!SETcc}
 \RU{Следующая новая инструкция для нас ~--- \SETNZ. В данном случае, если в \AL был не ноль, 
@@ -93,30 +93,30 @@ Strictly speaking, compiler is not obliged to emit understandable (to humans) co
 Смысл этой процедуры в том, что, если говорить человеческим языком, 
 \IT{если AL не ноль, то выполнить переход на} \TT{loc\_80483F0}.
 Компилятор выдал немного избыточный код, но не будем забывать, что оптимизация выключена.}
-\EN{Next new instruction for us is \SETNZ. Here, if \AL contain not zero, \TT{test al, al} 
-will set $0$ to the \ZF flag, but \SETNZ, if \TT{ZF==0} (\IT{NZ} means \IT{not zero}) will set $1$ to the \AL.
+\EN{The next new instruction for us is \SETNZ. Here, if \AL doesn't contain zero, \TT{test al, al} 
+will set the \ZF flag to $0$, but \SETNZ, if \TT{ZF==0} (\IT{NZ} means \IT{not zero}) will set \AL to $1$.
 Speaking in natural language, \IT{if \AL is not zero, let's jump to loc\_80483F0}. 
-Compiler emitted slightly redundant code, but let's not forget the optimization is turned off.}
+The compiler emits some redundant code, but let's not forget that the optimizations are turned off.}
 
 \subsubsection{\Optimizing MSVC}
 \label{strlen_MSVC_Ox}
 
 \RU{Теперь скомпилируем все то же самое в MSVC 2012, но с включенной оптимизацией (\Ox)}
-\EN{Now let's compile all this in MSVC 2012, with optimization turned on (\Ox)}:
+\EN{Now let's compile all this in MSVC 2012, with optimizations turned on (\Ox)}:
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0]{patterns/10_strings/1_strlen/10_2.asm.\LANG}
 
 \RU{Здесь все попроще стало. Но следует отметить, что компилятор обычно может так хорошо использовать регистры 
 только на не очень больших функциях с не очень большим количеством локальных переменных.}
 \EN{Now it is all simpler.
-But it is needless to say the compiler could use registers such efficiently 
-only in small functions with small number of local variables.}
+Needless to say, the compiler could use registers with such efficiency
+only in small functions with a few local variables.}
 
 \index{x86!\Instructions!INC}
 \index{x86!\Instructions!DEC}
 \INC/\DEC\EMDASH\RU{это инструкции \glslink{increment}{инкремента}-\glslink{decrement}{декремента}, попросту говоря: 
 увеличить на единицу или уменьшить.}
-\EN{are \gls{increment}/\gls{decrement} instruction, in other words: add 1 to variable or subtract.}
+\EN{are \gls{increment}/\gls{decrement} instructions, in other words: add or substract $1$ to/from a variable.}
 
 \ifdefined\IncludeOlly
 \input{patterns/10_strings/1_strlen/olly.tex}
@@ -125,21 +125,21 @@ only in small functions with small number of local variables.}
 \subsubsection{\Optimizing GCC}
 
 \RU{Попробуем GCC 4.4.1 с включенной оптимизацией (ключ \Othree:}
-\EN{Let's check GCC 4.4.1 with optimization turned on (\Othree key):}
+\EN{Let's check GCC 4.4.1 with optimizations turned on (\Othree key):}
 
 \lstinputlisting{patterns/10_strings/1_strlen/10_3_gcc_O3.asm}
 
 \RU{Здесь GCC не очень отстает от MSVC за исключением наличия \MOVZX.} 
-\EN{Here GCC is almost the same as MSVC, except of \MOVZX presence.}
+\EN{Here GCC is almost the same as MSVC, except for the presence of \MOVZX.}
 
 \RU{Впрочем, \MOVZX здесь явно можно заменить на}
-\EN{However, \MOVZX could be replaced here to} \TT{mov dl, byte ptr [eax]}.
+\EN{However, here \MOVZX could be replaced with} \TT{mov dl, byte ptr [eax]}.
 
 \RU{Но, возможно, компилятору GCC просто проще помнить, что у него под переменную типа \Tchar отведен целый 
 32-битный регистр \EDX и быть уверенным в том, что старшие биты регистра не будут замусорены.}
-\EN{Probably, it is simpler for GCC compiler's code generator to \IT{remember} 
+\EN{Probably it is simpler for GCC's code generator to \IT{remember} 
 the whole 32-bit \EDX register 
-is allocated for \Tchar variable and it can be sure the highest bits will not contain any noise 
+is allocated for a \Tchar variable and it then can be sure that the highest bits will not contain any noise 
 at any point.}
 
 \label{strlen_NOT_ADD}
@@ -150,15 +150,15 @@ at any point.}
 \NOT и следующая за ней инструкция \ADD вычисляют разницу указателей и отнимают от результата единицу. 
 Только происходит это слегка по-другому. Сначала \ECX, где хранится указатель на \IT{str}, 
 инвертируется и от него отнимается единица.}
-\EN{After, we also see new instruction \NOT. This instruction inverts all bits in operand. 
-It can be said, it is synonym to the \TT{XOR ECX, 0ffffffffh} instruction. 
-\NOT and following \ADD calculating pointer difference and subtracting 1. 
-At the beginning \ECX, where pointer to \IT{str} is stored, inverted and 1 is subtracted from it.}
+\EN{After that we also see a new instruction ~--- \NOT. This instruction inverts all bits in the operand. 
+You can say that it is a synonym to the \TT{XOR ECX, 0ffffffffh} instruction. 
+\NOT and the following \ADD calculate the pointer difference and subtract 1, just in a different way. 
+At the start \ECX, where the pointer to \IT{str} is stored, gets inverted and 1 is subtracted from it.}
 
 \RU{См. также раздел:}\EN{See also:} ``\SignedNumbersSectionName''~(\ref{sec:signednumbers}).
 
 \RU{Иными словами, в конце функции, после цикла, происходит примерно следующее:} 
-\EN{In other words, at the end of function, just after loop body, these operations are executed:}
+\EN{In other words, at the end of the function just after loop body, these operations are executed:}
 
 \begin{lstlisting}
 ecx=str;
@@ -180,5 +180,5 @@ return eax
 
 \RU{Но почему GCC решил, что так будет лучше? Снова не берусь сказать. Но я не сомневаюсь, 
 что эти оба варианта работают примерно равноценно в плане эффективности и скорости.}
-\EN{Why GCC decided it would be better? I cannot be sure. 
-But I'm sure the both variants are effectively equivalent in efficiency sense.}
+\EN{Why did GCC decide it would be better? I cannot be sure. 
+But I'm sure the both variants are equivalent in efficiency.}
