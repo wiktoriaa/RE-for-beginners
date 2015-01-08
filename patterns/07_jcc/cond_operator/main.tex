@@ -1,13 +1,13 @@
 \section{\RU{Условный оператор}\EN{Conditional operator}}
 \label{chap:cond}
 
-\RU{Условный оператор (conditional operator) в}\EN{Conditional operator in} \CCpp \RU{это}\EN{is}:
+\RU{Условный оператор (conditional operator) в}\EN{The conditional operator in} \CCpp \RU{это}\EN{is}:
 
 \begin{lstlisting}
 expression ? expression : expression
 \end{lstlisting}
 
-\RU{И вот пример}\EN{Now here is an example}:
+\RU{И вот пример}\EN{Here is an example}:
 
 \lstinputlisting{patterns/07_jcc/cond_operator/cond.c}
 
@@ -15,83 +15,83 @@ expression ? expression : expression
 
 \RU{Старые и неоптимизирующие компиляторы генерируют код так, как если бы выражение \TT{if/else} было использовано
 вместо:}
-\EN{Old and non-optimizing compilers generate the code just as if \TT{if/else} statement was used instead:}
+\EN{Old and non-optimizing compilers generate the code just as if an \TT{if/else} statement was used:}
 
 \lstinputlisting[caption=\NonOptimizing MSVC 2008]{patterns/07_jcc/cond_operator/MSVC2008.asm.\LANG}
 
 \lstinputlisting[caption=\Optimizing MSVC 2008]{patterns/07_jcc/cond_operator/MSVC2008_Ox.asm.\LANG}
 
-\RU{Более новые компиляторы могут быть более краткими}\EN{Latest compilers may be more concise}:
+\RU{Более новые компиляторы могут быть более краткими}\EN{Newer compilers are more concise}:
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/07_jcc/cond_operator/MSVC2012_Ox_x64.asm.\LANG}
 
 \index{x86!\Instructions!CMOVcc}
-\Optimizing GCC 4.8 \ForENRU x86 \RU{также использует инструкцию}\EN{also use} \TT{CMOVcc}\RU{, тогда как
-неоптимизирующий GCC 4.8 использует условные переходы}\EN{ instruction, while non-optimizing GCC 4.8 use 
-conditional jumps}.
+\Optimizing GCC 4.8 \ForENRU x86 \RU{также использует инструкцию}\EN{also uses the} \TT{CMOVcc}\RU{, тогда как
+неоптимизирующий GCC 4.8 использует условные переходы}\EN{ instruction, while the non-optimizing GCC 4.8 uses 
+a conditional jumps}.
 
 \ifdefined\IncludeARM
 \subsection{ARM}
 
 \index{x86!\Instructions!ADRcc}
 \Optimizing Keil \ForENRU \RU{режима ARM также использует инструкцию \TT{ADRcc}, срабатывающую при некотором
-условии}\EN{ARM mode also use conditional instructions \TT{ADRcc}}:
+условии}\EN{ARM mode also uses the conditional instructions \TT{ADRcc}}:
 
 \lstinputlisting[label=cond_Keil_ARM_O3,caption=\OptimizingKeilVI (\ARMMode)]{patterns/07_jcc/cond_operator/Keil_ARM_O3.s.\LANG}
 
 \RU{Без внешнего вмешательства, инструкции \TT{ADREQ} и \TT{ADRNE} никогда не исполнятся одновременно.}
-\EN{Without manual intervention, both \TT{ADREQ} and \TT{ADRNE} instructions cannot be executed.}
+\EN{Without manual intervention, the two instructions \TT{ADREQ} and \TT{ADRNE} cannot be executed in the same run.}
 
 \Optimizing Keil \ForENRU \RU{режима Thumb вынужден использовать инструкции условного перехода, потому
-что тут нет инструкции загрузки значения поддерживающую флаги условия}\EN{Thumb mode ought to use 
-conditional jump instructions, since there are no load instruction
-supporting conditional flags}:
+что тут нет инструкции загрузки значения поддерживающую флаги условия}\EN{Thumb mode needs to use 
+conditional jump instructions, since there are no load instructions
+that support conditional flags}:
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/07_jcc/cond_operator/Keil_thumb_O3.s.\LANG}
 
 \subsection{ARM64}
 
-\Optimizing GCC (Linaro) 4.9 \ForENRU ARM64 \RU{также использует условные переходы}\EN{also use conditional jumps}:
+\Optimizing GCC (Linaro) 4.9 \ForENRU ARM64 \RU{также использует условные переходы}\EN{also uses conditional jumps}:
 
 \lstinputlisting[label=cond_ARM64,caption=\Optimizing GCC (Linaro) 4.9]{patterns/07_jcc/cond_operator/ARM64_GCC_O3.s.\LANG}
 
 \RU{Это потому что в ARM64 нет простой инструкции загрузки с флагами условия, как \TT{ADRcc} в 32-битном 
 режиме ARM или \TT{CMOVcc} в x86}
-\EN{That's because ARM64 hasn't simple load instruction with conditional flags, like \TT{ADRcc} in 32-bit 
+\EN{That's because ARM64 doesn't have a simple load instruction with conditional flags, like \TT{ADRcc} in 32-bit 
 ARM mode or CMOVcc in x86}
 \cite[p390, C5.5]{ARM64ref}.
 \index{ARM!\Instructions!CSEL}
 \RU{Но с другой стороны, там есть инструкция \TT{CSEL} (``Conditional SELect''), но GCC 4.9 наверное, пока не так
 хорош, чтобы генерировать её в таком фрагменте кода.}
-\EN{It has, however, ``Conditional SELect'' instruction (\TT{CSEL}), but GCC 4.9 is probably not that good to 
-generate it in such piece of code.}
+\EN{It has, however, ``Conditional SELect'' instruction (\TT{CSEL}), but GCC 4.9 doesn't seem to be smart enough to 
+use it in such piece of code.}
 \fi
 
 \ifdefined\IncludeMIPS
 \subsection{MIPS}
 
-\RU{А GCC 4.4.5 для MIPS не так хорош, к сожалению}\EN{Unfortunately, GCC 4.4.5 for MIPS is not that good}:
+\RU{А GCC 4.4.5 для MIPS не так хорош, к сожалению}\EN{Unfortunately, GCC 4.4.5 for MIPS is not very smart, either}:
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/07_jcc/cond_operator/MIPS_O3.s.\LANG}
 
 \fi
 
-\subsection{\RU{Перепишем, используя обычный \TT{if/else}}\EN{Let's rewrite it in \TT{if/else} way}}
+\subsection{\RU{Перепишем, используя обычный \TT{if/else}}\EN{Let's rewrite it in an \TT{if/else} way}}
 
 \lstinputlisting{patterns/07_jcc/cond_operator/cond2.c}
 
 \index{x86!\Instructions!CMOVcc}
 \RU{Интересно, оптимизирующий GCC 4.8 для x86 также может генерировать \TT{CMOVcc} в этом случае:}
-\EN{Interestingly, optimizing GCC 4.8 for x86 also was able to generate \TT{CMOVcc} in this case:}
+\EN{Interestingly, optimizing GCC 4.8 for x86 was also able to use \TT{CMOVcc} in this case:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.8]{patterns/07_jcc/cond_operator/cond2_GCC_O3.s.\LANG}
 
 \ifdefined\IncludeARM
-\Optimizing Keil \InENRU \RU{режиме ARM генерирует код идентичный этому:}\EN{ARM mode generates a 
+\Optimizing Keil \InENRU \RU{режиме ARM генерирует код идентичный этому:}\EN{ARM mode generates 
 code identical to} \lstref{cond_Keil_ARM_O3}.
 \fi
 
-\RU{Но оптимизирующий}\EN{But optimizing} MSVC 2012 \RU{пока не так хорош}\EN{is not that good (yet)}.
+\RU{Но оптимизирующий}\EN{But the optimizing} MSVC 2012 \RU{пока не так хорош}\EN{is not that good (yet)}.
 
 \subsection{\Conclusion{}}
 
@@ -101,7 +101,7 @@ code identical to} \lstref{cond_Keil_ARM_O3}.
 \ifdefined\IncludeExercises
 \subsection{\Exercise}
 
-\RU{Попробуйте переписать код в}\EN{Try to rewrite the code in} \lstref{cond_ARM64} 
+\RU{Попробуйте переписать код в}\EN{Try rewriting the code in} \lstref{cond_ARM64} 
 \RU{убрав все инструкции условного перехода, и используйте инструкцию \TT{CSEL}}\EN{by removing all 
-conditional jump instructions, and use \TT{CSEL} instruction}.
+conditional jump instructions and using the \TT{CSEL} instruction}.
 \fi
