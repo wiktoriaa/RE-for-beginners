@@ -1,12 +1,12 @@
 \subsubsection{\NonOptimizing MSVC}
 
-\RU{Вот что выдал MSVC 2010}\EN{MSVC 2010 generated}:
+\RU{Вот что выдал MSVC 2010}\EN{MSVC 2010 generates the following}:
 
 \lstinputlisting[caption=\NonOptimizing MSVC 2010]{patterns/12_FPU/3_comparison/x86/MSVC/MSVC.asm.\LANG}
 
 \index{x86!\Instructions!FLD}
 \RU{Итак, \FLD загружает \TT{\_b} в регистр \ST{0}.}
-\EN{So, \FLD loading \TT{\_b} into the \ST{0} register.}
+\EN{So, \FLD loads \TT{\_b} into \ST{0}.}
 
 \label{Czero_etc}
 \newcommand{\Czero}{\TT{C0}\xspace}
@@ -17,15 +17,15 @@
 \index{x86!\Instructions!FCOMP}
 \RU{\FCOMP сравнивает содержимое \ST{0} с тем что лежит в \TT{\_a} и выставляет биты \CThreeBits в 
 регистре статуса FPU. Это 16-битный регистр отражающий текущее состояние FPU.}
-\EN{\FCOMP compares the value in the \ST{0} register with what is in \TT{\_a} value 
-and set \CThreeBits bits in FPU 
-status word register. 
-This is 16-bit register reflecting current state of FPU.}
+\EN{\FCOMP compares the value in \ST{0} with what is in \TT{\_a} 
+and sets \CThreeBits bits in FPU 
+status word register, accordingly. 
+This is a 16-bit register that reflects the current state of the FPU.}
 
 \RU{После этого, инструкция \FCOMP также выдергивает одно значение из стека. 
 Это отличает её от \FCOM, которая просто сравнивает значения, оставляя стек в таком же состоянии.}
-\EN{After bits are set, the \FCOMP instruction also popping one variable from stack. 
-This is what distinguish it from \FCOM, which is just comparing values, leaving the stack at the same state.}
+\EN{After the bits are set, the \FCOMP instruction also pops one variable from the stack. 
+This is what distinguishes it from \FCOM, which is just compares values, leaving the stack in the same state.}
 
 \RU{К сожалению, у процессоров до Intel P6 
 \footnote{Intel P6 это Pentium Pro, Pentium II, и далее} нет инструкций условного перехода,
@@ -33,33 +33,33 @@ This is what distinguish it from \FCOM, which is just comparing values, leaving 
 Возможно, так сложилось исторически (вспомните о том, что FPU когда-то был вообще отдельным чипом).\\
 А у Intel P6 появились инструкции \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP ~--- делающие тоже самое, 
 только напрямую модифицирующие флаги \ZF/\PF/\CF.}
-\EN{Unfortunately, CPU before Intel P6
-\footnote{Intel P6 is Pentium Pro, Pentium II, etc} has not any conditional 
-jumps instructions, which are checking \CThreeBits bits. 
+\EN{Unfortunately, CPUs before Intel P6
+\footnote{Intel P6 is Pentium Pro, Pentium II, etc} don't have any conditional 
+jumps instructions which check the \CThreeBits bits. 
 Probably, it is a matter of history (remember: FPU was separate chip in past).\\
-Modern CPU starting at Intel P6 has \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP 
-instructions~---which does the same, but modifies CPU flags \ZF/\PF/\CF.}
+Modern CPU starting at Intel P6 have \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP 
+instructions~---which do the same, but modify the \ZF/\PF/\CF CPU flags.}
 
 \index{x86!\Instructions!FNSTSW}
 \RU{Так что \FNSTSW копирует содержимое регистра статуса в \AX. 
 Биты \CThreeBits занимают позиции, 
 соответственно, 14, 10, 8, в этих позициях они и остаются в регистре \AX, 
 и все они расположены в старшей части регистра ~--- \AH.}
-\EN{So the \FNSTSW instruction copies FPU status word register to the \AX. 
+\EN{The \FNSTSW instruction copies FPU the status word register to \AX. 
 Bits \CThreeBits are placed at positions 14/10/8, 
-they will be at the same positions in the \AX register and all they are placed in high part of the \AX{}~---\AH{}.}
+they will be at the same positions in the \AX register and all they are placed in the high part of \AX{}~---\AH{}.}
 
 \begin{itemize}
 \item
 \RU{Если $b>a$ в нашем случае, то биты \CThreeBits должны быть выставлены так:}
 \EN{If $b>a$ in our example, then \CThreeBits bits will be set as following:} 0, 0, 0.
 \item
-\RU{Если $a>b$, то биты будут выставлены:}\EN{If $a>b$, then bits will be set:} 0, 0, 1.
+\RU{Если $a>b$, то биты будут выставлены:}\EN{If $a>b$, then the set bits will be:} 0, 0, 1.
 \item
-\RU{Если $a=b$, то биты будут выставлены так:}\EN{If $a=b$, then bits will be set:} 1, 0, 0.
+\RU{Если $a=b$, то биты будут выставлены так:}\EN{If $a=b$, then the set bits will be:} 1, 0, 0.
 \item
-\RU{Если результат не определен (в случае ошибки), то биты будут выставлены так}\EN{If result 
-is unordered (in case of error), then bits will be set}: 1, 1, 1.
+\RU{Если результат не определен (в случае ошибки), то биты будут выставлены так}\EN{If the result 
+is unordered (in case of error), then the set bits will be}: 1, 1, 1.
 \end{itemize}
 % TODO: table here?
 
@@ -75,7 +75,7 @@ is unordered (in case of error), then bits will be set}: 1, 1, 1.
 
 \RU{После исполнения \TT{test ah, 5}\footnote{5=1001b}, % FIXME: subscript here!
 будут учтены только биты \Czero и \Ctwo (на позициях 0 и 2), остальные проигнорированы.}
-\EN{After \TT{test ah, 5} execution\footnote{5=1001b}, 
+\EN{After the execution of \TT{test ah, 5}\footnote{5=1001b}, 
 only \Czero and \Ctwo bits (on 0 and 2 position) will be considered, all other bits will be
 ignored.}
 
@@ -83,12 +83,12 @@ ignored.}
 \index{x86!\Registers!\Flags!\RU{Флаг четности}\EN{Parity flag}}
 \RU{Теперь немного о \IT{parity flag}\footnote{флаг четности}. 
 Еще один замечательный рудимент эпохи.}
-\EN{Now let's talk about \IT{parity flag}. Another notable epoch rudiment.}
+\EN{Now let's talk about the \IT{parity flag}, another notable historical rudiment.}
 
 \RU{Этот флаг выставляется в $1$ если количество единиц в последнем результате ~--- четно. 
 И в $0$ если ~--- нечетно.}
-\EN{This flag is to be set to $1$ if number of ones in last calculation result is even. 
-And to $0$ if odd.}
+\EN{This flag is set to $1$ if the number of ones in the result of the last calculation is even, 
+and to $0$ if it is odd.}
 
 \RU{Заглянем в}\EN{Let's look into} Wikipedia
 \footnote{\href{http://go.yurichev.com/17131}{wikipedia}}:
@@ -103,7 +103,7 @@ with the FUCOM instructions.
 \end{quotation}
 \end{framed}
 
-\EN{As noted in Wikipedia, the parity flag used sometimes in FPU code and let's see how.}
+\EN{As noted in Wikipedia, the parity flag used sometimes in FPU code, let's see how.}
 \RU{Как упоминается в Wikipedia, флаг четности иногда используется в FPU-коде и сейчас увидим, как.}
 
 \index{x86!\Instructions!JP}
@@ -113,26 +113,26 @@ with the FUCOM instructions.
 Если мы вернемся чуть назад и посмотрим значения \CThreeBits 
 для разных вариантов, то увидим, что условный переход \JP сработает в двух случаях: если $b>a$ или если $a=b$ 
 (ведь бит \Cthree перестал учитываться после исполнения \TT{test ah, 5}).}
-\EN{The \PF flag will be set to 1 if both \Czero and \Ctwo are set to $0$ or both are $1$.
-And then following \JP (\IT{jump if PF==1}) will be triggered. 
-If we recall values of the \CThreeBits for various cases,
-we will see the conditional jump 
+\EN{The \PF flag will be set to 1 if both \Czero and \Ctwo are set to $0$ or both are $1$, in which case
+the subsequent \JP (\IT{jump if PF==1}) will trigger. 
+If we recall the values of \CThreeBits for various cases,
+we can see that the conditional jump 
 \JP will be triggered in two cases: if $b>a$ or $a=b$ 
-(\Cthree bit is not considering here since it was cleared while execution of 
+(\Cthree bit is not considered here, since it was cleared by 
 the \TT{test ah, 5} instruction).}
 
 \RU{Дальше все просто. Если условный переход сработал, то \FLD загрузит значение \TT{\_b} в \ST{0}, 
 а если не сработал, то загрузится \TT{\_a} и произойдет выход из функции.}
-\EN{It is all simple thereafter. If conditional jump was triggered, \FLD will load the \TT{\_b} value 
-to the \ST{0} register, and if it is not triggered, the value of the \TT{\_a} variable will be loaded.}
+\EN{It is all simple after that. If the conditional jump was triggered, \FLD will load the value of \TT{\_b} 
+in \ST{0}, and if it was not triggered, the value of \TT{\_a} will be loaded there.}
 
-\myparagraph{\RU{А как же проверка флага \Ctwo}\EN{What about \Ctwo flag checking}?}
+\myparagraph{\RU{А как же проверка флага \Ctwo}\EN{And what about checking \Ctwo}?}
 
 \RU{Флаг \Ctwo включается в случае ошибки (\gls{NaN}, и т.д.), но наш код его не проверяет.}
-\EN{\Ctwo flag is set in case of error (\gls{NaN}, etc), but our code doesn't check it.}
+\EN{The \Ctwo flag is set in case of error (\gls{NaN}, etc), but our code doesn't check it.}
 \RU{Если программисту нужно знать, не произошла ли FPU-ошибка, он должен позаботиться об этом
 дополнительно, добавив соответствующие проверки.}
-\EN{If programmer is aware about FPU errors, he/she must add additional checks.}
+\EN{If the programmer cares about FPU errors, he/she must add additional checks.}
 
 \ifdefined\IncludeOlly
 \input{patterns/12_FPU/3_comparison/x86/MSVC/olly.tex}
