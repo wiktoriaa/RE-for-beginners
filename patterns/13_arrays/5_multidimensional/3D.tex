@@ -1,9 +1,9 @@
 \subsection{\RU{Пример с трехмерным массивом}\EN{Three-dimensional array example}}
 
-\RU{То же самое и для многомерных массивов.}\EN{Same thing about multidimensional arrays.}
+\RU{То же самое и для многомерных массивов.}\EN{It's thing in multidimensional arrays.}
 
 \RU{На этот раз будем работать с массивом типа \Tint: каждый элемент требует 4 байта в памяти.}
-\EN{Now we will work with array of \Tint type: each element require 4 bytes in memory.}
+\EN{Now we will work with an array of type \Tint: each element requires 4 bytes in memory.}
 
 \RU{Попробуем}\EN{Let's see}:
 
@@ -11,7 +11,7 @@
 
 \subsubsection{x86}
 
-\RU{В итоге}\EN{We got} (MSVC 2010):
+\RU{В итоге}\EN{We get} (MSVC 2010):
 
 \lstinputlisting[caption=MSVC 2010]{patterns/13_arrays/5_multidimensional/multi_msvc.asm.\LANG}
 
@@ -19,22 +19,22 @@
 три входных аргумента перемножаются по формуле $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$, 
 чтобы представить массив трехмерным.
 Не забывайте также, что тип \Tint 32-битный (4 байта), поэтому все коэффициенты нужно умножить на 4.}
-\EN{Nothing special. For index calculation, three input arguments are multiplying 
-by formula $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$ to represent array as multidimensional.
-Do not forget the \Tint type is 32-bit (4 bytes),
+\EN{Nothing special. For index calculation, three input arguments are used 
+in the formula $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$, to represent the array as multidimensional.
+Do not forget that the \Tint type is 32-bit (4 bytes),
 so all coefficients must be multiplied by 4.}
 
 \lstinputlisting[caption=GCC 4.4.1]{patterns/13_arrays/5_multidimensional/multi_gcc.asm.\LANG}
 
-\RU{Компилятор GCC решил всё сделать немного иначе}\EN{GCC compiler does it differently}.
+\RU{Компилятор GCC решил всё сделать немного иначе}\EN{The GCC compiler does it differently}.
 \RU{Для вычисления одной из операций ($30y$), GCC создал код, где нет самой операции умножения.}
-\EN{For one of operations calculating ($30y$), GCC produced a code without multiplication instruction.}
+\EN{For one of the operations in the calculation ($30y$), GCC produces code without multiplication instructions.}
 \RU{Происходит это так}\EN{This is how it done}: 
 $(y+y) \ll 4 - (y+y) = (2y) \ll 4 - 2y = 2 \cdot 16 \cdot y - 2y = 32y - 2y = 30y$. 
 \RU{Таким образом, для вычисления $30y$ используется только операция сложения, 
-операция битового сдвига и операция вычитания.}\EN{Thus, for $30y$ calculation, only one addition operation
-used, one bitwise shift operation and one subtraction operation.}
-\RU{Это работает быстрее}\EN{That works faster}.
+операция битового сдвига и операция вычитания.}\EN{Thus, for the $30y$ calculation, only one addition operation,
+one bitwise shift operation and one subtraction operation are used.}
+\RU{Это работает быстрее}\EN{This works faster}.
 
 \ifdefined\IncludeARM
 \subsubsection{ARM + \NonOptimizingXcodeIV (\ThumbMode)}
@@ -42,52 +42,52 @@ used, one bitwise shift operation and one subtraction operation.}
 \lstinputlisting[caption=\NonOptimizingXcodeIV (\ThumbMode)]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O0.asm.\LANG}
 
 \NonOptimizing LLVM \RU{сохраняет все переменные в локальном стеке, хотя это и избыточно.}
-\EN{saves all variables in local stack, however, it is redundant.}
+\EN{saves all variables in local stack, which is redundant.}
 \RU{Адрес элемента массива вычисляется по уже рассмотренной формуле.}
-\EN{Address of array element is calculated by formula we already figured out.}
+\EN{The address of the array element is calculated by the formula we already saw.}
 
 \subsubsection{ARM + \OptimizingXcodeIV (\ThumbMode)}
 
 \lstinputlisting[caption=\OptimizingXcodeIV (\ThumbMode)]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O3.asm.\LANG}
 
 \RU{Тут используются уже описанные трюки для замены умножения на операции сдвига, сложения и вычитания.}
-\EN{Tricks for replacing multiplication by shift, addition and subtraction which we already considered
+\EN{The tricks for replacing multiplication by shift, addition and subtraction which we already saw
 are also present here.}
 
 \index{ARM!\Instructions!RSB}
 \index{ARM!\Instructions!SUB}
-\RU{Также мы видим новую для себя инструкцию}\EN{Here we also see new instruction for us:} 
+\RU{Также мы видим новую для себя инструкцию}\EN{Here we also see a new instruction for us:} 
 \TT{RSB} (\IT{Reverse Subtract}).
 \RU{Она работает так же, как и \SUB, только меняет операнды местами.}
-\EN{It works just as \SUB, but it swaps its operands with each other before.}
+\EN{It works just as \SUB, but it swaps its operands with each other before execution.}
 \RU{Зачем?}\EN{Why?}
 \index{ARM!Optional operators!LSL}
 \SUB \AndENRU \TT{RSB}\RU{, это те инструкции, ко второму операнду которых 
 можно применить коэффициент сдвига, как мы видим и здесь}
-\EN{ are those instructions, to the second operand of which shift coefficient may be applied}: 
+\EN{ are instructions, to the second operand of which shift coefficient may be applied}: 
 (\TT{LSL\#4}). 
 \RU{Но этот коэффициент можно применить только ко второму операнду.}
-\EN{But this coefficient may be applied only to second operand.}
+\EN{But this coefficient can be applied only to second operand.}
 \RU{Для коммутативных операций, таких как сложение или умножение, 
 (там операнды можно менять местами и это не влияет на результат).}
 \EN{That's fine for commutative operations like addition or multiplication 
-(operands may be swapped there without result affecting).}
+(operands may be swapped there without changing the result).}
 \RU{Но вычитание ~--- операция некоммутативная, так что, для этих случаев существует инструкция \TT{RSB}.}
-\EN{But subtraction is non-commutative operation, so \TT{RSB} exist for these cases.}
+\EN{But subtraction is a non-commutative operation, so \TT{RSB} exist for these cases.}
 
 \index{ARM!\Instructions!LDR.W}
-\RU{Инструкция }\TT{``LDR.W R9, [R9]''} \RU{работает как}\EN{instruction works like} \LEA~(\ref{sec:LEA})
+\EN{The}\RU{Инструкция} \TT{``LDR.W R9, [R9]''} \RU{работает как}\EN{instruction works like} \LEA~(\ref{sec:LEA})
 \RU{в x86, и здесь она ничего не делает, она избыточна.}
 \EN{in x86, but it does nothing here, it is redundant.}
-\RU{Вероятно, компилятор несоптимизировал её.}\EN{Apparently, compiler not optimized it.}
+\RU{Вероятно, компилятор несоптимизировал её.}\EN{Apparently, the compiler did not optimize it out.}
 \fi
 
 \ifdefined\IncludeMIPS
 \subsubsection{MIPS}
 
 \index{MIPS!Global Pointer}
-\EN{My example is tiny, so GCC compiler decided to put $a$ table into 64KiB area 
-addressable by Global Pointer.}
+\EN{My example is tiny, so the GCC compiler decided to put the $a$ table into the 64KiB area 
+addressable by the Global Pointer.}
 \RU{Мой пример такой крошечный, что компилятор GCC решил разместить таблицу $a$ в 64KiB-области,
 адресуемой при помощи Global Pointer.}
 
