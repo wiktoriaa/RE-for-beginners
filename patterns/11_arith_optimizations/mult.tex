@@ -14,7 +14,7 @@ unsigned int f(unsigned int a)
 \RU{Умножение на 8 заменяется на три инструкции сложения, делающих то же самое.}
 \EN{Multiplication by 8 is replaced by 3 addition instructions, which do the same.}
 \RU{Должно быть, оптимизатор в MSVC решил, что этот код будет работать быстрее.}
-\EN{Apparently, MSVC's optimizer decided that code will be faster.}
+\EN{Apparently, MSVC's optimizer decided that this code will be faster.}
 
 \begin{lstlisting}
 _TEXT	SEGMENT
@@ -35,7 +35,7 @@ END
 \label{subsec:mult_using_shifts}
 
 \RU{Еще очень часто умножения и деления на числа вида $2^{n}$ заменяются на инструкции сдвигов.}
-\EN{Multiplication and division instructions by numbers in form $2^{n}$ are often replaced
+\EN{Multiplication and division instructions by a numbers that's a power of $2$ are often replaced
 by shift instructions.}
 
 \begin{lstlisting}
@@ -60,16 +60,16 @@ _f	ENDP
 \RU{Умножить на $4$ это просто сдвинуть число на 2 бита влево, 
 вставив 2 нулевых бита справа (как два самых младших бита). 
 Это как умножить $3$ на $100$ ~--- нужно просто дописать два нуля справа.}
-\EN{Multiplication by $4$ is just shifting the number to the left by 2 bits,
-while inserting 2 zero bits at right (as the last two bits).
-It is just like to multiply $3$ by $100$~---we need just to add two zeroes at the right.}
+\EN{Multiplication by $4$ is just shifting the number to the left by 2 bits
+and inserting 2 zero bits at the right (as the last two bits).
+It is just like multiplying $3$ by $100$~---we need to just add two zeroes at the right.}
 
-\RU{Вот как работает инструкция сдвига влево}\EN{That's how shift left instruction works}:
+\RU{Вот как работает инструкция сдвига влево}\EN{That's how the shift left instruction works}:
 
 \index{x86!\Instructions!SHL}
 \input{shift_left}
 
-\RU{Добавленные биты справа --- всегда нули}\EN{Added bits at right---always zeroes}.
+\RU{Добавленные биты справа --- всегда нули}\EN{The added bits at right are always zeroes}.
 
 \ifdefined\IncludeARM
 \RU{Умножение на 4 в}\EN{Multiplication by 4 in} ARM:
@@ -97,9 +97,9 @@ SLL \RU{это}\EN{is} ``Shift Left Logical''
 
 \RU{Можно избавиться от операции умножения если вы умножаете на числа вроде 7 или 17,
 и использовать сдвиги.}
-\EN{It's still possible to get rid of multiplication operation when you multiplicate by numbers like
-7 or 17 and still use shifting.}
-\RU{Здесь используется относительно простая математика}\EN{Relatively easy mathematics is used here}.
+\EN{It's still possible to get rid of the multiplication operation when you multiply by numbers like
+7 or 17 again by using shifting.}
+\RU{Здесь используется относительно простая математика}\EN{The mathematics used here is relatively easy}.
 
 \subsubsection{32-\EN{bit}\RU{бита}}
 
@@ -114,13 +114,13 @@ SLL \RU{это}\EN{is} ``Shift Left Logical''
 
 \RU{Keil, генерируя для режима ARM, использует модификаторы инструкции, где можно задавать
 сдвиг для второго операнда:}
-\EN{Keil generating for ARM mode took advantage of second operand's shift modifiers:}
+\EN{Keil for ARM mode takes advantage of the second operand's shift modifiers:}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/11_arith_optimizations/mult_shifts_Keil_ARM_O3.s}
 
 \RU{Но таких модификаторов в режиме Thumb нет.}
 \EN{But there are no such modifiers in Thumb mode.}
-\RU{И он также не смог оптимизировать ф-цию \TT{f2()}}\EN{It also can't optimize \TT{f2()} function}:
+\RU{И он также не смог оптимизировать ф-цию \TT{f2()}}\EN{It also can't optimize \TT{f2()}}:
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/11_arith_optimizations/mult_shifts_Keil_thumb_O3.s}
 \fi
@@ -143,7 +143,7 @@ SLL \RU{это}\EN{is} ``Shift Left Logical''
 \myparagraph{ARM64}
 
 \RU{GCC 4.9 для ARM64 также очень лаконичен благодаря модификаторам сдвига:}
-\EN{GCC 4.9 for ARM64 is also terse, thanks to shift modifiers:}
+\EN{GCC 4.9 for ARM64 is also terse, thanks to the shift modifiers:}
 
 \lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_ARM64.s}
 \fi

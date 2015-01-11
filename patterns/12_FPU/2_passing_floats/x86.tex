@@ -1,6 +1,6 @@
 \subsection{x86}
 
-\RU{Посмотрим, что у нас вышло}\EN{Let's see what we got in} (MSVC 2010):
+\RU{Посмотрим, что у нас вышло}\EN{Let's see what we get in} (MSVC 2010):
 
 \lstinputlisting[caption=MSVC 2010]{patterns/12_FPU/2_passing_floats/MSVC.asm.\LANG}
 
@@ -10,22 +10,22 @@
 \TT{pow()}\footnote{стандартная функция Си, возводящая число в степень} достает оба значения из FPU-стека и 
 возвращает результат в \ST{0}. 
 \printf берет 8 байт из стека и трактует их как переменную типа \Tdouble.}
-\EN{\FLD and \FSTP are moving variables from/to data segment to FPU stack. 
-\TT{pow()}\footnote{standard C function, raises a number to the given power (exponentiation)}
-taking both values from FPU-stack and 
-returns result in the \ST{0} register.
-\printf takes 8 bytes from local stack and interpret them as \Tdouble type variable.}
+\EN{\FLD and \FSTP move variables between the data segment and the FPU stack. 
+\TT{pow()}\footnote{a standard C function, raises a number to the given power (exponentiation)}
+takes both values from the stack of the FPU and 
+returns its result in the \ST{0} register.
+\printf takes 8 bytes from the local stack and interprets them as \Tdouble type variable.}
 
 \ifdefined\IncludeARM
 \RU{Кстати, с тем же успехом, можно было бы перекладывать эти два числа из памяти в стек
-при помощи пары \MOV}
-\EN{By the way, pair of \MOV instructions could be used here for moving values from memory
-into stack}: 
+при помощи пары \MOV:}
+\EN{By the way, a pair of \MOV instructions could be used here for moving values from the memory
+into the stack,} 
 \RU{ведь в памяти числа в формате IEEE 754, и pow() также принимает их в том же
 формате, и никакая конверсия не требуется.}
-\EN{because values in memory are stored in IEEE 754 format, and pow() also takes them in this
-format, so, no conversion is necessary.}
+\EN{because the values in memory are stored in IEEE 754 format, and pow() also takes them in this
+format, so no conversion is necessary.}
 \RU{Собственно, так и происходит в следующем примере с ARM}
-\EN{That's how it's done in the next ARM example}:
+\EN{That's how it's done in the next example, for ARM}:
 \ref{FPU_passing_floats_ARM}.
 \fi

@@ -1,4 +1,4 @@
-\subsection{\RU{Чтение за пределами массива}\EN{Reading behind array bounds}}
+\subsection{\RU{Чтение за пределами массива}\EN{Reading outside array bounds}}
 
 \RU{Итак, индексация массива ~--- это просто \IT{массив\lbrack{}индекс\rbrack}.  % TODO как-то плохо отображаются []
 Если вы присмотритесь к коду, в цикле печати значений массива через \printf вы 
@@ -6,13 +6,13 @@
 А что будет если он будет 20 или больше? 
 Эта одна из особенностей \CCpp, за которую их, собственно, и ругают.}
 \EN{So, array indexing is just \IT{array\lbrack{}index\rbrack}.
-If you study generated code closely, you'll probably note missing index bounds checking,
-which could check index, \IT{if it is less than 20}.
-What if index will be 20 or greater?
+If you study the generated code closely, you'll probably note the missing index bounds checking,
+which could check \IT{if it is less than 20}.
+What if tee index is 20 or greater?
 That's the one \CCpp feature it is often blamed for.}
 
 \RU{Вот код который и компилируется и работает:}
-\EN{Here is a code successfully compiling and working:}
+\EN{Here is a code that successfully compiles and works:}
 
 \lstinputlisting{patterns/13_arrays/2_BO/r.c}
 
@@ -20,7 +20,7 @@ That's the one \CCpp feature it is often blamed for.}
 
 \lstinputlisting[caption=\NonOptimizing MSVC 2008]{patterns/13_arrays/2_BO/r_msvc.asm}
 
-\RU{У меня оно при запуске выдало вот это:}\EN{I'm running it, and I got:}
+\RU{У меня оно при запуске выдало вот это:}\EN{When I run it, I get:}
 
 \begin{figure}[h]
 \centering
@@ -31,43 +31,43 @@ That's the one \CCpp feature it is often blamed for.}
 
 \RU{Это просто \IT{что-то}, что волею случая лежало в стеке рядом с массивом, 
 через 80 байт от его первого элемента.}
-\EN{It is just \IT{something}, occasionally lying in the stack near to array, 80 bytes from its first element.}
+\EN{It is just \IT{something} that was lying in the stack near to the array, 80 bytes away from its first element.}
 
 \ifdefined\IncludeOlly
 \clearpage
 \index{\olly}
-\RU{Попробуем узнать в \olly, что это за значение}\EN{Let's try to find out using \olly, 
-where this value came from}.
+\RU{Попробуем узнать в \olly, что это за значение}\EN{Let's try to find out where did this value
+come from, using \olly}.
 \RU{Загружаем и находим это значение, находящееся точно после последнего элемента массива}
-\EN{Let's load and find a value located right after the last array element}:
+\EN{Let's load and find the value located right after the last array element}:
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/13_arrays/2_BO/olly_r1.png}
-\caption{\olly: \RU{чтение 20-го элемента и вызов \printf}\EN{reading of 20th element and execution of \printf}}
+\caption{\olly: \RU{чтение 20-го элемента и вызов \printf}\EN{reading of the 20th element and execution of \printf}}
 \label{fig:array_BO_olly_r1}
 \end{figure}
 
 \RU{Что это за значение}\EN{What is this}? 
-\RU{Судя по разметке стека, это сохраненное значение регистра EBP}\EN{Judging by stack layout,
-this is saved EBP register value}.
+\RU{Судя по разметке стека, это сохраненное значение регистра EBP}\EN{Judging by the stack layout,
+this is the saved value of the EBP register}.
 \clearpage
-\RU{Трассируем далее, и видим, как оно восстанавливается}\EN{Let's trace further and see, how
-it will be restored}:
+\RU{Трассируем далее, и видим, как оно восстанавливается}\EN{Let's trace further and see how
+it gets restored}:
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/13_arrays/2_BO/olly_r2.png}
-\caption{\olly: \RU{восстановление EBP}\EN{restoring value of EBP register}}
+\caption{\olly: \RU{восстановление EBP}\EN{restoring value of EBP}}
 \label{fig:array_BO_olly_r2}
 \end{figure}
 
 \RU{Действительно, а как могло бы быть иначе? Компилятор мог бы встроить какой-то код, 
 каждый раз проверяющий индекс на соответствие пределам массива, как в языках программирования 
 более высокого уровня\footnote{Java, Python, и т.д.}, что делало бы запускаемый код медленнее.}
-\EN{Indeed, how it could be done differently?
-Compiler may generate some additional code for checking index value to be always
-in array's bound (like in higher-level programming languages\footnote{Java, Python, etc})
-but this makes running code slower.}
+\EN{Indeed, how it could be different?
+The compiler may generate some additional code to check the index value to be always
+in the array's bounds (like in higher-level programming languages\footnote{Java, Python, etc})
+but this makes the code slower.}
 
 \fi

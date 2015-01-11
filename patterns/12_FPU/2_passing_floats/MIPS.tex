@@ -3,17 +3,17 @@
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/12_FPU/2_passing_floats/MIPS_O3_IDA.lst.\LANG}
 
 \RU{И снова, мы здесь видим, как LUI загружает 32-битную часть числа типа \Tdouble в \$V0.}
-\EN{And again, we see here LUI loading 32-bit part of \Tdouble number into \$V0.}
+\EN{And again, we see here LUI loading a 32-bit part of a \Tdouble number into \$V0.}
 \RU{И снова я, честно говоря, не знаю, почему}\EN{And again, I honestly don't know why}.
 
 \index{MIPS!\Instructions!MFC1}
 \RU{Новая для нас здесь инструкция это}
-\EN{New instruction for us here is} MFC1 (``Move From Coprocessor 1'')\RU{ (копировать из первого сопроцессора)}.
+\EN{The new instruction for us here is} MFC1 (``Move From Coprocessor 1'')\RU{ (копировать из первого сопроцессора)}.
 \RU{FPU это сопроцессор под номером 1, вот откуда ``1'' в имени инструкции.}
-\EN{FPU is coprocessor number 1, hence ``1'' in instruction name.}
+\EN{The FPU is coprocessor number 1, hence ``1'' in the instruction name.}
 \RU{Эта инструкция переносит значения из регистров сопроцессора в регистры основного CPU (\ac{GPR}).}
-\EN{This instruction transfers values from coprocessor's registers to main CPU registers (\ac{GPR}).}
+\EN{This instruction transfers values from the coprocessor's registers to the registers of the CPU (\ac{GPR}).}
 \RU{Так что результат исполнения pow() в итоге копируется в регистры \$A3 и \$A2,
 и из этой пары регистров \printf возьмет его как 64-битное значение типа \Tdouble.}
-\EN{So the result from pow() execution is finally moved into registers \$A3 and \$A2, 
-\printf will take 64-bit double value from this registers pair.}
+\EN{So in the end the result from pow() is moved to registers \$A3 and \$A2, 
+and \printf will take a 64-bit double value from this register pair.}

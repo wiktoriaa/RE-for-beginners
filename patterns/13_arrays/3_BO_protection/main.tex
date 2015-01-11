@@ -3,7 +3,7 @@
 
 \RU{В наше время пытаются бороться с этой напастью, не взирая на халатность программистов на \CCpp. 
 В MSVC есть опции вроде}
-\EN{There are several methods to protect against it, regardless of \CCpp programmers' negligence.
+\EN{There are several methods to protect against this scourge, regardless of the \CCpp programmers' negligence.
 MSVC has options like}\footnote{
 Wikipedia: \RU{описания защит, которые компилятор может вставлять в код}
 \EN{compiler-side buffer overflow protection methods}:\\
@@ -22,10 +22,10 @@ Wikipedia: \RU{описания защит, которые компилятор 
 и в эпилоге функции, перед выходом, это число проверять. 
 И если проверка не прошла, то не выполнять инструкцию \RET а остановиться (или зависнуть). 
 Процесс зависнет, но это лучше, чем удаленная атака на ваш хост.}
-\EN{One of the methods is to write random value among local variables to stack at function prologue 
-and to check it in function epilogue before function exiting.
-And if value is not the same, do not execute last instruction \RET, but halt (or hang).
-Process will hang, but that is much better then remote attack to your host.}
+\EN{One of the methods is to write a random value between the local variables in stack at function prologue 
+and to check it in function epilogue before the function exits.
+If value is not the same, do not execute the last instruction \RET, but stop (or hang).
+The process will halt, but that is much better than a remote attack to your host.}
     
 \newcommand{\CANARYURL}{\RU{\href{http://go.yurichev.com/17135}{miningwiki}}\EN{\href{http://go.yurichev.com/17134}{wikipedia}}}
 
@@ -35,36 +35,36 @@ Process will hang, but that is much better then remote attack to your host.}
 по аналогии с шахтной канарейкой\footnote{\CANARYURL},
 их использовали шахтеры в свое время, чтобы определять, есть ли в шахте опасный газ.
 }
-\EN{This random value is called ``canary'' sometimes, it is related to miner's canary\footnote{\CANARYURL},
-they were used by miners in these days, in order to detect poisonous gases quickly.}
+\EN{This random value is called a ``canary'' sometimes, it is related to the miners' canary\footnote{\CANARYURL},
+they were used by miners in the past days in order to detect poisonous gases quickly.}
 \RU{Канарейки очень к нему чувствительны и либо проявляли сильное беспокойство, либо гибли от газа.}
-\EN{Canaries are very sensitive to mine gases, they become very agitated in case of danger, or even dead.}
+\EN{Canaries are very sensitive to mine gases, they become very agitated in case of danger, or even die.}
 
 \RU{Если скомпилировать наш простейший пример работы с массивом}
 \EN{If we compile our very simple array example}~(\ref{arrays_simple}) \InENRU \ac{MSVC}
 \RU{с опцией RTC1 или RTCs}\EN{with RTC1 and RTCs option}, \RU{в конце функции будет вызов 
 функции}\EN{you will see a call to}\\
 \TT{@\_RTC\_CheckStackVars@8}\RU{, проверяющей корректность ``канарейки''.}
-\EN{ a function at the function end, checking for``canary'' correctness.}
+\EN{ a function at the end of the function that checks if the ``canary'' is correct.}
 
 \RU{Посмотрим, как дела обстоят в GCC}\EN{Let's see how GCC handles this}. 
-\RU{Возьмем пример из секции про}\EN{Let's take} \TT{alloca()}~(\ref{alloca})\EN{ example}:
+\RU{Возьмем пример из секции про}\EN{Let's take an} \TT{alloca()}~(\ref{alloca})\EN{ example}:
 
 \lstinputlisting{patterns/02_stack/04_alloca/2_1.c}
 
 \RU{По умолчанию, без дополнительных ключей, GCC 4.7.3 вставит в код проверку ``канарейки''}
-\EN{By default, without any additional options, GCC 4.7.3 will insert ``canary'' check into code}:
+\EN{By default, without any additional options, GCC 4.7.3 will insert a ``canary'' check into the code}:
 
 \lstinputlisting[caption=GCC 4.7.3]{patterns/13_arrays/3_BO_protection/gcc_canary.asm.\LANG}
 
 \index{x86!\Registers!GS}
-\RU{Случайное значение находится в}\EN{Random value is located in} \TT{gs:20}. 
+\RU{Случайное значение находится в}\EN{The random value is located in} \TT{gs:20}. 
 \RU{Оно записывается в стек, затем, в конце функции, значение в стеке
-сравнивается с корректной ``канарейкой'' в}\EN{It is to be written on the stack and then, at the function end,
-value in the stack is compared with correct ``canary'' in} \TT{gs:20}. 
-\RU{Если значения не равны, будет вызвана функция}\EN{If values are not equal to each other, } 
+сравнивается с корректной ``канарейкой'' в}\EN{It gets written on the stack and then at the end of the function
+the value in the stack is compared with the correct ``canary'' in} \TT{gs:20}. 
+\RU{Если значения не равны, будет вызвана функция}\EN{If the values are not equal, the} 
 \TT{\_\_stack\_chk\_fail}\RU{ и в консоли мы увидим что-то вроде такого}\EN{ function will be called and we will see
-something like that in console} (Ubuntu 13.04 x86):
+something like that in the console} (Ubuntu 13.04 x86):
 
 \begin{lstlisting}
 *** buffer overflow detected ***: ./2_1 terminated
@@ -102,24 +102,24 @@ Aborted (core dumped)
 
 \index{MS-DOS}
 gs\EMDASH\RU{это так называемый сегментный регистр, эти регистры широко использовались во времена MS-DOS 
-и DOS-экстендеров.}\EN{is so-called segment register, these registers were used widely in MS-DOS and DOS-extenders
+и DOS-экстендеров.}\EN{is the so-called segment register, these registers were used widely in MS-DOS and DOS-extenders
 times.}
 \RU{Сейчас их функция немного изменилась.}\EN{Today, its function is different.}
 \index{TLS}
 \index{Windows!TIB}
 \RU{Если говорить коротко, в Linux \TT{gs} всегда указывает на \ac{TLS}~(\ref{TLS}) ~--- там находится различная 
 информация, специфичная для выполняющегося треда}
-\EN{If to say briefly, the \TT{gs} register in Linux is always pointing to the
-\ac{TLS}~(\ref{TLS})~---various information specific to thread is stored there}
+\EN{To say it briefly, the \TT{gs} register in Linux always points to the
+\ac{TLS}~(\ref{TLS})~---some information specific to thread is stored there}
 (\RU{кстати, в win32 эту же роль играет сегментный регистр \TT{fs},
-он всегда указывает на}\EN{by the way, in win32 environment,
-the \TT{fs} register plays the same role, it pointing to}
+он всегда указывает на}\EN{by the way, in win32
+the \TT{fs} register plays the same role, pointing to}
 \ac{TIB} \footnote{\href{http://go.yurichev.com/17104}{wikipedia}}). 
 
 \RU{Больше информации можно почерпнуть из исходных кодов Linux (по крайней мере, в версии 3.11): 
-в файле}\EN{More information can be found in Linux source codes (at least in 3.11 version), in}
+в файле}\EN{More information can be found in the Linux kernel source code (at least in 3.11 version), in}
 \IT{arch/x86/include/asm/stackprotector.h}\RU{ в комментариях описывается эта переменная}
-\EN{ file this variable is described in comments}.
+\EN{ this variable is described in the comments}.
 
 \ifdefined\IncludeARM
 \input{patterns/13_arrays/3_BO_protection/ARM.tex}

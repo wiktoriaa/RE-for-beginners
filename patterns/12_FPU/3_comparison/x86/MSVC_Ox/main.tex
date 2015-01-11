@@ -6,19 +6,18 @@
 \RU{\FCOM отличается от \FCOMP тем что просто сравнивает значения и оставляет стек в том же состоянии. 
 В отличие от предыдущего примера, операнды здесь в другом порядке. 
 Поэтому и результат сравнения в \CThreeBits будет другим чем раньше:}
-\EN{\FCOM is distinguished from \FCOMP in that sense that it just comparing values and leaves FPU stack 
-in the same state. 
-Unlike previous example, operands here in reverse order. 
-And that is why result of comparison in the \CThreeBits will be different:}
+\EN{\FCOM differs from \FCOMP in the sense that it just compares the values and doesn't change the FPU stack. 
+Unlike the previous example, here the operands are in reverse order, 
+which is why the result of the comparison in \CThreeBits will be different:}
 
 \begin{itemize}
 \item
 \RU{Если $a>b$ в нашем случае, то биты \CThreeBits должны быть выставлены так:}
 \EN{If $a>b$ in our example, then \CThreeBits bits will be set as:} 0, 0, 0.
 \item
-\RU{Если $b>a$, то биты будут выставлены:}\EN{If $b>a$, then bits will be set as:} 0, 0, 1.
+\RU{Если $b>a$, то биты будут выставлены:}\EN{If $b>a$, then the bits will be set as:} 0, 0, 1.
 \item
-\RU{Если $a=b$, то биты будут выставлены так:}\EN{If $a=b$, then bits will be set as:} 1, 0, 0.
+\RU{Если $a=b$, то биты будут выставлены так:}\EN{If $a=b$, then the bits will be set as:} 1, 0, 0.
 \end{itemize}
 % TODO: table?
 
@@ -31,14 +30,14 @@ And that is why result of comparison in the \CThreeBits will be different:}
 (где сейчас лежит \TT{\_a}) в \ST{1}. 
 После этого на вершине стека два раза лежат \TT{\_a}. Затем одно значение выдергивается. 
 После этого в \ST{0} остается \TT{\_a} и функция завершается.}
-\EN{It can be said, \TT{test ah, 65} instruction just leaves two bits~---\Cthree and \Czero. 
-Both will be zeroes if $a>b$: in that case \JNE jump will not be triggered. 
-Then \TT{FSTP ST(1)} is following~---this instruction copies value in the \ST{0} into operand and 
-popping one value from FPU stack.
-In other words, the instruction copies \ST{0} (where \TT{\_a} value is now) into the \ST{1}.
-After that, two values of the {\_a} are at the top of stack now. 
-After that, one value is popping.
-After that, \ST{0} will contain {\_a} and function is finished.}
+\EN{The \TT{test ah, 65} instruction leaves just two bits~---\Cthree and \Czero. 
+Both will be zero if $a>b$: in that case the \JNE jump will not be triggered. 
+Then \TT{FSTP ST(1)} follows~---this instruction copies the value from \ST{0} to the operand and 
+pops one value from the FPU stack.
+In other words, the instruction copies \ST{0} (where the value of \TT{\_a} is now) into \ST{1}.
+After that, two copies of {\_a} are at the top of the stack. 
+Then, one value is popped.
+After that, \ST{0} will contain {\_a} and the function is finished.}
 
 \RU{Условный переход \JNE сработает в двух других случаях: если $b>a$ или $a=b$. 
 \ST{0} скопируется в \ST{0}, что как бы холостая операция, 
@@ -47,12 +46,12 @@ After that, \ST{0} will contain {\_a} and function is finished.}
 Эта инструкция используется здесь видимо потому что в FPU 
 нет другой инструкции, которая просто выдергивает 
 значение из стека и выбрасывает его.}
-\EN{Conditional \JNE jump is triggered in two cases: if $b>a$ or $a=b$. 
-\ST{0} will be copied into \ST{0}, it is just like idle (\ac{NOP}) operation, then one value 
-is popping from stack and top of stack (\ST{0}) will contain what was in the \ST{1} before 
-(that is {\_b}). Then function finishes. 
-The reason this instruction is used here probably is because \ac{FPU} 
-has no other instruction to pop value from the stack and discard it.}
+\EN{The conditional jump \JNE will trigger in two cases: if $b>a$ or $a=b$. 
+\ST{0} will be copied into \ST{0}, it is just like an idle (\ac{NOP}) operation, then one value 
+is popped from the stack and the top of the stack (\ST{0}) will contain what was in \ST{1} before 
+(that is {\_b}). Then the function finishes. 
+The reason this instruction is used here probably is because the \ac{FPU} 
+has no other instruction to pop a value from the stack and discard it.}
 
 \ifdefined\IncludeOlly
 \input{patterns/12_FPU/3_comparison/x86/MSVC_Ox/olly.tex}
