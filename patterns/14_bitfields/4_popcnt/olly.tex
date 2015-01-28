@@ -3,7 +3,7 @@
 \index{\olly}
 
 \RU{Загрузим этот пример в}\EN{Let's load this example into} \olly. 
-\RU{Входное значения для ф-ции пусть будет}\EN{Let's input value be} \TT{0x12345678}.\\
+\RU{Входное значения для ф-ции пусть будет}\EN{Let the input value be} \TT{0x12345678}.\\
 \\
 \RU{Для}\EN{For} $i=1$, \RU{мы видим, как}\EN{we see how} $i$ \RU{загружается в}\EN{is loaded into} \ECX: 
 
@@ -30,24 +30,24 @@
 
 \clearpage
 \ANDIns \RU{устанавливает}\EN{sets} \ZF \RU{в}\EN{to} $1$, 
-\RU{что означает, что входное значение}\EN{which is meaning that input value} (\TT{0x12345678}) 
-\RU{умножается\footnote{Логическое ``И''} с}\EN{ ANDed with} $2$ \RU{давая в результате}\EN{resulting} $0$:
+\RU{что означает, что входное значение}\EN{which means that the input value} (\TT{0x12345678}) 
+\RU{умножается\footnote{Логическое ``И''} с}\EN{ ANDed with} $2$ \RU{давая в результате}\EN{results in} $0$:
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/14_bitfields/4_popcnt/olly1_3.png}
 \caption{\olly: $i=1$, \RU{есть ли этот бит во входном значении? Нет.}
-\EN{are there that bit in the input value? No.} (\ZF=1)}
+\EN{is there that bit in the input value? No.} (\ZF=1)}
 \label{fig:shifts_olly1_3}
 \end{figure}
 
-\RU{Так что, во входном значении соответствующего бита нет}\EN{So, there are no corresponding bit in input value}.
+\RU{Так что, во входном значении соответствующего бита нет}\EN{So, there is no corresponding bit in the input value}.
 \RU{Участок кода, увеличивающий счетчик бит на единицу не будет исполнен: инструкция \JZ \textit{обойдет} его}
-\EN{The piece of code, which \glslink{increment}{increments} counter will not be executed: 
-\JZ instruction will \textit{bypass} it}.
+\EN{The piece of code, which \glslink{increment}{increments} the counter will not be executed: 
+the \JZ instruction will \textit{bypass} it}.
 
 \clearpage
-\RU{Я немного потрассировал далее и}\EN{Now I traced some time further and} $i$ \RU{теперь}\EN{is now} $4$.
+\RU{Я немного потрассировал далее и}\EN{I traced a bit further and} $i$ \RU{теперь}\EN{is now} $4$.
 \TT{SHL} \RU{исполнилась}\EN{is to be executed now}:
 
 \begin{figure}[H]
@@ -76,15 +76,15 @@
 \centering
 \includegraphics[scale=\FigScale]{patterns/14_bitfields/4_popcnt/olly4_3.png}
 \caption{\olly: $i=4$, \RU{есть ли этот бит во входном значении? Да.}
-\EN{are there that bit in the input value? Yes.} (\ZF=0)}
+\EN{is there that bit in the input value? Yes.} (\ZF=0)}
 \label{fig:shifts_olly4_3}
 \end{figure}
 
 \ZF \RU{сейчас}\EN{is} $0$ \RU{потому что этот бит присутствует во входном значении}
-\EN{because this bit is present in input value}.
+\EN{because this bit is present in the input value}.
 \RU{Действительно}\EN{Indeed}, \TT{0x12345678 \& 0x10 = 0x10}. 
 \RU{Этот бит считается: переход не сработает и счетчик бит будет увеличен на единицу}\EN{This bit counts: 
-jump will not trigger and bits counter will be \glslink{increment}{incremented} now}.\\
+the jump will not trigger and the bit counter will be \glslink{increment}{incremented} now}.\\
 \\
 \RU{Ф-ция возвращает}\EN{The function returns} $13$. 
-\RU{Это количество установленных бит в значении}\EN{This is total bits set in} \TT{0x12345678}\EN{ value}.
+\RU{Это количество установленных бит в значении}\EN{This is total number of bits set in} \TT{0x12345678}.

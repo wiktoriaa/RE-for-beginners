@@ -2,7 +2,7 @@
 
 \index{Linux}
 \RU{В ядре Linux 3.8.0 бит \TT{O\_CREAT} проверяется немного иначе.}
-\EN{\TT{O\_CREAT} bit is checked differently in Linux kernel 3.8.0.}
+\EN{The \TT{O\_CREAT} bit is checked differently in Linux kernel 3.8.0.}
 
 \begin{lstlisting}[caption=linux kernel 3.8.0]
 struct file *do_filp_open(int dfd, struct filename *pathname,
@@ -40,7 +40,7 @@ static int do_last(struct nameidata *nd, struct path *path,
 \end{lstlisting}
 
 \RU{Вот как это выглядит в \IDA, ядро скомпилированное для режима ARM:}
-\EN{Here is how kernel compiled for ARM mode looks like in \IDA:}
+\EN{Here is how the kernel compiled for ARM mode looks in \IDA:}
 
 \begin{lstlisting}[caption=do\_last() (vmlinux)]
 ...
@@ -77,15 +77,15 @@ static int do_last(struct nameidata *nd, struct path *path,
 
 \index{ARM!\Instructions!TST}
 \index{x86!\Instructions!TEST}
-\TT{TST} \RU{это аналог инструкции \TEST в x86.}\EN{is analogical to a \TEST instruction in x86.}
+\TT{TST} \RU{это аналог инструкции \TEST в x86.}\EN{is analogous to the \TEST instruction in x86.}
 
 \RU{Мы можем ``узнать'' визуально этот фрагмент кода по тому что в одном случае исполнится 
 функция \TT{lookup\_fast()}, а в другом \TT{complete\_walk()}.}
 \EN{We can ``spot'' visually this code fragment by the fact the 
 \TT{lookup\_fast()} will be executed
-in one case and the \TT{complete\_walk()} in another case.}
+in one case and \TT{complete\_walk()} in the other.}
 \RU{Это соответствует исходному коду функции \TT{do\_last()}.}
-\EN{This is corresponding to the \TT{do\_last()} function source code.}
+\EN{This corresponds to the source code of the \TT{do\_last()} function.}
 
-\RU{Макрос }\TT{O\_CREAT} \RU{здесь так же равен \TT{0x40}.}\EN{macro is equals to \TT{0x40} here too.}
+\EN{The}\RU{Макрос} \TT{O\_CREAT} \RU{здесь так же равен \TT{0x40}.}\EN{macro equals to \TT{0x40} here too.}
 
