@@ -1,11 +1,11 @@
 ﻿\section{\RU{Подсчет выставленных бит}\EN{Counting bits set to 1}}
 
 \RU{Вот этот несложный пример иллюстрирует функцию, считающую количество бит-единиц во входном значении.}
-\EN{Here is a simple example of function, calculating number of bits set in input value.}
+\EN{Here is a simple example of a function that calculates the number of bits set in the input value.}
 
 \RU{Эта операция также называется}\EN{This operation is also called} ``population count''
 \footnote{\RU{современные x86-процессоры (поддерживающие SSE4) даже имеют инструкцию POPCNT для этого}
-\EN{modern x86 CPUs (supporting SSE4) even have POPCNT instruction for it}}.
+\EN{modern x86 CPUs (supporting SSE4) even have a POPCNT instruction for it}}.
 
 \lstinputlisting{patterns/14_bitfields/4_popcnt/shifts.c}
 
@@ -14,11 +14,11 @@
 \IT{сдвинуть единицу на $n$ бит влево}.
 Т.е., в некотором смысле, выражение $1 \ll i$ последовательно выдаст все возможные позиции бит в 32-битном числе. 
 Освободившийся бит справа всегда обнуляется.}
-\EN{In this loop, iteration count value $i$ counting from $0$ to $31$, $1 \ll i$ statement will be counting 
+\EN{In this loop, the iteration count value $i$ is counting from $0$ to $31$, so the $1 \ll i$ statement will be counting 
 from $1$ to \TT{0x80000000}.
 Describing this operation in natural language, we would say \IT{shift $1$ by n bits left}.
-In other words, $1 \ll i$ statement will consequently produce all possible bit positions in 32-bit number.
-Freed bit at right is always cleared.}
+In other words, $1 \ll i$ statement will consequently produce all possible bit positions in a 32-bit number.
+The freed bit at right is always cleared.}
 
 \RU{Вот таблица всех возможных значений}\EN{Here is a table of all possible} $1 \ll i$ 
 \RU{для}\EN{for} $i=0 \ldots 31$:
@@ -100,16 +100,16 @@ $1 \ll 31$ & $2^{31}$ & 2147483648 & 0x80000000 \\
 
 \RU{Это числа-константы (битовые маски), которые крайне часто попадаются в практике reverse engineer-а, 
 и их нужно уметь распознавать.}
-\EN{These constant numbers (bit masks) are very often appears in code and practicing reverse engineer 
-should quickly spot them.}
+\EN{These constant numbers (bit masks) very often appear in code and a practicing reverse engineer 
+should be able to spot them quickly.}
 \RU{Числа в десятичном виде заучивать, пожалуй, незачем, а числа в шестнадцатеричном
 виде итак легко запомнить.}
-\EN{You probably shouldn't memorize decimal numbers, but hexadecimal ones are very easy to memorize.}
+\EN{You probably shouldn't memorize the decimal numbers, as the hexadecimal ones are very easy to remember.}
 
 \RU{Эти константы очень часто используются для определения отдельных бит как флагов.}
 \EN{These constants are very often used for mapping flags to specific bits.}
 \RU{Например, это из файла}\EN{For example, here is excerpt from} \TT{ssl\_private.h} \RU{из исходников}
-\EN{file from} Apache 2.4.6\EN{ source code}:
+\EN{from} Apache 2.4.6\EN{ source code}:
 
 \begin{lstlisting}
 /**
@@ -125,10 +125,10 @@ should quickly spot them.}
 #define SSL_OPT_LEGACYDNFORMAT (1<<7)
 \end{lstlisting}
 
-\RU{Вернемся назад к нашему примеру}\EN{Let's back to our example}.
+\RU{Вернемся назад к нашему примеру}\EN{Let's get back to our example}.
 
 \RU{Макрос \TT{IS\_SET} проверяет наличие этого бита в $a$.}
-\EN{\TT{IS\_SET} macro is checking bit presence in the $a$.}
+\EN{The \TT{IS\_SET} macro checks bit presence in $a$.}
 
 \index{x86!\Instructions!AND}
 \RU{Макрос \TT{IS\_SET} на самом деле это операция логического И (\IT{AND}) 
@@ -136,11 +136,11 @@ should quickly spot them.}
 либо эту же битовую маску, если бит там есть. 
 В \CCpp, конструкция \TT{if()} срабатывает, если выражение внутри её не ноль, пусть хоть $123456$, 
 поэтому все будет работать.}
-\EN{The \TT{IS\_SET} macro is in fact logical and operation (\IT{AND}) 
-and it returns $0$ if specific bit is absent there,
-or bit mask, if the bit is present.
-\IT{if()} operator triggered in \CCpp if expression in it is not a zero, it might be even $123456$, that is why
-it always working correctly.}
+\EN{The \TT{IS\_SET} macro is in fact the logical AND operation (\IT{AND}) 
+and it returns $0$ if the specific bit is absent there,
+or the bit mask, if the bit is present.
+\IT{The if()} operator in \CCpp triggers if the expression in it is not zero, it might be even $123456$, that is why
+it always works correctly.}
 
 % subsections
 \input{patterns/14_bitfields/4_popcnt/x86}

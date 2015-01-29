@@ -9,7 +9,7 @@
 	fh=CreateFile ("file", GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 \end{lstlisting}
 
-\RU{Получаем}\EN{We got} (MSVC 2010):
+\RU{Получаем}\EN{We get} (MSVC 2010):
 
 \begin{lstlisting}[caption=MSVC 2010]
 	push	0
@@ -23,7 +23,7 @@
 	mov	DWORD PTR _fh$[ebp], eax
 \end{lstlisting}
 
-\RU{Заглянем в файл}\EN{Let's take a look into} WinNT.h:
+\RU{Заглянем в файл}\EN{Let's take a look in} WinNT.h:
 
 \begin{lstlisting}[caption=WinNT.h]
 #define GENERIC_READ                     (0x80000000L)
@@ -35,15 +35,15 @@
 \RU{Все ясно}\EN{Everything is clear}, 
 \TT{GENERIC\_READ | GENERIC\_WRITE = 0x80000000 | 0x40000000 = 0xC0000000}, 
 \RU{и это значение используется как второй аргумент для}
-\EN{and that is value is used as the second argument for} \TT{CreateFile()}\footnote{\href{http://go.yurichev.com/17065}{MSDN: CreateFile function}} function.
+\EN{and that value is used as the second argument for the} \TT{CreateFile()}\footnote{\href{http://go.yurichev.com/17065}{MSDN: CreateFile function}} function.
 
-\RU{Как \TT{CreateFile()} будет проверять флаги?}\EN{How \TT{CreateFile()} will check flags?}
+\RU{Как \TT{CreateFile()} будет проверять флаги?}\EN{How would \TT{CreateFile()} check these flags?}
 
 \index{Windows!KERNEL32.DLL}
 \RU{Заглянем в KERNEL32.DLL от Windows XP SP3 x86 и найдем в функции \TT{CreateFileW()} в том числе и 
 такой фрагмент кода:}
-\EN{Let's take a look into KERNEL32.DLL in Windows XP SP3 x86 and we'll find
-this fragment of code in the function \TT{CreateFileW}:}
+\EN{If we look in KERNEL32.DLL in Windows XP SP3 x86, we'll find
+this fragment of code in \TT{CreateFileW}:}
 
 \begin{lstlisting}[caption=KERNEL32.DLL (Windows XP SP3 x86)]
 .text:7C83D429                 test    byte ptr [ebp+dwDesiredAccess+3], 40h
@@ -54,19 +54,19 @@ this fragment of code in the function \TT{CreateFileW}:}
 
 \index{x86!\Instructions!TEST}
 \RU{Здесь мы видим инструкцию \TEST, впрочем, она берет не весь второй аргумент функции, 
-но только его самый старший байт (\TT{ebp+dwDesiredAccess+3}) и проверяет его на флаг 0x40 
+но только его самый старший байт (\TT{ebp+dwDesiredAccess+3}) и проверяет его на флаг $0x40$ 
 (имеется ввиду флаг \TT{GENERIC\_WRITE}).}
-\EN{Here we see \TEST instruction, it takes, however, not the whole second argument,
-but only most significant byte (\TT{ebp+dwDesiredAccess+3}) and checks it for 0x40 flag
-(meaning \TT{GENERIC\_WRITE} flag here)}
+\EN{Here we see the \TEST instruction, however it doesn't take the whole second argument,
+but only the most significant byte (\TT{ebp+dwDesiredAccess+3}) and checks it for flag $0x40$
+(which here means the \TT{GENERIC\_WRITE} flag)}
 
 \index{x86!\Instructions!AND}
 \RU{\TEST это то же что и \ANDIns, только без сохранения результата 
 (вспомните что \CMP это то же что и \SUB, только без сохранения результатов}
-\EN{\TEST is merely the same instruction as \ANDIns, but without result saving
-(recall the fact \CMP instruction is merely the same as \SUB, but without result saving}~(\ref{CMPandSUB})).
+\EN{\TEST is basically the same instruction as \ANDIns, but without saving the result
+(recall the fact \CMP is merely the same as \SUB, but without saving the result}~(\ref{CMPandSUB})).
 
-\RU{Логика данного фрагмента кода примерно такая:}\EN{This fragment of code logic is as follows:}
+\RU{Логика данного фрагмента кода примерно такая:}\EN{The logic of this code fragment is as follows:}
 
 \begin{lstlisting}
 if ((dwDesiredAccess&0x40000000) == 0) goto loc_7C83D417
@@ -78,10 +78,10 @@ if ((dwDesiredAccess&0x40000000) == 0) goto loc_7C83D417
 \JZ не сработает. 
 Переход возможен только если в переменной \TT{dwDesiredAccess} отсутствует бит \TT{0x40000000} ~--- 
 тогда результат \ANDIns будет $0$, флаг \ZF будет поднят и переход сработает.}
-\EN{If \ANDIns instruction leaving this bit, \ZF flag is to be cleared and \JZ conditional jump will not 
+\EN{If \ANDIns instruction leaves this bit, the \ZF flag is to be cleared and the \JZ conditional jump will not 
 be triggered.
-Conditional jump will be triggered only if \TT{0x40000000} bit is absent in the \TT{dwDesiredAccess} 
-variable~---then \ANDIns result will be $0$, \ZF flag will be set and conditional jump is to be triggered.}
+The conditional jump will be triggered only if the \TT{0x40000000} bit is absent in variable \TT{dwDesiredAccess} 
+~---then the result of \ANDIns will be $0$, \ZF will be set and the conditional jump is to be triggered.}
 
 \RU{Попробуем GCC 4.4.1 и Linux:}\EN{Let's try GCC 4.4.1 and Linux:}
 
@@ -97,7 +97,7 @@ void main()
 };
 \end{lstlisting}
 
-\RU{Получим}\EN{We got}:
+\RU{Получим}\EN{We get}:
 
 \lstinputlisting[caption=GCC 4.4.1]{patterns/14_bitfields/1_check/check.asm}
 
@@ -105,7 +105,7 @@ void main()
 \index{syscall}
 \RU{Заглянем в реализацию функции \TT{open()} в библиотеке \TT{libc.so.6}, но обнаружим что там 
 только вызов сисколла:}
-\EN{Let's take a look into \TT{open()} function in the \TT{libc.so.6} library, but there is only syscall:}
+\EN{If we take a look in the \TT{open()} function in the \TT{libc.so.6} library, it is only a syscall:}
 
 \begin{lstlisting}[caption=open() (libc.so.6)]
 .text:000BE69B                 mov     edx, [esp+4+mode] ; mode
@@ -116,17 +116,17 @@ void main()
 \end{lstlisting}
 
 \RU{Значит, битовые поля флагов \TT{open()} вероятно проверяются где-то в ядре Linux.}
-\EN{So, \TT{open()} bit fields apparently checked somewhere in Linux kernel.}
+\EN{So, the bit fields for \TT{open()} are apparently checked somewhere in the Linux kernel.}
 
 \RU{Разумеется, и стандартные библиотеки Linux и ядро Linux можно получить в виде исходников, 
 но нам интересно попробовать разобраться без них.}
-\EN{Of course, it is easy to download both Glibc and Linux kernel source code, 
-but we are interesting to understand the matter without it.}
+\EN{Of course, it is easy to download both Glibc and the Linux kernel source code, 
+but we are interested in understanding the matter without it.}
 
 \RU{Итак, при вызове сисколла \TT{sys\_open}, управление в конечном итоге передается в \TT{do\_sys\_open} в ядре Linux 2.6. 
 Оттуда ~--- в \TT{do\_filp\_open()} (эта функция находится в исходниках ядра в файле \TT{fs/namei.c}).}
-\EN{So, as of Linux 2.6, when \TT{sys\_open} syscall is called, control eventually passed into \TT{do\_sys\_open} kernel function.
-From there~---to the \TT{do\_filp\_open()} function (this function located in kernel source tree in the file \TT{fs/namei.c}).}
+\EN{So, as of Linux 2.6, when the \TT{sys\_open} syscall is called, control eventually passes to \TT{do\_sys\_open},
+and from there~---to the \TT{do\_filp\_open()} function (it's located in the kernel source tree in \TT{fs/namei.c}).}
 
 \newcommand{\URLREGPARM}{\url{http://go.yurichev.com/17040}}
 
@@ -138,33 +138,33 @@ N.B. \RU{Помимо передачи параметров функции че�
 аргументов. 
 В GCC есть опция \IT{regparm}\footnote{\URLREGPARM}, 
 и с её помощью можно задать, сколько аргументов можно передать через регистры.}
-\EN{Aside from common passing arguments via stack,
+\EN{Aside from passing arguments via the stack,
 there is also a method of passing some of them
 via registers. This is also called fastcall~(\ref{fastcall}).
-This works faster since CPU not needed to access a stack in memory to read argument values.
-GCC has option \IT{regparm}\footnote{\URLREGPARM},
-and it is possible to set a number of arguments which might be passed via registers.}
+This works faster since CPU does not need to access the stack in memory to read argument values.
+GCC has the option \IT{regparm}\footnote{\URLREGPARM},
+through which it's possible to set the number of arguments that can be passed via registers.}
 
 \newcommand{\URLKERNELNEWB}{\url{http://go.yurichev.com/17066}}
 \newcommand{\CALLINGHFILE}{arch\textbackslash{}x86\textbackslash{}include\textbackslash{}asm\textbackslash{}calling.h}
 
 \RU{Ядро Linux 2.6 собирается с опцией \TT{-mregparm=3}~\footnote{\URLKERNELNEWB}
 \footnote{См. также файл \TT{\CALLINGHFILE} в исходниках ядра}.}
-\EN{Linux 2.6 kernel compiled with \TT{-mregparm=3} option~\footnote{\URLKERNELNEWB}
+\EN{The Linux 2.6 kernel is compiled with \TT{-mregparm=3} option~\footnote{\URLKERNELNEWB}
 \footnote{See also \TT{\CALLINGHFILE} file in kernel tree}.}
 
 \RU{И для нас это означает, что первые три аргумента функции будут передаваться через регистры \EAX, 
 \EDX и \ECX, 
 а остальные через стек. Разумеется, если аргументов у функции меньше трех, то будет задействована 
 только часть регистров.}
-\EN{What it means to us, the first 3 arguments will be passed via \EAX, \EDX and \ECX registers, 
-the rest ones via stack. Of course, if arguments number is less than 3, only part of registers
-are to be used.}
+\EN{What this means to us is that the first 3 arguments will be passed via registers \EAX, \EDX and \ECX, 
+and the rest via the stack. Of course, if the number of arguments is less than 3, only part of registers
+will be used.}
 
 \RU{Итак, качаем ядро 2.6.31, собираем его в Ubuntu: \TT{make vmlinux}, открываем в \IDA, 
 находим функцию \TT{do\_filp\_open()}. В начале мы увидим подобное (комментарии мои):}
 \EN{So, let's download Linux Kernel 2.6.31, compile it in Ubuntu: \TT{make vmlinux}, open it in \IDA, 
-find the \TT{do\_filp\_open()} function. At the beginning, we will see (comments are mine):}
+and find the \TT{do\_filp\_open()} function. At the beginning, we see (the comments are mine):}
 
 \lstinputlisting[caption=do\_filp\_open() (linux kernel 2.6.31)]{patterns/14_bitfields/1_check/check2.asm.\LANG}
 
@@ -172,9 +172,9 @@ find the \TT{do\_filp\_open()} function. At the beginning, we will see (comments
 не трогать вообще, то функции компилятора, распределяющей переменные по регистрам (так называемый 
 \gls{register allocator}), 
 будет очень тесно}
-\EN{GCC saves first 3 arguments values in local stack. 
-Otherwise, if compiler would not touch these registers, 
-it would be too tight environment for compiler's \gls{register allocator}}.
+\EN{GCC saves the values of the first 3 arguments in the local stack. 
+If that wasn't done, the compiler would not touch these registers, 
+and that would be too tight environment for the compiler's \gls{register allocator}}.
 
 \RU{Далее находим примерно такой фрагмент кода}\EN{Let's find this fragment of code}:
 
@@ -183,7 +183,7 @@ it would be too tight environment for compiler's \gls{register allocator}}.
 \RU{\TT{0x40} ~--- это то чему равен макрос \TT{O\_CREAT}. 
 \TT{open\_flag} проверяется на наличие бита \TT{0x40} и если бит равен $1$, то выполняется следующие 
 за \JNZ инструкции.}
-\EN{\TT{0x40}~---is what \TT{O\_CREAT} macro equals to.
-\TT{open\_flag} checked for \TT{0x40} bit presence, and if this bit is $1$, 
-next \JNZ instruction is triggered.}
+\EN{\TT{0x40}~---is what the \TT{O\_CREAT} macro equals to.
+\TT{open\_flag} gets checked for the presence of the \TT{0x40} bit, and if this bit is $1$, 
+the next \JNZ instruction is triggered.}
 
