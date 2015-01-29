@@ -3,9 +3,9 @@
 \RU{Язык \CCpp позволяет указывать, сколько именно бит отвести для каждого поля структуры. 
 Это удобно если нужно экономить место в памяти. К примеру, для переменной типа \Tbool достаточно одного бита.
 Но, это не очень удобно, если нужна скорость.}
-\EN{\CCpp language allow to define exact number of bits for each structure fields.
+\EN{The \CCpp language allows to define the exact number of bits for each structure field.
 It is very useful if one needs to save memory space. 
-For example, one bit is enough for variable of \Tbool type.
+For example, one bit is enough for a \Tbool variable.
 But of course, it is not rational if speed is important.}
 
 \newcommand{\FNCPUID}{\footnote{\href{http://go.yurichev.com/17069}{wikipedia}}}
@@ -14,12 +14,12 @@ But of course, it is not rational if speed is important.}
 \label{cpuid}
 \RU{Рассмотрим пример с инструкцией \CPUID\FNCPUID. 
 Эта инструкция возвращает информацию о том, какой процессор имеется в наличии и какие возможности он имеет.}
-\EN{Let's consider \CPUID\FNCPUID instruction example.
-This instruction returning information about current CPU and its features.}
+\EN{Let's consider the \CPUID\FNCPUID instruction example.
+This instruction returns information about the current CPU and its features.}
 
 \RU{Если перед исполнением инструкции в \EAX будет 1, 
 то \CPUID вернет упакованную в \EAX такую информацию о процессоре:}
-\EN{If the \EAX is set to 1 before instruction execution, 
+\EN{If the \EAX is set to 1 before the instruction's execution, 
 \CPUID will return this information packed into the \EAX register:}
 
 \begin{center}
@@ -40,19 +40,19 @@ This instruction returning information about current CPU and its features.}
 
 \RU{MSVC 2010 имеет макрос для \CPUID, а GCC 4.4.1 ~--- нет. 
 Поэтому для GCC сделаем эту функцию сами, используя его встроенный ассемблер\FNGCCAS.}
-\EN{MSVC 2010 has \CPUID macro, but GCC 4.4.1~---has not.
-So let's make this function by yourself for GCC with the help of its built-in assembler\FNGCCAS.}
+\EN{MSVC 2010 has \CPUID macro, but GCC 4.4.1 does not.
+So let's make this function by ourselves for GCC with the help of its built-in assembler\FNGCCAS.}
 
 \lstinputlisting{patterns/15_structs/6_bitfields/cpuid/CPUID.c}
 
 \RU{После того как \CPUID заполнит \EAX/\EBX/\ECX/\EDX, у нас они отразятся в массиве \TT{b[]}. 
 Затем, мы имеем указатель на структуру \TT{CPUID\_1\_EAX}, и мы указываем его на значение 
 \EAX из массива \TT{b[]}.}
-\EN{After \CPUID will fill \EAX/\EBX/\ECX/\EDX, these registers will be reflected in the \TT{b[]} array.
-Then, we have a pointer to the \TT{CPUID\_1\_EAX} structure and we point it to the value in the \EAX from \TT{b[]} array.}
+\EN{After \CPUID fills \EAX/\EBX/\ECX/\EDX, these registers will be written in the \TT{b[]} array.
+Then, we have a pointer to the \TT{CPUID\_1\_EAX} structure and we point it to the value in \EAX from the \TT{b[]} array.}
 
 \RU{Иными словами, мы трактуем 32-битный \Tint как структуру.}
-\EN{In other words, we treat 32-bit \Tint value as a structure.}
+\EN{In other words, we treat a 32-bit \Tint value as a structure.}
 \RU{Затем мы читаем из структуры.}\EN{Then we read from the structure.}
 
 \subsubsection{MSVC}
@@ -64,14 +64,14 @@ Then, we have a pointer to the \TT{CPUID\_1\_EAX} structure and we point it to t
 \index{x86!\Instructions!SHR}
 \RU{Инструкция \TT{SHR} сдвигает значение из \EAX на то количество бит, 
 которое нужно \IT{пропустить}, то есть, мы игнорируем некоторые биты \IT{справа}.}
-\EN{\TT{SHR} instruction shifting value in the \EAX register by number of bits must be
-\IT{skipped}, e.g., we ignore some bits \IT{at right}.}
+\EN{The \TT{SHR} instruction shifting the value in \EAX by the number of bits that must be
+\IT{skipped}, e.g., we ignore some bits \IT{at the right side}.}
 
 \index{x86!\Instructions!AND}
 \RU{А инструкция \ANDIns очищает биты \IT{слева} которые нам не нужны, или же, говоря иначе, 
 она оставляет по маске только те биты в \EAX, которые нам сейчас нужны.}
-\EN{\ANDIns instruction clears bits not needed \IT{at left}, or, in other words, 
-leaves only those bits in the \EAX register we need now.}
+\EN{The \ANDIns instruction clears the unneeded bits \IT{on the left}, or, in other words, 
+leaves only those bits in the \EAX register we need.}
 
 \ifdefined\IncludeOlly
 \input{patterns/15_structs/6_bitfields/cpuid/olly.tex}
@@ -87,6 +87,6 @@ leaves only those bits in the \EAX register we need now.}
 вычисление \TT{extended\_model\_id} и \TT{extended\_family\_id} в один блок, 
 вместо того чтобы вычислять их перед соответствующим вызовом \printf.}
 \EN{Almost the same.
-The only thing worth noting is the GCC somehow united calculation of
+The only thing worth noting is that GCC somehow combines the calculation of
 \TT{extended\_model\_id} and \TT{extended\_family\_id} into one block,
-instead of calculating them separately, before corresponding each \printf call.}
+instead of calculating them separately before each \printf call.}
