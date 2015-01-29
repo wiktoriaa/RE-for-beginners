@@ -2,23 +2,23 @@
 
 \subsubsection{\NonOptimizing MSVC}
 
-\RU{Имеем в итоге}\EN{We got} (MSVC 2010):
+\RU{Имеем в итоге}\EN{We get} (MSVC 2010):
 
 \lstinputlisting[caption=MSVC 2010]{patterns/14_bitfields/2_set_reset/set_reset_msvc.asm}
 
 \index{x86!\Instructions!OR}
 \RU{Инструкция \OR здесь добавляет в переменную еще один бит, игнорируя остальные.}
-\EN{\OR instruction adds one more bit to value while ignoring the rest ones.}
+\EN{The \OR instruction adds one more bit to value while ignoring the rest.}
 
 \index{x86!\Instructions!AND}
 \RU{А \ANDIns сбрасывает некий бит. Можно также сказать, что \ANDIns здесь копирует все биты, кроме одного. 
 Действительно, во втором операнде \ANDIns выставлены в единицу те биты, которые нужно сохранить, 
 кроме одного, копировать который мы не хотим (и который $0$ в битовой маске).
 Так проще понять и запомнить.}
-\EN{\ANDIns resetting one bit. It can be said, \ANDIns just copies all bits except one.
-Indeed, in the second \ANDIns operand only those bits are set, which are needed to be saved,
-except one bit we would not like to copy (which is $0$ in bitmask).
-It is easier way to memorize the logic.}
+\EN{\ANDIns resets one bit. It can be said that \ANDIns just copies all bits except one.
+Indeed, in the second \ANDIns operand only the bits that need to be saved are set,
+just the one do not want to copy is not (which is $0$ in the bitmask).
+It is the easier way to memorize the logic.}
 
 \ifdefined\IncludeOlly
 \clearpage
@@ -26,17 +26,17 @@ It is easier way to memorize the logic.}
 
 \RU{Попробуем этот пример в}\EN{Let's try this example in} \olly.
 \RU{Сначала, посмотрим на двоичное представление используемых нами констант}
-\EN{First, let's see binary form of constants we use}:
+\EN{First, let's see the binary form of the constants we will be using}:
 
 \TT{0x200} (0000000000000000000{\color{red}1}000000000) 
-(\RU{т.е., 10-й бит (считая с первого)}\EN{i.e., 10th bit (counting from 1st)}).
+(\RU{т.е., 10-й бит (считая с первого)}\EN{i.e., the 10th bit (counting from 1st)}).
 
 \RU{Инвертированное}\EN{Inverted} \TT{0x200} \RU{это}\EN{is} \TT{0xFFFFFDFF} 
 (1111111111111111111{\color{red}0}111111111).
 
-\TT{0x4000} (00000000000000{\color{red}1}00000000000000) (\RU{т.е., 15-й бит}\EN{i.e., 15th bit}).
+\TT{0x4000} (00000000000000{\color{red}1}00000000000000) (\RU{т.е., 15-й бит}\EN{i.e., the 15th bit}).
 
-\RU{Входное значение это}\EN{Input value is}: \TT{0x12340678} (10010001101000000011001111000).
+\RU{Входное значение это}\EN{The input value is}: \TT{0x12340678} (10010001101000000011001111000).
 \RU{Видим, как оно загрузилось}\EN{We see how it's loaded}:
 
 \begin{figure}[H]
@@ -47,7 +47,7 @@ It is easier way to memorize the logic.}
 \end{figure}
 
 \clearpage
-\OR \RU{исполнилась}\EN{executed}:
+\OR \RU{исполнилась}\EN{got executed}:
 
 \begin{figure}[H]
 \centering
@@ -60,8 +60,8 @@ It is easier way to memorize the logic.}
 (10010001101000{\color{red}1}00011001111000).
 
 \clearpage
-\RU{Значение перезагружается снова (потому что использовался режим компилятора без оптимизации)}\EN{Value is 
-reloaded again (because it's not optimizing compiler's mode)}: 
+\RU{Значение перезагружается снова (потому что использовался режим компилятора без оптимизации)}\EN{The value is 
+reloaded again (because the compiler is not in optimizing mode)}: 
 
 \begin{figure}[H]
 \centering
@@ -71,7 +71,7 @@ reloaded again (because it's not optimizing compiler's mode)}:
 \end{figure}
 
 \clearpage
-\ANDIns \RU{исполнилась}\EN{executed}:
+\ANDIns \RU{исполнилась}\EN{got executed}:
 
 \begin{figure}[H]
 \centering
@@ -81,7 +81,7 @@ reloaded again (because it's not optimizing compiler's mode)}:
 \end{figure}
 
 \RU{10-й бит очищен (или, иным языком, оставлены все биты кроме 10-го) и итоговое значение это}
-\EN{10th bit is cleared (or, in other words, all bits are left here instead of 10th) and final value now is} \\
+\EN{The 10th bit was cleared (or, in other words, all bits were left except the 10th) and the final value now is} \\
 \TT{0x12344{\color{red}4}78} (1001000110100010001{\color{red}0}001111000).
 
 \fi
@@ -101,7 +101,7 @@ reloaded again (because it's not optimizing compiler's mode)}:
 
 \RU{Также избыточный код, хотя короче, чем у MSVC без оптимизации.}
 \EN{There is a redundant code present,
-however, it is shorter than MSVC version without optimization.}
+however, it is shorter than the MSVC version without optimization.}
 
 \RU{Попробуем теперь GCC с оптимизацией}\EN{Now let's try GCC with optimization turned on} \Othree:
 
@@ -113,7 +113,7 @@ however, it is shorter than MSVC version without optimization.}
 эта его часть от 8-го до 15-го бита включительно.}
 \EN{That's shorter.
 It is worth noting the compiler works with the \EAX register part via the \AH 
-register~---that is the \EAX register part from 8th to 15th bits inclusive.}
+register~---that is the \EAX register part from the 8th to the 15th bits included.}
 
 \RegTableOne{RAX}{EAX}{AX}{AH}{AL}
 
@@ -124,29 +124,29 @@ N.B. \RU{В 16-битном процессоре 8086 аккумулятор и�
 В 80386 регистры были расширены до 32-бит, 
 аккумулятор стал называться \EAX, но в целях совместимости, к его \IT{более старым} частям все еще можно 
 обращаться как к \AX/\AH/\AL.}
-\EN{16-bit CPU 8086 accumulator was named \AX and consisted of two 8-bit 
+\EN{The 16-bit CPU 8086 accumulator was named \AX and consisted of two 8-bit 
 halves~---\AL (lower byte) and \AH (higher byte).
-In 80386 almost all registers were extended to 32-bit, accumulator was named \EAX, 
+In 80386 almost all registers were extended to 32-bit, the accumulator was named \EAX, 
 but for the sake of compatibility,
-its \IT{older parts} may be still accessed as \AX/\AH/\AL registers.}
+its \IT{older parts} may be still accessed as \AX/\AH/\AL.}
 
 \RU{Из-за того, что все x86 процессоры ~--- наследники 16-битного 8086, эти \IT{старые} 16-битные опкоды короче 
 нежели более новые 32-битные. 
 Поэтому, инструкция \TT{``or ah, 40h''} занимает только 3 байта. 
 Было бы логичнее сгенерировать здесь \TT{``or eax, 04000h''}, но это уже 5 байт, или даже 6 
 (если регистр в первом операнде не \EAX).}
-\EN{Since all x86 CPUs are 16-bit 8086 CPU successors, these \IT{older} 16-bit opcodes are shorter 
-than newer 32-bit opcodes.
-That's why \TT{``or ah, 40h''} instruction occupying only 3 bytes.
+\EN{Since all x86 CPUs are successors of the 16-bit 8086 CPU, these \IT{older} 16-bit opcodes are shorter 
+than the newer 32-bit ones.
+That's why the \TT{``or ah, 40h''} instruction occupies only 3 bytes.
 It would be more logical way to emit here \TT{``or eax, 04000h''}
 but that is 5 bytes, or even 6
-(in case if register in first operand is not \EAX).}
+(in case the register in the first operand is not \EAX).}
 
 \subsubsection{\Optimizing GCC \AndENRU regparm}
 
 \RU{Если мы скомпилируем этот же пример не только с включенной оптимизацией \Othree, 
 но еще и с опцией \TT{regparm=3}, о которой я писал немного выше, то получится еще короче:}
-\EN{It would be even shorter if to turn on \Othree optimization flag and also set \TT{regparm=3}.}
+\EN{It would be even shorter if to turn on the \Othree optimization flag and also set \TT{regparm=3}.}
 
 \lstinputlisting[caption=\Optimizing GCC]{patterns/14_bitfields/2_set_reset/set_reset_gcc_O3_regparm3.asm}
 
@@ -158,8 +158,8 @@ but that is 5 bytes, or even 6
 но возможно GCC еще не так хорош для подобных оптимизаций по размеру кода. 
 Впрочем, в реальной жизни, подобные короткие функции лучше всего автоматически делать в виде 
 \IT{inline-функций} (\ref{inline_code}).}
-\EN{Indeed~---first argument is already loaded into \EAX, so it is possible to work with it in-place.
-It is worth noting that both function prologue (\TT{``push ebp / mov ebp,esp''}) and epilogue (\TT{``pop ebp''})
+\EN{Indeed~---the first argument is already loaded in \EAX, so it is possible to work with it in-place.
+It is worth noting that both the function prologue (\TT{``push ebp / mov ebp,esp''}) and epilogue (\TT{``pop ebp''})
 can easily be omitted
-here, but GCC probably is not good enough for such code size optimizations.
+here, but GCC probably is not good enough to do such code size optimizations.
 However, such short functions are better to be \IT{inlined functions} (\ref{inline_code}).}

@@ -29,11 +29,11 @@ RRX (\IT{Rotate Right with Extend}) \RU{можно дополнять некот
 \CMP, \ADD, \SUB, \TT{RSB}\footnote{\DataProcessingInstructionsFootNote}.
 
 \RU{Эти модификаторы указывают, как сдвигать второй операнд, и на сколько.}
-\EN{These modificators define, how to shift second operand and by how many bits.}
+\EN{These modificators define how to shift the second operand and by how many bits.}
 
 \index{ARM!\Instructions!TST}
 \index{ARM!Optional operators!LSL}
-\RU{Таким образом, инструкция }\EN{Thus} \TT{``TST R1, R2,LSL R3''} 
+\RU{Таким образом, инструкция }\EN{Thus the} \TT{``TST R1, R2,LSL R3''} 
 \RU{здесь работает как}\EN{instruction works here as} $R1 \land (R2 \ll R3)$.
 
 \subsection{ARM + \OptimizingXcodeIV (\ThumbTwoMode)}
@@ -43,10 +43,10 @@ RRX (\IT{Rotate Right with Extend}) \RU{можно дополнять некот
 \RU{Почти такое же}\EN{Almost the same}, 
 \RU{только здесь применяется пара инструкций}\EN{but here are two} 
 \TT{LSL.W}/\TT{TST} 
-\RU{вместо одной}\EN{instructions are used instead of single} 
+\RU{вместо одной}\EN{instructions are used instead of a single} 
 \TT{TST},
-\RU{ведь в режиме thumb нельзя добавлять указывать модификатор}\EN{because, in thumb mode, it is not
-possible to define} \TT{LSL} \RU{прямо в}\EN{modifier right in} \TT{TST}.
+\RU{ведь в режиме thumb нельзя добавлять указывать модификатор}\EN{because in thumb mode it is not
+possible to define} \TT{LSL} \RU{прямо в}\EN{modifier directly in} \TT{TST}.
 
 \begin{lstlisting}[label=ARM_leaf_example5]
                 MOV             R1, R0
@@ -66,23 +66,23 @@ loc_2F7A
 
 \subsection{ARM64 + \Optimizing GCC 4.9}
 
-\RU{Я взял 64-битный пример, который уже использовал}\EN{I took 64-bit example I already used}: 
+\RU{Я взял 64-битный пример, который уже использовал}\EN{I took the 64-bit example I already used}: 
 \ref{popcnt_x64_example}.
 
 \lstinputlisting[caption=\Optimizing GCC (Linaro) 4.8]{patterns/14_bitfields/4_popcnt/ARM64_GCC_O3.s.\LANG}
 
 \RU{Результат очень похож на тот, что GCC сгенерировал для x64}\EN{The result is very similar to what GCC 
-generated for x64}: \ref{shifts64_GCC_O3}.
+generates for x64}: \ref{shifts64_GCC_O3}.
 
 \index{ARM!\Instructions!CSEL}
-\RU{Инструкция }\TT{CSEL} \RU{это}\EN{instruction is} ``Conditional SELect''\RU{ (выбор при условии)}, 
+\EN{The}\RU{Инструкция} \TT{CSEL} \RU{это}\EN{instruction is} ``Conditional SELect''\RU{ (выбор при условии)}, 
 \RU{она просто выбирает одну из переменных, в зависимости от флагов выставленных}\EN{it just choose one 
-variable of two depending on flags set by} \TT{TST} \RU{и копирует значение в регистр}\EN{and copy value 
-into} \RegW{2}\RU{, содержащий переменную ``rt''}\EN{ register, which holds ``rt'' variable}.
+variable of two depending on the flags set by} \TT{TST} \RU{и копирует значение в регистр}\EN{and copies the value 
+into} \RegW{2}\RU{, содержащий переменную ``rt''}\EN{ , which holds the ``rt'' variable}.
 
 \subsection{ARM64 + \NonOptimizing GCC 4.9}
 
-\RU{И снова, я использовал 64-битный пример, который я уже использовал раннее}\EN{Again, I use 64-bit 
+\RU{И снова, я использовал 64-битный пример, который я уже использовал раннее}\EN{And again, the 64-bit 
 example I already used}: \ref{popcnt_x64_example}.
 
 \RU{Код более многословный, как обычно}\EN{The code is more verbose, as usual}.
