@@ -89,12 +89,12 @@ That's \TT{(20+1)*sizeof(int)}.
 \RU{Обратите внимание на состояние регистров на момент падения процесса. В нашем случае, 
 в 20-й элемент записалось значение 20. 
 И вот все дело в том, что заканчиваясь, эпилог функции восстанавливал значение \EBP. 
-(20 в десятичной системе это как раз 0x14 в шестнадцатеричной). 
+(20 в десятичной системе это как раз \TT{0x14} в шестнадцатеричной). 
 Далее выполнилась инструкция \RET, которая на самом деле эквивалентна \TT{POP EIP}.}
 \EN{Please take a look at the register state at the moment of the crash. In our case,
 $20$ was written in the 20th element. 
 At the function end, the function epilogue restores the original \EBP value.
-($20$ in decimal is $0x14$ in hexadecimal).
+($20$ in decimal is \TT{0x14} in hexadecimal).
 Then \RET gets executed, which is effectively equivalent to \TT{POP EIP} instruction.}
 
 \RU{Инструкция \RET вытащила из стека адрес возврата (это адрес где-то внутри \ac{CRT}), 
@@ -103,8 +103,8 @@ Then \RET gets executed, which is effectively equivalent to \TT{POP EIP} instruc
 И вот процессор оказался по адресу 0x15, но исполняемого кода там нет, так что случилось исключение.}
 \EN{The \RET instruction takes the return address from the stack (that is the address in \ac{CRT}),
 which was called \main),
-and $21$ iss stored there ($0x15$ in hexadecimal).
-The CPU traps at address $0x15$,
+and $21$ iss stored there (\TT{0x15} in hexadecimal).
+The CPU traps at address \TT{0x15},
 but there is no executable code there, so exception gets raised.}
 
 \index{\RU{Переполнение буфера}\EN{Buffer overflow}}
