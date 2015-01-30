@@ -2,18 +2,18 @@
 
 \RU{Чтобы проиллюстрировать то что структура ~--- это просто набор переменных, лежащих в одном месте, 
 переделаем немного пример, еще раз заглянув в описание структуры \IT{tm}}
-\EN{In order to illustrate the structure is just variables laying side-by-side in one place, 
-let's rework example, while looking at the \IT{tm} structure definition again}: \lstref{struct_tm}.
+\EN{In order to illustrate that the structure is just variables laying side-by-side in one place, 
+let's rework our example while looking at the \IT{tm} structure definition again}: \lstref{struct_tm}.
 
 \lstinputlisting{patterns/15_structs/3_tm_linux/as_array/GCC_tm2.c}
 
 \index{\CStandardLibrary!localtime\_r()}
 N.B. \RU{В \TT{localtime\_r} передается указатель именно на \TT{tm\_sec}, 
 т.е., на первый элемент ``структуры''.}
-\EN{The pointer to the exactly \TT{tm\_sec} field is passed into \TT{localtime\_r}, i.e., 
-to the first ``structure'' element.}
+\EN{The pointer to the \TT{tm\_sec} field is passed into \TT{localtime\_r}, i.e., 
+to the first element of the ``structure''.}
 
-\RU{В итоге, и этот компилятор поворчит}\EN{Compiler will warn us}:
+\RU{В итоге, и этот компилятор поворчит}\EN{The compiler will warn us}:
 
 \begin{lstlisting}[caption=GCC 4.7.3]
 GCC_tm2.c: In function 'main':
@@ -22,66 +22,66 @@ In file included from GCC_tm2.c:2:0:
 /usr/include/time.h:59:12: note: expected 'struct tm *' but argument is of type 'int *'
 \end{lstlisting}
 
-\RU{Тем не менее, сгенерирует такое}\EN{But nevertheless, will generate this}:
+\RU{Тем не менее, сгенерирует такое}\EN{But nevertheless, it will generate this}:
 
 \lstinputlisting[caption=GCC 4.7.3]{patterns/15_structs/3_tm_linux/as_array/GCC_tm2.asm}
 
 \RU{Этот код почти идентичен уже рассмотренному, и нельзя сказать, была ли структура
 в оригинальном исходном коде либо набор переменных.}\EN{This code is identical to what we saw previously and it is
-not possible to say, was it structure in original source code or just pack of variables.}
+not possible to say, was it a structure in original source code or just a pack of variables.}
 
 \RU{И это работает}\EN{And this works}. 
 \RU{Однако, в реальности так лучше не делать}\EN{However, it is not recommended to do this in practice}. 
 \RU{Обычно, неоптимизируюий компилятор располагает переменные в локальном
 стеке в том же порядке, в котором они объявляются в функции.}
-\EN{Usually, non-optimizing compiler allocated variables in local stack in the 
-same order as they were declared in function.}
+\EN{Usually, non-optimizing compilers allocates variables in the local stack in the 
+same order as they were declared in the function.}
 \RU{Тем не менее, никакой гарантии нет.}
-\EN{Nevertheless, there is no any guarantee.}
+\EN{Nevertheless, there is no guarantee.}
 
 \RU{Кстати, какой-нибудь другой компилятор может предупредить, что переменные}
-\EN{By the way, some other compiler may warn the} \TT{tm\_year}, \TT{tm\_mon}, \TT{tm\_mday},
+\EN{By the way, some other compiler may warn about the} \TT{tm\_year}, \TT{tm\_mon}, \TT{tm\_mday},
 \TT{tm\_hour}, \TT{tm\_min}\RU{, но не}\EN{ variables, but not} \TT{tm\_sec}\RU{, используются без инициализации}
 \EN{ are used without being initialized}.
 \RU{Действительно, ведь компилятор не знает что они будут заполнены при вызове функции}
-\EN{Indeed, compiler is not aware these will be filled when calling to} \TT{localtime\_r()}.
+\EN{Indeed, the compiler is not aware that these will be filled by} \TT{localtime\_r()}.
 
-\EN{I chose exactly this example for illustration, since all structure fields has \Tint type.}
+\EN{I chose this example, since all structure fields are of type \Tint.}
 \RU{Я выбрал именно этот пример для иллюстрации, потому что все члены структуры имеют тип \Tint.}
 \RU{Это не сработает, если поля структуры будут иметь размер 16 бит (\TT{WORD}), как в случае
-со структурой \TT{SYSTEMTIME}}\EN{This will not work if structure fields have 16-bit size (\TT{WORD}), 
-as in case of \TT{SYSTEMTIME} structure}\EMDASH{}\TT{GetSystemTime()} 
+со структурой \TT{SYSTEMTIME}}\EN{This would not work if structure fields are 16-bit (\TT{WORD}), 
+like in the case of the \TT{SYSTEMTIME} structure}\EMDASH{}\TT{GetSystemTime()} 
 \RU{заполнит их неверно}\EN{will fill them incorrectly} 
 (\RU{потому что локальные переменные будут выровнены по 32-битной границе}
-\EN{because local variables will be aligned on 32-bit boundary}).
+\EN{because the local variables will be aligned on a 32-bit boundary}).
 \RU{Читайте об этом в следующей секции}\EN{Read more about it in next section}: 
 ``\StructurePackingSectionName'' (\ref{structure_packing}).
 
 \index{\SyntacticSugar}
 \RU{Так что, структура ~--- это просто набор переменных лежащих в одном месте, рядом.}
-\EN{So, structure is just variables pack laying on one place, side-by-side.}
+\EN{So, a structure is just a pack of variables laying on one place, side-by-side.}
 \RU{Я мог бы сказать, что структура ~--- это такой синтаксический сахар, 
 заставляющий компилятор удерживать их в одном месте.}
-\EN{I could say the structure is a syntactic sugar, directing
-compiler to hold them in one place.}
+\EN{I could say that the structure is syntactic sugar, directing
+the compiler to hold them in one place.}
 \RU{Впрочем, я не специалист по языкам программирования, так что, скорее всего, ошибаюсь с этим термином.}
-\EN{However, I'm not programming languages expert, so, most likely, I'm wrong with this term.}
+\EN{However, I'm not an expert on programming languages, so most likely I'm wrong with this term.}
 \RU{Кстати, когда-то, в очень ранних версиях Си (перед 1972) структур не было вовсе}
-\EN{By the way, there were a times, in very early C versions (before 1972), 
-in which there were no structures at all} \cite{Ritchie:1993:DCL:155360.155580}.
+\EN{By the way, in some very early C versions (before 1972), 
+there were no structures at all} \cite{Ritchie:1993:DCL:155360.155580}.
 
 \RU{Здесь я не добавляю пример с отладчиком: потому что он будет полностью идентичным тому, что вы уже
-видели.}\EN{I'm not adding debugger example here: because it will be just the same as you already
+видели.}\EN{I'm not adding a debugger example here: it will be just the same as you already
 saw.}
 
 \subsection{\RU{Структура как массив 32-битных слов}\EN{Structure as an array of 32-bit words}}
 
 \lstinputlisting{patterns/15_structs/3_tm_linux/as_array/GCC_tm3.c}
 
-\RU{Я просто привожу (cast) указатель на структуру к массиву \Tint{}-ов}\EN{I just cast pointer to structure 
-to array of \Tint{}'s}.
+\RU{Я просто привожу (cast) указатель на структуру к массиву \Tint{}-ов}\EN{I just cast a pointer to structure 
+to an array of \Tint{}'s}.
 \RU{И это работает}\EN{And that works}!
-\RU{Я запустил пример}\EN{I run example at} 23:51:45 26-July-2014.
+\RU{Я запустил пример}\EN{I ran the example at} 23:51:45 26-July-2014.
 
 \begin{lstlisting}[label=GCC_tm3_output]
 0x0000002D (45)
@@ -95,35 +95,35 @@ to array of \Tint{}'s}.
 0x00000001 (1)
 \end{lstlisting}
 
-\RU{Переменные здесь в том же порядке, в котором они перечислены в определении структуры}\EN{Variables here 
-are just in the same order as they are enumerated in structure definition}: \ref{struct_tm}.
+\RU{Переменные здесь в том же порядке, в котором они перечислены в определении структуры}\EN{The variables here 
+are in the same order as they are enumerated in the definition of the structure}: \ref{struct_tm}.
 
-\RU{Вот как это компилируется}\EN{Here is how it was compiled}:
+\RU{Вот как это компилируется}\EN{Here is how it gets compiled}:
 
 \lstinputlisting[caption=\Optimizing GCC 4.8.1]{patterns/15_structs/3_tm_linux/as_array/GCC_tm3.lst.\LANG}
 
 \RU{И действительно: место в локальном стеке в начале используется как структура, затем как массив.}
-\EN{Indeed: the space in local stack is first treated as structure, and then it's treated as array.}
+\EN{Indeed: the space in the local stack is first treated as a structure, and then it's treated as an array.}
 
 \RU{Возможно даже модифицировать поля структуры через указатель.}
-\EN{It's even possible to modify structure fields through this pointer.}
+\EN{It's even possible to modify the fields of the structure through this pointer.}
 
 \RU{И снова, это сомнительный хакерский способ, который не рекомендуется использовать в настоящем коде.}
-\EN{And again, it's dubious hackish way to do things, which is not recommended to use in production code.}
+\EN{And again, it's dubiously hackish way to do things, not recommended for use in production code.}
 
 \ifdefined\IncludeExercises
 \myparagraph{\Exercise}
 
 \RU{В качестве упражнения, попробуйте модифицировать (увеличить на 1) 
 текущий номер месяца обращаясь со структурой как с массивом.}
-\EN{As an exercise, try to modify (increase by 1) current month number treating structure as 
-array.}
+\EN{As an exercise, try to modify (increase by 1) the current month number, treating the structure as 
+an array.}
 \fi
 
 \subsection{\RU{Структура как массив байт}\EN{Structure as an array of bytes}}
 
 \RU{Я могу даже больше. Можно привести (cast) указатель к массиву байт и вывести его:}
-\EN{I can do even more. Let's cast the pointer to array of bytes and dump it:}
+\EN{I can do even more. Let's cast the pointer to an array of bytes and dump it:}
 
 \lstinputlisting{patterns/15_structs/3_tm_linux/as_array/GCC_tm4.c}
 
@@ -139,10 +139,10 @@ array.}
 0x01 0x00 0x00 0x00 
 \end{lstlisting}
 
-\RU{Я также запустил этот пример}\EN{I run this example also at} 23:51:45 26-July-2014.
-\RU{Переменные точно такие же, как и в предыдущем выводе}\EN{The values are just the same as in previous dump} 
+\RU{Я также запустил этот пример}\EN{I ran this example also at} 23:51:45 26-July-2014.
+\RU{Переменные точно такие же, как и в предыдущем выводе}\EN{The values are just the same as in the previous dump} 
 (\ref{GCC_tm3_output}), \RU{и конечно, младший байт идет в самом начале, потому что это архитектура 
-little-endian}\EN{and of course, lower byte goes first, because this is little-endian architecture} 
+little-endian}\EN{and of course, the lowest byte goes first, because this is a little-endian architecture} 
 (\ref{sec:endianness}).
 
 \lstinputlisting[caption=\Optimizing GCC 4.8.1]{patterns/15_structs/3_tm_linux/as_array/GCC_tm4.lst.\LANG}

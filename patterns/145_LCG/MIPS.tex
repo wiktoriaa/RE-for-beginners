@@ -3,11 +3,11 @@
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/145_LCG/MIPS_O3_IDA.lst.\LANG}
 
 \RU{Ух, мы видим здесь только одну константу}
-\EN{Wow, we see here only one constant} (0x3C6EF35F \OrENRU 1013904223).
-\RU{Где же вторая}\EN{Where is another one} (1664525)?
+\EN{Wow, here we see only one constant} (0x3C6EF35F \OrENRU 1013904223).
+\RU{Где же вторая}\EN{Where is the other one} (1664525)?
 
 \RU{Похоже, умножение на 1664525 сделано только при помощи сдвигов и прибавлений!}
-\EN{It seems, multiplication by 1664525 is done using just shifts and additions!}
+\EN{It seems that multiplication by 1664525 is done by just using shifts and additions!}
 \RU{Проверим эту версию}\EN{Let's check this assumption}:
 
 \lstinputlisting{patterns/145_LCG/test.c}
@@ -19,55 +19,55 @@
 \subsection{\RU{Релоки в MIPS}\EN{MIPS relocations}}
 
 \RU{Еще поговорим о том, как на самом деле происходят операции загрузки из памяти и запись в память.}
-\EN{I would also focus on how such operations as load from memory and store to memory are actually works.}
+\EN{I want also to focus on how such operations as load from memory and store to memory actually work.}
 \RU{Листинги здесь были сделаны в IDA, которая убирает немного деталей.}
-\EN{The listings here are produced by IDA, which hiding some details.}
+\EN{The listings here are produced by IDA, which hides some details.}
 
 \RU{Я запущу objdump дважды, чтобы получить дизассемблированный листинг и еще список релоков:}
-\EN{I'll run objdump twice to get disassembled listing and also relocations list:}
+\EN{I'll run objdump twice to get a disassembled listing and also relocations list:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump)]{patterns/145_LCG/MIPS_O3_objdump.txt}
 
 \RU{Рассмотрим два релока для ф-ции \TT{my\_srand()}.}
-\EN{Let's consider two relocations for the \TT{my\_srand()} function.}
+\EN{Let's consider the two relocations for the \TT{my\_srand()} function.}
 \RU{Первый, для адреса 0, имеет тип \TT{R\_MIPS\_HI16}, и второй, для адреса 8, имеет тип \TT{R\_MIPS\_LO16}.}
-\EN{First for address 0 has type of \TT{R\_MIPS\_HI16} and second for address 8 has types \TT{R\_MIPS\_LO16}.}
+\EN{The first one, for address 0 has a type of \TT{R\_MIPS\_HI16} and the second one for address 8 has a type of \TT{R\_MIPS\_LO16}.}
 \RU{Это значит, что адрес начала сегмента .bss будет записан в инструкцию по адресу 0 (старшая часть адреса)
 и по адресу 8 (младшая асть адреса).}
-\EN{That means that address of beginning of .bss segment will be written into instructions at
+\EN{That means that address of the beginning of the .bss segment will be written into the instructions at
 address of 0 (high part of address) and 8 (low part of address).}
 
 \RU{Ведь переменная \TT{rand\_state} находится в самом начале сегмента .bss.}
-\EN{\TT{rand\_state} variable is at the very start of .bss segment.}
+\EN{The \TT{rand\_state} variable is at the very start of the .bss segment.}
 
 \RU{Так что мы видим нули в операндах инструкций LUI и SW потому что там пока ничего нет --- 
 компилятор не знает, что туда записать.}
 \EN{So we see zeroes in the operands of instructions LUI and SW, because nothing is there yet --- 
-compiler don't know what to write there.}
+the compiler don't know what to write there.}
 \RU{Линкер это исправит и старшая часть адреса будет записана в операнд инструкции LUI и младшая часть адреса ---
 в операнд инструкции SW.}
-\EN{Linker will fix this and high part of address will be written into LUI instruction operand and
-low part of address --- to operand of SW instruction.}
+\EN{The linker will fix this and the high part of the address will be written into the operand of LUI  and
+the low part of the address --- to the operand of SW.}
 \RU{SW просуммирует младшую асть адреса и то что находится в регистре \$V0 (там старшая часть).}
-\EN{SW will sum up low part of address and what is in \$V0 register (high part is there).}
+\EN{SW will sum up the low part of the address and what is in register \$V0 (the high part is there).}
 
 \RU{Та же история и с ф-цией my\_rand(): релок R\_MIPS\_HI16 указывает линкеру записать старшую часть
 адреса сегмента .bss в инструкцию LUI.}
-\EN{The same story about my\_rand() function: R\_MIPS\_HI16 relocation instructs linker to write high part
-of .bss segment address into LUI instruction.}
+\EN{It's the same story with the my\_rand() function: R\_MIPS\_HI16 relocation instructs the linker to write the high part
+of the .bss segment address into instruction LUI.}
 \RU{Так что старшая часть адреса переменной rand\_state будет находится в регистре \$V1.}
-\EN{So, high part of rand\_state variable address will reside in \$V1 register.}
+\EN{So the high part of the rand\_state variable address will reside in register \$V1.}
 \RU{Инструкция LW по адресу 0x10 просуммирует старшую и младшую часть и загрузит значение переменной 
 rand\_state в \$V1.}
-\EN{LW instruction at address 0x10 will sum up high and low part and load value of rand\_state 
+\EN{The LW instruction at address 0x10 will sum up the high and low parts and load the value of the rand\_state 
 variable into \$V1.}
 \RU{Инструкция SW по адресу 0x54 также просуммирует и затем запишет новое значение в глобальную переменную
 rand\_state.}
-\EN{SW instruction at address 0x54 will also do the summing and then will store new value 
-to rand\_state global variable.}
+\EN{The SW instruction at address 0x54 will again do the summing and then store the new value 
+to the rand\_state global variable.}
 
 \RU{Так что IDA обрабатывает релоки при загрузке, и таким образом эти детали скрываются.}
-\EN{So, IDA processes relocations while loading, thus hiding these details.}
-\RU{Но мы должны о них помнить.}\EN{But we should remember about them.}
+\EN{IDA processes relocations while loading, thus hiding these details,}
+\RU{Но мы должны о них помнить.}\EN{but we ought to remember them.}
 
 % TODO add example of compiled binary, GDB example, etc...

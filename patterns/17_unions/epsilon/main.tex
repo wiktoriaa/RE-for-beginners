@@ -4,51 +4,51 @@
 
 \RU{Машинный эпсилон --- это самая маленькая гранула, с которой может работать \ac{FPU} 
 \footnote{В русскоязычной литературе встречается также термин ``машинный ноль''.}.}
-\EN{Machine epsilon is a smallest possible granule \ac{FPU} can work with.}
+\EN{The machine epsilon is the smallest possible value the \ac{FPU} can work with.}
 \RU{Чем больше бит выделено для числа с плавающей точкой, тем меньше машинный эпсилон.}
-\EN{The more bits allocated for floating point number, the smaller machine epsilon.}
+\EN{The more bits allocated for floating point number, the smaller the machine epsilon.}
 \RU{Это}\EN{It is} $2^{-23} = 1.19e-07$ \ForENRU \Tfloat \AndENRU $2^{-52} = 2.22e-16$ \ForENRU \Tdouble.
 
 \RU{Любопытно, что вычислить машинный эпсилон очень легко:}
-\EN{It's interesting, how easy it's possible to calculate machine epsilon:}
+\EN{It's interesting, how easy it's to calculate the machine epsilon:}
 
 \lstinputlisting{patterns/17_unions/epsilon/float.c}
 
 \RU{Что мы здесь делаем это обходимся с мантиссой числа в формате IEEE 754 как с целочисленным числом и прибавляем
 единицу к нему.}
-\EN{What we do here is just treating fraction part of IEEE 754 number as integer and adding 1 to it.}
+\EN{What we do here is just treat the fraction part of the IEEE 754 number as integer and add 1 to it.}
 \RU{Итоговое число с плавающей точкой будет равно $starting\_value+machine\_epsilon$, так что нам
 нужно просто вычесть изначальное значение (используя арифметику с плавающей точкой) чтобы измерить, 
 какое число отражает один бит в одинарной точности (\Tfloat).}
-\EN{Resulting floating number will be equal to $starting\_value+machine\_epsilon$, so we just need to subtract
-starting value (using floating point arithmetic) to measure, what number one bit reflects
+\EN{The resulting floating number will be equal to $starting\_value+machine\_epsilon$, so we just need to subtract
+the starting value (using floating point arithmetic) to measure, what difference one bit reflects
 in the single precision (\Tfloat).}
 
 \RU{\IT{union} здесь нужен чтобы мы могли обращаться к числу в формате IEEE 754 как к обычному целочисленному.}
-\EN{\IT{union} serves here as a way to access IEEE 754 number as a regular integer.}
+\EN{The \IT{union} serves here as a way to access IEEE 754 number as a regular integer.}
 \RU{Прибавление 1 к нему на самом деле прибавляет 1 к \IT{мантиссе} числа, хотя, нужно сказать,
 переполнение также возможно, что приведет к прибавлению единицы к экспоненте.}
-\EN{Adding 1 to it is in fact adds 1 to \IT{fraction} part of number, however, needless to say,
-overflow is possible, which will add another 1 to exponent part.}
+\EN{Adding 1 to it in fact adds 1 to the \IT{fraction} part of the number, however, needless to say,
+overflow is possible, which will add another 1 to the exponent part.}
 
 \lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/17_unions/epsilon/float_MSVC_2010_Ox.asm.\LANG}
 
 \RU{Вторая инструкция FST избыточная: нет необходимости сохранять входное значение в этом же месте
 (компилятор решил выделить переменную $v$ в том же месте локального стека, где находится и 
 входной аргумент).}
-\EN{Second FST instruction is redundant: there are no need to store input value to the same
-place (compiler decided to allocate $v$ variable at the same point of local stack as input 
+\EN{The second FST instruction is redundant: there is no need to store the input value in the same
+place (the compiler decided to allocate the $v$ variable at the same point in the local stack as the input 
 argument).}
 
 \RU{Далее оно инкрементируется при помощи INC, как если это обычная целочисленная переменная.}
-\EN{Then it is incremented with INC, as it is usual integer variable.}
+\EN{Then it is incremented with INC, as it is a normal integer variable.}
 \RU{Затем оно загружается в FPU как если это 32-битное число в формате IEEE 754, FSUBR делает остальную
 часть работы и результат в ST0.}
-\EN{Then it is loaded into FPU as it is 32-bit IEEE 754 number, FSUBR do the rest of job and resulting
-value is in the ST0.}
+\EN{Then it is loaded into the FPU as a 32-bit IEEE 754 number, FSUBR does the rest of job and the resulting
+value is stored in ST0.}
 
 \RU{Последняя пара инструкций FSTP/FLD избыточна, но компилятор не соптимизировал её.}
-\EN{Last FSTP/FLD instruction pair is redundant, but compiler didn't optimized it.}
+\EN{The last FSTP/FLD instruction pair is redundant, but the compiler didn't optimize it out.}
 
 \ifdefined\IncludeARM
 \subsection{ARM64}
@@ -60,9 +60,9 @@ value is in the ST0.}
 \RU{В ARM64 нет инструкции для добавления числа к D-регистру в FPU, так что входное значение
 (пришедшее в D0) в начале копируется в \ac{GPR},
 инкрементируется, копируется в регистр FPU D1, затем происходит вычитание.}
-\EN{ARM64 has no instruction, which can add a number to FPU D-register, 
-so input value (came in D0) is first copied into \ac{GPR},
-incremented, copied to FPU register D1, then subtraction occurred.}
+\EN{ARM64 has no instruction that can add a number to a FPU D-register, 
+so the input value (that came in D0) is first copied into \ac{GPR},
+incremented, copied to FPU register D1, and then subtraction occurs.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 ARM64]{patterns/17_unions/epsilon/double_GCC49_ARM64_O3.s.\LANG}
 
@@ -76,8 +76,8 @@ incremented, copied to FPU register D1, then subtraction occurred.}
 \index{MIPS!\Instructions!MTC1}
 \RU{Новая для нас здесь инструкция это MTC1 (``Move To Coprocessor 1''), она просто переносит данные
 из \ac{GPR} в регистры FPU.}
-\EN{New instruction here is MTC1 (``Move To Coprocessor 1''), it just transfers data from \ac{GPR}
-to FPU registers.}
+\EN{The new instruction here is MTC1 (``Move To Coprocessor 1''), it just transfers data from \ac{GPR}
+to the FPU's registers.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/17_unions/epsilon/MIPS_O3_IDA.lst}
 
@@ -88,6 +88,6 @@ to FPU registers.}
 \RU{Трудно сказать, понадобится ли кому-то такая эквилибристика в реальном коде,
 но как я уже упоминал много раз в этой книге, этот пример хорошо подходит для объяснения формата
 IEEE 754 и \IT{union} в \CCpp.}
-\EN{It's hard to say, whether someone will need this trickery in real-world code, 
-but as I write many times in this book, this example is serving well 
-for explaining IEEE 754 format and \IT{union} in \CCpp.}
+\EN{It's hard to say whether someone will need this trickery in real-world code, 
+but as I write many times in this book, this example serves well 
+for explaining the IEEE 754 format and \IT{union}s in \CCpp.}
