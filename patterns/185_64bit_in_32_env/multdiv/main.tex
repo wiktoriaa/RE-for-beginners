@@ -7,15 +7,15 @@
 \lstinputlisting[caption=\Optimizing MSVC 2012 /Ob1]{patterns/185_64bit_in_32_env/multdiv/2_MSVC.asm.\LANG}
 
 \RU{Умножение и деление --- это более сложная операция, так что обычно, компилятор встраивает вызовы библиотечных ф-ций,
-делающих это}\EN{Multiplication and division is more complex operation, so usually, the compiler embeds calls to
-the library functions doing that}. \\
+делающих это}\EN{Multiplication and division are more complex operations, so usually the compiler embeds calls to
+a library functions doing that}. \\
 \\
-\RU{Значение этих библиотечных ф-ций, здесь}\EN{These functions meaning are here}: \ref{sec:MSVC_library_func}.
+\RU{Значение этих библиотечных ф-ций, здесь}\EN{These functions are described here}: \ref{sec:MSVC_library_func}.
 
 \lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline]{patterns/185_64bit_in_32_env/multdiv/2_GCC.asm.\LANG}
 
 \RU{GCC делает почти то же самое, тем не менее,
-встраивает код умножения прямо в ф-цию, посчитав что так будет эффективнее}\EN{GCC doing almost the same, but multiplication
+встраивает код умножения прямо в ф-цию, посчитав что так будет эффективнее}\EN{GCC does the expected, but the multiplication
 code is inlined right in the function, thinking it could be more efficient}.
 \RU{У GCC другие имена библиотечных ф-ций}\EN{GCC has different library function names}: \ref{sec:GCC_library_func}.
 
@@ -28,7 +28,7 @@ code is inlined right in the function, thinking it could be more efficient}.
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/185_64bit_in_32_env/multdiv/Keil_thumb_O3.s}
 
 \RU{Keil для режима ARM, тем не менее, может сгенерировать код для умножения 64-битных чисел:}
-\EN{Keil for ARM mode, nevertheless, is able to produce 64-bit multiplication code:}
+\EN{Keil for ARM mode, on the other hand, is able to produce 64-bit multiplication code:}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/multdiv/Keil_ARM_O3.s}
 % TODO add explanation
@@ -38,14 +38,14 @@ code is inlined right in the function, thinking it could be more efficient}.
 \subsection{MIPS}
 
 \Optimizing GCC \ForENRU MIPS 
-\EN{can generate 64-bit multiplication code, but have to call library routine for 64-bit division:}
+\EN{can generate 64-bit multiplication code, but has to call a library routine for 64-bit division:}
 \RU{может генерировать код для 64-битного умножения, но для 64-битного деления приходится вызывать библиотечную ф-цию:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/185_64bit_in_32_env/multdiv/MIPS_O3_IDA.lst}
 
 \RU{Тут также много \ac{NOP}-ов, это возможно заполнение delay slot-ов после инструкции умножения (она ведь работает
 медленнее прочих инструкций), но я не однозначно уверен.}
-\EN{There are a lot of \ac{NOP}s, they are probably delay slots filled after multiplication instruction (it's slow
+\EN{There are a lot of \ac{NOP}s, probably delay slots filled after the multiplication instruction (it's slower
 than other instructions, after all), but I'm not completely sure.}
 
 % TODO add explanation
