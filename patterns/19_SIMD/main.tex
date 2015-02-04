@@ -4,10 +4,10 @@
 \ac{SIMD} \RU{это акроним}\EN{is an acronym}: \IT{Single Instruction, Multiple Data}.
 
 \RU{Как можно судить по названию, это обработка множества данных исполняя только одну инструкцию.}
-\EN{As it is said, it is multiple data processing using only one instruction.}
+\EN{As its name implies, it processes multiple data using only one instruction.}
 
 \RU{Как и \ac{FPU}, эта подсистема процессора выглядит так же отдельным процессором внутри x86.}
-\EN{As \ac{FPU}, that \ac{CPU} subsystem looks like separate processor inside x86.}
+\EN{Like the \ac{FPU}, that \ac{CPU} subsystem looks like a separate processor inside x86.}
 
 \index{x86!MMX}
 \RU{SIMD в x86 начался с MMX. Появилось 8 64-битных регистров MM0-MM7.}
@@ -15,25 +15,25 @@
 
 \RU{Каждый MMX-регистр может содержать 2 32-битных значения, 4 16-битных или же 8 байт. 
 Например, складывая значения двух MMX-регистров, можно складывать одновременно 8 8-битных значений.}
-\EN{Each MMX register may hold 2 32-bit values, 4 16-bit values or 8 bytes.
-For example, it is possible to add 8 8-bit values (bytes) simultaneously by adding two values in MMX-registers.}
+\EN{Each MMX register can hold 2 32-bit values, 4 16-bit values or 8 bytes.
+For example, it is possible to add 8 8-bit values (bytes) simultaneously by adding two values in MMX registers.}
 
 \RU{Простой пример, это некий графический редактор, который хранит открытое изображение как двумерный массив. 
 Когда пользователь меняет яркость изображения, редактору нужно, например, прибавить некий коэффициент 
 ко всем пикселям, или отнять. 
 Для простоты можно представить, что изображение у нас бело-серо-черное и каждый пиксель занимает один байт, 
 то с помощью MMX можно менять яркость сразу у восьми пикселей.}
-\EN{One simple example is graphics editor, representing image as a two dimensional array.
-When user change image brightness, the editor must add a coefficient to each pixel value, or to subtract.
-For the sake of brevity, our image may be grayscale and each pixel defined by one 8-bit byte, then it is possible
-to change brightness of 8 pixels simultaneously.}
+\EN{One simple example is a graphics editor that represents an image as a two dimensional array.
+When the user changes the brightness of the image, the editor must add or subtract a coefficient to/from each pixel value.
+For the sake of brevity if we say that the image is grayscale and each pixel is defined by one 8-bit byte, then it is possible
+to change the brightness of 8 pixels simultaneously.}
 \RU{Кстати, вот причина почему в SIMD присутствуют инструкции с \IT{насыщением} (\IT{saturation}).}
-\EN{By the way, it's also a reason why \IT{saturation} instructions present in SIMD.}
+\EN{By the way, this is the reason why the \IT{saturation} instructions are present in SIMD.}
 \RU{Когда пользователь в графическом редакторе изменяет яркость, переполнение и антипереполнение (\IT{underflow})
 не нужны, так что в SIMD имеются, например, инструкции сложения, которые ничего не будут прибавлять
 если максимальное значение уже достигнуто, и т.д.}
-\EN{When user changing brightness in graphics editor, overflow and underflow is not desirable, 
-so there are addition instructions in SIMD which will not add anything if maximal value is reached, etc.}
+\EN{When the user changes the brightness in the graphics editor, overflow and underflow is not desirable, 
+so there are addition instructions in SIMD which will not add anything if the maximum value is reached, etc.}
 
 \RU{Когда MMX только появилось, эти регистры на самом деле располагались в FPU-регистрах. 
 Можно было использовать 
@@ -42,18 +42,18 @@ so there are addition instructions in SIMD which will not add anything if maxima
 регистрах процессора не будет сохранять их во время переключения задач, а вот регистры FPU сохранять будет. 
 Таким образом, процессор с MMX + старая \ac{OS} + задача, использующая возможности MMX = все 
 это может работать вместе.}
-\EN{When MMX appeared, these registers was actually located in FPU registers. 
-It was possible to use either FPU or MMX at the same time. One might think, Intel saved on transistors,
-but in fact, the reason of such symbiosis is simpler~---older \ac{OS} may not aware 
-of additional CPU registers would not save them at the context switching, but will save FPU registers.
-Thus, MMX-enabled CPU + old \ac{OS} + process utilizing MMX features = that all will work together.}
+\EN{When MMX appeared, these registers were actually located in the FPU's registers. 
+It was possible to use either FPU or MMX at the same time. One might think that Intel saved on transistors,
+but in fact the reason of such symbiosis was simpler~---older \ac{OS}es that are not aware 
+of the additional CPU registers would not save them at the context switch, but will save the FPU registers.
+Thus, MMX-enabled CPU + old \ac{OS} + process utilizing MMX features will still work.}
 
 \index{x86!SSE}
 \index{x86!SSE2}
-SSE\EMDASH\RU{это расширение регистров до 128 бит, теперь уже отдельно от FPU.}\EN{is extension of SIMD registers up to 128 bits, now separately from FPU.}
+SSE\EMDASH\RU{это расширение регистров до 128 бит, теперь уже отдельно от FPU.}\EN{is extension of the SIMD registers to 128 bits, now separate from the FPU.}
 
 \index{x86!AVX}
-AVX\EMDASH\RU{расширение регистров до 256 бит.}\EN{another extension to 256 bits.}
+AVX\EMDASH\RU{расширение регистров до 256 бит.}\EN{another extension, to 256 bits.}
 
 \RU{Немного о практическом применении.}\EN{Now about practical usage.}
 
@@ -65,8 +65,8 @@ AVX\EMDASH\RU{расширение регистров до 256 бит.}\EN{anoth
 шифрует блок с ключом и образуется 64-битный результат.
 Алгоритм DES можно легко представить в виде очень большой электронной цифровой схемы, 
 с проводами, элементами И, ИЛИ, НЕ.}
-\EN{One more example: we got DES encryption algorithm, it takes 64-bit block, 56-bit key, encrypt block and produce 64-bit result.
-DES algorithm may be considered as a very large electronic circuit, with wires and AND/OR/NOT gates.}
+\EN{One more example: the DES encryption algorithm takes a 64-bit block and a 56-bit key, encrypt the block and produces a 64-bit result.
+The DES algorithm may be considered as a very large electronic circuit, with wires and AND/OR/NOT gates.}
 
 \label{bitslicedes}
 \newcommand{\URLBS}{\url{http://go.yurichev.com/17329}}
@@ -74,16 +74,16 @@ DES algorithm may be considered as a very large electronic circuit, with wires a
 \RU{Идея bitslice DES\footnote{\URLBS} ~--- это обработка сразу группы блоков и ключей одновременно. 
 Скажем, на x86 переменная типа \IT{unsigned int} вмещает в себе 32 бита, так что там можно хранить 
 промежуточные результаты сразу для 32-х блоков-ключей, используя 64+56 переменных типа \IT{unsigned int}.}
-\EN{Bitslice DES\footnote{\URLBS}~---is an idea of processing group of blocks and keys simultaneously.
-Let's say, variable of type \IT{unsigned int} on x86 may hold up to 32 bits, so, it is possible to store there
-intermediate results for 32 blocks-keys pairs simultaneously, using 64+56 variables of \IT{unsigned int} type.}
+\EN{Bitslice DES\footnote{\URLBS}~---is the idea of processing groups of blocks and keys simultaneously.
+Let's say, variable of type \IT{unsigned int} on x86 can hold up to 32 bits, so it is possible to store there
+intermediate results for 32 block-key pairs simultaneously, using 64+56 variables of type \IT{unsigned int}.}
 
 \index{\oracle}
 \RU{Я написал утилиту для перебора паролей/хешей \oracle (которые основаны на алгоритме DES), 
 переделав алгоритм bitslice DES для SSE2 и AVX ~--- и теперь возможно шифровать одновременно 
 128 или 256 блоков-ключей:}
 \EN{I wrote an utility to brute-force \oracle passwords/hashes (ones based on DES),
-slightly modified bitslice DES algorithm for SSE2 and AVX~---now it is possible to encrypt 128 
+using slightly modified bitslice DES algorithm for SSE2 and AVX~---now it is possible to encrypt 128 
 or 256 block-keys pairs simultaneously.}
 
 \url{http://go.yurichev.com/17313}

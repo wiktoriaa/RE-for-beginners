@@ -6,27 +6,27 @@
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 /Ob1]{patterns/185_64bit_in_32_env/passing_add_sub/1_MSVC.asm}
 
-\RU{В}\EN{We may see in the} \TT{f\_add\_test()} \RU{видно, как каждое 64-битное число передается двумя 32-битными значениями,
-сначала старшая часть, затем младшая}\EN{function as each 64-bit value is passed by two 32-bit values,
+\RU{В}\EN{We can see in the} \TT{f\_add\_test()} \RU{видно, как каждое 64-битное число передается двумя 32-битными значениями,
+сначала старшая часть, затем младшая}\EN{function that each 64-bit value is passed using two 32-bit values,
 high part first, then low part}. \\
 \\
-\RU{Сложение и вычитание происходит также парами}\EN{Addition and subtraction occurring by pairs as well}. \\
+\RU{Сложение и вычитание происходит также парами}\EN{Addition and subtraction occur in pairs as well}. \\
 \\
 \index{x86!\Instructions!ADC}
-\RU{При сложении, в начале складываются младшие 32 бита}\EN{While addition, low 32-bit part are added first}.
-\RU{Если при сложении был перенос, выставляется флаг CF}\EN{If carry was occurred while addition, CF flag is set}.
+\RU{При сложении, в начале складываются младшие 32 бита}\EN{In addition, the low 32-bit part are added first}.
+\RU{Если при сложении был перенос, выставляется флаг CF}\EN{If carry was occurred while adding, the CF flag is set}.
 \RU{Следующая инструкция \TT{ADC} складывает старшие части чисел, но также прибавляет единицу если $CF=1$}
-\EN{The next \TT{ADC} instruction adds high parts of values, but also adds 1 if $CF=1$}. \\
+\EN{The following \TT{ADC} instruction adds the high parts of the values, and also adds 1 if $CF=1$}. \\
 \\
 \index{x86!\Instructions!SBB}
-\RU{Вычитание также происходит парами}\EN{Subtraction is also occurred by pairs}.
-\RU{Первый}\EN{The very first} \SUB \RU{может также включить флаг переноса CF, который затем будет проверяться в \TT{SBB}}
-\EN{may also turn CF flag on, which will be checked in the subsequent \TT{SBB} instruction}:
-\RU{если флаг переноса включен, то от результата отнимется единица}\EN{if carry flag is on, then 1 will also be subtracted
+\RU{Вычитание также происходит парами}\EN{Subtraction also occurs in pairs}.
+\RU{Первый}\EN{The first} \SUB \RU{может также включить флаг переноса CF, который затем будет проверяться в \TT{SBB}}
+\EN{may also turn on the CF flag, which will be checked in the subsequent \TT{SBB} instruction}:
+\RU{если флаг переноса включен, то от результата отнимется единица}\EN{if the carry flag is on, then 1 will also be subtracted
 from the result}. \\
 \\
-\RU{Легко увидеть, как результат работы \TT{f\_add()} затем передается в \printf{}}\EN{It is easily can be seen how
-\TT{f\_add()} function is then passed to \printf{}}.
+\RU{Легко увидеть, как результат работы \TT{f\_add()} затем передается в \printf{}}\EN{It is easy to see how
+the \TT{f\_add()} function result is then passed to \printf{}}.
 
 \lstinputlisting[caption=GCC 4.8.1 -O1 -fno-inline]{patterns/185_64bit_in_32_env/passing_add_sub/1_GCC.asm}
 
@@ -42,21 +42,21 @@ from the result}. \\
 \index{ARM!\Instructions!ADC}
 \index{ARM!\Instructions!SBC}
 \RU{Первое 64-битное значение передается в паре регистров R0 и R1, второе --- в паре R2 и R3.}
-\EN{First 64-bit value is passed in R0 and R1 registers pair, second in R2 and R3 register pair.}
+\EN{The first 64-bit value is passed in R0 and R1 register pair, the second in R2 and R3 register pair.}
 \RU{В ARM также есть инструкция ADC (учитывающая флаг переноса) и SBC (``subtract with carry'' --- вычесть
 с переносом).}
-\EN{ARM has ADC instruction as well (which counts carry flag) and SBC (``subtract with carry'').}
+\EN{ARM has the ADC instruction as well (which counts carry flag) and SBC (``subtract with carry'').}
 
 \RU{Важная вещь: когда младшие части слагаются/вычитаются, используются инструкции ADDS и SUBS с суффиксом
 -S.}
-\EN{Important thing: when low parts are added/subtracting, ADDS and SUBS instructions with -S suffix are used.}
+\EN{Important thing: when the low parts are added/subtracted, ADDS and SUBS instructions with -S suffix are used.}
 \RU{Суффикс -S означает ``set flags'' (установить флаги), а флаги (особенно флаг переноса) это то что однозначно
 нужно последующим инструкциями ADC/SBC.}
-\EN{-S suffix mean ``set flags'', and flags (esp. carry flag) is what consequent ADC/SBC instruction
+\EN{The -S suffix means ``set flags'', and flags (esp. carry flag) is what consequent ADC/SBC instructions
 definitely need.}
 
 \RU{А иначе инструкции без суффикса -S здесь вполне бы подошли (ADD и SUB).}
-\EN{Otherwise, instructions without -S suffix would do the job (ADD and SUB).}
+\EN{Otherwise, instructions without the -S suffix would do the job (ADD and SUB).}
 
 \fi
 
@@ -66,14 +66,14 @@ definitely need.}
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/185_64bit_in_32_env/passing_add_sub/MIPS_O3_IDA.lst.\LANG}
 
 \RU{В MIPS нет регистра флагов, так что эта информация не присутствует после исполнения арифметических операций.}
-\EN{MIPS has no flags register, so there are no such information present after execution of arithmetic operations.}
-\EN{So there are no instructions like ADC or SBB in x86.}
+\EN{MIPS has no flags register, so there is no such information present after the execution of arithmetic operations.}
+\EN{So there are no instructions like x86's ADC and SBB.}
 \RU{Так что здесь нет инструкций как ADC или SBB в x86.}
 \RU{Чтобы получить информацию о том, был бы выставлен флаг переноса, происходит сравнение (используя инструкцию
 ``SLTU''), которая выставляет целевой регистр в 1 или 0.}
-\EN{To get information about if carry flag would be set, comparing (using ``SLTU'' instruction) is also occurring, 
-which set 1 to destination register, or 0.}
+\EN{To know if the carry flag would be set, a comparison (using ``SLTU'' instruction) also occurs, 
+which sets the destination register to 1 or 0.}
 \RU{Эта 1 или 0 затем прибавляется к итоговому результату, или вычитается.}
-\EN{This 1 or 0 is then added to final result, or subtracted.}
+\EN{This 1 or 0 is then added or subtracted to/from the final result.}
 
 \fi
