@@ -9,16 +9,16 @@ unsigned int f()
 
 \RU{В MIPS, так же как и в ARM, все инструкции имеют размер 32 бита, так что невозможно
 закодировать 32-битную константу в инструкцию.}
-\EN{MIPS, just like ARM, has all instructions with size of 32-bit, so it's not possible to
-embed 32-bit constant into one instruction.}
+\EN{All instructions in MIPS, just like ARM, have a of 32-bit, so it's not possible to
+embed a 32-bit constant into one instruction.}
 \index{MIPS!\Instructions!LI}
 \index{MIPS!\Instructions!ORI}
 \RU{Так что это транслируется в две инструкции:
 первая загружает старшую часть 32-битного числа и вторая применяет операцию ``ИЛИ'',
 эффект от которой в том, что она просто выставляет младшие 16 бит целевого регистра:}
 \EN{So this translates to at least two instructions: 
-first loads high part of 32-bit number and the second
-one apply OR operation which effectively sets low 16-bit part of the target register:}
+the first loads the high part of the 32-bit number and the second
+one applies an OR operation, which effectively sets the low 16-bit part of the target register:}
 
 \begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput)]
         li      $2,305397760                    # 0x12340000
@@ -29,9 +29,9 @@ one apply OR operation which effectively sets low 16-bit part of the target regi
 \IDA \RU{знает о таких часто встречающихся последовательностях, так что для удобства, 
 она показывает последнюю инструкцию ORI как псевдоинструкцию LI, 
 которая якобы загружает полное 32-битное значение в регистр \$V0.}
-\EN{is fully aware of such often encountering code patterns, 
-so, for convenience, it shows the last ORI instruction as LI pseudoinstruction,
-which allegedly loads full 32-bit number into \$V0 register.}
+\EN{is fully aware of such frequently encountered code patterns, 
+so, for convenience it shows the last ORI instruction as the LI pseudoinstruction,
+which allegedly loads a full 32-bit number into the \$V0 register.}
 
 \index{MIPS!\Instructions!LUI}
 
@@ -43,5 +43,5 @@ which allegedly loads full 32-bit number into \$V0 register.}
 
 \RU{В выводе на ассемблере от GCC есть псевдоинструкция LUI, но на самом деле, 
 там LUI (``Load Upper Immediate''), загружающая 16-битное значение в старшую часть регистра.}
-\EN{GCC assembly output has LI pseudoinstruction, but in fact, LUI (``Load Upper Imeddiate'') there,
-which stores 16-bit value into high part of register.}
+\EN{The GCC assembly output has the LI pseudoinstruction, but in fact, LUI (``Load Upper Imeddiate'') is there,
+which stores a 16-bit value into the high part of the register.}
