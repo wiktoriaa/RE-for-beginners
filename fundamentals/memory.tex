@@ -8,64 +8,64 @@
 \ac{AKA} ``static memory allocation''.
 \RU{Нет нужды явно выделять, выделение происходит просто при объявлении переменных/массивов 
 глобально.}
-\EN{No need to allocate explicitly, allocation is done just by declaring variables/arrays 
+\EN{No need to allocate explicitly, the allocation is done just by declaring variables/arrays 
 globally.}
 \RU{Это глобальные переменные расположенные в сегменте данных или констант.}
-\EN{This is global variables residing in data or constant segments.}
+\EN{These are global variables, residing in the data or constant segments.}
 \RU{Доступны глобально (поэтому считаются \glslink{anti-pattern}{анти-паттерном}).}
-\EN{Available globally (hence, considered as \gls{anti-pattern}).}
+\EN{The are available globally (hence, considered as an \gls{anti-pattern}).}
 \RU{Не удобны для буферов/массивов, потому что должны иметь фиксированный размер.}
-\EN{Not convenient for buffers/arrays, because must have fixed size.}
+\EN{Not convenient for buffers/arrays, because they must have a fixed size.}
 \RU{Переполнения буфера, случающиеся здесь, обычно перезаписывают переменные или буферы
 расположенные рядом в памяти.}
-\EN{Buffer overflows occurring here usually overwriting variable or buffer residing next in memory.}
-\RU{Пример в этой книге}\EN{Example in this book}: \ref{scanf_global_variable}.
+\EN{Buffer overflows that occur here usually overwrite variables or buffers reside next to them in memory.}
+\RU{Пример в этой книге}\EN{There's an example in this book}: \ref{scanf_global_variable}.
 
 \item \RU{Стек}\EN{Stack}.
 \ac{AKA} ``allocate on stack''.
 \RU{Выделение происходит просто при объявлении переменных/массивов локально в ф-ции.}
-\EN{Allocation is done just by declaring variables/arrays locally in the function.}
-\RU{Обычно это локальные для ф-ции переменные}\EN{This is usually local to function variables}.
+\EN{The allocation is done just by declaring variables/arrays locally in the function.}
+\RU{Обычно это локальные для ф-ции переменные}\EN{These are usually local variables for the function}.
 \RU{Иногда эти локальные переменные также доступны и для нисходящих ф-ций (если ф-ция передает
 указатель на переменную в следующую ф-цию).}
-\EN{Sometimes these local variable are also available to descending functions (if one passing
-pointer to variable to the function to be executed).}
+\EN{Sometimes these local variable are also available to descending functions (if one passes
+a pointer to a variable to the function to be executed).}
 \RU{Выделение и освобождение очень быстрое, достаточно просто сдвига \ac{SP}.}
-\EN{Allocation and deallocation are very fast, \ac{SP} only needs to be shifted.}
+\EN{Allocation and deallocation are very fast, only \ac{SP} needs to be shifted.}
 \index{\CStandardLibrary!alloca()}
-\EN{But also not convenient for buffers/arrays, because buffer size should be fixed at some length,
-unless \TT{alloca()} (\ref{alloca}) (or variable-length array) is used.}
+\EN{But they're also not convenient for buffers/arrays, because the buffer size should be fixed,
+unless \TT{alloca()} (\ref{alloca}) (or a variable-length array) is used.}
 \RU{Но также не удобно для буферов/массивов, потому что размер буфера фиксирован,
 если только не используется \TT{alloca()} (\ref{alloca}) (или массив с переменной длиной).}
-\RU{Переполнение буфера обычно перезаписывает важные структуры стека}\EN{Buffer overflow usually 
-overwrites important stack structures}: \ref{subsec:bufferoverflow}.
+\RU{Переполнение буфера обычно перезаписывает важные структуры стека}\EN{Buffer overflows usually 
+overwrite important stack structures}: \ref{subsec:bufferoverflow}.
 
 \index{\CStandardLibrary!malloc()}
 \index{\CStandardLibrary!free()}
 \item \RU{Куча (\IT{heap}}\EN{Heap}. 
 \ac{AKA} ``dynamic memory allocation''.
-\RU{Выделение происходит при помощи вызова}\EN{Allocation occurring by calling} 
+\RU{Выделение происходит при помощи вызова}\EN{Allocation is done by calling} 
 \TT{malloc()/free()} \OrENRU \TT{new/delete} \InENRU \Cpp.
-\RU{Самый удобный метод: размер блока может быть задан во время исполнения}\EN{Most convenient 
-method: block size may be set at runtime}.
+\RU{Самый удобный метод: размер блока может быть задан во время исполнения}\EN{This is the most convenient 
+method: the block size may be set at runtime}.
 \index{\CStandardLibrary!realloc()}
 \RU{Изменение размера возможно (при помощи \TT{realloc()}), но может быть медленным.}
-\EN{Resizing is possible  (using \TT{realloc()}), but may be slow.}
+\EN{Resizing is possible  (using \TT{realloc()}), but can be slow.}
 \RU{Это самый медленный метод выделения памяти: аллокатор памяти должен поддерживать и обновлять
 все управляющие структуры во время выделения и освобождения.}
-\EN{This is slowest way to allocate memory: 
-memory allocator must support and update all control structures while
+\EN{This is the slowest way to allocate memory: 
+the memory allocator must support and update all control structures while
 allocating and deallocating.}
-\RU{Переполнение буфера обычно перезаписывает все эти структуры}\EN{Buffer overflows are usually 
-overwrites these structures}.
+\RU{Переполнение буфера обычно перезаписывает все эти структуры}\EN{Buffer overflows usually 
+overwrite these structures}.
 \RU{Выделения в куче также ведут к проблеме утечек памяти: каждый выделенный блок должен быть
 явно освобожден, но кто-то может забыть об этом, или делать это неправильно.}
-\EN{Heap allocations is also source of memory leak problem: each memory block should be deallocated
-explicitly, but one may forgot about it, or do it incorrectly.}
+\EN{Heap allocations are also source of memory leak problems: each memory block should be deallocated
+explicitly, but one may forget about it, or do it incorrectly.}
 \index{\CStandardLibrary!free()}
 \RU{Еще одна проблема --- это ``использовать после освобождения'' --- использовать блок памяти после
 того как \TT{free()} был вызван на нем, это тоже очень опасно.}
-\EN{Another problem is ``use after free''---using a memory block after \TT{free()} was called on it,
+\EN{Another problem is the ``use after free''---using a memory block after \TT{free()} was called on it,
 which is very dangerous.}
 \RU{Пример в этой книге}\EN{Example in this book}: \ref{struct_malloc_example}.
 
