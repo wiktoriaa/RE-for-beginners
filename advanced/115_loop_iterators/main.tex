@@ -2,18 +2,18 @@
 \label{loop_iterators}
 
 \RU{Часто, у цикла только один итератор, но в итоговом коде их может быть несколько.}
-\EN{Common loop has only one iterator, but there could be several in resulting code.}
+\EN{In most cases loops have only one iterator, but there could be several in the resulting code.}
 
-\RU{Вот очень простой пример}\EN{Here is very simple example}:
+\RU{Вот очень простой пример}\EN{Here is a very simple example}:
 
 \lstinputlisting{\CURPATH/iterators.c.\LANG}
 
 \RU{Здесь два умножения на каждой итерации, а это дорогая операция.}
-\EN{There are two multiplications at each iteration and this is costly operation.}
+\EN{There are two multiplications at each iteration and they are costly operations.}
 \RU{Сможем ли мы соптимизировать это как-то}\EN{Can we optimize it somehow}?
 \RU{Да, если мы заметим, что индексы обоих массивов перескакивают на места, рассчитать которые мы
 можем легко и без умножения.}
-\EN{Yes, if we will notice that both array indices are leaping on places we can calculate easily without 
+\EN{Yes, if we notice that both array indices are jumping on values that we can easily calculate without 
 multiplication.}
 
 \section{\RU{Три итератора}\EN{Three iterators}}
@@ -22,35 +22,34 @@ multiplication.}
 
 \RU{Теперь здесь три итератора: переменная \IT{cnt} и два индекса, они увеличиваются на 12 и 28 на каждой
 итерации, указывая на новые элементы массивов.}
-\EN{Now there are 3 iterators: \IT{cnt} variable and two indices, they are increased by 12 and 28 at 
-each iteration,
-pointing to new array elements.}
+\EN{Now there are 3 iterators: the \IT{cnt} variable and two indices, which are increased by 12 and 28 at 
+each iteration.}
 \RU{Мы можем переписать этот код на}\EN{We can rewrite this code in} \CCpp:
 
 \lstinputlisting{\CURPATH/iterators3.c.\LANG}
 
 \RU{Так что, ценой модификации трех итераторов на каждой итерации вместо одного, 
 мы избавлены от двух операций умножения.}
-\EN{So, at the cost of updating 3 iterators on each iteration instead of one, 
-two multiplication operations are dropped.}
+\EN{So, at the cost of updating 3 iterators at each iteration instead of one, 
+we can remove two multiplication operations.}
 
 \section{\RU{Два итератора}\EN{Two iterators}}
 
 \RU{GCC 4.9 сделал еще больше, оставив только 2 итератора:}
-\EN{GCC 4.9 did even more, leaving only 2 iterators:}
+\EN{GCC 4.9 does even more, leaving only 2 iterators:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 x64]{\CURPATH/GCC491_x64_O3.asm.\LANG}
 
 \RU{Здесь больше нет переменной-\IT{счетчика}: GCC рассудил, что она не нужна.}
-\EN{There are no \IT{counter} variable: GCC concluded it not needed.}
+\EN{There is no \IT{counter} variable any more: GCC concluded that it is not needed.}
 \RU{Последний элемент массива \IT{a2} вычисляется перед началом цикла (а это просто: $cnt*7$),
 и при помощи этого цикл останавливается: просто исполняйте его пока второй индекс не сравняется
 с предвычисленным значением.}
-\EN{Last element of \IT{a2} array is calculated before loop begin (which is easy: $cnt*7$) 
-and that's how loop will be stopped: just iterate until second index not reached this precalculated value.}
+\EN{The last element of the \IT{a2} array is calculated before the loop begins (which is easy: $cnt*7$) 
+and that's how the loop will be stopped: just iterate until the second index has not reached this precalculated value.}
 
 \RU{Об умножении используя сдвиги/сложения/вычитания, читайте здесь:}
-\EN{About multiplication using shifts/additions/subtractions read here:} 
+\EN{You can read more about multiplication using shifts/additions/subtractions here:} 
 \ref{multiplication_using_shifts_adds_subs}.
 
 \RU{Этот код можно переписать на \CCpp вот так:}
@@ -60,8 +59,8 @@ and that's how loop will be stopped: just iterate until second index not reached
 
 \ifdefined\IncludeARM
 GCC (Linaro) 4.9 \ForENRU ARM64 \RU{делает тоже самое, только предвычисляет последний индекс массива \IT{a1} вместо
-\IT{a2}, а это, конечно, имеет тот же эффект}\EN{do the same, but precalculates last index of \IT{a1} 
-array instead of \IT{a2}, and this has the same effect, of course}:
+\IT{a2}, а это, конечно, имеет тот же эффект}\EN{does the same, but it precalculates the last index of \IT{a1} 
+instead of \IT{a2}, which, of course has the same effect}:
 
 \lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64,label=GCC_no_number_sign]{\CURPATH/ARM64_GCC_49_O3.s.\LANG}
 
@@ -69,7 +68,7 @@ array instead of \IT{a2}, and this has the same effect, of course}:
 \fi
 
 \ifdefined\IncludeMIPS
-GCC 4.4.5 \ForENRU MIPS \RU{делает то же самое}\EN{do the same}:
+GCC 4.4.5 \ForENRU MIPS \RU{делает то же самое}\EN{does the same}:
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 \ForENRU MIPS (IDA)]{\CURPATH/MIPS_O3_IDA.lst.\LANG}
 \fi
@@ -81,23 +80,23 @@ GCC 4.4.5 \ForENRU MIPS \RU{делает то же самое}\EN{do the same}:
 
 \RU{Оптимизации компилятора могут быть очень странными, но, тем не менее, корректными.}
 \EN{Compiler optimizations can also be weird, but nevertheless, still correct.}
-\RU{Вот что делает Intel C++ 2011}\EN{Here is what Intel C++ compiler 2011 do}:
+\RU{Вот что делает Intel C++ 2011}\EN{Here is what the Intel C++ compiler 2011 does}:
 
 \lstinputlisting[caption=\Optimizing Intel C++ 2011 x64]{\CURPATH/intel_2011_x64_Ox.asm}
 
 \RU{В начале, принимаются какие-то решения, затем исполняется одна из процедур.}
-\EN{First, there are some decisions taken, than one of the routines is executed.}
+\EN{First, there are some decisions taken, then one of the routines is executed.}
 \RU{Вероятно, это проверка, не пересекаются ли массивы.}
-\EN{Supposedly, it is checked, if arrays are intersected.}
+\EN{Looks like it is a check if arrays intersect.}
 \RU{Это хорошо известный способ оптимизации процедур копирования блоков в памяти.}
-\EN{This is very well known way of optimizing memory blocks copy routines.}
+\EN{This is very well known way of optimizing memory block copy routines.}
 \RU{Но копирующие процедуры одинаковые}\EN{But copy routines are the same}!
 \RU{Видимо, это ошибка оптимизатора Intel C++, который, тем не менее, генерирует работоспособный код.}
-\EN{This is probably error of Intel C++ optimizer, which still produce workable code, though.}
+\EN{This is probably an error of the Intel C++ optimizer, which still produces workable code, though.}
 
 \RU{Я добавляю примеры такого кода в мою книгу чтобы читатель мог понимать, что результаты работы
 компилятором иногда бывают крайне странными, но корректными, потому что когда компилятор тестировали, 
 тесты прошли нормально.}
-\EN{I'm adding such example code to my book so reader would understand that compilers output is weird at times,
-but still correct, because when compiler was tested, tests were passed.}
+\EN{I'm adding such example code to my book so the reader would understand that compiler output is weird at times,
+but still correct, because when the compiler was tested, is passed the tests.}
 \fi
