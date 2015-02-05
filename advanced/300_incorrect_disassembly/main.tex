@@ -2,26 +2,26 @@
 \label{sec:incorrectly_disasmed_code}
 
 \RU{Практикующие reverse engineer-ы часто сталкиваются с неверно дизассемблированным кодом}
-\EN{Practicing reverse engineers often dealing with incorrectly disassembled code}.
+\EN{Practicing reverse engineers often have to deal with incorrectly disassembled code}.
 
-\section{\RU{Дизассемблирование началось в неверном месте}\EN{Disassembling started incorrectly} (x86)}
+\section{\RU{Дизассемблирование началось в неверном месте}\EN{Disassembling from an incorrect start} (x86)}
 
 \RU{В отличие от ARM и MIPS (где у каждой инструкции длина или 2 или 4 байта), x86-инструкции имеют переменную длину,
 так что, любой дизассемблер, начиная работу с середины x86-инструкции, может выдать неверные результаты.}
-\EN{Unlike ARM and MIPS (where any instruction has length of 2 or 4 bytes), x86 instructions has variable size,
-so, any disassembler, starting at the middle of x86 instruction, may produce incorrect results.}
+\EN{Unlike ARM and MIPS (where any instruction has a length of 2 or 4 bytes), x86 instructions have variable size,
+so any disassembler that starts in the middle of a x86 instruction may produce incorrect results.}
 
 \RU{Как пример}\EN{As an example}:
 
 \lstinputlisting{\CURPATH/x86_wrong_start.asm.\LANG}
 
 \RU{В начале мы видим неверно дизассемблированные инструкции, но потом, так или иначе, дизассемблер находит верный след}
-\EN{There are incorrectly disassembled instructions at the beginning, but eventually, disassembler finds right 
+\EN{There are incorrectly disassembled instructions at the beginning, but eventually the disassembler gets on the right 
 track}.
 
-\section{\RU{Как выглядят случайные данные в дизассемблированном виде}\EN{How random noise looks disassembled}?}
+\section{\RU{Как выглядят случайные данные в дизассемблированном виде}\EN{How does random noise looks disassembled}?}
 
-\RU{Общее, что можно сразу заметить, это}\EN{Common properties which can be easily spotted are}:
+\RU{Общее, что можно сразу заметить, это}\EN{Common properties that can be spotted easily are}:
 
 \begin{itemize}
 \item \RU{Необычно большой разброс инструкций}\EN{Unusually big instruction dispersion}.
@@ -30,16 +30,16 @@ track}.
 \index{x86!\Instructions!CALL}
 \index{x86!\Instructions!IN}
 \index{x86!\Instructions!OUT}
-\RU{Самые частые x86-инструкции это}\EN{Most frequent x86 instructions are} \PUSH{}, \MOV{}, \CALL{}, \RU{но здесь мы видим
+\RU{Самые частые x86-инструкции это}\EN{The most frequent x86 instructions are} \PUSH{}, \MOV{}, \CALL{}, \RU{но здесь мы видим
 инструкции из любых групп: \ac{FPU}-инструкции, инструкции \TT{IN}/\TT{OUT}, редкие и системные инструкции, всё друг с другом смешано 
 в одном месте}\EN{but here we will see
-instructions from any instruction group: \ac{FPU} instructions, \TT{IN}/\TT{OUT} instructions, rare and system instructions,
-everything messed up in one single place}.
+instructions from all instruction groups: \ac{FPU} instructions, \TT{IN}/\TT{OUT} instructions, rare and system instructions,
+everything mixed up in one single place}.
 
 \item \RU{Большие и случайные значения, смещения,}\EN{Big and random values, offsets and} immediates.
 
 \item \RU{Переходы с неверными смещениями часто имеют адрес перехода в середину другой инструкции}
-\EN{Jumps having incorrect offsets often jumping into the middle of another instructions}.
+\EN{Jumps having incorrect offsets, often jumping in the middle of another instructions}.
 \end{itemize}
 
 \lstinputlisting[caption=\randomNoise{} (x86)]{\CURPATH/x86.asm}
@@ -58,6 +58,6 @@ everything messed up in one single place}.
 \RU{Также важно помнить, что хитрым образом написанный код для распаковки и дешифровки (включая самомодифицирующийся),
 также может выглядеть как случайный шум, тем не менее, он исполняется корректно.}
 \EN{It is also important to keep in mind that 
-cleverly constructed unpacking and decrypting code 
-(including self-modifying) may looks like noise as well, nevertheless, it executes correctly.}
+cleverly constructed unpacking and decryption code 
+(including self-modifying) may looks like noise as well, but still execute correctly.}
 % TODO таких примеров тоже бы добавить
