@@ -28,7 +28,7 @@
 
 \section{Little-endian\RU{ (от младшего к старшему)}}
 
-\RU{Число}\EN{AThe \TT{0x12345678} \RU{будет представлено в памяти так}\EN{value will be represented in memory as}:
+\RU{Число}\EN{The} \TT{0x12345678} \RU{будет представлено в памяти так}\EN{value will be represented in memory as}:
 
 \begin{center}
 \begin{tabular}{ | l | l | }
@@ -104,19 +104,24 @@ but here it is the last one, because the highest byte goes first.}
 
 \section{\RU{Конвертирование}\EN{Converting data}}
 
+\index{x86!\Instructions!BSWAP}
+\RU{Инструкция }{The }\TT{BSWAP} \RU{может использоваться для конвертирования}
+\EN{instruction can be used for conversion}.
+
 \index{TCP/IP}
 \RU{Сетевые пакеты TCP/IP используют соглашение big-endian, вот почему программа, работающая на little-endian архитектуре
-должна конвертировать значения используя ф-ции}
+должна конвертировать значения.}
 \EN{TCP/IP network data packets use the big-endian conventions, so that is why a program working on a little-endian architecture
-should convert the values using the} \TT{htonl()} \AndENRU \TT{htons()}\EN{ functions}.
+should convert the values.} 
+
+\RU{Обычно, используются ф-ции}\EN{The} \TT{htonl()} \AndENRU \TT{htons()}\EN{ functions are usually used}.
 
 \RU{Порядок байт big-endian в среде TCP/IP также называется}
 \EN{In TCP/IP, big-endian is also called} ``network byte order'',
-\RU{а}\EN{while} little-endian\EMDASH{}``host byte order''.
-% actually, the "host byte order" can be big, little or any-endian, there
-% is no specific name for the little-endian byte order in TCP/IP
-
-\index{x86!\Instructions!BSWAP}
-\RU{Инструкция }{The }\TT{BSWAP} \RU{также может использоваться для конвертирования}
-\EN{instruction can also be used for conversion}.
-
+\RU{а порядок байт на компьютере}\EN{while byte order on the computer}\EMDASH{}``host byte order''.
+\RU{На архитектуре Intel x86, и других little-endian архитектурах, ``host byte order'' это little-endian, 
+а вот на IBM POWER это может быть big-endian, так что на последней, 
+\TT{htonl()} и \TT{htons()} ничего не меняют.}
+\EN{``host byte order'' is little-endian on Intel x86 and other little-endian architectures,
+but it is big-endian on IBM POWER, so \TT{htonl()} and \TT{htons()} will do nothing
+on latter.}
