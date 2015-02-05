@@ -1,7 +1,7 @@
 ﻿\section{\RU{Как это работает}\EN{How it works}}
 
 \RU{Вот как деление может быть заменено на умножение и деление на числа $2^{n}$}
-\EN{That's how division can be replaced by multiplication and division by $2^{n}$ numbers}:
+\EN{That's how division can be replaced by multiplication and division with $2^{n}$ numbers}:
 
 \[
 	result = 
@@ -10,35 +10,35 @@
 	\frac{input \cdot M}{2^{n}}
 \]
 
-\RU{Где}\EN{Where} $M$ \RU{это}\EN{is} \IT{magic}-\RU{коэффициент}\EN{coefficient}.
+\RU{Где}\EN{Where} $M$ \RU{это}\EN{is a} \IT{magic}\RU{-коэффициент}\EN{ coefficient}.
 
-\RU{Как вычислить $M$}\EN{That's how $M$ can be computed}:
+\RU{Как вычислить $M$}\EN{This is how $M$ can be computed}:
 
 \[
 	M = \frac{2^{n}}{divisor}
 \]
 
 \RU{Так что эти фрагменты кода обычно имеют форму}
-\EN{So these code snippets are usually have this form}:
+\EN{So these code snippets usually have this form}:
 
 \[
 	result = \frac{input \cdot M}{2^{n}}
 \]
 
 \RU{Деление на $2^{n}$ производится обычным битовым сдвигом вправо.}
-\EN{Division by $2^{n}$ is usually done by simple right bit shift.}
+\EN{Division by $2^{n}$ is usually done by simply shifting to the right.}
 \RU{Если}\EN{If} $n<32$, 
 \RU{то тогда сдвигается младшая часть \glslink{product}{произведения}}
-\EN{then low part of \gls{product} is shifted} (\InENRU \EAX \OrENRU \RAX).
+\EN{then the low part of the \gls{product} is shifted} (\InENRU \EAX \OrENRU \RAX).
 \RU{Если}\EN{If} $n\geq32$, 
 \RU{то тогда сдвигается старшая часть \glslink{product}{произведения}}
-\EN{then the high part of \gls{product} is shifted} (\InENRU \EDX \OrENRU \RDX).
+\EN{then the high part of the \gls{product} is shifted} (\InENRU \EDX \OrENRU \RDX).
 
 $n$ \RU{выбирается так, чтобы улучшить точность результата}\EN{is chosen in order to minimize
-error}.
+the error}.
 
 \RU{Если делать знаковое деление, знак результата умножения также добавляется к результату}
-\EN{When doing signed division, sign of multiplication result also added to the output result}.
+\EN{When doing signed division, the sign of the multiplication result is also added to the output result}.
 
 \RU{Посмотрите на разницу}\EN{Take a look at the difference}:
 
@@ -54,22 +54,22 @@ unsigned int f3_32_unsigned(unsigned int a)
 };
 \end{lstlisting}
 
-\RU{В беззнаковой версии функции}\EN{In the unsigned version of function}, 
-\IT{magic}-\RU{коэффициент это}\EN{coefficient is} \TT{0xAAAAAAAB} \RU{и результат умножения делится на}
-\EN{and multiplication result is divided by} $2^{33}$.
+\RU{В беззнаковой версии функции, }\EN{In the unsigned version of the function, the}
+\IT{magic}\RU{-коэффициент это}\EN{ coefficient is} \TT{0xAAAAAAAB} \RU{и результат умножения делится на}
+\EN{and the multiplication result is divided by} $2^{33}$.
 
-\RU{В знаковой версии функции}\EN{In the signed version of function}, \IT{magic}-\RU{коэффициент это}
-\EN{coefficient is} \TT{0x55555556} \RU{и результат умножения делится на}
-\EN{and multiplication result is divided by} $2^{32}$.
+\RU{В знаковой версии функции,}\EN{In the signed version of the function, the} \IT{magic}\RU{-коэффициент это}
+\EN{ coefficient is} \TT{0x55555556} \RU{и результат умножения делится на}
+\EN{and the multiplication result is divided by} $2^{32}$.
 \RU{Впрочем здесь нет инструкции деления: результат просто берется из}\EN{There are no 
-division instruction though: result is just taken from} \EDX. 
+division instruction though: the result is just taken from} \EDX. 
 
 \RU{Знак результата умножения также учитывается: старшие 32 бита результата сдвигаются на 31
 (таким образом, оставляя знак в самом младшем бите \EAX).}
-\EN{Sign is also taken from multiplication result: high 32 bits of result is shifted by 31
-(leaving sign in least significant bit of \EAX).}
+\EN{The sign is also taken from the multiplication result: the high 32 bits of the result are shifted by 31
+(leaving the sign in the least significant bit of \EAX).}
 $1$ \RU{прибавляется к конечному результату, если знак отрицательный, для коррекции результата}
-\EN{is added to the final result if sign is negative, for result correction}.
+\EN{is added to the final result if the sign is negative, for result correction}.
 
 \lstinputlisting[caption=\Optimizing MSVC 2012]{\CURPATH/2.asm.\LANG}
 

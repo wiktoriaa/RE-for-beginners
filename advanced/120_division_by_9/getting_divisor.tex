@@ -1,14 +1,14 @@
-﻿\section{\RU{Определение делителя}\EN{Getting divisor}}
+﻿\section{\RU{Определение делителя}\EN{Getting the divisor}}
 
 \subsection{\RU{Вариант}\EN{Variant} \#1}
 
-\RU{Часто, код имеет вид}\EN{Often, the code has a form of}:
+\RU{Часто, код имеет вид}\EN{Often, the code looks like this}:
 
 \lstinputlisting{\CURPATH/form.asm.\LANG}
 
 \RU{Определим 32-битную \IT{magic}-коэффициент через}
-\EN{Let's denote 32-bit \IT{magic}-coefficient as} $M$, 
-\RU{коэффициент сдвига через}\EN{shifting coefficient by} $C$ \RU{и делитель через}\EN{and divisor by} $D$.
+\EN{Let's denote the 32-bit \IT{magic} coefficient as} $M$, 
+\RU{коэффициент сдвига через}\EN{the shifting coefficient as} $C$ \RU{и делитель через}\EN{and the divisor as} $D$.
 
 \RU{Делитель, который нам нужен это}\EN{The divisor we need to get is}:
 
@@ -28,17 +28,17 @@ D=\frac{2^{32 + 3}}{2021161081}
 
 \index{Wolfram Mathematica}
 \RU{Числа больше чем 32-битные, так что я использовал}
-\EN{Numbers are larger than 32-bit ones, so I use} Wolfram Mathematica \RU{для удобства}\EN{for convenience}:
+\EN{The numbers are larger than 32-bit, so I used} Wolfram Mathematica \RU{для удобства}\EN{for convenience}:
 
 \begin{lstlisting}[caption=Wolfram Mathematica]
 In[1]:=N[2^(32+3)/2021161081]
 Out[1]:=17.
 \end{lstlisting}
 
-\RU{Так что искомый делитель это}\EN{So the divisor from the code I used for example is} 17.
+\RU{Так что искомый делитель это}\EN{So the divisor from the code I used as example is} 17.
 
-\RU{При делении в x64, всё то же самое, только нужно использовать}\EN{As of x64 division, things 
-are the same, but} $2^{64}$ \RU{вместо}\EN{should be used instead of} $2^{32}$:
+\RU{При делении в x64, всё то же самое, только нужно использовать}\EN{For x64 division, things 
+are the same, but} $2^{64}$ \RU{вместо}\EN{has to be used instead of} $2^{32}$:
 
 \begin{lstlisting}
 uint64_t f1234(uint64_t a)
@@ -65,7 +65,7 @@ Out[1]:=1234.
 \subsection{\RU{Вариант}\EN{Variant} \#2}
 
 \RU{Бывает также вариант с пропущенным арифметическим сдвигом, например}\EN{A variant with 
-omitted arithmetic shift is also exist}:
+omitted arithmetic shift also exist}:
 
 \begin{lstlisting}
 		mov     eax, 55555556h ; 1431655766
@@ -88,7 +88,7 @@ D=\frac{2^{32}}{1431655766}
 
 \index{Wolfram Mathematica}
 \RU{Снова использую}
-\EN{And again I use} Wolfram Mathematica:
+\EN{And again I used} Wolfram Mathematica:
 
 \begin{lstlisting}[caption=Wolfram Mathematica]
 In[1]:=N[2^32/16^^55555556]
