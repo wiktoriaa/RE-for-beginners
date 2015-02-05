@@ -1,13 +1,13 @@
-﻿\section{\RU{Загрузка констант в регистр}\EN{Loading constants into register}}
+﻿\section{\RU{Загрузка констант в регистр}\EN{Loading a constant into a register}}
 
 \subsection{\RU{32-битный}\EN{32-bit} ARM}
 \label{ARM_big_constants_loading}
 
 \RU{Как мы уже знаем, все инструкции имеют длину в 4 байта в режиме ARM и 2 байта в режиме Thumb.}
-\EN{Aa we already know, all instructions has length of 4 bytes in ARM mode and 2 bytes in Thumb mode.}
+\EN{Aa we already know, all instructions have a length of 4 bytes in ARM mode and 2 bytes in Thumb mode.}
 \RU{Как в таком случае записать в регистр 32-битное число, если его невозможно закодировать
 внутри одной инструкции?}
-\EN{How to load 32-bit value into register, if it's not possible to encode it inside one instruction?}
+\EN{Then how can we load a 32-bit value into a register, if it's not possible to encode it in one instruction?}
 
 \RU{Попробуем}\EN{Let's try}:
 
@@ -27,9 +27,9 @@ f:
 \end{lstlisting}
 
 \RU{Т.е., значение \TT{0x12345678} просто записано в памяти отдельно и загружается, если нужно.}
-\EN{So, the \TT{0x12345678} value just stored aside in memory and loads if it needs.}
+\EN{So, the \TT{0x12345678} value is just stored aside in memory and loaded if needed.}
 \RU{Но можно обойтись и без дополнительного обращения к памяти.}
-\EN{But it's possible to get rid of additional memory access.}
+\EN{But it's possible to get rid of the additional memory access.}
 
 \begin{lstlisting}[caption=GCC 4.6.3 -O3 -march{=}armv7-a (\ARMMode)]
 movw    r0, #22136      ; 0x5678
@@ -39,15 +39,15 @@ bx      lr
 
 \RU{Видно, что число загружается в регистр по частям, в начале младшая часть 
 (при помощи инструкции MOVW), затем старшая (при помощи MOVT).}
-\EN{We see that value is loaded into register by parts, lower part first (using MOVW instruction), 
-then higher (using MOVT).}
+\EN{We see that the value is loaded into the register by parts, the lower part first (using MOVW), 
+then the higher (using MOVT).}
 
 \RU{Следовательно, нужно 2 инструкции в режиме ARM, чтобы записать 32-битное число в регистр.}
-\EN{It means, 2 instructions are necessary in ARM mode for loading 32-bit value into register.}
+\EN{This means that 2 instructions are necessary in ARM mode for loading a 32-bit value into a register.}
 \RU{Это не так уж и страшно, потому что в реальном коде не так уж и много констант (кроме 0 и 1).}
-\EN{It's not a real problem, because in fact there are not much constants in the real code (except of 0 and 1).}
+\EN{It's not a real problem, because in fact there are not many constants in real code (except of 0 and 1).}
 \RU{Значит ли это, что это исполняется медленнее чем одна инструкция, как две инструкции?}
-\EN{Does it mean it executes slower then one instruction, as two instructions?}
+\EN{Does it mean that the two-instruction version is slower than one-instruction version?}
 \RU{Вряд ли, наверняка современные процессоры ARM наверняка умеют распознавать такие 
 последовательности и исполнять их быстро.}
 \EN{Doubtfully. Most likely, modern ARM processors are able to detect such sequences and execute
@@ -80,18 +80,17 @@ ret
 
 \index{ARM!\Instructions!MOVK}
 \TT{MOVK} \RU{означает}\EN{means} ``MOV Keep'', \RU{т.е., она записывает 16-битное значение в регистр, не трогая
-при этом остальные биты.}\EN{i.e., it writes 16-bit value into register, not touching other bits at the same 
-time.}
+при этом остальные биты.}\EN{i.e., it writes a 16-bit value into the register, not touching the rest of the bits.}
 \index{ARM!Optional operators!LSL}
-\RU{Суффикс }\TT{LSL} \RU{сдвигает значение в каждом случае влево на 16, 32 и 48 бит. Сдвиг происходит
-перед загрузкой.}\EN{suffix shifts value left by 16, 32 and 48 bits at each step. Shifting done before loading.}
+\EN{The}\RU{Суффикс} \TT{LSL} \RU{сдвигает значение в каждом случае влево на 16, 32 и 48 бит. Сдвиг происходит
+перед загрузкой.}\EN{suffix shifts left the value by 16, 32 and 48 bits at each step. The shifting is done before loading.}
 \RU{Таким образом, нужно 4 инструкции, чтобы записать в регистр 64-битное значение.}
-\EN{This means, 4 instructions are necessary to load 64-bit value into register.}
+\EN{This means that 4 instructions are necessary to load a 64-bit value into a register.}
 
-\subsubsection{\RU{Записать числа с плавающей точкой в регистр}\EN{Storing floating number into register}}
+\subsubsection{\RU{Записать числа с плавающей точкой в регистр}\EN{Storing floating-point number into register}}
 
 \RU{Некоторые числа можно записывать в D-регистр при помощи только одной инструкции.}
-\EN{It's possible to store a floating number into D-register using only one instruction.}
+\EN{It's possible to store a floating-point number into a D-register using only one instruction.}
 
 \RU{Например}\EN{For example}:
 
@@ -109,19 +108,19 @@ double a()
 \end{lstlisting}
 
 \RU{Число $1.5$ действительно было закодировано в 32-битной инструкции.}
-\EN{$1.5$ number was indeed encoded in 32-bit instruction.}
+\EN{The number $1.5$ was indeed encoded in a 32-bit instruction.}
 \RU{Но как}\EN{But how}?
 \index{ARM!\Instructions!FMOV}
 \RU{В ARM64, инструкцию \TT{FMOV} есть 8 бит для кодирования некоторых чисел с плавающей запятой.}
-\EN{In ARM64, there are 8 bits in \TT{FMOV} instruction for encoding some float point numbers.}
+\EN{In ARM64, there are 8 bits in the \TT{FMOV} instruction for encoding some floating-point numbers.}
 \RU{В \cite{ARM64ref} алгоритм называется \TT{VFPExpandImm()}.}
 \EN{The algorithm is called \TT{VFPExpandImm()} in \cite{ARM64ref}.}
 \index{minifloat}
 \EN{This is also called}\RU{Это также называется} \IT{minifloat}\footnote{\href{http://go.yurichev.com/17139}{wikipedia}}.
 \RU{Я попробовал разные: $30.0$ и $31.0$ компилятору удается закодировать, а $32.0$ уже нет, для него
 приходится выделять 8 байт в памяти и записать его там в формате IEEE 754:}
-\EN{I tried different: compiler is able to encode $30.0$ and $31.0$, but it couldn't encode $32.0$,
-an 8 bytes should be allocated to this number in IEEE 754 format:}
+\EN{I tried it with different values: the compiler is able to encode $30.0$ and $31.0$, but it couldn't encode $32.0$,
+as 8 bytes have to be allocated for this number in the IEEE 754 format:}
 
 \begin{lstlisting}
 double a()
