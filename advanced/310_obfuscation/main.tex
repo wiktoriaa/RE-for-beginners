@@ -1,19 +1,19 @@
 \chapter{\RU{Обфускация}\EN{Obfuscation}}
 
 \RU{Обфускация это попытка спрятать код (или его значение) от reverse engineer-а}
-\EN{Obfuscation is an attempt to hide the code (or its meaning) from reverse engineer}.
+\EN{The obfuscation is an attempt to hide the code (or its meaning) from reverse engineers}.
 
 \section{\RU{Текстовые строки}\EN{Text strings}}
 
-\RU{Как я указывал в}\EN{As I revealed in} (\ref{sec:digging_strings}) \RU{текстовые строки могут быть крайне
-полезны}\EN{text strings may be utterly helpful}.
+\RU{Как я указывал в}\EN{As I explained in} (\ref{sec:digging_strings}) \RU{текстовые строки могут быть крайне
+полезны}\EN{, text strings may be really helpful}.
 \RU{Знающие об этом программисты могут попытаться их спрятать так, чтобы их не было видно в \IDA{} или любом
 шестнадцатеричном редакторе}
-\EN{Programmers who aware of this, may try to hide them resulting inability to find the string in \IDA{} or any hex editor}.
+\EN{Programmers who are aware of this try to hide them, making it impossible to find the string in \IDA{} or any hex editor}.
 
 \RU{Вот простейший метод}\EN{Here is the simplest method}.
 
-\RU{Вот как строка может быть сконструирована}\EN{That is how the string may be constructed}:
+\RU{Вот как строка может быть сконструирована}\EN{This is how the string can be constructed}:
 
 \begin{lstlisting}
 mov     byte ptr [ebx], 'h'
@@ -29,7 +29,7 @@ mov     byte ptr [ebx+9], 'l'
 mov     byte ptr [ebx+10], 'd'
 \end{lstlisting}
 
-\RU{Строка также может сравниваться с другой}\EN{The string is also can be compared with another like}:
+\RU{Строка также может сравниваться с другой}\EN{The string is also can be compared with another one like this}:
 
 \begin{lstlisting}
 mov	ebx, offset username
@@ -45,28 +45,28 @@ jz	it_is_john
 \end{lstlisting}
 
 \RU{В обоих случаях, эти строки нельзя так просто найти в шестнадцатеричном редакторе.}
-\EN{In both cases, it is impossible to find these strings straightforwardly in hex editor.}
+\EN{In both cases, it is impossible to find these strings straightforwardly in a hex editor.}
 
 \index{Shellcode}
 \RU{Кстати, точно также со строками можно работать в тех случаях, 
 когда строку нельзя разместить в сегменте данных, например, в \ac{PIC}, или в шелл-коде.}
 \EN{By the way, this is a way to work with the strings when it is impossible
-to allocate them in data segment, for example, in \ac{PIC} or in shellcode.}
+to allocate space for them in the data segment, for example in a \ac{PIC} or in shellcode.}
 
 \RU{Еще один виденный мною метод с использованием ф-ции}\EN{Another method I once saw is to use} \TT{sprintf()} 
-\RU{для конструирования}\EN{for constructing}:
+\RU{для конструирования}\EN{for the construction}:
 
 \begin{lstlisting}
 sprintf(buf, "%s%c%s%c%s", "hel",'l',"o w",'o',"rld");
 \end{lstlisting}
 
 \RU{Код выглядит ужасно, но как простейшая мера для анти-реверсинга, это может помочь.}
-\EN{The code looks weird, but as a simplest anti-reversing measure, it may be helpful.}
+\EN{The code looks weird, but as a simple anti-reversing measure, it may be helpful.}
 
 \RU{Текстовые строки могут также присутствовать в зашифрованном виде, в таком случае,
 их использование будет предварять вызов ф-ции для дешифровки.}
 \EN{Text strings may also be present in encrypted form, 
-then all string usage will precede string decrypting routine.}
+then every string usage will preceded by a string decrypting routine.}
 \RU{Например}\EN{For example}: \ref{examples_SCO}.
 
 \section{\RU{Исполняемый код}\EN{Executable code}}
@@ -74,10 +74,10 @@ then all string usage will precede string decrypting routine.}
 \subsection{\RU{Вставка мусора}\EN{Inserting garbage}}
 
 \RU{Обфускация исполняемого кода --- это вставка случайного мусора (между настоящим кодом), который исполняется, но не делает
-ничего полезного}\EN{Executable code obfuscation mean inserting random garbage code between real one,
-which executes but not doing anything useful}.
+ничего полезного}\EN{Executable code obfuscation means inserting random garbage code between real one,
+which executes but does nothing useful}.
 
-\RU{Просто пример}\EN{Simple example is}:
+\RU{Просто пример}\EN{A simple example}:
 
 \begin{lstlisting}[caption=\RU{оригинальный код}\EN{original code}]
 add	eax, ebx
@@ -87,37 +87,37 @@ mul	ecx
 \lstinputlisting[caption=obfuscated code]{\CURPATH/1.asm.\LANG}
 
 \RU{Здесь код-мусор использует регистры, которые не используются в настоящем коде}
-\EN{Here garbage code uses registers which are not used in the real code} (\TT{ESI} \AndENRU \TT{EDX}).
+\EN{Here the garbage code uses registers which are not used in the real code} (\TT{ESI} \AndENRU \TT{EDX}).
 \RU{Впрочем, промежуточные результаты полученные при исполнении настоящего кода вполне могут использоваться
-кодом-мусором для б\'{о}льшей путаницы}\EN{However, intermediate results produced by the real code 
-may be used by garbage instructions for extra mess}\EMDASH{}\RU{почему нет}\EN{why not}?
+кодом-мусором для б\'{о}льшей путаницы}\EN{However, the intermediate results produced by the real code 
+may be used by the garbage instructions for some extra mess}\EMDASH{}\RU{почему нет}\EN{why not}?
 
-\subsection{\RU{Замена инструкций на раздутые эквиваленты}\EN{Replacing instructions to bloated equivalents}}
+\subsection{\RU{Замена инструкций на раздутые эквиваленты}\EN{Replacing instructions with bloated equivalents}}
 
 \begin{itemize}
-\item \TT{MOV op1, op2} \RU{может быть заменена на пару}\EN{can be replaced by} \TT{PUSH op2 / POP op1}\EN{ pair}.
-\item \TT{JMP label} \RU{может быть заменена на пару}\EN{can be replaced by} \TT{PUSH label / RET}\EN{ pair}. 
-\IDA{} \RU{не покажет ссылок на эту метку}\EN{will not show references to the label}.
-\item \TT{CALL label} \RU{может быть заменена на тройку}\EN{can be replaced by}
+\item \TT{MOV op1, op2} \RU{может быть заменена на пару}\EN{can be replaced by the} \TT{PUSH op2 / POP op1}\EN{ pair}.
+\item \TT{JMP label} \RU{может быть заменена на пару}\EN{can be replaced by the} \TT{PUSH label / RET}\EN{ pair}. 
+\IDA{} \RU{не покажет ссылок на эту метку}\EN{will not show the references to the label}.
+\item \TT{CALL label} \RU{может быть заменена на тройку}\EN{can be replaced by the}
 \TT{PUSH label\_after\_CALL\_instruction / PUSH label / RET}\EN{ triplet}.
-\item \TT{PUSH op} \RU{также можно заменить на пару}\EN{may also be replaced by} 
+\item \TT{PUSH op} \RU{также можно заменить на пару}\EN{can also be replaced with the} 
 \TT{SUB ESP, 4 (\OrENRU 8) / MOV [ESP], op}\EN{ pair}.
 \end{itemize}
 
 \subsection{\RU{Всегда исполняющийся/никогда не исполняющийся код}\EN{Always executed/never executed code}}
 
 \RU{Если разработчик уверен, что в}\EN{If the developer is sure that} ESI \RU{всегда будет 0 в этом месте}
-\EN{at the point is always 0}:
+\EN{at always 0 at that point}:
 
 \lstinputlisting{\CURPATH/2.asm.\LANG}
 
-Reverse engineer\RU{-у понадобится какое-то время чтобы с этим разобраться}\EN{ need some time to get into it}.
+\EN{The r}\RU{R}everse engineer\RU{-у понадобится какое-то время чтобы с этим разобраться}\EN{ needs some time to get into it}.
 
 \index{opaque predicate}
-\RU{Это также называется}\EN{This is also called} \IT{opaque predicate}.
+\RU{Это также называется}\EN{This is also called an} \IT{opaque predicate}.
 
 \RU{Еще один пример}\EN{Another example} (\RU{и снова разработчик уверен, что}
-\EN{and again, developer is sure that} ESI\EMDASH{}\RU{всегда ноль}\EN{is always zero}):
+\EN{and again, the developer is sure that} ESI\RU{\EMDASH{}всегда ноль}\EN{ is always zero}):
 
 \lstinputlisting{\CURPATH/3.asm.\LANG}
 
@@ -129,7 +129,7 @@ instruction 2
 instruction 3
 \end{lstlisting}
 
-\RU{Можно заменить на}\EN{Can be replaced to}:
+\RU{Можно заменить на}\EN{Can be replaced with}:
 
 \begin{lstlisting}
 begin:		jmp	ins1_label
@@ -178,19 +178,19 @@ func		endp
 \section{\RU{Виртуальная машина / псевдо-код}\EN{Virtual machine / pseudo-code}}
 
 \RU{Программист может также создать свой собственный}
-\EN{Programmer may construct his/her own} \ac{PL} \OrENRU \ac{ISA} \RU{и интерпретатор для него}\EN{and interpreter for it}.
-(\RU{Как версии Visual Basic перед 5.0}\EN{Like pre-5.0 Visual Basic}, .NET, Java machine).
-Reverse engineer\RU{-у придется потратить какое-то время для понимания деталей всех инструкций в}
-\EN{will have to spend some time to understand meaning and details of all} \ac{ISA}\EN{ instructions}.
+\EN{A programmer can construct his/her own} \ac{PL} \OrENRU \ac{ISA} \RU{и интерпретатор для него}\EN{and interpreter for it}.
+(\RU{Как версии Visual Basic перед 5.0}\EN{Like the pre-5.0 Visual Basic}, .NET or Java machines).
+\EN{The r}\RU{R}everse engineer\RU{-у придется потратить какое-то время для понимания деталей всех инструкций в}
+\EN{will have to spend some time to understand the meaning and details of all of the} \ac{ISA}\EN{'s instructions}.
 \RU{Ему также возможно придется писать что-то вроде дизассемблера/декомпилятора}
-\EN{Probably, he/she will also need to write a disassembler/decompiler of some sort}.
+\EN{Probably, he/she will also have to write a disassembler/decompiler of some sort}.
 
-\section{\RU{Еще кое-что}\EN{Other thing to mention}}
+\section{\RU{Еще кое-что}\EN{Other things to mention}}
 
 \RU{Моя попытка (хотя и слабая) пропатчить компилятор Tiny C чтобы он выдавал обфусцированный код}
-\EN{My own (yet weak) attempt to patch Tiny C compiler to produce obfuscated code}: \url{http://go.yurichev.com/17220}.
+\EN{My own (yet weak) attempt to patch the Tiny C compiler to produce obfuscated code}: \url{http://go.yurichev.com/17220}.
 
-\RU{Использование инструкции}\EN{Using} \MOV \RU{для сложных вещей}
+\RU{Использование инструкции}\EN{Using the} \MOV \RU{для сложных вещей}
 \EN{instruction for really complicated things}: \cite{MOV_is_TM}.
 
 \section{\Exercises}
@@ -199,9 +199,9 @@ Reverse engineer\RU{-у придется потратить какое-то вр
 \label{exercise_obfuscation_1}
 
 \RU{Это очень короткая программа, скомпилированная моим пропатченным компилятором Tiny C}
-\EN{This is very short program, compiled using patched Tiny C compiler}
+\EN{This is a very short program, compiled using the patched Tiny C compiler}
 \footnote{\href{http://go.yurichev.com/17220}{blog.yurichev.com}}.
-\RU{Попробуйте разобраться, что она делает}\EN{Try to find out, what it does}.
+\RU{Попробуйте разобраться, что она делает}\EN{Try to find out what it does}.
 
 \href{http://go.yurichev.com/17219}{beginners.re}.
 
