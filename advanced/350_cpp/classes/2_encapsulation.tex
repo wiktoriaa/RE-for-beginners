@@ -1,22 +1,22 @@
 \subsection{\RU{Инкапсуляция}\EN{Encapsulation}}
 
 \RU{Инкапсуляция ~--- это сокрытие данных в \IT{private} секциях класса, например, чтобы разрешить доступ к ним только 
-для методов этого класса, но не более.}\EN{Encapsulation is data hiding in the \IT{private} sections of class, 
-e.g. to allow access to them only from this class methods, but no more than.}
+для методов этого класса, но не более.}\EN{Encapsulation is hiding the data in the \IT{private} sections of the class, 
+e.g. to allow access to them only from this class methods.}
 
 \RU{Однако, маркируется ли как-нибудь в коде тот сам факт, что некоторое поле ~--- приватное, 
 а некоторое другое ~--- нет?}
-\EN{However, are there any marks in code about the very fact that some field is private and
+\EN{However, are there any marks in code the about the fact that some field is private and
 some other~---not?}
 
 \RU{Нет, никак не маркируется.}\EN{No, there are no such marks.}
 
-\RU{Попробуем простой пример:}\EN{Let's try simple example:}
+\RU{Попробуем простой пример:}\EN{Let's try this simple example:}
 
 \lstinputlisting{\CURPATH/classes/classes2_0.cpp}
 
 \RU{Снова скомпилируем в MSVC 2008 с опциями \Ox и \Obzero и посмотрим код метода \TT{box::dump()}:}
-\EN{Let's compile it again in MSVC 2008 with \Ox and \Obzero options and let's see \TT{box::dump()} method code:}
+\EN{Let's compile it again in MSVC 2008 with \Ox and \Obzero options and see the \TT{box::dump()} method code:}
 
 \lstinputlisting{\CURPATH/classes/classes2_1.asm}
 
@@ -39,30 +39,30 @@ some other~---not?}
 \end{center}
 
 \RU{Все поля приватные и недоступные для модификации из других функций, но, зная эту разметку, 
-сможем ли мы создать код модифицирующий эти поля?}\EN{All fields are private and not allowed to access from any other
-functions, but, knowing this layout, can we create a code modifying these fields?} 
+сможем ли мы создать код модифицирующий эти поля?}\EN{All fields are private and not allowed to be accessed from any other
+function, but knowing this layout, can we create code that modifies these fields?} 
 
 \RU{Для этого я добавил функцию \TT{hack\_oop\_encapsulation()}, которая если обладает приведенным ниже телом, 
-то просто не скомпилируется:}\EN{So I added \TT{hack\_oop\_encapsulation()} function, which, if has the body
-as follows, will not compile:}
+то просто не скомпилируется:}\EN{TO do this I've added the \TT{hack\_oop\_encapsulation()} function, which will not compile
+if it looked like this:}
 
 \lstinputlisting{\CURPATH/classes/classes2_2.cpp.\LANG}
 
 \RU{Тем не менее, если преобразовать тип \IT{box} к типу \IT{указатель на массив int}, 
 и если модифицировать полученный массив \Tint{}-ов, тогда всё получится.}
-\EN{Nevertheless, if to cast \IT{box} type to \IT{pointer to int array},
-and if to modify array of the \Tint{}-s we got, then we have success.}
+\EN{Nevertheless, if we cast the \IT{box} type to a \IT{pointer to an int array},
+and we modify the array of \Tint{}-s that we have, we will succeed.}
 
 \lstinputlisting{\CURPATH/classes/classes2_3.cpp}
 
 \RU{Код этой функции довольно прост ~--- можно сказать, функция берет на вход указатель на массив \Tint{}-ов и 
 записывает \IT{123} во второй \Tint{}:}
-\EN{This functions' code is very simple~---it can be said, the function taking pointer to array of the \Tint{}-s on input
-and writing \IT{123} to the second \Tint{}:}
+\EN{This function's code is very simple~---it can be said that the function takes a pointer to an array of \Tint{}-s for input
+and writes \IT{123} to the second \Tint{}:}
 
 \lstinputlisting{\CURPATH/classes/classes2_5.asm}
 
-\RU{Проверим, как это работает:}\EN{Let's check, how it works:}
+\RU{Проверим, как это работает:}\EN{Let's check how it works:}
 
 \lstinputlisting{\CURPATH/classes/classes2_4.cpp}
 
@@ -73,10 +73,10 @@ this is box. color=1, width=10, height=20, depth=30
 this is box. color=1, width=123, height=20, depth=30
 \end{lstlisting}
 
-\RU{Выходит, инкапсуляция ~--- это защита полей класса только на стадии компиляции.}\EN{We see, encapsulation is
-just class fields protection only on compiling stage.}
+\RU{Выходит, инкапсуляция ~--- это защита полей класса только на стадии компиляции.}\EN{We see that the encapsulation is
+just protection of class fields only in the compilation stage.}
 \RU{Компилятор ЯП \Cpp не позволит сгенерировать код прямо
 модифицирующий защищенные поля, тем не менее, используя \IT{грязные трюки} ~--- это вполне возможно.}
-\EN{\Cpp compiler will not allow to generate a code modifying protected fields straightforwardly, nevertheless,
+\EN{The \Cpp compiler will not allow the generation of code that modifies protected fields straightforwardly, nevertheless,
 it is possible with the help of \IT{dirty hacks}.}
 
