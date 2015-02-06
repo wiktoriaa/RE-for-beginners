@@ -2,7 +2,7 @@
 \label{pointer_to_argument}
 
 \dots \RU{и даже более того, можно взять указатель на аргумент ф-ции и передать его в другую ф-цию:}
-\EN{even more than that, it's possible to take a pointer to the function argument and pass
+\EN{even more than that, it's possible to take a pointer to the function's argument and pass
 it to another function:}
 
 \lstinputlisting{OS/calling_conventions/ptr_to_argument/10.c}
@@ -14,32 +14,32 @@ it to another function:}
 
 \RU{Адрес места в стеке где была передана $a$ просто передается в другую ф-цию.
 Она модифицирует переменную по этому адресу, и затем \printf выведет модифицированное значение.}
-\EN{The address of the place in stack where $a$ was passed is just passed to another function.
-It will modify the value by pointer and then \printf will print modified value.}\\
+\EN{The address of the place in the stack where $a$ was passed is just passed to another function.
+It will modify the value addressed by the pointer and then \printf will print the modified value.}\\
 \\
 \RU{Наблюдательный читатель может спросить, а что насчет тех соглашений о вызовах, где аргументы ф-ции
 передаются в регистрах?}
-\EN{Observant reader might ask, what about calling conventions where function arguments are
+\EN{The observant reader might ask, what about calling conventions where the function's arguments are
 passed in registers?}
 
 \RU{Это та ситуация где используется \IT{Shadow Space}.}
-\EN{That's a situation when \IT{Shadow Space} is used.}
+\EN{That's a situation where the \IT{Shadow Space} is used.}
 \RU{Так что входящее значение копируется из регистра в \IT{Shadow Space} в локальном стеке и затем это адрес
 передается в другую ф-цию:}
-\EN{So the input value is copied from register
-to the \IT{Shadow Space} in the local stack, and then this address is passed into another function:}
+\EN{The input value is copied from the register
+to the \IT{Shadow Space} in the local stack, and then this address is passed to the other function:}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{OS/calling_conventions/ptr_to_argument/MSVC_2012_x64_O3.asm}
 
 \RU{GCC также записывает входное значение в локальный стек:}
-\EN{GCC is also store input value in the local stack:}
+\EN{GCC also stores the input value in the local stack:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{OS/calling_conventions/ptr_to_argument/GCC491_x64_O3.s}
 
 \RU{GCC для ARM64 делает то же самое, но это пространство здесь называется \IT{Register Save Area}:}
-\EN{GCC for ARM64 doing the same, but this space is called \IT{Register Save Area} here:}
+\EN{GCC for ARM64 does the same, but this space is called \IT{Register Save Area} here:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{OS/calling_conventions/ptr_to_argument/GCC49_ARM64_O3.s}
 
-\EN{By the way, similar usage of \IT{Shadow Space} is also considered here}
+\EN{By the way, a similar usage of the \IT{Shadow Space} is also considered here}
 \RU{Кстати, похожее использование \IT{Shadow Space} разбирается здесь}: \ref{variadic_arith_registers}.
