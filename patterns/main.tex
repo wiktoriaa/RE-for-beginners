@@ -6,12 +6,10 @@
 что связь между кодом на \CCpp и тем, что генерирует компилятор, вбилась мне в подсознание достаточно 
 глубоко, поэтому я могу, глядя на код на ассемблере, сразу понимать, в общих чертах, что там было написано 
 на Си. Возможно это поможет кому-то ещё, попробую описать некоторые примеры.}
-\EN{When I first learned C and then \Cpp, I wrote small pieces of code, compiled them, 
-and saw what 
-was produced in the assembly language. This was easy for me. I did it many times and the relation 
-between the \CCpp code and what the compiler produced was imprinted in my mind so deep that 
-I could quickly understand what was in the original C code when I looked at the produced x86 code. 
-Perhaps this technique may be helpful for someone else so I will try to describe some examples here.}
+\EN{When I first started learning C and then \Cpp, I used to write small pieces of code, compile them, 
+and look at the assembly language output. This was much easy for me to understand. I did it so many times that the relation 
+between the \CCpp code and what the compiler produced was imprinted deeply in my mind. That is why when I look at assembly code I could instantly grasp what the original C code in general does and looks like. 
+Perhaps this technique could be helpful for someone else and so I will try to describe some examples here.}
 %
 %\RU{Здесь много примеров и для x86/x64 и для ARM}\EN{There are a lot of examples for both x86/x64 
 %and ARM}. 
@@ -54,16 +52,16 @@ but it's a very good method to learn assembly better.}
 \RU{Одна очень важная черта отладочного кода в том, что он может содержать отладочную информацию, хранящую
 связи между каждой строкой в исходном коде и адресом в машинном коде.}
 \EN{One important feature of the debugging code is that there might be debugging information showing connections
-between each line in source code and address in machine code.}
+between each line in source code and machine code addresses.}
 \RU{Оптимизирующие компиляторы обычно генерируют код где целые строки из исходного кода могут быть соптимизированы
 и не присутствовать в итоговом машинном коде.}
-\EN{Optimizing compilers tend to produce such code where whole source code lines may be optimized away 
+\EN{Optimizing compilers tend to produce such output where whole source code lines may be optimized away 
 and not present in resulting machine code.}
 
 \RU{Практикующий reverse engineer обычно сталкивается с обоими версиями, потому что некоторые разработчики
 включают оптимизацию, некоторые другие --- нет.}
-\EN{A practicing reverse engineer will usually encounter both versions,
-because some developers turn on optimization switches, some others do not.}
+\EN{Reverse engineer practitioner usually encounters either version
+because some developers turn on optimization switches and others do not.}
 
 \RU{Вот почему я стараюсь дать примеры для обоих версий.}
 \EN{That's why I try to give examples of both versions of code.}
@@ -75,7 +73,8 @@ because some developers turn on optimization switches, some others do not.}
 \RU{Немного терминологии}\EN{Short glossary}:
 
 \begin{description}
-\item[\RU{Инструкция}\EN{Instruction}]: \RU{примитивная команда}\EN{a primitive command to the} \ac{CPU}.
+\item[\RU{Инструкция}\EN{Instruction}]: \RU{примитивная команда}\EN{a primitive}
+ \ac{CPU} \EN{command}.
 \RU{Простейшие примеры: перемещение между регистрами, работа с памятью, примитивные арифметические операции}
 \EN{Simplest examples: moving data between registers, working with memory, arithmetic primitives}.
 \RU{Как правило, каждый}\EN{As a rule, each} \ac{CPU} \RU{имеет свой набор инструкций}\EN{has its own instruction set architecture} 
@@ -118,7 +117,7 @@ to do it without making a huge amount of annoying mistakes}.
 \EN{The program, which converts high-level \ac{PL} code into assembly, is called a \IT{compiler}}.
 % TODO add about linker: "компоновщик" и "редактор связей" в русскоязычной лит-ре
 
-\section{\RU{Несколько слов о разнице между \ac{ISA}}\EN{A couple of words about difference between \ac{ISA}}}
+\section{\RU{Несколько слов о разнице между \ac{ISA}}\EN{A couple of words about different \ac{ISA}}}
 
 \RU{x86 всегда был архитектурой с опкодами переменной длины, так что когда пришла 64-битная эра,
 расширения x64 не очень сильно повлияли на \ac{ISA}.}
@@ -135,14 +134,14 @@ the x64 extensions did not affect the \ac{ISA} very much.}
 в прошлом.}
 \EN{ARM is a \ac{RISC} \ac{CPU} designed with constant opcode length in mind, which had some advantages in the past.}
 \RU{Так что в самом начале, все инструкции ARM кодировались 4-мя байтами}
-\EN{So at the very start, ARM had all instructions encoded in 4 bytes}\footnote{\RU{Кстати,
+\EN{At the very beginning, ARM had all instructions encoded in 4 bytes}\footnote{\RU{Кстати,
 инструкции фиксированного размера удобны тем, что всегда можно легко узнать адрес 
 следующей (или предыдущей) инструкции. Эта особенность будет рассмотрена в секции о 
 switch()~(\ref{sec:SwitchARMLot}).}
 \EN{By the way, fixed-length instructions are handy in a way that one can calculate the next (or previous) 
 instruction's address without effort. This feature will be discussed in switch()~(\ref{sec:SwitchARMLot}) section.}
 }.
-\RU{Это то что сейчас называется ``режим ARM''}\EN{This is now called ``ARM mode''}.
+\RU{Это то что сейчас называется ``режим ARM''}\EN{This is now referred as ``ARM mode''}.
 
 \RU{Потом они подумали что это не очень экономично}\EN{Then they thought it wasn't very frugal}.
 \RU{На самом деле, самые используемые инструкции\footnote{А это MOV/PUSH/CALL/Jcc} процессора на практике могут быть закодированы
@@ -152,7 +151,7 @@ less information.}
 \RU{Так что они добавили другую \ac{ISA} с названием Thumb, где каждая инструкция кодируется всего лишь
 2-мя байтами.}
 \EN{So they added another \ac{ISA} called Thumb, where each instruction was encoded in just 2 bytes.}
-\RU{Теперь это называется ``режим Thumb''}\EN{Now this is called ``Thumb mode''}.
+\RU{Теперь это называется ``режим Thumb''}\EN{This is now referred as ``Thumb mode''}.
 \RU{Но не все инструкции ARM могут быть закодированы в двух байтах, так что набор инструкций Thumb ограниченный.}
 \EN{However, not all ARM instructions can be encoded in just 2 bytes, so Thumb instruction set is somewhat limited.}
 \RU{Код скомпилированный для режима ARM и Thumb может сосуществовать в одной программе, конечно.}
@@ -162,27 +161,27 @@ less information.}
 \EN{Then ARM creators thought Thumb could be extended: Thumb-2 appeared (in ARMv7). }
 \RU{Thumb-2 это все еще двухбайтные инструкции, но некоторые новые инструкции имеют длину 4 байта.}
 \EN{Thumb-2 is still 2-byte instructions, but some new instructions have a size of 4 bytes.}
-\RU{Распространено заблуждение, что thumb-2 ~--- это смесь ARM и thumb. Это не верно. Просто thumb-2 был дополнен до
+\RU{Распространено заблуждение, что Thumb-2 ~--- это смесь ARM и Thumb. Это не верно. Просто Thumb-2 был дополнен до
 более полной поддержки возможностей процессора, что теперь может легко конкурировать с режимом ARM.}
-\EN{There is a common misconception that thumb-2 is a mix of ARM and thumb. This is not correct. 
-Rather, thumb-2 was extended to fully support all processor features so it could
+\EN{There is a common misconception that Thumb-2 is a mix of ARM and Thumb. This is incorrect. 
+Rather, Thumb-2 was extended to fully support all processor features so it could
 compete with ARM mode.}
 \RU{По поводу богатства возможностей, Thumb-2 теперь может конкурировать с режимом ARM.}
-\EN{On instruction set richness, Thumb-2 can now compete with the original ARM mode.}
-\RU{Основное количество приложений для \idevices скомпилировано для набора инструкций thumb-2, потому что Xcode
+\EN{On instruction set richness, Thumb-2 now competes with the original ARM mode.}
+\RU{Основное количество приложений для \idevices скомпилировано для набора инструкций Thumb-2, потому что Xcode
 делает так по умолчанию}
-\EN{The majority of \idevices applications are compiled for the thumb-2 instruction set because Xcode does this by default}.
+\EN{The majority of \idevices applications are compiled for the Thumb-2 instruction set because Xcode does this by default}.
 
 \RU{Потом появился 64-битный ARM, это \ac{ISA} снова с 4-хбайтными опкодами, без дополнительного режима Thumb.}
-\EN{Then the 64-bit ARM came, this \ac{ISA} has 4-byte opcodes again, without any additional Thumb mode.}
+\EN{Later the 64-bit ARM came out. This \ac{ISA} has 4-byte opcodes again, without any additional Thumb mode.}
 \RU{Но 64-битные требования повлияли на \ac{ISA}, так что, подводя итог, теперь у нас 3 набора инструкций ARM:
 режим ARM, режим Thumb (включая Thumb-2) и ARM64.}
 \EN{But the 64-bit requirements affected \ac{ISA}, so, summarizing, we now have 3 ARM instruction sets: ARM mode,
 Thumb mode (including Thumb-2) and ARM64.}
 \RU{Эти наборы инструкций частично пересекаются, но я бы сказал, это скорее разные наборы, нежели
 вариации одного.}
-\EN{These \ac{ISA}s intersect partially, but I would say that they are more different
-\ac{ISA}s than variations of one.}
+\EN{These \ac{ISA}s intersect partially, but I would rather say they are different
+\ac{ISA}s than variations of the same {ISA}.}
 \RU{Следовательно, в этой книге я стараюсь добавлять фрагменты кода на всех трех ARM \ac{ISA}.}
 \EN{Therefore, I try to add fragments of code in all 3 ARM \ac{ISA}s in this book.}\\
 \\
@@ -190,7 +189,7 @@ Thumb mode (including Thumb-2) and ARM64.}
 \index{MIPS}
 \index{Alpha AXP}
 \RU{Существует еще много \ac{RISC} \ac{ISA} с опкодами фиксированной 32-битной длины, это как минимум}
-\EN{There are more \ac{RISC} \ac{ISA}s with fixed length 32-bit opcodes, for example}
+\EN{There are many other \ac{RISC} \ac{ISA}s with fixed length 32-bit opcodes, for example}
 MIPS, PowerPC \AndENRU Alpha AXP.
 
 % chapters
