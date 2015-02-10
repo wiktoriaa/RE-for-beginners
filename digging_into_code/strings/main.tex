@@ -3,12 +3,12 @@
 \subsection{\CCpp}
 
 \label{C_strings}
-\RU{Обычные строки в Си заканчиваются нулем}\EN{Usual C-strings are zero-terminated} 
+\RU{Обычные строки в Си заканчиваются нулем}\EN{The normal C strings are zero-terminated} 
 (\ac{ASCIIZ}-\RU{строки}\EN{strings}).
 
 \RU{Причина, почему формат строки в Си именно такой (оканчивающийся нулем) вероятно историческая}
-\EN{The reason why C string format is as it is (zero-terminating) is apparently historical}.
-\RU{В}\EN{In} \cite{Ritchie79} \RU{мы можем прочитать}\EN{we can read}:
+\EN{The reason why the C string format is as it is (zero-terminated) is apparently historical}.
+\RU{В}\EN{In} \cite{Ritchie79} \RU{мы можем прочитать}\EN{we read}:
 
 \begin{framed}
 \begin{quotation}
@@ -20,7 +20,7 @@ characters, because null was used to pad a file to an even number of characters.
 
 \index{Hiew}
 \RU{Строки выглядят в Hiew или FAR Manager точно так же}
-\EN{In Hiew or FAR Manager these strings looks like as it is}:
+\EN{In Hiew or FAR Manager these strings looks like this}:
 
 \begin{lstlisting}
 int main()
@@ -41,7 +41,7 @@ int main()
 \RU{Когда кодируются строки в Pascal и Delphi, 
 сама строка предваряется 8-битным или 32-битным значением,
 в котором закодирована длина строки.}
-\EN{The string in Pascal and Borland Delphi is preceded by 8-bit or 32-bit string length value.}
+\EN{The string in Pascal and Borland Delphi is preceded by an 8-bit or 32-bit string length.}
 
 \RU{Например}\EN{For example}:
 
@@ -59,33 +59,33 @@ CODE:00518B00 aPreparingRun__ db 'Preparing run...',0
 
 \index{Unicode}
 \RU{Нередко уникодом называют все способы передачи символов, когда символ занимает 2 байта или 16 бит}
-\EN{Often, what is called by Unicode is a methods of strings encoding where each character occupies 2 bytes or 16 bits}.
-\RU{Это распространенная терминологическая ошибка}\EN{This is common terminological mistake}.
+\EN{Often, what is called Unicode is a methods for encoding strings where each character occupies 2 bytes or 16 bits}.
+\RU{Это распространенная терминологическая ошибка}\EN{This is a common terminological mistake}.
 \RU{Уникод --- это стандарт, присваивающий номер каждому символу многих письменностей мира, но не описывающий
-способ кодирования}\EN{Unicode is a standard assigning a number to each character of many writing systems of the 
-world, but not describing encoding method}.
+способ кодирования}\EN{Unicode is a standard for assigning a number to each character in the many writing systems of the 
+world, but does not describe the encoding method}.
 
 \index{UTF-8}
 \index{UTF-16LE}
-\RU{Наиболее популярные способы кодирования}\EN{Most popular encoding methods are}: 
+\RU{Наиболее популярные способы кодирования}\EN{The most popular encoding methods are}: 
 UTF-8 (\RU{наиболее часто используется в Интернете и *NIX-системах}\EN{is widespread in Internet and *NIX systems})
-\AndENRU UTF-16LE (\RU{используется в}\EN{used in} Windows).
+\AndENRU UTF-16LE (\RU{используется в}\EN{is used in} Windows).
 
 \subsubsection{UTF-8}
 
 \index{UTF-8}
-UTF-8 \RU{это один из очень удачных способов кодирования символов}\EN{is one of the most successful methods of
-character encoding}.
+UTF-8 \RU{это один из очень удачных способов кодирования символов}\EN{is one of the most successful methods for
+encoding characters}.
 \RU{Все символы латиницы кодируются так же, как и в ASCII-кодировке, а символы, выходящие за пределы
-ASCII-7-таблицы, кодируются несколькими байтами}\EN{All Latin symbols are encoded just like in an ASCII-encoding,
-and symbols beyond ASCII-table are encoded by several bytes}.
+ASCII-7-таблицы, кодируются несколькими байтами}\EN{All Latin symbols are encoded just like in ASCII,
+and the symbols beyond the ASCII table are encoded using several bytes}.
 \RU{$0$ кодируется, как и прежде, нулевыми байтом, так что все стандартные
-ф-ции Си продолжают работать с UTF-8-строками так же как и с обычными строками}\EN{$0$ is encoded as it was
-before, so all standard C string functions works with UTF-8-strings just like any other string}.
+ф-ции Си продолжают работать с UTF-8-строками так же как и с обычными строками}\EN{$0$ is encoded as
+before, so all standard C string functions work with UTF-8 strings just like any other string}.
 
 \RU{Посмотрим, как символы из разных языков кодируются в UTF-8 и как это выглядит в FAR, в кодировке 437}
-\EN{Let's see how symbols in various languages are encoded in UTF-8 and how it looks like in FAR in 437 codepage}
-\footnote{\RU{Я взял пример и переводы на разные языки здесь}\EN{I've got example and translations from there}: 
+\EN{Let's see how the symbols in various languages are encoded in UTF-8 and how it looks like in FAR, using the 437 codepage}
+\footnote{\RU{Я взял пример и переводы на разные языки здесь}\EN{I've got the example and translations from here}: 
 \url{http://go.yurichev.com/17304}}:
 
 \begin{figure}[H]
@@ -100,41 +100,41 @@ before, so all standard C string functions works with UTF-8-strings just like an
 \end{figure}
 
 \RU{Видно, что строка на английском языке выглядит точно так же, как и в ASCII-кодировке}
-\EN{As it seems, English language string looks like as it is in ASCII-encoding}.
+\EN{As you can see, the English language string looks the same as it is in ASCII}.
 \RU{В венгерском языке используются латиница плюс латинские буквы с диакритическими знаками}
-\EN{Hungarian language uses Latin symbols plus symbols with diacritic marks}.
+\EN{The Hungarian language uses some Latin symbols plus symbols with diacritic marks}.
 \RU{Здесь видно, что эти буквы кодируются несколькими байтами, я подчеркнул их красным}
-\EN{These symbols are encoded by several bytes, I underscored them by red}.
-\RU{То же самое с исландским и польским языками}\EN{The same story with Icelandic and Polish languages}.
+\EN{These symbols are encoded using several bytes, I underscored them with red}.
+\RU{То же самое с исландским и польским языками}\EN{It's the same story with the Icelandic and Polish languages}.
 \RU{В самом начале я также применил символ валюты ``Евро'', который кодируется тремя байтами}
-\EN{I also used ``Euro'' currency symbol at the begin, which is encoded by 3 bytes}.
+\EN{I also used the ``Euro'' currency symbol at the start, which is encoded with 3 bytes}.
 \RU{Остальные системы письма здесь никак не связаны с латиницей}
-\EN{All the rest writing systems here have no connection with Latin}.
+\EN{The rest of the writing systems here have no connection with Latin}.
 \RU{По крайней мере о русском, арабском, иврите и хинди мы можем сказать, что здесь видны повторяющиеся
 байты, что не удивительно, ведь, обычно буквы из одной и той же системы письменности расположены в одной
 или нескольких таблицах уникода, поэтому часто их коды начинаются с одних и тех же цифр}
-\EN{At least about Russian, Arabic, Hebrew and Hindi we could see recurring bytes, and that is not surprise:
-all symbols from the writing system is usually located in the same Unicode table, so their code begins with
+\EN{At least in Russian, Arabic, Hebrew and Hindi we can see some recurring bytes, and that is not surprise:
+all symbols from a writing system are usually located in the same Unicode table, so their code begins with
 the same numbers}.
 
 \RU{В самом начале, перед строкой ``How much?'', видны три байта, которые на самом деле \ac{BOM}}
-\EN{At the very beginning, before ``How much?'' string we see 3 bytes, which is \ac{BOM} in fact}.
-\ac{BOM} \RU{показывает, какой способ кодирования будет сейчас использоваться}\EN{defines encoding system to be
-used now}.
+\EN{At the beginning, before the ``How much?'' string we see 3 bytes, which are in fact the \ac{BOM}}.
+\EN{The }\ac{BOM} \RU{показывает, какой способ кодирования будет сейчас использоваться}\EN{defines the encoding system to be
+used}.
 
 \subsubsection{UTF-16LE}
 
 \index{UTF-16LE}
 \index{Windows!Win32}
-\RU{Многие ф-ции win32 в Windows имееют суффикс}\EN{Many win32 functions in Windows has a suffix} \TT{-A} 
+\RU{Многие ф-ции win32 в Windows имееют суффикс}\EN{Many win32 functions in Windows have the suffixes} \TT{-A} 
 \AndENRU \TT{-W}.
-\RU{Первые ф-ции работают с обычными строками, вторые с UTF-16LE-строками}\EN{The first functions works
-with usual strings, the next with UTF-16LE-strings} (\IT{wide}).
+\RU{Первые ф-ции работают с обычными строками, вторые с UTF-16LE-строками}\EN{The first type of functions works
+with normal strings, the other with UTF-16LE strings} (\IT{wide}).
 \RU{Во втором случае, каждый символ обычно хранится в 16-битной переменной типа \IT{short}}
-\EN{As in the second case, each symbol is usually stored in 16-bit value of \IT{short} type}.
+\EN{In the second case, each symbol is usually stored in a 16-bit value of type \IT{short}}.
 
 \RU{Cтроки с латинскими буквами выглядят в Hiew или FAR как перемежающиеся с нулевыми байтами}
-\EN{Latin symbols in UTF-16 strings looks in Hiew or FAR as interleaved with zero byte}:
+\EN{The Latin symbols in UTF-16 strings look in Hiew or FAR like they are interleaved with zero byte}:
 
 \begin{lstlisting}
 int wmain()
@@ -149,7 +149,7 @@ int wmain()
 \caption{Hiew}
 \end{figure}
 
-\RU{Подобное можно часто увидеть в системных файлах \gls{Windows NT}}\EN{We may often see this in \gls{Windows NT} 
+\RU{Подобное можно часто увидеть в системных файлах \gls{Windows NT}}\EN{We can see this often in \gls{Windows NT} 
 system files}:
 
 \begin{figure}[H]
@@ -159,8 +159,8 @@ system files}:
 \end{figure}
 
 \index{IDA}
-\RU{В \IDA, уникодом называется именно строки с символами, занимающими 2 байта}\EN{String with characters
-occupying exactly 2 bytes are called by ``Unicode'' in \IDA}:
+\RU{В \IDA, уникодом называется именно строки с символами, занимающими 2 байта}\EN{Strings with characters
+that occupy exactly 2 bytes are called ``Unicode'' in \IDA}:
 
 \begin{lstlisting}
 .data:0040E000 aHelloWorld:
@@ -168,8 +168,8 @@ occupying exactly 2 bytes are called by ``Unicode'' in \IDA}:
 .data:0040E000                 dw 0Ah, 0
 \end{lstlisting}
 
-\RU{Вот как может выглядеть строка на русском языке}\EN{Here is how Russian language 
-string}\RU{ (``И снова здравствуйте!'')} \RU{закодированная в UTF-16LE}\EN{encoded in UTF-16LE may looks like}:
+\RU{Вот как может выглядеть строка на русском языке}\EN{Here is how the Russian language 
+string}\RU{ (``И снова здравствуйте!'')} \RU{закодированная в UTF-16LE}\EN{will be encoded in UTF-16LE}:
 
 \begin{figure}[H]
 \centering
@@ -178,16 +178,16 @@ string}\RU{ (``И снова здравствуйте!'')} \RU{закодиро�
 \end{figure}
 
 \RU{То что бросается в глаза --- это то что символы перемежаются ромбиками (который имеет код 4)}
-\EN{What we can easily spot---is that symbols are interleaved by diamond character (which has code of 4)}.
-\RU{Действительно, в уникоде кирилличные символы находятся в четвертом блоке}\EN{Indeed, Cyrillic symbols
+\EN{What we can easily spot is that the symbols are interleaved by the diamond character (which has the ASCII code of 4)}.
+\RU{Действительно, в уникоде кирилличные символы находятся в четвертом блоке}\EN{Indeed, the Cyrillic symbols
 are located in the fourth Unicode plane}
 \footnote{\href{http://go.yurichev.com/17003}{wikipedia}}.
 \RU{Таким образом, все кирилличные символы в UTF-16LE находятся в диапазоне}\EN{Hence, all
-Cyrillic symbols in UTF-16LE are located in} \TT{0x400-0x4FF}\EN{ range}.
+Cyrillic symbols in UTF-16LE are located in the} \TT{0x400-0x4FF}\EN{ range}.
 
-\RU{Вернемся к примеру, где одна и та же строка написана разными языками}\EN{Let's back to the example with the
+\RU{Вернемся к примеру, где одна и та же строка написана разными языками}\EN{Let's go back to the example with the
 string written in multiple languages}.
-\RU{Здесь посмотрим в кодировке UTF-16LE}\EN{Here we can see it in UTF-16LE encoding}.
+\RU{Здесь посмотрим в кодировке UTF-16LE}\EN{Here is how it looks like in UTF-16LE}.
 
 \begin{figure}[H]
 \centering
@@ -195,10 +195,10 @@ string written in multiple languages}.
 \caption{FAR: UTF-16LE}
 \end{figure}
 
-\RU{Здесь мы также видим \ac{BOM} в самом начале}\EN{Here we can also see \ac{BOM} in the very beginning}.
-\RU{Все латинские буквы перемежаются с нулевыми байтом}\EN{All Latin characters are interleaved with zero byte}.
+\RU{Здесь мы также видим \ac{BOM} в самом начале}\EN{Here we can also see the \ac{BOM} in the beginning}.
+\RU{Все латинские буквы перемежаются с нулевыми байтом}\EN{All Latin characters are interleaved with a zero byte}.
 \RU{Некоторые буквы с диакритическими знаками (венгерский и исландский языки) также подчеркнуты красным}
-\EN{I also underscored by red some characters with diacritic marks (Hungarian and Icelandic languages)}.
+\EN{I also underscored in red some characters with diacritic marks (Hungarian and Icelandic languages)}.
 
 % TODO: strings *NIX utility. procmonitor also shows strings...
 
@@ -206,16 +206,16 @@ string written in multiple languages}.
 \index{Base64}
 
 \RU{Кодировка base64 очень популярна в тех случаях, когда нужно передать двоичные данные как текстовую строку.}
-\EN{Base64 encoding is highly popular when one need to transfer binary data as a text string.}
+\EN{The base64 encoding is highly popular for the cases when you need to transfer binary data as a text string.}
 \RU{По сути, этот алгоритм кодирует 3 двоичных байта в 4 печатаемых символа:}
 \EN{In essence, this algorithm encodes 3 binary bytes into 4 printable characters:}
 \RU{все 26 букв латинского алфавита (в обоих регистрах), цифры, знак плюса (``+'') и слэша (``/''),}
 \EN{all 26 Latin letters (both lower and upper case), digits, plus sign (``+'') and slash sign (``/''),}
-\RU{в итоге это получается 64 символа}\EN{resulting 64 characters in total}.
+\RU{в итоге это получается 64 символа}\EN{64 characters in total}.
 
 \RU{Одна отличительная особенность строк в формате base64, это то что они часто (хотя и не всегда) заканчиваются
 одним или двумя символами знака равенства (``='') для выравнивания, например:}
-\EN{One distinctive feature of base64 strings is that they often (but not always) ending with 1 or 2 padding 
+\EN{One distinctive feature of base64 strings is that they often (but not always) end with 1 or 2 padding 
 equality symbol(s) (``=''), for example:}
 
 \begin{lstlisting}
@@ -227,4 +227,4 @@ WVjbbVSVfcUMu1xvjaMgjNtueRwBbxnyJw8dpGnLW8ZW8aKG3v4Y0icuQT+qEJAp9lAOuQ==
 \end{lstlisting}
 
 \RU{Так что знак равенства (``='') никогда не встречается в середине строк закодированных в base64.}
-\EN{So equality sign (``='') never encounter in the middle of base64-encoded string.}
+\EN{The equality sign (``='') is never encounter in the middle of base64-encoded strings.}

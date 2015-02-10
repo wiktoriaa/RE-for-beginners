@@ -1,19 +1,22 @@
 \chapter{\RU{Отрицательные индексы массивов}\EN{Negative array indices}}
 \label{negative_array_indices}
 
-\EN{It's possible to address a space \IT{before} array by supplying negative index, e.g.}\RU{Возможно
+\EN{It's possible to address the space \IT{before} an array by supplying a negative index, e.g.}\RU{Возможно
 адресовать место в памяти \IT{перед} массивом задавая отрицательный индекс, например}, $array[-1]$.
 
 \index{FORTRAN}
-\EN{It's very hard to say, why one should need it, I know probably only one practical application
+\EN{It's very hard to say why one should use it, I know probably only one practical application
 of this technique}\RU{Трудно сказать, зачем это вообще может понадобиться, я знаю только одно практическое
 применение этому}.
-\EN{\CCpp array elements indices are started at 0, but some \ac{PL}s has first index at 1 
+% another use (which seems to be used more often) can be found in "Transaction processing" by Jim Gray, p. 755
+% basically, it's used in structures that describe pages, and the entries are indexed from the beginning,
+% and the directory entries - from the end with negative indices.
+\EN{\CCpp array elements indices start at 0, but some \ac{PL}s have a first index at 1 
 (at least FORTRAN).}
 \RU{Элементы массивов в \CCpp индексируются, начиная с 0, но в некоторых \ac{PL}, первый элемент 
 индексируется через 1 (как минимум FORTRAN).}
-\EN{Programmers may still have this habit, so using this little trick, it's possible to address first element
-in \CCpp using index 1}\RU{Привычка у программистов может остаться, так что все еще возможно адресовать
+\EN{Programmers may still have this habit, so using this little trick, it's possible to address the first element
+in \CCpp using index $1$}\RU{Привычка у программистов может остаться, так что все еще возможно адресовать
 первый элемент через 1 в \CCpp используя этот трюк}:
 
 \lstinputlisting{\CURPATH/neg_array.c}
@@ -22,17 +25,17 @@ in \CCpp using index 1}\RU{Привычка у программистов мож
 
 \EN{So we have \TT{array[]} of ten elements, filled with $0 \ldots 9$ bytes.}
 \RU{Так что у нас тут массив \TT{array[]} из десяти элементов, заполненный байтами $0 \ldots 9$.}
-\EN{Then we have \TT{fakearray[]} pointer which points one byte before \TT{array[]}.}
+\EN{Then we have the \TT{fakearray[]} pointer, which points one byte before \TT{array[]}.}
 \RU{Затем у нас указатель \TT{fakearray[]} указывающий на один байт перед \TT{array[]}.}
-\TT{fakearray[1]} \RU{указывает точно на}\EN{pointing exactly to} \TT{array[0]}.
-\EN{But we still curious, what is before}\RU{Но нам все еще любопытно, что же находится перед} \TT{array[]}?
+\TT{fakearray[1]} \RU{указывает точно на}\EN{points exactly to} \TT{array[0]}.
+\EN{But we are still curious, what is there before}\RU{Но нам все еще любопытно, что же находится перед} \TT{array[]}?
 \RU{Я добавил}\EN{I added} \TT{random\_value} \RU{перед}\EN{before} \TT{array[]} \RU{и установил её в}\EN{and set 
 it to} \TT{0x11223344}.
-\EN{Non-optimizing compiler allocated variables in the order they were declared, so yes, 32-bit \TT{random\_value}
-is right before array}\RU{Неоптимизирующий компилятор выделяет переменные в том же порядке, в котором они 
+\EN{The non-optimizing compiler allocated the variables in the order they were declared, so yes, the 32-bit \TT{random\_value}
+is right before the array}\RU{Неоптимизирующий компилятор выделяет переменные в том же порядке, в котором они 
 объявлены, так что да, 32-битная \TT{random\_value} находится точно перед массивом}.
 
-\RU{Запускаю, и}\EN{I run it, and}:
+\RU{Запускаю, и}\EN{I ran it, and}:
 
 \begin{lstlisting}
 first element 0
@@ -41,14 +44,14 @@ last element 9
 array[-1]=11, array[-2]=22, array[-3]=33, array[-4]=44
 \end{lstlisting}
 
-\EN{Stack fragment I copypasted from \olly stack window (with my comments):}
+\EN{Here is the stack fragment I copypasted from \olly's stack window (with my comments):}
 \RU{Фрагмент стека, который я скопипастил из окна стека в \olly (включая мои комментарии):}
 
 \lstinputlisting[caption=\NonOptimizing MSVC 2010]{\CURPATH/stack.txt.\LANG}
 
-\RU{Указатель на}\EN{Pointer to the} \TT{fakearray[]} (\TT{0x001DFBD3}) \RU{это действительно адрес}\EN{is indeed 
-address of} \TT{array[]} \RU{в стеке}\EN{in stack} (\TT{0x001DFBD4}), 
-\RU{но минус 1 байт}\EN{but minus 1 byte}.
+\RU{Указатель на}\EN{The pointer to the} \TT{fakearray[]} (\TT{0x001DFBD3}) \RU{это действительно адрес}\EN{is indeed 
+the address of} \TT{array[]} \RU{в стеке}\EN{in the stack} (\TT{0x001DFBD4}), 
+\RU{но минус 1 байт}\EN{but minus $1$ byte}.
 
 \EN{It's still very hackish and dubious trick, I doubt anyone should use it in production code,
 but as a demonstration, it fits perfectly here.}

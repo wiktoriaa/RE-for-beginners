@@ -1,7 +1,7 @@
-\subsection{\RU{Простой пример}\EN{Simple example}}
+\subsection{\RU{Простой пример}\EN{A simple example}}
 
 \RU{Внутреннее представление классов в \Cpp почти такое же, как и представление структур.}
-\EN{Internally, \Cpp classes representation is almost the same as structures representation.}
+\EN{Internally, the representation of \Cpp classes is almost the same as the structures.}
 
 \RU{Давайте попробуем простой пример с двумя переменными, двумя конструкторами и одним методом:}
 \EN{Let's try an example with two variables, two constructors and one method:}
@@ -10,7 +10,7 @@
 
 \subsubsection{MSVC\EMDASH{}x86}
 
-\RU{Вот как выглядит \main на ассемблере:}\EN{Here is how \main function looks like translated 
+\RU{Вот как выглядит \main на ассемблере:}\EN{Here is how the \main function looks like, translated 
 into assembly language:}
 
 \lstinputlisting[caption=MSVC]{\CURPATH/classes/simple_1_msvc.asm}
@@ -18,9 +18,9 @@ into assembly language:}
 \RU{Вот что происходит. 
 Под каждый экземпляр класса $c$ выделяется по 8 байт, столько же, сколько нужно 
 для хранения двух переменных.}
-\EN{So what's going on.
-For each object (instance of class $c$) 8 bytes allocated,
-that is exactly size of 2 variables storage.}
+\EN{Here's what's going on.
+For each object (instance of class $c$) 8 bytes are allocated,
+exactly the size needed to store the 2 variables.}
 
 \RU{Для \IT{c1} вызывается конструктор по умолчанию без аргументов \TT{??0c@@QAE@XZ}. 
 Для \IT{c2} вызывается другой конструктор \TT{??0c@@QAE@HH@Z} и передаются два числа в качестве аргументов.}
@@ -32,27 +32,27 @@ For \IT{c2} another constructor \TT{??0c@@QAE@HH@Z} is called and two numbers ar
 \index{x86!\Registers!ECX}
 \RU{А указатель на объект (\ITthis в терминологии \Cpp) передается в регистре \ECX. 
 Это называется thiscall~(\ref{thiscall}) ~--- метод передачи указателя на объект.}
-\EN{A pointer to object (\ITthis in \Cpp terminology) is passed in the \ECX register.
-This is called thiscall~(\ref{thiscall})~---a pointer to object passing method.}
+\EN{A pointer to the object (\ITthis in \Cpp terminology) is passed in the \ECX register.
+This is called thiscall~(\ref{thiscall})~---the method for passing a pointer to the object.}
 
 \RU{В данном случае, MSVC делает это через \ECX. Необходимо помнить, что это не стандартизированный метод, 
 и другие компиляторы могут делать это иначе, например, через первый аргумент функции (как GCC).}
-\EN{MSVC doing it using the \ECX register. Needless to say, it is not a standardized method, other compilers could do it
-differently, e.g., via first function argument (like GCC).}
+\EN{MSVC does it using the \ECX register. Needless to say, it is not a standardized method, other compilers can do it
+differently, e.g., via the first function argument (like GCC).}
 
 \label{namemangling}
 \index{Name mangling}
 \index{\RU{ООП!Полиморфизм}\EN{OOP!Polymorphism}}
 \RU{Почему у имен функций такие странные имена? Это \gls{name mangling}.}
-\EN{Why these functions has so odd names?
+\EN{Why do these functions have such odd names?
 That's \gls{name mangling}.}
 
 \RU{В \Cpp, у класса, может иметься несколько методов с одинаковыми именами, 
 но аргументами разных типов ~--- это полиморфизм. 
 Ну и конечно, у разных классов могут быть методы с одинаковыми именами.}
-\EN{\Cpp class may contain several methods sharing the same name but having different 
+\EN{A \Cpp class may contain several methods sharing the same name but having different 
 arguments~---that is polymorphism.
-And of course, different classes may own methods sharing the same name.}
+And of course, different classes may have their own methods with the same name.}
 
 \index{\RU{Компоновщик}\EN{Linker}}
 \RU{\IT{Name mangling} позволяет закодировать имя класса + имя метода + типы всех аргументов метода 
@@ -60,39 +60,39 @@ And of course, different classes may own methods sharing the same name.}
 Это все потому что ни компоновщик\footnote{linker}, ни загрузчик DLL \ac{OS}
 (мангленные имена могут быть среди экспортов/импортов в DLL), 
 ничего не знают о \Cpp или \ac{OOP}.}
-\EN{\IT{Name mangling} enable us to encode class name + method name + all method argument types
-in one ASCII-string, which is to be used as internal function name.
-That's all because neither linker, nor DLL \ac{OS} loader (mangled names may be among 
-DLL exports as well) knows nothing about \Cpp or \ac{OOP}.}
+\EN{\IT{Name mangling} enable us to encode the class name + method name + all method argument types
+in one ASCII string, which is then used as an internal function name.
+That's all because neither the linker, nor the DLL \ac{OS} loader (mangled names may be among 
+the DLL exports as well) knows anything about \Cpp or \ac{OOP}.}
 
-\RU{Далее вызывается два раза \TT{dump()}.}\EN{\TT{dump()} function is called two times.}
+\RU{Далее вызывается два раза \TT{dump()}.}\EN{The \TT{dump()} function is called two times.}
 
-\RU{Теперь смотрим на код в конструкторах:}\EN{Now let's see constructors' code:}
+\RU{Теперь смотрим на код в конструкторах:}\EN{Now let's see the constructors' code:}
 
 \lstinputlisting[caption=MSVC]{\CURPATH/classes/simple_2_msvc.asm}
 
 \RU{Конструкторы ~--- это просто функции, они используют указатель на структуру в \ECX, 
 копируют его себе в локальную переменную, хотя это и не обязательно.}
-\EN{Constructors are just functions, they use pointer to structure in the \ECX,
-copying the pointer into own local variable, however, it is not necessary.}
+\EN{The constructors are just functions, they use a pointer to the structure in \ECX,
+copying the pointer into their own local variable, however, it is not necessary.}
 
 \RU{Из стандарта \Cpp мы знаем}\EN{From the \Cpp standard} \cite[12.1]{CPP11} 
-\RU{что конструкторы не должны возвращать значение}\EN{we know that constructors should not return
+\RU{что конструкторы не должны возвращать значение}\EN{we know that constructors are not required to return
 any values}.
 \RU{В реальности, внутри, конструкторы возвращают указатель на созданный объект, т.е.}
-\EN{In fact, internally, constructors are returning pointer to the newly created object, i.e.}, \ITthis.
+\EN{In fact, internally, the constructors return a pointer to the newly created object, i.e.}, \ITthis.
 
-\RU{И еще метод \TT{dump()}:}\EN{Now \TT{dump()} method:}
+\RU{И еще метод \TT{dump()}:}\EN{Now the \TT{dump()} method:}
 
 \lstinputlisting[caption=MSVC]{\CURPATH/classes/simple_3_msvc.asm}
 
 \RU{Все очень просто, \TT{dump()} берет указатель на структуру состоящую из двух \Tint через \ECX, 
 выдергивает оттуда две переменные и передает их в \printf.}
-\EN{Simple enough: \TT{dump()} taking pointer to the structure containing two \Tint's in the \ECX,
-takes two values from it and passing it into \printf.}
+\EN{Simple enough: \TT{dump()} takes a pointer to the structure that contains the two \Tint's from \ECX,
+takes both values from it and passes them to \printf.}
 
 \RU{А если скомпилировать с оптимизацией (\Ox), то кода будет намного меньше:}
-\EN{The code is much shorter if compiled with optimization (\Ox):}
+\EN{The code is much shorter if compiled with optimizations (\Ox):}
 
 \lstinputlisting[caption=MSVC]{\CURPATH/classes/simple_4_msvc_Ox.asm}
 
@@ -100,37 +100,37 @@ takes two values from it and passing it into \printf.}
 \RU{Вот и все. Единственное о чем еще нужно сказать, это о том, что в функции \main, 
 когда вызывался второй конструктор с двумя аргументами, за ним не корректировался стек при помощи 
 \TT{add esp, X}. В то же время, в конце конструктора вместо \RET имеется \TT{RET 8}.}
-\EN{That's all. One more thing to say is the \gls{stack pointer} was not corrected
-with \TT{add esp, X} after constructor called. 
-Withal, constructor has \TT{ret 8} instead of the \RET at the end.}
+\EN{That's all. The other thing we need to note is that the \gls{stack pointer} was not corrected
+with \TT{add esp, X} after the constructor was called. 
+At the same time, the constructor has \TT{ret 8} instead of \RET at the end.}
 
 \index{thiscall}
 \RU{Это потому что здесь используется thiscall~(\ref{thiscall}), который, вместе с stdcall~(\ref{sec:stdcall})
 (все это ~--- методы передачи аргументов через стек), предлагает вызываемой функции корректировать стек. 
 Инструкция \TT{ret X} сначала прибавляет \TT{X} к \ESP, затем передает управление вызывающей функции.}
-\EN{This is all because thiscall~(\ref{thiscall}) calling convention here used, the method of passing values through the
-stack, which is, together with stdcall~(\ref{sec:stdcall}) method, offers to correct stack to \gls{callee}
-rather than to \gls{caller}.
-\TT{ret x} instruction adds \TT{X} to the value in the \ESP, then passes control to the \gls{caller} function.}
+\EN{This is all because the thiscall~(\ref{thiscall}) calling convention is used here,
+which together with the stdcall~(\ref{sec:stdcall}) method offers the \gls{callee} to correct the stack
+instead of the \gls{caller}.
+The \TT{ret x} instruction adds \TT{X} to the value in \ESP, then passes the control to the \gls{caller} function.}
 
 \RU{См. также в соответствующем разделе о способах передачи аргументов через стек}
-\EN{See also section about calling conventions}~(\ref{sec:callingconventions}).
+\EN{See also the section about calling conventions}~(\ref{sec:callingconventions}).
 
 \RU{Еще, кстати, нужно отметить, что именно компилятор решает, когда вызывать конструктор и деструктор ~--- 
 но это и так известно из основ языка \Cpp.}
-\EN{It is also should be noted the compiler deciding when to call constructor and 
-destructor~---but that is we already know from \Cpp language basics.}
+\EN{It also should be noted that the compiler decides when to call the constructor and 
+destructor~---but we already know that from the \Cpp language basics.}
 
 \subsubsection{MSVC\EMDASH{}x86-64}
 \label{simple_CPP_MSVC_x64}
 
 \RU{Как мы уже знаем, в x86-64 первые 4 аргумента ф-ции передаются через регистры \RCX, \RDX, \Reg{8}, 
 \Reg{9}, а остальные\EMDASH{}через стек}
-\EN{As we already know, first 4 function arguments in x86-64 are passed in \RCX, \RDX, \Reg{8}, 
-\Reg{9} registers, all the rest\EMDASH{}via stack}.
+\EN{As we already know, the first 4 function arguments in x86-64 are passed in \RCX, \RDX, \Reg{8} and 
+\Reg{9} registers, all the rest\EMDASH{}via the stack}.
 \RU{Тем не менее, указатель на объект \ITthis передается через \RCX, 
 а первый аргумент метода\EMDASH{}в \RDX, и т.д.}
-\EN{Nevertheless, \ITthis pointer to the object is passed in \RCX, first method argument\EMDASH{}in \RDX, etc.}
+\EN{Nevertheless, the \ITthis pointer to the object is passed in \RCX, the first argument of the method in \RDX, etc.}
 \RU{Здесь это видно во внутренностях метода}\EN{We can see this in the} 
 \TT{c(int a, int b)}\EN{ method internals}:
 
@@ -139,9 +139,9 @@ destructor~---but that is we already know from \Cpp language basics.}
 \RU{Тип \Tint в x64 остается 32-битным
 \footnote{Вероятно, так решили для упрощения портирования \CCpp{}-кода на x64}, 
 поэтому здесь используются 32-битные части регистров}
-\EN{\Tint data type is still 32-bit in x64
-\footnote{Apparently, for easier porting of \CCpp 32-bit code to x64}, 
-so that is why 32-bit register's parts are used here}.
+\EN{The \Tint data type is still 32-bit in x64
+\footnote{Apparently, for easier porting of 32-bit \CCpp code to x64}, 
+so that is why 32-bit register parts are used here}.
 
 \RU{В методе \TT{dump()} вместо \RET мы видим \TT{JMP printf}, этот \IT{хак} мы рассматривали раннее}
 \EN{We also see \TT{JMP printf} instead of \RET in the \TT{dump()} method, that \IT{hack} we already saw
@@ -159,10 +159,10 @@ earlier}: \ref{JMP_instead_of_RET}.
 Во-вторых, указатель на экземпляр передается как первый аргумент функции ~--- 
 конечно же, скрыто от программиста.}
 \EN{Here we see another \IT{name mangling} style, specific to GNU
-\footnote{There is a good document about various compilers name mangling conventions:
+\footnote{There is a good document about the various name mangling conventions in different compilers:
 \cite{AgnerFogCC}.}
-It is also can be noted the pointer to object is passed as first function 
-argument~---invisibly for programmer, of course.}
+It can also be noted that the pointer to the object is passed as the first function 
+argument~---invisible to programmer, of course.}
 
 \RU{Это первый конструктор:}\EN{First constructor:}
 
@@ -184,7 +184,7 @@ _ZN1cC1Ev       endp
 \end{lstlisting}
 
 \RU{Он просто записывает два числа по указателю, переданному в первом (и единственном) аргументе.}
-\EN{What it does is just writes two numbers using pointer passed in first (and single) argument.}
+\EN{It just writes two numbers using the pointer passed in the first (and only) argument.}
 
 \RU{Второй конструктор:}\EN{Second constructor:}
 
@@ -209,7 +209,7 @@ arg_8           = dword ptr  10h
 _ZN1cC1Eii      endp
 \end{lstlisting}
 
-\RU{Это функция, аналог которой мог бы выглядеть так:}\EN{This is a function, analog of which could be looks like:}
+\RU{Это функция, аналог которой мог бы выглядеть так:}\EN{This is a function, the analog of which can look like this:}
 
 \begin{lstlisting}
 void ZN1cC1Eii (int *obj, int a, int b)
@@ -221,7 +221,7 @@ void ZN1cC1Eii (int *obj, int a, int b)
 
 \dots \RU{что, в общем, предсказуемо}\EN{and that is completely predictable}.
 
-\RU{И функция \TT{dump()}:}\EN{Now \TT{dump()} function:}
+\RU{И функция \TT{dump()}:}\EN{Now the \TT{dump()} function:}
 
 \begin{lstlisting}
                 public _ZN1c4dumpEv
@@ -250,10 +250,10 @@ _ZN1c4dumpEv    endp
 
 \RU{Эта функция \IT{во внутреннем представлении} имеет один аргумент, через который передается указатель на 
 объект\footnote{экземпляр класса} (\ITthis).}
-\EN{This function in its \IT{internal representation} has sole argument, 
+\EN{This function in its \IT{internal representation} has only one argument, 
 used as pointer to the object (\ITthis).}
 
-\RU{Это можно переписать на Си}\EN{This function could be rewritten into C}:
+\RU{Это можно переписать на Си}\EN{This function could be rewritten in C like this}:
 
 \begin{lstlisting}
 void ZN1c4dumpEv (int *obj)
@@ -265,19 +265,19 @@ void ZN1c4dumpEv (int *obj)
 \RU{Таким образом, если брать в учет только эти простые примеры, разница между MSVC и GCC 
 в способе кодирования имен функций (\IT{name mangling}) и передаче указателя на экземпляр класса 
 (через \ECX или через первый аргумент).}
-\EN{Thus, if to base our judgment on these simple examples, the difference between MSVC and GCC
-is style of function names encoding (\IT{name mangling}) and passing pointer to object
+\EN{Thus, if we base our judgment on these simple examples, the difference between MSVC and GCC
+is the style of the encoding of function names (\IT{name mangling}) and the method for passing a pointer to the object
 (via the \ECX register or via the first argument).}
 
 \subsubsection{GCC\EMDASH{}x86-64}
 
 \RU{Первые 6 аргументов, как мы уже знаем, передаются через 6 регистров}
-\EN{The first 6 arguments, as we already know, are passed in the} \RDI, \RSI, \RDX, \RCX, \Reg{8}, 
+\EN{The first 6 arguments, as we already know, are passed in the} \RDI, \RSI, \RDX, \RCX, \Reg{8} and 
 \Reg{9}\cite{SysVABI}\RU{, а указатель на \ITthis через первый (\RDI) что мы здесь и видим}\EN{ registers,
-and the pointer to \ITthis via first one (\RDI) and that is what we see here}.
-\RU{Тип \Tint 32-битный и здесь}\EN{\Tint data type is also 32-bit here}.
+and the pointer to \ITthis via the first one (\RDI) and that is what we see here}.
+\RU{Тип \Tint 32-битный и здесь}\EN{The \Tint data type is also 32-bit here}.
 \RU{\IT{Хак} с \JMP вместо \RET используется и здесь}
-\EN{\JMP instead of \RET \IT{hack} is also used here}.
+\EN{The \JMP instead of \RET \IT{hack} is also used here}.
 
 \lstinputlisting[caption=GCC 4.4.6 x64]{\CURPATH/classes/simple_GCC_x64.s.\LANG}
 
