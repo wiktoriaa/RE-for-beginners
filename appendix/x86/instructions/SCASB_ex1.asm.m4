@@ -1,5 +1,5 @@
 include(`commons.m4')lea     edi, string
-mov     ecx, 0FFFFFFFFh ; _EN(``scan $2^{32-1}$ bytes, i.e., almost "infinitely"'')_RU(``сканировать $2^{32-1}$ байт, т.е., почти "бесконечно"'')
+mov     ecx, 0FFFFFFFFh ; _EN(``scan $2^{32}-1$ bytes, i.e., almost "infinitely"'')_RU(``сканировать $2^{32}-1$ байт, т.е., почти "бесконечно"'')
 xor     eax, eax        ; _EN(`0 is the terminator')_RU(`конец строки это 0')
 repne scasb
 add     edi, 0FFFFFFFFh ; _EN(`correct it')_RU(`скорректировать')
