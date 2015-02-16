@@ -1,4 +1,4 @@
-$SG2989	DB	'hello, world', 00H
+$SG2989	DB	'hello, world', 0AH, 00H
 
 main	PROC
 	sub	rsp, 40
