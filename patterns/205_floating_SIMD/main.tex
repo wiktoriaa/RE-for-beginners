@@ -22,7 +22,7 @@ for x86-64) usually use \ac{SIMD} instructions instead of FPU ones.}
 \RU{Это, можно сказать, хорошая новость, потому что работать с ними легче}
 \EN{It can be said that it's good news, because it's easier to work with them}.
 
-\RU{Примеры будем использовать из секции о FPU}\EN{We will reuse here the examples from the FPU section}: \ref{sec:FPU}.
+\RU{Примеры будем использовать из секции о FPU}\EN{We will reuse here the examples from the FPU section}: \myref{sec:FPU}.
 
 \section{\RU{Простой пример}\EN{Simple example}}
 
@@ -38,10 +38,10 @@ all the rest---via the stack}
 \footnote{\href{http://go.yurichev.com/17263}{MSDN: Parameter Passing}}.
 
 $a$ \RU{передается через}\EN{is passed in} \XMM{0}, $b$\EMDASH{}\RU{через}\EN{via} \XMM{1}.
-\RU{Но XMM-регистры (как мы уже знаем из секции о \ac{SIMD}: \ref{SIMD_x86}) 128-битные, 
+\RU{Но XMM-регистры (как мы уже знаем из секции о \ac{SIMD}: \myref{SIMD_x86}) 128-битные, 
 а значения типа \Tdouble --- 64-битные,
 так что используется только младшая половина регистра}
-\EN{The XMM-registers are 128-bit (as we know from the section about \ac{SIMD}: \ref{SIMD_x86}), 
+\EN{The XMM-registers are 128-bit (as we know from the section about \ac{SIMD}: \myref{SIMD_x86}), 
 but the \Tdouble values are 64 bit, so only lower register half is used}.
 
 \index{x86!\Instructions!DIVSD}
@@ -66,7 +66,7 @@ one value of type \Tdouble by another, stored in the lower halves of operands}.
 
 \index{Shadow space}
 \RU{Чуть более избыточно}\EN{Slightly redundant}. 
-\RU{Входные аргументы сохраняются в}\EN{The input arguments are saved in the} ``shadow space'' (\ref{shadow_space}), 
+\RU{Входные аргументы сохраняются в}\EN{The input arguments are saved in the} ``shadow space'' (\myref{shadow_space}), 
 \RU{причем, только младшие половины регистров, т.е., только 64-битные значения типа \Tdouble}
 \EN{but only their lower register halves, i.e., only 64-bit values of type \Tdouble}.\\
 \\
@@ -84,8 +84,8 @@ MSVC 2012 uses SSE2 instructions:}
 
 \RU{Код почти такой же, правда есть пара отличий связанных с соглашениями о вызовах:}
 \EN{It's almost the same code, however, there are some differences related to calling conventions:}
-1) \RU{аргументы передаются не в XMM-регистрах, а через стек, как и прежде, в примерах с FPU (\ref{sec:FPU});}
-\EN{the arguments are passed not in XMM registers, but in the stack, like in the FPU examples (\ref{sec:FPU});}
+1) \RU{аргументы передаются не в XMM-регистрах, а через стек, как и прежде, в примерах с FPU (\myref{sec:FPU});}
+\EN{the arguments are passed not in XMM registers, but in the stack, like in the FPU examples (\myref{sec:FPU});}
 2) \RU{результат работы ф-ции возвращается через \ST{0} --- для этого он через стек
 (через локальную переменную \TT{tv}) копируется из XMM-регистра в \ST{0}.}
 \EN{the result of the function is returned in \ST{0} --- in order to do so, it's copied
@@ -166,7 +166,7 @@ of the} \XMM{0}-\XMM{3}\EN{ registers}.
 Intel \cite{Intel} \AndENRU AMD \cite{AMD}\EN{ manuals}, 
 \RU{там она называется просто}\EN{there it is called just} \TT{MOVSD}.
 \RU{Таким образом, в процессорах x86 две инструкции с одинаковым именем}\EN{So there are two instructions
-sharing the same name in x86} (\RU{о второй}\EN{about the other see}: \ref{REP_MOVSx}).
+sharing the same name in x86} (\RU{о второй}\EN{about the other see}: \myref{REP_MOVSx}).
 \RU{Возможно, в Microsoft решили избежать
 путаницы и переименовали инструкцию в}\EN{Apparently, Microsoft developers wanted to get rid of the mess,
 so they renamed it to} \TT{MOVSDX}.

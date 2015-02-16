@@ -44,6 +44,20 @@
 \usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
 \usepackage[]{bookmark,hyperref} % must be last
 
+% ************** myref
+% http://tex.stackexchange.com/questions/228286/how-to-mix-ref-and-pageref#228292
+\ifdefined\RUSSIAN
+\newcommand{\myref}[1]{%
+  \ref{#1} 
+  (стр.~\pageref{#1})%
+  }
+% FIXME: I wasn't able to force varioref to output russian text...
+\else
+\usepackage{varioref}
+\newcommand{\myref}[1]{\vref{#1}}
+\fi
+% ************** myref
+
 \usepackage{glossaries}
 \usepackage{tikz}
 %\usepackage{fixltx2e}
