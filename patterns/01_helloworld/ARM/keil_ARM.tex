@@ -1,4 +1,4 @@
-﻿\subsection{\NonOptimizingKeilVI (\ARMMode)}
+\subsection{\NonOptimizingKeilVI (\ARMMode)}
 
 \RU{Для начала скомпилируем наш пример в Keil}\EN{Let's start by compiling our example in Keil}:
 
@@ -43,19 +43,19 @@ armcc.exe --arm --c90 -O0 1.c
 actually shows the} \TT{``PUSH \{r4,lr\}''}\EN{ instruction}.
 \RU{Но это не совсем точно, инструкция \PUSH доступна только в режиме thumb, поэтому,
 во избежание путаницы, я предложил работать в \IDA}
-\EN{But it is not quite precise. The \PUSH instruction is only available in thumb mode.
-So, to make things less messy, we're doing this in \IDA}.
+\EN{But that is not quite precise. The \PUSH instruction is only available in thumb mode.
+So, to make things less confusing, we're doing this in \IDA}.
 
 \RU{Итак, эта инструкция уменьшает \ac{SP}, чтобы он указывал на место в стеке, свободное для записи
 новых значений, затем записывает значения регистров \Reg{4} и \ac{LR} 
 по адресу в памяти, на который указывает измененный регистр \ac{SP}}
-\EN{This instruction first \glspl{decrement} \ac{SP} so it will point to the place in the stack
-that is free for new entries, then it writes the values of the \Reg{4} and \ac{LR} registers at the address
+\EN{This instruction \glspl{decrement} first the \ac{SP} so it points to the place in the stack
+that is free for new entries, then it saves the values of the \Reg{4} and \ac{LR} registers at the address
 stored in the modified \ac{SP}}.
 
 \RU{Эта инструкция, как и инструкция \PUSH в режиме thumb, может сохранить в стеке одновременно несколько значений регистров, что может быть очень удобно}
-\EN{This instruction (like the \PUSH instruction in thumb mode) is able to save several register values at once and this may be useful}. 
-\RU{Кстати, такого в x86 нет}\EN{By the way, there is no such thing in x86}.
+\EN{This instruction (like the \PUSH instruction in thumb mode) is able to save several register values at once which can be very useful}. 
+\RU{Кстати, такого в x86 нет}\EN{By the way, this has no equivalent in x86}.
 \RU{Также следует заметить, что \TT{STMFD} ~--- генерализация инструкции \PUSH (то есть, расширяет её возможности), потому что может работать с любым регистром, а не только с \ac{SP}.}
 \EN{It can also be noted that the \TT{STMFD} instruction is a generalization 
 of the \PUSH instruction (extending its features), since it can work with any register, not just with \ac{SP}.}
@@ -68,22 +68,22 @@ of the \PUSH instruction (extending its features), since it can work with any re
 \RU{прибавляет значение регистра \ac{PC} к смещению, где хранится строка}
 \EN{instruction adds the value in the \ac{PC} register to the offset where the}
 \IT{``hello, world''}\EN{ string is located}.
-\RU{Причем здесь \ac{PC}, можно спросить}\EN{How the \TT{PC} register is used here, one might ask}?
+\RU{Причем здесь \ac{PC}, можно спросить}\EN{How is the \TT{PC} register used here, one might ask}?
 \RU{Притом, что это так называемый ``\PICcode''}\EN{This is so-called ``\PICcode''.}
 \footnote{
 	\RU{Читайте больше об этом в соответствующем разделе}
 	\EN{Read more about it in relevant section}~(\ref{sec:PIC})
 	}
 \RU{он предназначен для исполнения будучи не привязанным к каким-либо адресам в памяти}
-\EN{It is intended to be executed at a non-fixed address in memory}.
+\EN{Such code can be be executed at a non-fixed address in memory}.
 \RU{В опкоде инструкции \TT{ADR} указывается разница между адресом этой инструкции и местом, где хранится строка}
-\EN{In the opcode of the \TT{ADR} instruction, the difference between the address of this instruction and the place where the string is located is encoded}.
+\EN{The \TT{ADR} instruction takes into account the difference between the address of this instruction and the address where the string is located}.
 \RU{Эта разница всегда будет постоянной, вне зависимости от того, куда был загружен \ac{OS}
 наш код}
-\EN{The difference will always be the same,
-independent of the address where the code is loaded by the \ac{OS}}.
+\EN{This difference(offset) will always be the same,
+no matter at what address our code is loaded by the \ac{OS}}.
 \RU{Поэтому всё, что нужно ~--- это прибавить адрес текущей инструкции (из \ac{PC}), чтобы получить текущий абсолютный адрес нашей Си-строки}
-\EN{That's why all we need is to add the address of the current instruction (from \ac{PC}) in order to get the absolute address of our C-string in memory}.
+\EN{That's why all we need is to add the address of the current instruction (from \ac{PC}) in order to get the absolute memory address of our C-string}.
 
 \index{ARM!\Registers!Link Register}
 \index{ARM!\Instructions!BL}
@@ -94,19 +94,19 @@ independent of the address where the code is loaded by the \ac{OS}}.
 \begin{itemize}
 \item
 \RU{записать адрес после инструкции \TT{BL} (\TT{0xC}) в регистр \ac{LR}}
-\EN{write the address following the \TT{BL} instruction (\TT{0xC}) into the \ac{LR}};
+\EN{store the address following the \TT{BL} instruction (\TT{0xC}) into the \ac{LR}};
 \item
 \RU{затем собственно передать управление в \printf, записав адрес этой функции в регистр \ac{PC}}
-\EN{then pass control flow into \printf by writing its address into the \ac{PC} register}.
+\EN{then pass the control to the \printf by writing its address into the \ac{PC} register}.
 \end{itemize}
 
 \RU{Ведь когда функция \printf закончит работу, нужно знать, куда вернуть управление, поэтому закончив работу, всякая функция передает управление по адресу, записанному в регистре \ac{LR}}
-\EN{When \printf finishes its work it must have information about where it must return control.
+\EN{When \printf finishes its execution it must have information about where it needs to return the control to.
 That's why each function passes control to the address stored in the \ac{LR} register}.
 
 \RU{В этом разница между ``чистыми'' \ac{RISC}-процессорами вроде ARM и \ac{CISC}-процессорами как x86,
 где адрес возврата обычно записывается в стек}
-\EN{That is the difference between ``pure'' \ac{RISC}-processors like ARM and \ac{CISC}-processors like x86,
+\EN{That is a difference between ``pure'' \ac{RISC}-processors like ARM and \ac{CISC}-processors like x86,
 where the return address is usually stored on the stack}\footnote{\RU{Подробнее об этом будет описано в следующей главе}\EN{Read more about this in next section}~(\ref{sec:stack})}.
 
 \RU{Кстати, 32-битный абсолютный адрес, либо же смещение, невозможно закодировать в 32-битной инструкции \TT{BL}, в ней есть место только для 24-х бит}
@@ -133,20 +133,19 @@ This means that the last 2 bits of the instruction address (which are always zer
 \EN{It loads values from the stack (or any other memory place) in order to save them into \Reg{4} and \ac{PC}, and \glslink{increment}{increments} the \gls{stack pointer} \ac{SP}}.
 \RU{Здесь она работает как аналог \POP}\EN{It works like \POP here}.\\
 N.B. \RU{Самая первая инструкция \TT{STMFD} сохранила в стеке \Reg{4} и \ac{LR}, а \IT{восстанавливаются} во время исполнения \TT{LDMFD} регистры \Reg{4} и \ac{PC}}
-\EN{The very first instruction \TT{STMFD} saves the \Reg{4} and \ac{LR} registers pair on the stack, but \Reg{4} and \ac{PC} are \IT{restored} during execution of \TT{LDMFD}}.
+\EN{The very first instruction \TT{STMFD} saved the \Reg{4} and \ac{LR} registers pair on the stack, but \Reg{4} and \ac{PC} are \IT{restored} during the \TT{LDMFD} execution}.
 
 \RU{Как я уже описывал, в регистре \ac{LR} обычно сохраняется адрес места, куда нужно всякой функции вернуть управление}
-\EN{As I wrote before, the address of the place to where each function must return control is usually saved in the \ac{LR}
-register}.
+\EN{As I mentioned before, the address of the place where each function must return control to is usually saved in the \ac{LR} register}.
 \RU{Самая первая инструкция сохраняет это значение в стеке, потому что наша функция \main позже будет сама пользоваться этим регистром, в момент вызова \printf}
-\EN{The very first function saves its value in the stack because our
-\main function will use the register in order to call \printf}.
+\EN{The very first instruction saves its value in the stack because the same register will be used by our
+\main function when calling \printf}.
 \RU{А затем, в конце функции, это значение можно сразу записать прямо в \ac{PC}, таким образом, передав управление туда, откуда была вызвана наша функция}
-\EN{In the function end, this value can be written directly to the \ac{PC} register, thus passing control to where our function was called}.
+\EN{In the function's end, this value can be written directly to the \ac{PC} register, thus passing control to where our function was called}.
 \RU{Так как функция \main обычно самая главная в \CCpp, управление будет возвращено в загрузчик \ac{OS}, либо куда-то в \ac{CRT} 
 или что-то в этом роде}
-\EN{Since our \main function is usually the primary function in \CCpp,
-control will be returned to the \ac{OS} loader or to a point in \ac{CRT},
+\EN{Since \main is usually the primary function in \CCpp,
+the control will be returned to the \ac{OS} loader or to a point in a \ac{CRT},
 or something like that}.
 
 \index{ARM!DCB}
