@@ -6,7 +6,16 @@
 \RU{Затем, при помощи \IDA{}, посмотрим, как создалась функция \main.}
 \EN{Next, with the assistance of the \IDA disassembler, let's see how the \main function was created.} 
 
-(\IDA, \RU{как и MSVC, показывает код в Intel-синтаксисе}\EN{like MSVC, shows code in Intel-syntax}).
+(\IDA, \RU{как и MSVC, показывает код в Intel-синтаксисе}\EN{like MSVC, uses Intel-syntax}).
+% Since only GCC listing is included bellow an IDA screenshot or listing could be benfitial to illustrate the above statements
+% I have included an image and sample latex segment bellow for review
+%
+%\begin{figure}[H]
+%\centering
+%\includegraphics[scale=\FigScale]{patterns/01_helloworld/IDA-helloworld-32.png}
+%\caption{\IDA: \TT{hello world}}
+%\label{fig:IDA_helloworld_32}
+%\end{figure}
 
 N.B. \RU{Мы также можем заставить GCC генерировать листинги в этом формате при помощи ключей}
 \EN{We could also have GCC produce assembly listings in Intel-syntax by applying the options} 
@@ -39,11 +48,10 @@ main            endp
 в стеке также выровненными по этой границе (процессор более эффективно работает с переменными, расположенными
 в памяти по адресам кратным 4 или 16)\footnote{\URLWPDA}.}
 \EN{The result is almost the same.
-The address of the ``hello, world'' string (stored in the data segment) is saved in the \EAX register first and then it is stored on the stack.
-In addition, in the function prologue, we see \TT{AND ESP, 0FFFFFFF0h}~---this 
-instruction aligns the value in the \ESP register on a 16-byte boundary.
-This results in all values in the stack being aligned.
-(The CPU performs better if the values it is dealing with are located in memory at addresses aligned 
+The address of the ``hello, world'' string (stored in the data segment) is loaded in the \EAX register first and then it is saved onto the stack.
+In addition, the function prologue contains \TT{AND ESP, 0FFFFFFF0h}~---this 
+instruction aligns the \ESP register value on a 16-byte boundary.
+This results in all values in the stack being aligned the same way (The CPU performs better if the values it is dealing with are located in memory at addresses aligned 
 on a 4- or 16-byte boundary)\footnote{\URLWPDA}.}
 
 \index{x86!\Instructions!SUB}
@@ -58,8 +66,7 @@ on a 4- or 16-byte boundary)\footnote{\URLWPDA}.}
 \index{x86!\Instructions!PUSH}
 \RU{Адрес строки (или указатель на строку) затем записывается прямо в стек без помощи инструкции \PUSH.
 \IT{var\_10} по совместительству ~--- и локальная переменная и одновременно аргумент для \printf{}. Подробнее об этом будет ниже.}
-\EN{The string address (or a pointer to the string) is then written directly onto the stack space 
-without using the \PUSH instruction.
+\EN{The string address (or a pointer to the string) is then stored directly onto the stack without using the \PUSH instruction.
 \IT{var\_10}~---is a local variable and is also an argument for \printf{}.
 Read about it below.}
 
@@ -85,7 +92,7 @@ beginning of the function (executing}
 \label{ATT_syntax}
 
 \RU{Попробуем посмотреть, как выглядит то же самое в AT\&T-синтаксисе языка ассемблера.}
-\EN{Let's see how this can be represented in the AT\&T syntax of assembly language.}
+\EN{Let's see how this can be represented in assembly language AT\&T syntax.}
 \RU{Этот синтаксис больше распространен в UNIX-мире.}
 \EN{This syntax is much more popular in the UNIX-world.}
 
@@ -98,12 +105,14 @@ gcc -S 1_1.c
 \lstinputlisting[caption=GCC 4.7.3]{patterns/01_helloworld/GCC.s}
 
 \RU{Здесь много макросов (начинающихся с точки). Они нам пока не интересны.}
-\EN{There are many macros (beginning with dot). These are not interesting for us at the moment.}
+\EN{The listing contains many macros (beginning with dot). These are not interesting for us at the moment.}
 \RU{Пока что, ради упрощения, мы можем
 их игнорировать и впредь (кроме макроса \IT{.string}, при помощи которого кодируется последовательность символов, 
 оканчивающихся нулем, такие же строки как в Си). И тогда получится следующее}
 \EN{For now, for the sake of simplification, we can ignore them (except the \IT{.string} macro which
 encodes a null-terminated character sequence just like a C-string). Then we'll see this}
+
+% I would suggest moving this particular footnote to the main text. IMHO this will improve the readability.
 \footnote{\RU{Кстати, для уменьшения генерации ``лишних'' макросов, можно использовать такой ключ GCC}
 \EN{This GCC option can be used to eliminate ``unnecessary'' macros}: 
 \IT{-fno-asynchronous-unwind-tables}}:
@@ -118,7 +127,7 @@ encodes a null-terminated character sequence just like a C-string). Then we'll s
 \begin{itemize}
 
 \item
-\RU{Операнды записываются наоборот.}\EN{Operands are written backwards.}
+\RU{Операнды записываются наоборот.}\EN{Source and destination operands are written in opposite order.}
 
 \RU{В Intel-синтаксисе: <инструкция> <операнд назначения> <операнд-источник>.}
 \EN{In Intel-syntax: <instruction> <destination operand> <source operand>.}
@@ -127,10 +136,10 @@ encodes a null-terminated character sequence just like a C-string). Then we'll s
 \EN{In AT\&T syntax: <instruction> <source operand> <destination operand>.}
 
 \RU{Чтобы легче понимать разницу, можно запомнить следующее}
-\EN{Here is a way to think about them}: \RU{когда вы работаете с Intel-синтаксисом ~--- можете в уме ставить знак равенства ($=$) между операндами,}
-\EN{when you deal with Intel-syntax, you can put in equality sign ($=$) in your mind between operands}
+\EN{Here is a way to easy memorise the difference}: \RU{когда вы работаете с Intel-синтаксисом ~--- можете в уме ставить знак равенства ($=$) между операндами,}
+\EN{when you deal with Intel-syntax, you can imagine that there is an equality sign ($=$) between operands}
 \RU{а когда с AT\&T-синтаксисом ~--- мысленно ставьте стрелку направо}
-\EN{and when you deal with AT\&T-syntax put in a right arrow} 
+\EN{and when you deal with AT\&T-syntax imagine there is a right arrow} 
 ($\rightarrow$)
 \footnote{
 \index{\CStandardLibrary!memcpy()}
@@ -148,7 +157,7 @@ AT\&T: \RU{Перед именами регистров ставится зна�
 
 \item
 AT\&T: \RU{К каждой инструкции добавляется специальный символ, определяющий тип данных:}
-\EN{A special symbol is to be added to each instruction defining the type of data:}
+\EN{Suffix is added to instructions to define the operand size:}
 
 \begin{itemize}
 \item q --- quad (64 \RU{бита}\EN{bits})
@@ -157,12 +166,14 @@ AT\&T: \RU{К каждой инструкции добавляется спец�
 \item b --- byte (8 \RU{бит}\EN{bits})
 \end{itemize}
 
+%simple example may be? \RU{Например mov\textbf{l}, movb, movw представляют различые версии инсструкция mov} \EN {For example: movl, movb, movw are variations of the mov instruciton}
+
 \end{itemize}
 
 \RU{Возвращаясь к результату компиляции: он идентичен тому, который мы посмотрели в \IDA.}
 \EN{Let's go back to the compiled result: it is identical to what we saw in \IDA.}
-\RU{Одна мелочь}\EN{With one subtle difference}: \TT{0FFFFFFF0h} \RU{записывается как}\EN{is written as} \TT{\$-16}.
-\RU{Это то же самое}\EN{It is the same}: \TT{16} \RU{в десятичной системе это}\EN{in the decimal system is} \TT{0x10} 
+\RU{Одна мелочь}\EN{With one subtle difference}: \TT{0FFFFFFF0h} \RU{записывается как}\EN{is presented as} \TT{\$-16}.
+\RU{Это то же самое}\EN{It is the same thing}: \TT{16} \RU{в десятичной системе это}\EN{in the decimal system is} \TT{0x10} 
 \RU{в шестнадцатеричной}\EN{in hexadecimal}. 
 \TT{-0x10} \RU{будет как раз}\EN{is equal to} \TT{0xFFFFFFF0} 
 (\RU{в рамках 32-битных чисел}\EN{for a 32-bit data type}).
