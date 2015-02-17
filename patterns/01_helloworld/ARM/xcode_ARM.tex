@@ -1,4 +1,4 @@
-﻿\subsection{\OptimizingXcodeIV (\ARMMode)}
+\subsection{\OptimizingXcodeIV (\ARMMode)}
 
 Xcode 4.6.3 \RU{без включенной оптимизации выдает слишком много лишнего кода, поэтому включим оптимизацию компилятора (ключ \Othree), потому что там меньше инструкций.}
 \EN{without optimization turned on produces a lot of redundant code so we'll study optimized output, where the instruction count is as small as possible, setting the compiler switch \Othree.}
@@ -25,7 +25,7 @@ __cstring:00003F62 48 65 6C 6C+aHelloWorld_0  DCB "Hello world!",0
 This is the offset pointing to the ``Hello world!'' string}.
 
 \RU{Регистр \TT{R7} (по стандарту, принятому в \cite{IOSABI}) это frame pointer, о нем будет рассказано позже.}
-\EN{The \TT{R7} register (as it is standardized in \cite{IOSABI}) is a frame pointer. More on it below.}
+\EN{The \TT{R7} register (as it is standardized in \cite{IOSABI}) is a frame pointer. More on that below.}
 
 \index{ARM!\Instructions!MOVT}
 \RU{Инструкция}\EN{The} \TT{MOVT R0, \#0} (MOVe Top) \RU{записывает $0$ в старшие 16 бит регистра}
@@ -37,7 +37,7 @@ This is the offset pointing to the ``Hello world!'' string}.
 \RU{Поэтому для записи в старшие биты (от 16-го по 31-го включительно) существует дополнительная команда \TT{MOVT}}
 \EN{That's why an additional instruction \TT{MOVT} exists for writing into the higher bits (from 16 to 31 inclusive)}.
 \RU{Впрочем, здесь её использование избыточно, потому что инструкция \TT{``MOV R0, \#0x1686''} выше и так обнулила старшую часть регистра}
-\EN{However, its usage here is redundant because the \TT{``MOV R0, \#0x1686''} instruction above cleared the higher part of the register}.
+\EN{Its usage here, however, is redundant because the \TT{``MOV R0, \#0x1686''} instruction above cleared the higher part of the register}.
 \RU{Возможно, это недочет компилятора}\EN{This is probably a shortcoming of the compiler}.
 
 \index{ARM!\Instructions!ADD}
@@ -58,8 +58,7 @@ Indeed: \printf with a sole argument is almost analogous to \puts.}
 
 \RU{\IT{Почти}, если принять условие, что в строке не будет управляющих символов \printf, 
 начинающихся со знака процента. Тогда эффект от работы этих двух функций будет разным}
-\EN{\IT{Almost}, because we need to be sure the string will not contain printf-control 
-statements starting with \IT{\%}: then the effect of these two functions would be different}
+\EN{\IT{Almost}, because the two functions will produce the same result only in case the string does not contain printf format identifiers starting with \IT{\%}. In case it does the effect of these two functions would be different}
 \footnote{
 \RU{Также нужно заметить, что \puts не требует символа перевода строки '\textbackslash{}n' в конце строки,
 поэтому его здесь нет.}
@@ -71,7 +70,7 @@ at the end of a string, so we do not see it here.}}.
 \footnote{\url{http://go.yurichev.com/17063}}. 
 
 \RU{Видимо потому, что \puts проталкивает символы в \gls{stdout} не сравнивая каждый со знаком процента.}
-\EN{\puts works faster because it just passes characters to \gls{stdout} without comparing each to the \IT{\%} symbol.}
+\EN{\puts works faster because it just passes characters to \gls{stdout} without comparing every one of them with the \IT{\%} symbol.}
 
 \RU{Далее уже знакомая инструкция}\EN{Next, we see the familiar} 
 \TT{``MOV R0, \#0''}\RU{, служащая для установки в $0$ возвращаемого значения функции}
