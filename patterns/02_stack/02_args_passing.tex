@@ -16,8 +16,8 @@ add esp, 4*3
 
 \RU{Следовательно, так будут расположены значения в стеке перед исполнением самой первой инструкции
 ф-ции \ttf{}:}
-\EN{Consequently, this is how values will be located in the stack before execution
-of the very first instruction of the \ttf{} function:}
+\EN{Therefore, here is how the argument values will be located in the stack before the execution
+of the \ttf{} function's very first instruction:}
 
 \begin{center}
 \begin{tabular}{ | l | l | }
@@ -36,7 +36,7 @@ ESP+0xC & \argument \#3, \MarkedInIDAAs{} \TT{arg\_8} \\
 \end{center}
 
 \RU{См. также в соответствующем разделе о других способах передачи аргументов через стек}
-\EN{See also the section about other calling conventions}~(\myref{sec:callingconventions}).
+\EN{For more information on other calling conventions see also section}~(\myref{sec:callingconventions}).
 \RU{Важно отметить, что, в общем, никто не заставляет программистов передавать параметры именно через стек,
 это не является требованием к исполняемому коду.}
 \EN{It is worth noting that nothing obliges programmers to pass arguments through the stack. It is not a requirement.}
@@ -53,17 +53,16 @@ via a pointer to this block in the \EAX register. This will work}
 передающей управление подпрограмме. Кнут описывает что это было особенно удобно для компьютеров IBM System/360.}
 \EN{For example, in the ``The Art of Computer Programming'' book by Donald Knuth, 
 in section 1.4.1 dedicated to subroutines\cite[section 1.4.1]{Knuth:1998:ACP:521463},
-we can read about one way to supply arguments to a subroutine is simply to list them after the \JMP instruction
-passing control to subroutine. Knuth writes this method was particularly convenient on IBM System/360.}}.
+we could read that one way to supply arguments to a subroutine is simply to list them after the \JMP instruction
+passing control to subroutine. Knuth explains that this method was particularly convenient on IBM System/360.}}.
 \RU{Однако, так традиционно сложилось, что в x86 и ARM передача аргументов происходит именно через стек.}
-\EN{However, it is a convenient custom in x86 and ARM to use the stack for this.} \\
+\EN{However, it is a convenient custom in x86 and ARM to use the stack for this purpose.} \\
 \\
 \RU{Кстати, вызываемая ф-ция не имеет информации, сколько аргументов было ей было передано.}
 \EN{By the way, the \gls{callee} function does not have any information about how many arguments were passed.}
 \RU{Функции Си с переменным количеством аргументов (как \printf) определяют их количество по 
 спецификаторам строки формата (начинающиеся со знака \%).}
-\EN{Functions with a variable number of arguments (like \printf) determine the number by specifiers
-(which begin with the \% symbol) in the format string.}
+\EN{C functions with a variable number of arguments (like \printf) determine their number using format string  specifiers (which begin with the \% symbol).}
 \RU{Если написать что-то вроде}\EN{If we write something like} 
 
 \begin{lstlisting}
@@ -91,10 +90,10 @@ call main
 
 \RU{Если вы объявляете \main как \main без аргументов, они, тем не менее, присутствуют в стеке, но не используются.}
 \EN{If you declare \main as \main without arguments, they are, nevertheless, still present in the stack, but
-not used.}
+are not used.}
 \RU{Если вы объявите \main как}\EN{If you declare \main as} \TT{main(int argc, char *argv[])}, 
 \RU{вы будете использовать два аргумента, а третий останется для вашей ф-ции ``невидимым''.}
 \EN{you will use two arguments, and the third will remain ``invisible'' for your function.}
-\RU{Более того, можно даже объявить}\EN{Even more than that, it is possible to declare} \TT{main(int argc)}, 
+\RU{Более того, можно даже объявить}\EN{Even further, it is possible to declare} \TT{main(int argc)}, 
 \RU{и это будет работать}\EN{and it will work}.
 

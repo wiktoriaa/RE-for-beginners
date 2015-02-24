@@ -23,13 +23,13 @@ for local variables.}
 \RU{\EBP сохраняет свое значение на протяжении всей функции, он будет использоваться здесь для доступа 
 к локальным переменным и аргументам. Можно было бы использовать и \ESP, но он постоянно меняется и 
 это не очень удобно.}
-\EN{The value in the \EBP is fixed over the period of the function execution and is to be used for local variables and 
+\EN{The value in the \EBP stays the same over the period of the function execution and is to be used for local variables and 
 arguments access. 
-One can use \ESP, but it changes over time and it is not convenient.}
+For the same purpose one can use \ESP, but since it changes over time this approach is not too convenient.}
 
 \RU{Эпилог функции аннулирует выделенное место в стеке, возвращает значение \EBP на то что было и возвращает 
 управление в вызывающую функцию:}
-\EN{The function epilogue frees allocated space in the stack, returns the value in the \EBP register back to initial state 
+\EN{The function epilogue frees allocated space in the stack, returns the value in the \EBP register back to its initial state 
 and returns the control flow to the \gls{callee}:}
 
 \begin{lstlisting}
@@ -38,7 +38,7 @@ and returns the control flow to the \gls{callee}:}
     ret    0
 \end{lstlisting}
 
-\RU{Пролог и эпилог ф-ции обычно находятся в в дизассемблерах для размежевания ф-ций 
+\RU{Пролог и эпилог ф-ции обычно находятся в дизассемблерах для размежевания ф-ций 
 друг от друга}\EN{Function prologues and epilogues are usually detected in disassemblers for function
 delimitation}.
 
@@ -46,13 +46,13 @@ delimitation}.
 
 \index{\Recursion}
 \RU{Наличие эпилога и пролога может несколько ухудшить эффективность рекурсии.}
-\EN{Epilogues and prologues can make recursion performance worse.}
+\EN{Epilogues and prologues can negatively affect the recursion performance.}
 
 \RU{Например, однажды я написал функцию для поиска нужного узла в двоичном дереве. 
 Рекурсивно она выглядела очень красиво, но из-за того, что при каждом вызове тратилось время на эпилог и пролог, 
 все это работало в несколько раз медленнее чем та же функция, но без рекурсии.}
-\EN{For example, once upon a time I wrote a function to seek the correct node in a binary tree. 
-As a recursive function it would look stylish but since additional time
+\EN{For example, I once wrote a function to seek a particular node in a binary tree. 
+As a recursive function it looked quite stylish but since additional time
 was to be spent at each function call
 for the prologue/epilogue, it was working a couple of times slower than an iterative (recursion-free)
 implementation.}
