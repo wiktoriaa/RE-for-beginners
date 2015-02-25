@@ -7,26 +7,26 @@
 \RU{скопировать}\EN{copy} \RU{байт}\EN{byte}/
 16-\RU{битное слово}\EN{bit word}/
 32-\RU{битное слово}\EN{bit word}/
-64-\RU{битное слово}\EN{bit word} \RU{на который указывает}\EN{address of which is in the} SI/ESI/RSI 
-\RU{куда указывает}\EN{into the place address of which is in the} DI/EDI/RDI.
+64-\RU{битное слово}\EN{bit word} \RU{на который указывает}\EN{from the address which is in} SI/ESI/RSI 
+\RU{куда указывает}\EN{into the address which is in} DI/EDI/RDI.
 
 \label{REP_MOVSx}
 \index{x86!\Prefixes!REP}
 \RU{Вместе с префиксом REP, инструкция будет исполняться в цикле, счетчик будет
 находится в регистре CX/ECX/RCX}
-\EN{Together with REP prefix, it will repeated in loop, count is stored in the CX/ECX/RCX register}:
+\EN{Together with the REP prefix, it will be repeated in a loop, the count will be stored in the CX/ECX/RCX register}:
 \RU{это работает как}\EN{it works like} memcpy() \RU{в Си}\EN{in C}.
 \RU{Если размер блока известен компилятору на стадии компиляции,
 memcpy() часто компилируется в короткий фрагмент кода использующий
 REP MOVSx, иногда даже несколько инструкций}
-\EN{If block size is known to compiler on compile stage, 
-memcpy() is often inlined into short code fragment
+\EN{If the block size is known to the compiler in the compile stage, 
+memcpy() is often inlined into a short code fragment
 using REP MOVSx, sometimes even as several instructions}.
 
-\RU{Эквивалент }memcpy(EDI, ESI, 15)\EN{ equivalent is}:
+\EN{The}\RU{Эквивалент} memcpy(EDI, ESI, 15)\EN{ equivalent is}:
 
 \lstinputlisting{appendix/x86/instructions/MOVSB_ex1.asm.\LANG}
 
 (\RU{Вероятно, так быстрее чем копировать 15 байт используя просто одну}
-\EN{Supposedly, it will work faster then copying 15 bytes using just one} REP MOVSB).
+\EN{Supposedly, it will work faster than copying 15 bytes using just one} REP MOVSB).
 
