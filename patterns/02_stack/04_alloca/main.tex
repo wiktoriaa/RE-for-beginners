@@ -12,7 +12,7 @@
   \TT{C:\textbackslash{}Program Files (x86)\textbackslash{}Microsoft Visual Studio 10.0\textbackslash{}VC\textbackslash{}crt\textbackslash{}src\textbackslash{}intel}}. 
 
 \RU{Эта функция работает как \TT{malloc()}, но выделяет память прямо в стеке.} 
-\EN{This function works like \TT{malloc()}, but allocates memory just on the stack.}
+\EN{This function works like \TT{malloc()}, but allocates memory directly on the stack.}
 
 \RU{Память освобождать через \TT{free()} не нужно, так как эпилог функции~(\myref{sec:prologepilog})
 вернет \ESP назад в изначальное состояние и выделенная память просто \IT{выкидывается}.}
@@ -25,8 +25,7 @@ the allocated memory will be just \IT{dropped}.}
 
 \RU{Эта функция, если упрощенно, просто сдвигает \ESP вглубь стека 
 на столько байт, сколько вам нужно и возвращает \ESP в качестве указателя на выделенный блок.}
-\EN{In simple terms, this function just shifts \ESP downwards toward the stack bottom by the number of bytes you 
-need and sets \ESP as a pointer to the \IT{allocated} block.}
+\EN{In simple terms, this function just shifts \ESP downwards toward the stack bottom by the number of bytes you need and sets \ESP as a pointer to the \IT{allocated} block.}
 \RU{Попробуем:}\EN{Let's try:}
 
 \lstinputlisting{patterns/02_stack/04_alloca/2_1.c}
@@ -55,9 +54,8 @@ function calls might be replaced by one \printf call, but I would like to illust
 \RU{Одна из причин, почему здесь нужна именно функция, а не несколько инструкций прямо в коде в том, что в реализации 
 функции alloca() от \ac{MSVC}
 есть также код, читающий из только что выделенной памяти, чтобы \ac{OS} подключила физическую память к этому региону \ac{VM}.}
-\EN{One of the reason there is a separate function instead of just a couple instructions in the code,
-is because the \ac{MSVC} implementation
-of the alloca() function also has code which reads from the memory just allocated, in order to let the \ac{OS} map
+\EN{One of the reasons we need a separate function instead of just a couple of instructions in the code,
+is because the \ac{MSVC} alloca() implementation also has code which reads from the memory just allocated, in order to let the \ac{OS} map
 physical memory to this \ac{VM} region.}
 }.
 \RU{После вызова \TT{alloca()}, \ESP теперь указывает на блок в 600 байт, который 
@@ -82,8 +80,7 @@ use it as memory for the \TT{buf} array.}
 \RU{Всё то же самое, что и в прошлом листинге.}\EN{The code is the same as in the previous listing.}
 
 \RU{Кстати}\EN{By the way}, \TT{movl \$3, 20(\%esp)} 
-\RU{ ~--- это аналог}\EN{is analogous to} \TT{mov DWORD PTR [esp+20], 3} \RU{в Intel-синтаксисе:}
-\EN{ in Intel-syntax}\RU{ при адресации памяти в виде}\EN{~---when addressing memory in form} \IT{\RU{регистр+смещение}\EN{register+offset}}, 
-\RU{это записывается в AT\&T синтаксисе как}\EN{it is written as} 
-\TT{\RU{смещение}\EN{offset}(\%\RU{регистр}\EN{register})}\EN{ in AT\&T syntax}.
-
+\RU{ ~--- это аналог}\EN{corresponds to} \TT{mov DWORD PTR [esp+20], 3} \RU{в Intel-синтаксисе:}
+\EN{ in Intel-syntax.}\RU{ при адресации памяти в виде} \EN{In AT\&T syntax when addressing memory using} \IT{\RU{регистр+смещение}\EN{register+offset}} \EN format, 
+\RU{это записывается в AT\&T синтаксисе как}\EN{it is notated as} 
+\TT{\RU{смещение}\EN{offset}(\%\RU{регистр}\EN{register})}.

@@ -7,7 +7,7 @@
 \footnote{\href{http://go.yurichev.com/17119}{wikipedia}}.
 
 \RU{Технически, это просто блок памяти в памяти процесса + регистр \ESP или \RSP в x86 или x64, либо \ac{SP} в ARM, который указывает где-то в пределах этого блока.}
-\EN{Technically, it is just a block of memory in process memory along with the \ESP or \RSP register in x86 or x64, or the \ac{SP} register in ARM, as a pointer within the block.}
+\EN{Technically, it is just a block of memory in process memory along with the \ESP or \RSP register in x86 or x64, or the \ac{SP} register in ARM, as a pointer within that block.}
 
 \index{ARM!\Instructions!PUSH}
 \index{ARM!\Instructions!POP}
@@ -17,24 +17,24 @@
 \PUSH уменьшает \ESP/\RSP/\ac{SP} на $4$ в 32-битном режиме (или на $8$ в 64-битном),
 затем записывает по адресу, на который указывает \ESP/\RSP/\ac{SP}, содержимое своего единственного операнда.}
 \EN{The most frequently used stack access instructions are \PUSH and \POP (in both x86 and ARM thumb-mode). 
-\PUSH subtracts $4$ in 32-bit mode (or $8$ in 64-bit mode) from \ESP/\RSP/\ac{SP} and then writes the contents of its sole operand to the memory address pointed to by \ESP/\RSP/\ac{SP}.} 
+\PUSH subtracts from \ESP/\RSP/\ac{SP} $4$ in 32-bit mode (or $8$ in 64-bit mode) and then writes the contents of its sole operand to the memory address pointed by \ESP/\RSP/\ac{SP}.} 
 
 \RU{\POP это обратная операция ~--- сначала достает из \glslink{stack pointer}{указателя стека} значение и помещает его в операнд 
 (который очень часто является регистром) и затем увеличивает указатель стека на $4$ (или $8$).}
-\EN{\POP is the reverse operation: get the data from memory pointed to by \ac{SP}, 
-put it in the operand (often a register) and then add $4$ (or $8$) to the \gls{stack pointer}.}
+\EN{\POP is the reverse operation: retrieve the data from memory pointed by \ac{SP}, 
+loads it into the instruction operand (often a register) and then add $4$ (or $8$) to the \gls{stack pointer}.}
 
 \RU{В самом начале \glslink{stack pointer}{регистр-указатель} указывает на конец стека.}
-\EN{After stack allocation, the \gls{stack pointer} points at the end of stack.}
+\EN{After stack allocation, the \gls{stack pointer} points at the bottom of the stack.}
 \RU{\PUSH уменьшает \glslink{stack pointer}{регистр-указатель}, а \POP ~--- увеличивает.}
 \EN{\PUSH decreases the \gls{stack pointer} and \POP increases it.}
 \RU{Конец стека находится в начале блока памяти, выделенного под стек. Это странно, но это так.}
-\EN{The end of the stack is actually at the beginning of the memory allocated for the stack block. 
+\EN{The bottom of the stack is actually at the beginning of the memory allocated for the stack block. 
 It seems strange, but that's the way it is.}
 
 \RU{В процессоре ARM, тем не менее, есть поддержка стеков, растущих как в сторону уменьшения, так и в
 сторону увеличения.}
-\EN{Besides support for descending stacks, ARM has also support for ascending stacks.} \\
+\EN{ARM supports both descending and ascending stacks.} \\
 \index{ARM!\Instructions!STMFD}
 \index{ARM!\Instructions!LDMFD}
 \index{ARM!\Instructions!STMED}
@@ -45,12 +45,15 @@ It seems strange, but that's the way it is.}
 \index{ARM!\Instructions!LDMEA}
 \RU{Например, инструкции}\EN{For example the} 
 \ac{STMFD}/\ac{LDMFD}, \ac{STMED}/\ac{LDMED} 
+%I've added some extra EN text in parenthesis clarifying the meaning of "decsending" and "ascending"
+%because the terms were not introduced till that point. Those could go in footnote as well. Sorry that I am
+%not includding a russian version but I my russian is not that good.
 \RU{предназначены для descending-стека, т.е. уменьшающегося}\EN{instructions are intended to deal with 
-a descending stack}.
+a descending stack (grows downwards, starting with a high address and progressing to a lower one)}.
 \RU{Инструкции}\EN{The}
 \ac{STMFA}/\ac{LDMFA}, \ac{STMEA}/\ac{LDMEA} 
 \RU{предназначены для ascending-стека, т.е. увеличивающегося}\EN{instructions are intended to deal with 
-an ascending stack}.
+an ascending stack (grows upwards, starting from a low address and progressing to a higher one)}.
 
 \section{\RU{Почему стек растет в обратную сторону?}\EN{Why does the stack grow backwards?}}
 

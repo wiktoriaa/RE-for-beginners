@@ -1,12 +1,12 @@
 \subsection{\RU{Сохранение адреса куда должно вернуться управление после вызова функции}
-\EN{Save the return address where a function must return control after execution}}
+\EN{Save the function's return address}}
 
 \subsubsection{x86}
 
 \index{x86!\Instructions!CALL}
 \RU{При вызове другой функции через \CALL сначала в стек записывается адрес, указывающий на место аккурат после 
 инструкции \CALL, затем делается безусловный переход (почти как \TT{JMP}) на адрес, указанный в операнде.} 
-\EN{While calling another function with a \CALL instruction the address of the point exactly after the \CALL instruction is saved 
+\EN{When calling another function with a \CALL instruction the address of the point exactly after the \CALL instruction is saved 
 to the stack and then an unconditional jump to the address in the CALL operand is executed.} 
 
 \index{x86!\Instructions!PUSH}
@@ -18,7 +18,7 @@ to the stack and then an unconditional jump to the address in the CALL operand i
 \index{x86!\Instructions!POP}
 \RU{\RET вытаскивает из стека значение и передает управление по этому адресу ~--- 
 это аналог пары инструкций \TT{POP tmp / JMP tmp}.}
-\EN{\RET fetches a value from the stack and jumps to it~---it is equivalent to a \TT{POP tmp / JMP tmp} instruction pair.}
+\EN{\RET fetches a value from the stack and jumps to it~---that is equivalent to a \TT{POP tmp / JMP tmp} instruction pair.}
 
 \index{\Stack!\RU{Переполнение стека}\EN{Stack overflow}}
 \index{\Recursion}
@@ -61,8 +61,8 @@ c:\tmp6\ss.cpp(4) : warning C4717: 'f' : recursive on all control paths, functio
 
 \dots \RU{причем, если включить оптимизацию (\Ox), то будет даже интереснее, без переполнения стека, 
 но работать будет \IT{корректно}\footnote{здесь ирония}:}
-\EN{Also if we turn on optimization (\Ox option) the optimized code will not overflow the stack 
-but instead will work \IT{correctly}\footnote{irony here}:}
+\EN{Also if we turn on the compiler optimization (\Ox option) the optimized code will not overflow the stack 
+and will work \IT{correctly}\footnote{irony here} instead:}
 
 \begin{lstlisting}
 ?f@@YAXXZ PROC						; f
@@ -75,7 +75,7 @@ $LL3@f:
 \end{lstlisting}
 
 \RU{GCC 4.4.1 генерирует точно такой же код в обоих случаях, хотя и не предупреждает о проблеме.}
-\EN{GCC 4.4.1 generates similar code in both cases, although without issuing any warning about the problem.}
+\EN{GCC 4.4.1 generates similar code in both cases without, however,  issuing any warning about the problem.}
 
 \ifdefined\IncludeARM
 \subsubsection{ARM}
@@ -87,7 +87,7 @@ programs also use the stack for saving return addresses, but differently}.
 \RU{\ac{RA} записывается в регистр}\EN{the \ac{RA} is saved to the} \ac{LR} (\gls{link register}).
 \RU{Но если есть необходимость вызывать какую-то другую функцию и использовать регистр \ac{LR} еще
 раз, его значение желательно сохранить}
-\EN{However, if one needs to call another function and use the \ac{LR} register
+\EN{If one needs, however, to call another function and use the \ac{LR} register
 one more time its value should be saved}.
 \index{Function prologue}
 \RU{Обычно это происходит в прологе функции, часто мы видим там инструкцию вроде}
@@ -106,18 +106,18 @@ to be used in the function are saved in the stack, including} \ac{LR}.
 \RU{Как следствие, ``leaf''-функция не сохраняет регистр \ac{LR} (потому что не изменяет его).}
 \EN{As a consequence, leaf functions do not save the \ac{LR} register (because they don't modify it).}
 \RU{А если эта функция небольшая, использует мало регистров, она может не использовать стек вообще}
-\EN{If this function is small and uses a small number of registers, it may not use the stack at all}.
-\RU{Таким образом, в ARM возможен вызов небольших leaf-функций не используя стек}
-\EN{Thus, it is possible to call leaf functions without using the stack}.
+\EN{If such function is small and uses a small number of registers, it may not use the stack at all}.
+\RU{Таким образом, в ARM возможен вызов небольших leaf-функций не используя стек.}
+\EN{Thus, it is possible to call leaf functions without using the stack}
 \RU{Это может быть быстрее чем в старых x86, ведь внешняя память для стека не используется}
-\EN{This can be faster than on older x86 because external RAM is not used for the stack}
+\EN{which can be faster than on older x86 because external RAM is not used for the stack}
 \footnote{\RU{Когда-то, очень давно, на PDP-11 и VAX на инструкцию CALL (вызов других функций) могло тратиться
 вплоть до 50\% времени (возможно из-за работы с памятью),
 поэтому считалось, что много небольших функций это \glslink{anti-pattern}{анти-паттерн}}
 \EN{Some time ago, on PDP-11 and VAX, the CALL instruction (calling other functions) was expensive; up to 50\%
-of execution time might be spent on it, so it was common sense that a lot of small functions is an \gls{anti-pattern}}\cite[Chapter 4, Part II]{Raymond:2003:AUP:829549}.}.
+of execution time might be spent on it, so it was considered that having a big number of small functions is an \gls{anti-pattern}}\cite[Chapter 4, Part II]{Raymond:2003:AUP:829549}.}.
 \RU{Либо это может быть полезным для тех ситуаций, когда память для стека еще не выделена либо недоступна}
-\EN{It can be useful for such situations when memory for the stack is not yet allocated or not available}.
+\EN{This can be also useful for situations when memory for the stack is not yet allocated or not available}.
 
 \EN{Some examples of leaf functions are}\RU{Некоторые примеры таких ф-ций здесь}: \listingname 
 \myref{ARM_leaf_example1}, \myref{ARM_leaf_example2}, 
