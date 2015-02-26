@@ -4,20 +4,20 @@
 
 \RU{Игра}\EN{The} ``Millenium Return to Earth'' \RU{под DOS довольно древняя (1991), позволяющая
 добывать ресурсы, строить корабли, снаряжать их на другие планеты, и т.д.}
-\EN{is an ancient DOS game (1991), allowing to mine resources, build ships,
-equip them to other planets, and so on}\footnote{\RU{Её можно скачать бесплатно}\EN{It can be downloaded for free}
+\EN{is an ancient DOS game (1991), that allows you to mine resources, build ships,
+equip them on other planets, and so on}\footnote{\RU{Её можно скачать бесплатно}\EN{It can be downloaded for free}
 \href{http://go.yurichev.com/17316}{\RU{здесь}\EN{here}}}.
 
 \RU{Как и многие другие игры, она позволяет сохранять состояние игры в файл.}
-\EN{Like many other games, it allows to save all game state into file.}
+\EN{Like many other games, it allows you to save all game state into a file.}
 
-\RU{Посмотрим, сможем ли мы найти что-нибудь в нем}\EN{Let's see, if we can find something in it}.
+\RU{Посмотрим, сможем ли мы найти что-нибудь в нем}\EN{Let's see if we can find something in it}.
 
 \clearpage
 \RU{В игре есть шахта}\EN{So there is a mine in the game}.
 \RU{Шахты на некоторых планетах работают быстрее, на некоторых других --- медленнее}\EN{Mines at some planets 
-work faster, or slower on another}. 
-\RU{Набор ресурсов также разный}\EN{Resource set is also different}.
+work faster, or slower on others}. 
+\RU{Набор ресурсов также разный}\EN{The set of resources is also different}.
 
 \RU{Здесь видно, какие ресурсы добыты в этот момент}\EN{Here I see what resources are mined at the time}: 
 
@@ -32,7 +32,7 @@ work faster, or slower on another}.
 \RU{Это файл размером}\EN{This is a file of size} 9538 \RU{байт}\EN{bytes}.
 
 \RU{Я подождал несколько ``дней'' здесь в игре и теперь в шахте добыто больше ресурсов}\EN{I wait some 
-``days'' here in game, and now we've got more resources at the mine}:
+``days'' here in the game, and now we've got more resources from the mine}:
 
 \begin{figure}[H]
 \centering
@@ -44,34 +44,34 @@ work faster, or slower on another}.
 \RU{Я снова сохранил состояние игры}\EN{I saved game state again}.
 
 \RU{Теперь просто попробуем сравнить оба файла побайтово используя простую утилиту FC под DOS/Windows:}
-\EN{Now let's try just to do binary comparison of the save files using simple DOS/Windows FC utility:}
+\EN{Now let's try to just do binary comparison of the save files using the simple DOS/Windows FC utility:}
 
 \lstinputlisting{ff/millenium/fc_result.txt}
 
 \RU{Вывод здесь неполный, там было больше отличий, но я обрезал результат до самого интересного.}
-\EN{The output is unfull here, there are more differences, but I cut result to the most interesting.}
+\EN{The output is incomplete here, there are more differences, but I cut result to show the most interesting.}
 
 \RU{В первой версии было 14 единиц водорода (hydrogen) и 102 --- кислорода (oxygen).}
-\EN{At first state, I have 14 ``units'' of hydrogen and 102 ``units'' of oxygen.}
+\EN{In the first state, I have 14 ``units'' of hydrogen and 102 ``units'' of oxygen.}
 \RU{Во второй версии 22 и 155 единиц соответственно.}
-\EN{I have 22 and 155 ``units'' respectively at the second state.}
+\EN{I have 22 and 155 ``units'' respectively in the second state.}
 \RU{Если эти значения сохраняются в файл, мы должны увидеть разницу}\EN{If these values are saved into 
-save-file, we should see this in difference}.
-\RU{И она действительно есть}\EN{And indeed so}. 
-\RU{Там}\EN{There are} 0x0E (14) \RU{на позиции}\EN{at} 0xBDA \RU{и это значение}\EN{position and this value is} 
-0x16 (22) \RU{в новой версии файла}\EN{in new version of file}.
-\RU{Это, наверное, водород}\EN{This could be for hydrogen}.
-\RU{Там также}\EN{There is} 0x66 (102) \RU{на позиции}\EN{at position} 0xBDC \RU{в старой версии и}\EN{in old 
-version and} 0x9B (155) \RU{в новой версии файла}\EN{in new version of file}. 
-\RU{Это, наверное, кислород}\EN{This could be for oxygen}.
+the save file, we should see this in the difference}.
+\RU{И она действительно есть}\EN{And indeed we do}. 
+\RU{Там}\EN{There is} 0x0E (14) \RU{на позиции}\EN{at position} 0xBDA \RU{и это значение}\EN{and this value is} 
+0x16 (22) \RU{в новой версии файла}\EN{in the new version of the file}.
+\RU{Это, наверное, водород}\EN{This is probably hydrogen}.
+\RU{Там также}\EN{There is} 0x66 (102) \RU{на позиции}\EN{at position} 0xBDC \RU{в старой версии и}\EN{in the old 
+version and} 0x9B (155) \RU{в новой версии файла}\EN{in the new version of the file}. 
+\RU{Это, наверное, кислород}\EN{This seems to be the oxygen}.
 
 \RU{Я выложил обе версии файла на своем сайте для тех кто хочет их изучить 
-(или поэкспериментировать)}\EN{There both of files I put on my website for those who wants to inspect them 
+(или поэкспериментировать)}\EN{I've put both files on my website for those who wants to inspect them 
 (or experiment) more}: \href{http://go.yurichev.com/17212}{beginners.re}.
 
 \clearpage
 \RU{Новую версию файла я открыл в Hiew и отметил значения, связанные с ресурсами, добытыми на шахте в 
-игре}\EN{Here is a new version of file opened in Hiew, I marked values related to resources mined in the game}: 
+игре}\EN{Here is the new version of file opened in Hiew, I marked the values related to the resources mined in the game}: 
 
 \begin{figure}[H]
 \centering
@@ -83,12 +83,12 @@ version and} 0x9B (155) \RU{в новой версии файла}\EN{in new ver
 \RU{Я проверил каждое, и это они}\EN{I checked each, and these are}.
 \RU{Это явно 16-битные значения: не удивительно для 16-битной программы под DOS, где \Tint имел длину в 
 16 бит.}
-\EN{These are clearly 16-bit values: not a strange thing for DOS 16-bit software where \Tint has 16-bit width.}
+\EN{These are clearly 16-bit values: not a strange thing for 16-bit DOS software where the \Tint type has 16-bit width.}
 
 \clearpage
 \RU{Проверим наши предположения}\EN{Let's check our assumptions}.
-\RU{Я записал}\EN{I'm writing} 1234 (0x4D2) \RU{на первой позиции (это должен быть водород)}\EN{value at 
-first position (this should be hydrogen)}:
+\RU{Я записал}\EN{I wrote the} 1234 (0x4D2) \RU{на первой позиции (это должен быть водород)}\EN{value at 
+the first position (this should be hydrogen)}:
 
 \begin{figure}[H]
 \centering
@@ -97,8 +97,8 @@ first position (this should be hydrogen)}:
 \label{fig:mill_hiew4}
 \end{figure}
 
-\RU{Затем я загрузил измененный файл в игру и посмотрел на статистику в шахте}\EN{Then I loaded changed 
-file into game and taking a look on mine statistics}:
+\RU{Затем я загрузил измененный файл в игру и посмотрел на статистику в шахте}\EN{Then I loaded the changed 
+file in the game and took a look at mine statistics}:
 
 \begin{figure}[H]
 \centering
@@ -111,7 +111,7 @@ file into game and taking a look on mine statistics}:
 
 \clearpage
 \RU{Попробуем пройти игру как ожно быстрее, установим максимальные значения везде}\EN{Now let's try to 
-finish the game as soon as possible, set maximal values everywhere}:
+finish the game as soon as possible, set the maximal values everywhere}:
 
 \begin{figure}[H]
 \centering
@@ -131,8 +131,8 @@ lot of resources}:
 \end{figure}
 
 \clearpage
-\RU{Я пропустил еще несколько ``дней'' в игре и оппа}\EN{I skipped some ``days'' in game and oops}! 
-\RU{Некоторых ресурсов стало меньше}\EN{I have lower amount of some resources}:
+\RU{Я пропустил еще несколько ``дней'' в игре и оппа}\EN{I skipped some ``days'' in the game and oops}! 
+\RU{Некоторых ресурсов стало меньше}\EN{I have a lower amount of some resources}:
 
 \begin{figure}[H]
 \centering
@@ -145,14 +145,14 @@ lot of resources}:
 \RU{Разработчик игры вероятно никогда не думал, что значения ресурсов будут такими большими,
 так что, здесь, наверное, нет проверок на переполнение, но шахта в игре ``работает'', ресурсы добавляются,
 отсюда и переполнение.}
-\EN{Game developer probably didn't thought about such high amounts of resources,
-so there are probably no overflow check, but mine is ``working'' in the games, resources are added,
-hence overflow.}
+\EN{The game's developer probably didn't think about such high amounts of resources,
+so there are probably no overflow checks, but the mine is ``working'' in the game, resources are added,
+hence the overflows.}
 \RU{Полагаю, я не должен был быть таким жадным}\EN{I shouldn't be that greedy, I suppose}.
 
 \RU{Здесь наверняка еще какие-то значения в этом файле}\EN{There are probably a lot of more values 
 saved in this file}.
 
 \RU{Так что это очень простой способ читинга в играх}\EN{So this is very simple method of cheating in games}.
-\RU{Файл с таблицей очков также можно легко модифицировать}\EN{High score files are often can be easily 
+\RU{Файл с таблицей очков также можно легко модифицировать}\EN{High score files often can be easily 
 patched like that}.

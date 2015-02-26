@@ -15,11 +15,11 @@
 \cellcolor{blue!25} \RU{Псевдоимя}\EN{Pseudoname} & 
 \cellcolor{blue!25} \RU{Описание}\EN{Description} \\
 \hline
-\$0             & \$ZERO          & \RU{Всегда ноль. Запись в этот регистр работает как холостая инструкция}\EN{Always zero. Writing to this register is effectively idle instruction} (\ac{NOP}). \\
+\$0             & \$ZERO          & \RU{Всегда ноль. Запись в этот регистр работает как холостая инструкция}\EN{Always zero. Writing to this register is effectively an idle instruction} (\ac{NOP}). \\
 \hline
 \$1             & \$AT            & \RU{Используется как временный регистр для ассемблерных макросов и псевдоинструкций}\EN{Used as a temporary register for assembly macros and pseudoinstructions}. \\
 \hline
-\$2 \dots \$3   & \$V0 \dots \$V1 & \RU{Здесь возвращается результат ф-ции}\EN{Function result returned here}. \\
+\$2 \dots \$3   & \$V0 \dots \$V1 & \RU{Здесь возвращается результат ф-ции}\EN{Function result is returned here}. \\
 \hline
 \$4 \dots \$7   & \$A0 \dots \$A3 & \RU{Аргументы ф-ции}\EN{Function arguments}. \\
 \hline
@@ -73,12 +73,12 @@ n/a             & LO              & \RU{младшие 32 бита резуль�
 \end{tabular}
 \end{center}
 
-\AsteriskOne{} --- \Gls{callee} \RU{должен сохранять}\EN{must preserve}.\\
-\AsteriskTwo{} --- \Gls{callee} \RU{должен сохранять}\EN{must preserve} (\RU{кроме \ac{PIC}-кода}
-\EN{except \ac{PIC} code}).\\
+\AsteriskOne{} --- \Gls{callee} \RU{должен сохранять}\EN{must preserve the value}.\\
+\AsteriskTwo{} --- \Gls{callee} \RU{должен сохранять}\EN{must preserve the value} (\RU{кроме \ac{PIC}-кода}
+\EN{except in \ac{PIC} code}).\\
 \index{MIPS!\Instructions!MFLO}
 \index{MIPS!\Instructions!MFHI}
-\AsteriskThree{} --- \RU{доступны используя инструкции}\EN{accessible using} \TT{MFHI} \AndENRU \TT{MFLO}\EN{ instructions}.\\
+\AsteriskThree{} --- \RU{доступны используя инструкции}\EN{accessible using the} \TT{MFHI} \AndENRU \TT{MFLO}\EN{ instructions}.\\
 
 \section{\Instructions}
 
@@ -87,7 +87,7 @@ n/a             & LO              & \RU{младшие 32 бита резуль�
 \begin{itemize}
 
 \item \RU{Тип R: имеющие 3 регистра. R-инструкции обычно имеют такой вид:}
-\EN{R-type: those which has 3 registers. R-instruction are usually has the following form:}
+\EN{R-type: those which have 3 registers. R-instruction usually have the following form:}
 
 \begin{lstlisting}
 instruction destination, source1, source2
@@ -95,21 +95,21 @@ instruction destination, source1, source2
 
 \RU{Важно помнить что если первый и второй регистр один и тот же, IDA может показать инструкцию в сокращенной
 форме:}
-\EN{One important thing to remember is that when first and second register is the same, 
-IDA may show instruction in shorter form:}
+\EN{One important thing to remember is that when the first and second register are the same, 
+IDA may show the instruction in its shorter form:}
 
 \begin{lstlisting}
 instruction destination/source1, source2
 \end{lstlisting}
 
 \RU{Это немного напоминает Интеловский синтаксис ассемблера x86.}
-\EN{That somewhat reminds us Intel-syntax of x86 assembly language.}
+\EN{That somewhat reminds us of the Intel syntax for x86 assembly language.}
 
 \item \RU{Тип I: имеющие 2 регистра и 16-битное ``immediate''-значение.}
-\EN{I-type: those which has 2 registers and 16-bit immediate value.}
+\EN{I-type: those which have 2 registers and a 16-bit immediate value.}
 
 \item \RU{Тип J: инструкции перехода, имеют 26 бит для кодирования смещения.}
-\EN{J-type: jump/branch instructions, has 26 bits for offset encoding.}
+\EN{J-type: jump/branch instructions, have 26 bits for encoding the offset.}
 
 \end{itemize}
 
@@ -119,15 +119,15 @@ instruction destination/source1, source2
 \EN{What is the difference between B- instructions (BEQ, B, etc) and J- ones (JAL, JALR, etc)?}
 
 \RU{B-инструкции имеют тип I, так что, смещение в этих инструкциях кодируется как 16-битное значение.}
-\EN{B-instructions has I-type, hence, B-instructions offset is encoded as 16-bit immediate.}
+\EN{The B-instructions have an I-type, hence, the B-instructions' offset is encoded as a 16-bit immediate.}
 \RU{Инструкции JR и JALR имеют тип R, и они делают переход по абсолютному адресу указанному в регистре.}
-\EN{JR and JALR are R-type, which jumps to absolute address specified in register.}
+\EN{JR and JALR are R-type and jump to an absolute address specified in a register.}
 \RU{J и JAL имеют тип J, так что смещение кодируется как 26-битное значение.}
-\EN{J and JAL are J-type, hence, offset is encoded as 26-bit immediate.}
+\EN{J and JAL are J-type, hence the offset is encoded as a 26-bit immediate.}
 
 \RU{Коротко говоря, в B-инструкциях можно кодировать условие 
 (B на самом деле это псевдоинструкция для \TT{BEQ \$ZERO, \$ZERO, LABEL}),
 а в J-инструкциях нельзя.}
-\EN{In short, B-instructions can encode condition 
+\EN{In short, B-instructions can encode a condition 
 (B is in fact pseudoinstruction for \TT{BEQ \$ZERO, \$ZERO, LABEL}), 
 while J-instructions can't.}

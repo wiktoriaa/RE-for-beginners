@@ -3,8 +3,8 @@
 
 \RU{Когда процесс в \oracle терпит серьезную ошибку (crash), он записывает массу информации в лог-файлы,
 включая состояние стека, вроде:}
-\EN{When \oracle process experiencing some kind of crash, it writes a lot of information into log files,
-including stack trace, like:}
+\EN{When an \oracle process experiences some kind of crash, it writes a lot of information into log files,
+including stack trace, like this:}
 
 \begin{lstlisting}
 ----- Call Stack Trace -----
@@ -33,20 +33,20 @@ _OracleThreadStart@  CALLrel  _opimai()            2 EB1FF6C 7C88A7F4 EB1FC34 0
 
 \RU{Но конечно, для этого исполняемые файлы \oracle должны содержать некоторую отладочную информацию,
 либо map-файлы с информацией о символах или что-то в этом роде.}
-\EN{But of course, \oracle executables must have some kind of debug information or map files with symbol
+\EN{But of course, \oracle's executables must have some kind of debug information or map files with symbol
 information included or something like that.}
 
 \RU{\oracle для Windows NT содержит информацию о символах в файлах с расширением .SYM, но его формат закрыт.}
-\EN{Windows NT \oracle have symbol information in files with .SYM extension, but the format is proprietary.}
+\EN{Windows NT \oracle has symbol information in files with .SYM extension, but the format is proprietary.}
 \EN{(Plain text files are good, but needs additional parsing, hence offer slower access.)}
 \RU{(Простые текстовые файлы --- это хорошо, но они требуют дополнительной обработки (парсинга), и из-за этого доступ
 к ним медленнее.)}
 
 \RU{Посмотрим, сможем ли мы разобрать его формат}\EN{Let's see if we can understand its format}.
 \RU{Я выбрал самый короткий файл \TT{orawtc8.sym}, поставляемый с файлом \TT{orawtc8.dll} в Oracle 8.1.7}
-\EN{I chose shortest \TT{orawtc8.sym} file, coming with \TT{orawtc8.dll} file in Oracle 8.1.7}
+\EN{I chose the shortest \TT{orawtc8.sym} file that comes with the \TT{orawtc8.dll} file in Oracle 8.1.7}
 \footnote{\RU{Я выбрал древнюю версию \oracle сознательно, из-за более короткого размера его модулей}\EN{I chose 
-ancient \oracle version intentionally due to smaller size of its modules}}.
+an ancient \oracle version intentionally due to the smaller size of its modules}}.
 
 \clearpage
 \RU{Вот я открываю этот файл в}\EN{Here is the file opened in} Hiew:
@@ -61,16 +61,16 @@ ancient \oracle version intentionally due to smaller size of its modules}}.
 \RU{Сравнивая этот файл с другими .SYM-файлами, мы можем быстро заметить, что \TT{OSYM} всегда является
 заголовком (и концом), так что это, наверное, сигнатура файла.}
 \EN{By comparing the file with other .SYM files, we can quickly see that \TT{OSYM} is always header (and footer),
-so this is maybe file signature.}
+so this is maybe the file's signature.}
 
 \RU{Мы также видим, что в общем-то, формат файла это: OSYM + какие-то бинарные данные + 
 текстовые строки разделенные нулем + OSYM.}
-\EN{We also see that basically, file format is: OSYM + some binary data + zero delimited text strings + OSYM.}
-\RU{Строки --- это, очевидно, имена ф-ций и глобальных переменных}\EN{Strings are, obviously, function and global 
+\EN{We also see that basically, the file format is: OSYM + some binary data + zero delimited text strings + OSYM.}
+\RU{Строки --- это, очевидно, имена ф-ций и глобальных переменных}\EN{The strings are, obviously, function and global 
 variable names}.
 
 \clearpage
-\RU{Я отметил сигнатуры OSYM и строки здесь}\EN{I marked OSYM signatures and strings here}: 
+\RU{Я отметил сигнатуры OSYM и строки здесь}\EN{I marked the OSYM signatures and strings here}: 
 
 \begin{figure}[H]
 \centering
@@ -82,9 +82,9 @@ variable names}.
 \RU{Посмотрим}\EN{Well, let's see}. 
 \RU{В Hiew я отметил весь блок со строками (исключая оконечивающую сигнатуру OSYM) и сохранил его в отдельный
 файл.}
-\EN{In Hiew, I marked the whole strings block (except trailing OSYM signatures) and put it into separate file.}
+\EN{In Hiew, I marked the whole strings block (except the trailing OSYM signatures) and put it into a separate file.}
 \RU{Затем я запустил UNIX-утилиты \IT{strings} и \IT{wc} для подсчета строк здесь:}
-\EN{Then I run UNIX \IT{strings} and \IT{wc} utilities to count strings in there:}
+\EN{Then I ran UNIX \IT{strings} and \IT{wc} utilities to count the strings in there:}
 
 \begin{lstlisting}
 strings strings_block | wc -l
@@ -96,40 +96,40 @@ strings strings_block | wc -l
 
 \RU{Можно сказать, что в общем, как правило, количество \IT{чего-либо} часто сохраняется в бинарном
 файле отдельно.}
-\EN{We can say, in general, as a rule, number of \IT{anything} is often stored separately in binary files.}
+\EN{We can say, in general, as a rule, the number of \IT{anything} is often stored separately in binary files.}
 \RU{Это действительно так, мы можем найти значение 66 (0x42) в самом начале файла, прямо после сигнатуры OSYM:}
-\EN{It's indeed so, we can find 66 value (0x42) at the file begin, right after OSYM signature:}
+\EN{It's indeed so, we can find the 66 value (0x42) at the file's start, right after the OSYM signature:}
 
 \lstinputlisting{ff/Oracle_SYM/dump1.txt}
 
 \RU{Конечно, 0x42 здесь это не байт, но скорее всего, 32-битное значение, запакованное как little-endian,
 поэтому мы видим 0x42 и затем как минимум 3 байта.}
-\EN{Of course, 0x42 here is not a byte, but most likely a 32-bit value, packed as little-endian, hence we see
+\EN{Of course, 0x42 here is not a byte, but most likely a 32-bit value packed as little-endian, hence we see
 0x42 and then at least 3 zero bytes.}
 
-\RU{Почему я думаю, что оно 32-битное}\EN{Why I think it's 32-bit}?
-\RU{Потому что файлы с символами в \oracle могут быть очень большими}\EN{Because, \oracle symbol 
+\RU{Почему я думаю, что оно 32-битное}\EN{Why do I think it's 32-bit}?
+\RU{Потому что файлы с символами в \oracle могут быть очень большими}\EN{Because, \oracle's symbol 
 files may be pretty big}.
 \RU{oracle.sym для главного исполняемого файла oracle.exe (версия 10.2.0.4) содержит \TT{0x3A38E} (238478) 
 символов.}
-\EN{The oracle.sym for the main oracle.exe (version 10.2.0.4) executable contain \TT{0x3A38E} (238478) symbols.}
-\RU{16-битного значения тут недостаточно}\EN{16-bit value isn't enough here}.
+\EN{The oracle.sym file for the main oracle.exe (version 10.2.0.4) executable contains \TT{0x3A38E} (238478) symbols.}
+\RU{16-битного значения тут недостаточно}\EN{A 16-bit value isn't enough here}.
 
 \RU{Я проверил другие .SYM-файлы как этот и это подтвердило мою догадку: значение после 32-битной сигнатуры OSYM
 всегда отражает количество текстовых строк в файле.}
-\EN{I checked other .SYM files like this and it proves my guess: the value after 32-bit OSYM signature is always
-reflects number of text strings in the file.}
+\EN{I checked other .SYM files like this and it proves my guess: the value after the 32-bit OSYM signature always
+reflects the number of text strings in the file.}
 
 \RU{Это общая особенность почти всех бинарных файлов: заголовок с сигнатурой плюс некоторая дополнительная
 информация о файле.}
-\EN{It's a general feature of almost all binary files: header with signature plus some other information 
-about file.}
+\EN{It's a general feature of almost all binary files: a header with a signature plus some other information 
+about the file.}
 
 \RU{Рассмотрим бинарный блок поближе}\EN{Now let's investigate closer what this binary block is}.
 \RU{Снова используя Hiew, я сохранил блок начиная с адреса 8 (т.е., после 32-битного значения,
 отражающего количество) до блока со строками, в отдельный файл.}
-\EN{Using Hiew again, I put the block starting at address 8 (i.e., after 32-bit \IT{count} value) 
-till strings block into separate binary file.}
+\EN{Using Hiew again, I put the block starting at address 8 (i.e., after the 32-bit \IT{count} value) 
+ending at the strings block, into a separate binary file.}
 
 \clearpage
 \RU{Посмотрим этот блок в}\EN{Let's see the binary block in} Hiew:
@@ -141,7 +141,7 @@ till strings block into separate binary file.}
 \label{fig:oracle_SYM_binary1}
 \end{figure}
 
-\RU{Тут явно есть какая-то структура}\EN{There is some clear pattern in it}. 
+\RU{Тут явно есть какая-то структура}\EN{There is a clear pattern in it}. 
 
 \clearpage
 \RU{Я добавил красные линии, чтобы разделить блок}\EN{I added red lines to divide the block}: 
@@ -162,12 +162,12 @@ there are 4 32-bit values per line}.
 всегда в виде \TT{0x1000xxxx}, так что начинаются с байт 0x10 и 0.}
 \EN{The pattern is visually visible because some values here (till address \TT{0x104}) 
 are always in \TT{0x1000xxxx} form, 
-so started by 0x10 and 0 bytes.}
+started with 0x10 and zero bytes.}
 \RU{Другие значения (начинающиеся на \TT{0x108}) всегда в виде \TT{0x0000xxxx}, так что начинаются с двух
 нулевых байт.}
-\EN{Other values (starting at \TT{0x108}) are in \TT{0x0000xxxx} form, so always started by two zero bytes.}
+\EN{Other values (starting at \TT{0x108}) are in \TT{0x0000xxxx} form, so always started with two zero bytes.}
 
-\RU{Посмотрим на этот блок как на массив 32-битных значений}\EN{Let's dump the block as 32-bit values array}:
+\RU{Посмотрим на этот блок как на массив 32-битных значений}\EN{Let's dump the block as an array of 32-bit values}:
 
 \lstinputlisting[caption=\RU{первый столбец --- это адрес}\EN{first column is address}]{ff/Oracle_SYM/dump2.txt}
 
@@ -176,14 +176,14 @@ so started by 0x10 and 0 bytes.}
 there are two 32-bit values for each symbol, but maybe there are two arrays}? 
 \RU{Посмотрим}\EN{Let's see}.
 
-\RU{Значения, начинающиеся с}\EN{Values started with} \TT{0x1000} \RU{могут быть адресами}\EN{may be addresses}.
+\RU{Значения, начинающиеся с}\EN{Values starting with} \TT{0x1000} \RU{могут быть адресами}\EN{may be addresses}.
 \RU{В конце концов, этот .SYM-файл для DLL, а базовый адрес для DLL в win32 это \TT{0x10000000}, и сам код
 обычно начинается по адресу \TT{0x10001000}.}
-\EN{This is .SYM file for DLL after all, and, default base address of
-win32 DLLs is \TT{0x10000000}, and the code is usually started at \TT{0x10001000}.}
+\EN{This is a .SYM file for a DLL after all, and the default base address of
+win32 DLLs is \TT{0x10000000}, and the code usually starts at \TT{0x10001000}.}
 
 \RU{Когда я открываю файл orawtc8.dll в IDA, базовый адрес другой, но тем не менее, первая ф-ция это:}
-\EN{When I open orawtc8.dll file in IDA, base address is different, but nevertheless, the first function is:}
+\EN{When I open the orawtc8.dll file in IDA, the base address is different, but nevertheless, the first function is:}
 
 \begin{lstlisting}
 .text:60351000 sub_60351000    proc near
@@ -219,7 +219,7 @@ win32 DLLs is \TT{0x10000000}, and the code is usually started at \TT{0x10001000
 \RU{Ух ты}\EN{Wow}, ``ax\_reg'' \RU{звучит знакомо}\EN{string sounds familiar}. 
 \RU{Действительно, это самая первая строка в блоке строк!}
 \EN{It's indeed the first string in the strings block!}
-\RU{Так что имя этой ф-ции, похоже}\EN{So the name of this function it seems} ``ax\_reg''.
+\RU{Так что имя этой ф-ции, похоже}\EN{So the name of this function seems to be} ``ax\_reg''.
 
 \RU{Вторая ф-ция}\EN{The second function is}:
 
@@ -254,41 +254,41 @@ win32 DLLs is \TT{0x10000000}, and the code is usually started at \TT{0x10001000
 \end{lstlisting}
 
 \RU{Строка ``ax\_unreg'' также это вторая строка в строке блок!}
-\EN{``ax\_unreg'' string is also the second string in strings block!}
+\EN{The ``ax\_unreg'' string is also the second string in the strings block!}
 \RU{Адрес начала второй ф-ции это \TT{0x60351080}, а второе значение в бинарном блоке это \TT{10001080}.}
-\EN{Starting address of the second function is \TT{0x60351080}, and the second value in the binary 
+\EN{The starting address of the second function is \TT{0x60351080}, and the second value in the binary 
 block is \TT{10001080}.}
-\RU{Так что это адрес, но для DLL с базовым адресом по умолчанию}\EN{So this is address, 
-but for the DLL with default base address}.
+\RU{Так что это адрес, но для DLL с базовым адресом по умолчанию}\EN{So this is the address, 
+but for a DLL with the default base address}.
 
 \RU{Я могу быстро проверить и убедиться, что первые 66 значений в массиве (т.е., первая половина)
 это просто адреса ф-ций в DLL, включая некоторые метки, и т.д.}
-\EN{I can quickly check and be sure that first 66 values in array (i.e., first half of array) 
-are just function addresses in DLL, including some labels, etc.}
-\RU{Хорошо, что же тогда остальная часть массива}\EN{Well, what's then other part of array}? 
-\RU{Остальные 66 значений, начинающиеся с}\EN{Other 66 values starting at} \TT{0x0000}? 
-\RU{Они похоже в пределах}\EN{These are seems to be in range} \TT{[0...0x3F8]}. 
-\RU{И не похоже, что это битовые поля: ряд чисел возрастает}\EN{And they are not looks like bitfields: 
-sequence of numbers is growing}.
+\EN{I can quickly check and be sure that the first 66 values in the array (i.e., the first half of the array) 
+are just function addresses in the DLL, including some labels, etc.}
+\RU{Хорошо, что же тогда остальная часть массива}\EN{Well, what's the other part of array then}? 
+\RU{Остальные 66 значений, начинающиеся с}\EN{The other 66 values that start with} \TT{0x0000}? 
+\RU{Они похоже в пределах}\EN{These seem to be in range} \TT{[0...0x3F8]}. 
+\RU{И не похоже, что это битовые поля: ряд чисел возрастает}\EN{And they do not look like bitfields: 
+the series of numbers is increasing}.
 \RU{Последняя шестнадцатеричная цифра выглядит как случайная, так что, не похоже, что это
 адрес чего-либо (в противном случае, он бы делился, может быть, на 4 или 8 или 0x10).}
-\EN{The last hexadecimal digit is seems to be random, so, it's unlikely an address of something 
+\EN{The last hexadecimal digit seems to be random, so, it's unlikely the address of something 
 (it would be divisible by 4 or maybe 8 or 0x10 otherwise).}
 
 \RU{Спросим себя: что еще разработчики \oracle хранили бы здесь, в этом файле?}
-\EN{Let's ask ourselves: what else \oracle developers would save here, in this file?}
+\EN{Let's ask ourselves: what else \oracle's developers would save here, in this file?}
 \RU{Случайная догадка: это может быть адрес текстовой строки (название ф-ции).}
-\EN{Quick wild guess: it could be an address of the text string (function name).}
+\EN{Quick wild guess: it could be the address of the text string (function name).}
 \RU{Это можно легко проверить, и да, каждое число --- это просто позиция первого символа в блоке строк.}
-\EN{It can be quickly checked, and yes, each number is just position of the first character in the strings block.}
+\EN{It can be quickly checked, and yes, each number is just the position of the first character in the strings block.}
 
 \RU{Вот и всё! Всё закончено.}\EN{This is it! All done.}
 
 \index{IDA}
 \RU{Я написал утилиту для конвертирования .SYM-файлов в \IDA-скрипт, так что я могу загружать .idc-скрипт
 и он выставит имена ф-ций:}
-\EN{I wrote an utility to convert these .SYM files into \IDA script, so I can load .idc script and it will
-set function names:}
+\EN{I wrote an utility to convert these .SYM files into \IDA script, so I can load the .idc script and it will
+set the function names:}
 
 \lstinputlisting{ff/Oracle_SYM/unpacker.c}
 
@@ -310,7 +310,7 @@ static main() {
 }
 \end{lstlisting}
 
-\RU{Файлы, которые я использовал в этом примере, здесь}\EN{The files I used for example are here}: 
+\RU{Файлы, которые я использовал в этом примере, здесь}\EN{The example files I used are here}: 
 \href{http://go.yurichev.com/17216}{beginners.re}.
 
 \clearpage
@@ -327,11 +327,11 @@ static main() {
 \end{figure}
 
 \RU{Так что да, все таблицы здесь имеют 64-битные элементы, даже смещения строк!}
-\EN{So yes, all tables now has 64-bit elements, even string offsets!}
+\EN{So yes, all tables now have 64-bit elements, even string offsets!}
 \RU{Сигнатура теперь}\EN{The signature is now} \TT{OSYMAM64}, \RU{чтобы отличить целевую платформу, 
-я полагаю}\EN{to distinguish target platform, I suppose}.\\
+я полагаю}\EN{to distinguish the target platform, I suppose}.\\
 \\
 \RU{Вот и всё}\EN{This is it}!
 \RU{Вот также моя библиотека в которой есть ф-ция для доступа к .SYM-файлам \oracle}\EN{Here is also my 
-library in which I have function to access \oracle .SYM-files}:
+library in which I have functions to access \oracle .SYM-files}:
 \href{http://go.yurichev.com/17007}{GitHub}.
