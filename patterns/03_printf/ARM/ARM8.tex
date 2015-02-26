@@ -43,13 +43,12 @@ with 9 arguments from the previous section}: \myref{example_printf8_x64}.
 \RU{Самая первая инструкция}\EN{The very first} \TT{``STR LR, [SP,\#var\_4]!''} 
 \RU{сохраняет в стеке \ac{LR}, ведь нам придется использовать этот регистр для вызова \printf}
 \EN{instruction saves \ac{LR} on the stack, because we will use this register for the \printf call}.
-\RU{Восклицательный знак в конце означает}\EN{Exclamation mark at the end mean} \IT{pre-index}.
+\RU{Восклицательный знак в конце означает}\EN{Exclamation mark at the end indicates} \IT{pre-index}.
 \RU{Это значит, что в начале \ac{SP} должно быть
 уменьшено на 4, затем по адресу в \ac{SP} должно быть записано значение \ac{LR}.}
-\EN{This means that first \ac{SP} will be decreased by 4, 
-then \ac{LR} will be written at the address stored in \ac{SP}.}
-\RU{Это аналог знакомой в x86 инструкции \PUSH}\EN{This is analogous to \PUSH in x86}.
-\RU{Читайте больше об этом}\EN{Read more about it}: \myref{ARM_postindex_vs_preindex}.
+\EN{This means that \ac{SP} will be decreased by 4 first, and then \ac{LR} will be saved at the address stored in \ac{SP}.}
+\RU{Это аналог знакомой в x86 инструкции \PUSH}\EN{This is similar to \PUSH in x86}.
+\RU{Читайте больше об этом}\EN{Read more about it at}: \myref{ARM_postindex_vs_preindex}.
 
 \index{ARM!\Instructions!SUB}
 \RU{Вторая инструкция}\EN{The second} \TT{``SUB SP, SP, \#0x14''}
@@ -58,29 +57,28 @@ then \ac{LR} will be written at the address stored in \ac{SP}.}
 \ac{SP} (the \gls{stack pointer}) in order to 
 allocate \TT{0x14} ($20$) bytes on the stack}.
 \RU{Действительно, нам нужно передать 5 32-битных значений через стек в \printf, каждое значение занимает 4 байта, а $5*4=20$ ~--- как раз}
-\EN{Indeed, we need to pass 5 32-bit values via the stack to the \printf function, and each one occupies 4 bytes, that is $5*4=20$~---exactly}.
-\RU{Остальные 4 32-битных значения будут переданы через регистры}\EN{The other 4 32-bit values will be passed in
-registers}.
+\EN{Indeed, we need to pass 5 32-bit values via the stack to the \printf function, and each one occupies 4 bytes, which is exactly $5*4=20$}.
+\RU{Остальные 4 32-битных значения будут переданы через регистры}\EN{The other 4 32-bit values will be passed through registers}.
 
 \item \RU{Передача 5, 6, 7 и 8 через стек}\EN{Passing 5, 6, 7 and 8 via the stack}:
 \RU{они записываются в регистры \Reg{0}, \Reg{1}, \Reg{2} и \Reg{3} соответственно}
-\EN{they are written in the \Reg{0}, \Reg{1}, \Reg{2} and \Reg{3} registers respectively}.
+\EN{they are stored in the \Reg{0}, \Reg{1}, \Reg{2} and \Reg{3} registers respectively}.
 \RU{Затем инструкция}\EN{Then, the} \TT{``ADD R12, SP, \#0x18+var\_14''} 
 \RU{записывает в регистр \TT{R12} адрес места в стеке, куда будут помещены эти 4 значения}
-\EN{instruction writes the address in the stack where these 4 variables will be written, into the \TT{R12} register}.
+\EN{instruction writes the stack address where these 4 variables will be stored, into the \TT{R12} register}.
 \index{IDA!var\_?}
 \IT{var\_14} \RU{~--- это макрос ассемблера}\EN{is an assembly macro}, \RU{равный}\EN{equal to} $-0x14$, 
 \RU{такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку}
-\EN{which is created by \IDA to better show code accessing the stack}.
-\RU{Макросы \IT{var\_?}, создаваемые \IDA, отражают локальные переменные в стеке}\EN{The \IT{var\_?} macros created
+\EN{created by \IDA to conveniently display the code accessing the stack}.
+\RU{Макросы \IT{var\_?}, создаваемые \IDA, отражают локальные переменные в стеке}\EN{The \IT{var\_?} macros generated
 by \IDA reflect local variables in the stack}.
-\RU{Так что в \TT{R12} будет записано $SP+4$}\EN{So, $SP+4$ will be written into the \TT{R12} register}.
+\RU{Так что в \TT{R12} будет записано $SP+4$}\EN{So, $SP+4$ will be stored into the \TT{R12} register}.
 \index{ARM!\Instructions!STMIA}
 \RU{Следующая инструкция}\EN{The next} \TT{``STMIA R12, {R0-R3}''} 
 \RU{записывает содержимое регистров \Reg{0}-\Reg{3} по адресу в памяти, на который указывает \TT{R12}}
 \EN{instruction
-writes the contents of registers \Reg{0}-\Reg{3} to the point in memory to which \TT{R12} is pointing}.
-\RU{Инструкция }\TT{STMIA} \RU{означает}\EN{means} \IT{Store Multiple Increment After}. 
+writes registers \Reg{0}-\Reg{3} contents to the memory pointed by \TT{R12}}.
+\RU{Инструкция }\TT{STMIA} \RU{означает}\EN{abbreviates} \IT{Store Multiple Increment After}. 
 \IT{``Increment After''} \RU{означает, что \TT{R12} будет увеличиваться на 4 после записи каждого значения регистра}
 \EN{means that \TT{R12} will be increased by $4$ after each register value is written}.
 
@@ -90,13 +88,13 @@ this value, with the help of the} \TT{``STR R0, [SP,\#0x18+var\_18]''} \RU{по�
 on the stack}.
 \IT{var\_18} \RU{равен}\EN{is} $-0x18$, \RU{смещение будет $0$}\EN{so the offset will be $0$}, 
 \RU{так что, значение из регистра \Reg{0} ($4$) запишется туда, куда указывает \ac{SP}}
-\EN{so the value from the \Reg{0} register ($4$) will be written to the addrss written in \ac{SP}}.
+\EN{thus the value from the \Reg{0} register ($4$) will be written to the address written in \ac{SP}}.
 
 \item \RU{Передача 1, 2 и 3 через регистры}\EN{Passing 1, 2 and 3 via registers}:
 
 \RU{Значения для первых трех чисел (a, b, c) (1, 2, 3 соответственно) передаются в регистрах 
 \Reg{1}, \Reg{2} и \Reg{3} перед самим вызовом \printf}
-\EN{The values of the first 3 numbers (a, b, c) (1, 2, 3 respectively) are passed in the 
+\EN{The values of the first 3 numbers (a, b, c) (1, 2, 3 respectively) are passed through the 
 \Reg{1}, \Reg{2} and \Reg{3}
 registers right before the \printf call}, \RU{а остальные 5 значений передаются через стек, и вот как}\EN{and the other
 5 values are passed via the stack}:
@@ -108,11 +106,11 @@ registers right before the \printf call}, \RU{а остальные 5 значе
 
 \RU{Инструкция}\EN{The} \TT{``ADD SP, SP, \#0x14''} \RU{возвращает \ac{SP} на прежнее место, 
 аннулируя таким образом всё, что было записано в стеке}
-\EN{instruction returns the \ac{SP} pointer back to its former point,
+\EN{instruction restores the \ac{SP} pointer back to its former value,
 thus cleaning the stack}.
 \RU{Конечно, то что было записано в стек, там пока и останется, но всё это будет многократно 
 перезаписано во время исполнения последующих функций}
-\EN{Of course, what was written on the stack will stay there, but it all will be
+\EN{Of course, what was stored on the stack will stay there, but it will all be
 rewritten during the execution of subsequent functions}.
 
 \index{ARM!\Instructions!LDR}
@@ -120,21 +118,20 @@ rewritten during the execution of subsequent functions}.
 сохраненное значение \ac{LR} из стека, обеспечивая таким образом выход из функции.}
 \EN{instruction loads the saved \ac{LR} value from the stack into the \ac{PC} register, 
 thus causing the function to exit.}
-\EN{There is no exclamation mark---indeed, first \ac{PC} is loaded from the address written in \ac{SP} }
+\EN{There is no exclamation mark---indeed, \ac{PC} is loaded first from the address stored in \ac{SP} }
 \RU{Здесь нет восклицательного знака --- действительно,  в начале \ac{PC} загружается из места,
 куда указывает \ac{SP}}
 ($4+var\_4=4+(-4)=0$, \RU{так что эта инструкция аналогична}\EN{so this instruction is 
 analogous to} \TT{LDR PC, [SP],\#4}), \RU{затем}\EN{and then} \ac{SP} \RU{увеличивается 
 на}\EN{is increased by} $4$.
-\RU{Это называется}\EN{This is called} \IT{post-index}\footnote{\RU{Читайте больше об 
+\RU{Это называется}\EN{This is referred as} \IT{post-index}\footnote{\RU{Читайте больше об 
 этом}\EN{Read more about it}: \myref{ARM_postindex_vs_preindex}.}.
-\RU{Почему}\EN{Why does} \IDA \RU{показывает инструкцию именно так}\EN{show the instruction like that}?
-\RU{Потому что она хочет показать разметку стека и тот факт, что}\EN{Because it wants to show 
-the stack layout and the fact that} \TT{var\_4} \RU{выделена в локальном стеке именно для сохраненного
-значения}\EN{is allocated for saving the value of} \ac{LR}\EN{ in the local stack}.
+\RU{Почему}\EN{Why does} \IDA \RU{показывает инструкцию именно так}\EN{display the instruction like that}?
+\RU{Потому что она хочет показать разметку стека и тот факт, что}\EN{Because it wants to illustrate the stack layout and the fact that} \TT{var\_4} \RU{выделена в локальном стеке именно для сохраненного
+значения}\EN{is allocated for saving the} \ac{LR}\EN{ value in the local stack}.
 \RU{Эта инструкция в каком-то смысле аналогична}\EN{This instruction is somewhat 
-analogous to} \TT{POP PC} \InENRU x86\footnote{\EN{It's impossible to
-set value of \TT{IP/EIP/RIP} using \POP in x86, but anyway, you get the idea, I hope}\RU{В x86 
+similar to} \TT{POP PC} \InENRU x86\footnote{\EN{It is impossible to
+set \TT{IP/EIP/RIP} value using \POP in x86, but anyway, you get the idea, I hope}\RU{В x86 
 невозможно установить значение \TT{IP/EIP/RIP} используя \POP, но надеюсь, вы поняли, о чем я}.}.
 
 \end{itemize}
@@ -171,10 +168,10 @@ set value of \TT{IP/EIP/RIP} using \POP in x86, but anyway, you get the idea, I 
 \end{lstlisting}
 
 \RU{Это почти то же самое, что и в предыдущем примере, только код для thumb и значения помещаются в 
-стек немного иначе: в начале $8$ за первый раз, затем $5$, $6$, $7$ за второй раз и $4$ за третий раз}\EN{Almost 
-like
+стек немного иначе: в начале $8$ за первый раз, затем $5$, $6$, $7$ за второй раз и $4$ за третий раз}\EN{The output is almost 
+like in
 the previous example. However, this is thumb code and the values are packed into stack differently: 
-$8$ for the first time, then $5$, $6$, $7$ for the second, and $4$ for the third}.
+$8$ goes first, then $5$, $6$, $7$, and $4$ goes third}.
 
 \subsubsection{\OptimizingXcodeIV: \ARMMode}
 
@@ -215,18 +212,17 @@ exception of} \TT{STMFA} (Store Multiple Full Ascending)
 \TT{STMIB} (Store Multiple Increment Before) \EN{instruction}. 
 \RU{Эта инструкция увеличивает \ac{SP} и только затем записывает в память значение очередного регистра, 
 но не наоборот}\EN{This
-instruction increases the value in the \ac{SP} register and only then writes the next register value into memory, rather than the opposite order}.
+instruction increases the value in the \ac{SP} register and only then writes the next register value into the memory, rather than performing those two actions in the opposite order}.
 
 \RU{Второе, что бросается в глаза, это то, что инструкции как будто бы расположены случайно}\EN{Another thing
-we easily spot is that the instructions seem to be located randomly}.
+that catches the eye is that the instructions are arranged seemingly random}.
 \RU{Например, значение в регистре \Reg{0} подготавливается в трех местах, по адресам \TT{0x2918}, \TT{0x2920} 
 и \TT{0x2928}, 
-когда это можно было бы сделать в одном месте}\EN{For example, the value in the \Reg{0} register is prepared in three
-places, at addresses \TT{0x2918}, \TT{0x2920} and \TT{0x2928}, when it would be possible to do it in one single point}.
+когда это можно было бы сделать в одном месте}\EN{For example, the value in the \Reg{0} register is manipulated in three
+places, at addresses \TT{0x2918}, \TT{0x2920} and \TT{0x2928}, when it would be possible to do it in one point}.
 \RU{Однако, у оптимизирующего компилятора могут быть свои доводы о том, как лучше составлять инструкции 
 друг с другом для лучшей эффективности исполнения}
-\EN{However, the optimizing compiler has its own reasons for how
-to place instructions better}.
+\EN{However, the optimizing compiler may have its own reasons on how to order the instructions so to achieve higher efficiency during the execution}.
 \RU{Процессор обычно пытается исполнять одновременно идущие друг за другом инструкции}
 \EN{Usually, the processor attempts to simultaneously execute instructions located side-by-side}.
 \RU{К примеру, инструкции}\EN{For example, instructions like} \TT{``MOVT R0, \#0''} \AndENRU 
@@ -235,9 +231,9 @@ to place instructions better}.
 \RU{А вот инструкции}\EN{On the other hand,} \TT{``MOVT R0, \#0''} \AndENRU \TT{``MOV R2, \#4''} 
 \RU{легко можно исполнить одновременно, 
 потому что эффекты от их исполнения никак не конфликтуют друг с другом}\EN{instructions can be executed
-simultaneously since effects of their execution are not conflicting with each other}.
+simultaneously since the effects of their execution are not conflicting with each other}.
 \RU{Вероятно, компилятор старается генерировать код именно таким образом там, где это возможно}
-\EN{Presumably, the compiler tries to generate code in such a way (where it is possible)}.
+\EN{Presumably, the compiler tries to generate code in such a manner (wherever it is possible)}.
  
 \subsubsection{\OptimizingXcodeIV: \ThumbTwoMode}
 
@@ -273,7 +269,7 @@ __text:00002BD8 80 BD          POP      {R7,PC}
 
 \RU{Почти то же самое, что и в предыдущем примере,
 лишь за тем исключением, что здесь используются thumb-инструкции}
-\EN{Almost the same as in the previous example,
+\EN{The output is almost the same as in the previous example,
 with the exception that thumb-instructions are used instead}.
 % also STMIA is used instead of STMIB,
 % which is why it uses LR, which is 4 bytes ahead of SP
@@ -290,13 +286,13 @@ in X- or W-registers}: \cite{ARM64_PCS}.
 requires a 64-bit register, so it's passed in} \RegX{0}.
 \RU{Все остальные значения имеют 32-битный тип \Tint, так что они записываются в 32-битные
 части регистров (W-).}
-\EN{All other values have a \Tint 32-bit type, so they are written in the 32-bit part of 
+\EN{All other values have a \Tint 32-bit type, so they are stored in the 32-bit part of 
 the registers (W-).}
 \RU{Девятый аргумент ($8$) передается через стек.}
 \EN{The 9th argument ($8$) is passed via the stack.}
 \RU{Действительно: невозможно передать большое количество аргументов в регистрах, потому
 что количество регистров ограничено.}
-\EN{Indeed: it's not possible to pass large number of arguments in registers, 
-their count is limited.}
+\EN{Indeed: it's not possible to pass large number of arguments through registers, 
+because the number of registers is limited.}
 
 \Optimizing GCC (Linaro) 4.9 \RU{генерирует почти такой же код}\EN{generates the same code}.
