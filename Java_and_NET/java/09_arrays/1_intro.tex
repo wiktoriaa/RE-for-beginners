@@ -1,0 +1,95 @@
+% TODO translation
+% TODO proof-reading
+\subsection{Simple example}
+
+Let's first create array of 10 integers and fill it:
+
+\begin{lstlisting}
+	public static void main(String[] args) 
+	{
+		int a[]=new int[10];
+		for (int i=0; i<10; i++)
+			a[i]=i;
+		dump (a);
+	}
+\end{lstlisting}
+
+\begin{lstlisting}
+  public static void main(java.lang.String[]);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=3, locals=3, args_size=1
+         0: bipush        10
+         2: newarray       int
+         4: astore_1      
+         5: iconst_0      
+         6: istore_2      
+         7: iload_2       
+         8: bipush        10
+        10: if_icmpge     23
+        13: aload_1       
+        14: iload_2       
+        15: iload_2       
+        16: iastore       
+        17: iinc          2, 1
+        20: goto          7
+        23: aload_1       
+        24: invokestatic  #4                  // Method dump:([I)V
+        27: return        
+\end{lstlisting}
+
+\TT{newarray} instruction creates an array object of 10 \IT{int} elements. 
+Array size is set by \TT{bipush} and left at \ac{TOS}.
+Array type is set in \TT{newarray} instruction operand.
+After \TT{newarray} execution, a reference (or pointer) to the newly created array in heap is left
+at the \ac{TOS}.
+\TT{astore\_1} stores the reference to the 1st slot in \ac{LVA}.
+Second part of \TT{main()} function is the loop which stores \IT{i} value into corresponding
+array element.
+\TT{aload\_1} gets reference of array and places it into stack.
+\TT{iastore} then stores integer value from stack to the array, reference of which is currently in stack.
+Third part of \TT{main()} function calls for \TT{dump()} function. 
+An argument for it is prepared by \TT{aload\_1} instruction.
+
+Now let's proceed to \TT{dump()} function:
+
+\begin{lstlisting}
+	public static void dump(int a[])
+	{
+		for (int i=0; i<a.length; i++)
+			System.out.println(a[i]);
+	}
+\end{lstlisting}
+
+\begin{lstlisting}
+  public static void dump(int[]);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=3, locals=2, args_size=1
+         0: iconst_0      
+         1: istore_1      
+         2: iload_1       
+         3: aload_0       
+         4: arraylength   
+         5: if_icmpge     23
+         8: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        11: aload_0       
+        12: iload_1       
+        13: iaload        
+        14: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V
+        17: iinc          1, 1
+        20: goto          2
+        23: return        
+\end{lstlisting}
+
+Incoming reference to array is in the zeroth slot.
+\TT{a.length} expression in the source code is converted into \TT{arraylength} instruction: 
+it takes reference to array and leave array size in stack.
+\TT{iaload} at offset 13 is used to load array elements, it requires to array reference be present
+in stack (prepared by \TT{aload\_0} at 11), and also index (prepared by \TT{iload\_1} at offset 12).
+
+Needless to say, instructions prefixed with \IT{a} may be mistakenly comprehended 
+as \IT{array} instructions.
+It's not correct.
+These instructions works with references to objects.
+And arrays and strings are objects too.

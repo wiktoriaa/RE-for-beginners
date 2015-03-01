@@ -1,0 +1,43 @@
+% TODO translation
+% TODO proof-reading
+\subsection{\TT{main()} function sole argument is array too}
+
+Let's use the sole \TT{main()} function argument, which is array of strings:
+
+\begin{lstlisting}
+public class UseArgument
+{
+	public static void main(String[] args)
+	{
+		System.out.print("Hi, ");
+		System.out.print(args[1]);
+		System.out.println(". How are you?");
+	}
+}
+\end{lstlisting}
+
+Zeroth argument is a program name (like in C/C++, etc), 
+so the 1st argument supplied by user is 1st (counting at 0).
+
+\begin{lstlisting}
+  public static void main(java.lang.String[]);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=3, locals=1, args_size=1
+         0: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+         3: ldc           #3                  // String Hi, 
+         5: invokevirtual #4                  // Method java/io/PrintStream.print:(Ljava/lang/String;)V
+         8: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        11: aload_0       
+        12: iconst_1      
+        13: aaload        
+        14: invokevirtual #4                  // Method java/io/PrintStream.print:(Ljava/lang/String;)V
+        17: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        20: ldc           #5                  // String . How are you?
+        22: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        25: return        
+\end{lstlisting}
+
+\TT{aload\_0} at 11 loads reference of the zeroth \ac{LVA} slot (1st and only \TT{main()} argument).
+\TT{iconst\_1} and \TT{aaload} at 12 and 13 takes reference to the first (counting at 0) element of array.
+The reference of string object is at TOS at offset 14 and there it is taken by \TT{println} method.

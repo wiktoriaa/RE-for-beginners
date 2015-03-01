@@ -1,0 +1,198 @@
+% TODO translation
+% TODO proof-reading
+\section{Simple calculating functions}
+
+Let's continue with simple calculating functions.
+
+\begin{lstlisting}
+public class calc
+{
+	public static int half(int a)
+	{
+		return a/2;
+	}
+}
+\end{lstlisting}
+
+This is the case when \TT{iconst\_2} instruction is used:
+
+\begin{lstlisting}
+  public static int half(int);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=1, args_size=1
+         0: iload_0       
+         1: iconst_2      
+         2: idiv          
+         3: ireturn       
+\end{lstlisting}
+         
+\TT{iload\_0} takes zeroth function argument and pushes it to stack.
+\TT{iconst\_2} pushes 2 into stack.
+After these two instructions, this is how stack looks like:
+
+% FIXME: TikZ
+\begin{lstlisting}
+      +---+
+TOS ->| 2 |
+      +---+
+      | a |
+      +---+
+\end{lstlisting}
+
+\TT{idiv} just takes two values at the \ac{TOS}, divides one by another and leave
+result at \ac{TOS}:
+
+% FIXME: TikZ
+\begin{lstlisting}
+      +--------+
+TOS ->| result |
+      +--------+
+\end{lstlisting}
+
+\TT{ireturn} takes it and returns.
+
+Let's proceed to double precision floating point numbers:
+
+\begin{lstlisting}
+public class calc
+{
+	public static double half_double(double a)
+	{
+		return a/2.0;
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Constant pool]
+...
+   #2 = Double             2.0d
+...
+\end{lstlisting}
+
+\begin{lstlisting}
+  public static double half_double(double);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=4, locals=2, args_size=1
+         0: dload_0       
+         1: ldc2_w        #2                  // double 2.0d
+         4: ddiv          
+         5: dreturn       
+\end{lstlisting}
+
+It's the very same, but \TT{ldc2\_w} instruction is used to load constant of 2.0 from constant pool.
+Also, all other three instructions has \IT{d} prefix, 
+meaning they work with double data type values.
+
+Let now use two function arguments:
+
+\begin{lstlisting}
+public class calc
+{
+	public static int sum(int a, int b)
+	{
+		return a+b;
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+  public static int sum(int, int);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=2, args_size=2
+         0: iload_0       
+         1: iload_1       
+         2: iadd          
+         3: ireturn       
+\end{lstlisting}
+
+\TT{iload\_0} loads first function argument (a), \TT{iload\_2} --- second (b).
+Here is a stack after both instruction executed:
+
+\begin{lstlisting}
+      +---+
+TOS ->| b |
+      +---+
+      | a |
+      +---+
+\end{lstlisting}
+
+\TT{iadd} adds two values and leave result at \ac{TOS}:
+
+\begin{lstlisting}
+      +--------+
+TOS ->| result |
+      +--------+
+\end{lstlisting}
+
+\begin{lstlisting}
+Let's extend this example to "long" data type:
+
+	public static long lsum(long a, long b)
+	{
+		return a+b;
+	}
+\end{lstlisting}
+
+\dots we got:
+
+\begin{lstlisting}
+  public static long lsum(long, long);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=4, locals=4, args_size=2
+         0: lload_0       
+         1: lload_2       
+         2: ladd          
+         3: lreturn       
+\end{lstlisting}
+
+The second \TT{lload} instruction takes second argument from 2nd slot.
+That's because 64-bit \IT{long} value occupies exactly two 32-bit slots.
+
+Slightly more complex example:
+
+\begin{lstlisting}
+public class calc
+{
+	public static int mult_add(int a, int b, int c)
+	{
+		return a*b+c;
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+  public static int mult_add(int, int, int);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=3, args_size=3
+         0: iload_0       
+         1: iload_1       
+         2: imul          
+         3: iload_2       
+         4: iadd          
+         5: ireturn       
+\end{lstlisting}
+
+First step is multiplication. Product is left at the \ac{TOS}:
+
+\begin{lstlisting}
+      +---------+
+TOS ->| product |
+      +---------+
+\end{lstlisting}
+
+\TT{iload\_2} loads third argument (c) into stack:
+
+\begin{lstlisting}
+      +---------+
+TOS ->|    c    |
+      +---------+
+      | product |
+      +---------+
+\end{lstlisting}
+
+Now \TT{iadd} instruction can add two values.

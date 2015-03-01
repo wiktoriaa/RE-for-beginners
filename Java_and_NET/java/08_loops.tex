@@ -1,0 +1,125 @@
+% TODO translation
+% TODO proof-reading
+\section{Loops}
+
+\begin{lstlisting}
+public class Loop
+{
+	public static void main(String[] args)
+	{ 
+		for (int i = 1; i <= 10; i++)
+		{
+			System.out.println(i); 
+		}               
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+  public static void main(java.lang.String[]);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=2, args_size=1
+         0: iconst_1      
+         1: istore_1      
+         2: iload_1       
+         3: bipush        10
+         5: if_icmpgt     21
+         8: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        11: iload_1       
+        12: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V
+        15: iinc          1, 1
+        18: goto          2
+        21: return        
+\end{lstlisting}
+
+\TT{iconst\_1} loads 1 into \ac{TOS}, \TT{istore\_1} stores it to \ac{LVA} at slot 1.
+Why not zeroth slot? Because \TT{main()} function has one argument (array of \TT{String}) 
+and pointer to it (or reference) is now in zeroth slot.
+
+So, \IT{i} local variable will always be in 1st slot.
+
+Instructions at offsets 3 and 5 compares \IT{i} with 10.
+If \IT{i} is larger, execution flow is changed to offset 21, where function is finished.
+If it's not, \TT{println} is called. \IT{i} is then reloaded at offset 11 for \TT{println}.
+By the way, we call \TT{println} method for integer data type, we see this in comments: ``(I)V''
+(\IT{I} mean integer and \IT{V} mean returning type is \IT{void}).
+
+When \TT{println} is finished, \IT{i} is incremented at offset 15. 
+First argument of the instruction is number of slot, second is a number to add to variable.
+
+\TT{goto} is just GOTO, it jumps to the loop body begin at offset 2.
+
+Let's proceed to more complex example:
+
+\begin{lstlisting}
+public class Fibonacci
+{
+	public static void main(String[] args)
+	{ 
+		int limit = 20, f = 0, g = 1;
+
+		for (int i = 1; i <= limit; i++)
+		{
+			f = f + g;
+			g = f - g;
+			System.out.println(f); 
+		}
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+  public static void main(java.lang.String[]);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=5, args_size=1
+         0: bipush        20
+         2: istore_1      
+         3: iconst_0      
+         4: istore_2      
+         5: iconst_1      
+         6: istore_3      
+         7: iconst_1      
+         8: istore        4
+        10: iload         4
+        12: iload_1       
+        13: if_icmpgt     37
+        16: iload_2       
+        17: iload_3       
+        18: iadd          
+        19: istore_2      
+        20: iload_2       
+        21: iload_3       
+        22: isub          
+        23: istore_3      
+        24: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        27: iload_2       
+        28: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V
+        31: iinc          4, 1
+        34: goto          10
+        37: return        
+\end{lstlisting}
+        
+Here is \ac{LVA} slots map:
+
+\begin{itemize}
+\item 0 --- the sole \TT{main()} argument
+\item 1 --- \IT{limit}, always holding 20
+\item 2 --- \IT{f}
+\item 3 --- \IT{g}
+\item 4 --- \IT{i}
+\end{itemize}
+
+We can see that Java compiler allocated \ac{LVA} slots just in the same sequence, 
+as variables were declared in the source code.
+
+There are separate \TT{istore} instructions for accessing slots by number 0, 1, 2, 3, 
+but not 4 and larger, so there \TT{istore} at offset 8 
+which takes slot number as additional argument.
+The same story about \TT{iload} at offset 10.
+
+But is not it's dubious to allocate another slot for \IT{limit} variable which always holding 20, 
+and reload its value so often?
+\ac{JVM} \ac{JIT} compiler is usually good enough to optimize such things.
+Manual intervention is probably not worth it.

@@ -1,0 +1,31 @@
+% TODO translation
+% TODO proof-reading
+\section{\ac{JVM} memory model}
+
+x86 and other low-level environments uses stack for arguments passing and 
+as local variables storage.
+\ac{JVM} is slightly different.
+
+It has: 
+
+\begin{itemize}
+\item Local variable array (\ac{LVA}).
+It is used for incoming function arguments and local variables.
+Instructions like \TT{iload\_0} loads values from it.
+\TT{istore} stores values to it.
+First, function arguments are came: starting at 0 or at 1 
+(if zeroth argument is occupied by \IT{this} pointer).
+Then local variables are allocated.
+
+Each slot has size of 32-bit. Hence, values of \IT{long} and \IT{double} data types 
+occupy two slots.
+
+\item Operand stack (or just ``stack''). 
+It's used for computations and passing arguments to caller functions.
+Unlike low-level environments like x86, it's not possible to access the stack without using
+instructions which explicitely pushes or pops values to/from it.
+
+\item Heap. It is used as storage for objects and arrays.
+\end{itemize}
+
+These 3 areas are isolated from each other.
