@@ -6,4 +6,4 @@ int main()
 {
     printf($SG3830);
     return 0;
-};
+}
