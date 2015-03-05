@@ -55,3 +55,54 @@ file. 256 is not so much.}
 
 \EN{More about Norton Guide's file format:}
 \RU{Больше о формате файлов Norton Guide:} \url{http://go.yurichev.com/17317}.
+
+\section{\RU{Энтропия}\EN{Entropy}}
+\index{Wolfram Mathematica}
+\index{\RU{Энтропия}\EN{Entropy}}
+
+\EN{A very important property of such primitive encryption systems is that information entropy
+of the encrypted/decrypted block is the same.}
+\RU{Очень важное свойство подобного примитивного шифрования в том, что информационная энтропия
+зашифрованного/дешифрованного блока точно такая же.}
+\EN{Here is my analyze in}\RU{Вот мой анализ в} Wolfram Mathematica 10.
+
+\begin{lstlisting}[caption=Wolfram Mathematica 10]
+In[1]:= input = BinaryReadList["X86.NG"];
+
+In[2]:= Entropy[input] // N
+Out[2]= 3.9005
+
+In[3]:= decrypted = Map[BitXor[#, 16^^1A] &, test];
+
+In[4]:= Export["X86_decrypted.NG", decrypted, "Binary"];
+
+In[5]:= Entropy[decrypted] // N
+Out[5]= 3.9005
+
+In[6]:= Entropy[ExampleData[{"Text", "ShakespearesSonnets"}]] // N
+Out[6]= 3.06625
+\end{lstlisting}
+
+\EN{What I do here is load file, get entropy of it, decrypt it, save it, get entropy again 
+(the same!).}
+\RU{Что я здесь делаю это загружаю файл, вычисляю его энтропию, дешифрую его, сохраняю, 
+снова вычисляю энтропию (точно такая же!).}
+\EN{Mathematica also offers some well-known English language texts for analyze.}
+\RU{Mathematica дает возможность анализировать некоторые хорошо известные англоязычные тексты.}
+\EN{So I also get entropy of Shakespear's sonnets, and it is close to entropy of file 
+we analyzed.}
+\RU{Так что я вычисляю энтропию соннетов Шейкспира, и она близка к энтропии анализируемого
+нами файла.}
+\EN{The file we analyzed consting of English language sentences, which are close to language 
+of Shakespear.}
+\RU{Анализируемый нами файл состоит из предложений на английском языке, которые близки к языку
+Шейкспира.}
+\EN{And XOR-ed bytewisely English language text has the same entropy.}
+\RU{И применение побайтового XOR к тексту на английском языке не меняет энтропию.}
+
+\EN{However, this will not be true if the file is XOR-ed by pattern larger than one byte.}
+\RU{Хотя, это не будет справедливо если файл зашифрован при помощи XOR 
+шаблоном длинее одного байта.}
+
+\EN{The file we analyzed can be downloaded here}\RU{Файл, который мы анализировали, 
+можно скачать здесь}: \url{http://go.yurichev.com/17350}.
