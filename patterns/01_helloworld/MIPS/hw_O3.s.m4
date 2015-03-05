@@ -1,6 +1,6 @@
 include(`commons.m4')$LC0:
 ; \000 _EN(`is zero byte in octal base')_RU(`это ноль в восьмиричной системе'):
-	.ascii	"Hello, world!\000"
+	.ascii	"Hello, world!\012\000"
 main:
 ; _EN(`function prologue.')_RU(`пролог функции')
 ; _EN(`set')_RU(`установить') GP:

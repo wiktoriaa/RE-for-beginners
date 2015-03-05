@@ -1,5 +1,5 @@
 include(`commons.m4')$LC0:
-	.ascii	"Hello, world!\000"
+	.ascii	"Hello, world!\012\000"
 main:
 ; _EN(`function prologue.')_RU(`пролог функции')
 ; _EN(`save GP and FP in the stack')_RU(`сохранить GP и FP в стеке'):
