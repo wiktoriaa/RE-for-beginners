@@ -69,18 +69,18 @@ of the encrypted/decrypted block is the same.}
 \begin{lstlisting}[caption=Wolfram Mathematica 10]
 In[1]:= input = BinaryReadList["X86.NG"];
 
-In[2]:= Entropy[input] // N
-Out[2]= 3.9005
+In[2]:= Entropy[2, input] // N
+Out[2]= 5.62724
 
-In[3]:= decrypted = Map[BitXor[#, 16^^1A] &, test];
+In[3]:= decrypted = Map[BitXor[#, 16^^1A] &, input];
 
 In[4]:= Export["X86_decrypted.NG", decrypted, "Binary"];
 
-In[5]:= Entropy[decrypted] // N
-Out[5]= 3.9005
+In[5]:= Entropy[2, decrypted] // N
+Out[5]= 5.62724
 
-In[6]:= Entropy[ExampleData[{"Text", "ShakespearesSonnets"}]] // N
-Out[6]= 3.06625
+In[6]:= Entropy[2, ExampleData[{"Text", "ShakespearesSonnets"}]] // N
+Out[6]= 4.42366
 \end{lstlisting}
 
 \EN{What I do here is load file, get entropy of it, decrypt it, save it, get entropy again 
@@ -106,3 +106,16 @@ of Shakespear.}
 
 \EN{The file we analyzed can be downloaded here}\RU{Файл, который мы анализировали, 
 можно скачать здесь}: \url{http://go.yurichev.com/17350}.
+
+\subsection{\EN{One more word about base of entropy}\RU{Еще кое-что о базе энтропии}}
+
+\newcommand{\FNENTURL}{\footnote{\url{http://www.fourmilab.ch/random/}}}
+
+\EN{Wolfram Mathematica calculates entropy with base of $e$ (base of the natural logarithm),
+and UNIX \IT{ent} utility\FNENTURL uses base of 2.}
+\RU{Wolfram Mathematica вычисляет энтропию с базой $e$ (основание натурального логарифма),
+а утилита UNIX \IT{ent}\FNENTURL использует базу 2.}
+\EN{So I set base of 2 explicitely in \TT{Entropy} command, so Mathematica will give the 
+same results as \IT{ent} utility.}
+\RU{Так что я явно указал базу 2 в команде \TT{Entropy}, чтобы Mathematica давала те же результаты,
+что и утилита \IT{ent}.}
