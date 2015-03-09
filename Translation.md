@@ -21,6 +21,20 @@ Choose a new macro name, for example, `\FR{}` for French or `\PTBR{}` for Brazil
 Send me files you had changed to `dennis(a)yurichev.com` and I'll setup everything to build a book
 in your language.
 
+In past, I often translated sentences by parts, so each sentence may contain several 
+`\RU{}` and `\EN{}` macroses.
+It was not a good idea, as I realized.
+Best way to provide translations to a sentence is to list them, like:
+
+    `\EN{English sentence.}`
+    `\RU{Russian sentence.}`
+    `\FR{French sentence.}`
+    ...
+    `\EN{Another English sentence.}`
+    `\RU{Another Russian sentence.}`
+    `\FR{Another French sentence.}`
+    ...
+
 Since this work can be done collaboratively, you may also use [my forum](http://forum.yurichev.com/viewforum.php?f=6) for coordination.
 Github may also be used as well.
 
