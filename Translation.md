@@ -1,7 +1,5 @@
-Translation
------------
-
 Want to translate this book to some other language?
+---------------------------------------------------
 
 Keep in mind, it's a very hard and tedious work.
 You'll need basic understanding of git, LaTeX and m4.
