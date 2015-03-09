@@ -23,7 +23,7 @@ Send me files you had changed to `dennis(a)yurichev.com` and I'll setup everythi
 in your language.
 
 In past, I often translated sentences by parts, so each sentence may contain several 
-`\RU{}` and `\EN{}` macros.
+`\RU{}` and `\EN{}` macros, like [here](https://github.com/dennis714/RE-for-beginners/blob/master/patterns/03_printf/x86/x86.tex#L98).
 It was not a good idea, as I realized.
 Better way to provide translations to a sentence is to list them, like:
 
