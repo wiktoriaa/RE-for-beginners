@@ -19,8 +19,8 @@ Translators may use git to get to know which TeX files are in somewhat stable st
 translated before those parts which I still rework occasionally.
 
 Choose a new macro name, for example, `\FR{}` for French or `\PTBR{}` for Brazilian Portuguese.
-Send me files you had changed to `dennis(a)yurichev.com` and I'll setup everything to build a book
-in your language.
+Create a new fork at Github and I'll setup everything to build a book in your language.
+Or just send me files you had changed to `dennis(a)yurichev.com`.
 
 In past, I often translated sentences by parts, so each sentence may contain several 
 `\RU{}` and `\EN{}` macros, like [here](https://github.com/dennis714/RE-for-beginners/blob/b06840982e0c50c661b4327cbf5e32784cfe5b51/patterns/03_printf/x86/x86.tex#L98).
@@ -41,3 +41,5 @@ Github may also be used as well.
 
 All your work will be licensed, like this book, in CC BY-NC-ND terms.
 Korean, Chinese and Farsi translations are reserved by publishers.
+
+[Contact me](http://yurichev.com/contacts.html) for any questions.
