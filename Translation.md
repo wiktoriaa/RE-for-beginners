@@ -39,5 +39,6 @@ Github may also be used as well.
 
 All your work will be licensed, like this book, in CC BY-NC-ND terms.
 Korean, Chinese and Farsi translations are reserved by publishers.
+English and Russian versions I maintain by myself, but any fixes are very welcome!
 
 [Contact me](http://yurichev.com/contacts.html) for any questions.
