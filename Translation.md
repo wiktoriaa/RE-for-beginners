@@ -14,6 +14,8 @@ m4 (used here for assembly listings) has `_EN()` and` _RU()` macros.
 
 Since translation work is very tedious and may be done gradually, try to start at ["patterns" directory] 
 (https://github.com/dennis714/RE-for-beginners/tree/master/patterns).
+Translators may use git to get to know which TeX files are in somewhat stable state so can be 
+translated before those parts which I still rework.
 
 Choose a new macro name, for example, `\FR{}` for French or `\PTBR{}` for Brazilian Portuguese.
 Send me files you had changed to `dennis(a)yurichev.com` and I'll setup everything to build a book
