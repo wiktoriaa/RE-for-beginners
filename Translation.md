@@ -22,7 +22,7 @@ Send me files you had changed to `dennis(a)yurichev.com` and I'll setup everythi
 in your language.
 
 In past, I often translated sentences by parts, so each sentence may contain several 
-`\RU{}` and `\EN{}` macroses.
+`\RU{}` and `\EN{}` macros.
 It was not a good idea, as I realized.
 Best way to provide translations to a sentence is to list them, like:
 
