@@ -1,5 +1,5 @@
 Translation
-===========
+-----------
 
 Want to translate this book to some other language?
 
@@ -23,4 +23,4 @@ Since this work can be done collaboratively, you may also use [my forum](http://
 Github may also be used as well.
 
 All your work will be licensed, like this book, in CC BY-NC-ND terms.
-Korean, Chinese and Farsi translations are reserved for publishers.
+Korean, Chinese and Farsi translations are reserved by publishers.
