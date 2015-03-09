@@ -25,7 +25,7 @@ in your language.
 In past, I often translated sentences by parts, so each sentence may contain several 
 `\RU{}` and `\EN{}` macros, like [here](https://github.com/dennis714/RE-for-beginners/blob/b06840982e0c50c661b4327cbf5e32784cfe5b51/patterns/03_printf/x86/x86.tex#L98).
 It was not a good idea, as I realized.
-Better way to provide translations to a sentence is to list them, like:
+Better way to provide translations to a sentence is to list them, like [here](https://github.com/dennis714/RE-for-beginners/blob/06c668a6c57546239cc9dfa7f8c9cb24b5ab258c/patterns/00_ret/main.tex#L44):
 
     `\EN{English sentence.}`
     `\RU{Russian sentence.}`
