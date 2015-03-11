@@ -1,4 +1,4 @@
-﻿\section{MIPS}
+\section{MIPS}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5]{patterns/05_passing_arguments/MIPS_O3_IDA.lst.\LANG}
 
@@ -8,17 +8,16 @@
 \index{MIPS!\Instructions!MULT}
 \RU{В MIPS есть два специальных регистра: HI и LO, которые выставляются в 64-битный результат умножения
 во время исполнения инструкции \TT{MULT}.}
-\EN{There are two special registers in MIPS: HI and LO which are filled by 64-bit result of multiplication during
-the execution of the \TT{MULT} instruction.}
+\EN{There are two special registers in MIPS: HI and LO which are filled with the 64-bit result of the multiplication during the execution of the \TT{MULT} instruction.}
 \index{MIPS!\Instructions!MFLO}
 \index{MIPS!\Instructions!MFHI}
 \RU{К регистрам можно обращаться только используя инструкции \TT{MFLO} и \TT{MFHI}.}
-\EN{These registers are accessible only using the \TT{MFLO} and \TT{MFHI} instructions.}
+\EN{These registers are accessible only by using the \TT{MFLO} and \TT{MFHI} instructions.}
 \RU{Здесь, \TT{MFLO} берет младшую часть результата умножения и записывает в \$V0.}
-\EN{\TT{MFLO} here it takes the low-part of the result of multiplication and puts it into \$V0.}
+\EN{\TT{MFLO} here takes the low-part of the multiplication result and stores it into \$V0.}
 
 \RU{Так что старшая 32-битная часть результата игнорируется (содержимое регистра HI не используется).}
-\EN{So the high 32-bit part of the multiplication result is dropped (the contents of register HI are not used).}
+\EN{So the high 32-bit part of the multiplication result is dropped (the HI register content is not used).}
 \RU{Действительно: мы ведь работаем с 32-битным типом \Tint.}
 \EN{Indeed: we work with 32-bit \Tint data types here.}
 
@@ -35,12 +34,10 @@ the execution of the \TT{MULT} instruction.}
 \RU{На самом деле, дело не в знаковых числах, но в исключениях: \TT{ADD} может вызвать исключение
 во время переполнения, а это иногда полезно\footnote{\url{http://go.yurichev.com/17326}} и поддерживается,
 например, в \ac{PL} Ada.}
-\EN{It's not about signedness, but about exceptions: \TT{ADD} can raise an exception on overflow,
-which is sometimes useful\footnote{\url{http://go.yurichev.com/17326}} and supported in Ada \ac{PL}, 
-for instance.}
-\TT{ADDU} \RU{не вызывает исключения во время переполнения}\EN{do not raise exceptions on overflow}.
+\EN{The difference between them is not related to signedness, but to exceptions. \TT{ADD} can raise an exception on overflow, which is sometimes useful\footnote{\url{http://go.yurichev.com/17326}} and supported in Ada \ac{PL}, for instance.}
+\TT{ADDU} \RU{не вызывает исключения во время переполнения}\EN{does not raise exceptions on overflow}.
 \RU{А так как \CCpp не поддерживает всё это, мы видим здесь \TT{ADDU} вместо \TT{ADD}.}
-\EN{Since \CCpp doesn't support this, here we see \TT{ADDU} instead of \TT{ADD}.}
+\EN{Since \CCpp does not support this, in our example we see \TT{ADDU} instead of \TT{ADD}.}
 
 \RU{32-битный результат оставляется в}\EN{The 32-bit result is left in} \$V0.
 

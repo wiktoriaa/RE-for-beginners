@@ -1,10 +1,10 @@
-﻿\subsection{ARM64}
+\subsection{ARM64}
 
 \subsubsection{\Optimizing GCC (Linaro) 4.9}
 
 \index{Fused multiply–add}
 \index{ARM!\Instructions!MADD}
-\RU{Тут всё просто}\EN{That's easy}.
+\RU{Тут всё просто}\EN{Everything here is simple}.
 \EN{\TT{MADD} is just an instruction doing fused multiply/add (similar to the \TT{MLA} we already saw).}
 \RU{\TT{MADD} это просто инструкция производящая умножение/сложение одновременно (как \TT{MLA}, 
 которую мы уже видели).}
@@ -17,7 +17,7 @@
 
 \lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9]{patterns/05_passing_arguments/ARM/ARM64_O3.s.\LANG}
 
-\EN{I also extended all data types to 64-bit \TT{uint64\_t} and tried it:}
+\EN{I also extended all data types to 64-bit \TT{uint64\_t} and tested:}
 \RU{Я также расширил все типы данных до 64-битных \TT{uint64\_t} и попробовал:}
 
 \lstinputlisting{patterns/05_passing_arguments/ex64.c}
@@ -44,7 +44,7 @@ main:
 	.string	"%lld\n"
 \end{lstlisting}
 
-\EN{The \ttf{} function is just the same, but whole 64-bit X-registers are now used.}
+\EN{The \ttf{} function is the same, only the whole 64-bit X-registers are now used.}
 \RU{Ф-ция \ttf{} точно такая же, только теперь используются полные части 64-битных X-регистров.}
 \RU{Длинные 64-битные значения загружаются в регистры по частям, я описал это здесь}
 \EN{Long 64-bit values are loaded into the registers by parts, I have described it also here}: \myref{ARM_big_constants_loading}.
@@ -70,20 +70,20 @@ f:
 \end{lstlisting}
 
 \EN{The code saves its input arguments in the local stack, 
-for a case if someone (or something) in this function will need to use the \TT{W0...W2} 
-registers, this overwriting original
+in case someone (or something) in this function needs using the \TT{W0...W2} 
+registers. This prevents overwriting the original
 function arguments, which may be needed again in the future.}
 \RU{Код сохраняет входные аргументы в локальном стеке, на случай если кому-то (или чему-то) в этой ф-ции
 понадобится использовать регистры \TT{W0...W2}, перезаписывая оригинальные аргументы ф-ции, которые
 могут понадобится в будущем.}
-\RU{Это называется}\EN{This is called} \IT{Register Save Area} \cite{ARM64_PCS}
-\RU{хотя, вызываемая ф-ция не обязана сохранять их}\EN{, however, the callee is not obliged to save them}.
+\RU{Это называется}\EN{This is called} \IT{Register Save Area.} \cite{ARM64_PCS}
+\RU{хотя, вызываемая ф-ция не обязана сохранять их}\EN{ The callee, however, is not obliged to save them}.
 \RU{Это то же что и}\EN{This is somewhat similar to} ``Shadow Space'': \myref{shadow_space}.
 
 \RU{Почему оптимизирующий GCC 4.9 убрал этот, сохраняющий аргументы, код?}
 \EN{Why did the optimizing GCC 4.9 drop this argument saving code? }
 \EN{Because it did some additional optimizing work and concluded
-that the function arguments will not be needed in the future and registers \TT{W0...W2} also will not be used.}
+that the function arguments will not be needed in the future and also that the registers \TT{W0...W2} will not be used.}
 \RU{Потому что он провел дополнительную работу по оптимизации и сделал вывод, что аргументы ф-ции не понадобятся
 в будущем и регистры \TT{W0...W2} также не будут использоваться.}
 
