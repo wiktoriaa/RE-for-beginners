@@ -22,8 +22,8 @@
 
 \index{\CLanguageElements!\Pointers}
 \RU{Чтобы \scanf мог вернуть значение, ему нужно передать указатель на переменную типа \Tint.}
-\EN{A pointer
-to an \Tint-typed variable must be passed to \scanf so it can return value via it.}
+\EN{In order for \scanf to be able to read item it needs a parameter - pointer
+to an \Tint.}
 \Tint \RU{~--- 32-битное значение, для его хранения нужно только 4 байта, и оно помещается в 
 32-битный регистр.}
 \EN{is 32-bit, so we need 4 bytes to store it somewhere in memory, and it fits exactly 
@@ -32,8 +32,7 @@ in a 32-bit register.}
 \RU{Место для локальной переменной \TT{x} выделяется в стеке, \IDA наименовала её \IT{var\_8}, 
 впрочем, место для нее выделять не обязательно, т.к., \glslink{stack pointer}{указатель стека} \ac{SP} уже указывает на место, 
 свободное для использования сразу же.}\EN{A place for the local variable \TT{x} is allocated in the stack and \IDA
-has named it \IT{var\_8}, however, it is not necessary to allocate it since \ac{SP} (\gls{stack pointer})
-is already pointing to the space and it can be used directly.}
+has named it \IT{var\_8}. It is not necessary, however, to allocate a such since \ac{SP} (\gls{stack pointer}) is already pointing to that space and it can be used directly.}
 \RU{Так что значение указателя \ac{SP} копируется в регистр \Reg{1}, и вместе с format-строкой, 
 передается в \scanf.}
 \EN{So, \ac{SP}'s value is copied to the \Reg{1} register and, together with the format-string, passed
@@ -51,7 +50,7 @@ from the stack to the \Reg{1} register in order to be passed to \printf.}
 \EN{The most interesting part is finding space for the $x$ variable in the stack frame (line 22).}
 \RU{Адрес передается потом в \scanf, которая просто сохраняет значение введенное пользователем в памяти
 по этому адресу.}
-\EN{The address is passed to \scanf, which just stores value the user entered in the memory at this address.}
+\EN{The address is passed to \scanf, which just stores the user input value in the memory at that address.}
 \RU{Это 32-битное значение типа \Tint}\EN{This is 32-bit value of type \Tint}.
 \RU{Значение загружается в строке 27 и затем передается в \printf.}
 \EN{The value is fetched at line 27 and then passed to \printf.}

@@ -1,4 +1,4 @@
-﻿\clearpage
+\clearpage
 \subsection{MSVC: x86 + \olly}
 
 \RU{Попробуем в \olly немного хакнуть программу, и сделать вид что \scanf срабатывает всегда без ошибок}
@@ -7,7 +7,7 @@
 \RU{Когда в \scanf передается адрес локальной переменной, изначальное, в данном случае, 
 у нас в этой переменной
 находится некий мусор, а это}\EN{When an address of a local variable is passed into \scanf,
-initially the variable contain some random garbage, in this case} \TT{0x6E494714}:
+the variable initially contains some random garbage, in this case} \TT{0x6E494714}:
 
 \begin{figure}[H]
 \centering
@@ -18,9 +18,9 @@ initially the variable contain some random garbage, in this case} \TT{0x6E494714
 
 \clearpage
 \RU{Когда}\EN{While} \scanf \RU{запускается, я ввожу в консоли что-то непохожее на число, например}
-\EN{is executing, I enter something that's definitely not a number in the console, like} ``asdasd''.
+\EN{executes, in the console I enter something that is definitely not a number, like} ``asdasd''.
 \scanf \RU{заканчивается с 0 в}\EN{finishes with 0 in} \EAX, \RU{что означает, что произошла ошибка}
-\EN{which means that an error has occurred}:
+\EN{which indicates that an error has occurred}:
 
 \begin{figure}[H]
 \centering
@@ -30,21 +30,20 @@ initially the variable contain some random garbage, in this case} \TT{0x6E494714
 \end{figure}
 
 \RU{Вместе с этим, мы можем посмотреть на локальную переменную в стеке, она не изменилась}
-\EN{We can also see to the local variable in the stack and note that it hasn't changed}.
-\RU{Действительно, ведь что туда записала бы ф-ция \scanf}\EN{Indeed, what \scanf would write there}?
-\RU{Она просто ничего не делала кроме возвращения нуля}\EN{It just did nothing except returning zero}.
+\EN{We can also check the local variable in the stack and note that it has not changed}.
+\RU{Действительно, ведь что туда записала бы ф-ция \scanf}\EN{Indeed, what would \scanf write there}?
+\RU{Она просто ничего не делала кроме возвращения нуля}\EN{It simply did nothing except returning zero}.
 
 \RU{А еще попробуем немного ``хакнуть'' нашу программу}\EN{Let's try to ``hack'' our program}.
 \RU{Кликнем правой кнопкой на}\EN{Right-click on} \EAX, \RU{там, в числе опций, будет также}
-\EN{there will be} ``Set to 1''\EN{ among other options}.
+\EN{Among the options there is} ``Set to 1''.
 \RU{Это то что нам нужно}\EN{This is what we need}.
 
 \RU{В \EAX теперь 1, последующая проверка пройдет как надо, и \printf выведет значение переменной
-из стека}\EN{We now have 1 in \EAX, so the following check will executed as we need, and \printf will print
+из стека}\EN{We now have 1 in \EAX, so the following check will execute as intended, and \printf will print
 the value of the variable in the stack}.
 
-\RU{Запускаем}\EN{When we run it} (F9) \RU{и видим в консоли следующее}\EN{we will see this in 
-the console window}:
+\RU{Запускаем}\EN{When we run the program} (F9) \RU{и видим в консоли следующее}\EN{we will see the following in the console window}:
 
 \begin{figure}[H]
 \centering
