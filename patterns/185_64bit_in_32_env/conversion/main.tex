@@ -12,7 +12,7 @@
 \RU{Конвертировать беззнаковые значения очень просто: нужно просто выставить в 0 все биты в старшей части}
 \EN{Unsigned values are converted straightforwardly: all bits in the higher part must be set to 0}.
 \RU{Но для знаковых типов это не подходит: знак числа должен быть скопирован в старшую часть числа-результата}
-\EN{But this is not appropriate for signed data types: the sign should be copied into the higher part of the resulting number}.
+\EN{But this is not appropriate for signed data types: the sign has to be copied into the higher part of the resulting number}.
 \index{x86!\Instructions!CDQ}
 \RU{Здесь это делает инструкция \TT{CDQ}, она берет входное значение в \EAX{}, расширяет его до 64-битного,
 и оставляет его в паре регистров \EDX{}:\EAX{}}
@@ -50,9 +50,11 @@ of the high 32-bit part of the resulting 64-bit value.}
 \ifdefined\IncludeMIPS
 \subsection{MIPS}
 
+\ifdefined\IncludeGCC
 \EN{GCC for MIPS does the same as Keil did for ARM mode:}
 \RU{GCC для MIPS делает то же, что сделал Keil для режима ARM:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/185_64bit_in_32_env/conversion/MIPS_O3_IDA.lst}
+\fi
 
 \fi

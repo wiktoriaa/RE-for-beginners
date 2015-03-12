@@ -117,6 +117,7 @@ to do it without making a huge amount of annoying mistakes}.
 \EN{The program, which converts high-level \ac{PL} code into assembly, is called a \IT{compiler}}.
 % TODO add about linker: "компоновщик" и "редактор связей" в русскоязычной лит-ре
 
+\ifx\LITE\undefined
 \section{\RU{Несколько слов о разнице между \ac{ISA}}\EN{A couple of words about different \ac{ISA}}}
 
 \RU{x86 всегда был архитектурой с опкодами переменной длины, так что когда пришла 64-битная эра,
@@ -134,13 +135,17 @@ the x64 extensions did not affect the \ac{ISA} very much.}
 в прошлом.}
 \EN{ARM is a \ac{RISC} \ac{CPU} designed with constant opcode length in mind, which had some advantages in the past.}
 \RU{Так что в самом начале, все инструкции ARM кодировались 4-мя байтами}
-\EN{At the very beginning, ARM had all instructions encoded in 4 bytes}\footnote{\RU{Кстати,
+\EN{At the very beginning, ARM had all instructions encoded in 4 bytes}
+\ifx\LITE\undefined
+\footnote{\RU{Кстати,
 инструкции фиксированного размера удобны тем, что всегда можно легко узнать адрес 
 следующей (или предыдущей) инструкции. Эта особенность будет рассмотрена в секции о 
 switch()~(\myref{sec:SwitchARMLot}).}
 \EN{By the way, fixed-length instructions are handy in a way that one can calculate the next (or previous) 
 instruction's address without effort. This feature will be discussed in switch()~(\myref{sec:SwitchARMLot}) section.}
-}.
+}
+\fi
+.
 \RU{Это то что сейчас называется ``режим ARM''}\EN{This is now referred as ``ARM mode''}.
 
 \RU{Потом они подумали что это не очень экономично}\EN{Then they thought it wasn't very frugal}.
@@ -191,6 +196,7 @@ Thumb mode (including Thumb-2) and ARM64.}
 \RU{Существует еще много \ac{RISC} \ac{ISA} с опкодами фиксированной 32-битной длины, это как минимум}
 \EN{There are many other \ac{RISC} \ac{ISA}s with fixed length 32-bit opcodes, for example}
 MIPS, PowerPC \AndENRU Alpha AXP.
+\fi
 
 % chapters
 \input{patterns/00_ret/main}
@@ -210,17 +216,25 @@ MIPS, PowerPC \AndENRU Alpha AXP.
 \input{patterns/09_loops/main}
 \input{patterns/10_strings/main}
 \input{patterns/11_arith_optimizations/main}
+\ifx\LITE\undefined
 \input{patterns/12_FPU/main}
+\fi
 \input{patterns/13_arrays/main}
 \input{patterns/14_bitfields/main}
 \input{patterns/145_LCG/main}
 \input{patterns/15_structs/main}
+\ifx\LITE\undefined
 \input{patterns/17_unions/main}
 \input{patterns/18_pointers_to_functions/main}
+\fi
 \input{patterns/185_64bit_in_32_env/main}
+\ifx\LITE\undefined
 \input{patterns/19_SIMD/main}
+\fi
 \input{patterns/20_x64/main}
+\ifx\LITE\undefined
 \input{patterns/205_floating_SIMD/main}
+\fi
 \ifdefined\IncludeARM
 \input{patterns/ARM/main}
 \fi

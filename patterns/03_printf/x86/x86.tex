@@ -33,7 +33,7 @@ $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 \RU{Когда при помощи инструкции \TT{ADD ESP, X} корректируется \glslink{stack pointer}{указатель стека} \ESP 
 после вызова какой-либо функции, зачастую можно сделать вывод о том, сколько аргументов 
 у вызываемой функции было, разделив X на 4.}
-\EN{When the \gls{stack pointer} (\ESP register) is changed back by the \TT{ADD ESP, X}
+\EN{When the \gls{stack pointer} (\ESP register) has changed back by the \TT{ADD ESP, X}
 instruction after a function 
 call, often, the number of function arguments could be deduced by simply dividing X by 4.}
 
@@ -42,8 +42,10 @@ call, often, the number of function arguments could be deduced by simply dividin
 \EN{Of course, this is specific to the \IT{cdecl} calling convention, 
 and only for 32-bit environment.}
 
+\ifx\LITE\undefined
 \RU{См. также в соответствующем разделе о способах передачи аргументов через стек}
 \EN{See also the calling conventions section}~(\myref{sec:callingconventions}).
+\fi
 
 \RU{Иногда бывает так, что подряд идут несколько вызовов разных функций, 
 но стек корректируется только один раз, после последнего вызова:}
@@ -82,7 +84,7 @@ functions clearly in the debugger}.
 \RU{Самый первый брякпойнт в}\EN{The very first breakpoint is in} \TT{ntdll.dll}, \RU{нажмите}\EN{press} 
 F9 (\RU{запустить}\EN{run}).
 \RU{Второй брякпойнт в}\EN{The second breakpoint is in} \ac{CRT}-\RU{коде}\EN{code}.
-\RU{Теперь мы должны найти ф-цию}\EN{Now we should find the} \main\EN{ function}.
+\RU{Теперь мы должны найти ф-цию}\EN{Now we have to find the} \main\EN{ function}.
 
 \RU{Найдите этот код скроллируя окно кода до самого верха (MSVC располагает ф-цию \main в самом начале
 секции кода)}\EN{Find this code by scrolling the code to the very top (MSVC allocates the \main function at
@@ -207,6 +209,7 @@ of course; no one needs to set these values to zeroes or something like that}
 
 \fi
 
+\ifdefined\IncludeGCC
 \subsubsection{GCC}
 
 \RU{Скомпилируем то же самое в Linux при помощи GCC 4.4.1 и посмотрим в \IDA что вышло:}
@@ -445,4 +448,5 @@ edi            0x0	0
 eip            0x804844f	0x804844f <main+50>
 ...
 \end{lstlisting}
+\fi
 \fi

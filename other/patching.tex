@@ -7,7 +7,7 @@
 \RU{Эта техника доступна даже для тех, кто вовсе не разбирается в машинном коде и форматах исполняемых
 файлов}\EN{This technique is available even for those who are not aware of machine code and executable file formats}.
 \RU{Новая строка не должна быть длиннее старой, потому что имеется риск затереть какую-то другую переменную
-или код}\EN{The new string should not be bigger than the old one, because there's a risk of overwriting another value or code
+или код}\EN{The new string has not to be bigger than the old one, because there's a risk of overwriting another value or code
 there}.
 \index{MS-DOS}
 \RU{Используя этот метод, очень много ПО было \IT{локализовано} во времена MS-DOS, как минимум,
@@ -55,14 +55,14 @@ longer strings}.
 (\myref{sec:stdcall}).
 \RU{При модификации ф-ций}\EN{While patching} \TT{stdcall}\RU{, нужно в начале определить количество аргументов 
 (например, отыскав \RETN в этой ф-ции),
-и использовать}\EN{ functions, one should determine the number of arguments (for example, 
+и использовать}\EN{ functions, one has to determine the number of arguments (for example, 
 by finding \RETN in this function), 
 and use} \RETN \RU{с 16-битным аргументом}\EN{with a 16-bit argument} (0xC2).
 
 \index{x86!\Instructions!MOV}
 \index{x86!\Instructions!XOR}
 \index{x86!\Instructions!INC}
-\item \RU{Иногда, запрещенная ф-ция должна возвращать}\EN{Sometimes, a disabled functions should return} 0 \OrENRU 1.
+\item \RU{Иногда, запрещенная ф-ция должна возвращать}\EN{Sometimes, a disabled functions has to return} 0 \OrENRU 1.
 \RU{Это можно сделать при помощи}\EN{This can be done by} \TT{MOV EAX, 0} \OrENRU \TT{MOV EAX, 1}, 
 \RU{но это слишком многословно}\EN{but it's slightly verbose}.
 \RU{Способ получше это}\EN{A better way is} \TT{XOR EAX, EAX} (2 \RU{байта}\EN{bytes} \TT{0x31 0xC0}) 
@@ -84,7 +84,7 @@ the code must be read before protection is triggered}.
 
 \RU{Релоки в исполняемых PE-файлах}\EN{PE executable file relocs} (\myref{subsec:relocs}) 
 \RU{не должны быть тронуты, потому что загрузчик Windows перезапишет ваш новый код}
-\EN{should not be touched while patching, 
+\EN{must not to be touched while patching, 
 because the Windows loader will overwrite your new code}.
 \index{Hiew}
 (\RU{Они выделяются серым в Hiew, например}\EN{They are grayed in Hiew, for example}:

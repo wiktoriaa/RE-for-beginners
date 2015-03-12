@@ -48,8 +48,16 @@ function calls might be replaced by one \printf call, but I would like to illust
 \RU {Единственный параметр в \TT{alloca()} передается через \EAX, а не как обычно через стек}
 \EN{The sole \TT{alloca()} argument is passed via \EAX (instead of pushing it into the stack)}
 \footnote{
-\RU{Это потому, что alloca() ~--- это не сколько функция, сколько т.н. \IT{compiler intrinsic} (\myref{sec:compiler_intrinsic})}
-\EN{It is because alloca() is rather a compiler intrinsic (\myref{sec:compiler_intrinsic}) than a normal function}.
+\RU{Это потому, что alloca() ~--- это не сколько функция, сколько т.н. \IT{compiler intrinsic} 
+\ifx\LITE\undefined
+(\myref{sec:compiler_intrinsic})
+\fi
+}
+\EN{It is because alloca() is rather a compiler intrinsic 
+\ifx\LITE\undefined
+(\myref{sec:compiler_intrinsic}) 
+\fi
+than a normal function}.
 
 \RU{Одна из причин, почему здесь нужна именно функция, а не несколько инструкций прямо в коде в том, что в реализации 
 функции alloca() от \ac{MSVC}
@@ -63,6 +71,7 @@ physical memory to this \ac{VM} region.}
 \EN{After the \TT{alloca()} call, \ESP points to the block of 600 bytes and we can 
 use it as memory for the \TT{buf} array.}
 
+\ifdefined\IncludeGCC
 \subsubsection{GCC + \IntelSyntax}
 
 \RU{А GCC 4.4.1 обходится без вызова других функций:}
@@ -84,3 +93,4 @@ use it as memory for the \TT{buf} array.}
 \EN{ in Intel-syntax.}\RU{ при адресации памяти в виде} \EN{In AT\&T syntax when addressing memory using} \IT{\RU{регистр+смещение}\EN{register+offset}} \EN format, 
 \RU{это записывается в AT\&T синтаксисе как}\EN{it is notated as} 
 \TT{\RU{смещение}\EN{offset}(\%\RU{регистр}\EN{register})}.
+\fi

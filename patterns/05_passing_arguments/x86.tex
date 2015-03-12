@@ -39,6 +39,7 @@ On returning to \gls{caller}, it will take the \EAX value and use it as an argum
 \input{patterns/05_passing_arguments/olly.tex}
 \fi
 
+\ifdefined\IncludeGCC
 \subsection{GCC}
 
 \RU{Скомпилируем то же в GCC 4.4.1 и посмотрим результат в \IDA:}
@@ -52,3 +53,4 @@ On returning to \gls{caller}, it will take the \EAX value and use it as an argum
 \RU{После вызова обоих ф-ций, \glslink{stack pointer}{указатель стека} не возвращается назад, потому что предпоследняя
 инструкция}\EN{The \gls{stack pointer} is not set back after the two function calls(f and printf), because the penultimate}
 \TT{LEAVE} (\myref{x86_ins:LEAVE}) \RU{сделает это за один раз, в конце исполнения}\EN{instruction will take care of this at the end}.
+\fi

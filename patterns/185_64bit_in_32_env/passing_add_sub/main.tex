@@ -28,9 +28,11 @@ from the result}. \\
 \RU{Легко увидеть, как результат работы \TT{f\_add()} затем передается в \printf{}}\EN{It is easy to see how
 the \TT{f\_add()} function result is then passed to \printf{}}.
 
+\ifdefined\IncludeGCC
 \lstinputlisting[caption=GCC 4.8.1 -O1 -fno-inline]{patterns/185_64bit_in_32_env/passing_add_sub/1_GCC.asm}
 
 \RU{Код GCC почти такой же}\EN{GCC code is the same}.
+\fi
 
 \ifdefined\IncludeARM
 \subsection{ARM}
@@ -52,7 +54,7 @@ the \TT{f\_add()} function result is then passed to \printf{}}.
 \EN{Important thing: when the low parts are added/subtracted, ADDS and SUBS instructions with -S suffix are used.}
 \RU{Суффикс -S означает ``set flags'' (установить флаги), а флаги (особенно флаг переноса) это то что однозначно
 нужно последующим инструкциями ADC/SBC.}
-\EN{The -S suffix means ``set flags'', and flags (esp. carry flag) is what consequent ADC/SBC instructions
+\EN{The -S suffix stands for ``set flags'', and flags (esp. carry flag) is what consequent ADC/SBC instructions
 definitely need.}
 
 \RU{А иначе инструкции без суффикса -S здесь вполне бы подошли (ADD и SUB).}

@@ -42,6 +42,7 @@ and of course loop body.}
 
 \RU{В принципе, ничего необычного.}\EN{As we see, nothing special.}
 
+\ifdefined\IncludeGCC
 \RU{GCC 4.4.1 выдает примерно такой же код, с небольшой разницей:}
 \EN{GCC 4.4.1 emits almost the same code, with one subtle difference:}
 
@@ -49,6 +50,7 @@ and of course loop body.}
 
 \RU{Интересно становится, если скомпилируем этот же код при помощи MSVC 2010 с включенной оптимизацией}
 \EN{Now let's see what we get with optimization turned on} (\Ox):
+\fi
 
 \lstinputlisting[caption=\Optimizing MSVC]{patterns/09_loops/simple/1_MSVC_Ox.asm}
 
@@ -71,6 +73,7 @@ at the function's prologue and restored at the function's epilogue,
 almost like in our listing: please note \TT{PUSH ESI/POP ESI}
 at the function start and end.}
 
+\ifdefined\IncludeGCC
 \RU{Попробуем GCC 4.4.1 с максимальной оптимизацией (\Othree):}
 \EN{Let's try GCC 4.4.1 with maximal optimization turned on (\Othree option):}
 
@@ -112,6 +115,7 @@ with the exception that the \EBX register will be allocated for the $i$ variable
 \EN{GCC is sure this register will not be modified inside of the \ttf function, 
 and if it will, it will be saved at the function prologue and restored at epilogue, 
 just like here in the \main function.}
+\fi
 
 \ifdefined\IncludeOlly
 \clearpage
@@ -194,7 +198,7 @@ is} \TT{0x00401020} \RU{и запускаю}\EN{and we run}:
 tracer.exe -l:loops_2.exe bpf=loops_2.exe!0x00401020,trace:cc
 \end{lstlisting}
 
-\TT{BPF} \RU{означает установить брякпойнт на ф-ции}\EN{means set breakpoint on function}.
+\TT{BPF} \RU{означает установить брякпойнт на ф-ции}\EN{stands for set breakpoint on function}.
 
 \RU{Получаю в итоге скрипты}\EN{As a result, we get the} \TT{loops\_2.exe.idc} \AndENRU 
 \TT{loops\_2.exe\_clear.idc}\EN{ scripts}.

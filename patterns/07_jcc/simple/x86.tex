@@ -99,7 +99,7 @@ we can almost be sure that the variables are signed or unsigned, respectively.}
 to the second} \printf,
 \RU{и он всегда будет срабатывать и выводить на консоль}\EN{and it always print} ``a==b''.
 
-\RU{Для этого нужно пропатчить три инструкции (или байта)}\EN{Three instructions (or bytes) should be patched}:
+\RU{Для этого нужно пропатчить три инструкции (или байта)}\EN{Three instructions (or bytes) has to be patched}:
 
 \begin{itemize}
 \item \RU{Первый переход теперь будет}\EN{The first jump will now be} \JMP, \RU{но смещение перехода 
@@ -133,6 +133,7 @@ the jump will be to the next instruction}.
 \EN{If we forget about any of these jumps, then several
 \printf calls may execute, but we want just one.}
 
+\ifdefined\IncludeGCC
 \subsubsection{\NonOptimizing GCC}
 
 \index{puts() \RU{вместо}\EN{instead of} printf()}
@@ -171,4 +172,4 @@ assembly language programmers are fully aware of the fact that} \TT{Jcc} \RU{м�
 \EN{But nevertheless, there are two \TT{CMP} instructions instead of three.}
 \RU{Так что, алгоритмы оптимизации GCC 4.8.1, наверное, еще пока не идеальны.}
 \EN{So optimization algorithms of GCC 4.8.1 are probably not perfect yet.} 
-
+\fi
