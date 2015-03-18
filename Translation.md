@@ -13,6 +13,7 @@ m4 (used here for assembly listings) has `_EN()` and` _RU()` macros.
 Since translation project is large, work can be done gradually.
 Try to start at ["patterns" directory] 
 (https://github.com/dennis714/RE-for-beginners/tree/master/patterns).
+There are also [lite (introductory) version](beginners.re/#lite), and that's a good idea to translate it first.
 Translators may use git to get to know which TeX files are in somewhat stable state so can be 
 translated before those parts which I still rework occasionally.
 

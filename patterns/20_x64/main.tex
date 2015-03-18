@@ -41,13 +41,21 @@ For example, it is possible to access the lower 32-bit part of the \TT{RAX} regi
 \EN{The number of SIMD registers was doubled from 8 to 16:} \XMM{0}-\XMM{15}.
 
 \item
-\RU{В win64 передача всех параметров немного иная, это немного похоже на fastcall~(\myref{fastcall}).
+\RU{В win64 передача всех параметров немного иная, это немного похоже на fastcall 
+\ifx\LITE\undefined
+(\myref{fastcall})
+\fi
+.
 Первые 4 аргумента записываются в регистры \RCX, \RDX, \Reg{8}, \Reg{9}, а остальные ~--- в стек. 
 Вызывающая функция также должна подготовить место из 32 байт чтобы вызываемая функция могла сохранить 
 там первые 4 аргумента и использовать эти регистры по своему усмотрению. 
 Короткие функции могут использовать аргументы прямо из регистров, но б\'{о}льшие функции могут сохранять 
 их значения на будущее.}
-\EN{In Win64, the function calling convention is slightly different, somewhat resembling fastcall~(\myref{fastcall}).
+\EN{In Win64, the function calling convention is slightly different, somewhat resembling fastcall
+\ifx\LITE\undefined
+(\myref{fastcall})
+\fi
+.
 The first 4 arguments are stored in the \RCX, \RDX, \Reg{8}, \Reg{9} registers, the rest~---in the stack.
 The \Gls{caller} function must also allocate 32 bytes so the \gls{callee} may save there 4 first arguments and use these 
 registers for its own needs.
@@ -58,8 +66,10 @@ fastcall, \RU{использует 6 регистров}\EN{it uses 6 registers}
 \RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9} \RU{для первых шести аргументов}\EN{for the first 6 arguments}.
 \RU{Остальные передаются через стек}\EN{All the rest are passed via the stack}.
 
+\ifx\LITE\undefined
 \RU{См. также в соответствующем разделе о способах передачи аргументов через стек}
 \EN{See also the section on calling conventions}~(\myref{sec:callingconventions}).
+\fi
 
 \item
 \RU{\Tint в \CCpp остается 32-битным для совместимости.}
@@ -85,6 +95,7 @@ including cache memory, despite the fact that x64 \ac{CPU}s can address only 48 
 \glslink{register allocator}{register allocation}.
 For us this means that the emitted code will contain less local variables.}
 
+\ifx\LITE\undefined
 \index{DES}
 \RU{Для примера, функция вычисляющая первый S-бокс алгоритма шифрования DES, 
 она обрабатывает сразу 32/64/128/256 значений, в зависимости от типа \TT{DES\_type} (uint32, uint64, SSE2 или AVX), 
@@ -113,6 +124,7 @@ Let's compile it with MSVC 2008 with \Ox option:}
 
 \RU{Компилятор ничего не выделил в локальном стеке, а \TT{x36} это синоним для \TT{a5}.}
 \EN{Nothing was allocated in the local stack by the compiler, \TT{x36} is synonym for \TT{a5}.}
+\fi
 
 \iffalse
 % FIXME невнятно
@@ -133,7 +145,9 @@ Itanium ~--- 128 регистров.}
 \RU{64-битные инструкции появились в}\EN{64-bit instructions appeared in} ARMv8.
 \fi
 
+\ifx\LITE\undefined
 \section{\RU{Числа с плавающей запятой}\EN{Float point numbers}}
 
 \RU{О том как происходит работа с числами с плавающей запятой в x86-64, читайте здесь: \myref{floating_SIMD}.}
 \EN{How float point numbers are processed in x86-64 is explained here: \myref{floating_SIMD}.}
+\fi

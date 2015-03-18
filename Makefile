@@ -8,9 +8,8 @@ M4SOURCES := $(shell find $(pwd) -name '*.m4')
 RU_LISTINGS := $(M4SOURCES:%.m4=%.ru)
 EN_LISTINGS := $(M4SOURCES:%.m4=%.en)
 
-all:    russian english russian-A5 english-A5
-#all:    russian english russian-A5 english-A5 \
-#	russian-lite english-lite russian-A5-lite english-A5-lite
+all:    russian english russian-A5 english-A5 \
+	russian-lite english-lite russian-A5-lite english-A5-lite
 
 define compile
 	rm -f *.fls
@@ -35,14 +34,14 @@ russian-A5: $(RU_LISTINGS)
 english-A5: $(EN_LISTINGS)
 	$(call compile,RE_for_beginners-en-A5)
 
-#russian-lite: 
-#	$(call compile,RE_for_beginners-ru-lite)
-#
-#english-lite: 
-#	$(call compile,RE_for_beginners-en-lite)
-#
-#russian-A5-lite: 
-#	$(call compile,RE_for_beginners-ru-A5-lite)
-#
-#english-A5-lite: 
-#	$(call compile,RE_for_beginners-en-A5-lite)
+russian-lite: 
+	$(call compile,RE_for_beginners-ru-lite)
+
+english-lite: 
+	$(call compile,RE_for_beginners-en-lite)
+
+russian-A5-lite: 
+	$(call compile,RE_for_beginners-ru-A5-lite)
+
+english-A5-lite: 
+	$(call compile,RE_for_beginners-en-A5-lite)

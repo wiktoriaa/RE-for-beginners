@@ -5,6 +5,7 @@
 
 \lstinputlisting[label=popcnt_x64_example]{patterns/14_bitfields/4_popcnt/shifts64.c}
 
+\ifdefined\IncludeGCC
 \subsubsection{\NonOptimizing GCC 4.8.2}
 
 \RU{Пока всё просто}\EN{So far so easy}.
@@ -49,6 +50,7 @@ two jumps (skipping the ``rt'' value increment and at the end of loop).}
 which is recommended by AMD to be placed at the end of function, if \RET goes right after conditional jump}: 
 \cite[p.15]{AMDOptimization}
 \footnote{\RU{Больше об этом}\EN{More information on it}: \url{http://go.yurichev.com/17328}}.
+\fi
 
 \subsubsection{\Optimizing MSVC 2010}
 
@@ -61,8 +63,10 @@ which is recommended by AMD to be placed at the end of function, if \RET goes ri
 \RU{но здесь, в этом примере, она работает так же как и}\EN{but in this example 
 it will work just as} \TT{SHL}.
 
+\ifx\LITE\undefined
 \RU{Об этих ``прокручивающих'' инструкциях больше читайте здесь}\EN{You can read more about the rotate instruction 
 here}: \myref{ROL_ROR}.
+\fi
 
 \Reg{8} \RU{здесь считает от 64 до 0}\EN{here is counting from 64 to 0}. 
 \RU{Это как бы инвертированная переменная $i$}\EN{It's just like an inverted $i$}.
@@ -91,9 +95,11 @@ here}: \myref{ROL_ROR}.
 \end{tabular}
 \end{center}
 
+\ifx\LITE\undefined
 \index{x86!\Instructions!FATRET}
 \RU{В конце видим инструкцию}\EN{At the end we see the} \TT{FATRET}\RU{, которая была описана здесь}\EN{ instruction, 
 which was explained here}: \myref{FATRET}.
+\fi
 
 \subsubsection{\Optimizing MSVC 2012}
 

@@ -11,11 +11,24 @@ Compiled versions are:
 
 English: 
 [A4 (for browsing/printing)](http://beginners.re/RE_for_beginners-en.pdf);
-[A5 (for e-book readers)](         http://beginners.re/RE_for_beginners-en-A5.pdf)
+[A5 (for e-book readers)](http://beginners.re/RE_for_beginners-en-A5.pdf)
 
 Russian:
 [A4 (for browsing/printing)](http://beginners.re/RE_for_beginners-ru.pdf);
 [A5 (for e-book readers)](http://beginners.re/RE_for_beginners-ru-A5.pdf)
+
+There are also [lite (introductory) version](http://beginners.re/#lite).
+It is approximately 6 times shorter than full version (~150 pages) and intended to those 
+who wants for very quick introduction to reverse engineering basics.
+There are nothing about MIPS, ARM, OllyDBG, GCC, GDB, IDA, there are no exercises, examples, etc.
+
+English lite: 
+[A4 (for browsing/printing)](http://beginners.re/RE_for_beginners-en-lite.pdf);
+[A5 (for e-book readers)](http://beginners.re/RE_for_beginners-en-A5-lite.pdf)
+
+Russian lite:
+[A4 (for browsing/printing)](http://beginners.re/RE_for_beginners-ru-lite.pdf);
+[A5 (for e-book readers)](http://beginners.re/RE_for_beginners-ru-A5-lite.pdf)
 
 See also [ChangeLog](https://github.com/dennis714/RE-for-beginners/blob/master/ChangeLog) file for latest changes.
 

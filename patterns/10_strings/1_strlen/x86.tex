@@ -56,6 +56,7 @@ we need to identify its sign and extend it. That is what \MOVSX does.}
 You can read more about the \TEST instruction in the section about bit fields~(\myref{sec:bitfields}).
 Here this instruction just checks if the value in \EDX equals to $0$.}
 
+\ifdefined\IncludeGCC
 \subsubsection{\NonOptimizing GCC}
 
 \RU{Попробуем}\EN{Let's try} GCC 4.4.1:
@@ -97,6 +98,7 @@ Strictly speaking, the compiler is not obliged to emit understandable (to humans
 will set the \ZF flag to $0$, but \SETNZ, if \TT{ZF==0} (\IT{NZ} means \IT{not zero}) will set \AL to $1$.
 Speaking in natural language, \IT{if \AL is not zero, let's jump to loc\_80483F0}. 
 The compiler emits some redundant code, but let's not forget that the optimizations are turned off.}
+\fi
 
 \subsubsection{\Optimizing MSVC}
 \label{strlen_MSVC_Ox}
@@ -122,6 +124,7 @@ only in small functions with a few local variables.}
 \input{patterns/10_strings/1_strlen/olly.tex}
 \fi
 
+\ifdefined\IncludeGCC
 \subsubsection{\Optimizing GCC}
 
 \RU{Попробуем GCC 4.4.1 с включенной оптимизацией (ключ \Othree:}
@@ -182,3 +185,4 @@ return eax
 что эти оба варианта работают примерно равноценно в плане эффективности и скорости.}
 \EN{Why did GCC decide it would be better? I cannot be sure. 
 But I'm sure the both variants are equivalent in efficiency.}
+\fi
