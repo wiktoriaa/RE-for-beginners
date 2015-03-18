@@ -23,25 +23,25 @@ define compile
 endef
 
 russian: $(RU_LISTINGS)
-	$(call compile,RE_for_beginners-ru)
+	$(call compile,Reverse_Engineering_for_Beginners-ru)
 
 english: $(EN_LISTINGS)
-	$(call compile,RE_for_beginners-en)
+	$(call compile,Reverse_Engineering_for_Beginners-en)
 
 russian-A5: $(RU_LISTINGS)
-	$(call compile,RE_for_beginners-ru-A5)
+	$(call compile,Reverse_Engineering_for_Beginners-ru-A5)
 
 english-A5: $(EN_LISTINGS)
-	$(call compile,RE_for_beginners-en-A5)
+	$(call compile,Reverse_Engineering_for_Beginners-en-A5)
 
-russian-lite: 
-	$(call compile,RE_for_beginners-ru-lite)
+russian-lite: $(RU_LISTINGS)
+	$(call compile,Reverse_Engineering_for_Beginners-ru-lite)
 
-english-lite: 
-	$(call compile,RE_for_beginners-en-lite)
+english-lite: $(EN_LISTINGS)
+	$(call compile,Reverse_Engineering_for_Beginners-en-lite)
 
-russian-A5-lite: 
-	$(call compile,RE_for_beginners-ru-A5-lite)
+russian-A5-lite: $(RU_LISTINGS)
+	$(call compile,Reverse_Engineering_for_Beginners-ru-A5-lite)
 
-english-A5-lite: 
-	$(call compile,RE_for_beginners-en-A5-lite)
+english-A5-lite: $(EN_LISTINGS)
+	$(call compile,Reverse_Engineering_for_Beginners-en-A5-lite)
