@@ -35,3 +35,5 @@ See also [ChangeLog](https://github.com/dennis714/RE-for-beginners/blob/master/C
 Please [donate](http://beginners.re/donate.html)!
 
 Want to translate this book to some other language? Read [here](https://github.com/dennis714/RE-for-beginners/blob/master/Translation.md).
+
+It's also possible to build your own version of book, see the contents.md file.
