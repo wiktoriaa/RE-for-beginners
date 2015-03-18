@@ -6,7 +6,7 @@ Options enumerated in the [contents.tex](https://github.com/dennis714/RE-for-beg
 
 Remove some or comment with percent sign ('%').
 
-In general, anyone could comment any \input LaTeX instruction to reduce whole size of the book.
+In general, anyone can comment any `\input` LaTeX instruction to reduce whole size of the book.
 No special TeX/LaTeX knowledge required.
 So feel free to do it.
 Some points of interest are: 
