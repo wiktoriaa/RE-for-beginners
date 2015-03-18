@@ -10,8 +10,8 @@ In general, anyone can comment any `\input` LaTeX instruction to reduce whole si
 No special TeX/LaTeX knowledge required.
 So feel free to do it.
 Some points of interest are: 
-[point where main parts are enumerated](https://github.com/dennis714/RE-for-beginners/blob/master/main.tex#L242);
-[point where chapters in 'pattern' part are enumerated](https://github.com/dennis714/RE-for-beginners/blob/master/patterns/main.tex#L201).
+[point where main parts are enumerated](https://github.com/dennis714/RE-for-beginners/blob/2858ae9051d393fcd5614f991a624b1c05448f03/main.tex#L242);
+[point where chapters in 'pattern' part are enumerated](https://github.com/dennis714/RE-for-beginners/blob/f449775bacd0563f73082eb9985c1412055de5d1/patterns/main.tex#L201).
 
 As a shortcoming, some references may broke (in case it's referencing to the part had been omitted), 
 like "?? on page ??" -- but that's normal.
