@@ -9,50 +9,12 @@ very weak and can be broken easily---for cryptographers, of course}.
 \RU{Но представим на время что мы не в числе этих профессионалов}
 \EN{But let's pretend we are not among these crypto-professionals}.
 
-\RU{Я нашел эту необратимую хэш-ф-цию, которая конвертирует одно 64-битное значение в другое,
-и нам нужно попытаться развернуть её работу назад}
-\EN{I once found this one-way hash function that converted a 64-bit value to another and we need to try
-to reverse its flow back}.
-
-\label{hash_func}
-% FIXME it looks like I quotate someone?
-\begin{quotation}
-\index{\RU{Хеш-функции}\EN{Hash functions}}
-\index{CRC32}
-\RU{Но что такое хеш-функция}\EN{But what is hash-function}?
-\RU{Простейший пример это CRC32, алгоритм ``более мощный'' чем простая контрольная сумма,
-для проверки целостности данных}
-\EN{A very simple example is CRC32, an algorithm that provides ``stronger'' checksum for integrity checking purposes}.
-\RU{Невозможно восстановить оригинальный текст из хеша, там просто меньше информации: ведь текст
-может быть очень длинным, но результат CRC32 всегда ограничен 32 битами}
-\EN{it is impossible to restore the original text from the hash value, it has much less information:
-the input can be long, but CRC32's result is always limited to 32 bits}.
-\RU{Но CRC32 не надежна в криптографическом смысле: известны методы как изменить текст таким образом,
-чтобы получить нужный результат}
-\EN{But CRC32 is not cryptographically secure: it is known how to alter a text in a way that the resulting
-CRC32 hash value will be the one we need}.
-\RU{Криптографические хеш-функции защищены от этого}
-\EN{Cryptographic hash functions are protected from this}.
-\index{MD5}
-\index{SHA1}
-\RU{Такие ф-ции как MD5, SHA1, и т.д, широко используются для хеширования паролей
-для хранения их в базе}
-\EN{Such functions are MD5, SHA1, etc., and they are widely used to hash user passwords in order to store them in a database}.
-\RU{Действительно: БД форума в интернете может и не хранить пароли 
-(иначе злоумышленник получивший доступ к БД сможет узнать все пароли), а только хеши}
-\EN{Indeed: an internet forum database may not contain user passwords (a stolen database will compromise
-all user's passwords) but only hashes (a cracker will not be able to reveal passwords)}.
-\RU{К тому же, скрипту интернет-форума вовсе не обязательно знать ваш пароль, он только должен
-сверить его хеш с тем что лежит в БД, и дать вам доступ если cверка проходит}
-\EN{Besides, an internet forum engine is not aware of your password, it has only to check if its hash
-is the same as the one in the database, and give you access if they match}.
-\RU{Один из самых простых способов взлома --- это просто перебирать все пароли и ждать пока
-результат будет такой же как тот что нам нужен}
-\EN{One of the simplest password cracking methods is just to try hashing all possible passwords in order
-to see which will match the resulting value that we need}.
-% TODO add about Rainbow tables
-\RU{Другие методы намного сложнее}\EN{Other methods are much more complex}. \\
-\end{quotation}
+\RU{Я нашел эту необратимую хэш-ф-цию (читайте больше о них: \myref{hash_func}), 
+которая конвертирует одно 64-битное значение в другое,
+и нам нужно попытаться развернуть её работу назад.}
+\EN{I once found this one-way hash function (read more about them: \myref{hash_func}),
+that converted a 64-bit value to another and we need to try
+to reverse its flow back.}
 
 \section{\RU{Ручная декомпиляция}\EN{Hand decompiling}}
 
