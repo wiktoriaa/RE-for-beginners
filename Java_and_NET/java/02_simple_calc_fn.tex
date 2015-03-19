@@ -1,8 +1,7 @@
-% TODO translation
 % TODO proof-reading
-\section{Simple calculating functions}
+\section{\EN{Simple calculating functions}\RU{Простая вычисляющая ф-ция}}
 
-Let's continue with simple calculating functions.
+\EN{Let's continue with simple calculating functions}\RU{Продолжим с простой вычисляющей ф-цией}.
 
 \begin{lstlisting}
 public class calc
@@ -14,7 +13,8 @@ public class calc
 }
 \end{lstlisting}
 
-This is the case when \TT{iconst\_2} instruction is used:
+\EN{This is the case when \TT{iconst\_2} instruction is used:}
+\RU{Это тот случай, когда используется инструкция \TT{iconst\_2}:}
 
 \begin{lstlisting}
   public static int half(int);
@@ -27,9 +27,11 @@ This is the case when \TT{iconst\_2} instruction is used:
          3: ireturn       
 \end{lstlisting}
          
-\TT{iload\_0} takes zeroth function argument and pushes it to stack.
-\TT{iconst\_2} pushes 2 into stack.
-After these two instructions, this is how stack looks like:
+\TT{iload\_0} \EN{takes zeroth function argument and pushes it to stack.}
+\RU{Берет нулевой аргумент ф-ции и заталкивает его в стек.}
+\TT{iconst\_2} \EN{pushes 2 into stack}\RU{заталкивает в стек 2}.
+\EN{After these two instructions execution, this is how stack looks like:}
+\RU{Вот как выглядит стек после исполнения этих двух инструкций:}
 
 % FIXME: TikZ
 \begin{lstlisting}
@@ -40,8 +42,10 @@ TOS ->| 2 |
       +---+
 \end{lstlisting}
 
-\TT{idiv} just takes two values at the \ac{TOS}, divides one by another and leave
-result at \ac{TOS}:
+\EN{\TT{idiv} just takes two values at the \ac{TOS}, divides one by another and leave
+result at \ac{TOS}:}
+\RU{\TT{idiv} просто берет два значения на вершине стека (\ac{TOS}), 
+делит одно на другое и оставляет результат на вершине (\ac{TOS}):}
 
 % FIXME: TikZ
 \begin{lstlisting}
@@ -50,9 +54,10 @@ TOS ->| result |
       +--------+
 \end{lstlisting}
 
-\TT{ireturn} takes it and returns.
+\TT{ireturn} \EN{takes it and returns}\RU{берет его и возвращает}.
 
-Let's proceed to double precision floating point numbers:
+\EN{Let's proceed to double precision floating point numbers:}
+\RU{Продолжим с числами с плавающей запятой, двойной точности:}
 
 \begin{lstlisting}
 public class calc
@@ -81,11 +86,17 @@ public class calc
          5: dreturn       
 \end{lstlisting}
 
-It's the very same, but \TT{ldc2\_w} instruction is used to load constant of 2.0 from constant pool.
-Also, all other three instructions has \IT{d} prefix, 
-meaning they work with double data type values.
+\EN{It's the very same, but \TT{ldc2\_w} instruction is used to load constant of 
+2.0 from constant pool.}
+\RU{Почти то же самое, но инструкция \TT{ldc2\_w} используется для загрузки константы 
+2.0 из пула констант.}
+\EN{Also, all other three instructions has \IT{d} prefix, 
+meaning they work with \IT{double} data type values.}
+\RU{Также, все три инструкции имеют префикс \IT{d}, что означает, что они работают с переменными
+типа \IT{double}.}
 
-Let now use two function arguments:
+\EN{Let's now use two arguments function:}
+\RU{Теперь перейдем к ф-ции с двумя аргументами:}
 
 \begin{lstlisting}
 public class calc
@@ -108,8 +119,10 @@ public class calc
          3: ireturn       
 \end{lstlisting}
 
-\TT{iload\_0} loads first function argument (a), \TT{iload\_2} --- second (b).
-Here is a stack after both instruction executed:
+\EN{\TT{iload\_0} loads first function argument (a), \TT{iload\_2} --- second (b).}
+\RU{\TT{iload\_0} загружает первый аргумент ф-ции (a), \TT{iload\_2} --- второй (b).}
+\EN{Here is a stack after both instruction executed:}
+\RU{Вот так выглядит стек после исполнения обоих инструкций:}
 
 \begin{lstlisting}
       +---+
@@ -119,7 +132,8 @@ TOS ->| b |
       +---+
 \end{lstlisting}
 
-\TT{iadd} adds two values and leave result at \ac{TOS}:
+\EN{\TT{iadd} adds two values and leave result at \ac{TOS}:}
+\RU{\TT{iadd} складывает два значения и оставляет результат на \ac{TOS}:}
 
 \begin{lstlisting}
       +--------+
@@ -127,16 +141,17 @@ TOS ->| result |
       +--------+
 \end{lstlisting}
 
-\begin{lstlisting}
-Let's extend this example to "long" data type:
+\EN{Let's extend this example to \IT{long} data type:}
+\RU{Расширим этот пример до типа данных \IT{long}:}
 
+\begin{lstlisting}
 	public static long lsum(long a, long b)
 	{
 		return a+b;
 	}
 \end{lstlisting}
 
-\dots we got:
+\dots \EN{we got}\RU{получим}:
 
 \begin{lstlisting}
   public static long lsum(long, long);
@@ -149,10 +164,13 @@ Let's extend this example to "long" data type:
          3: lreturn       
 \end{lstlisting}
 
-The second \TT{lload} instruction takes second argument from 2nd slot.
-That's because 64-bit \IT{long} value occupies exactly two 32-bit slots.
+\EN{The second \TT{lload} instruction takes second argument from 2nd slot.}
+\RU{Вторая инструкция \TT{lload} берет второй аргумент из второго слота.}
+\EN{That's because 64-bit \IT{long} value occupies exactly two 32-bit slots.}
+\RU{Это потому что 64-битное значение \IT{long} занимает ровно два 32-битных слота.}
 
-Slightly more complex example:
+\EN{Slightly more complex example:}
+\RU{Немного более сложный пример:}
 
 \begin{lstlisting}
 public class calc
@@ -177,7 +195,8 @@ public class calc
          5: ireturn       
 \end{lstlisting}
 
-First step is multiplication. Product is left at the \ac{TOS}:
+\EN{First step is multiplication. Product is left at the \ac{TOS}:}
+\RU{Первый шаг это умножение. Произведение остается на \ac{TOS}:}
 
 \begin{lstlisting}
       +---------+
@@ -185,7 +204,7 @@ TOS ->| product |
       +---------+
 \end{lstlisting}
 
-\TT{iload\_2} loads third argument (c) into stack:
+\TT{iload\_2} \EN{loads third argument (c) into stack}\RU{загружает третий аргумент (c) в стек}:
 
 \begin{lstlisting}
       +---------+
@@ -195,4 +214,5 @@ TOS ->|    c    |
       +---------+
 \end{lstlisting}
 
-Now \TT{iadd} instruction can add two values.
+\EN{Now \TT{iadd} instruction can add two values.}
+\RU{Теперь инструкция \TT{iadd} может сложить два значения.}

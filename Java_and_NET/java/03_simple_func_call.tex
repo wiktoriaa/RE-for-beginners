@@ -1,9 +1,10 @@
-% TODO translation
 % TODO proof-reading
-\section{Simple function calling}
+\section{\EN{Simple function calling}\RU{Простой вызов ф-ций}}
 
-\TT{Math.random()} returns a pseudorandom number in range of [0.0 \dots 1.0), but let's say,
-by some reason, we need to devise a function returning number in range of [0.0 \dots 0.5):
+\EN{\TT{Math.random()} returns a pseudorandom number in range of [0.0 \dots 1.0), but let's say,
+by some reason, we need to devise a function returning number in range of [0.0 \dots 0.5):}
+\RU{\TT{Math.random()} возвращает псевдослучайное число в пределах [0.0 \dots 1.0), но представим,
+по какой-то причине, нам нужна ф-ция, возвращающая число в пределах [0.0 \dots 0.5):}
 
 \begin{lstlisting}
 public class HalfRandom
@@ -39,22 +40,39 @@ public class HalfRandom
          7: dreturn       
 \end{lstlisting}
 
-\TT{invokestatic} calls for the \TT{Math.random()} function and left result at the \ac{TOS}.
-Then the result is divided by 0.5 and returned.
-But how function name is encoded?
-It's encoded in the constant pool using \TT{Methodref} clause. 
-It defines class and method names.
-First field of \TT{Methodref} is points to the \TT{Class} clause which is, in turn, points to
-the usual text string (``java/lang/Math'').
-Second \TT{Methodref} clause points to \TT{NameAndType} clause which also has two links 
-to the strings.
-First string is ``random'' which is the name of method.
-The second string is ``()D'' which encodes function type. It means it returns double value
-(hence \IT{D} in the string).
-This is the way 1) JVM can check data type correctness; 2) Java decompilers can restore data types
-from a compiled class file.
+\EN{\TT{invokestatic} calls for the \TT{Math.random()} function and left result at the \ac{TOS}.}
+\RU{\TT{invokestatic} вызывает ф-цию \TT{Math.random()} и оставляет результат на \ac{TOS}.}
+\EN{Then the result is divided by 0.5 and returned.}
+\RU{Затем результат делится на 0.5 и возвращается.}
+\EN{But how function name is encoded?}
+\RU{Но как закодировано имя ф-ции?}
+\EN{It's encoded in the constant pool using \TT{Methodref} expression.}
+\RU{Оно закодировано в пуле констант используя выражение \TT{Methodref}.}
+\EN{It defines class and method names.}
+\RU{Оно определяет имена класса и метода.}
+\EN{First field of \TT{Methodref} is points to the \TT{Class} expression which is, in turn, points to
+the usual text string (``java/lang/Math'').}
+\RU{Первое поле \TT{Methodref} указывает на выражение \TT{Class}, которое, в свою очередь,
+указывает на обычную текстовую строку (``java/lang/Math'').}
+\EN{Second \TT{Methodref} expression points to \TT{NameAndType} expression which also 
+has two links to the strings.}
+\RU{Второе выражение \TT{Methodref} указывает на выражение \TT{NameAndType}, которое также
+имеет две ссылки на строки.}
+\EN{First string is ``random'' which is the name of method.}
+\RU{Первая строка это ``random'', это имя метода.}
+\EN{The second string is ``()D'' which encodes function type. It means it returns 
+\IT{double} value (hence \IT{D} in the string).}
+\RU{Вторая строка это ``()D'', которая кодирует тип ф-ции. Это означает что возвращаемый тип --- 
+\IT{double} (отсюда \IT{D} в строке).}
+\EN{This is the way 
+1) JVM can check data type correctness; 
+2) Java decompilers can restore data types from a compiled class file.}
+\RU{Благодаря этому
+1) JVM проверяет корректность типов данных; 
+2) Java-декомпиляторы могут восстанавливать типы данных из class-файлов.}
 
-Now let's finally try ``Hello, world!'' example:
+\EN{Now let's finally try ``Hello, world!'' example:}
+\RU{Наконец попробуем пример ``Hello, world!'':}
 
 \begin{lstlisting}
 public class HelloWorld
@@ -98,22 +116,43 @@ public class HelloWorld
          8: return        
 \end{lstlisting}
 
-\TT{ldc} at offset 3 is taking pointer to the ``Hello, World'' string in constant pool 
-and pushes into stack.
-It's called \IT{reference} in the Java world, but it's rather pointer, or address.
+\EN{\TT{ldc} at offset 3 is taking pointer to the ``Hello, World'' string in constant pool 
+and pushes into stack.}
+\RU{\TT{ldc} по смещению 3 берет указатель (или адрес) на строку ``Hello, World'' 
+в пуле констант и заталкивает его в стек.}
+\EN{It's called \IT{reference} in the Java world, but it's rather pointer, or address.}
+\RU{В мире Java это называется \IT{reference}, но это скорее указатель или просто адрес.}
+% FIXME -> \myref C++ ptrs vs refs
 
-The familiar \TT{invokevirtual} instruction takes information about \TT{println} function (or method) 
-from the constant pool and call it.
-As we may know, there are several \TT{println} methods, dedicated for each data type.
-Our case is \TT{println} for \IT{String} data type.
+\EN{The familiar \TT{invokevirtual} instruction takes information about \TT{println} 
+function (or method) from the constant pool and call it.}
+\RU{Уже знакомая нам инструкция \TT{invokevirtual} берет информацию о ф-ции (или методе) \TT{println} 
+из пула констант и вызывает её.}
+\EN{As we may know, there are several \TT{println} methods, dedicated for each data type.}
+\RU{Как мы можем знать, есть несколько методов \TT{println}, каждый предназначен для каждого типа
+данных.}
+\EN{Our case is \TT{println} function version, which is intended for \IT{String} data type.}
+\RU{В нашем случае, используется та версия \TT{println}, которая для типа данных \IT{String}.}
 
-But what about the first \TT{getstatic} instruction?
-This instruction takes a reference (or address of) field of object (\TT{System.out}) 
-and pushes it into the stack.
-This value is acting like \IT{this} pointer for \TT{println} method.
-Thus, \TT{println} method takes two arguments internally:
+\EN{But what about the first \TT{getstatic} instruction?}
+\RU{Что насчет первой инструкции \TT{getstatic}?}
+\EN{This instruction takes a \IT{reference} (or address of) field of object \TT{System.out} 
+and pushes it into the stack.}
+\RU{Эта инструкция берет \IT{reference} (или адрес) поля объекта \TT{System.out}
+и заталкивает его в стек.}
+\EN{This value is acting like \IT{this} pointer for \TT{println} method.}
+\RU{Это значение работает как указатель \IT{this} для метода \TT{println}.}
+\EN{Thus, internally, \TT{println} method takes two arguments at input:
 1) \IT{this}, i.e., pointer to object; 
-2) address of ``Hello, World'' string.
-Indeed, \TT{println()} is called as a method within initialized \TT{System.out} object.
+2) address of ``Hello, World'' string.}
+\RU{Таким образом, внутри, метод \TT{println} берет на вход два аргумента:
+1) \IT{this}, т.е., указатель на объект
+\footnote{Или ``экземпляр класса'' в некоторой русскоязычной литературе.};
+2) адрес строки ``Hello, World''.}
 
-For convenience, \TT{javap} utility writes all this information in comments.
+\EN{Indeed, \TT{println()} is called as a method within initialized \TT{System.out} object.}
+\RU{Действительно, \TT{println()} вызывается как метод в рамках инициализированного объекта 
+\TT{System.out}.}
+
+\EN{For convenience, \TT{javap} utility writes all this information in comments.}
+\RU{Для удобства, утилита \TT{javap} пишет всю эту информацию в комментариях.}
