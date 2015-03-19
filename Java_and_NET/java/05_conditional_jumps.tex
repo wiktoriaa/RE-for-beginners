@@ -1,8 +1,7 @@
-% TODO translation
 % TODO proof-reading
-\section{Conditional jumps}
+\section{\EN{Conditional jumps}\RU{Условные переходы}}
 
-Now let's proceed to conditional jumps.
+\EN{Now let's proceed to conditional jumps}\RU{Перейдем к условным переходам}.
 
 \begin{lstlisting}
 public class abs
@@ -30,14 +29,18 @@ public class abs
          8: ireturn       
 \end{lstlisting}
 
-\TT{ifge} jumps to offset 7 if value at \ac{TOS} is greater or equal to 0.
-Don't forget, any \TT{ifXX} instruction pops the value (to be compared) from stack.
+\EN{\TT{ifge} jumps to offset 7 if value at \ac{TOS} is greater or equal to 0.}
+\RU{\TT{ifge} переходит на смещение 7 если значение на \ac{TOS} больше или равно 0.}
+\EN{Don't forget, any \TT{ifXX} instruction pops the value (to be compared) from stack.}
+\RU{Не забывайте, любая инструкция \TT{ifXX} выталкивает значение (с которым будет производиться
+сравнение) из стека.}
 
-\TT{ineg} just negates value at \ac{TOS}.
+\EN{\TT{ineg} just negates value at \ac{TOS}.}
+\RU{\TT{ineg} просто меняет знак значения на \ac{TOS}.}
+
+\EN{Another example}\RU{Еще пример}:
 
 \begin{lstlisting}
-Another example:
-
 	public static int min (int a, int b)
 	{
 		if (a>b)
@@ -46,7 +49,7 @@ Another example:
 	}
 \end{lstlisting}
 
-What we've got:
+\EN{What we've got}\RU{Получаем}:
 
 \begin{lstlisting}
   public static int min(int, int);
@@ -62,10 +65,12 @@ What we've got:
          8: ireturn       
 \end{lstlisting}
 
-\TT{if\_icmple} pops two values and compares them. 
-If the second one is lesser (or equal) than first, jump to offset 7 is occurred.
+\TT{if\_icmple} \EN{pops two values and compares them}\RU{выталкивает два значения и сравнивает их}.
+\EN{If the second one is lesser (or equal) than first, jump to offset 7 is occurred.}
+\RU{Если второе меньше первого (или равно), происходит переход на смещение 7.}
 
-When we define \TT{max()} function...
+\EN{When we define \TT{max()} function \dots}
+\RU{Когда мы определяем ф-цию \TT{max()} \dots}
 
 \begin{lstlisting}
 	public static int max (int a, int b)
@@ -76,7 +81,10 @@ When we define \TT{max()} function...
 	}
 \end{lstlisting}
 
-\dots resulting code is just the same, but last \TT{iload} instructions are swapped:
+\EN{\dots resulting code is just the same, but two last \TT{iload} instructions 
+(at offsets 5 and 7) are swapped:}
+\RU{\dots итоговый код точно такой же, только последние инструкции \TT{iload} 
+(на смещениях 5 и 7) поменены местами:}
 
 \begin{lstlisting}
   public static int max(int, int);
@@ -92,7 +100,7 @@ When we define \TT{max()} function...
          8: ireturn       
 \end{lstlisting}
 
-More complex example:
+\EN{More complex example}\RU{Более сложный пример}:
 
 \begin{lstlisting}
 public class cond
@@ -142,14 +150,24 @@ public class cond
         54: return        
 \end{lstlisting}
 
-\TT{if\_icmpge} pops two values and compares them. If the second one is larger than first, 
-jump to offset 14 is occurred.
-\TT{if\_icmpne} and \TT{if\_icmple} works just as the same, but different condition is used.
+\TT{if\_icmpge} \EN{pops two values and compares them}\RU{Выталкивает два значения и сравнивает их}.
+\EN{If the second one is larger than first, jump to offset 14 is occurred.}
+\RU{Если второй больше первого, происходит переход на смещение 14.}
+\EN{\TT{if\_icmpne} and \TT{if\_icmple} works just as the same, but different conditions are used.}
+\RU{\TT{if\_icmpne} и \TT{if\_icmple} работают одинаково, но используются разные условия.}
 
-There are also \TT{ifne} instruction at offset 43. 
-Its name is misnomer, I would name it rather \TT{ifnz} (jump if value at \ac{TOS} is not zero).
-And that is what it does: it jumps to offset 54 if input value is not zero.
-If zero, execution flow is proceeded to offset 46, where the "==0" string is printed.
+\EN{There are also \TT{ifne} instruction at offset 43.}
+\RU{По смещению 43 есть также инструкция \TT{ifne}.}
+\EN{Its name is misnomer, I would name it rather \TT{ifnz} 
+(jump if value at \ac{TOS} is not zero).}
+\RU{Название неудачное, я бы скорее назвал её \TT{ifnz} 
+(переход если переменная на \ac{TOS} не равна нулю).}
+\EN{And that is what it does: it jumps to offset 54 if input value is not zero.}
+\RU{И вот что она делает: производит переход на смещение 54, если входное значение не ноль.}
+\EN{If zero, execution flow is proceeded to offset 46, where the ``==0'' string is printed.}
+\RU{Если ноль, управление передается на смещение 46, где выводится строка ``==0''.}
 
-N.B.: \ac{JVM} has no unsigned data types, so comparison instructions operates 
-only on signed integer values.
+\EN{N.B.: \ac{JVM} has no unsigned data types, so comparison instructions operates 
+only on signed integer values.}
+\RU{N.B.: В \ac{JVM} нет беззнаковых типов данных, так что инструкции сравнения работают
+только с знаковыми челочисленными значениями.}

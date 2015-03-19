@@ -1,8 +1,8 @@
-% TODO translation
 % TODO proof-reading
-\section{Exceptions}
+\section{\EN{Exceptions}\RU{Исключения}}
 
-Let's rework our \IT{Month} example (\myref{Java_2D_array_month}) slightly:
+\EN{Let's rework our \IT{Month} example (\myref{Java_2D_array_month}) slightly:}
+\RU{Немного переделаем пример \IT{Month} (\myref{Java_2D_array_month}):}
 
 \begin{lstlisting}[caption=IncorrectMonthException.java]
 public class IncorrectMonthException extends Exception
@@ -61,12 +61,19 @@ class Month2
 }
 \end{lstlisting}
 
-Essentially, \TT{IncorrectMonthException.class} has just object constructor and one accessor method.
+\EN{Essentially, \TT{IncorrectMonthException.class} has just object constructor 
+and one accessor method.}
+\RU{Которко говоря, \TT{IncorrectMonthException.class} имеет только конструктор объетка и один
+метод-акцессор.}
 
-\TT{IncorrectMonthException} class is inherited from \TT{Exception}, 
+\EN{\TT{IncorrectMonthException} class is inherited from \TT{Exception}, 
 so \TT{IncorrectMonthException} constructor
 first calls constructor of \TT{Exception} class, 
-then it put incoming integer value into the sole \TT{IncorrectMonthException} class field:
+then it put incoming integer value into the sole \TT{IncorrectMonthException} class field:}
+\RU{Класс \TT{IncorrectMonthException} наследуется от \TT{Exception}, 
+так что конструктор \TT{IncorrectMonthException}
+в начале вызывает конструктор класса \TT{Exception}, 
+затем он перекладывает входящее значение в единственное поле класса \TT{IncorrectMonthException}:}
 
 \begin{lstlisting}
   public IncorrectMonthException(int);
@@ -81,9 +88,13 @@ then it put incoming integer value into the sole \TT{IncorrectMonthException} cl
          9: return        
 \end{lstlisting}
 
-\TT{getIndex()} is just accessor. 
-Reference to \TT{IncorrectMonthException} is passed in zeroth \ac{LVA} slot
-(\IT{this}), \TT{aload\_0} takes it, \TT{getfield} loads integer value, \TT{ireturn} returns it.
+\TT{getIndex()} \EN{is just accessor}\RU{это просто акцессор}.
+\EN{\IT{Reference} to \TT{IncorrectMonthException} is passed in zeroth \ac{LVA} slot
+(\IT{this}), \TT{aload\_0} takes it, \TT{getfield} loads integer value from object, 
+\TT{ireturn} returns it.}
+\RU{\IT{Reference} (указатель) на \TT{IncorrectMonthException} передается в нулевом слоте \ac{LVA}
+(\IT{this}), \TT{aload\_0} берет его, \TT{getfield} загружает значение из объекта, 
+\TT{ireturn} возвращает его.}
 
 \begin{lstlisting}
   public int getIndex();
@@ -95,7 +106,8 @@ Reference to \TT{IncorrectMonthException} is passed in zeroth \ac{LVA} slot
          4: ireturn       
 \end{lstlisting}
 
-Now let's take a look on \TT{get\_month()} in \TT{Month2.class}:
+\EN{Now let's take a look on \TT{get\_month()} in \TT{Month2.class}:}
+\RU{Посмотрим на \TT{get\_month()} в \TT{Month2.class}:}
 
 \begin{lstlisting}[caption=Month2.class]
   public static java.lang.String get_month(int) throws IncorrectMonthException;
@@ -118,17 +130,33 @@ Now let's take a look on \TT{get\_month()} in \TT{Month2.class}:
         24: areturn       
 \end{lstlisting}
 
-\TT{iflt} at offset 1 is \IT{if less than}.
+\EN{\TT{iflt} at offset 1 is \IT{if less than}.}
+\RU{\TT{iflt} по смещению 1 это \IT{if less than} (если меньше, чем).}
 
-In case of invalid index, a new object is created using \TT{new} instruction at offset 10.
-Object type is passed as argument to the instruction (\TT{IncorrectMonthException}).
-Then its constructor is called with index integer passed via \ac{TOS} (offset 15).
-At offset 18 object is constructed, now \TT{athrow} instruction takes reference to newly constructed
-object and signalling to JVM to find appropriate exception handler.
-Nothing happened after \TT{athrow} instruction here, so at offset 19 is another basic block,
-not related to exceptions business, we can get here from offset 7.
+\EN{In case of invalid index, a new object is created using \TT{new} instruction at offset 10.}
+\RU{В случае неправильного индекса, создается новый объект при помощи инструкции \TT{new} 
+по смещению 10.}
+\EN{Object type is passed as operand to the instruction (and this is \TT{IncorrectMonthException}).}
+\RU{Тип объекта передается как операнд инструкции (и это \TT{IncorrectMonthException}).}
+\EN{Then its constructor is called with index integer is passed via \ac{TOS} (offset 15).}
+\RU{Затем вызывается его конструктор, в который передается индекс (через \ac{TOS}) (по смещению 15).}
+\EN{At the time of control flow being at offset 18, object is already constructed, 
+now \TT{athrow} instruction takes \IT{reference} 
+to newly constructed object and signalling to \ac{JVM} to find appropriate exception handler.}
+\RU{В то время как управление находится на смещении 18, объект уже создан,
+теперь инструкция \TT{athrow} берет указатель (\IT{reference})
+на только что созданный объект и сигнализирует в \ac{JVM}, чтобы тот нашел подходящий обработчик
+исключения.}
 
-How handler works? Now take a look at \TT{main()} in \TT{Month2.class}:
+\EN{\TT{athrow} instruction don't return control flow to here, 
+so at offset 19 is another \gls{basic block},
+not related to exceptions business, we can get here from offset 7.}
+\RU{Инструкция \TT{athrow} не возвращает управление сюда,
+так что по смещению 19 здесь совсем другой \gls{basic block},
+не имеющий отношения к исключениям, сюда можно попасть со смещения 7.}
+
+\EN{How handler works}\RU{Как работает обработчик}?
+\RU{Now take a look at}\RU{Посмотрим на} \main \InENRU \TT{Month2.class}:
 
 \begin{lstlisting}[caption=Month2.class]
   public static void main(java.lang.String[]);
@@ -160,27 +188,50 @@ How handler works? Now take a look at \TT{main()} in \TT{Month2.class}:
              0    11    14   Class IncorrectMonthException
 \end{lstlisting}
 
-Here is \TT{Exception table}, which defines that from offset 0 to 11 (inclusive) an exception 
-\TT{IncorrectMonthException} may happen, and if it's so, pass control flow to offset 14.
-Indeed, the main program is ended at offset 11.
-At the offset 14 handler started, it's not possible to get here, there are no conditional/unconditional
-jumps to this area.
-But JVM will transfer execution flow here in case of exception.
-The very first \TT{astore\_1} (at 14) takes incoming reference to exception object and stores it to
-\ac{LVA} slot 1.
-Later, \TT{getIndex()} method will be called for it at offset 31. 
-Reference to current exception object is passed right before (offset 30).
-All the rest of the code is string manipulating code: first integer value returned by \TT{getIndex()}
+\EN{Here is \TT{Exception table}, which defines that from offset 0 to 11 (inclusive) an exception 
+\TT{IncorrectMonthException} may happen, and if it will, control flow is to be passed to offset 14.}
+\RU{Тут есть \TT{Exception table}, которая определяет, что между смещениями 0 и 11 (включительно)
+может случиться исключение \TT{IncorrectMonthException}, и если это произойдет, то нужно передать
+управление на смещение 14.}
+\EN{Indeed, the main program is ended at offset 11.}
+\RU{Действительно, основная программа заканчивается на смещении 11.}
+\EN{At the offset 14 handler started, it's not possible to get here, 
+there are no conditional/unconditional jumps to this area.}
+\RU{По смещению 14 начинается обработчик, и сюда невозможно попасть, 
+здесь нет никаких условных/безусловных переходов в эту область.}
+\EN{But \ac{JVM} will transfer execution flow here in case of exception.}
+\RU{Но \ac{JVM} передаст сюда управление в случае исключения.}
+\EN{The very first \TT{astore\_1} (at 14) takes incoming \IT{reference} to exception object 
+and stores it to \ac{LVA} slot 1.}
+\RU{Самая первая \TT{astore\_1} (на 14) берет входящий указатель (\IT{reference}) на объект 
+исключения и сохраняет его в слоте 1 \ac{LVA}.}
+\EN{Later, \TT{getIndex()} method (of this exception object) will be called for it at offset 31.}
+\RU{Позже, по смещению 31 будет вызван метод этого объекта (\TT{getIndex()}).}
+\EN{\IT{Reference} to current exception object is passed right before (offset 30).}
+\RU{Указатель \IT{reference} на текующий объект исключения передался немного раньше (смещение 30).}
+\EN{All the rest of the code is string manipulating code: 
+first integer value returned by \TT{getIndex()}
 is converted into string by \TT{toString()} method, then it concatenates with 
 ``incorrect month index: '' text string (like we already considered before), 
-then \TT{println()} and \TT{printStackTrace()} are called.
-After \TT{printStackTrace()} finishes, exception is handled, we can proceed to normal functioning.
-At offset 47 there are \TT{return} which finishes \TT{main()} function, but there could be any other
-code which executes as if no exceptions raised.
+then \TT{println()} and \TT{printStackTrace()} are called.}
+\RU{Остальной код это просто код для манипуляции со строками: 
+в начале значение возвращенное методом \TT{getIndex()}
+конвертируется в строку используя метод \TT{toString()}, 
+затем эта строка прибавляется к текстовой строке
+``incorrect month index: '' (как мы уже рассматривали раннее), 
+затем вызываются \TT{println()} и \TT{printStackTrace()}.}
+\EN{After \TT{printStackTrace()} finishes, exception is handled, we can proceed to normal functioning.}
+\RU{После того как \TT{printStackTrace()} заканчивается, исключение уже обработано, мы можем
+возвращаться к нормальной работе.}
+\EN{At offset 47 there are \TT{return} which finishes \main function, 
+but there could be any other code which executes as if no exceptions raised.}
+\RU{По смещению 47 есть \TT{return}, который заканчивает работу ф-ции \main, 
+но там может быть любой другой код, который исполнится, если исключения не произошло.}
 
-Here is an example, how IDA shows exception ranges:
+\EN{Here is an example, how IDA shows exception ranges:}
+\RU{Вот пример, как IDA показывает интервалы исключений:}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=\EN{from some random .class file I found on my computer}\RU{из какого-то случайного найденного на моем компьютере .class-файла}]
     .catch java/io/FileNotFoundException from met001_335 to met001_360\
  using met001_360
     .catch java/io/FileNotFoundException from met001_185 to met001_214\

@@ -1,6 +1,5 @@
-% TODO translation
 % TODO proof-reading
-\section{Loops}
+\section{\EN{Loops}\RU{Циклы}}
 
 \begin{lstlisting}
 public class Loop
@@ -33,24 +32,44 @@ public class Loop
         21: return        
 \end{lstlisting}
 
-\TT{iconst\_1} loads 1 into \ac{TOS}, \TT{istore\_1} stores it to \ac{LVA} at slot 1.
-Why not zeroth slot? Because \TT{main()} function has one argument (array of \TT{String}) 
-and pointer to it (or reference) is now in zeroth slot.
+\EN{\TT{iconst\_1} loads 1 into \ac{TOS}, \TT{istore\_1} stores it to \ac{LVA} at slot 1.}
+\RU{\TT{iconst\_1} загружает 1 в \ac{TOS}, \TT{istore\_1} сохраняет её в первом слоте \ac{LVA}.}
+\EN{Why not zeroth slot}\RU{Почему не нулевой слот}?
+\EN{Because \main function has one argument (array of \TT{String}) 
+and pointer to it (or \IT{reference}) is now in zeroth slot.}
+\RU{Потому что ф-ция \main имеет один аргумент (массив \TT{String}),
+и указатель на него (или \IT{reference}) сейчас в нулевом слоте.}
 
-So, \IT{i} local variable will always be in 1st slot.
+\EN{So, \IT{i} local variable will always be in 1st slot.}
+\RU{Так что локальная переменная \IT{i} всегда будет в первом слоте.}
 
-Instructions at offsets 3 and 5 compares \IT{i} with 10.
-If \IT{i} is larger, execution flow has changed to offset 21, where function is finished.
-If it's not, \TT{println} is called. \IT{i} is then reloaded at offset 11 for \TT{println}.
-By the way, we call \TT{println} method for integer data type, we see this in comments: ``(I)V''
-(\IT{I} mean integer and \IT{V} mean returning type is \IT{void}).
+\EN{Instructions at offsets 3 and 5 compares \IT{i} with 10.}
+\RU{Инструкции по смещениями 3 и 5 сравнивают \IT{i} с 10.}
+\EN{If \IT{i} is larger, execution flow has passed to offset 21, where function is finished.}
+\RU{Если \IT{i} больше, управление передается на смещение 21, где ф-ция заканчивает работу.}
+\EN{If it's not, \TT{println} is called.}
+\RU{Если нет, вызывается \TT{println}.}
+\EN{\IT{i} is then reloaded at offset 11, for \TT{println}.}
+\RU{\IT{i} перезагружается по смещению 11, для \TT{println}.}
+\EN{By the way, we call \TT{println} method for \IT{integer} data type, 
+and we see this in comments: ``(I)V''
+(\IT{I} mean \IT{integer} and \IT{V} mean returning type is \IT{void}).}
+\RU{Кстати, мы вызываем метод \TT{println} для типа данных \IT{integer}, 
+и мы видим это в комментариях: ``(I)V''
+(\IT{I} означает \IT{integer} и \IT{V} означает что возвращаемое значение имеет тип \IT{void}).}
 
-When \TT{println} is finished, \IT{i} is incremented at offset 15. 
-First argument of the instruction is number of slot, second is a number to add to variable.
+\EN{When \TT{println} is finished, \IT{i} is incremented at offset 15.}
+\RU{Когда \TT{println} заканчивается, \IT{i} увеличивается на 1 по смещению 15.}
+\EN{First operand of the instruction is a number of slot (1), 
+second is a number (1) to add to variable.}
+\RU{Первый операнд инструкции это номер слота (1), 
+второй это число (1) для прибавления.}
 
-\TT{goto} is just GOTO, it jumps to the loop body begin at offset 2.
+\EN{\TT{goto} is just GOTO, it jumps to the loop body begin at offset 2.}
+\RU{\TT{goto} это просто GOTO, она переходит на начало цикла по смещению 2.}
 
-Let's proceed to more complex example:
+\EN{Let's proceed to more complex example:}
+\RU{Перейдем к более сложному примеру:}
 
 \begin{lstlisting}
 public class Fibonacci
@@ -101,25 +120,37 @@ public class Fibonacci
         37: return        
 \end{lstlisting}
         
-Here is \ac{LVA} slots map:
+\EN{Here is \ac{LVA} slots map:}
+\RU{Вот карта слотов в \ac{LVA}:}
 
 \begin{itemize}
-\item 0 --- the sole \TT{main()} argument
-\item 1 --- \IT{limit}, always holding 20
+\item 0 --- \EN{the sole \main argument}\RU{единственный аргумент ф-ции \main}
+\item 1 --- \IT{limit}, \EN{always holding}\RU{всегда содержит} 20
 \item 2 --- \IT{f}
 \item 3 --- \IT{g}
 \item 4 --- \IT{i}
 \end{itemize}
 
-We can see that Java compiler allocated \ac{LVA} slots just in the same sequence, 
-as variables were declared in the source code.
+\EN{We can see that Java compiler allocated variables in \ac{LVA} slots just in the same sequence, 
+as variables were declared in the source code.}
+\RU{Мы видим что компилятор Java расположил переменные в слотах \ac{LVA} в точно таком же порядке,
+в котором переменные были определены в исходном коде.}
 
-There are separate \TT{istore} instructions for accessing slots by number 0, 1, 2, 3, 
-but not 4 and larger, so there \TT{istore} at offset 8 
-which takes slot number as additional argument.
-The same story about \TT{iload} at offset 10.
+\EN{There are separate \TT{istore} instructions for accessing slots by number 0, 1, 2, 3, 
+but not 4 and larger, so there \TT{istore} with additional operand at offset 8 
+which takes slot number as operand.}
+\RU{Существуют отдельные инструкции \TT{istore} для слотов 0, 1, 2, 3, но не 4 и более, 
+так что здесь есть \TT{istore} с дополнительным операндом по смещению 8, 
+которая имеет номер слота в операнде.}
+\EN{The same story about \TT{iload} at offset 10.}
+\RU{Та же история с \TT{iload} по смещению 10.}
 
-But is not it's dubious to allocate another slot for \IT{limit} variable which always holding 20, 
-and reload its value so often?
-\ac{JVM} \ac{JIT} compiler is usually good enough to optimize such things.
-Manual intervention is probably not worth it.
+\EN{But is not it's dubious to allocate another slot for \IT{limit} variable which 
+always holding 20 (so it's constant in essence), and reload its value so often?}
+\RU{Но не слишком ли это сомнительно, выделить целый слот для переменной \IT{limit},
+которая всегда содержит 20 (так что это по сути константа), и перезагружать её так часто?}
+\EN{\ac{JVM} \ac{JIT} compiler is usually good enough to optimize such things.}
+\RU{\ac{JIT}-компилятор в \ac{JVM} обычно достаточно хорош, чтобы всё это оптимизировать.}
+\EN{Manual intervention into the code is probably not worth it.}
+\RU{Самостоятельное вмешательство в код, наверное, того не стоит.}
+

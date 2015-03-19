@@ -1,8 +1,8 @@
-% TODO translation
 % TODO proof-reading
-\subsection{Simple example}
+\subsection{\EN{Simple example}\RU{Простой пример}}
 
-Let's first create array of 10 integers and fill it:
+\EN{Let's first create array of 10 integers and fill it:}
+\RU{Создадим массив из 10-и чисел и заполним его:}
 
 \begin{lstlisting}
 	public static void main(String[] args) 
@@ -38,20 +38,35 @@ Let's first create array of 10 integers and fill it:
         27: return        
 \end{lstlisting}
 
-\TT{newarray} instruction creates an array object of 10 \IT{int} elements. 
-Array size is set by \TT{bipush} and left at \ac{TOS}.
-Array type is set in \TT{newarray} instruction operand.
-After \TT{newarray} execution, a reference (or pointer) to the newly created array in heap is left
-at the \ac{TOS}.
-\TT{astore\_1} stores the reference to the 1st slot in \ac{LVA}.
-Second part of \TT{main()} function is the loop which stores \IT{i} value into corresponding
-array element.
-\TT{aload\_1} gets reference of array and places it into stack.
-\TT{iastore} then stores integer value from stack to the array, reference of which is currently in stack.
-Third part of \TT{main()} function calls for \TT{dump()} function. 
-An argument for it is prepared by \TT{aload\_1} instruction.
+\EN{\TT{newarray} instruction creates an array object of 10 \IT{int} elements.}
+\RU{Инструкция \TT{newarray} создает объект массива из 10 элементов типа \IT{int}.}
+\EN{Array size is set by \TT{bipush} and left at \ac{TOS}.}
+\RU{Размер массива выставляется инструкцией \TT{bipush} и остается на \ac{TOS}.}
+\EN{Array type is set in \TT{newarray} instruction operand.}
+\RU{Тип массива выставляется в операнде инструкции \TT{newarray}.}
+\EN{After \TT{newarray} execution, a \IT{reference} (or pointer) to the newly created array in heap 
+is left at the \ac{TOS}.}
+\RU{После исполнения \TT{newarray}, \IT{reference} (или указатель) только что созданного 
+в куче (heap) массива остается на \ac{TOS}.}
+\EN{\TT{astore\_1} stores the \IT{reference} to the 1st slot in \ac{LVA}.}
+\RU{\TT{astore\_1} сохраняет \IT{reference} на него в первом слоте \ac{LVA}.}
+\EN{Second part of \main function is the loop which stores \IT{i} value into corresponding
+array element.}
+\RU{Вторая часть ф-ции \main это цикл, сохраняющий значение \IT{i} в соответствующий
+элемент массива.}
+\EN{\TT{aload\_1} gets \IT{reference} of array and places it into stack.}
+\RU{\TT{aload\_1} берет \IT{reference} массива и сохраняет его в стеке.}
+\EN{\TT{iastore} then stores integer value from stack to the array, 
+\IT{reference} of which is currently at \ac{TOS}.}
+\RU{\TT{iastore} затем сохраняет значение из стека в массив, 
+\IT{reference} на который в это время находится на \ac{TOS}.}
+\EN{Third part of \main function calls \TT{dump()} function.}
+\RU{Третья часть ф-ции \main вызывает ф-цию \TT{dump()}.}
+\EN{An argument for it is prepared by \TT{aload\_1} instruction (offset 23).}
+\RU{Аргумент для нее готовится инструкцией \TT{aload\_1} (смещение 23).}
 
-Now let's proceed to \TT{dump()} function:
+\EN{Now let's proceed to \TT{dump()} function:}
+\RU{Перейдем к ф-ции \TT{dump()}:}
 
 \begin{lstlisting}
 	public static void dump(int a[])
@@ -82,14 +97,27 @@ Now let's proceed to \TT{dump()} function:
         23: return        
 \end{lstlisting}
 
-Incoming reference to array is in the zeroth slot.
-\TT{a.length} expression in the source code is converted into \TT{arraylength} instruction: 
-it takes reference to array and leave array size in stack.
-\TT{iaload} at offset 13 is used to load array elements, it requires to array reference be present
-in stack (prepared by \TT{aload\_0} at 11), and also index (prepared by \TT{iload\_1} at offset 12).
+\EN{Incoming \TT{reference} to array is in the zeroth slot.}
+\RU{Входящий \TT{reference} на массив в нулевом слоте.}
+\EN{\TT{a.length} expression in the source code is converted into \TT{arraylength} instruction: 
+it takes \IT{reference} to array and leave array size at \ac{TOS}.}
+\RU{Выражение \TT{a.length} в исходном коде конвертируется в инструкцию \TT{arraylength},
+она берет \IT{reference} на массив и оставляет размер массива на \ac{TOS}.}
+\EN{\TT{iaload} at offset 13 is used to load array elements, 
+it requires to array \IT{reference} be present
+in stack (prepared by \TT{aload\_0} at 11), 
+and also index (prepared by \TT{iload\_1} at offset 12).}
+\RU{Инструкция \TT{iaload} по смещеню 13 используется для загрузки элементов массива, 
+она требует чтобы в стеке присутствовал \IT{reference} на массив
+(подготовленный \TT{aload\_0} на 11), 
+а также индекс (подготовленный \TT{iload\_1} по смещеню 12).}
 
-Needless to say, instructions prefixed with \IT{a} may be mistakenly comprehended 
-as \IT{array} instructions.
-It's not correct.
-These instructions works with references to objects.
-And arrays and strings are objects too.
+\EN{Needless to say, instructions prefixed with \IT{a} may be mistakenly comprehended 
+as \IT{array} instructions.}
+\RU{Нужно сказать что инструкции с префиксом \IT{a} могут быть неверно поняты, 
+как инструкции работающие с массивами (\IT{array}).}
+\EN{It's not correct}\RU{Это неверно}.
+\EN{These instructions works with \IT{references} to objects.}
+\RU{Эти инструкции работают с \IT{reference}-ами на объекты.}
+\EN{And arrays and strings are objects too.}
+\RU{А массивы и строки это тоже объекты.}
