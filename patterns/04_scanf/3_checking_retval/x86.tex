@@ -21,9 +21,10 @@ In other words, we compare the value in the \EAX register with $1$.}
 Это означает \IT{Jump if Not Equal}, то есть, условный переход \IT{если не равно}.}
 \EN{A \JNE conditional jump follows the \CMP instruction. \JNE stands for \IT{Jump if Not Equal}.}
 
-\RU{Итак, если \EAX не равен 1, то \JNE заставит перейти процессор 
+\RU{Итак, если \EAX не равен 1, то \JNE заставит перейти \ac{CPU} 
 по адресу указанном в операнде \JNE, у нас это \TT{\$LN2@main}.}
-\EN{So, if the value in the \EAX register is not equal to $1$, the processor will pass the execution to the 
+\EN{So, if the value in the \EAX register is not equal to $1$, 
+the \ac{CPU} will pass the execution to the 
 address mentioned in the \JNE operand, in our case \TT{\$LN2@main}.}
 \RU{Передав управление по этому адресу, \ac{CPU} как раз начнет исполнять вызов \printf с 
 аргументом \TT{``What you entered? Huh?''}.}
@@ -31,15 +32,16 @@ address mentioned in the \JNE operand, in our case \TT{\$LN2@main}.}
 with the argument \TT{``What you entered? Huh?''}.}
 \RU{Но если все нормально, перехода не случится, и исполнится другой \printf с двумя аргументами: 
 \TT{'You entered \%d...'} и значением переменной \TT{x}.}
-\EN{But if everything is fine, the conditional jump will not be taken, and another \printf call 
-will be executed, with two arguments: \TT{'You entered \%d...'} and the value of \TT{x}. }
+\EN{But if everything is fine, the conditional jump is not be be taken, and another \printf call 
+is to be executed, with two arguments: \TT{'You entered \%d...'} and the value of \TT{x}. }
 
 \index{x86!\Instructions!XOR}
 \index{\CLanguageElements!return}
 \RU{А для того чтобы после этого вызова не исполнился сразу второй вызов \printf, 
 после него имеется инструкция \JMP, безусловный переход, он отправит процессор на место аккурат 
 после второго \printf и перед инструкцией \TT{XOR EAX, EAX}, которая собственно \TT{return 0}.}
-\EN{Since in this case the second \printf has not to be executed, there is a \JMP preceding it (unconditional jump). It will pass the control to the point after the second \printf and just before the \TT{XOR EAX, EAX} instruction, which implements \TT{return 0}.}
+\EN{Since in this case the second \printf has not to be executed, there is a \JMP preceding it (unconditional jump). 
+It passes the control to the point after the second \printf and just before the \TT{XOR EAX, EAX} instruction, which implements \TT{return 0}.}
 
 \index{x86!\Registers!\Flags}
 \RU{Итак, можно сказать, что в подавляющих случаях сравнение какой-либо переменной с чем-то другим 
@@ -64,8 +66,8 @@ processor flags\footnote{x86 flags, see also: \href{http://go.yurichev.com/17120
 \RU{Если мы сравним 1 и 1, от единицы отнимется единица, получится $0$, и выставится флаг 
 \ZF (\IT{zero flag}), означающий что последний полученный результат был $0$.}
 \EN{If we compare 1 and 1, $1-1$ is $0$ so the \ZF flag would be set (meaning that the last result was $0$).}
-\RU{Ни при каких других значениях \EAX, флаг \ZF выставлен не будет, кроме тех, когда операнды равны друг другу.}
-\EN{In no other circumstances \ZF will be set, except when the operands are equal.}
+\RU{Ни при каких других значениях \EAX, флаг \ZF не может быть выставлен, кроме тех, когда операнды равны друг другу.}
+\EN{In no other circumstances \ZF can be set, except when the operands are equal.}
 \index{x86!\Instructions!JNE}
 \index{x86!\Registers!ZF}
 \RU{Инструкция \JNE проверяет только флаг \ZF, и совершает переход только если флаг не поднят. 
@@ -76,7 +78,8 @@ processor flags\footnote{x86 flags, see also: \href{http://go.yurichev.com/17120
 \EN{Assembler translates both \JNE and \JNZ instructions into the same opcode.}
 \RU{Таким образом, можно \CMP заменить на \SUB и все будет работать также, но разница в том, что \SUB 
 все-таки испортит значение в первом операнде. \CMP это \IT{SUB без сохранения результата}.}
-\EN{So, the \CMP instruction can be replaced with a \SUB instruction and almost everything will be fine,
+\EN{So, the \CMP instruction can be replaced with a \SUB instruction 
+and almost everything will be fine,
 with the difference that \SUB alters the value of the first operand.
 \CMP is \IT{SUB without saving the result}.}
 
@@ -87,17 +90,18 @@ with the difference that \SUB alters the value of the first operand.
 \RU{Наверное, уже пора делать первые попытки анализа кода в \IDA}
 \EN{It is time to run \IDA and try to do something in it}.
 \RU{Кстати, для начинающих, полезно компилировать в MSVC с ключом \TT{/MD}, что означает что все эти стандартные
-ф-ции не будут скомпонованы с исполняемым файлу, а будут импортироваться из файла \TT{MSVCR*.DLL}}
+ф-ции не будут скомпонованы с исполняемым файлу, а будут импортироваться из файла \TT{MSVCR*.DLL}.}
 \EN{By the way, for beginners it is good idea to use \TT{/MD} option in MSVC, which means that all these
-standard functions will not be linked with the executable file, but will be imported from the \TT{MSVCR*.DLL}
-file instead}.
-\RU{Так будет легче увидеть, где какая стандартная ф-ция используется}\EN{Thus it will be easier to see
-which standard function are used and where}.
+standard functions are not be linked with the executable file, 
+but are to be imported from the \TT{MSVCR*.DLL} file instead.}
+\RU{Так будет легче увидеть, где какая стандартная ф-ция используется.}
+\EN{Thus it will be easier to see which standard function are used and where.}
 
 \RU{Анализируя код в \IDA, очень полезно делать пометки для себя (и других)}
 \EN{While analysing code in \IDA, it is very helpful to leave notes for oneself (and others)}.
-\RU{Например, разбирая этот пример, мы сразу видим, что \TT{JNZ} срабатывает в случае ошибки}
-\EN{In instance, analysing this example, we see that \TT{JNZ} will be triggered in case of an error}.
+\RU{Например, разбирая этот пример, мы сразу видим, что \TT{JNZ} срабатывает в случае ошибки.}
+\EN{In instance, analysing this example, 
+we see that \TT{JNZ} is to be triggered in case of an error.}
 \RU{Можно навести курсор на эту метку, нажать ``n'' и переименовать метку в ``error''}
 \EN{So it is possible to move the cursor to the label, press ``n'' and rename it to ``error''}.
 \RU{Еще одну метку}\EN{Create another label}\EMDASH{}\RU{в}\EN{into} ``exit''.
@@ -134,8 +138,10 @@ we can see how \IDA represents a function as a graph}:
 
 \RU{После каждого условного перехода видны две стрелки: зеленая и красная}\EN{There are two arrows
 after each conditional jump: green and red}.
-\RU{Зеленая ведет к тому блоку, который исполнится если переход сработал, а красная --- если не сработал}
-\EN{The green arrow points to the block which will be executed if the jump is triggered, and red if otherwise}.
+\RU{Зеленая ведет к тому блоку, который исполнится если переход сработает, 
+а красная --- если не сработает.}
+\EN{The green arrow points to the block which executes if the jump is triggered, 
+and red if otherwise.}
 
 \clearpage
 \RU{В этом режиме также можно сворачивать узлы и давать им названия}
@@ -176,7 +182,7 @@ beginning of the} \TT{.text}\EN{ section}.
 \RU{Откроем исполняемый файл в Hiew, найдем самое начало секции}\EN{Let's open the executable in Hiew and 
 find the beginning of the} \TT{.text}\EN{ section} (Enter, F8, F6, Enter, Enter).
 
-\RU{Мы увидим следующее}\EN{We will see this}:
+\RU{Мы увидим следующее}\EN{We can see this}:
 
 \begin{figure}[H]
 \centering

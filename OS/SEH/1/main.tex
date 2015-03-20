@@ -4,7 +4,7 @@
 \EN{In Windows, the \ac{SEH} is intended for exceptions handling, nevertheless, it is language-agnostic,
 not related to \Cpp or \ac{OOP} in any way}.
 \RU{Здесь мы рассмотрим \ac{SEH} изолированно от Си++ и расширений MSVC}
-\EN{Here we will take a look at \ac{SEH} in its isolated (from C++ and MSVC extensions) form}.
+\EN{Here we are going to take a look at \ac{SEH} in its isolated (from C++ and MSVC extensions) form}.
 
 \index{Windows!TIB}
 \index{Windows!Win32!RaiseException()}
@@ -16,16 +16,16 @@ not related to \Cpp or \ac{OOP} in any way}.
 передав ему информацию о состоянии \ac{CPU} в момент исключения
 (все значения регистров, и т.д.)}
 \EN{When an exception occurs (division by zero, incorrect address access, user exception triggered by
-calling the \TT{RaiseException()} function), the \ac{OS} will find the last handler in the \ac{TIB} and will call it,
+calling the \TT{RaiseException()} function), the \ac{OS} finds the last handler in the \ac{TIB} and calls it,
 passing all information about the \ac{CPU} state (register values, etc) at the moment of the exception}.
-\RU{Обработчик выясняет, то ли это исключение, для которого он создавался}\EN{The exception handler will
-consider the exception, was it made for it}?
-\RU{Если да, то он обрабатывает исключение}\EN{If so, it will handle the exceptin}.
+\RU{Обработчик выясняет, то ли это исключение, для которого он создавался?}
+\EN{The exception handler considering the exception, was it made for it?}
+\RU{Если да, то он обрабатывает исключение}\EN{If so, it handles the exception}.
 \RU{Если нет, то показывает \ac{OS} что он не может его обработать и \ac{OS} вызывает следующий обработчик
-в цепочке, и так до тех пор, пока не найдется обработчик способный обработать исключение}
-\EN{If not, it will signal the \ac{OS} that it
-cannot handle it and the \ac{OS} will call the next handler in the chain,
-until a handler which is able to handle the exception is be found}.
+в цепочке, и так до тех пор, пока не найдется обработчик способный обработать исключение.}
+\EN{If not, it signals to the \ac{OS} that it
+cannot handle it and the \ac{OS} calls the next handler in the chain,
+until a handler which is able to handle the exception is be found.}
 
 \RU{В самом конце цепочки находится стандартный обработчик, показывающий всем очень известное окно, 
 сообщающее что процесс упал, 
@@ -67,8 +67,8 @@ and offering to collect all information and send it to developers in Microsoft}.
 \EN{By the way, some developers make their own handler that sends information about the program crash to themselves}.
 \index{Windows!Win32!SetUnhandledExceptionFilter()}
 \RU{Он регистрируется при помощи ф-ции}\EN{It is registered with the help of} \TT{SetUnhandledExceptionFilter()} 
-\RU{и будет вызван если \ac{OS} не знает как иначе обработать исключение}\EN{and will be called if
-the \ac{OS} does not have any other way to handle the exception}.
+\RU{и будет вызван если \ac{OS} не знает как иначе обработать исключение.}
+\EN{and to be called if the \ac{OS} does not have any other way to handle the exception.}
 \index{\oracle}
 \RU{А, например,}\EN{An example is} \oracle \RU{в этом случае генерирует огромные дампы, 
 содержащие всю возможную информацию и состоянии \ac{CPU} и памяти}
@@ -116,9 +116,9 @@ list and its elements are stored right in the stack}.
 \RU{После инсталляции своего обработчика, вызываем}\EN{After our handler is installed, we call}
 \TT{RaiseException()}
 \footnote{\href{http://go.yurichev.com/17253}{MSDN}}.
-\RU{Это пользовательские исключения}\EN{This is an user exception}. \RU{Обработчик проверяет код}\EN{The handler will check
-the code}.
-\RU{Если код}\EN{If the code is} \TT{0xE1223344}, \RU{то он возвращает}\EN{it will return} 
+\RU{Это пользовательские исключения}\EN{This is an user exception}. 
+\RU{Обработчик проверяет код}\EN{The handler checks the code}.
+\RU{Если код}\EN{If the code is} \TT{0xE1223344}, \RU{то он возвращает}\EN{it returning} 
 \TT{ExceptionContinueExecution},
 \RU{что сигнализирует системе что обработчик скорректировал состояние CPU (обычно это регистры EIP/ESP) и что \ac{OS} может
 возобновить исполнение треда}
@@ -227,7 +227,7 @@ at address $0$}.
 \EN{Of course, there is nothing at this address in win32, so an exception is raised}.
 \RU{Однако, первый обработчик, который будет заниматься этим делом ~--- ваш, и он узнает об этом
 первым, проверяя код на соответствие с константной \TT{EXCEPTION\_ACCESS\_VIOLATION}}
-\EN{The very first handler will be called --- yours, and it will know about it first, by checking
+\EN{The very first handler is to be called---yours, and it will know about it first, by checking
 the code if it's equal to the \TT{EXCEPTION\_ACCESS\_VIOLATION} constant}.
 
 \RU{А если заглянуть в то что получилось на ассемблере,
@@ -240,10 +240,11 @@ address $0$ is looks like this}:
 \EN{Will it be possible to fix this error ``on the fly'' and to continue with program execution}?
 \RU{Да, наш обработчик может изменить значение в \EAX и предложить \ac{OS} исполнить эту же инструкцию еще раз}
 \EN{Yes, our exception handler can fix the \EAX value and let the \ac{OS} execute this instruction once again}.
-\RU{Что мы и делаем}\EN{So that is what we do}. \printf \RU{напечатает}\EN{will print} 1234,
+\RU{Что мы и делаем}\EN{So that is what we do}. \printf \RU{напечатает}\EN{prints} 1234,
 \RU{потому что после работы нашего обработчика, }\EN{because after the execution of our handler }
-\EAX \RU{будет не}\EN{will not be} 0,
-\RU{а будет содержать адрес глобальной переменной}\EN{but will contain the address of the global variable} \TT{new\_value}.
+\EAX \RU{будет не}\EN{is not} 0,
+\RU{а будет содержать адрес глобальной переменной}
+\EN{but contains the address of the global variable} \TT{new\_value}.
 \RU{Программа будет исполняться далее}\EN{The execution will resume}.
 
 \RU{Собственно, вот что происходит}\EN{That is what is going on}: 
@@ -254,8 +255,9 @@ address $0$ is looks like this}:
 \EN{which, in turn, starts to call all handlers in the \ac{SEH} chain, one by one}.
 
 \RU{Я компилирую это всё в MSVC 2010, но конечно же, нет никакой гарантии 
-что для указателя будет использован именно регистр \EAX}\EN{I'm using MSVC 2010 here, but of course,
-there is no any guarantee that \EAX will be used for this pointer}.
+что для указателя будет использован именно регистр \EAX.}
+\EN{I'm using MSVC 2010 here, but of course,
+there is no any guarantee that \EAX will be used for this pointer.}
 
 \RU{Этот трюк с подменой адреса эффектно выглядит, 
 и я его привожу здесь для наглядной иллюстрации работы \ac{SEH}}
@@ -267,10 +269,10 @@ any place where it is used for ``on-the-fly'' error fixing}.
 
 \RU{Почему SEH-записи хранятся именно в стеке а не в каком-то другом месте}
 \EN{Why SEH-related records are stored right in the stack instead of some other place}?
-\RU{Вероятно, потому что тогда \ac{OS} не будет заботиться об освобождении этой информации, эти записи
-пропадают как ненужные когда ф-ция заканчивает работу}
-\EN{Supposedly because then the \ac{OS} will not need to care about freeing this information, these records
-will be disposed of when the function finishes its execution}.
+\RU{Вероятно, потому что \ac{OS} не нужно заботиться об освобождении этой информации, эти записи
+просто пропадают как ненужные когда ф-ция заканчивает работу.}
+\EN{Supposedly because the \ac{OS} is not needing to care about freeing this information, 
+these records are simply disposed when the function finishes its execution.}
 \RU{Но я не уверен на}\EN{But I'm not} 100\%\RU{ и могу ошибаться}\EN{ sure and can be wrong}.
 \index{\CStandardLibrary!alloca()}
 \RU{Это чем-то похоже на}\EN{This is somewhat like} alloca(): (\myref{alloca}).

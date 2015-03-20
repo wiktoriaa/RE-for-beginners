@@ -100,13 +100,13 @@ similar to \JMP in x86}.
 \RU{Основных причин две: 1) стек не модифицируется, как и \glslink{stack pointer}{указатель стека} \ac{SP}; 2) вызов функции \printf последний, 
 после него ничего не происходит}\EN{There are two main reasons: 1) neither the stack nor \ac{SP} (the \gls{stack pointer}) is modified;
 2) the call to \printf is the last instruction, so there is nothing going on afterwards}.
-\RU{Функция \printf, отработав, просто вернет управление по адресу, записанному в \ac{LR}}\EN{On completion, the \printf
-function will simply return the control to the address stored in \ac{LR}}.
-\RU{Но в \ac{LR} находится адрес места, откуда была вызвана наша функция!}
+\RU{Функция \printf, отработав, просто возвращает управление по адресу, записанному в \ac{LR}.}
+\EN{On completion, the \printf function simply returns the control to the address 
+stored in \ac{LR}.}
+\RU{Но в \ac{LR} находится адрес места, откуда была вызвана наша функция!
+А, следовательно, управление из \printf вернется сразу туда.}
 \EN{Since the \ac{LR} currently stores the address of the point from where our function
-was called }
-\RU{А, следовательно, управление из \printf вернется сразу туда}
-\EN{then the control from \printf will be returned to that point}.
+was called then the control from \printf will be returned to that point.}
 \RU{Следовательно, нет нужды сохранять \ac{LR}, потому что нет нужны модифицировать \ac{LR}}
 \EN{Therefore we do not need to save \ac{LR} because we do not need to modify \ac{LR}}.
 \RU{А нет нужды модифицировать \ac{LR}, потому что нет иных вызовов функций, кроме \printf, к тому же, после этого вызова не нужно ничего здесь больше делать}
@@ -117,9 +117,8 @@ after this call we do not to do anything else}!
 \RU{Эта оптимизация часто используется в ф-циях, где последнее выражение --- это вызов другой ф-ции.}
 \EN{This optimization is often used in functions where the last statement is a call to another function.}
 
-\RU{Еще один похожий пример описан в секции}\EN{A similar example will be presented in} 
-``\SwitchCaseDefaultSectionName'' 
-\RU{, здесь}\EN{section, in}~(\myref{jump_to_last_printf}).
+\RU{Еще один похожий пример описан здесь}\EN{A similar example is presented here}:
+\myref{jump_to_last_printf}.
 
 \subsubsection{ARM64}
 

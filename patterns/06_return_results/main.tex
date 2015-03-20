@@ -50,13 +50,14 @@ exit(main(argc,argv,envp));
 \RU{Если вы объявите \main как \Tvoid, и ничего не будете возвращать явно (при помощи выражения \IT{return}), 
 то в единственный аргумент exit() попадет
 то, что лежало в регистре \EAX на момент выхода из \main.}
-\EN{If you declare \main as \Tvoid, nothing will be returned explicitly (using the \IT{return} statement),
-then something random, that was stored in the \EAX register at the end of \main will become 
+\EN{If you declare \main as \Tvoid, nothing is to be returned explicitly 
+(using the \IT{return} statement),
+then something random, that was stored in the \EAX register at the end of \main becomes 
 the sole argument of the exit() function.}
-\RU{Там, скорее всего, будет какие-то случайное число, оставшееся от работы вашей ф-ции.}
-\EN{Most likely, there will be a random value, left from your function execution, }
-\RU{Так что, код завершения программы будет псевдослучайным.}
-\EN{so the exit code of program will be pseudorandom.} \\
+\RU{Там, скорее всего, будет какие-то случайное число, оставшееся от работы вашей ф-ции.
+Так что, код завершения программы будет псевдослучайным.}
+\EN{Most likely, there will be a random value, left from your function execution,
+so the exit code of program is pseudorandom.} \\
 
 \RU{Я могу это проиллюстрировать}\EN{I can illustrate this fact}. 
 \RU{Заметьте что у ф-ции}\EN{Please note that here the} \main \RU{тип возвращаемого значения именно}\EN{function 
@@ -82,8 +83,8 @@ GCC 4.8.1 \RU{заменила}\EN{replaced} \printf \RU{на}\EN{with} \puts
 выведенных символов, так же как и}\EN{returns the number of characters printed out, just like} \printf.
 \RU{Обратите внимание на то что}\EN{Please notice that} \EAX \RU{не обнуляется перед выходом их}\EN{is not 
 zeroed before} \main\EN{'s end}.
-\RU{Это значит, \EAX перед выходом из \main будет содержать то, что \puts оставит там.}
-\EN{This implies that the value of \EAX at the end of \main will contain what \puts has left there.}
+\RU{Это значит, \EAX перед выходом из \main содержит то, что \puts оставляет там.}
+\EN{This implies that the value of \EAX at the end of \main contains what \puts has left there.}
 
 \begin{lstlisting}[caption=GCC 4.8.1]
 .LC0:
@@ -140,10 +141,10 @@ int f()
 };
 \end{lstlisting}
 
-\EN{The result of the rand() function will always be left in \EAX, in all four cases.}
-\RU{Результат работы rand() будет оставаться в \EAX во всех четырех случаях.}
-\EN{But in the first 3 cases, the value in \EAX will be just thrown away.}
-\RU{Но в первых трех случаях, значение лежащее в \EAX, будет просто выброшено.}
+\EN{The result of the rand() function is left in \EAX, in all four cases.}
+\RU{Результат работы rand() остается в \EAX во всех четырех случаях.}
+\EN{But in the first 3 cases, the value in \EAX is just thrown away.}
+\RU{Но в первых трех случаях, значение лежащее в \EAX, просто выбрасывается.}
 
 \ifx\LITE\undefined
 \section{\RU{Возврат структуры}\EN{Returning a structure}}

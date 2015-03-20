@@ -96,7 +96,8 @@ The object file is in the main Oracle-library \TT{libserver11.a}.}
 \RU{Бегло оценив цикличность данных, мы легко видим, что в каждом элементе таблицы \TT{kqfviw} 12 полей 32-битных полей.}\EN{Superficially, by noticing the cyclic recurrence of data, we can easily see that each \TT{kqfviw} table element has 12 32-bit fields.}
 \RU{В \IDA легко создать структуру из 12-и элементов и применить её ко всем элементам таблицы.}\EN{It is very simple to create a 12-elements structure in \IDA and apply it to all table elements.}
 \RU{Для версии \oracle 11.2, здесь 1023 элемента в таблице, то есть, здесь описываются 1023 всех возможных \IT{fixed view}.}\EN{As of \oracle version 11.2, there are 1023 table elements, i.e., in it are described 1023 of all possible \IT{fixed views}.}
-\RU{Позже, мы еще вернемся к этому числу.}\EN{We will return to this number later.}
+\RU{Позже, мы еще вернемся к этому числу.}
+\EN{We are going to return to this number later.}
 
 \RU{Как видно, мы не очень много можем узнать чисел в этих полях. Самое первое число всегда равно длине строки-названия view (без терминирующего ноля).}
 \EN{As we can see, there is not much information in these numbers in the fields. The first number is always equals to the name of the view (without the terminating zero.}
@@ -204,7 +205,8 @@ kqfvip_element.params:
 
 \RU{\IT{Fixed view} \TT{GV\$VERSION} отличается от \TT{V\$VERSION} тем, что содержит еще и поле отражающее идентификатор \IT{instance}.}
 \EN{The \TT{GV\$VERSION} \IT{fixed view} is different from \TT{V\$VERSION} only in that it contains one more field with the identifier \IT{instance}.}
-\RU{Но так или иначе, мы теперь упираемся в таблицу \TT{X\$VERSION}. Как и прочие X\$-таблицы, она не документирована, однако, мы можем оттуда что-то прочитать}\EN{Anyway, we will stick with the \TT{X\$VERSION} table. Just like any other X\$-table, it is undocumented, however, we can query it}:
+\RU{Но так или иначе, мы теперь упираемся в таблицу \TT{X\$VERSION}. Как и прочие X\$-таблицы, она не документирована, однако, мы можем оттуда что-то прочитать}
+\EN{Anyway, we are going to stick with the \TT{X\$VERSION} table. Just like any other X\$-table, it is undocumented, however, we can query it}:
 
 \begin{lstlisting}
 SQL> select * from x$version;
@@ -306,7 +308,8 @@ kqftap_element.fn2=NULL
 \index{tracer}
 \RU{При помощи \tracer, можно легко проверить, что эта ф-ция вызывается 6 раз кряду (из ф-ции \TT{qerfxFetch()}) при получении строк из \TT{X\$VERSION}.}\EN{With the help of \tracer, it is easy to check that this function is called 6 times in row (from the \TT{qerfxFetch()} function) while querying the \TT{X\$VERSION} table.}
 
-\RU{Запустим \tracer в режиме \TT{cc} (он добавит комментарий к каждой исполненной инструкции):}\EN{Let's run \tracer in \TT{cc} mode (it will comment each executed instruction):}
+\RU{Запустим \tracer в режиме \TT{cc} (он добавит комментарий к каждой исполненной инструкции):}
+\EN{Let's run \tracer in \TT{cc} mode (it comments each executed instruction):}
 
 \begin{lstlisting}
 tracer -a:oracle.exe bpf=oracle.exe!_kqvrow,trace:cc

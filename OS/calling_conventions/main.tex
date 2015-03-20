@@ -34,10 +34,12 @@ add esp, 12 ; returns ESP
 \RU{Это почти то же что и \IT{cdecl}, за исключением того, что вызываемая функция сама возвращает \ESP 
 в нормальное состояние, выполнив инструкцию \TT{RET x} вместо \RET, где 
 \TT{x = количество\_аргументов * sizeof(int)\footnote{\SIZEOFINT}}.
-Вызывающая функция не будет корректировать \glslink{stack pointer}{указатель стека} при помощи инструкции \TT{add esp, x}.}
+Вызывающая функция не будет корректировать \glslink{stack pointer}{указатель стека},
+там нет инструкции \TT{add esp, x}.}
 \EN{It's almost the same as \IT{cdecl}, with the exception that the \gls{callee} must set \ESP to the initial state by executing the \TT{RET x} instruction instead of \RET, where
 \TT{x = arguments number * sizeof(int)\footnote{\SIZEOFINT}}.
-The \Gls{caller} will not adjust the \gls{stack pointer} using the \TT{add esp, x} instruction.}
+The \Gls{caller} is not adjusting the \gls{stack pointer}, 
+there are no \TT{add esp, x} instruction.}
 
 \begin{lstlisting}[caption=stdcall]
 push arg3
@@ -65,8 +67,8 @@ int __stdcall f2 (int a, int b, int c)
 };
 \end{lstlisting}
 
-\RU{Он будет скомпилирован почти так же как и}\EN{It will be compiled in almost the same way as} 
-\myref{src:passing_arguments_ex_MSVC_cdecl},
+\RU{Он будет скомпилирован почти так же как и}
+\EN{It is to be compiled in almost the same way as} \myref{src:passing_arguments_ex_MSVC_cdecl},
 \RU{но вы увидите}\EN{but you will see} \TT{RET 12} \RU{вместо}\EN{instead of} \TT{RET}. 
 \ac{SP} \RU{не будет корректироваться в \glslink{caller}{вызывающей ф-ции}}
 \EN{is not update in the \gls{caller}}.
@@ -107,11 +109,11 @@ Thus it is not suitable for such functions to use \IT{stdcall}, \IT{cdecl} is be
 
 \RU{Это общее название для передачи некоторых аргументов через регистры, а всех остальных ~--- через стек.На более старых процессорах, это работало потенциально быстрее чем \IT{cdecl}/\IT{stdcall} (ведь стек
 в памяти использовался меньше).
-Впрочем, на современных, намного более сложных CPU, выигрыша может не быть.}
+Впрочем, на современных (намного более сложных) CPU, выигрыша может и не быть.}
 \EN{That's the general naming for the method of passing some arguments via registers and the 
 rest via the stack. It worked faster than \IT{cdecl}/\IT{stdcall} on older CPUs 
 (because of smaller stack pressure).
-It will not help to gain performance on modern much more complex CPUs, however.}
+It may not help to gain performance on modern (much more complex) CPUs, however.}
 
 \RU{Это не стандартизированный способ, поэтому разные компиляторы делают это по-своему. 
 Разумеется, если у вас есть, скажем, две DLL, одна использует другую, и обе они собраны с \IT{fastcall}
@@ -149,7 +151,7 @@ int __fastcall f3 (int a, int b, int c)
 };
 \end{lstlisting}
 
-\RU{Вот как он будет скомпилирован}\EN{Here is how it will be compiled}:
+\RU{Вот как он будет скомпилирован}\EN{Here is how it is to be compiled}:
 
 \lstinputlisting[caption=\Optimizing MSVC 2010 /Ob0]{OS/calling_conventions/fastcall_ex.asm}
 
@@ -168,12 +170,12 @@ int __fastcall f3 (int a, int b, int c)
 сколько аргументов компилятор будет передавать через регистры. Максимально 3. 
 В этом случае будут задействованы регистры \EAX, \EDX и \ECX.}
 \EN{It is the evolution of \IT{fastcall}\footnote{\URLREGPARMM} in some sense.
-With the \TT{-mregparm} option it is possible to set how many arguments will be passed via registers 
+With the \TT{-mregparm} option it is possible to set how many arguments are to be passed via registers 
 (3 is the maximum).
 Thus, the \EAX, \EDX and \ECX registers are to be used.}
 
 \RU{Разумеется, если аргументов у функции меньше трех, то будет задействована только часть регистров.}
-\EN{Of course, if the number the of arguments is less than 3, not all 3 registers will be used.}
+\EN{Of course, if the number the of arguments is less than 3, not all 3 registers are to be used.}
 
 \RU{Вызывающая функция возвращает \glslink{stack pointer}{указатель стека} в первоначальное состояние.}
 \EN{The \Gls{caller} restores the \gls{stack pointer} to its initial state.}
@@ -204,7 +206,7 @@ those having a different calling convention}.
 \RU{В GCC указатель \ITthis обычно передается как самый первый аргумент. 
 Таким образом, внутри будет видно: у всех функций-методов на один аргумент больше.}
 \EN{In GCC, the \ITthis pointer is passed as the first function-method argument.
-Thus it will be very visible that internally, all function-methods have an extra argument.}
+Thus it will be very visible that internally: all function-methods have an extra argument.}
 
 \RU{Для примера, см.}\EN{For an example, see} (\myref{thiscall}).
 
@@ -258,10 +260,10 @@ which will otherwise be occupied by the arguments until the function's execution
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 /0b]{OS/calling_conventions/x64_MSVC_Ox_Ob.asm}
 
-\RU{Если компилировать этот пример с оптимизацией, то выйдет почти то же самое, только ``scratch space''
-не используется, потому что незачем}
-\EN{If we compile the example with optimizations, it will be almost the same, but the ``scratch space''
-will not be used, because it won't be needed}.
+\RU{Если компилировать этот пример с оптимизацией, то выйдет почти то же самое, 
+только ``scratch space'' не используется, потому что незачем.}
+\EN{If we compile the example with optimizations, it is to be almost the same, 
+but the ``scratch space'' will not be used, because it won't be needed.}
 
 \index{x86!\Instructions!LEA}
 \label{using_MOV_and_pack_of_LEA_to_load_values}
@@ -315,14 +317,15 @@ in the low 32 or 64 bits of the \XMM{0} register.}
 \section{\RU{Модификация аргументов}\EN{Modifying arguments}}
 
 \RU{Иногда программисты на \CCpp{} (и не только этих \ac{PL}) задаются вопросом,
-что будет если модифицировать аргументы?}
+что может случиться, если модифицировать аргументы?}
 \EN{Sometimes, \CCpp{} programmers (not limited to these \ac{PL}s, though),
-may ask, what will happen if they modify the arguments?}
+may ask, what can happen if they modify the arguments?}
 \RU{Ответ прост: аргументы хранятся в стеке, именно там и будет происходит модификация.}
-\EN{The answer is simple: the arguments are stored in the stack, that is where the modification will occur.}
+\EN{The answer is simple: the arguments are stored in the stack, 
+that is where the modification takes place.}
 \RU{А вызывающие ф-ции не использует их после вызова ф-ции (обратного случая в своей практике я не видел
 ни разу).}
-\EN{The calling functions will not use them after the \gls{callee}'s exit (I have not seen any such case in my practice).}
+\EN{The calling functions is not using them after the \gls{callee}'s exit (I have not seen any such case in my practice).}
 
 \lstinputlisting{OS/calling_conventions/change_arguments.c}
 

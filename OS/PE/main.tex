@@ -31,9 +31,9 @@ but this function usually does nothing.}
 \RU{В начале всякого PE-файла есть крохотная DOS-программа,
 выводящая на консоль сообщение вроде}\EN{Every PE file begins with tiny DOS program that prints a
 message like} ``This program cannot be run in DOS mode.'' --- 
-\RU{если запустить эту программу в DOS либо Windows 3.1 (ОС не знающие о PE-формате), 
+\RU{если запустить эту программу в DOS либо Windows 3.1 (\ac{OS} не знающие о PE-формате), 
 выведется это сообщение.}
-\EN{if you run this program in DOS or Windows 3.1 (OSes which are not aware of the PE format), 
+\EN{if you run this program in DOS or Windows 3.1 (\ac{OS}-es which are not aware of the PE format), 
 this message will be printed.}
 
 \subsection{\RU{Терминология}\EN{Terminology}}
@@ -58,12 +58,12 @@ loaded modules, memory of the stack, \gls{heap}(s), etc}.
 \item
 \index{VA}
 \ac{VA} --- \RU{это адрес, который будет использоваться в самой программе.}
-\EN{an address which will used in program.}
+\EN{an address which is to be used in program.}
 
 \item
 \index{\RU{Базовый адрес}\EN{Base address}}
 \RU{Базовый адрес}\EN{Base address}\EMDASH{}\RU{это адрес, по которому модуль будет загружен 
-в пространство процесса}\EN{the address within the process memory at which the module will be loaded}.
+в пространство процесса}\EN{the address within the process memory at which the module is to be loaded}.
 
 \item
 \index{RVA}
@@ -97,7 +97,7 @@ loaded modules, memory of the stack, \gls{heap}(s), etc}.
 
 \RU{Дело в том, что несколько авторов модулей могут готовить DLL-файлы для других, и нет возможности договориться о том, какие адреса и кому будут отведены.}
 \EN{The problem is that several module authors can prepare DLL files for others to use and it is not possible
-to reach an agreement which addresses will be assigned to whose modules.}
+to reach an agreement which addresses is to be assigned to whose modules.}
 
 \RU{Поэтому, если у двух необходимых для загрузки процесса DLL одинаковые базовые адреса,
 одна из них будет загружена по этому базовому адресу, 
@@ -209,7 +209,7 @@ data}\EMDASH\IT{IMAGE\_SCN\_CNT\_UNINITIALIZED\_DATA}, \IT{IMAGE\_SCN\_MEM\_READ
 (one that's protected from writing)}, \RU{могут быть флаги}
 \EN{the flags} \\
 \IT{IMAGE\_SCN\_CNT\_INITIALIZED\_DATA} \AndENRU \IT{IMAGE\_SCN\_MEM\_READ} \RU{без}\EN{can be set, but not} \IT{IMAGE\_SCN\_MEM\_WRITE}. 
-\RU{Если попытаться записать что-то в эту секцию, процесс упадет}\EN{A process will crash if it tries to write to this
+\RU{Если попытаться записать что-то в эту секцию, процесс упадет}\EN{A process going to crash if it tries to write to this
 section}.
 \end{itemize}
 
@@ -354,7 +354,7 @@ of the global variable must be} \TT{0x510000}.
 
 \index{\olly}
 \olly \RU{подчеркивает места в памяти, к которым будут применены релоки, например}\EN{underlines
-the places in memory to which relocs will be applied, for example}: \figref{fig:switch_lot_olly3}.
+the places in memory to which relocs are to be applied, for example}: \figref{fig:switch_lot_olly3}.
 
 \subsection{\RU{Экспорты и импорты}\EN{Exports and imports}}
 
@@ -404,7 +404,7 @@ which are function numbers stored in the table, instead of their names}.
 
 % TODO example!
 \RU{При загрузке такой программы в \IDA, она спросит у вас путь к файлу mfc*.dll,
-чтобы установить имена ф-ций}\EN{When loading such programs in \IDA, it will ask for a path to the mfs*.dll files
+чтобы установить имена ф-ций}\EN{When loading such programs in \IDA, it will ask for a path to the mfc*.dll files
 in order to determine the function names}.
 \RU{Если в \IDA не указать путь к этой DLL, то вместо имен ф-ций будет что-то вроде}
 \EN{If you don't tell \IDA the path to these DLLs, there will be}
@@ -443,13 +443,14 @@ however, this is not a strict rule}.
 (``hint'')\EMDASH\RU{``ординал'' ф-ции}\EN{``ordinal'' of function}.
 
 \RU{Если при загрузке удается найти ф-цию по ординалу, тогда сравнение текстовых строк не будет происходить.
-Массив оканчивается нулем}\EN{While loading, if it is possible to find a function by ordinal,
-then the strings comparison will not occur. The array is terminated by zero}.
+Массив оканчивается нулем.}
+\EN{While loading, if it is possible to find a function by ordinal,
+then the strings comparison will not occur. The array is terminated by zero.}
 \RU{Есть также указатель на таблицу \ac{IAT} с названием}
 \EN{There is also a pointer to the \ac{IAT} table named} \IT{FirstThunk},
 \RU{это просто}\EN{it is just the} \ac{RVA}\RU{-адрес}\EN{ address} 
-\RU{места, где загрузчик будет проставлять адреса найденных ф-ций}\EN{of the place where the loader will
-write the addresses of the resolved functions}.
+\RU{места, где загрузчик будет проставлять адреса найденных ф-ций}\EN{of the place where the loader
+writes the addresses of the resolved functions}.
 
 \RU{Места где загрузчик проставляет адреса, \IDA именует их так}\EN{The points where
 the loader writes addresses are marked by \IDA like this}: \IT{\_\_imp\_CreateFileA}, \RU{и т.д}\EN{etc}.
@@ -465,7 +466,7 @@ the loader writes addresses are marked by \IDA like this}: \IT{\_\_imp\_CreateFi
 \RU{а так как, поле с адресом импортируемой ф-ции это как бы глобальная переменная}
 \EN{and since the field with the address of the imported function is a global variable in some sense}, 
 \RU{то в таблице релоков добавляется адрес (плюс 1 или 2) в инструкции \IT{call}}
-\EN{the address of the \IT{call} instruction (plus 1 or 2) will be added to the relocs table},
+\EN{the address of the \IT{call} instruction (plus 1 or 2) is to be added to the relocs table},
 \RU{на случай если модуль будет загружен по другому базовому адресу}
 \EN{for the case when the module is loaded at a different base address}.
 
@@ -525,7 +526,7 @@ code section is usually write-protected}, \RU{так что, моя утилит
 добавляет флаг}\EN{so my utility adds the} \\
 \IT{IMAGE\_SCN\_MEM\_WRITE} 
 \RU{для секции кода. Иначе при загрузке такой программы, она упадет с ошибкой}
-\EN{flag for code section. Otherwise, the program will crash while loading with error code}
+\EN{flag for code section. Otherwise, the program to crash while loading with error code}
 5 (access denied). \\
 \\
 \RU{Может возникнуть вопрос: а что если я поставляю программу с набором DLL,
@@ -539,12 +540,12 @@ is it possible to speed up the loading process?}
 \IT{IMAGE\_IMPORT\_DESCRIPTOR} \RU{имеется поле \IT{Timestamp}}\EN{structure}.
 \RU{И если там присутствует какое-то значение, то загрузчик сверяет это значение с датой-временем DLL-файла}
 \EN{If a value is present there, then the loader compares this value with the date-time of the DLL file}.
-\RU{И если они равны, то загрузчик больше ничего не делает, и загрузка будет происходить быстрее}
-\EN{If the values are equal, then the loader does not do anything, and the loading of the process will be faster}.
+\RU{И если они равны, то загрузчик больше ничего не делает, и загрузка может происходить быстрее.}
+\EN{If the values are equal, then the loader does not do anything, and the loading of the process can be faster.}
 \RU{Это называется}\EN{This is called} ``old-style binding''
 \footnote{\href{http://go.yurichev.com/17050}{MSDN}.
 \RU{Существует также}\EN{There is also the} ``new-style binding'',
-\RU{про него напишу позже}\EN{I will write about it in the future}}.
+\RU{про него напишу позже}\EN{I'm going to write about it in the future}}.
 \index{BIND.EXE}
 \RU{В Windows SDK для этого имеется утилита BIND.EXE}
 \EN{The BIND.EXE utility in Windows SDK is for for this}.
@@ -572,8 +573,8 @@ installation on the computer of the end user}. \\
 и подгружается в память частями по мере обращения к этой памяти.}
 \EN{While loading, the .exe file is not loaded into memory as a whole (recall huge install programs which are
 started suspiciously fast), it is ``mapped'', and loaded into memory in parts as they are accessed.}
-\RU{И возможно в Microsoft решили что так будет быстрее}
-\EN{Probably, Microsoft developers decided it will be faster}.
+\RU{И возможно в Microsoft решили что так будет быстрее.}
+\EN{Probably, Microsoft developers decided it will be faster.}
 
 \subsection{\RU{Ресурсы}\EN{Resources}}
 
@@ -604,8 +605,8 @@ in the .exe file, however, the entry point (\ac{OEP}) points to this tiny fragme
 jmp         mscoree.dll!_CorExeMain
 \end{lstlisting}
 
-\RU{А в mscoree.dll и находится .NET-загрузчик, который уже сам будет работать с PE-файлом}
-\EN{The .NET loader is located in mscoree.dll, which will process the PE file}.
+\RU{А в mscoree.dll и находится .NET-загрузчик, который уже сам будет работать с PE-файлом.}
+\EN{The .NET loader is located in mscoree.dll, which processes the PE file.}
 \index{Windows!Windows XP}
 \RU{Так было в \ac{OS} до Windows XP. Начиная с XP, загрузчик \ac{OS} уже сам определяет, что это
 .NET-файл и запускает его не исполняя этой инструкции \JMP}
@@ -627,9 +628,9 @@ data for the} \ac{TLS}(\myref{TLS}) (\RU{если нужно}\EN{if needed}).
 \EN{Aside from that, the PE file specification also provides initialization of the}
 \ac{TLS }\RU{-секции, т.н.,}\EN{section, the so-called} TLS callbacks.
 \RU{Если они присутствуют, то они будут вызваны перед тем как передать управление на главную точку входа}
-\EN{If they are present, they will be called before the control is passed to the main entry point} (\ac{OEP}).
-\RU{Это широко используется запаковщиками/защифровщиками PE-файлов}
-\EN{This is used widely in the PE file packers/encryptors}.
+\EN{If they are present, they are to be called before the control is passed to the main entry point} (\ac{OEP}).
+\RU{Это широко используется запаковщиками/защифровщиками PE-файлов.}
+\EN{This is used widely in the PE file packers/encryptors.}
 
 \subsection{\RU{Инструменты}\EN{Tools}}
 

@@ -11,7 +11,9 @@
 кто-то обратится, \ac{OS} подставит туда блок, состоящий из нулей\footnote{Так работает \ac{VM}}.}
 \EN{In this case the \TT{x} variable is defined in the \TT{\_DATA} segment and no memory is allocated in the local stack. It is accessed directly, not through the stack. 
 Uninitialized global variables take no space in the executable file
-(indeed, why one needs to allocate space for variables initially set to zero?), but when someone accesses their address, the \ac{OS} will allocate a block of zeroes there\footnote{That is how a \ac{VM} behaves}.}
+(indeed, why one needs to allocate space for variables initially set to zero?), 
+but when someone accesses their address, 
+the \ac{OS} will allocate a block of zeroes there\footnote{That is how a \ac{VM} behaves}.}
 
 \RU{Попробуем изменить объявление этой переменной:}
 \EN{Now let's explicitly assign a value to the variable:}
@@ -32,8 +34,8 @@ _x	DD	0aH
 
 \RU{Если вы откроете скомпилированный .exe-файл в \IDA, то увидите, что \IT{x} 
 находится аккурат в начале сегмента \TT{\_DATA}, после этой переменной будут текстовые строки.}
-\EN{If you open the compiled .exe in \IDA, you will see the \IT{x} variable placed at the beginning of 
-the \TT{\_DATA} segment, and after it you will see text strings.}
+\EN{If you open the compiled .exe in \IDA, you can see the \IT{x} variable placed at the beginning of 
+the \TT{\_DATA} segment, and after it you can see text strings.}
 
 \RU{А вот если вы откроете в \IDA, .exe скомпилированный в прошлом примере, 
 где значение \IT{x} не определено, то в IDA вы увидите:}
@@ -61,7 +63,7 @@ set, you would see something like this:}
 Но в самом .exe ничего этого нет. Неинициализированные переменные не занимают места в исполняемых файлах. 
 Удобно для больших массивов, например.}
 \EN{\TT{\_x} is marked with \TT{?} with the rest of the variables that do not need to be initialized. 
-This implies that after loading the .exe to the memory, a space for all these variables will be 
+This implies that after loading the .exe to the memory, a space for all these variables is to be 
 allocated and filled with zeroes \cite[6.7.8p10]{C99TC3}. 
 But in the .exe file these uninitialized variables do not occupy anything. This is convenient for example when using large arrays.}
 
@@ -88,7 +90,8 @@ In \ac{ELF} file this segment has the following attributes:}
 значения, например, $10$, то она будет находится 
 в сегменте \TT{\_data},
 это сегмент с такими атрибутами:}
-\EN{If you, however, initialise the variable with some value e.g. $10$, it will be placed in the \TT{\_data} segment, which has the following attributes:}
+\EN{If you, however, initialise the variable with some value e.g. $10$, 
+it is to be placed in the \TT{\_data} segment, which has the following attributes:}
 
 \begin{lstlisting}
 ; Segment type: Pure data

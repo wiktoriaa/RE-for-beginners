@@ -13,19 +13,20 @@ or just a pack of if() statements.}
 которая будет исполняться только
 если $R0=0$, и тогда, в \Reg{0} будет загружен адрес строки \IT{<<zero\textbackslash{}n>>}.}
 \EN{Anyway, we see here predicated instructions again (like \ADREQ (\IT{Equal}))
-which will be triggered only in case $R0=0$, and then will load the address of the string \IT{<<zero\textbackslash{}n>>}
+which is triggered only in case $R0=0$, and then loads the address of the string \IT{<<zero\textbackslash{}n>>}
 into \Reg{0}.}
 \index{ARM!\Instructions!BEQ}
 \RU{Следующая инструкция}\EN{The next instruction} \ac{BEQ}
-\RU{перенаправит исполнение на}\EN{will redirect control flow to} \TT{loc\_170}, \RU{если}\EN{if} $R0=0$.
+\RU{перенаправит исполнение на}
+\EN{redirects control flow to} \TT{loc\_170}, \RU{если}\EN{if} $R0=0$.
 \RU{Кстати, наблюдательный читатель может спросить, сработает ли \ac{BEQ} нормально,
-ведь \ADREQ перед ним уже заполнила регистр \Reg{0} чем-то другим.}
-\EN{An astute reader may ask, will \ac{BEQ} trigger right since \ADREQ before it
-has already filled the \Reg{0} register with another value.}
+ведь \ADREQ перед ним уже заполнила регистр \Reg{0} чем-то другим?}
+\EN{An astute reader may ask, will \ac{BEQ} trigger correctly since \ADREQ before it
+has already filled the \Reg{0} register with another value?}
 \RU{Сработает, потому что \ac{BEQ} проверяет флаги, установленные инструкцией \CMP, 
 а \ADREQ флаги никак не модифицирует.}
-\EN{Yes, it will since \ac{BEQ} checks the flags set by the \CMP instruction, and \ADREQ does not modify any flags
-at all.}
+\EN{Yes, it will since \ac{BEQ} checks the flags set by the \CMP instruction, 
+and \ADREQ does not modify any flags at all.}
 
 \RU{Далее всё просто и знакомо.}\EN{The rest of the instructions are already familiar to us.} 
 \RU{Вызов}\EN{There is only one call to} \printf \RU{один, и в самом конце, 
@@ -41,7 +42,7 @@ at all.}
 \RU{Если это не так, то при помощи \ADRNE (\IT{Not Equal}) в \Reg{0} будет загружен указатель на 
 строку \IT{<<something unknown \textbackslash{}n>>}, ведь $a$ уже было проверено на $0$ и $1$ до этого, 
 и здесь $a$ точно не попадает под эти константы.}
-\EN{If it is not true, then \ADRNE will load a pointer to the string \IT{<<something unknown \textbackslash{}n>>} 
+\EN{If it is not true, then \ADRNE loads a pointer to the string \IT{<<something unknown \textbackslash{}n>>} 
 into \Reg{0}, since $a$ was already checked to be equal to $0$ or $1$,
 and we can sure that the $a$ variable is not equal to these numbers at this point.}
 \RU{Ну а если}\EN{And if} $R0=2$, \RU{в \Reg{0} будет загружен указатель на строку}

@@ -34,7 +34,7 @@ In our example, it jumps if password is not correct (\TT{equals} method return \
 The very first idea is to patch it.
 There are two bytes in \TT{ifeq} opcode, which encodes jump offset.
 To make this instruction idle, we must set byte 3 at 3rd opcode
-(because 3 will be added to the current address resulting always jump to the next instruction,
+(because 3 is to be added to the current address resulting always jump to the next instruction,
 \TT{ifeq} instruction length is 3 bytes):
 
 \begin{figure}[H]
@@ -83,5 +83,5 @@ plus pack of \ac{NOP}s:
 \caption{IDA}
 \end{figure}
 
-1 will always be at the \ac{TOP} when \TT{ifeq} instruction will be executed, 
+1 is always to be at the \ac{TOS} when \TT{ifeq} instruction is executed, 
 so \TT{ifeq} will never jump.

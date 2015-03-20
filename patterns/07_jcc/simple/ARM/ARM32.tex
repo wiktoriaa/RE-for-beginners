@@ -31,24 +31,25 @@ ignoring flags.}
 \index{ARM!\Instructions!ADR}
 \index{ARM!\Instructions!ADRcc}
 \index{ARM!\Instructions!CMP}
-\RU{Инструкция \TT{ADRGT} работает так же, как и \TT{ADR}, но исполнится только в случае 
+\RU{Инструкция \TT{ADRGT} работает так же, как и \TT{ADR}, но исполняется только в случае,
 если предыдущая инструкция \CMP,
-сравнивая два числа, обнаружила что одно из них больше второго}
-\EN{The \TT{ADRGT} instructions works just like \TT{ADR} but will execute only in the case when the previous \CMP
+сравнивая два числа, обнаруживает, что одно из них больше второго.}
+\EN{The \TT{ADRGT} instructions works just like \TT{ADR} but executes only in the case when the previous \CMP
 instruction found one number greater than another, while comparing the two.}
 (\IT{Greater Than}).
 
 \index{ARM!\Instructions!BL}
 \index{ARM!\Instructions!BLcc}
 \RU{Следующая инструкция \TT{BLGT} ведет себя так же, как и \TT{BL} и сработает только если 
-результат сравнения был такой же}\EN{The next \TT{BLGT} instruction behaves exactly as \TT{BL} and will be
-triggered only if the result of the comparison was the same} (\IT{Greater Than}). 
+результат сравнения был такой же}
+\EN{The next \TT{BLGT} instruction behaves exactly as \TT{BL} 
+and is triggered only if the result of the comparison was the same} (\IT{Greater Than}). 
 \TT{ADRGT} \RU{записывает в \Reg{0} указатель на строку}\EN{writes a pointer to the string} 
 \TT{``a>b\textbackslash{}n''}
 \RU{, а \TT{BLGT} вызывает}\EN{ into \Reg{0} and \TT{BLGT} calls} \printf.
 \RU{Следовательно, эти инструкции с суффиксом \TT{-GT}, исполнятся только в том случае, если значение
 в \Reg{0} (там $a$) было больше чем значение в \Reg{4} (там $b$).}
-\EN{Consequently, these instructions with suffix \TT{-GT} will be executed only in the case when
+\EN{Consequently, these instructions with suffix \TT{-GT} are executes only in the case when
 the value in \Reg{0} ($a$ is there) is bigger than the value in \Reg{4} ($b$ is there).}
 
 \index{ARM!\Instructions!ADRcc}
@@ -67,19 +68,18 @@ other during the last comparison.}
 но сработает только в случае если в результате сравнения одно из значений было больше 
 или равно второму}
 \EN{Then we see \TT{LDMGEFD}, this instruction works just like \TT{LDMFD}\footnote{\ac{LDMFD}},
-but will be triggered only when one value was greater or equal to the other}
-(\IT{Greater or Equal}).
+but is triggered only when one value was greater or equal to the other} (\IT{Greater or Equal}).
 
 \RU{Смысл инструкции}\EN{The sense of} \TT{``LDMGEFD SP!, \{R4-R6,PC\}''} 
 \RU{в том, что это как бы эпилог функции, но он сработает только если $a>=b$, только тогда работа 
 функции закончится.}
-\EN{instruction is that is like a function epilogue, but it will be triggered only if $a>=b$, only then the function 
-execution will finish.}
+\EN{instruction is that is like a function epilogue, but it is triggered only if $a>=b$, 
+only then the function execution finishes.}
 \index{Function epilogue}
 \RU{Но если это не так, то есть $a<b$, то исполнение дойдет до следующей инструкции 
 \TT{``LDMFD SP!, \{R4-R6,LR\}''}, это еще один эпилог функции, эта инструкция восстанавливает состояние регистров
 \TT{R4-R6}, но и \ac{LR} вместо \ac{PC}, таким образом, пока что, не делая возврата из функции.}
-\EN{But if it is not true, i.e., $a<b$, then the control flow will continue to the next \TT{``LDMFD SP!, \{R4-R6,LR\}''} instruction,
+\EN{But if it is not true, i.e., $a<b$, then the control flow continues to the next \TT{``LDMFD SP!, \{R4-R6,LR\}''} instruction,
 which is one more function epilogue. This instruction restores the state of registers \TT{R4-R6}, 
 but also \ac{LR} instead of \ac{PC}, thus, it does not returns from the function.}
 \RU{Последние две инструкции вызывают}\EN{The last two instructions call} \printf 

@@ -42,11 +42,11 @@ with 9 arguments from the previous section}: \myref{example_printf8_x64}.
 \index{ARM!\Instructions!STR}
 \RU{Самая первая инструкция}\EN{The very first} \TT{``STR LR, [SP,\#var\_4]!''} 
 \RU{сохраняет в стеке \ac{LR}, ведь нам придется использовать этот регистр для вызова \printf}
-\EN{instruction saves \ac{LR} on the stack, because we will use this register for the \printf call}.
+\EN{instruction saves \ac{LR} on the stack, because we are going to use this register for the \printf call}.
 \RU{Восклицательный знак в конце означает}\EN{Exclamation mark at the end indicates} \IT{pre-index}.
 \RU{Это значит, что в начале \ac{SP} должно быть
 уменьшено на 4, затем по адресу в \ac{SP} должно быть записано значение \ac{LR}.}
-\EN{This implies that \ac{SP} will be decreased by 4 first, and then \ac{LR} will be saved at the address stored in \ac{SP}.}
+\EN{This implies that \ac{SP} is to be decreased by 4 first, and then \ac{LR} will be saved at the address stored in \ac{SP}.}
 \RU{Это аналог знакомой в x86 инструкции \PUSH}\EN{This is similar to \PUSH in x86}.
 \RU{Читайте больше об этом}\EN{Read more about it at}: \myref{ARM_postindex_vs_preindex}.
 
@@ -58,37 +58,40 @@ with 9 arguments from the previous section}: \myref{example_printf8_x64}.
 allocate \TT{0x14} ($20$) bytes on the stack}.
 \RU{Действительно, нам нужно передать 5 32-битных значений через стек в \printf, каждое значение занимает 4 байта, а $5*4=20$ ~--- как раз}
 \EN{Indeed, we need to pass 5 32-bit values via the stack to the \printf function, and each one occupies 4 bytes, which is exactly $5*4=20$}.
-\RU{Остальные 4 32-битных значения будут переданы через регистры}\EN{The other 4 32-bit values will be passed through registers}.
+\RU{Остальные 4 32-битных значения будут переданы через регистры.}
+\EN{The other 4 32-bit values are to be passed through registers.}
 
 \item \RU{Передача 5, 6, 7 и 8 через стек}\EN{Passing 5, 6, 7 and 8 via the stack}:
 \RU{они записываются в регистры \Reg{0}, \Reg{1}, \Reg{2} и \Reg{3} соответственно}
 \EN{they are stored in the \Reg{0}, \Reg{1}, \Reg{2} and \Reg{3} registers respectively}.
 \RU{Затем инструкция}\EN{Then, the} \TT{``ADD R12, SP, \#0x18+var\_14''} 
 \RU{записывает в регистр \TT{R12} адрес места в стеке, куда будут помещены эти 4 значения}
-\EN{instruction writes the stack address where these 4 variables will be stored, into the \TT{R12} register}.
+\EN{instruction writes the stack address where these 4 variables are to be stored, into the \TT{R12} register}.
 \index{IDA!var\_?}
 \IT{var\_14} \RU{~--- это макрос ассемблера}\EN{is an assembly macro}, \RU{равный}\EN{equal to} $-0x14$, 
 \RU{такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку}
 \EN{created by \IDA to conveniently display the code accessing the stack}.
 \RU{Макросы \IT{var\_?}, создаваемые \IDA, отражают локальные переменные в стеке}\EN{The \IT{var\_?} macros generated
 by \IDA reflect local variables in the stack}.
-\RU{Так что в \TT{R12} будет записано $SP+4$}\EN{So, $SP+4$ will be stored into the \TT{R12} register}.
+\RU{Так что в \TT{R12} будет записано $SP+4$.}
+\EN{So, $SP+4$ is to be stored into the \TT{R12} register.}
 \index{ARM!\Instructions!STMIA}
 \RU{Следующая инструкция}\EN{The next} \TT{``STMIA R12, {R0-R3}''} 
 \RU{записывает содержимое регистров \Reg{0}-\Reg{3} по адресу в памяти, на который указывает \TT{R12}}
 \EN{instruction
 writes registers \Reg{0}-\Reg{3} contents to the memory pointed by \TT{R12}}.
 \RU{Инструкция }\TT{STMIA} \RU{означает}\EN{abbreviates} \IT{Store Multiple Increment After}. 
-\IT{``Increment After''} \RU{означает, что \TT{R12} будет увеличиваться на 4 после записи каждого значения регистра}
-\EN{implies that \TT{R12} will be increased by $4$ after each register value is written}.
+\IT{``Increment After''} 
+\RU{означает, что \TT{R12} будет увеличиваться на 4 после записи каждого значения регистра.}
+\EN{implies that \TT{R12} is to be increased by $4$ after each register value is written.}
 
 \item \RU{Передача $4$ через стек}\EN{Passing $4$ via the stack}:
 \RU{$4$ записывается в \Reg{0}, затем это значение при помощи инструкции}\EN{$4$ is stored in \Reg{0} and then
 this value, with the help of the} \TT{``STR R0, [SP,\#0x18+var\_18]''} \RU{попадает в стек}\EN{instruction is saved
 on the stack}.
-\IT{var\_18} \RU{равен}\EN{is} $-0x18$, \RU{смещение будет $0$}\EN{so the offset will be $0$}, 
+\IT{var\_18} \RU{равен}\EN{is} $-0x18$, \RU{смещение будет $0$}\EN{so the offset is to be $0$}, 
 \RU{так что, значение из регистра \Reg{0} ($4$) запишется туда, куда указывает \ac{SP}}
-\EN{thus the value from the \Reg{0} register ($4$) will be written to the address written in \ac{SP}}.
+\EN{thus the value from the \Reg{0} register ($4$) is to be written to the address written in \ac{SP}}.
 
 \item \RU{Передача 1, 2 и 3 через регистры}\EN{Passing 1, 2 and 3 via registers}:
 
@@ -109,9 +112,9 @@ registers right before the \printf call}, \RU{а остальные 5 значе
 \EN{instruction restores the \ac{SP} pointer back to its former value,
 thus cleaning the stack}.
 \RU{Конечно, то что было записано в стек, там пока и останется, но всё это будет многократно 
-перезаписано во время исполнения последующих функций}
+перезаписано во время исполнения последующих функций.}
 \EN{Of course, what was stored on the stack will stay there, but it will all be
-rewritten during the execution of subsequent functions}.
+rewritten during the execution of subsequent functions.}
 
 \index{ARM!\Instructions!LDR}
 \RU{Инструкция}\EN{The} \TT{``LDR PC, [SP+4+var\_4],\#4''} \RU{загружает в \ac{PC} 

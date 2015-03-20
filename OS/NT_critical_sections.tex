@@ -4,11 +4,12 @@
 \label{critical_sections}
 
 \RU{Критические секции в любой \ac{OS} очень важны в мультитредовой среде, используются в основном
-для обеспечения гарантии что только один тред будет иметь доступ к данным,
-блокируя остальные треды и прерывания}
+для обеспечения гарантии что только один тред будет иметь доступ к данным в один момент времени,
+блокируя остальные треды и прерывания.}
 \EN{Critical sections in any \ac{OS} are very important in multithreaded environment,
 mostly for giving a guarantee
-that only one thread will access some data, while blocking other threads and interrupts}. \\
+that only one thread can access some data in a single moment of time, 
+while blocking other threads and interrupts.} \\
 \\
 \RU{Вот как объявлена структура}\EN{That is how a} \TT{CRITICAL\_SECTION} 
 \RU{объявлена в линейке OS}\EN{structure is declared in} \gls{Windows NT}\EN{ line OS}:
@@ -139,10 +140,10 @@ meaning that all other CPUs or CPU cores in system are blocked from accessing th
 \EN{The}\RU{Префикс} \TT{LOCK} \RU{очень важен}\EN{prefix is very important}: 
 \RU{два треда, каждый из которых работает на разных CPU или ядрах CPU, могут попытаться одновременно
 войти в критическую секцию, одновременно модифицируя значение в памяти, и это может привести к
-непредсказуемым результатам}
+непредсказуемым результатам.}
 \EN{without it two threads, each of which works on separate CPU or CPU core can try to
 enter a critical section and to modify the value in memory,
-which will result in non-deterministic behaviour}.
+which will result in non-deterministic behaviour.}
 
 % TODO linux
 

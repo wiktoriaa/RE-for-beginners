@@ -5,8 +5,10 @@
 \RU{Начинается ли исполнение программы прямо с ф-ции \main{}}
 \EN{Does the program execution start right at the \main{} function}?
 \RU{Нет, не начинается}\EN{No, it does not}.
-\RU{Если открыть любой исполняемый файл в \IDA или Hiew, то \ac{OEP} указывает на совсем другой код}
-\EN{If we would open any executable file in \IDA or HIEW, we will see \ac{OEP} pointing to another code block}.
+\RU{Если открыть любой исполняемый файл в \IDA или Hiew, 
+то \ac{OEP} указывает на какой-то совсем другой код.}
+\EN{If we would open any executable file in \IDA or HIEW, 
+we can see \ac{OEP} pointing to some another code block.}
 \RU{Это код, который делает некоторые приготовления перед тем как запустить ваш код}
 \EN{This code is doing some maintenance and preparations before passing control flow to our code}.
 \RU{Он называется стартап-код или CRT-код (C RunTime)}\EN{It is called startup-code or CRT code (C RunTime)}. \\
@@ -97,35 +99,36 @@ cl no_crt.c user32.lib /link /entry:main
 
 \RU{Получаем вполне работающий .exe размером 2560 байт, внутри которого есть только PE-заголовок, инструкции, 
 вызывающие \TT{MessageBox},
-две строки в сегменте данных, импортируемая из \TT{user32.dll} ф-ция \TT{MessageBox}, и более ничего}
-\EN{We will get a runnable .exe with size 2560 bytes, that has in it a PE header, instructions calling
+две строки в сегменте данных, импортируемая из \TT{user32.dll} ф-ция \TT{MessageBox}, и более ничего.}
+\EN{We are getting a runnable .exe with size 2560 bytes, that has a PE header in it, instructions calling
 \TT{MessageBox}, two strings in the data segment,
-the \TT{MessageBox} function imported from \TT{user32.dll} and nothing else}.
+the \TT{MessageBox} function imported from \TT{user32.dll} and nothing else.}
 
 \RU{Это работает, но вы уже не сможете вместо \main{} написать \TT{WinMain} с его четырьмя аргументами}
 \EN{This works, but you cannot write \TT{WinMain} with its 4 arguments instead of \main{}}.
-\RU{Вернее, написать-то сможете, но доступа к этим аргументам не будет, 
-потому что они не будут подготовлены на момент исполнения}\EN{To be correct, you can,
-but the arguments will not be prepared at the moment of execution}.
+\RU{Вернее, если быть точным, написать-то сможете, но доступа к этим аргументам не будет, 
+потому что они не подготовлены на момент исполнения.}
+\EN{To be precise, you can, but the arguments are not prepared at the moment of execution.}
 
 \RU{Кстати, можно еще короче сделать .exe если уменьшить 
-выравнивание \ac{PE}-секций (которое, по умолчанию, 4096 байт)}\EN{By the way, it is possible to make the .exe even
-shorter by aligning the \ac{PE} sections at less than the default 4096 bytes}.
+выравнивание \ac{PE}-секций (которое, по умолчанию, 4096 байт).}
+\EN{By the way, it is possible to make the .exe even 
+shorter by aligning the \ac{PE} sections at less than the default 4096 bytes.}
 
 \begin{lstlisting}
 cl no_crt.c user32.lib /link /entry:main /align:16
 \end{lstlisting}
 
-\RU{Линкер скажет}\EN{Linker will say}:
+\RU{Линкер скажет}\EN{Linker says}:
 
 \begin{lstlisting}
 LINK : warning LNK4108: /ALIGN specified without /DRIVER; image may not run
 \end{lstlisting}
 
 \RU{Получим .exe размером 720 байт}\EN{We get an .exe that's 720 bytes}.
-\RU{Он запускается в}\EN{It will run in} Windows 7 x86, \RU{но не}\EN{but not in} x64 
-(\RU{там выдает ошибку при загрузке}\EN{an error message will be shown when you  try to execute it}).
+\RU{Он запускается в}\EN{It can be exectued in} Windows 7 x86, \RU{но не}\EN{but not in} x64 
+(\RU{там выдает ошибку при загрузке}\EN{an error message will be shown when you try to execute it}).
 \RU{При желании, размер можно еще сильнее ужать, но, как видно, 
-возникают проблемы с совместимостью с разными версиями Windows}\EN{With even more efforts, it is possible
-to make the executable even shorter, but as you can see, compatibility problems arise quickly}.
-
+возникают проблемы с совместимостью с разными версиями Windows.}
+\EN{With even more efforts, it is possible
+to make the executable even shorter, but as you can see, compatibility problems arise quickly.}

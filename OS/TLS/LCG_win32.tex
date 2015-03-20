@@ -2,10 +2,10 @@
 
 \subsubsection{\RU{Неинициализированные данные в \ac{TLS}}\EN{Uninitialized \ac{TLS} data}}
 
-\RU{Одно из решений --- это добавить модификатор \TT{\_\_declspec( thread )} к глобальной переменной, и теперь
-она будет выделена в \ac{TLS} (строка 9):}
-\EN{One solution is to add \TT{\_\_declspec( thread )} modifier to the global variable, then it will be allocated
-in the \ac{TLS} (line 9):}
+\RU{Одно из решений --- это добавить модификатор \TT{\_\_declspec( thread )} к глобальной переменной, 
+и теперь она будет выделена в \ac{TLS} (строка 9):}
+\EN{One solution is to add \TT{\_\_declspec( thread )} modifier to the global variable, 
+then it will be allocated in the \ac{TLS} (line 9):}
 
 \lstinputlisting[numbers=left]{OS/TLS/win32/rand_uninit.c}
 
@@ -93,10 +93,10 @@ initialized at start with something truly random, instead of 1234.}
 \RU{Нижеследующий код не очень портабельный из-за хака, но тем не менее, вы поймете идею.}
 \EN{The following code is not very portable due to the hack, but nevertheless, you get the idea.}
 \RU{Мы здесь добавляем ф-цию (\TT{tls\_callback()}), которая вызывается \IT{перед} стартом процесса и/или потока.}
-\EN{What we do here is define a function (\TT{tls\_callback()}) which will be called \IT{before} 
+\EN{What we do here is define a function (\TT{tls\_callback()}) which is to be called \IT{before} 
 the process and/or thread start.}
-\RU{Ф-ция будет инициализировать \ac{PRNG} значением из GetTickCount().}
-\EN{The function will initialize the \ac{PRNG} with the value returned from GetTickCount().}
+\RU{Ф-ция будет инициализировать \ac{PRNG} значением возвращенным ф-цией \TT{GetTickCount()}.}
+\EN{The function initializes the \ac{PRNG} with the value returned by \TT{GetTickCount()} function.}
 
 \lstinputlisting{OS/TLS/win32/rand_TLS_callback.c}
 

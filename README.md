@@ -19,7 +19,7 @@ Russian:
 
 There are also [lite (introductory) version](http://beginners.re/#lite).
 It is approximately 6 times shorter than full version (~150 pages) and intended to those 
-who wants for very quick introduction to reverse engineering basics.
+who wants very quick introduction to reverse engineering basics.
 There are nothing about MIPS, ARM, OllyDBG, GCC, GDB, IDA, there are no exercises, examples, etc.
 
 English lite: 

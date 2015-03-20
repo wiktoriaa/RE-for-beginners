@@ -33,7 +33,7 @@ a \gls{product} of the value in \EAX and the content of \TT{\_b}.}
 Возвращаем управление вызываемой 
 функции ~--- она возьмет значение из \EAX и отправит его в \printf.}
 \EN{The value in \EAX does not need to be moved: it is already where it must be.
-On returning to \gls{caller}, it will take the \EAX value and use it as an argument to \printf.}
+On returning to \gls{caller}, it takes the \EAX value and use it as an argument to \printf.}
 
 \ifdefined\IncludeOlly
 \input{patterns/05_passing_arguments/olly.tex}
@@ -50,7 +50,10 @@ On returning to \gls{caller}, it will take the \EAX value and use it as an argum
 \RU{Практически то же самое, если не считать мелких отличий описанных раннее.}
 \EN{The result is almost the same with some minor differences discussed earlier.}
 
-\RU{После вызова обоих ф-ций, \glslink{stack pointer}{указатель стека} не возвращается назад, потому что предпоследняя
-инструкция}\EN{The \gls{stack pointer} is not set back after the two function calls(f and printf), because the penultimate}
-\TT{LEAVE} (\myref{x86_ins:LEAVE}) \RU{сделает это за один раз, в конце исполнения}\EN{instruction will take care of this at the end}.
+\RU{После вызова обоих ф-ций, \glslink{stack pointer}{указатель стека} не возвращается назад, 
+потому что предпоследняя инструкция}
+\EN{The \gls{stack pointer} is not set back after the two function calls(f and printf), 
+because the penultimate} \TT{LEAVE} (\myref{x86_ins:LEAVE}) 
+\RU{делает это за один раз, в конце исполнения.}
+\EN{instruction takes care of this at the end.}
 \fi

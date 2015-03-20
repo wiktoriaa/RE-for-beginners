@@ -12,22 +12,22 @@
 \RU{То есть, если второй операнд больше первого или 
 равен ему, произойдет переход туда, где будет следующая проверка.}
 \EN{In other words, if the second operand is 
-larger than first or equal, control flow will be passed to address or label mentioned in instruction.}
+larger than first or equal, control is to be passed to address or label mentioned in instruction.}
 \RU{А если это условие не срабатывает, то есть второй операнд меньше первого, то перехода не будет, 
 и сработает первый \printf.}
-\EN{If this condition does not trigger (second operand smaller than first), the control flow will 
-not be altered and the first \printf will be called.}
+\EN{If this condition does not trigger (second operand smaller than first), 
+the control flow is not to be altered and the first \printf is to be called.}
 \index{x86!\Instructions!JNE}
 \RU{Вторая проверка это}\EN{The second check is} \JNE: \IT{Jump if Not Equal}.
-\RU{Переход не произойдет, если операнды равны}\EN{Control flow will not change if the operands are 
-equal}.
+\RU{Переход не произойдет, если операнды равны.}
+\EN{Control flow will not change if the operands are equal.}
 \index{x86!\Instructions!JGE}
 \RU{Третья проверка}\EN{The third check is} \JGE: \IT{Jump if Greater or Equal}\EMDASH{}\RU{переход 
 если первый операнд больше второго или равен ему}\EN{jump if the first operand is larger than 
 the second or if they are equal}.
 \RU{Кстати, если все три условных перехода сработают, ни один \printf не вызовется. 
 Но, без внешнего вмешательства, это невозможно.}
-\EN{So, if all three conditional jumps are triggered, no \printf will be called whatsoever. 
+\EN{So, if all three conditional jumps are triggered, no \printf to be called whatsoever. 
 But it is impossible without special intervention.}
 
 \EN{The}\RU{Функция} \TT{f\_unsigned()} \RU{точно такая же, за тем исключением, что используются инструкции 
@@ -76,8 +76,10 @@ we can almost be sure that the variables are signed or unsigned, respectively.}
 \subsubsection{x86 + MSVC + Hiew}
 \index{Hiew}
 
-\RU{Можем попробовать модифицировать исполняемый файл так,}\EN{We can try to patch the executable file in a way} 
-\RU{чтобы ф-ция}\EN{that the} \TT{f\_unsigned()} \RU{всегда показывала}\EN{function will always print} ``a==b'', 
+\RU{Можем попробовать модифицировать исполняемый файл так, чтобы ф-ция}
+\EN{We can try to patch the executable file in a way that the}
+\TT{f\_unsigned()} \RU{всегда показывала}
+\EN{function will always print} ``a==b'', 
 \RU{при любых входящих значениях}\EN{for any input values}.
 
 \RU{Вот как она выглядит в}\EN{Here is how it looks in} Hiew:
@@ -103,8 +105,9 @@ to the second} \printf,
 \RU{Для этого нужно пропатчить три инструкции (или байта)}\EN{Three instructions (or bytes) has to be patched}:
 
 \begin{itemize}
-\item \RU{Первый переход теперь будет}\EN{The first jump will now be} \JMP, \RU{но смещение перехода 
-(\gls{jump offset}) останется прежним}\EN{but the \gls{jump offset} will be same}.
+\item \RU{Первый переход теперь будет}\EN{The first jump will now be} \JMP, 
+\RU{но смещение перехода (\gls{jump offset}) останется прежним.}
+\EN{but the \gls{jump offset} is still the same.}
 
 \item \RU{Второй переход может быть и будет срабатывать иногда, но в любом случае он будет совершать переход
 только на следующую инструкцию, потому что мы выставляем смещение перехода (\gls{jump offset}) в 0}
@@ -112,11 +115,11 @@ to the second} \printf,
 instruction, because, we set the \gls{jump offset} to 0}.
 \RU{В этих инструкциях, смещение перехода просто прибавляется к адресу следующей инструкции}
 \EN{\Gls{jump offset} is just gets added to the address for the next instruction in these instructions}.
-\RU{И когда смещение 0, то тогда и переход будет на следующую инструкцию}\EN{So if the offset is 0,
-the jump will be to the next instruction}.
+\RU{И когда смещение 0, то тогда и переход соскальзывает на следующую инструкцию.}
+\EN{So if the offset is 0, the jump slips to the next instruction.}
 
-\item \RU{Третий переход конвертируем в \JMP точно так же, как и первый, он будет срабатывать всегда}
-\EN{The third jump we convert into \JMP just as the first one, so it will always trigger}.
+\item \RU{Третий переход конвертируем в \JMP точно так же, как и первый, он будет срабатывать всегда.}
+\EN{The third jump we convert into \JMP just as the first one, so it is always triggering.}
 \end{itemize}
 
 \clearpage
@@ -153,7 +156,8 @@ if the flags are same after each execution}?
 
 % should be here instead of 'switch' section?
 \RU{Мы здесь также видим}\EN{We also see} \TT{JMP puts} \RU{вместо}\EN{here instead of} \TT{CALL puts / RETN}.
-\RU{Этот прием будет описан немного позже}\EN{This kind of trick will be explained later}: \myref{JMP_instead_of_RET}.
+\RU{Этот прием описан немного позже}
+\EN{This kind of trick will have explained later}: \myref{JMP_instead_of_RET}.
 
 \RU{Нужно сказать, что x86-код такого типа редок}\EN{This type of x86 code 
 is somewhat rare}.

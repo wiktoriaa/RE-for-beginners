@@ -93,10 +93,12 @@ ReactOS\footnote{\url{http://go.yurichev.com/17060}}.\\
 \RU{Если указатель}\EN{If the} \IT{filter} \RU{ноль,}\EN{pointer is NULL, the} \IT{handler} \RU{указывает на код \IT{finally}}
 \EN{pointer is the pointer to the \IT{finally} code block}.\\
 \\
-\RU{Во время исполнения, значение}\EN{During execution, the} \IT{previous try level} \RU{в стеке меняется,
-чтобы ф-ция}\EN{value in the stack changes, so} \TT{\_except\_handler3} \RU{знала о текущем уровне вложенности,
-чтобы знать, какой элемент таблицы}\EN{will know about the current
-level of nestedness, in order to know which} \IT{scope table} \RU{использовать}\EN{entry to use}.
+\RU{Во время исполнения, значение \IT{previous try level} в стеке меняется, чтобы ф-ция
+\TT{\_except\_handler3} знала о текущем уровне вложенности, чтобы знать, какой элемент таблицы
+\IT{scope table} использовать.}
+\EN{During execution, the \IT{previous try level} value in the stack changes, so
+\TT{\_except\_handler3} can get information about the current level of nestedness, 
+in order to know which \IT{scope table} entry to use.}
 
 \subsubsection{SEH3: \RU{пример с одним блоком try/except}\EN{one try/except block example}}
 
@@ -106,7 +108,7 @@ level of nestedness, in order to know which} \IT{scope table} \RU{использ
 
 \RU{Здесь мы видим, как структура SEH конструируется в стеке}\EN{Here we see how the SEH frame is constructed in the stack}.
 \RU{\IT{Scope table} расположена в сегменте}\EN{The \IT{scope table} is located in the} \TT{CONST}\EN{ segment}\EMDASH{}
-\RU{действительно, эти поля не будут меняться}\EN{indeed, these fields will not change}.
+\RU{действительно, эти поля не будут меняться}\EN{indeed, these fields are not to be changed}.
 \RU{Интересно, как меняется переменная}\EN{An interesting thing is how the} \IT{previous try level}\EN{ variable has changed}.
 \RU{Исходное значение}\EN{The initial value is} \TT{0xFFFFFFFF} ($-1$).
 \RU{Момент, когда тело}\EN{The moment when the body of the} \TT{try} \RU{открывается, обозначен инструкцией, записывающей}
@@ -232,10 +234,10 @@ scopetable entry[0]. previous try level=-2, filter=0x771f74d0 (ntdll.dll!___safe
 \EN{Each element has an offset inside the stack of another value: 
 the address of the \gls{stack frame} (\EBP)} \glslink{xoring}{\RU{про-XOR-еный}\EN{xored}} \RU{с}\EN{with the} 
 \TT{security\_cookie} \RU{расположенный в стеке}\EN{, placed in the stack}.
-\RU{Это значение будет прочитано во время обработки исключения и проверено на правильность}
-\EN{This value will be read during exception handling and checked for correctness}.
-\EN{The \IT{security cookie} in the stack is random each time, so hopefully a remote attacker will not be able to predict it.}
-\RU{\IT{Security cookie} в стеке случайное каждый раз, так что атакующий, как мы надеемся, не мог предсказать его.}\\
+\RU{Это значение будет прочитано во время обработки исключения и проверено на правильность.}
+\EN{This value will be read during exception handling and checked for correctness.}
+\EN{The \IT{security cookie} in the stack is random each time, so hopefully a remote attacker can't predict it.}
+\RU{\IT{Security cookie} в стеке случайное каждый раз, так что атакующий, как мы надеемся, не может предсказать его.}\\
 \\
 \RU{Изначальное значение}\EN{The initial} \IT{previous try level} \RU{это}\EN{is} $-2$ \InENRU SEH4 \RU{вместо}\EN{instead of} $-1$.
 
@@ -256,7 +258,7 @@ and the} $EBP \oplus security\_cookie$ \RU{в стеке}\EN{value in the stack}
 $EBP \oplus security\_cookie$ \RU{и тем что записано в стеке}\EN{value and what is
 stored in the stack}.
 \RU{Если это уравнение не верно, то процесс остановится из-за разрушения стека}
-\EN{If this equation is not true, the process will be stopped due to stack corruption}:
+\EN{If this equation is not true, the process is to halt due to stack corruption}:
 
 \begin{center}
 $security\_cookie \oplus (CookieXOROffset + address\_of\_saved\_EBP) == stack[address\_of\_saved\_EBP + CookieOffset]$
@@ -269,7 +271,8 @@ $security\_cookie \oplus (CookieXOROffset + address\_of\_saved\_EBP) == stack[ad
 \RU{смотрите}\EN{see} \href{http://go.yurichev.com/17061}{GitHub} \RU{для деталей}\EN{for details}.\\
 \\
 \RU{Возможность переключиться назад на SEH3 все еще присутствует в компиляторах после (и включая) MSVC 2005, нужно включить
-опцию \TT{/GS-}, впрочем, \ac{CRT}-код будет продолжать использовать SEH4}
-\EN{It is still possible to fall back to SEH3 in the compilers after (and including) MSVC 2005 by setting the \TT{/GS-} option,
-however, the \ac{CRT} code will use SEH4 anyway}.
+опцию \TT{/GS-}, впрочем, \ac{CRT}-код будет продолжать использовать SEH4.}
+\EN{It is still possible to fall back to SEH3 in the compilers after 
+(and including) MSVC 2005 by setting the \TT{/GS-} option,
+however, the \ac{CRT} code use SEH4 anyway.}
 
