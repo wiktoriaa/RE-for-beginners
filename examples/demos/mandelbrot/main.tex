@@ -99,7 +99,7 @@ number of iterations}.
 \RU{(Для цветного изображения) преобразуем количество итераций в какой-нибудь цвет.
 Так что цвет будет показывать, с какой скоростью точка вышла за пределы.}
 \EN{(For a colored image) transform the number of iterations to some color. 
-      So the color will show the speed with which point has gone off limits.}
+      So the color shows the speed with which point has gone off limits.}
   \end{itemize}
 
 \end{itemize}
@@ -156,8 +156,8 @@ eventually swirls at some point inside:}
 \caption{\RU{Я кликнул внутри желтой области}\EN{I clicked inside yellow area}}
 \end{figure}
 
-\RU{Это значит, что точка на которой я кликнул, находится внутри множества Мандельброта}\EN{This means 
-that the point I clicked belongs to the Mandelbrot set}.
+\RU{Это значит, что точка на которой я кликнул, находится внутри множества Мандельброта.}
+\EN{This implies that the point I clicked belongs to the Mandelbrot set.}
 
 \clearpage
 \RU{Затем я кликнул снаружи желтой области, и мы видим более хаотичные движения точки, которая быстро выходит
@@ -210,11 +210,12 @@ the VGA video buffer, but storing 0xA000 to ES requires at least 4 bytes} (\TT{P
 \RU{Учитывая, что BX здесь 0, и Program Segment Prefix находится по нулевому адресу, 2-байтная инструкция
 \TT{LES AX,[BX]} запишет 0x20CD в AX и 0x9FFF в ES.}
 \EN{Assuming that BX is zero here, and the Program Segment Prefix is at the zeroth
-address, the 2-byte \TT{LES AX,[BX]} instruction will store 0x20CD to AX and 0x9FFF to ES.}
-\RU{Так что программа начнет рисовать на 16 пикселей или байт перед видеобуфером.}
-\EN{So the program will start to draw 16 pixels or bytes before the actual video buffer.}
-\RU{Но это}\EN{But this is} MS-DOS, \RU{здесь нет защиты памяти, так что ничего плохого не произойдет}\EN{there 
-is no memory protection, so nothing will crash}.
+address, the 2-byte \TT{LES AX,[BX]} instruction stores 0x20CD to AX and 0x9FFF to ES.}
+\RU{Так что программа начнет рисовать на 16 пикселей (или байт) перед видеобуфером.}
+\EN{So the program starts to draw 16 pixels (or bytes) before the actual video buffer.}
+\RU{Но это}\EN{But this is} MS-DOS, 
+\RU{здесь нет защиты памяти, так что ничего плохого не произойдет.}
+\EN{there is no memory protection, so no crash can happen.}
 \RU{Вот почему вы видите красную полосу шириной 16 пикселей справа}\EN{That's why you see a red strip 16 
 pixels wide at the right side}.
 \RU{Вся картинка сдвинута налево на 16 пикселей}\EN{The whole picture is shifted left by 16 pixels}.
@@ -286,7 +287,7 @@ of bounds: we jump to the \TT{MandelBreak} label.}
 \EN{There is also a division by 64 (SAR instruction). 64 sets scale.}
 \RU{Попробуйте увеличить значение и вы получите более увеличенную картинку, или уменьшить для
 меньшей.}
-\EN{Try to increase the value and you will get a closer look, or to decrease if for a more distant look.}
+\EN{Try to increase the value and you can get a closer look, or to decrease if for a more distant look.}
 
     \end{itemize}
 
@@ -326,9 +327,10 @@ for clearing DX instead of the 2-byte} \TT{XOR DX, DX} \RU{или даже тр�
 \footnote{\RU{Больше о состояниях регистров на старте}\EN{More information about initial register values}: 
 \url{http://go.yurichev.com/17004}}.
 \RU{Это нормально, потому что программа работает бесконечно для всех DI в пределах 0..0xFFFF, и пользователь
-не заметит, что работала началась за экраном (последний пиксель видеобуфера 320*200 имеет адрес 0xF9FF).}
-\EN{That's OK, because the program works for all DI in the range of 0..0xFFFF eternally, and the user will not notice
-that it started off the screen (the last pixel of a 320*200 video buffer is at address 0xF9FF).}
+не может увидеть, что работала началась за экраном (последний пиксель видеобуфера 320*200 имеет адрес 0xF9FF).}
+\EN{That's OK, because the program works for all DI in the range of 0..0xFFFF eternally, 
+and the user can't notice
+that it is started off the screen (the last pixel of a 320*200 video buffer is at address 0xF9FF).}
 \RU{Так что некоторая часть работы на самом деле происходит за экраном}\EN{So some work is actually done 
 off the limits of the screen}.
 \RU{А иначе понадобятся дополнительные инструкции для установки DI в 0; добавить проверку на конец буфера.}

@@ -38,8 +38,8 @@ this is done in order to support various character types: at least \Tchar and \I
 \EN{The MSVC implementation may store the buffer in place instead of using a pointer to a buffer 
 (if the string is shorter than 16 symbols).}
 
-\RU{Это означает что каждая короткая строка будет занимать в памяти по крайней мере}\EN{This means
-that a short string will occupy at least} $16 + 4 + 4 = 24$ 
+\RU{Это означает что каждая короткая строка будет занимать в памяти по крайней мере}
+\EN{This implies that a short string is to occupy at least} $16 + 4 + 4 = 24$ 
 \RU{байт для 32-битной среды либо}\EN{bytes in 32-bit environment or at least} $16 + 8 + 8 = 32$ 
 \RU{байта в 64-битной, а если строка длиннее 16-и символов, то прибавьте еще длину самой строки}
 \EN{bytes in 64-bit one, and if the string is longer than 16 characters, we also have to add the length of the string itself}.
@@ -50,8 +50,10 @@ that a short string will occupy at least} $16 + 4 + 4 = 24$
 
 \RU{Несколько замечаний}\EN{A couple of notes}:
 
-\RU{Если строка короче 16-и символов, то отдельный буфер для строки в \glslink{heap}{куче} выделяться не будет}
-\EN{If the string is shorter than 16 symbols, a buffer for the string will not be allocated in the \gls{heap}}.
+\RU{Если строка короче 16-и символов, 
+то отдельный буфер для строки в \glslink{heap}{куче} выделяться не будет.}
+\EN{If the string is shorter than 16 symbols, 
+a buffer for the string is not to be allocated in the \gls{heap}.}
 \RU{Это удобно потому что на практике, действительно немало строк короткие}
 \EN{This is convenient because
 in practice, a lot of strings are short indeed}.
@@ -79,8 +81,10 @@ array of characters, hence it works}.
 (or typo) to forget to write c\_str()}.
 \RU{Это работает потому что в это время в начале структуры расположен указатель на буфер}
 \EN{This works because at the moment a pointer to buffer is located at the start of structure}.
-\RU{Это может надолго остаться незамеченным: до тех пока там не появится строка короче 16-и символов, тогда процесс упадет}
-\EN{This may stay unnoticed for a long time, until a longer string will appears there, then the process will crash}.
+\RU{Это может надолго остаться незамеченным: до тех пока там не появится строка 
+короче 16-и символов, тогда процесс упадет.}
+\EN{This may stay unnoticed for a long time, until a longer string appears there at some time, 
+then the process will crash.}
 
 \myparagraph{GCC}
 
@@ -172,8 +176,8 @@ variables with an \ac{STL} type can be defined}.
 
 \lstinputlisting{\CURPATH/STL/string/5.cpp}
 
-\RU{На самом деле, эта переменная будет инициализирована даже перед началом \main{}.}
-\EN{In fact, this variable will be initialized even before \main start.}
+\RU{На самом деле, эта переменная будет инициализирована даже перед началом \main.}
+\EN{In fact, this variable is to be initialized even before \main start.}
 
 \lstinputlisting[caption=MSVC 2012: \RU{здесь конструируется глобальная переменная, а также регистрируется её деструктор}\EN{here is how a global variable is constructed and also its destructor is registered}]{\CURPATH/STL/string/5_MSVC_p2.asm}
 

@@ -21,7 +21,7 @@ Duff's device
 \RU{Так что более правильный способ --- это очищать регион в памяти блоками по 4 или 8 байт.}
 \EN{So the better way is to clear the memory region using 4 or 8 byte blocks.}
 \RU{Так как мы будем работать с 64-битным примером, мы будем очищать память блоками по 8 байт.}
-\EN{Since we will work with a 64-bit example here, we will clear the memory in 8 byte blocks.}
+\EN{Since we are going to work with a 64-bit example here, we are going to clear the memory in 8 byte blocks.}
 \RU{Пока всё хорошо}\EN{So far so good}.
 \RU{Но что насчет хвоста}\EN{But what about the tail}? 
 \RU{Ф-ция очистки памяти будет также вызываться и для блоков с длиной не кратной 8.}
@@ -76,7 +76,7 @@ Duff's device
 
 \RU{В начале, нужно определить, будем ли мы вообще исполнять 8-байтную процедуру,
 так что нам нужно узнать, не больше ли $count$ чем 7.}
-\EN{We also need to find out if we will execute the 8-byte procedure at all, so we need
+\EN{We also need to find out if we are going to execute the 8-byte procedure at all, so we need
 to check if the value of $count$ is greater than 7.}
 \RU{Мы делаем это очищая младшие 3 бита и сравнивая результат с нулем, потому что,
 всё что нам нужно узнать, это ответ на вопрос, содержит ли старшая часть значения $count$ ненулевые биты.}
@@ -114,9 +114,9 @@ is to be executed.}
 \RU{Если это 2, перейти на другое место, где две операции записи будут исполнены, и т.д.}
 \EN{If it's 2, jump to another place, where two storage operation are to be executed, etc.}
 \RU{7 во входном значении приведет к тому что исполнятся все 7 операций.}
-\EN{7 as input value will lead to the execution of all 7 operations.}
+\EN{7 as input value leads to the execution of all 7 operations.}
 \RU{8 здесь нет, потому что регион памяти размером в 8 байт будет обработан первой частью нашей ф-ции.}
-\EN{There is no 8, because a memory region of 8 bytes will be processed by the first part of our function.}
+\EN{There is no 8, because a memory region of 8 bytes is to be processed by the first part of our function.}
 
 \RU{Так что мы сделали развернутый цикл}\EN{So we wrote an unrolled loop}.
 \RU{Это однозначно работало быстрее обычных циклов на старых компьютерах
@@ -139,7 +139,7 @@ inside it.}
 \RU{Между парами инструкций \TT{MOV}/\TT{INC} никакого другого кода нет, так что исполнение
 продолжается до самого конца, исполняются столько пар, сколько нужно.}
 \EN{There is no other code between the \TT{MOV}/\TT{INC} instruction pairs, 
-so the execution will fall until the very end, executing as many pairs as needed.}
+so the execution is to fall until the very end, executing as many pairs as needed.}
 
 \RU{Кстати, мы можем заметить, что пара \TT{MOV}/\TT{INC} занимает какое-то фиксированное количество
 байт (3+3).}
@@ -150,12 +150,12 @@ so the execution will fall until the very end, executing as many pairs as needed
 \EN{Knowing that, we can get rid of the switch() jumptable, we can just multiple the input value by 6
 and jump to $current\_RIP + input\_value * 6$.}
 \RU{Это будет также быстрее, потому что не нужно будет загружать элемент из таблицы переходов (\IT{jumptable}).}
-\EN{This will also be faster because we will not need to fetch a value from the jumptable.}
+\EN{This can also be faster because we are not in need to fetch a value from the jumptable.}
 \RU{Может быть, 6 не самая подходящая константа для быстрого умножения, и может быть оно того и не стоит,
 но вы поняли идею\footnote{В качестве упражнения, вы можете попробовать переработать этот код и избавиться
 от таблицы переходов.
 \index{x86!\Instructions!STOSB}
-Пару инструкций тоже можно переписать так что они будет занимать 4 байта или 8.
+Пару инструкций тоже можно переписать так что они будут занимать 4 байта или 8.
 1 байт тоже возможен (используя инструкцию \TT{STOSB}).}.}
 \EN{It's possible that 6 probably is not a very good constant for fast multiplication and maybe it's not worth it,
 but you get the idea\footnote{As an exercise, you can try to rework the code to get rid of 
