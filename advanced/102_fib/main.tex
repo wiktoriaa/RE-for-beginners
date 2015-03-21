@@ -75,7 +75,7 @@ although it's technically possible}.
 \EN{Each saved \EBP value is the address of the previous \gls{stack frame}: 
 this is the reason why some debuggers can easily divide the stack in frames and dump each 
 function's arguments.}
-% FIXME add about StackWalk (MSDN)
+% TODO add about StackWalk (MSDN)
 
 \RU{Как видно, каждая инкарнация ф-ции готовит аргументы для следующего вызова ф-ции}
 \EN{As we see here, each function incarnation prepares the arguments for the next function call}.
@@ -132,6 +132,7 @@ argument $b$ to the next incarnation}.
 
 \section{\RU{Итог}\EN{Summary}}
 
+\label{Recursion_and_tail_call}
 \index{\Recursion}
 \RU{Рекурсивные ф-ции эстетически красивы, но технически могут ухудшать производительность
 из-за активного использования стека}
@@ -140,5 +141,17 @@ of their heavy stack usage}.
 \RU{Тот, кто пишет критические к времени исполнения участки кода, наверное, должен избегать 
 применение там рекурсии}\EN{Everyone who writes performance critical code probably should
 should avoid recursion}.
-% TODO add about tail recursion
-\fi
+
+\RU{Например, однажды я написал функцию для поиска нужного узла в двоичном дереве. 
+Рекурсивно она выглядела очень красиво, но из-за того, что при каждом вызове тратилось время на эпилог и пролог, 
+все это работало в несколько раз медленнее чем та же функция, но без рекурсии.}
+\EN{For example, I once wrote a function to seek a particular node in a binary tree. 
+As a recursive function it looked quite stylish but since additional time
+was to be spent at each function call
+for the prologue/epilogue, it was working a couple of times slower than an iterative (recursion-free)
+implementation.}
+
+\index{\Recursion!Tail recursion}
+\RU{Кстати, поэтому есть такая вещь как \glslink{tail call}{хвостовая рекурсия}}
+\EN{By the way, that is the reason compilers use \gls{tail call}}.
+\fi % \IncludeOlly
