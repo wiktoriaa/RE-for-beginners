@@ -24,14 +24,14 @@
 \gls{NaN}s\NANFN{}. 
 These are infinity, result of division by $0$, etc. 
 Not-a-numbers can be ``quiet'' and ``signaling''. It is possible to continue to work with ``quiet'' NaNs, 
-but if one tries to do any operation with ``signaling'' NaNs, an exception will be raised.}
+but if one tries to do any operation with ``signaling'' NaNs, an exception is to be raised.}
 
 \index{x86!\Instructions!FCOM}
 \index{x86!\Instructions!FUCOM}
 \RU{Так вот, \FCOM вызовет исключение если любой из операндов ~--- какое-либо нечисло.
 \FUCOM же вызовет исключение только если один из операндов именно ``сигнализирующее нечисло''.}
-\EN{\FCOM will raise an exception if any operand is \gls{NaN}. 
-\FUCOM will raise an exception only if any operand is a signaling \gls{NaN} (SNaN).}
+\EN{\FCOM raising an exception if any operand is \gls{NaN}. 
+\FUCOM raising an exception only if any operand is a signaling \gls{NaN} (SNaN).}
 
 \index{x86!\Instructions!SAHF}
 \label{SAHF}
@@ -46,8 +46,8 @@ instruction in code not related to the FPU.
 \index{x86!\Instructions!FNSTSW}
 \RU{Вспомним, что \FNSTSW перегружает интересующие нас биты \CThreeBits в \AH, 
 и соответственно они будут в позициях 6, 2, 0 в регистре \AH:}
-\EN{Let's recall that \FNSTSW is moves the bits that interest us ~--- \CThreeBits ~--- into \AH 
-and they will be in positions 6, 2, 0 in the \AH register:}
+\EN{Let's recall that \FNSTSW moves the bits that interest us (\CThreeBits) into \AH 
+and they are in positions 6, 2, 0 of the \AH register:}
 
 \input{C3_in_AH}
 
@@ -60,23 +60,27 @@ and they will be in positions 6, 2, 0 in the \AH register:}
 \begin{itemize}
 \item
 \RU{Если $a$ больше $b$ в нашем случае, то биты \CThreeBits должны быть выставлены так:}
-\EN{If $a$ is greater than $b$ in our example, then \CThreeBits will be set to:} 0, 0, 0.
+\EN{If $a$ is greater than $b$ in our example, then \CThreeBits are to be set to:} 0, 0, 0.
 \item
-\RU{Если $a$ меньше $b$, то биты будут выставлены так:}\EN{if $a$ is less than $b$, then the bits will be set to:} 0, 0, 1.
+\RU{Если $a$ меньше $b$, то биты будут выставлены так:}
+\EN{if $a$ is less than $b$, then the bits are to be set to:} 0, 0, 1.
 \item
 \RU{Если $a=b$, то так:}\EN{If $a=b$, then:} 1, 0, 0.
 \end{itemize}
 % TODO: table?
 
-\RU{Иными словами, после трех инструкций \FUCOMPP/\FNSTSW/\SAHF, мы получим такое состояние флагов:}
-\EN{In other words, after three \FUCOMPP/\FNSTSW/\SAHF instructions, we will have these states for the CPU flags:}
+\RU{Иными словами, после трех инструкций \FUCOMPP/\FNSTSW/\SAHF, 
+возможны такие состояния флагов:}
+\EN{In other words, these states of the CPU flags are possible
+after three \FUCOMPP/\FNSTSW/\SAHF instructions:}
 
 \begin{itemize}
 \item
 \RU{Если $a>b$ в нашем случае, то флаги будут выставлены так:}
-\EN{If $a>b$, the CPU flags will be set as:} \TT{ZF=0, PF=0, CF=0}.
+\EN{If $a>b$, the CPU flags are to be set as:} \TT{ZF=0, PF=0, CF=0}.
 \item
-\RU{Если $a<b$, то флаги будут выставлены так:}\EN{If $a<b$, then the flags will be set as:} \TT{ZF=0, PF=0, CF=1}.
+\RU{Если $a<b$, то флаги будут выставлены так:}
+\EN{If $a<b$, then the flags are to be set as:} \TT{ZF=0, PF=0, CF=1}.
 \item
 \RU{Если $a=b$, то так:}\EN{And if $a=b$, then:} \TT{ZF=1, PF=0, CF=0}.
 \end{itemize}
@@ -89,11 +93,12 @@ and they will be in positions 6, 2, 0 in the \AH register:}
 \footnote{\IT{cc} это \IT{condition code}}
 выставляет $1$ или $0$ в \AL, а \Jcc делает переход или нет. 
 \SETNBE запишет $1$ если только \TT{CF=0} и \TT{ZF=0}. Если это не так, то запишет $0$ в \AL.}
-\EN{Depending on the CPU flags and conditions, \SETNBE will store store $1$ or $0$ to AL. 
+\EN{Depending on the CPU flags and conditions, \SETNBE stores $1$ or $0$ to AL. 
 It is almost the counterpart of \JNBE, with the exception that \SETcc 
 \footnote{\IT{cc} is \IT{condition code}} stores $1$ or $0$ in \AL, 
 but \Jcc does actually jump or not. 
-\SETNBE stores $1$ only if \TT{CF=0} and \TT{ZF=0}. If it is not true, $0$ will be stored into \AL.}
+\SETNBE stores $1$ only if \TT{CF=0} and \TT{ZF=0}. 
+If it is not true, $0$ is to be stored into \AL.}
 
 \RU{\CF будет $0$ и \ZF будет $0$ одновременно только в одном случае: если $a>b$.}
 \EN{Only in one case both \CF and \ZF are $0$: if $a>b$.}
@@ -101,6 +106,7 @@ but \Jcc does actually jump or not.
 \RU{Тогда в \AL будет записана $1$, последующий условный переход \JZ взят не будет, 
 и функция вернет \TT{\_a}. 
 В остальных случаях, функция вернет \TT{\_b}.}
-\EN{Then $1$ will be stored in \AL, the subsequent \JZ will not be triggered and the function will 
-return {\_a}. In all other cases, {\_b} will be returned.}
+\EN{Then $1$ is to be stored to \AL, 
+the subsequent \JZ is not to be triggered and the function will return {\_a}. 
+In all other cases, {\_b} is to be returned.}
 \fi

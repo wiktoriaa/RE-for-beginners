@@ -32,17 +32,17 @@
 (\IT{GT\EMDASH{}Greater Than}). 
 
 \RU{Если она сработает}\EN{If it gets executed}, 
-\RU{в \TT{D16} запишется значение $b$}\EN{the value of $b$ will be written into \TT{D16}} 
+\RU{в \TT{D16} запишется значение $b$}\EN{the value of $b$ is to be written into \TT{D16}} 
 \RU{, лежащее в тот момент в}\EN{(that is currently stored in in} \TT{D17} \EN{)}.
 
 \RU{В обратном случае}\EN{Otherwise}, 
-\RU{в \TT{D16} останется лежать значение $a$.}
-\EN{the value of $a$ will stay in the \TT{D16} register.}
+\RU{в \TT{D16} остается значение $a$.}
+\EN{the value of $a$ stays in the \TT{D16} register.}
 
 \index{ARM!\Instructions!VMOV}
-\RU{Предпоследняя инструкция \TT{VMOV} подготовит то что было в \TT{D16} для возврата через 
+\RU{Предпоследняя инструкция \TT{VMOV} готовит, то что было в \TT{D16}, для возврата через 
 пару регистров \Reg{0} и \Reg{1}.}
-\EN{The penultimate instruction \TT{VMOV} will prepare the value in the \TT{D16} register for returning it via the \Reg{0} and \Reg{1}
+\EN{The penultimate instruction \TT{VMOV} prepares the value in the \TT{D16} register for returning it via the \Reg{0} and \Reg{1}
 register pair.}
 
 \subsubsection{\OptimizingXcodeIV (\ThumbTwoMode)}
@@ -89,11 +89,14 @@ BX              LR
 \index{ARM!\Instructions!IT}
 \index{ARM!if-then block}
 \EN{The}\RU{Инструкция} \TT{IT} \RU{определяет так называемый}\EN{instruction defines a so-called} \IT{if-then block}. 
-\RU{После этой инструкции, можно указывать до четырех инструкций, к которым будет добавлен суффикс условия.}
-\EN{After the instruction it is possible to place up to 4 instructions to which a predicate suffix will be added.}
+\RU{После этой инструкции, можно указывать до четырех инструкций, 
+к каждой из которых будет добавлен суффикс условия.}
+\EN{After the instruction it is possible to place up to 4 instructions, 
+each of them has a predicate suffix.}
 \RU{В нашем примере}\EN{In our example}, \TT{``IT GT''} \RU{означает,}\EN{implies}
-\RU{что следующая за ней инструкция будет исполнена}\EN{that the next instruction will be executed}, 
-\RU{если условие}\EN{if the} \IT{GT} (\IT{Greater Than}) \RU{справедливо}\EN{condition is true}.
+\RU{что следующая за ней инструкция будет исполнена, если условие}
+\EN{that the next instruction is to be executed, if the}
+\IT{GT} (\IT{Greater Than}) \RU{справедливо}\EN{condition is true}.
 
 \index{Angry Birds}
 \RU{Теперь более сложный пример, кстати, из}\EN{Here is a more complex code fragment, by the way, from} 
@@ -109,7 +112,7 @@ VMOVEQ          R2, R3, D17
 \RU{и кодирует суффиксы для двух следующих за ней инструкций.}
 \EN{and it encodes suffixes for the next two instructions.}
 \RU{Первая из них исполнится, если условие, закодированное в}
-\EN{The first instruction will execute if the condition encoded in} \TT{ITE} (\IT{NE, not equal}) 
+\EN{The first instruction executes if the condition encoded in} \TT{ITE} (\IT{NE, not equal}) 
 \RU{будет в тот момент справедливо}\EN{is true at},
 \RU{а вторая ~--- если это условие не сработает}\EN{and the 
 second~---if the condition is not true}.
@@ -127,9 +130,9 @@ POPEQ.W         {R8,R10}
 POPEQ           {R4-R7,PC}
 \end{lstlisting}
 
-\RU{4 символа ``T'' в инструкции означают что 4 следующие инструкции будут исполнены если условие соблюдается.}
-\EN{4 ``T'' symbols in the instruction mnemonic mean 
-that the 4 instructions that follow will be executed if the condition is true.}
+\RU{Четыре символа ``T'' в инструкции означают что четыре последующие инструкции будут исполнены если условие соблюдается.}
+\EN{Four ``T'' symbols in the instruction mnemonic mean 
+that the four subsequent instructions are to be executed if the condition is true.}
 \RU{Поэтому \IDA добавила ко всем четырем инструкциям суффикс}
 \EN{That's why \IDA adds the} \TT{-EQ}\EN{ suffix
 to each one of them}. 
@@ -157,12 +160,13 @@ NEGLE           R0, R0
 MOVGT           R10, R0
 \end{lstlisting}
 
-\TT{ITTE} (\IT{if-then-then-else}) \RU{означает что первая и вторая инструкции исполнятся}
-\EN{implies that the 1st and 2nd instructions will be executed }
-\RU{, если условие}\EN{if the} \TT{LE} (\IT{Less or Equal}) \RU{справедливо}\EN{condition is true},
-\RU{а третья}\EN{and the 3rd}\EMDASH\RU{если справедливо обратное условие}\EN{if the inverse condition} 
-(\TT{GT}\EMDASH\IT{Greater Than})\EN{ is true}.
-
+\TT{ITTE} (\IT{if-then-then-else}) 
+\RU{означает что первая и вторая инструкции исполнятся, если условие \TT{LE} (\IT{Less or Equal})
+справедливо, а третья --- если справедливо обратное условие (\TT{GT}\EMDASH\IT{Greater Than}).}
+\EN{implies that the 1st and 2nd instructions are to be executed if the \TT{LE} (\IT{Less or Equal})
+condition is true, and the 3rd---if the inverse condition (\TT{GT}\EMDASH\IT{Greater Than}) 
+is true.}\\
+\\
 \RU{Компиляторы способны генерировать далеко не все варианты.}
 \EN{Compilers usually don't generate all possible combinations.}
 \index{Angry Birds}

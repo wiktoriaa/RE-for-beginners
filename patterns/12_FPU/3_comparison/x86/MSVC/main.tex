@@ -46,20 +46,20 @@ instructions~---which do the same, but modify the \ZF/\PF/\CF CPU flags.}
 соответственно, 14, 10, 8, в этих позициях они и остаются в регистре \AX, 
 и все они расположены в старшей части регистра ~--- \AH.}
 \EN{The \FNSTSW instruction copies FPU the status word register to \AX. 
-Bits \CThreeBits are placed at positions 14/10/8, 
-they will be at the same positions in the \AX register and all they are placed in the high part of \AX{}~---\AH{}.}
+\CThreeBits bits are placed at positions 14/10/8, 
+they are at the same positions in the \AX register and all they are placed in the high part of \AX{}~---\AH{}.}
 
 \begin{itemize}
 \item
 \RU{Если $b>a$ в нашем случае, то биты \CThreeBits должны быть выставлены так:}
-\EN{If $b>a$ in our example, then \CThreeBits bits will be set as following:} 0, 0, 0.
+\EN{If $b>a$ in our example, then \CThreeBits bits are to be set as following:} 0, 0, 0.
 \item
-\RU{Если $a>b$, то биты будут выставлены:}\EN{If $a>b$, then the set bits will be:} 0, 0, 1.
+\RU{Если $a>b$, то биты будут выставлены:}\EN{If $a>b$, then the bits are:} 0, 0, 1.
 \item
-\RU{Если $a=b$, то биты будут выставлены так:}\EN{If $a=b$, then the set bits will be:} 1, 0, 0.
+\RU{Если $a=b$, то биты будут выставлены так:}\EN{If $a=b$, then the bits are:} 1, 0, 0.
 \item
-\RU{Если результат не определен (в случае ошибки), то биты будут выставлены так}\EN{If the result 
-is unordered (in case of error), then the set bits will be}: 1, 1, 1.
+\RU{Если результат не определен (в случае ошибки), то биты будут выставлены так}
+\EN{If the result is unordered (in case of error), then the set bits are}: 1, 1, 1.
 \end{itemize}
 % TODO: table here?
 
@@ -74,9 +74,9 @@ is unordered (in case of error), then the set bits will be}: 1, 1, 1.
 \input{C3_in_AH}
 
 \RU{После исполнения \TT{test ah, 5}\footnote{5=1001b}, % FIXME: subscript here!
-будут учтены только биты \Czero и \Ctwo (на позициях 0 и 2), остальные проигнорированы.}
+будут учтены только биты \Czero и \Ctwo (на позициях 0 и 2), остальные просто проигнорированы.}
 \EN{After the execution of \TT{test ah, 5}\footnote{5=1001b}, 
-only \Czero and \Ctwo bits (on 0 and 2 position) will be considered, all other bits will be
+only \Czero and \Ctwo bits (on 0 and 2 position) are considered, all other bits are just
 ignored.}
 
 \label{parity_flag}
@@ -113,18 +113,20 @@ with the FUCOM instructions.
 Если мы вернемся чуть назад и посмотрим значения \CThreeBits 
 для разных вариантов, то увидим, что условный переход \JP сработает в двух случаях: если $b>a$ или если $a=b$ 
 (ведь бит \Cthree перестал учитываться после исполнения \TT{test ah, 5}).}
-\EN{The \PF flag will be set to 1 if both \Czero and \Ctwo are set to $0$ or both are $1$, in which case
-the subsequent \JP (\IT{jump if PF==1}) will trigger. 
+\EN{The \PF flag is to be set to 1 if both \Czero and \Ctwo are set to $0$ or both are $1$, in which case
+the subsequent \JP (\IT{jump if PF==1}) is triggering. 
 If we recall the values of \CThreeBits for various cases,
 we can see that the conditional jump 
-\JP will be triggered in two cases: if $b>a$ or $a=b$ 
+\JP is triggering in two cases: if $b>a$ or $a=b$ 
 (\Cthree bit is not considered here, since it was cleared by 
 the \TT{test ah, 5} instruction).}
 
 \RU{Дальше все просто. Если условный переход сработал, то \FLD загрузит значение \TT{\_b} в \ST{0}, 
 а если не сработал, то загрузится \TT{\_a} и произойдет выход из функции.}
-\EN{It is all simple after that. If the conditional jump was triggered, \FLD will load the value of \TT{\_b} 
-in \ST{0}, and if it was not triggered, the value of \TT{\_a} will be loaded there.}
+\EN{It is all simple after that. 
+If the conditional jump was triggered, 
+\FLD loads the value of \TT{\_b} 
+in \ST{0}, and if it was not triggered, the value of \TT{\_a} is loaded there.}
 
 \myparagraph{\RU{А как же проверка флага \Ctwo}\EN{And what about checking \Ctwo}?}
 

@@ -8,10 +8,9 @@
 \EN{This code makes use of the ARM mode feature in which all instructions have a fixed size of 4 bytes.}
 
 \RU{Итак, не будем забывать, что максимальное значение для $a$ это $4$, всё что выше, должно вызвать
-вывод строки}
-\EN{Let's keep in mind that the maximum value for $a$ is $4$ and any greater value will cause}
-\IT{<<something unknown\textbackslash{}n>>}
-\RU{.}\EN{to string printing.}
+вывод строки \IT{<<something unknown\textbackslash{}n>>}.}
+\EN{Let's keep in mind that the maximum value for $a$ is $4$ and any greater value will cause
+\IT{<<something unknown\textbackslash{}n>>} string to be printed.}
 
 \index{ARM!\Instructions!CMP}
 \index{ARM!\Instructions!ADDCC}
@@ -21,16 +20,16 @@
 
 \RU{Следующая инструкция}\EN{The next} \TT{``ADDCC PC, PC, R0,LSL\#2''}
 \footnote{ADD\EMDASH\RU{складывание чисел}\EN{addition}}
-\RU{сработает только в случае если}\EN{instruction will execute only if} $R0 < 5$ (\IT{CC=Carry clear / Less than}). 
+\RU{сработает только в случае если}\EN{instruction is being executed only if} $R0 < 5$ (\IT{CC=Carry clear / Less than}). 
 \RU{Следовательно, если}\EN{Consequently, if} \TT{ADDCC} \RU{не сработает}\EN{does not trigger} 
 (\RU{это случай с}\EN{it is a} $R0 \geq 5$\EN{ case}), 
 \RU{выполнится переход на метку}\EN{a jump to} 
-\IT{default\_case}\RU{.}\EN{ label will occur.}
+\IT{default\_case}\EN{ label will occur}.
 
 \RU{Но если}\EN{But if} $R0 < 5$ \AndENRU \TT{ADDCC} \RU{сработает, то произойдет следующее:}
-\EN{triggers, the following will happen:}
+\EN{triggers, the following is to be happen:}
 
-\RU{Значение в \Reg{0} умножается на $4$}\EN{The value in \Reg{0} will be multiplied by $4$}.
+\RU{Значение в \Reg{0} умножается на $4$}\EN{The value in \Reg{0} is multiplied by $4$}.
 \RU{Фактически}\EN{In fact}, \TT{LSL\#2} \RU{в суффиксе инструкции означает ``сдвиг влево на 2 бита''.}
 \EN{at the instruction's suffix stands for ``shift left by 2 bits''.}
 \RU{Но как будет видно позже}\EN{But as we will see later}~(\myref{division_by_shifting}) \RU{в секции}\EN{in section} 
@@ -63,8 +62,8 @@ so that is why \ac{PC} points there. This has to be memorized.}
 в \ac{PC} запишется актуальный на тот момент \ac{PC} (который больше на 8) 
 и произойдет переход на метку \IT{loc\_180}, 
 это на 8 байт дальше от места где находится инструкция \TT{ADDCC}.}
-\EN{If $a=0$, then nothing will be added to the value in \ac{PC},
-and the actual value in the \ac{PC} will be written into \ac{PC} (which is 8 bytes ahead)
+\EN{If $a=0$, then is to be added to the value in \ac{PC},
+and the actual value of the \ac{PC} will be written into \ac{PC} (which is 8 bytes ahead)
 and a jump to the label \IT{loc\_180} will happen,
 which is 8 bytes ahead of the point where the \TT{ADDCC} instruction is.}
 
@@ -93,8 +92,8 @@ what was programmed in the}
 
 \index{ARM!\ThumbMode}
 \index{ARM!\ThumbTwoMode}
-\RU{В режимах thumb и thumb-2, уже нельзя надеяться на то что все инструкции будут иметь одну длину.}
-\EN{One cannot be sure that all instructions in thumb and thumb-2 modes will have the same size.}
+\RU{В режимах thumb и thumb-2, уже нельзя надеяться на то что все инструкции имеют одну длину.}
+\EN{One cannot be sure that all instructions in thumb and thumb-2 modes has the same size.}
 \RU{Можно даже сказать, что в этих режимах инструкции переменной длины, как в x86.}
 \EN{It can even be said that in these modes the instructions have variable lengths, just like in x86.}
 
@@ -117,22 +116,24 @@ the corresponding case.}
 \RU{Далее функция, работающая с таблицей.}\EN{Then you see the function for table processing.} 
 \RU{Она слишком сложная для 
 рассмотрения в данном месте, так что я пропущу все объяснения.}
-\EN{It is too complex to describe it here now, so I will omit it.}
-% TODO дописать когда-то?
+\EN{It is too complex to describe it here now, so I'm omitting it.}
+% TODO explain it...
 
 \index{ARM!\Registers!Link Register}
 \RU{Но можно отметить, что эта функция использует регистр \ac{LR} как указатель на таблицу.}
 \EN{It is interesting to note that the function uses the \ac{LR} register as a pointer to the table.}
-\RU{Действительно, после вызова этой функции, в \ac{LR} был записан
-адрес после инструкции}\EN{Indeed, after this calling this function, \ac{LR} will contain the address after} \\ 
-\TT{``BL \_\_ARM\_common\_switch8\_thumb''}\RU{, а там как раз и начинается таблица.}
+\RU{Действительно, после вызова этой функции, 
+в \ac{LR} был записан адрес после инструкции}
+\EN{Indeed, after calling of this function, \ac{LR} contains the address after} \\ 
+\TT{``BL \_\_ARM\_common\_switch8\_thumb''}
+\RU{, а там как раз и начинается таблица.}
 \EN{ instruction, where the table starts.}
 
 \RU{Еще можно отметить что код для этого выделен в отдельную функцию для того, 
 чтобы не нужно было каждый раз генерировать 
 точно такой же фрагмент кода для каждого выражения switch().}
 \EN{It is also worth noting that the code is generated as a separate function in order to reuse it, 
-so the compiler will not generate the same code for every switch() statement.}
+so the compiler not generates the same code for every switch() statement.}
 
 \IDA 
 \RU{распознала эту служебную функцию и таблицу автоматически, дописав комментарии к меткам вроде}

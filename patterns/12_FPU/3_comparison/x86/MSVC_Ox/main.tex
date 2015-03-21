@@ -4,20 +4,20 @@
 
 \index{x86!\Instructions!FCOM}
 \RU{\FCOM отличается от \FCOMP тем что просто сравнивает значения и оставляет стек в том же состоянии. 
-В отличие от предыдущего примера, операнды здесь в другом порядке. 
+В отличие от предыдущего примера, операнды здесь в обратном порядке. 
 Поэтому и результат сравнения в \CThreeBits будет другим чем раньше:}
 \EN{\FCOM differs from \FCOMP in the sense that it just compares the values and doesn't change the FPU stack. 
 Unlike the previous example, here the operands are in reverse order, 
-which is why the result of the comparison in \CThreeBits will be different:}
+which is why the result of the comparison in \CThreeBits is different:}
 
 \begin{itemize}
 \item
 \RU{Если $a>b$ в нашем случае, то биты \CThreeBits должны быть выставлены так:}
-\EN{If $a>b$ in our example, then \CThreeBits bits will be set as:} 0, 0, 0.
+\EN{If $a>b$ in our example, then \CThreeBits bits are to be set as:} 0, 0, 0.
 \item
-\RU{Если $b>a$, то биты будут выставлены:}\EN{If $b>a$, then the bits will be set as:} 0, 0, 1.
+\RU{Если $b>a$, то биты будут выставлены:}\EN{If $b>a$, then the bits are:} 0, 0, 1.
 \item
-\RU{Если $a=b$, то биты будут выставлены так:}\EN{If $a=b$, then the bits will be set as:} 1, 0, 0.
+\RU{Если $a=b$, то биты будут выставлены так:}\EN{If $a=b$, then the bits are:} 1, 0, 0.
 \end{itemize}
 % TODO: table?
 
@@ -37,7 +37,7 @@ pops one value from the FPU stack.
 In other words, the instruction copies \ST{0} (where the value of \TT{\_a} is now) into \ST{1}.
 After that, two copies of {\_a} are at the top of the stack. 
 Then, one value is popped.
-After that, \ST{0} will contain {\_a} and the function is finished.}
+After that, \ST{0} contains {\_a} and the function is finishes.}
 
 \RU{Условный переход \JNE сработает в двух других случаях: если $b>a$ или $a=b$. 
 \ST{0} скопируется в \ST{0}, что как бы холостая операция, 
@@ -46,10 +46,11 @@ After that, \ST{0} will contain {\_a} and the function is finished.}
 Эта инструкция используется здесь видимо потому что в FPU 
 нет другой инструкции, которая просто выдергивает 
 значение из стека и выбрасывает его.}
-\EN{The conditional jump \JNE will trigger in two cases: if $b>a$ or $a=b$. 
-\ST{0} will be copied into \ST{0}, it is just like an idle (\ac{NOP}) operation, then one value 
-is popped from the stack and the top of the stack (\ST{0}) will contain what was in \ST{1} before 
-(that is {\_b}). Then the function finishes. 
+\EN{The conditional jump \JNE is triggering in two cases: if $b>a$ or $a=b$. 
+\ST{0} is copied into \ST{0}, it is just like an idle (\ac{NOP}) operation, then one value 
+is popped from the stack and the top of the stack (\ST{0}) is contain what was in \ST{1} before 
+(that is {\_b}). 
+Then the function finishes. 
 The reason this instruction is used here probably is because the \ac{FPU} 
 has no other instruction to pop a value from the stack and discard it.}
 

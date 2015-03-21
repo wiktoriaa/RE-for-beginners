@@ -19,8 +19,8 @@
 или заполнит нулями, если знак \IT{плюс}.}
 \EN{The first one ~--- \MOVSX ~---  takes a byte from an address in memory and stores the value in a 32-bit register. 
 \MOVSX stands for \IT{MOV with Sign-Extend}. 
-\MOVSX will set the rest of the bits, from the 8th to the 31th, to $1$ if the source byte is \IT{negative} 
-or to 0 if is \IT{positive}.}
+\MOVSX sets the rest of the bits, from the 8th to the 31th, 
+to $1$ if the source byte is \IT{negative} or to 0 if is \IT{positive}.}
 
 \RU{И вот зачем все это.}\EN{And here is why.}
 
@@ -34,7 +34,7 @@ $-2$ в переменной \Tint кодируется как \TT{0xFFFFFFFE}. 
 Это делает \MOVSX.}
 \EN{By default, the \Tchar type is signed in MSVC and GCC. If we have two values of which one is \Tchar 
 and the other is \Tint, (\Tint is signed too), and if the first value contain $-2$ (coded as \TT{0xFE}) 
-and we just copy this byte into the \Tint container, it will result in \TT{0x000000FE}, and this 
+and we just copy this byte into the \Tint container, it makes \TT{0x000000FE}, and this 
 from the point of signed \Tint view is $254$, but not $-2$. In signed int, $-2$ is coded as \TT{0xFFFFFFFE}. 
 So if we need to transfer \TT{0xFE} from a variable of \Tchar type to \Tint, 
 we need to identify its sign and extend it. That is what \MOVSX does.}
@@ -94,8 +94,9 @@ Strictly speaking, the compiler is not obliged to emit understandable (to humans
 Смысл этой процедуры в том, что, если говорить человеческим языком, 
 \IT{если AL не ноль, то выполнить переход на} \TT{loc\_80483F0}.
 Компилятор выдал немного избыточный код, но не будем забывать, что оптимизация выключена.}
-\EN{The next new instruction for us is \SETNZ. Here, if \AL doesn't contain zero, \TT{test al, al} 
-will set the \ZF flag to $0$, but \SETNZ, if \TT{ZF==0} (\IT{NZ} stands for \IT{not zero}) will set \AL to $1$.
+\EN{The next new instruction for us is \SETNZ. 
+Here, if \AL doesn't contain zero, \TT{test al, al} 
+sets the \ZF flag to $0$, but \SETNZ, if \TT{ZF==0} (\IT{NZ} stands for \IT{not zero}) sets \AL to $1$.
 Speaking in natural language, \IT{if \AL is not zero, let's jump to loc\_80483F0}. 
 The compiler emits some redundant code, but let's not forget that the optimizations are turned off.}
 \fi
@@ -142,7 +143,7 @@ only in small functions with a few local variables.}
 32-битный регистр \EDX и быть уверенным в том, что старшие биты регистра не будут замусорены.}
 \EN{Probably it is simpler for GCC's code generator to \IT{remember} 
 the whole 32-bit \EDX register 
-is allocated for a \Tchar variable and it then can be sure that the highest bits will not contain any noise 
+is allocated for a \Tchar variable and it then can be sure that the highest bits has no any noise 
 at any point.}
 
 \label{strlen_NOT_ADD}

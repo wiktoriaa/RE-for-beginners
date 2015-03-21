@@ -30,7 +30,7 @@ and of course loop body.}
 \lstinputlisting{patterns/09_loops/simple/loops_1.c.\LANG}
 
 \RU{Примерно так же, генерируемый код и будет состоять из этих четырех частей.}
-\EN{The generated code will consist of four parts as well.}
+\EN{The generated code is consisting of four parts as well.}
 
 \RU{Возьмем пример}\EN{Let's start with a simple example}:
 
@@ -100,15 +100,15 @@ may require bigger cache footprint}
 \RU{А также о рекомендациях о развернутых циклах от Intel можно прочитать здесь}: 
 \cite[3.4.1.7]{IntelOptimization}.}.\\
 \\
-\RU{OK, увеличим максимальное значение $i$ в цикле до $100$ и попробуем снова. GCC выдаст подобное:}
-\EN{OK, let's increase the maximum value of the $i$ variable to $100$ and try again. GCC will do:}
+\RU{OK, увеличим максимальное значение $i$ в цикле до $100$ и попробуем снова. GCC выдает:}
+\EN{OK, let's increase the maximum value of the $i$ variable to $100$ and try again. GCC does:}
 
 \lstinputlisting[caption=GCC]{patterns/09_loops/simple/2_GCC.asm.\LANG}
 
 \RU{Это уже похоже на то что сделал MSVC 2010 в режиме оптимизации (\Ox). 
 За исключением того, что под переменную $i$ будет выделен регистр \EBX.}
 \EN{It is quite similar to what MSVC 2010 with optimization (\Ox) produce, 
-with the exception that the \EBX register will be allocated for the $i$ variable.}
+with the exception that the \EBX register is allocated for the $i$ variable.}
 \RU{GCC уверен, что этот регистр не будет 
 модифицироваться внутри \ttf, а если вдруг это и придётся там сделать, то его значение будет сохранено 
 в начале функции, прямо как в \main здесь.}
@@ -147,8 +147,9 @@ just like here in the \main function.}
 \end{figure}
 
 $9$ \RU{это последнее значение цикла}\EN{is the last loop value}.
-\RU{Поэтому}\EN{That's why} \JL \RU{после \glslink{increment}{инкремента} не срабатывает и ф-ция заканчивается}
-\EN{will not trigger after the \gls{increment}, and the function will finish}:
+\RU{Поэтому}\EN{That's why} \JL 
+\RU{после \glslink{increment}{инкремента} не срабатывает и ф-ция заканчивается}
+\EN{is not triggering after the \gls{increment}, and the function will finish}:
 
 \begin{figure}[H]
 \centering
@@ -174,8 +175,9 @@ convenient to trace manulally in the debugger}.
 tracer.exe -l:loops_2.exe bpx=loops_2.exe!0x00401026
 \end{lstlisting}
 
-\RU{Опция }\TT{BPX} \RU{просто ставит брякпойнт по адресу и затем будет выдавать состояние регистров}
-\EN{just sets a breakpoint at the address and will then print the state of the registers}.
+\RU{Опция }\TT{BPX} 
+\RU{просто ставит брякпойнт по адресу и tracer затем будет выдавать состояние регистров}
+\EN{just sets a breakpoint at the address and tracer will then print the state of the registers}.
 
 \RU{В}\EN{In the} \TT{tracer.log} \RU{после запуска я вижу следующее}\EN{This is what we see}:
 

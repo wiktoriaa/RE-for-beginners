@@ -79,7 +79,8 @@ N.B. \RU{В этой функции не сохранялись регистры
 Таким образом, их можно использовать как захочется}
 \EN{That's because in the ARM calling convention registers \Reg{0}-\Reg{3} are ``scratch registers'', 
 intended for arguments passing,
-and we're not required to restore their value when the function exits, since the calling function will not use them anymore.
+and we're not required to restore their value when the function exits, 
+since the calling function will not use them anymore.
 Consequently, they may be used for anything we want.}
 \RU{А так как никакие больше регистры не используются, то и сохранять нечего.}
 \EN{No other registers are used here, so that is why we have nothing to save on the stack.}
@@ -99,8 +100,10 @@ to the address in the \ac{LR} register.}
 \EN{As optimizing LLVM concludes, \IT{eos} and \IT{str} do not need space on the stack},
 \RU{и эти переменные можно хранить прямо в регистрах.}
 \EN{and can always be stored in registers.}
-\RU{Перед началом тела цикла}\EN{Before the start of the loop body}, \IT{str} \RU{будет находиться в}\EN{will always be in} 
-\Reg{0}, \RU{а}\EN{and} \IT{eos}\EMDASH\InENRU \Reg{1}.
+\RU{Перед началом тела цикла, \IT{str} будет находиться в \Reg{0}, 
+а \IT{eos}\EMDASH{}в \Reg{1}.}
+\EN{Before the start of the loop body, \IT{str} is always in \Reg{0}, 
+and \IT{eos}\EMDASH{}in \Reg{1}.}
 
 \index{ARM!\Instructions!LDRB.W}
 \EN{The}\RU{Инструкция} \TT{``LDRB.W R2, [R1],\#1''} \RU{загружает в \Reg{2} байт из памяти по адресу \Reg{1}, 
@@ -133,8 +136,8 @@ $R0 = ~str + eos$,
 \EN{which is effectively equivalent to what was in the source code, and why it is so, I already explained here}
 ~(\myref{strlen_NOT_ADD}).
 
-\RU{Вероятно, LLVM, как и GCC, посчитал что такой код будет короче, или быстрее.}
-\EN{Apparently, LLVM, just like GCC, concludes that this code will be shorter, or faster.}
+\RU{Вероятно, LLVM, как и GCC, посчитал что такой код может быть короче (или быстрее).}
+\EN{Apparently, LLVM, just like GCC, concludes that this code can be shorter (or faster).}
 
 %\subsubsection{\OptimizingXcodeIV + \ARMMode}
 %Практически, точно такой же код.
@@ -151,9 +154,9 @@ $str - eos - 1$
 \EN{expression can be computed not at the function's end, but right in the body of the loop.}
 \EN{The}\RU{Суффикс} \TT{-EQ}\RU{, как мы помним, означает что инструкция будет выполнена только
 если операнды в исполненной перед этим инструкции \CMP были равны.}
-\EN{suffix, as we may recall, implies that the instruction will be executed only if the operands in
+\EN{suffix, as we may recall, implies that the instruction executes only if the operands in
 the \CMP that was executed before were equal to each other.}
 \RU{Таким образом}\EN{Thus}, \RU{если в \Reg{0} будет $0$}\EN{if \Reg{0} contains $0$},
 \RU{обе инструкции}\EN{both} \TT{SUBEQ} \RU{исполнятся и результат останется в \Reg{0}.}
-\EN{instructions will be executed and result will be left in the \Reg{0} register.}
+\EN{instructions executes and result is left in the \Reg{0} register.}
 
