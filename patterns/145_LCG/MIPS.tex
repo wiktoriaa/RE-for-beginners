@@ -34,7 +34,7 @@
 \EN{The first one, for address 0 has a type of \TT{R\_MIPS\_HI16} and the second one for address 8 has a type of \TT{R\_MIPS\_LO16}.}
 \RU{Это значит, что адрес начала сегмента .bss будет записан в инструкцию по адресу 0 (старшая часть адреса)
 и по адресу 8 (младшая асть адреса).}
-\EN{That implies that address of the beginning of the .bss segment will be written into the instructions at
+\EN{That implies that address of the beginning of the .bss segment is to be written into the instructions at
 address of 0 (high part of address) and 8 (low part of address).}
 
 \RU{Ведь переменная \TT{rand\_state} находится в самом начале сегмента .bss.}
@@ -46,24 +46,24 @@ address of 0 (high part of address) and 8 (low part of address).}
 the compiler don't know what to write there.}
 \RU{Линкер это исправит и старшая часть адреса будет записана в операнд инструкции LUI и младшая часть адреса ---
 в операнд инструкции SW.}
-\EN{The linker will fix this and the high part of the address will be written into the operand of LUI  and
+\EN{The linker will fix this, and the high part of the address will be written into the operand of LUI and
 the low part of the address --- to the operand of SW.}
-\RU{SW просуммирует младшую асть адреса и то что находится в регистре \$V0 (там старшая часть).}
-\EN{SW will sum up the low part of the address and what is in register \$V0 (the high part is there).}
+\RU{\TT{SW} просуммирует младшую асть адреса и то что находится в регистре \$V0 (там старшая часть).}
+\EN{\TT{SW} will sum up the low part of the address and what is in register \$V0 (the high part is there).}
 
 \RU{Та же история и с ф-цией my\_rand(): релок R\_MIPS\_HI16 указывает линкеру записать старшую часть
 адреса сегмента .bss в инструкцию LUI.}
 \EN{It's the same story with the my\_rand() function: R\_MIPS\_HI16 relocation instructs the linker to write the high part
 of the .bss segment address into instruction LUI.}
-\RU{Так что старшая часть адреса переменной rand\_state будет находится в регистре \$V1.}
-\EN{So the high part of the rand\_state variable address will reside in register \$V1.}
+\RU{Так что старшая часть адреса переменной rand\_state находится в регистре \$V1.}
+\EN{So the high part of the rand\_state variable address is residing in register \$V1.}
 \RU{Инструкция LW по адресу 0x10 просуммирует старшую и младшую часть и загрузит значение переменной 
 rand\_state в \$V1.}
-\EN{The LW instruction at address 0x10 will sum up the high and low parts and load the value of the rand\_state 
+\EN{The LW instruction at address 0x10 sums up the high and low parts and loads the value of the rand\_state 
 variable into \$V1.}
 \RU{Инструкция SW по адресу 0x54 также просуммирует и затем запишет новое значение в глобальную переменную
 rand\_state.}
-\EN{The SW instruction at address 0x54 will again do the summing and then store the new value 
+\EN{The SW instruction at address 0x54 do the summing again and then stores the new value 
 to the rand\_state global variable.}
 
 \RU{Так что IDA обрабатывает релоки при загрузке, и таким образом эти детали скрываются.}

@@ -14,7 +14,7 @@ N.B. \RU{В \TT{localtime\_r} передается указатель именн
 \EN{The pointer to the \TT{tm\_sec} field is passed into \TT{localtime\_r}, i.e., 
 to the first element of the ``structure''.}
 
-\RU{В итоге, и этот компилятор поворчит}\EN{The compiler will warn us}:
+\RU{В итоге, и этот компилятор поворчит}\EN{The compiler warns us}:
 
 \begin{lstlisting}[caption=GCC 4.7.3]
 GCC_tm2.c: In function 'main':
@@ -23,7 +23,7 @@ In file included from GCC_tm2.c:2:0:
 /usr/include/time.h:59:12: note: expected 'struct tm *' but argument is of type 'int *'
 \end{lstlisting}
 
-\RU{Тем не менее, сгенерирует такое}\EN{But nevertheless, it will generate this}:
+\RU{Тем не менее, сгенерирует такое}\EN{But nevertheless, it generates this}:
 
 \lstinputlisting[caption=GCC 4.7.3]{patterns/15_structs/3_tm_linux/as_array/GCC_tm2.asm}
 
@@ -45,7 +45,8 @@ same order as they were declared in the function.}
 \TT{tm\_hour}, \TT{tm\_min}\RU{, но не}\EN{ variables, but not} \TT{tm\_sec}\RU{, используются без инициализации}
 \EN{ are used without being initialized}.
 \RU{Действительно, ведь компилятор не знает что они будут заполнены при вызове функции}
-\EN{Indeed, the compiler is not aware that these will be filled by} \TT{localtime\_r()}.
+\EN{Indeed, the compiler is not aware that these are to be filled by} 
+\TT{localtime\_r()}\EN{ function}.
 
 \EN{I chose this example, since all structure fields are of type \Tint.}
 \RU{Я выбрал именно этот пример для иллюстрации, потому что все члены структуры имеют тип \Tint.}
@@ -53,8 +54,8 @@ same order as they were declared in the function.}
 со структурой \TT{SYSTEMTIME}}\EN{This would not work if structure fields are 16-bit (\TT{WORD}), 
 like in the case of the \TT{SYSTEMTIME} structure}\EMDASH{}\TT{GetSystemTime()} 
 \RU{заполнит их неверно}\EN{will fill them incorrectly} 
-(\RU{потому что локальные переменные будут выровнены по 32-битной границе}
-\EN{because the local variables will be aligned on a 32-bit boundary}).
+(\RU{потому что локальные переменные выровнены по 32-битной границе}
+\EN{because the local variables are aligned on a 32-bit boundary}).
 \RU{Читайте об этом в следующей секции}\EN{Read more about it in next section}: 
 ``\StructurePackingSectionName'' (\myref{structure_packing}).
 
@@ -72,7 +73,7 @@ the compiler to hold them in one place.}
 there were no structures at all} \cite{Ritchie:1993:DCL:155360.155580}.
 
 \RU{Здесь я не добавляю пример с отладчиком: потому что он будет полностью идентичным тому, что вы уже
-видели.}\EN{I'm not adding a debugger example here: it will be just the same as you already
+видели.}\EN{I'm not adding a debugger example here: it is just the same as you already
 saw.}
 
 \subsection{\RU{Структура как массив 32-битных слов}\EN{Structure as an array of 32-bit words}}

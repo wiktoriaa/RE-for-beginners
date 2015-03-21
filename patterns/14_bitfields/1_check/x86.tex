@@ -78,10 +78,10 @@ if ((dwDesiredAccess&0x40000000) == 0) goto loc_7C83D417
 \JZ не сработает. 
 Переход возможен только если в переменной \TT{dwDesiredAccess} отсутствует бит \TT{0x40000000} ~--- 
 тогда результат \ANDIns будет $0$, флаг \ZF будет поднят и переход сработает.}
-\EN{If \ANDIns instruction leaves this bit, the \ZF flag is to be cleared and the \JZ conditional jump will not 
-be triggered.
-The conditional jump will be triggered only if the \TT{0x40000000} bit is absent in variable \TT{dwDesiredAccess} 
-~---then the result of \ANDIns will be $0$, \ZF will be set and the conditional jump is to be triggered.}
+\EN{If \ANDIns instruction leaves this bit, the \ZF flag is to be cleared and the 
+\JZ conditional jump is not to be triggered.
+The conditional jump is triggered only if the \TT{0x40000000} bit is absent in \TT{dwDesiredAccess} variable
+~---then the result of \ANDIns is $0$, \ZF is to be set and the conditional jump is to be triggered.}
 
 \ifdefined\IncludeGCC
 \RU{Попробуем GCC 4.4.1 и Linux:}\EN{Let's try GCC 4.4.1 and Linux:}
@@ -157,10 +157,10 @@ through which it's possible to set the number of arguments that can be passed vi
 \RU{И для нас это означает, что первые три аргумента функции будут передаваться через регистры \EAX, 
 \EDX и \ECX, 
 а остальные через стек. Разумеется, если аргументов у функции меньше трех, то будет задействована 
-только часть регистров.}
-\EN{What this means to us is that the first 3 arguments will be passed via registers \EAX, \EDX and \ECX, 
-and the rest via the stack. Of course, if the number of arguments is less than 3, only part of registers
-will be used.}
+только часть этих регистров.}
+\EN{What this means to us is that the first 3 arguments are to be passed via registers \EAX, \EDX and \ECX, 
+and the rest via the stack. 
+Of course, if the number of arguments is less than 3, only part of registers set is to be used.}
 
 \RU{Итак, качаем ядро 2.6.31, собираем его в Ubuntu: \TT{make vmlinux}, открываем в \IDA, 
 находим функцию \TT{do\_filp\_open()}. В начале мы увидим подобное (комментарии мои):}

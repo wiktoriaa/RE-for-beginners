@@ -100,10 +100,11 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 то требуется чтобы адрес был выровнен по 16-байтной границе. Если он не выровнен, произойдет исключение
 \footnote{О выравнивании данных см. также: \URLWPDA}.}
 \EN{adds 4 pairs of 32-bit numbers and leaves the result in the first operand.
-By the way, no exception is raised in case of overflow and no flags will be set, just the low 32 bits of the result will
-be stored.
+By the way, no exception is raised in case of overflow and no flags are to be set, 
+just the low 32 bits of the result are to be stored.
 If one of \PADDD's operands is the address of a value in memory,
-then the address must be aligned on a 16-byte boundary. If it is not aligned, an exception will be triggered
+then the address must be aligned on a 16-byte boundary. 
+If it is not aligned, an exception will be triggered
 \footnote{More about data alignment: \URLWPDA}.}
 
 \item
@@ -119,11 +120,13 @@ If it is not aligned, exception will be raised.
 
 \RU{Итак, эти SSE2-инструкции исполнятся только в том случае если еще осталось просуммировать 
 4 пары переменных типа \Tint плюс если указатель \TT{ar3} выровнен по 16-байтной границе.}
-\EN{So, these SSE2-instructions will be executed only in case there are more than 4 pairs to work on
+\EN{So, these SSE2-instructions are to be executed only in case there are more than 4 pairs to work on
 and the pointer \TT{ar3} is aligned on a 16-byte boundary.}
 
-\RU{Более того, если еще и \TT{ar2} выровнен по 16-байтной границе, то будет выполняться этот фрагмент кода:}
-\EN{Also, if \TT{ar2} is aligned on a 16-byte boundary as well, this fragment of code will be executed:}
+\RU{Более того, если еще и \TT{ar2} выровнен по 16-байтной границе, 
+то будет выполняться этот фрагмент кода:}
+\EN{Also, if \TT{ar2} is aligned on a 16-byte boundary as well, 
+this fragment of code is to be executed:}
 
 \begin{lstlisting}
 movdqu  xmm0, xmmword ptr [ebx+edi*4] ; ar1+i*4
@@ -133,14 +136,14 @@ movdqa  xmmword ptr [eax+edi*4], xmm0 ; ar3+i*4
 
 \RU{А иначе, значение из \TT{ar2} загрузится в \XMM{0} используя инструкцию \MOVDQU, 
 которая не требует выровненного указателя, зато может работать чуть медленнее:}
-\EN{Otherwise, the value from \TT{ar2} will be loaded into \XMM{0} using \MOVDQU,
+\EN{Otherwise, the value from \TT{ar2} is to be loaded into \XMM{0} using \MOVDQU,
 which does not require aligned pointer, but may work slower:}
 
 \lstinputlisting{patterns/19_SIMD/18_1_excerpt.asm.\LANG}
 
 \RU{А во всех остальных случаях, будет исполняться код, который был бы, как если бы не была 
 включена поддержка SSE2.}
-\EN{In all other cases, non-SSE2 code will be executed.}
+\EN{In all other cases, non-SSE2 code is to be executed.}
 
 \ifdefined\IncludeGCC
 \subsubsection{GCC}

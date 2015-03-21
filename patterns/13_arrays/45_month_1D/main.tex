@@ -21,7 +21,7 @@
 to RAX with sign-extension (because the $month$ argument is of type \Tint).}
 \RU{Причина расширения в том, что это значение будет использоваться в вычислениях наряду с другими 64-битными
 значениями.}
-\EN{The reason for the sign extension is that this 32-bit value will be used in calculations with
+\EN{The reason for the sign extension is that this 32-bit value is to be used in calculations
 with other 64-bit values.}
 \RU{Таким образом, оно должно быть расширено до 64-битного}
 \EN{Hence, it has to be promoted to 64-bit}
@@ -35,12 +35,12 @@ with other 64-bit values.}
 Всё это не будет корректно работать без знакового расширения.}
 \EN{It is somewhat weird, but negative array index could be passed here as $month$
 \ifx\LITE\undefined
-(negative array indices will be explained later: \myref{negative_array_indices}) 
+(negative array indices will have been explained later: \myref{negative_array_indices}) 
 \fi
 .
-And if this happens, the negative input \Tint value will be sign-extended correctly 
-and the corresponding element before table will be picked. 
-It will not work correctly without sign-extension.}}.
+And if this happens, the negative input value of \Tint type is sign-extended correctly 
+and the corresponding element before table is picked. 
+It is not going to work correctly without sign-extension.}}.
 
 \item
 \RU{Затем адрес таблицы указателей загружается в RCX.}
@@ -172,8 +172,8 @@ so it just the month names.}
 
 \RU{Так что будет если 12 будет передано в ф-цию?}\EN{So what if 12 is passed to the function?}
 \RU{Вернется 13-й элемент таблицы}\EN{The 13th element will be returned}.
-\RU{Посмотрим, как CPU будет обходиться с байтами там как с 64-битным значением:}
-\EN{Let's see how the CPU will treat the bytes there as a 64-bit value:}
+\RU{Посмотрим, как CPU обходится с байтами там как с 64-битным значением:}
+\EN{Let's see how the CPU treating the bytes there as a 64-bit value:}
 
 \lstinputlisting[caption=\RU{Исполняемый файл в}\EN{Executable file in} IDA]{patterns/13_arrays/45_month_1D/MSVC2012_win64_2.lst}
 
@@ -183,7 +183,7 @@ so it just the month names.}
 \EN{Soon after, some other function (presumably, one that processes strings) may try to read bytes at 
 this address, expecting a C-string there.}
 \RU{И скорее всего упадет, потому что это значение не выглядит как действительный адрес.}
-\EN{Most likely it will crash, because this value does't look like a valid address.}
+\EN{Most likely it is about to crash, because this value does't look like a valid address.}
 
 \subsubsection{\RU{Защита от переполнения массива}\EN{Array overflow protection}}
 \epigraph{\RU{Если какая-нибудь неприятность может случиться, она случается}
@@ -208,14 +208,14 @@ which teaches to report problems as early as possible and stop.}
 \lstinputlisting[caption=assert() \RU{добавлен}\EN{added}]{patterns/13_arrays/45_month_1D/month1_assert.c}
 
 \RU{Макрос будет проверять на верные значения во время каждого старта ф-ции и падать если не выражение.}
-\EN{The assertion macro will check for valid values at every function start and fail if the expression is false.}
+\EN{The assertion macro checks for valid values at every function start and fails if the expression is false.}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/13_arrays/45_month_1D/MSVC2013_x64_Ox_checked.asm}
 
 \RU{На самом деле, assert() это не ф-ция, а макрос. Он проверяет условие и передает также номер строки и название
 файла в другую ф-цию, которая покажет эту информацию пользователю.}
 \EN{In fact, assert() is not a function, but macro. It checks for a condition, then passes also the line number and file
-name to another function which will show this information to the user.}
+name to another function which reports this information to the user.}
 
 \RU{Мы видим, что здесь и имя файла и выражение закодировано в UTF-16.}
 \EN{Here we see that both file name and condition are encoded in UTF-16.}

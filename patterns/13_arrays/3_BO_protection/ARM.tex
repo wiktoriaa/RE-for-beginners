@@ -1,8 +1,9 @@
 \subsection{\OptimizingXcodeIV (\ThumbTwoMode)}
 
-\RU{Возвращаясь к нашему простому примеру}\EN{Let's get back to our simple array example}~(\myref{arrays_simple}),
+\RU{Возвращаясь к нашему простому примеру}
+\EN{Let's get back to our simple array example} (\myref{arrays_simple}),
 \RU{можно посмотреть, как LLVM добавит проверку ``канарейки''}
-\EN{again, now we can see how LLVM will the correctness of the ``canary''}:
+\EN{again, now we can see how LLVM checks the correctness of the ``canary''}:
 
 \lstinputlisting{patterns/13_arrays/3_BO_protection/simple_Xcode_thumb_O3.asm.\LANG}
 
@@ -11,7 +12,7 @@
 уже вычисленные, 
 потому что LLVM посчитал что так будет быстрее.}
 \EN{First of all, as we see, LLVM ``unrolled'' the loop and all values were written into an array one-by-one,
-pre-calculated, as LLVM concluded it will be faster.}
+pre-calculated, as LLVM concluded it can work faster.}
 \RU{Кстати, инструкции режима ARM позволяют сделать это еще быстрее и это может быть вашим 
 домашним заданием.}\EN{By the way, instructions in ARM mode may help to do this even faster, 
 and finding this could be your homework.}
@@ -26,7 +27,7 @@ $0$ в \Reg{0}, эпилог функции и выход из нее.}
 \EN{If they are equal to each other, a 4-instruction block is triggered by \TT{``ITTTT EQ''}, which 
 contains writing $0$ in \Reg{0}, the function epilogue and exit.}
 \RU{Если ``канарейки'' не равны, блок не срабатывает и происходит
-переход на функцию}\EN{If the ``canaries'' are not equal, the block will not be executed,
+переход на функцию}\EN{If the ``canaries'' are not equal, the block being skipped,
 and the jump to} \TT{\_\_\_stack\_chk\_fail}\RU{, которая, вероятно, остановит работу программы.}
 \EN{ function will occur, which, as I suppose, will halt execution.}
 % TODO illustrate this!

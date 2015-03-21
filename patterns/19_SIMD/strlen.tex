@@ -16,7 +16,7 @@ For MSVC, some of them are located in the \TT{intrin.h} file.}
 Эта функция будет загружать в XMM-регистр сразу 16 байт и проверять каждый на ноль}
 \EN{It is possible to implement the \strlen function\footnote{strlen()~---standard C library function for calculating
 string length} using SIMD instructions that works 2-2.5 times faster than the common implementation.
-This function will load 16 characters into a XMM-register and check each against zero}
+This function loads 16 characters into a XMM-register and check each against zero}
 \footnote{\RU{Пример базируется на исходнике отсюда: \url{\URLSTRLEN}.}
 \EN{The example is based on source code from: \url{\URLSTRLEN}.}}.
 
@@ -58,7 +58,7 @@ if not~---use the slower \MOVDQU.}
 \EN{In the \gls{Windows NT} line of \ac{OS} (but not limited to it), memory is allocated by pages of 4 KiB (4096 bytes).
 Each win32-process has 4 GiB available, but in fact, only some parts
 of the address space are connected to real physical memory.
-If the process is accessing an absent memory block, an exception will be raised.
+If the process is accessing an absent memory block, an exception is to be raised.
 That's how \ac{VM} works\footnote{\URLPAGE}.}
 
 \RU{Так вот, функция, читающая сразу по 16 байт, имеет возможность нечаянно вылезти за границу 
@@ -100,7 +100,7 @@ and that is not a crime.}
 \strlen будет читать по одному байту до 0x008c1ffd, где ноль, и здесь она закончит работу.}
 \EN{So, in normal conditions the program calls \strlen, passing it a pointer to the string \TT{'hello'} 
 placed in memory at address 0x008c1ff8.
-\strlen will read one byte at a time until 0x008c1ffd, where there's a zero byte, and it will stop working.}
+\strlen reads one byte at a time until 0x008c1ffd, where there's a zero byte, and then it stops.}
 
 \RU{Теперь, если мы напишем свою реализацию \strlen читающую сразу по 16 байт, с любого адреса, 
 будь он выровнен по 16-байтной границе или нет, 
@@ -132,9 +132,11 @@ read from unallocated memory.}
 побайтово сравнивает значения из двух XMM регистров.} 
 \EN{is a macro for \PCMPEQB, an instruction that compares two XMM-registers bytewise.}
 
-\RU{И если какой-то из байт равен другому, то в результирующем значении будет выставлено на месте этого 
+\RU{И если какой-то из байт равен другому, 
+то в результирующем значении будет выставлено на месте этого 
 байта \TT{0xff}, либо 0, если байты не были равны.}
-\EN{And if some byte was equals to the one in the other register, there will be \TT{0xff} at this point in the result or 0 if otherwise.}
+\EN{And if some byte was equals to the one in the other register, 
+there will be \TT{0xff} at this point in the result or 0 if otherwise.}
 
 \RU{Например.}\EN{For example.}
 
@@ -143,8 +145,8 @@ XMM1: 11223344556677880000000000000000
 XMM0: 11ab3444007877881111111111111111
 \end{verbatim}
 
-\RU{После исполнения \TT{pcmpeqb xmm1, xmm0}, регистр \XMM{1} будет содержать:}
-\EN{After the execution of \TT{pcmpeqb xmm1, xmm0}, the \XMM{1} register will contain:}
+\RU{После исполнения \TT{pcmpeqb xmm1, xmm0}, регистр \XMM{1} содержит:}
+\EN{After the execution of \TT{pcmpeqb xmm1, xmm0}, the \XMM{1} register contains:}
 
 \begin{verbatim}
 XMM1: ff0000ff0000ffff0000000000000000
@@ -168,15 +170,16 @@ which was set in the \XMM{0} register by \TT{pxor xmm0, xmm0}.}
 регистре \XMM{1} является единицей. 
 Иными словами, если первый байт в регистре \XMM{1} является \TT{0xff}, то первый бит в \EAX будет также единицей, 
 иначе нулем.}
-\EN{This instruction will set first \EAX bit to 1 if the most significant bit of the first byte in \XMM{1} is $1$.
-In other words, if the first byte of the \XMM{1} register is \TT{0xff}, the first bit of \EAX will be set to 1, too.}
+\EN{This instruction sets first \EAX bit to 1 if the most significant bit of the first byte in \XMM{1} is $1$.
+In other words, if the first byte of the \XMM{1} register is \TT{0xff}, then the first bit of \EAX is to be 1, too.}
 
 \RU{Если второй байт в регистре \XMM{1} является \TT{0xff}, то второй бит в \EAX также будет единицей. 
 Иными словами, инструкция отвечает на вопрос, ``какие из байт в \XMM{1} являются \TT{0xff}?''
 В результате приготовит 16 бит и запишет в \EAX. Остальные биты в \EAX обнулятся.}
-\EN{If the second byte in the \XMM{1} register is \TT{0xff}, then the second bit in \EAX will be set to 1.
+\EN{If the second byte in the \XMM{1} register is \TT{0xff}, then the second bit in \EAX is to be set to 1.
 In other words, the instruction is answering the question ``which bytes in \XMM{1} are \TT{0xff}?''
-and will return 16 bits in the \EAX register. The other bits in the \EAX register will be cleared.}
+and returns 16 bits in the \EAX register. 
+The other bits in the \EAX register are to be cleared.}
 
 \RU{Кстати, не забывайте также вот о какой особенности нашего алгоритма.}
 \EN{By the way, do not forget about this quirk of our algorithm.}
@@ -201,7 +204,8 @@ and will return 16 bits in the \EAX register. The other bits in the \EAX registe
 \EN{It is the \TT{'hello'} string, terminating zero, and some random noise in memory.}
 \RU{Если мы загрузим эти 16 байт в \XMM{1} и сравним с нулевым \XMM{0}, то в итоге получим такое 
 \footnote{Я использую здесь порядок с \ac{MSB} до \ac{LSB}}:}
-\EN{If we load these 16 bytes into \XMM{1} and compare them with the zeroed \XMM{0}, we will get something like
+\EN{If we load these 16 bytes into \XMM{1} and compare them with the zeroed \XMM{0}, 
+we are getting something like
 \footnote{I use here order from \ac{MSB} to \ac{LSB}}:}
 
 \begin{verbatim}
@@ -230,7 +234,7 @@ EAX=0010000000100000b
 
 \RU{После исполнения этой инструкции \TT{bsf eax, eax}, в \EAX будет 5, что означает, 
 что единица найдена в пятой позиции (считая с нуля).}
-\EN{After the execution of \TT{bsf eax, eax}, \EAX will contain 5, meaning 
+\EN{After the execution of \TT{bsf eax, eax}, \EAX contains 5, meaning 
 1 was found at the 5th bit position (starting from zero).}
 
 \RU{Для использования этой инструкции, в MSVC также имеется макрос}

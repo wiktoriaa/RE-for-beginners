@@ -1,4 +1,4 @@
-% FIXME divide this file into files...
+% FIXME divide this file into separate ones...
 \chapter{\RU{Работа с числами с плавающей запятой используя SIMD}\EN{Working with floating point numbers using SIMD}}
 
 \label{floating_SIMD}
@@ -22,7 +22,8 @@ for x86-64) usually use \ac{SIMD} instructions instead of FPU ones.}
 \RU{Это, можно сказать, хорошая новость, потому что работать с ними легче}
 \EN{It can be said that it's good news, because it's easier to work with them}.
 
-\RU{Примеры будем использовать из секции о FPU}\EN{We will reuse here the examples from the FPU section}: \myref{sec:FPU}.
+\RU{Примеры будем использовать из секции о FPU}
+\EN{We are going to reuse the examples from the FPU section here}: \myref{sec:FPU}.
 
 \section{\RU{Простой пример}\EN{Simple example}}
 
@@ -231,7 +232,7 @@ is left in} \ST{0}.
 
 \ifdefined\IncludeOlly
 \RU{Если загрузить этот пример в}\EN{If we load this example in} \olly, 
-\RU{увидим, как инструкция}\EN{we will see how the} \TT{COMISD} \RU{сравнивает значения и устанавливает/сбрасывает
+\RU{увидим, как инструкция}\EN{we can see how the} \TT{COMISD} \RU{сравнивает значения и устанавливает/сбрасывает
 флаги}\EN{instruction compares values and sets/clears the} \CF \AndENRU \PF\EN{ flags}:
 
 \begin{figure}[H]
@@ -298,11 +299,13 @@ were evolved in a less chaotic way than the FPU ones in the past.}
 % TODO: do this!
 \RU{Если вы попробуете заменить в этих примерах}\EN{If you would try to replace} \Tdouble \RU{на}\EN{with} \Tfloat
 \RU{, то инструкции будут использоваться те же,
-только с суффиксом}\EN{in these examples, the same instructions will be used, but prefixed with} \TT{-SS} 
+только с суффиксом}
+% FIXME ... but their -SS versions
+\EN{in these examples, the same instructions will be used, but prefixed with} \TT{-SS} 
 (``Scalar Single-Precision''), \RU{например}\EN{for example}, \TT{MOVSS}, \TT{COMISS}, \TT{ADDSS}, \RU{и т.д.}\EN{etc.}
 
 ``Scalar'' \RU{означает что SIMD-регистр будет хранить только одно значение, вместо нескольких.}
-\EN{implies that the SIMD register will contain only one value instead of several.}
+\EN{implies that the SIMD register containing only one value instead of several.}
 \RU{Инструкции, работающие с несколькими значениями в регистре одновременно, имеют ``Packed'' в названии}
 \EN{Instructions working with several values in a register simultaneously have ``Packed'' in their name}.
 

@@ -10,8 +10,8 @@
 the Mersenne twister. 
 It produces random 32-bit values in DWORD form. 
 Then we can transform this value to \Tfloat and then
-divide it by \TT{RAND\_MAX} (\TT{0xFFFFFFFF} in our case)~---we 
-will get a value in the 0..1 interval.}
+divide it by \TT{RAND\_MAX} (\TT{0xFFFFFFFF} in our case)~---
+we getting a value in the 0..1 interval.}
 
 \RU{Но как известно, операция деления ~--- это медленная операция. 
 Да и вообще хочется избежать лишних операций с FPU.
@@ -31,10 +31,11 @@ We just need to store random bits in all significand bits to get a random float 
 это будет означать что экспонента равна единице. Далее заполняем мантиссу случайными битами, 
 знак оставляем в виде 0 (что значит наше число положительное), и вуаля. 
 Генерируемые числа будут в интервале от 1 до 2, так что нам еще нужно будет отнять единицу.}
-\EN{The exponent cannot be zero (the number will be denormalized in this case), so we will store \TT{01111111} 
-to exponent~---this means that the exponent is 1. Then we will fill the significand with random bits, set the sign bit to
+\EN{The exponent cannot be zero (the number is denormalized in this case), so we are storing \TT{01111111} 
+to exponent~---this means that the exponent is 1. 
+Then we filling the significand with random bits, set the sign bit to
 0 (which means a positive number) and voilà.
-The generated numbers will be between 1 and 2, so we must also subtract 1.}
+The generated numbers is to be between 1 and 2, so we must also subtract 1.}
 
 \newcommand{\URLXOR}{\url{http://go.yurichev.com/17308}}
 
@@ -54,10 +55,11 @@ In our case, we are able to create a variable
 of type \TT{union} and then access to it as it is \Tfloat or as it is \IT{uint32\_t}. 
 It can be said, it is just a hack. A dirty one.}
 
+% WTF?
 \RU{Код целочисленного \ac{PRNG} точно такой же, как мы уже рассматривали раннее:}
 \EN{The integer \ac{PRNG} code is the same as we already considered:} \myref{LCG_simple}.
 \RU{Так что и в скомпилированном виде этот код будет опущен.}
-\EN{So this code will be omitted from the compiled form.}
+\EN{So this code in compiled form is omitted.}
 
 \lstinputlisting{patterns/17_unions/FPU_PRNG/FPU_PRNG.cpp.\LANG}
 
@@ -72,7 +74,7 @@ we will talk about it later:}
 
 \RU{Если скомпилировать это в MSVC 2012, компилятор будет использовать SIMD-инструкции для FPU, читайте об этом
 здесь:}
-\EN{If we compile this in MSVC 2012, it will use the SIMD instructions for the FPU, read more about it here:}
+\EN{If we compile this in MSVC 2012, it uses the SIMD instructions for the FPU, read more about it here:}
 \myref{FPU_PRNG_SIMD}.
 
 \subsection{MIPS}
