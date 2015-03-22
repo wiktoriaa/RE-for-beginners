@@ -1,8 +1,8 @@
-% TODO translation
 % TODO proof-reading
-\subsection{Variadic functions}
+\subsection{\EN{Variadic functions}\RU{Ф-ции с переменным кол-вом аргументов (variadic)}}
 
-Variadic functions are in fact use arrays:
+\EN{Variadic functions are in fact use arrays:}
+\RU{Ф-ции с переменным кол-вом аргументов (variadic) на самом деле используют массивы:}
 
 \begin{lstlisting}
 	public static void f(int... values)
@@ -38,8 +38,10 @@ Variadic functions are in fact use arrays:
         23: return        
 \end{lstlisting}
 
-\TT{f()} just takes array of integers using \TT{aload\_0} at offset 3.
-Then it getting array size, etc.
+\EN{\ttf just takes array of integers using \TT{aload\_0} at offset 3.}
+\RU{По смещению 3, \ttf просто берет массив переменных используя \TT{aload\_0}.}
+\EN{Then it getting array size, etc.}
+\RU{Затем берет размер массива, итд.}
 
 \begin{lstlisting}
   public static void main(java.lang.String[]);
@@ -72,22 +74,30 @@ Then it getting array size, etc.
         26: return        
 \end{lstlisting}
 
-Array is constructed in \main using \TT{newarray} instruction, 
-then it's filled, and \TT{f()} is called.
+\EN{Array is constructed in \main using \TT{newarray} instruction, 
+then it's filled, and \ttf is called.}
+\RU{Массив конструируется в \main используя инструкцию \TT{newarray}, 
+затем он заполняется, и вызывается \ttf.}
 
-Oh, by the way, array object is not destroyed upon \main end.
-There are no destructors in Java at all, because JVM has garbage collector which does this
-automatically, when it feels it needs to.
+\EN{Oh, by the way, array object is not destroyed upon \main end.}
+\RU{Кстати, объект массива не уничтожается в конце \main.}
+\index{\EN{Garbage collector}\RU{Сборщик мусора}}
+\EN{There are no destructors in Java at all, because JVM has garbage collector which does this
+automatically, when it feels it needs to.}
+\RU{В Java вообще нет деструкторов, потому что в JVM есть сборщик мусора (garbage collector),
+делающий это автоматически, когда считает нужным.}
 
-What about \TT{format()} method?
-It takes two arguments: string and array of objects:
+\EN{What about \TT{format()} method?}
+\RU{Как насчет метода \TT{format()}?}
+\EN{It takes two arguments at input: string and array of objects:}
+\RU{Он берет на вход два аргумента: строку и массив объектов:}
 
 \begin{lstlisting}
 	public PrintStream format(String format, Object... args)
 \end{lstlisting}
 ( \url{http://docs.oracle.com/javase/tutorial/java/data/numberformat.html} )
 
-Let's see:
+\EN{Let's see}\RU{Посмотрим}:
 
 \begin{lstlisting}
 	public static void main(String[] args)
@@ -126,16 +136,29 @@ Let's see:
         34: return        
 \end{lstlisting}
 
-So values of \IT{int} and \IT{double} types are first promoted to \TT{Integer} and \TT{Double} 
-objects using \TT{valueOf} methods.
-\TT{format()} method needs objects of \TT{Object} type at input, and since \TT{Integer} and 
+\EN{So values of \IT{int} and \IT{double} types are first promoted to \TT{Integer} and \TT{Double} 
+objects using \TT{valueOf} methods.}
+\RU{Так что в начале значения типов \IT{int} и \IT{double} конвертируются в объекты типов 
+\TT{Integer} и \TT{Double} используя методы \TT{valueOf}.}
+\EN{\TT{format()} method needs objects of \TT{Object} type at input, and since \TT{Integer} and 
 \TT{Double} classes are inherited from root \TT{Object} class, they suitable as elements 
-in array of \TT{Object} elements.
-On the other hand, array is always homogeneous, i.e., it can't contain elements of the 
-different types, which makes impossible to push values of \IT{int} and \IT{double} types to it.
+in input array.}
+\RU{Метод \TT{format()} требует на входе объекты типа \TT{Object}, а так как классы \TT{Integer} и
+\TT{Double} наследуются от корневого класса \TT{Object}, они подходят как элементы
+во входном массиве.}
+\EN{On the other hand, array is always homogeneous, i.e., it can't contain elements of the 
+different types, which makes impossible to push values of \IT{int} and \IT{double} types to it.}
+\RU{С другой стороны, массив всегда гомогенный, т.е., он не может содержать элементы разных типов,
+что делает невозможным хранение там значений типов \IT{int} и \IT{double}.}
 
-Array of \TT{Object} objects is created at offset 13, \TT{Integer} objects is added into array at offset
-22, \TT{Double} object is added into array at offset 29.
+\EN{Array of \TT{Object} objects is created at offset 13, 
+\TT{Integer} objects is added into array at offset 22, 
+\TT{Double} object is added into array at offset 29.}
+\RU{Массив объектов \TT{Object} создается по смещению 13, 
+объект \TT{Integer} добавляется в массив по смещению 22, 
+объект \TT{Double} добавляется в массив по смещению 29.}
 
-The penultimate \TT{pop} instruction discards element at \ac{TOS}, 
-so at the moment of \TT{return} execution, stack is to be empty (or balanced).
+\EN{The penultimate \TT{pop} instruction discards element at \ac{TOS}, 
+so at the moment of \TT{return} execution, stack is to be empty (or balanced).}
+\RU{Предпоследняя инструкция \TT{pop} удаляет элемент на \ac{TOS}, 
+так что в момент исполнения \TT{return}, стек пуст (или сбалансирован).}

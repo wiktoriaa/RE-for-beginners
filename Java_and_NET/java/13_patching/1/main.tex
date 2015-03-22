@@ -1,8 +1,8 @@
-% TODO translation
 % TODO proof-reading
-\subsection{First example}
+\subsection{\EN{First example}\RU{Первый пример}}
 
-Let's proceed to simple patching task.
+\EN{Let's proceed to simple patching task.}
+\RU{Перейдем к простой задаче модификации кода.}
 
 \begin{lstlisting}
 public class nag
@@ -19,9 +19,11 @@ public class nag
 }
 \end{lstlisting}
 
-How we would remove printing of ``This program is not registered'' string?
+\EN{How we would remove printing of ``This program is not registered'' string?}
+\RU{Как можно избавиться от печати строки ``This program is not registered''?}
 
-Let's finally load IDA:
+\EN{Let's finally load the .class file into IDA:}
+\RU{Наконец загрузим .class-файл в IDA:}
 
 \begin{figure}[H]
 \centering
@@ -29,7 +31,8 @@ Let's finally load IDA:
 \caption{IDA}
 \end{figure}
 
-Let's patch first byte of the function to 177 (which is \TT{return} instruction):
+\EN{Let's patch first byte of the function to 177 (which is \TT{return} instruction opcode):}
+\RU{В начале заменим первый байт ф-ции на 177 (это опкод инструкции \TT{return}):}
 
 \begin{figure}[H]
 \centering
@@ -37,7 +40,7 @@ Let's patch first byte of the function to 177 (which is \TT{return} instruction)
 \caption{IDA}
 \end{figure}
 
-But that doesn't work (JRE 1.7):
+\EN{But that doesn't work}\RU{Но это не работает} (JRE 1.7):
 
 \begin{lstlisting}
 Exception in thread "main" java.lang.VerifyError: Expecting a stack map frame
@@ -57,9 +60,11 @@ Exception Details:
         at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:486)
 \end{lstlisting}
 
-Perhaps, JVM has some other checks related to stack maps.
+\EN{Perhaps, JVM has some other checks related to stack maps.}
+\RU{Вероятно, в JVM есть проверки связанные с картами стека.}
 
-OK, let's patch it differently by removing call to \TT{nag()}:
+\EN{OK, let's patch it differently by removing call to \TT{nag()}:}
+\RU{ОК, попробуем пропатчить её иначе, удаляя вызов ф-ции \TT{nag()}:}
 
 \begin{figure}[H]
 \centering
@@ -67,6 +72,7 @@ OK, let's patch it differently by removing call to \TT{nag()}:
 \caption{IDA}
 \end{figure}
 
-0 is opcode for \ac{NOP}.
+\EN{0 is opcode for \ac{NOP}.}
+\RU{0 это опкод инструкции \ac{NOP}.}
 
-Now that works!
+\EN{Now that works}\RU{Теперь всё работает}!
