@@ -559,7 +559,7 @@ You can read more about it in the ``\DivisionByNineSectionName'' section~(\myref
 
 \RU{Это код, на самом деле, делит значение символа пароля на 3.}
 \EN{The code actually divides the password character's value by 3.}
-% TODO: add Mathematica calculations
+% TODO1: add Mathematica calculations
 \begin{lstlisting}
 .text:005411EA                 mov     eax, 55555556h
 .text:005411EF                 imul    ecx
@@ -817,7 +817,7 @@ could be seen as 2D coordinates. Then the array is to be an 8*8 matrix.}
 #define SET_BIT(var, bit)       ((var) |= (bit))
 #define REMOVE_BIT(var, bit)    ((var) &= ~(bit))
 
-char cube[8][8];
+static BYTE cube[8][8];
 
 void set_bit (int x, int y, int shift, int bit)
 {
@@ -827,7 +827,7 @@ void set_bit (int x, int y, int shift, int bit)
 		REMOVE_BIT (cube[x][y], 1<<shift);
 };
 
-int get_bit (int x, int y, int shift)
+bool get_bit (int x, int y, int shift)
 {
 	if ((cube[x][y]>>shift)&1==1)
 		return 1;
