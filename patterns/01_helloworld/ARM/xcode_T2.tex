@@ -56,15 +56,23 @@ then the second and finally the first (due to different \gls{endianness})}.
 
 \index{ARM!\RU{переключение режимов}\EN{mode switching}}
 \index{ARM!\Instructions!BLX}
-\RU{Помимо прочих отличий, здесь используется инструкция}\EN{Among the other differences, the} \TT{BLX} \RU{вместо}\EN{instruction is used in this case instead of the} \TT{BL}.
-\RU{Отличие в том, что помимо сохранения адреса возврата в регистре \ac{LR} и передаче управления в функцию \puts, происходит смена режима процессора с thumb на ARM, либо наоборот}
-\EN{The difference is that, besides saving the \ac{RA} in the \ac{LR} register and passing control to the \puts function, the processor is also switching from thumb mode to ARM (or back)}.
-\RU{Здесь это нужно потому, что инструкция, куда ведет переход, выглядит так (она закодирована в режиме ARM)}\EN{This instruction is placed here since the instruction to which control is passed looks like (it is encoded in ARM mode)}:
+\RU{Помимо прочих отличий, здесь используется инструкция}
+\EN{Among the other differences, the} \TT{BLX} 
+\RU{вместо}\EN{instruction is used in this case instead of the} \TT{BL}.
+\RU{Отличие в том, что помимо сохранения адреса возврата в регистре \ac{LR} и передаче управления 
+в функцию \puts, происходит смена режима процессора с thumb/thumb-2 на режим ARM (либо назад).}
+\EN{The difference is that, besides saving the \ac{RA} in the \ac{LR} register and passing control 
+to the \puts function, the processor is also switching from thumb/thumb-2 mode to ARM mode (or back).}
+\RU{Здесь это нужно потому, что инструкция, куда ведет переход, выглядит так (она закодирована в режиме ARM)}
+\EN{This instruction is placed here since the instruction to which control is passed looks like (it is encoded in ARM mode)}:
 
 \begin{lstlisting}
 __symbolstub1:00003FEC _puts           ; CODE XREF: _hello_world+E
 __symbolstub1:00003FEC 44 F0 9F E5     LDR  PC, =__imp__puts
 \end{lstlisting}
+
+\EN{This is essentially jump to place where \puts address is written in imports' section.}
+\RU{Это просто переход на место где записан адрес \puts в секции импортов.}
 
 \RU{Итак, внимательный читатель может задать справедливый вопрос: почему бы не вызывать \puts сразу в 
 том же месте кода, где он нужен?}
