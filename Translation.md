@@ -38,6 +38,10 @@ Better way to provide translations to a sentence is to list them, like [here](ht
 Since this work can be done collaboratively, you may also use [my forum](http://forum.yurichev.com/viewforum.php?f=6) for coordination.
 Github may also be used as well.
 
+Do not be discouraged by the size of the whole project. 
+Try to translate some small piece with familiar material to you.
+Start the ball rolling, as they say. Some other translator may continue your work.
+
 All your work will be licensed, like this book, in CC BY-NC-ND terms.
 Korean, Chinese and Farsi translations are reserved by publishers.
 English and Russian versions I maintain by myself, but any fixes are very welcome!
