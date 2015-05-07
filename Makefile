@@ -4,7 +4,7 @@
 .m4.ru:
 	m4 --define=lang=ru $*.m4 >$*.ru
 
-M4SOURCES := $(shell find $(pwd) -name '*.m4')
+M4SOURCES := $(shell find . $(pwd) -name '*.m4')
 RU_LISTINGS := $(M4SOURCES:%.m4=%.ru)
 EN_LISTINGS := $(M4SOURCES:%.m4=%.en)
 
