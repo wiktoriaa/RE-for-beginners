@@ -8,11 +8,10 @@
 что связь между кодом на \CCpp и тем, что генерирует компилятор, вбилась мне в подсознание достаточно 
 глубоко, поэтому я могу, глядя на код на ассемблере, сразу понимать, в общих чертах, что там было написано 
 на Си. Возможно это поможет кому-то ещё, попробую описать некоторые примеры.}
-\EN{When I first started learning C and then \Cpp, I used to write small pieces of code, compile them, 
-and look at the assembly language output. This was much easy for me to understand
-\footnote{Frankly speaking, I still do so when I can't understand what some code does.}. 
-I did it so many times that the relation 
-between the \CCpp code and what the compiler produced was imprinted deeply in my mind. That is why when I look at assembly code I could instantly grasp what the original C code in general does and looks like. 
+\EN{When I first started learning C and later, \Cpp, I used to write small pieces of code, compile them, 
+and then look at the assembly language output. This made it very easy for me to understand what was going on in the code that I had written.
+\footnote{In fact, I still do when I can't understand what a particular bit of code does.}. 
+I did it so many times that the relationship between the \CCpp code and what the compiler produced was imprinted deeply in my mind. That's why that when I look at assembly code, I can instantly imagine a rough outline of C code's appearance and function. 
 Perhaps this technique could be helpful for someone else and so I'm going to describe some examples here.}
 %
 %\RU{Здесь много примеров и для x86/x64 и для ARM}\EN{There are a lot of examples for both x86/x64 
@@ -35,61 +34,54 @@ them gradually to assembly, trying to make their code as short as possible.}
 \RU{Наверное, этим не стоит заниматься в наше время на практике (потому что конкурировать с современными
 компиляторами в плане эффективности очень трудно), но это очень хороший способ разобраться в ассемблере
 лучше.}
-\EN{This probably is not worth doing today in real-world scenarios 
-(because it's hard to compete with modern compilers on efficiency), 
-but it's a very good method to learn assembly better.}
+\EN{This probably is not worth doing in real-world scenarios today, 
+because it's hard to compete with modern compilers in terms of efficiency. It is, however, a very good way to gain a better understanding of assembly.}
 \RU{Так что вы можете взять любой фрагмент кода на ассемблере в этой книге и постараться сделать его короче.}
-\EN{Therefore, you can take any assembly code from this book and try to make it shorter.}
+\EN{Feel free, therefore, to take any assembly code from this book and try to make it shorter.}
 \RU{Но не забывайте о тестировании своих результатов!}
-\EN{However, please also do not forget about testing your results!}
+\EN{However, don't forget to test what you have written!}
 \fi
 
-\section*{\RU{Разница между неоптимизирующей (debug) и оптимизирующей (release) версиями}\EN{Difference between non-optimized (debug) and optimized (release) versions}}
+\section*{\RU{Разница между неоптимизирующей (debug) и оптимизирующей (release) версиями}\EN{The Difference between non-optimized (debug) and optimized (release) versions}}
 
-\RU{Неоптимизирующий компилятор работает быстрее, генерирует более понятный (хотя и более объемный) код.}
-\EN{A non-optimizing compiler works faster and produces more understandable (verbose, though) code.}
+\RU{Неоптимизирующий компилятор работает быстрее, генерирует более понятный (хотя и более объемный) код. Оптимизирующий (release) компилятор работает медленнее и старается сгенерировать более быстрый (хотя и не обязательно краткий) код.}
+\EN{A non-optimizing (debug) compiler is faster and produces more understandable (albeit verbose) code, whereas an optimizing (release) compiler is slower and tries to produce code that runs faster (but is not necessarily more compact).}
 
-\RU{Оптимизирующий (release) компилятор работает медленнее и старается сгенерировать более быстрый (хотя
-и не обязательно краткий) код.}
-\EN{An optimizing (release) compiler works slower and tries to produce faster (but not necessarily smaller) code.}
+
+
 
 \RU{Одна очень важная черта отладочного кода в том, что он может содержать отладочную информацию, хранящую
 связи между каждой строкой в исходном коде и адресом в машинном коде.}
-\EN{One important feature of the debugging code is that there might be debugging information showing connections
-between each line in source code and machine code addresses.}
-\RU{Оптимизирующие компиляторы обычно генерируют код где целые строки из исходного кода могут быть соптимизированы
-и не присутствовать в итоговом машинном коде.}
-\EN{Optimizing compilers tend to produce such output where whole source code lines may be optimized away 
-and not present in the resulting machine code.}
+\EN{One of the important features of the ´debug' code is that there might be debugging information which shows the connections between each line of the source code and the respective machine code addresses.}
+\RU{Оптимизирующие компиляторы обычно генерируют код где целые строки из исходного кода могут быть соптимизированы и не присутствовать в итоговом машинном коде.}
+\EN{Optimizing compilers, on the other hand, tend to produce output where entire lines of source code can be optimized away and thus not even be present in the resulting machine code.}
 
 \RU{Практикующий reverse engineer обычно сталкивается с обоими версиями, потому что некоторые разработчики
-включают оптимизацию, некоторые другие --- нет.}
-\EN{Reverse engineer practitioner usually encounters either version
-because some developers turn on compiler's optimization switches and others do not.}
+включают оптимизацию, некоторые другие --- нет. Вот почему я стараюсь дать примеры для обоих версий.}
+\EN{Reverse engineers can encounter either version, simply because some developers turn on the compiler's optimization flags and others do not. Because of this, I have tried to show examples of both debug and release versions of the code featured in this book, where possible.}
 
-\RU{Вот почему я стараюсь дать примеры для обоих версий.}
-\EN{That's why I try to give examples of both versions of code.}
+
 
 \chapter{\RU{Краткое введение в CPU}\EN{A short introduction to the CPU}}
 
-\EN{The} \ac{CPU} \RU{это собственно устройство исполняющее все программы}\EN{is the unit, which executes all of the programs}.
+\EN{The} \ac{CPU} \RU{это собственно устройство исполняющее все программы}\EN{is the device which executes the machine code a program consists of}.
 
-\RU{Немного терминологии}\EN{Short glossary}:
+\textbf{\RU{Немного терминологии}\EN{A short glossary}:}
 
 \begin{description}
-\item[\RU{Инструкция}\EN{Instruction}]: \RU{примитивная команда}\EN{a primitive}
+\item[\RU{Инструкция}\EN{Instruction}]: \RU{примитивная команда}\EN{A primitive}
  \ac{CPU} \EN{command}.
 \RU{Простейшие примеры: перемещение между регистрами, работа с памятью, примитивные арифметические операции}
-\EN{Simplest examples: moving data between registers, working with memory, arithmetic primitives}.
+\EN{The simplest examples include: moving data between registers, working with memory and arithmetic primitives}.
 \RU{Как правило, каждый}\EN{As a rule, each} \ac{CPU} \RU{имеет свой набор инструкций}\EN{has its own instruction set architecture} 
 (\ac{ISA}).
 
-\item[\RU{Машинный код}\EN{Machine code}]: \RU{код понимаемый}\EN{code for the} \ac{CPU}. 
+\item[\RU{Машинный код}\EN{Machine code}]: \RU{код понимаемый}\EN{Code that the} \ac{CPU}\EN{ directly processes}. 
 \RU{Каждая инструкция обычно кодируется несколькими байтами}\EN{Each instruction is usually encoded by several bytes}.
 
 \item[\RU{Язык ассемблера}\EN{Assembly language}]: 
 \RU{машинный код плюс некоторые расширения призванные облегчить труд программиста: макросы, и т.д.}
-\EN{mnemonic code and some extensions like macros which are intended to make a programmer's life easier.}
+\EN{Mnemonic code and some extensions like macros which are intended to make a programmer's life easier.}
 
 \item[\RU{Регистр CPU}\EN{CPU register}]: 
 \RU{Каждый}\EN{Each} \ac{CPU} \RU{имеет некоторый фиксированный набор регистров общего назначения}\EN{has a fixed set
@@ -98,107 +90,103 @@ $\approx 8$ \InENRU x86, $\approx 16$ \InENRU x86-64, $\approx 16$ \InENRU ARM.
 \RU{Проще всего понимать регистр как временную переменную без типа}
 \EN{The easiest way to understand a register is to think of it as an untyped temporary variable}.
 \RU{Можно представить что вы пишете на \ac{PL} высокого уровня и у вас только 8 переменных шириной 32 (или 64) бита}
-\EN{Imagine you are working with a high-level \ac{PL} and you have only 8 32-bit (or 64-bit) variables}.
-\RU{Можно сделать очень много используя только их}\EN{Many things can be done using only these}!
+\EN{Imagine if you were working with high-level \ac{PL} and could only use eight 32-bit (or 64-bit) variables}.
+\RU{Можно сделать очень много используя только их}\EN{Yet a lot can be done using just these}!
 \end{description}
 
-\RU{Откуда взялась разница между машинным кодом и \ac{PL} высокого уровня}
-\EN{What is the difference between machine code and a \ac{PL}}?
+\RU{Откуда взялась разница между машинным кодом и \ac{PL} высокого уровня?}
+\EN{One might wonder why there needs to be a difference between machine code and a \ac{PL}. The answer lies in the fact that humans and \ac{CPU}s are not alike -}
 \RU{Человеку проще писать на \ac{PL} высокого уровня вроде \CCpp, Java, Python, 
 а \ac{CPU} проще работать с абстракциями куда более низкого уровня}
-\EN{It is much easier for humans to use a high-level \ac{PL} like \CCpp, Java, Python, etc., 
+\EN{it is much easier for humans to use a high-level \ac{PL} like \CCpp, Java, Python, etc., 
 but it is easier for a \ac{CPU} to use a much lower level of abstraction}.
 \RU{Возможно, можно было бы придумать \ac{CPU} исполняющий код \ac{PL} высокого уровня, но он был бы значительно сложнее}
-\EN{Perhaps, it would be possible to invent a \ac{CPU} which can execute high-level \ac{PL} code, but it would be much more complex}.
+\EN{Perhaps it would be possible to invent a \ac{CPU} that can execute high-level \ac{PL} code, but it would be many times more complex than the \ac{CPU}s we know of today}.
 % A note on the experiments in this area (like the LISP machines http://en.wikipedia.org/wiki/Lisp_machine
 % might be useful
 \RU{И наоборот, человеку очень неудобно писать на ассемблере из-за его низкоуровневости, к тому же, крайне трудно обойтись
 без мелких ошибок}
-\EN{On the contrary, it is very inconvenient for humans to use assembly language due to it being low-level. Besides, it is very hard
-to do it without making a huge amount of annoying mistakes}.
+\EN{In a similar fashion, it is very inconvenient for humans to write in assembly language due to it being so low-level and difficult to write in without making a huge amount of annoying mistakes}.
 \RU{Программа переводящая код из \ac{PL} высокого уровня в ассемблер называется \IT{компилятором}
 \footnote{В более старой русскоязычной литературе также часто встречается термин ``транслятор''.}}
-\EN{The program, which converts high-level \ac{PL} code into assembly, is called a \IT{compiler}}.
+\EN{The program which converts the high-level \ac{PL} code into assembly is called a \IT{compiler}}.
 % TODO1 add about linker: "компоновщик" и "редактор связей" в русскоязычной лит-ре
 
 \ifx\LITE\undefined
-\section{\RU{Несколько слов о разнице между \ac{ISA}}\EN{A couple of words about different \ac{ISA}}}
+\section{\RU{Несколько слов о разнице между ISA}\EN{A couple of words about different ISAs}
 
 \RU{x86 всегда был архитектурой с опкодами переменной длины, так что когда пришла 64-битная эра,
 расширения x64 не очень сильно повлияли на \ac{ISA}.}
-\EN{x86 was always an \ac{ISA} with variable-length opcodes, so when the 64-bit era came, 
-the x64 extensions did not affect the \ac{ISA} very much.}
+\EN{The x86 \ac{ISA} has always been one with variable-length opcodes, so when the 64-bit era came, 
+the x64 extensions did not impact the \ac{ISA} very significantly. In fact, x86 \ac{ISA} still contains a lot of instructions that first appeared in 16-bit 8086 CPU, yet are still found in the CPUs of today.}
 \RU{В x86 до сих пор есть масса инструкций появившихся в 16-битном 8086 и присутствующих в самых последних
 процессорах.}
-\EN{x86 has a lot of instructions that appeared in 16-bit 8086 CPU and are still present in latest CPUs.}\\
 \\
 \index{ARM!\ARMMode}
 \index{ARM!\ThumbMode}
 \index{ARM!\ThumbTwoMode}
 \RU{ARM это \ac{RISC}-процессор разработанный с учетом опкодов одинаковой длины, что было некоторым преимуществом
 в прошлом.}
-\EN{ARM is a \ac{RISC} \ac{CPU} designed with constant opcode length in mind, which had some advantages in the past.}
+\EN{ARM is a \ac{RISC} \ac{CPU} designed with constant-length opcode in mind, which had some advantages in the past.}
 \RU{Так что в самом начале, все инструкции ARM кодировались 4-мя байтами}
-\EN{At the very beginning, ARM had all instructions encoded in 4 bytes}
+\EN{In the very beginning, all ARM instructions were encoded in 4 bytes}
 \ifx\LITE\undefined
 \footnote{\RU{Кстати,
 инструкции фиксированного размера удобны тем, что всегда можно легко узнать адрес 
 следующей (или предыдущей) инструкции. Эта особенность будет рассмотрена в секции о 
 switch()~(\myref{sec:SwitchARMLot}).}
-\EN{By the way, fixed-length instructions are handy in a way that one can calculate the next (or previous) 
-instruction's address without effort. This feature will be discussed in switch()~(\myref{sec:SwitchARMLot}) section.}
+\EN{By the way, fixed-length instructions are handy due to that one can calculate the next (or previous) 
+instruction's address without effort. This feature will be discussed in the switch()~(\myref{sec:SwitchARMLot}) section.}
 }
 \fi
 .
-\RU{Это то что сейчас называется ``режим ARM''}\EN{This is now referred as ``ARM mode''}.
+\RU{Это то что сейчас называется ``режим ARM''}\EN{This is now referred to as ``ARM mode''}.
 
-\RU{Потом они подумали что это не очень экономично}\EN{Then they thought it wasn't very frugal}.
+\RU{Потом они подумали что это не очень экономично}\EN{Then they thought it wasn't as frugal as they first imagined}.
 \RU{На самом деле, самые используемые инструкции\footnote{А это MOV/PUSH/CALL/Jcc} процессора на практике могут быть закодированы
 используя меньшее количество информации.}
 \EN{In fact, most used \ac{CPU} instructions\footnote{These are MOV/PUSH/CALL/Jcc} in real world applications can be encoded using 
 less information.}
 \RU{Так что они добавили другую \ac{ISA} с названием Thumb, где каждая инструкция кодируется всего лишь
 2-мя байтами.}
-\EN{So they added another \ac{ISA} called Thumb, where each instruction was encoded in just 2 bytes.}
+\EN{They therefore added another \ac{ISA}, called Thumb, where each instruction was encoded in just 2 bytes.}
 \RU{Теперь это называется ``режим Thumb''}\EN{This is now referred as ``Thumb mode''}.
 \RU{Но не все инструкции ARM могут быть закодированы в двух байтах, так что набор инструкций Thumb ограниченный.}
-\EN{However, not all ARM instructions can be encoded in just 2 bytes, so Thumb instruction set is somewhat limited.}
+\EN{However, not \IT{all} ARM instructions can be encoded in just 2 bytes, so the Thumb instruction set is somewhat limited.}
 \RU{Код скомпилированный для режима ARM и Thumb может сосуществовать в одной программе, конечно.}
-\EN{Code compiled for ARM mode and Thumb mode may coexist in one program, of course.}
+\EN{It is worth noting that code compiled for ARM mode and Thumb mode may of course coexist within one single program.}
 
 \RU{Затем создатели ARM решили что Thumb можно расширить: так появился Thumb-2 (в ARMv7).}
-\EN{Then ARM creators thought Thumb could be extended: Thumb-2 appeared (in ARMv7). }
+\EN{The ARM creators thought Thumb could be extended, giving rise to Thumb-2, which appeared in ARMv7. }
 \RU{Thumb-2 это все еще двухбайтные инструкции, но некоторые новые инструкции имеют длину 4 байта.}
-\EN{Thumb-2 is still 2-byte instructions, but some new instructions have a size of 4 bytes.}
+\EN{Thumb-2 still uses 2-byte instructions, but has some new instructions which have the size of 4 bytes.}
 \RU{Распространено заблуждение, что Thumb-2 ~--- это смесь ARM и Thumb. Это не верно. Просто Thumb-2 был дополнен до
 более полной поддержки возможностей процессора, что теперь может легко конкурировать с режимом ARM.}
 \EN{There is a common misconception that Thumb-2 is a mix of ARM and Thumb. This is incorrect. 
 Rather, Thumb-2 was extended to fully support all processor features so it could
-compete with ARM mode.}
-\RU{По поводу богатства возможностей, Thumb-2 теперь может конкурировать с режимом ARM.}
-\EN{On instruction set richness, Thumb-2 now competes with the original ARM mode.}
-\RU{Основное количество приложений для \idevices скомпилировано для набора инструкций Thumb-2, потому что Xcode
+compete with ARM mode - a goal that was clearly achieved, as the majority of applications for \idevices are compiled for the Thumb-2 instruction set (admittedly, largely due to the fact that that Xcode does this by default) .}
+\RU{По поводу богатства возможностей, Thumb-2 теперь может конкурировать с режимом ARM. Основное количество приложений для \idevices скомпилировано для набора инструкций Thumb-2, потому что Xcode
 делает так по умолчанию}
-\EN{The majority of \idevices applications are compiled for the Thumb-2 instruction set because Xcode does this by default}.
+
 
 \RU{Потом появился 64-битный ARM, это \ac{ISA} снова с 4-хбайтными опкодами, без дополнительного режима Thumb.}
-\EN{Later the 64-bit ARM came out. This \ac{ISA} has 4-byte opcodes again, without any additional Thumb mode.}
+\EN{Later the 64-bit ARM came out. This \ac{ISA} has 4-byte opcodes, and lacked the need of any additional Thumb mode.}
 \RU{Но 64-битные требования повлияли на \ac{ISA}, так что, подводя итог, теперь у нас 3 набора инструкций ARM:
 режим ARM, режим Thumb (включая Thumb-2) и ARM64.}
-\EN{But the 64-bit requirements affected \ac{ISA}, so, summarizing, we now have 3 ARM instruction sets: ARM mode,
+\EN{However, the 64-bit requirements affected the \ac{ISA}, resulting in us now having three ARM instruction sets: ARM mode,
 Thumb mode (including Thumb-2) and ARM64.}
 \RU{Эти наборы инструкций частично пересекаются, но я бы сказал, это скорее разные наборы, нежели
 вариации одного.}
 \EN{These \ac{ISA}s intersect partially, but I would rather say they are different
-\ac{ISA}s than variations of the same one.}
+\ac{ISA}s, rather than variations of the same one.}
 \RU{Следовательно, в этой книге я стараюсь добавлять фрагменты кода на всех трех ARM \ac{ISA}.}
-\EN{Therefore, I try to add fragments of code in all 3 ARM \ac{ISA}s in this book.}\\
+\EN{Therefore, I shall try to add fragments of code in all three ARM \ac{ISA}s in this book.}\\
 \\
 \index{PowerPC}
 \index{MIPS}
 \index{Alpha AXP}
 \RU{Существует еще много \ac{RISC} \ac{ISA} с опкодами фиксированной 32-битной длины, это как минимум}
-\EN{There are many other \ac{RISC} \ac{ISA}s with fixed length 32-bit opcodes, for example}
+\EN{There are, by the way, many other \ac{RISC} \ac{ISA}s with fixed length 32-bit opcodes, such as}
 MIPS, PowerPC \AndENRU Alpha AXP.
 \fi
 
