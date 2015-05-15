@@ -8,6 +8,11 @@ Aside from LaTeX markup, there are only 2 macros you may be aware of.
 
 "\RU{russian text}" and "\EN{english text}" used in places where the string of one specific language should be present.
 
+Translating
+-----------
+
+Read [here](https://github.com/dennis714/RE-for-beginners/blob/master/Translation.md).
+
 Adding comments to source code
 ------------------------------
 
