@@ -1,12 +1,12 @@
 \part{\RU{Образцы кода}\EN{Code patterns}}
 
 \RU{\epigraph{Всё познается в сравнении}{Автор неизвестен}} % FIXME: english version?
-\RU{Когда я учил Си, а затем \Cpp, я просто писал небольшие фрагменты кода, компилировал и смотрел что 
-получилось на ассемблере. Так было намного проще понять
+\RU{Когда я учил Си, а затем \Cpp, я просто писал небольшие фрагменты кода, компилировал и смотрел, что 
+получилось на ассемблере. Так было намного проще понять%
 \footnote{Честно говоря, я до сих пор так делаю, когда я не понимаю, как работает некий код.}. 
 Я делал это такое количество раз, 
 что связь между кодом на \CCpp и тем, что генерирует компилятор, вбилась мне в подсознание достаточно 
-глубоко, поэтому я могу, глядя на код на ассемблере, сразу понимать, в общих чертах, что там было написано 
+глубоко. Поэтому я могу, глядя на код на ассемблере, сразу в общих чертах понимать, что там было написано 
 на Си. Возможно это поможет кому-то ещё, попробую описать некоторые примеры.}
 \EN{When I first started learning C and later, \Cpp, I used to write small pieces of code, compile them, 
 and then look at the assembly language output. This made it very easy for me to understand what was going on in the code that I had written.
@@ -42,29 +42,45 @@ because it's hard to compete with modern compilers in terms of efficiency. It is
 \EN{However, don't forget to test what you have written!}
 \fi
 
-\section*{\RU{Разница между неоптимизирующей (debug) и оптимизирующей (release) версиями}\EN{The Difference between non-optimized (debug) and optimized (release) versions}}
+% rewrote to show that debug\release and optimisations levels are orthogonal concepts.
+\section*{\RU{Уровни оптимизации и отладочная информация}\EN{Optimization levels and debug information}}
 
-\RU{Неоптимизирующий компилятор работает быстрее, генерирует более понятный (хотя и более объемный) код. Оптимизирующий (release) компилятор работает медленнее и старается сгенерировать более быстрый (хотя и не обязательно краткий) код.}
-\EN{A non-optimizing (debug) compiler is faster and produces more understandable (albeit verbose) code, whereas an optimizing (release) compiler is slower and tries to produce code that runs faster (but is not necessarily more compact).}
+\RU{Исходный код можно компилировать различными компиляторами с различными уровнями оптимизации.
+В типичном компиляторе этих уровней около трёх, где нулевой уровень~--- отключить оптимизацию.
+Различают также направления оптимизации кода по размеру и по скорости.}
+\EN{Source code can be compiled by different compilers with various optimization levels.
+Typical compiler has about three such levels, where level zero means disable optimization.
+Optimization can also be targeted towards code size or code speed.}
 
+\RU{Неоптимизирующий компилятор работает быстрее, генерирует более понятный (хотя и более объемный) код.
+Оптимизирующий компилятор работает медленнее и старается сгенерировать более быстрый (хотя и не обязательно краткий) код.}
+\EN{A non-optimizing compiler is faster and produces more understandable (albeit verbose) code,
+whereas an optimizing compiler is slower and tries to produce code that runs faster (but is not necessarily more compact).}
 
+\RU{Наряду с уровнями и направлениями оптимизации компилятор может включать в конечный файл отладочную информацию,
+производя таким образом код, который легче отлаживать.}
+\EN{In addition to optimization levels and direction, compiler can include in the resulting file some debug information,
+thus producing code for easy debugging.}
 
-
-\RU{Одна очень важная черта отладочного кода в том, что он может содержать отладочную информацию, хранящую
+\RU{Одна очень важная черта отладочного кода в том, что он может содержать
 связи между каждой строкой в исходном коде и адресом в машинном коде.}
-\EN{One of the important features of the ´debug' code is that there might be debugging information which shows the connections between each line of the source code and the respective machine code addresses.}
-\RU{Оптимизирующие компиляторы обычно генерируют код, где целые строки из исходного кода могут быть соптимизированы и не присутствовать в итоговом машинном коде.}
-\EN{Optimizing compilers, on the other hand, tend to produce output where entire lines of source code can be optimized away and thus not even be present in the resulting machine code.}
+\EN{One of the important features of the ´debug' code is that it might contain links
+between each line of the source code and the respective machine code addresses.}
+\RU{Оптимизирующие компиляторы обычно генерируют код, где целые строки из исходного кода
+могут быть оптимизированы и не присутствовать в итоговом машинном коде.}
+\EN{Optimizing compilers, on the other hand, tend to produce output where entire lines of source code
+can be optimized away and thus not even be present in the resulting machine code.}
 
 \RU{Практикующий reverse engineer обычно сталкивается с обоими версиями, потому что некоторые разработчики
-включают оптимизацию, некоторые другие --- нет. Вот почему я стараюсь дать примеры для обоих версий.}
-\EN{Reverse engineers can encounter either version, simply because some developers turn on the compiler's optimization flags and others do not. Because of this, I have tried to show examples of both debug and release versions of the code featured in this book, where possible.}
+включают оптимизацию, некоторые другие~--- нет. Вот почему я стараюсь дать примеры для обоих версий.}
+\EN{Reverse engineers can encounter either version, simply because some developers turn on compiler optimization flags and others do not.
+Because of this, I have tried to show examples of both optimized and unoptimizaed versions of the code featured in this book.}
 
 
 
 \chapter{\RU{Краткое введение в CPU}\EN{A short introduction to the CPU}}
 
-\EN{The} \ac{CPU} \RU{это собственно устройство исполняющее все программы}\EN{is the device which executes the machine code a program consists of}.
+\EN{The} \ac{CPU} \RU{это устройство исполняющее все программы}\EN{is the device which executes the machine code a program consists of}.
 
 \textbf{\RU{Немного терминологии}\EN{A short glossary}:}
 
@@ -80,7 +96,7 @@ because it's hard to compete with modern compilers in terms of efficiency. It is
 \RU{Каждая инструкция обычно кодируется несколькими байтами}\EN{Each instruction is usually encoded by several bytes}.
 
 \item[\RU{Язык ассемблера}\EN{Assembly language}]: 
-\RU{машинный код плюс некоторые расширения, призванные облегчить труд программиста: макросы, и~т.д.}
+\RU{машинный код плюс некоторые расширения, призванные облегчить труд программиста: макросы, имена, \etc.}
 \EN{Mnemonic code and some extensions like macros which are intended to make a programmer's life easier.}
 
 \item[\RU{Регистр CPU}\EN{CPU register}]: 
@@ -104,12 +120,13 @@ but it is easier for a \ac{CPU} to use a much lower level of abstraction}.
 \EN{Perhaps it would be possible to invent a \ac{CPU} that can execute high-level \ac{PL} code, but it would be many times more complex than the \ac{CPU}s we know of today}.
 % A note on the experiments in this area (like the LISP machines http://en.wikipedia.org/wiki/Lisp_machine
 % might be useful
-\RU{И наоборот, человеку очень неудобно писать на ассемблере из-за его низкоуровневости, к тому же, крайне трудно обойтись
-без мелких ошибок}%
-\EN{In a similar fashion, it is very inconvenient for humans to write in assembly language due to it being so low-level and difficult to write in without making a huge amount of annoying mistakes}.
-\RU{Программа переводящая код из \ac{PL} высокого уровня в ассемблер называется \IT{компилятором}%
-\footnote{В более старой русскоязычной литературе также часто встречается термин ``транслятор''.}}
-\EN{The program which converts the high-level \ac{PL} code into assembly is called a \IT{compiler}}.
+\RU{И наоборот, человеку очень неудобно писать на ассемблере из-за его низкоуровневости,
+к тому же, крайне трудно обойтись без мелких ошибок.}
+\EN{In a similar fashion, it is very inconvenient for humans to write in assembly language
+due to it being so low-level and difficult to write in without making a huge amount of annoying mistakes.}
+\RU{Программа, переводящая код из \ac{PL} высокого уровня в ассемблер называется \IT{компилятором}%
+\footnote{В более старой русскоязычной литературе также часто встречается термин ``транслятор''.}.}
+\EN{The program which converts the high-level \ac{PL} code into assembly is called a \IT{compiler}.}
 % TODO1 add about linker: "компоновщик" и "редактор связей" в русскоязычной лит-ре
 
 \ifx\LITE\undefined
@@ -126,19 +143,18 @@ the x64 extensions did not impact the \ac{ISA} very significantly. In fact, x86 
 \index{ARM!\ThumbMode}%
 \index{ARM!\ThumbTwoMode}%
 
-\RU{ARM это \ac{RISC}-процессор разработанный с учетом опкодов одинаковой длины, что было некоторым преимуществом
-в прошлом.}
+\RU{ARM это \ac{RISC}-процессор разработанный с учетом опкодов одинаковой длины, что было некоторым преимуществом в прошлом.}
 \EN{ARM is a \ac{RISC} \ac{CPU} designed with constant-length opcode in mind, which had some advantages in the past.}
 \RU{Так что в самом начале все инструкции ARM кодировались 4-мя байтами}%
-\EN{In the very beginning, all ARM instructions were encoded in 4 bytes}
+\EN{In the very beginning, all ARM instructions were encoded in 4 bytes}%
 \ifx\LITE\undefined
 \footnote{\RU{Кстати,
 инструкции фиксированного размера удобны тем, что всегда можно легко узнать адрес 
-следующей (или предыдущей) инструкции. Эта особенность будет рассмотрена в секции о 
+следующей (или предыдущей) инструкции. Эта особенность будет рассмотрена в секции об операторе 
 switch()~(\myref{sec:SwitchARMLot}).}
-\EN{By the way, fixed-length instructions are handy due to that one can calculate the next (or previous) 
-instruction's address without effort. This feature will be discussed in the switch()~(\myref{sec:SwitchARMLot}) section.}
-}
+\EN{By the way, fixed-length instructions are handy because one can calculate the next (or previous) 
+instruction address without effort. This feature will be discussed in the switch() operator~(\myref{sec:SwitchARMLot}) section.}
+}%
 \fi
 .
 \RU{Это то, что сейчас называется ``режим ARM''}\EN{This is now referred to as ``ARM mode''}.
@@ -185,7 +201,7 @@ Thumb mode (including Thumb-2) and ARM64.}
 \index{MIPS}%
 \index{Alpha AXP}%
 
-\RU{Существует ещё много \ac{RISC} \ac{ISA} с опкодами фиксированной 32-битной длины, это как минимум}
+\RU{Существует ещё много \ac{RISC} \ac{ISA} с опкодами фиксированной 32-битной длины~--- это как минимум}
 \EN{There are, by the way, many other \ac{RISC} \ac{ISA}s with fixed length 32-bit opcodes, such as}
 MIPS, PowerPC \AndENRU Alpha AXP.
 \fi
