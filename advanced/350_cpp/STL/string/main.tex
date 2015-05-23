@@ -6,13 +6,13 @@
 
 \RU{Многие строковые библиотеки \cite[2.2]{CBook} обеспечивают структуру содержащую ссылку 
 на буфер собственно со строкой, переменная всегда содержащую длину строки 
-(что очень удобно для массы ф-ций \cite[2.2.1]{CBook}) и переменную содержащую текущий размер буфера.}
+(что очень удобно для массы функций \cite[2.2.1]{CBook}) и переменную содержащую текущий размер буфера.}
 \EN{Many string libraries \cite[2.2]{CBook} implement a structure that contains a pointer to a string buffer,
 a variable that always contains the current string length 
 (which is very convenient for many functions: \cite[2.2.1]{CBook}) and
 a variable containing the current buffer size.}
 \RU{Строка в буфере обыкновенно оканчивается нулем: это для того чтобы указатель на буфер можно было
-передавать в ф-ции требующие на вход обычную сишную \ac{ASCIIZ}-строку.}
+передавать в функции требующие на вход обычную сишную \ac{ASCIIZ}-строку.}
 \EN{The string in the buffer is usually terminated with zero, in order to be able to pass a pointer to the buffer
 into the functions that take  usual C \ac{ASCIIZ} strings.}
 
@@ -60,7 +60,7 @@ in practice, a lot of strings are short indeed}.
 \RU{Вероятно, разработчики в Microsoft выбрали размер в 16 символов как разумный баланс}
 \EN{Looks like that Microsoft's developers chose 16 characters as a good balance}.
 
-\RU{Теперь очень важный момент в конце ф-ции main(): я не пользуюсь методом c\_str(), тем не менее,
+\RU{Теперь очень важный момент в конце функции main(): я не пользуюсь методом c\_str(), тем не менее,
 если это скомпилировать и запустить, то обе строки появятся в консоли!}
 \EN{One very important thing here can be seen at the end of main(): I'm not using the c\_str() method, nevertheless,
 if we compile and run this code, both strings will appear in the console!}
@@ -147,7 +147,7 @@ in \EAX, otherwise the address of the string buffer located in the \gls{heap} is
 тогда нужно освободить буфера в \glslink{heap}{куче}}\EN{Next, we see calls to the 3 destructors, they are called if
 the string is longer than 16 characters: then the buffers in the \gls{heap} have to be freed}.
 \RU{В противном случае, так как все три объекта std::string хранятся в стеке,
-они освобождаются автоматически после выхода из ф-ции}\EN{Otherwise, since all three std::string objects
+они освобождаются автоматически после выхода из функции}\EN{Otherwise, since all three std::string objects
 are stored in the stack, they are freed automatically, when the function ends}.
 
 \RU{Следовательно, работа с короткими строками более быстрая из-за м\'{е}ньшего обращения к \glslink{heap}{куче}}
@@ -188,12 +188,12 @@ variables with an \ac{STL} type can be defined}.
 \EN{this destructor function is called before exit}]{\CURPATH/STL/string/5_MSVC_p3.asm}
 
 \index{\CStandardLibrary!atexit()}
-\RU{В реальности, из \ac{CRT}, еще до вызова main(), вызывается специальная ф-ция,
+\RU{В реальности, из \ac{CRT}, еще до вызова main(), вызывается специальная функция,
 в которой перечислены все конструкторы подобных переменных}
 \EN{In fact, a special function with all constructors of global variables is called from \ac{CRT}, before
 main()}.
-\RU{Более того: при помощи atexit() регистрируется ф-ция, которая будет вызвана в конце работы программы:
-в этой ф-ции компилятор собирает вызовы деструкторов всех подобных глобальных переменных.}
+\RU{Более того: при помощи atexit() регистрируется функция, которая будет вызвана в конце работы программы:
+в этой функции компилятор собирает вызовы деструкторов всех подобных глобальных переменных.}
 \EN{More than that: with the help of atexit() another function is registered, 
 which contain calls to all destructors of such global variables.}
 
@@ -201,7 +201,7 @@ GCC \RU{работает похожим образом}\EN{works likewise}:
 
 \lstinputlisting[caption=GCC 4.8.1]{\CURPATH/STL/string/5_GCC.s}
 
-\RU{Но он не выделяет отдельной ф-ции в которой будут собраны деструкторы: 
+\RU{Но он не выделяет отдельной функции в которой будут собраны деструкторы: 
 каждый деструктор передается в atexit() по одному.}
 \EN{But it does not create a separate function for this, 
 each destructor is passed to atexit(), one by one.}

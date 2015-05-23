@@ -25,7 +25,7 @@ of selecting from this table should be carefully kept since it cannot be retriev
 \RU{Сможем ли мы найти причину, почему это происходит?}\EN{Are we able to find why?}
 \RU{Если вернуться к уже рассмотренным таблицам \TT{kqftab} и \TT{kqftap} полученных при помощи \oracletables, 
 содержащим информацию о X\$-таблицах, мы узнаем что для того чтобы подготовить строки этой таблицы, 
-вызывается ф-ция \TT{ksmlrs()}:}\EN{Let's get back to tables we already know: \TT{kqftab} and \TT{kqftap} 
+вызывается функция \TT{ksmlrs()}:}\EN{Let's get back to tables we already know: \TT{kqftab} and \TT{kqftap} 
 which were generated with \oracletables's help, that contain all information about the X\$-tables. We can see here 
 that the \TT{ksmlrs()} function is called to prepare this table's elements:}
 
@@ -53,15 +53,15 @@ kqftap_element.fn2=NULL
 \end{lstlisting}
 
 \index{tracer}
-\RU{Действительно, при помощи \tracer легко убедиться, что эта ф-ция вызывается каждый раз, когда мы обращаемся 
+\RU{Действительно, при помощи \tracer легко убедиться, что эта функция вызывается каждый раз, когда мы обращаемся 
 к таблице \TT{X\$KSMLRU}.}\EN{Indeed, with \tracer's help it is easy to see that this function is called each 
 time we query the \TT{X\$KSMLRU} table.}
 
 \index{\CStandardLibrary!memset()}
-\RU{Здесь есть ссылки на ф-ции \TT{ksmsplu\_sp()} и \TT{ksmsplu\_jp()}, каждая из которых в итоге вызывает 
+\RU{Здесь есть ссылки на функции \TT{ksmsplu\_sp()} и \TT{ksmsplu\_jp()}, каждая из которых в итоге вызывает 
 \TT{ksmsplu()}.}\EN{Here we see a references to the \TT{ksmsplu\_sp()} and \TT{ksmsplu\_jp()} functions, each of 
 them calls the \TT{ksmsplu()} in the end.}
-\RU{В конце ф-ции \TT{ksmsplu()} мы видим вызов \TT{memset()}:}\EN{At the end of the \TT{ksmsplu()} function we see 
+\RU{В конце функции \TT{ksmsplu()} мы видим вызов \TT{memset()}:}\EN{At the end of the \TT{ksmsplu()} function we see 
 a call to \TT{memset()}:}
 
 \begin{lstlisting}[caption=ksm.o]
@@ -97,7 +97,7 @@ a call to \TT{memset()}:}
 
 \index{tracer}
 \RU{Запускаем \tracer со следующей опцией: поставить точку останова на \TT{0x434C7A} 
-(там, где начинается передача параметров для ф-ции \TT{memset()}) так, 
+(там, где начинается передача параметров для функции \TT{memset()}) так, 
 чтобы \tracer в этом месте установил указатель инструкций процессора (\TT{EIP}) на место, где уже произошла очистка переданных параметров в \TT{memset()} (по адресу \TT{0x434C8A}):}
 \EN{Let's run \tracer with the following options: set breakpoint at \TT{0x434C7A} 
 (the point where the arguments to \TT{memset()} are to be passed), 

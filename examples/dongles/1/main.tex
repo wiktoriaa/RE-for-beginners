@@ -37,7 +37,7 @@ has disappeared a long time ago, so the (legal) customer was afraid of physical 
 \EN{Each instruction occupies 4 bytes (just as in MIPS and ARM) and the names somewhat resemble
 MIPS instruction names}.
 
-\TT{check1()} \RU{это имя которое я дал этой ф-ции позже}\EN{is a function name I gave to it later}.
+\TT{check1()} \RU{это имя которое я дал этой функции позже}\EN{is a function name I gave to it later}.
 \TT{BL} \RU{это инструкция}\EN{is} \IT{Branch Link} 
 \RU{т.е., предназначенная для вызова подпрограмм}\EN{instruction, e.g., intended for calling subroutines}.
 \RU{Самое важное место ~--- это инструкция \ac{BNE} срабатывающая если проверка наличия донглы прошла
@@ -65,18 +65,18 @@ and puts them in r0, so it is analogical to} \MOVZX \InENRU x86 (\myref{movzx}),
 
 \lstinputlisting{examples/dongles/1/check1.lst}
 
-\RU{Как можно увидеть в \ac{IDA}, эта ф-ция вызывается из многих мест в программе, но только значение
+\RU{Как можно увидеть в \ac{IDA}, эта функция вызывается из многих мест в программе, но только значение
 в регистре r3 проверяется сразу после каждого вызова}
 \EN{As you can see in \ac{IDA}, that function is called from many places in the program, but only the r3 register's value
 is checked after each call}.
 \index{thunk-\RU{функции}\EN{functions}}
-\RU{Всё что эта ф-ция делает это только вызывает другую ф-цию, так что это}
+\RU{Всё что эта функция делает это только вызывает другую функцию, так что это}
 \EN{All this function does is to call the other function, so it is a} \gls{thunk function}: 
-\RU{здесь присутствует и пролог ф-ции и эпилог, но регистр r3 не трогается, так что}
+\RU{здесь присутствует и пролог функции и эпилог, но регистр r3 не трогается, так что}
 \EN{there are function prologue and epilogue, but the r3 register is not touched, so} \TT{checkl()} 
 \RU{возвращает то, что возвращает}\EN{returns what} \TT{check2()}\EN{ returns}.
 
-\ac{BLR} \RU{это похоже возврат из ф-ции, но так как IDA делает всю разметку ф-ций автоматически,
+\ac{BLR} \RU{это похоже возврат из функции, но так как IDA делает всю разметку функций автоматически,
 наверное, мы можем пока не интересоваться этим}\EN{looks like the return from the function, but since \ac{IDA} does the function layout, we probably do not need
 to care about this}.
 \RU{Так как это типичный \ac{RISC}, похоже, подпрограммы вызываются, используя}
@@ -88,7 +88,7 @@ to care about this}.
 \lstinputlisting{examples/dongles/1/check2.lst}
 
 \index{USB}
-\RU{Снова повезло: имена некоторых ф-ций оставлены в исполняемом файле
+\RU{Снова повезло: имена некоторых функций оставлены в исполняемом файле
 (в символах в отладочной секции? Я не уверен, т.к. я не знаком с этим форматом файлов,
 может быть это что-то вроде PE-экспортов (\myref{PE_exports_imports}))?
 как например \TT{.RBEFINDNEXT()} and \TT{.RBEFINDFIRST()}.}
@@ -96,12 +96,12 @@ to care about this}.
 (debug symbols section? I'm not sure, since I'm not very familiar with the file format, maybe it is
 some kind of PE exports? (\myref{PE_exports_imports})),
 like \TT{.RBEFINDNEXT()} and \TT{.RBEFINDFIRST()}.}
-\RU{В итоге, эти ф-ции вызывают другие ф-ции с именами вроде}
+\RU{В итоге, эти функции вызывают другие функции с именами вроде}
 \EN{Eventually these functions call other functions with names like} \TT{.GetNextDeviceViaUSB()}, 
 \TT{.USBSendPKT()},
 \RU{так что они явно работают с каким-то USB-устройством}\EN{so these are clearly dealing with an USB device}.
 
-\RU{Тут даже есть ф-ция с названием}\EN{There is even a function named} 
+\RU{Тут даже есть функция с названием}\EN{There is even a function named} 
 \TT{.GetNextEve3Device()}\EMDASH\RU{звучит знакомо, в 1990-х годах была донгла}\EN{sounds familiar, there was a} Sentinel Eve3 
 \RU{для ADB-порта (присутствующих на Макинтошах)}\EN{dongle for ADB port (present on Macs) in 1990s}.
 
@@ -112,7 +112,7 @@ like \TT{.RBEFINDNEXT()} and \TT{.RBEFINDFIRST()}.}
 \EN{We know that a ``good'' r3 value has to be non-zero, zero r3 leads the execution
 flow to the message box with an error message.}
 
-\RU{В ф-ции имеются две инструкции}\EN{There are two} \TT{li \%r3, 1} 
+\RU{В функции имеются две инструкции}\EN{There are two} \TT{li \%r3, 1} 
 \RU{и одна}\EN{instructions present in the function and one} \TT{li \%r3, 0} 
 (\IT{Load Immediate}, \RU{т.е., загрузить значение в регистр}\EN{i.e., loading a value into a register}).
 \RU{Самая первая инструкция находится на}\EN{The first instruction is at} 
@@ -122,7 +122,7 @@ what it means, I need some more time to learn the PowerPC assembly language}.
 
 \RU{А вот то что мы видим дальше понять проще}\EN{What we see next is, however, easier to understand}: 
 \RU{вызывается }\TT{.RBEFINDFIRST()} \RU{и в случае ошибки, 0 будет записан в r3
-и мы перейдем на \IT{exit}, а иначе будет вызвана ф-ция \TT{check3()} ~--- если и она будет
+и мы перейдем на \IT{exit}, а иначе будет вызвана функция \TT{check3()} ~--- если и она будет
 выполнена с ошибкой, будет вызвана}\EN{is called:
 if it fails, 0 is written into r3 and we jump to \IT{exit}, otherwise another
 function is called (\TT{check3()})~---if it fails too, }
@@ -143,7 +143,7 @@ N.B.: \TT{clrlwi. \%r0, \%r3, 16} \RU{это аналог того что мы �
 \lstinputlisting{examples/dongles/1/check3.lst}
 
 \RU{Здесь много вызовов}\EN{There are a lot of calls to} \TT{.RBEREAD()}. 
-\RU{Эта ф-ция вероятно читает какие-то значения из донглы, которые потом сравниваются здесь при помощи}
+\RU{Эта функция вероятно читает какие-то значения из донглы, которые потом сравниваются здесь при помощи}
 \EN{The function probably returns some values from the dongle,
 so they are compared here with some hard-coded variables using} \TT{CMPLWI}.
 
@@ -152,10 +152,10 @@ so they are compared here with some hard-coded variables using} \TT{CMPLWI}.
 \RU{одно из этих значений}\EN{with one of these values}: 0, 1, 8, 0xA, 0xB, 0xC, 0xD, 4, 5.
 \RU{Вероятно адрес в памяти или что-то в этом роде}\EN{Probably a memory address or something like that}?
 
-\RU{Да, действительно, если погуглить имена этих ф-ций, можно легко найти документацию к}
+\RU{Да, действительно, если погуглить имена этих функций, можно легко найти документацию к}
 \EN{Yes, indeed, by googling these function names it is easy to find the} Sentinel Eve3\EN{ dongle manual}!
 
-\RU{Мне даже, наверное, не нужно изучать остальные инструкции PowerPC: всё что делает эта ф-ция это просто
+\RU{Мне даже, наверное, не нужно изучать остальные инструкции PowerPC: всё что делает эта функция это просто
 вызывает}
 \EN{I probably don't even need to learn any other PowerPC instructions: all this function does is just
 call} \TT{.RBEREAD()}, \RU{сравнивает его результаты с константами и возвращает 1 если результат сравнения положительный или 0 в другом случае}\EN{compare its results with the constants and returns 1 if the comparisons

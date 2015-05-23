@@ -10,7 +10,7 @@ Windows}.
 
 \index{OEP}
 \RU{У \ac{DLL}, как и у всех PE-файлов, есть точка входа (\ac{OEP})
-(там располагается ф-ция DllMain()), но обычно эта ф-ция ничего не делает.}
+(там располагается функция DllMain()), но обычно эта функция ничего не делает.}
 \EN{A \ac{DLL}, just like any other PE-file, has an entry point (\ac{OEP}) (the function DllMain() is located there) 
 but this function usually does nothing.}
 
@@ -52,8 +52,8 @@ one .exe file and bunch of .dll files}.
 \RU{Память процесса}\EN{Process memory} --- \RU{память с которой работает процесс}\EN{the memory a process
 works with}.
 \RU{У каждого процесса --- своя}\EN{Each process has its own}.
-\RU{Там обычно имеются загруженные модули, память стека, \glslink{heap}{кучи}, и т.д}\EN{There usually are 
-loaded modules, memory of the stack, \gls{heap}(s), etc}.
+\RU{Там обычно имеются загруженные модули, память стека, \glslink{heap}{кучи},}
+\EN{There usually are loaded modules, memory of the stack, \gls{heap}(s),}\etc{}.
 
 \item
 \index{VA}
@@ -126,7 +126,7 @@ and each virtual addresses in the second DLL will be corrected.} \\
 
 \index{Shellcode}
 \RU{Дело в том, что некий шеллкод, пытающийся исполниться на зараженной системе, 
-должен вызывать какие-то системные ф-ции}\EN{A shellcode trying to get executed on a compromised
+должен вызывать какие-то системные функции}\EN{A shellcode trying to get executed on a compromised
 system must call system functions}.
 
 \RU{И в старых}\EN{In older} \ac{OS} (\RU{в линейке \gls{Windows NT}: до}\EN{in \gls{Windows NT} line: before} Windows Vista),
@@ -134,7 +134,7 @@ system must call system functions}.
 по одним и тем же адресам}\EN{were always loaded at known addresses}, 
 \RU{а если еще и вспомнить, что версии этих DLL редко менялись}\EN{and if we also recall
 that their versions rarely changed}, \RU{то адреса отдельных
-ф-ций, можно сказать, фиксированы и шеллкод может вызывать их напрямую}\EN{the addresses of functions were
+функций, можно сказать, фиксированы и шеллкод может вызывать их напрямую}\EN{the addresses of functions were
 fixed and shellcode could call them directly}.
 
 \RU{Чтобы избежать этого, методика}\EN{In order to avoid this, the} \ac{ASLR}
@@ -368,26 +368,26 @@ the places in memory to which relocs are to be applied, for example}: \figref{fi
 \EN{It can be said that functions from one module (usually DLL) must be connected somehow to the points of their
 calls in other modules (.exe-file or another DLL)}.
 
-\RU{Для этого, у каждой DLL есть ``экспорты'', это таблица ф-ций плюс их адреса в модуле}
+\RU{Для этого, у каждой DLL есть ``экспорты'', это таблица функций плюс их адреса в модуле}
 \EN{For this, each DLL has an ``exports'' table, which consists of functions plus their addresses in a module}.
 
-\RU{А у .exe-файла, либо DLL, есть ``импорты'', это таблица ф-ций требующихся для исполнения 
+\RU{А у .exe-файла, либо DLL, есть ``импорты'', это таблица функций требующихся для исполнения 
 включая список имен DLL-файлов}
 \EN{And every .exe file or DLL has ``imports'', a table of functions it needs for execution including
 list of DLL filenames}.
 
 \RU{Загрузчик \ac{OS}, после загрузки основного .exe-файла, проходит по таблице импортов:
 загружает дополнительные DLL-файлы, 
-находит имена ф-ций среди экспортов в DLL и прописывает их адреса в \ac{IAT} в головном .exe-модуле}
+находит имена функций среди экспортов в DLL и прописывает их адреса в \ac{IAT} в головном .exe-модуле}
 \EN{After loading the main .exe-file, the \ac{OS} loader processes imports table: 
 it loads the additional DLL-files, finds function names
 among the DLL exports and writes their addresses down in the \ac{IAT} of the main .exe-module}.
 
 \index{Windows!Win32!Ordinal}
-\RU{Как видно, во время загрузки, загрузчику нужно много сравнивать одни имена ф-ций с другими,
+\RU{Как видно, во время загрузки, загрузчику нужно много сравнивать одни имена функций с другими,
 а сравнение строк ~--- это не очень быстрая процедура, так что,
 имеется также поддержка ``ординалов'' или 
-``hint''-ов, это когда в таблице импортов проставлены номера ф-ций вместо их имен}
+``hint''-ов, это когда в таблице импортов проставлены номера функций вместо их имен}
 \EN{As we can see, during loading the loader must compare a lot of function names, but string comparison is not a very
 fast procedure, so there is a support for ``ordinals'' or ``hints'',
 which are function numbers stored in the table, instead of their names}.
@@ -399,14 +399,14 @@ which are function numbers stored in the table, instead of their names}.
 \index{MFC}
 \RU{К примеру}\EN{For example}, \RU{программы использующие библиотеки}\EN{a program using the} 
 \ac{MFC}\RU{, обычно загружают mfc*.dll по ординалам}\EN{ library usually loads mfc*.dll by ordinals},
-\RU{и в таких программах, в \ac{INT}, нет имен ф-ций \ac{MFC}}
+\RU{и в таких программах, в \ac{INT}, нет имен функций \ac{MFC}}
 \EN{and in such programs there are no \ac{MFC} function names in \ac{INT}}.
 
 % TODO example!
 \RU{При загрузке такой программы в \IDA, она спросит у вас путь к файлу mfc*.dll,
-чтобы установить имена ф-ций}\EN{When loading such programs in \IDA, it will ask for a path to the mfc*.dll files
+чтобы установить имена функций}\EN{When loading such programs in \IDA, it will ask for a path to the mfc*.dll files
 in order to determine the function names}.
-\RU{Если в \IDA не указать путь к этой DLL, то вместо имен ф-ций будет что-то вроде}
+\RU{Если в \IDA не указать путь к этой DLL, то вместо имен функций будет что-то вроде}
 \EN{If you don't tell \IDA the path to these DLLs, there will be}
 \IT{mfc80\_123}\EN{ instead of function names}.
 
@@ -437,23 +437,23 @@ however, this is not a strict rule}.
 \IT{OriginalFirstThink} \RU{это}\EN{is the} \ac{RVA} \RU{-адрес таблицы \ac{INT}}\EN{address of the \ac{INT} table}. 
 \RU{Это массив}\EN{This is an array of} 
 \ac{RVA}\RU{-адресов}\EN{ addresses},
-\RU{каждый из которых указывает на текстовую строку где записано имя ф-ции}
+\RU{каждый из которых указывает на текстовую строку где записано имя функции}
 \EN{each of which points to a text string with a function name}. 
 \RU{Каждую строку предваряет 16-битное число}\EN{Each string is prefixed by a 16-bit integer} 
-(``hint'')\EMDASH\RU{``ординал'' ф-ции}\EN{``ordinal'' of function}.
+(``hint'')\EMDASH\RU{``ординал'' функции}\EN{``ordinal'' of function}.
 
-\RU{Если при загрузке удается найти ф-цию по ординалу, тогда сравнение текстовых строк не будет происходить.
+\RU{Если при загрузке удается найти функцию по ординалу, тогда сравнение текстовых строк не будет происходить.
 Массив оканчивается нулем.}
 \EN{While loading, if it is possible to find a function by ordinal,
 then the strings comparison will not occur. The array is terminated by zero.}
 \RU{Есть также указатель на таблицу \ac{IAT} с названием}
 \EN{There is also a pointer to the \ac{IAT} table named} \IT{FirstThunk},
 \RU{это просто}\EN{it is just the} \ac{RVA}\RU{-адрес}\EN{ address} 
-\RU{места, где загрузчик будет проставлять адреса найденных ф-ций}\EN{of the place where the loader
+\RU{места, где загрузчик будет проставлять адреса найденных функций}\EN{of the place where the loader
 writes the addresses of the resolved functions}.
 
-\RU{Места где загрузчик проставляет адреса, \IDA именует их так}\EN{The points where
-the loader writes addresses are marked by \IDA like this}: \IT{\_\_imp\_CreateFileA}, \RU{и т.д}\EN{etc}.
+\RU{Места где загрузчик проставляет адреса, \IDA именует их так}
+\EN{The points where the loader writes addresses are marked by \IDA like this}: \IT{\_\_imp\_CreateFileA}, \etc{}.
 
 \RU{Есть по крайней мере два способа использовать адреса, проставленные загрузчиком}
 \EN{There are at least two ways to use the addresses written by the loader}.
@@ -463,7 +463,7 @@ the loader writes addresses are marked by \IDA like this}: \IT{\_\_imp\_CreateFi
 \item
 \RU{В коде будут просто инструкции вроде}\EN{The code will have instructions like} 
 \IT{call \_\_imp\_CreateFileA}, 
-\RU{а так как, поле с адресом импортируемой ф-ции это как бы глобальная переменная}
+\RU{а так как, поле с адресом импортируемой функции это как бы глобальная переменная}
 \EN{and since the field with the address of the imported function is a global variable in some sense}, 
 \RU{то в таблице релоков добавляется адрес (плюс 1 или 2) в инструкции \IT{call}}
 \EN{the address of the \IT{call} instruction (plus 1 or 2) is to be added to the relocs table},
@@ -472,7 +472,7 @@ the loader writes addresses are marked by \IDA like this}: \IT{\_\_imp\_CreateFi
 
 \RU{Но как видно, это приводит к увеличению таблицы релоков}\EN{But, obviously, this may enlarge
 relocs table significantly}.
-\RU{Ведь вызовов импортируемой ф-ции у вас в модуле может быть очень много}
+\RU{Ведь вызовов импортируемой функции у вас в модуле может быть очень много}
 \EN{Because there are might be a lot of calls to imported functions in the module}.
 \RU{К тому же, чем больше таблица релоков, тем дольше загрузка}
 \EN{Furthermore, large relocs table slows down the process of loading modules}.
@@ -480,12 +480,12 @@ relocs table significantly}.
 \index{x86!\Instructions!JMP}
 \index{thunk-\RU{функции}\EN{functions}}
 \item
-\RU{На каждую импортируемую ф-цию выделяется только один переход на импортируемую ф-цию используя
+\RU{На каждую импортируемую функцию выделяется только один переход на импортируемую функцию используя
 инструкцию \JMP плюс релок на эту инструкцию}
 \EN{For each imported function, there is only one jump allocated, using the \JMP instruction 
 plus a reloc to it}.
 \RU{Такие места-``переходники'' называются также ``thunk''-ами}\EN{Such points are also called ``thunks''}.
-\RU{А все вызовы импортируемой ф-ции это просто инструкция \CALL на соответствующий ``thunk''}
+\RU{А все вызовы импортируемой функции это просто инструкция \CALL на соответствующий ``thunk''}
 \EN{All calls to the imported functions are just \CALL instructions to the corresponding ``thunk''}.
 \RU{В данном случае, дополнительные релоки не нужны, потому что эти CALL-ы имеют относительный адрес,
 и корректировать их не надо}\EN{In this case, additional relocs are not necessary because these CALL-s
@@ -497,13 +497,13 @@ have relative addresses and do not need to be corrected}.
 \EN{Possible, the linker creates individual ``thunk''s if there are too many calls to the function,
 but not done by default.} \\
 \\
-\RU{Кстати, массив адресов ф-ций, на который указывает FirstThunk,
+\RU{Кстати, массив адресов функций, на который указывает FirstThunk,
 не обязательно может быть в секции \ac{IAT}}\EN{By the way, the array of function addresses to which FirstThunk is
 pointing is not necessary to be located in the \ac{IAT} section}.
 \RU{К примеру, я написал утилиту}\EN{For example, I once wrote the}
 PE\_add\_import\footnote{\href{http://go.yurichev.com/17049}{yurichev.com}} 
 \RU{для добавления импорта в уже существующий .exe-файл}\EN{utility for adding imports to an existing .exe-file}.
-\RU{Раньше, в прошлых версиях утилиты, на месте ф-ции, вместо которой вы хотите подставить вызов в другую DLL,
+\RU{Раньше, в прошлых версиях утилиты, на месте функции, вместо которой вы хотите подставить вызов в другую DLL,
 моя утилита вписывала такой код:}
 \EN{Some time earlier, in the previous versions of the utility, 
 at the place of the function you want to substitute with a call to another DLL,
@@ -516,7 +516,7 @@ JMP EAX
 
 \RU{При этом, FirstThunk указывает прямо на первую инструкцию.
 Иными словами, загрузчик, загружая yourdll.dll, 
-прописывает адрес ф-ции \IT{function} прямо в коде.}
+прописывает адрес функции \IT{function} прямо в коде.}
 \EN{FirstThunk points to the first instruction. In other words, when loading yourdll.dll,
 the loader writes the address of the \IT{function} function right in the code.}
 
@@ -534,7 +534,7 @@ code section is usually write-protected}, \RU{так что, моя утилит
 \EN{One might ask: what if I supply a program with a set of DLL files which is not supposed to change,
 is it possible to speed up the loading process?}
 
-\RU{Да, можно прописать адреса импортируемых ф-ций в массивы FirstThunk заранее}
+\RU{Да, можно прописать адреса импортируемых функций в массивы FirstThunk заранее}
 \EN{Yes, it is possible to write the addresses of the functions to be imported into the FirstThunk arrays in advance}.
 \RU{Для этого в структуре}\EN{The \IT{Timestamp} field is present in the} \\
 \IT{IMAGE\_IMPORT\_DESCRIPTOR} \RU{имеется поле \IT{Timestamp}}\EN{structure}.
@@ -664,7 +664,7 @@ PE\_patcher\footnote{\href{http://go.yurichev.com/17054}{yurichev.com}} ---
 
 \item
 PE\_search\_str\_refs\footnote{\href{http://go.yurichev.com/17055}{yurichev.com}} --- 
-\RU{простая утилита для поиска ф-ции в PE-файле, где используется некая текстовая строка}
+\RU{простая утилита для поиска функции в PE-файле, где используется некая текстовая строка}
 \EN{simple tool for searching for a function in PE executables which use some text string}.
 \end{itemize}
 

@@ -2,7 +2,7 @@
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{\CURPATH/MSVC2013_x64_Ox.asm.\LANG}
 
-\RU{В начале, MSVC вставил тело ф-ции \strlen{} прямо в код, потому что решил, что так будет
+\RU{В начале, MSVC вставил тело функции \strlen{} прямо в код, потому что решил, что так будет
 быстрее чем обычная работа \strlen{} + время на вызов её и возврат из нее.}
 \EN{First, MSVC inlined the \strlen{} function code, because it concluded this 
 is to be faster than the usual \strlen{} work + the cost of calling it and returning from it.}
@@ -10,7 +10,7 @@ is to be faster than the usual \strlen{} work + the cost of calling it and retur
 
 \index{x86!\Instructions!OR}
 \index{\CStandardLibrary!strlen()}
-\RU{Первая инструкция ф-ции \strlen{} вставленная здесь, это}\EN{The first instruction of 
+\RU{Первая инструкция функции \strlen{} вставленная здесь, это}\EN{The first instruction of 
 the inlined \strlen{} is} \TT{OR RAX, 0xFFFFFFFFFFFFFFFF}. 
 \RU{Я не знаю, почему MSVC использовала \TT{OR} вместо \TT{MOV RAX, 0xFFFFFFFFFFFFFFFF}, 
 но он делает это часто.}
@@ -21,7 +21,7 @@ but it does this often.}
 \EN{And of course, it is equivalent: all bits are set, and a number with all bits set is $-1$ 
 in two's complement arithmetic: \myref{sec:signednumbers}.}
 
-\RU{Кто-то мог бы спросить, зачем вообще нужно использовать число -1 в ф-ции \strlen{}?}
+\RU{Кто-то мог бы спросить, зачем вообще нужно использовать число -1 в функции \strlen{}?}
 \EN{Why would the $-1$ number be used in \strlen{}, one might ask.}
 \RU{Вследствие оптимизации, конечно}\EN{Due to optimizations, of course}.
 \RU{Вот что сделал MSVC}\EN{Here is the code that MSVC generated}:
@@ -45,12 +45,12 @@ the actual character loading.}
 \EN{If the first character is 0, that's OK, \RAX is 0 at this moment, 
 so the resulting string length is 0.}
 
-\RU{Остальную часть ф-ции проще понять.}
+\RU{Остальную часть функции проще понять.}
 \EN{The rest in this function seems easy to understand.}
 \RU{Еще один трюк в конце}\EN{There is another trick at the end}.
-\RU{Если не учитывать вставленный код \strlen{}, здесь только 3 условных перехода в ф-ции.}
+\RU{Если не учитывать вставленный код \strlen{}, здесь только 3 условных перехода в функции.}
 \EN{If we do not count \strlen{}'s inlined code, there are only 3 conditional jumps in the function.}
-\RU{Должно было быть 4: четвертый должен был быть в конце ф-ции, проверяющий, является
+\RU{Должно было быть 4: четвертый должен был быть в конце функции, проверяющий, является
 ли символ нулевым.}
 \EN{There should be 4: the 4th has to be located at the function end, to check 
 if the character is zero.}
@@ -83,7 +83,7 @@ and there two clauses are checked, one after another.}
 \EN{The second will never be checked, if the first one (\IT{str\_len==0}) is false 
 (this is ``short-circuit'').}
 
-\RU{Теперь посмотрим на эту ф-цию в коротком виде:}
+\RU{Теперь посмотрим на эту функцию в коротком виде:}
 \EN{Now let's see this function in short form:}
 
 \begin{itemize}

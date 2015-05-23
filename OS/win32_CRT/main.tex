@@ -2,7 +2,7 @@
 \label{sec:CRT}
 \index{CRT}
 
-\RU{Начинается ли исполнение программы прямо с ф-ции \main{}}
+\RU{Начинается ли исполнение программы прямо с функции \main{}}
 \EN{Does the program execution start right at the \main{} function}?
 \RU{Нет, не начинается}\EN{No, it does not}.
 \RU{Если открыть любой исполняемый файл в \IDA или Hiew, 
@@ -21,7 +21,7 @@ CRT-код находит там пробелы и разрезает строк
 the CRT code finds the spaces in it and cuts it in parts}.
 \RU{CRT-код также готовит массив переменных окружения \TT{envp}}\EN{The CRT code also prepares the environment
 variables array \TT{envp}}.
-\RU{В \ac{GUI}-приложениях win32, вместо \main{} имеется ф-ция \TT{WinMain} со своими аргументами}
+\RU{В \ac{GUI}-приложениях win32, вместо \main{} имеется функция \TT{WinMain} со своими аргументами}
 \EN{As for \ac{GUI} win32 applications, \TT{WinMain} is used instead of \main{}, having its own arguments}:
 
 \begin{lstlisting}
@@ -35,7 +35,7 @@ int CALLBACK WinMain(
 
 \RU{CRT-код готовит и их}\EN{The CRT code prepares them as well}.
 
-\RU{А также, число, возвращаемое ф-цией \main{}, это код ошибки возвращаемый программой}
+\RU{А также, число, возвращаемое функцией \main{}, это код ошибки возвращаемый программой}
 \EN{Also, the number returned by the \main{} function is the exit code}.
 \RU{В CRT это значение передается в \TT{ExitProcess()}, принимающей в качестве аргумента код ошибки}
 \EN{It may be passed in CRT to the \TT{ExitProcess()} function, which takes the exit code as an argument}. \\
@@ -47,7 +47,7 @@ int CALLBACK WinMain(
 \lstinputlisting[numbers=left]{OS/win32_CRT/crt_msvc_2008.asm}
 
 \RU{Здесь можно увидеть по крайней мере вызов
-ф-ции}\EN{Here we can see calls to} \TT{GetCommandLineA()} (\LineENRU 62), 
+функции}\EN{Here we can see calls to} \TT{GetCommandLineA()} (\LineENRU 62), 
 \RU{затем}\EN{then to} \TT{setargv()} (\LineENRU 66) \AndENRU \TT{setenvp()} (\LineENRU 74),
 \RU{которые, видимо, заполняют глобальные переменные-указатели}\EN{which apparently fill the global variables}
 \TT{argc}, \TT{argv}, \TT{envp}.
@@ -55,7 +55,7 @@ int CALLBACK WinMain(
 \RU{В итоге, вызывается \main{} с этими аргументами}\EN{Finally, \main{} is called with these arguments} 
 (\LineENRU 97).
 
-\RU{Также имеются вызовы ф-ций с говорящими именами вроде}\EN{There are also calls to functions
+\RU{Также имеются вызовы функций с говорящими именами вроде}\EN{There are also calls to functions
 with self-describing names like} \TT{heap\_init()} (\LineENRU 35), \TT{ioinit()} (\LineENRU 54).
 
 \RU{\glslink{heap}{Куча} действительно инициализируется в \ac{CRT}}
@@ -99,7 +99,7 @@ cl no_crt.c user32.lib /link /entry:main
 
 \RU{Получаем вполне работающий .exe размером 2560 байт, внутри которого есть только PE-заголовок, инструкции, 
 вызывающие \TT{MessageBox},
-две строки в сегменте данных, импортируемая из \TT{user32.dll} ф-ция \TT{MessageBox}, и более ничего.}
+две строки в сегменте данных, импортируемая из \TT{user32.dll} функция \TT{MessageBox}, и более ничего.}
 \EN{We are getting a runnable .exe with size 2560 bytes, that has a PE header in it, instructions calling
 \TT{MessageBox}, two strings in the data segment,
 the \TT{MessageBox} function imported from \TT{user32.dll} and nothing else.}

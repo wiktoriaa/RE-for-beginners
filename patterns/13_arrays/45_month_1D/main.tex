@@ -60,8 +60,8 @@ for storage.}
 \RU{Это то, что делает MOV}\EN{That's what MOV does}.
 \RU{В дополнении, эта инструкция также загружает элемент по этому адресу.}
 \EN{In addition, this instruction also loads the element at this address.}
-\RU{Для 1, элемент будет указателем на строку, содержащую ``February'', и т.д.}
-\EN{For 1, an element would be a pointer to a string that contains ``February'', etc.}
+\RU{Для 1, элемент будет указателем на строку, содержащую ``February'', \etc{}.}
+\EN{For 1, an element would be a pointer to a string that contains ``February'', \etc{}.}
 
 \end{itemize}
 
@@ -147,12 +147,12 @@ sign-extends it (this is what ``sxtw'' suffix implies) and adds to X0.}
 \ifx\LITE\undefined
 \subsection{\RU{Переполнение массива}\EN{Array overflow}}
 
-\RU{Наша ф-ция принимает значения в пределах $0..11$, но что будет, если будет передано $12$?}
+\RU{Наша функция принимает значения в пределах $0..11$, но что будет, если будет передано $12$?}
 \EN{Our function accepts values in the range of $0..11$, but what if $12$ is passed?}
 \RU{В таблице в этом месте нет элемента.}\EN{There is no element in table at this place.}
-\RU{Так что ф-ция загрузит какое-то значение, которое волею случая находится там, и вернет его.}
+\RU{Так что функция загрузит какое-то значение, которое волею случая находится там, и вернет его.}
 \EN{So the function will load some value which happens to be there, and return it.}
-\RU{Позже, какая-то другая ф-ция попытается прочитать текстовую строку по этому адресу и, возможно, упадет.}
+\RU{Позже, какая-то другая функция попытается прочитать текстовую строку по этому адресу и, возможно, упадет.}
 \EN{Soon after, some other function can try to get a text string from this address and may crash.}
 
 \RU{Я скомпилировал этот пример в MSVC для win64 и открыл его в IDA чтобы посмотреть, что линкер расположил
@@ -170,7 +170,7 @@ so it just the month names.}
 случайным образом.}
 \EN{But I have to note that there might be really \IT{anything} that linker has decided to put by chance.}
 
-\RU{Так что будет если 12 будет передано в ф-цию?}\EN{So what if 12 is passed to the function?}
+\RU{Так что будет если 12 будет передано в функцию?}\EN{So what if 12 is passed to the function?}
 \RU{Вернется 13-й элемент таблицы}\EN{The 13th element will be returned}.
 \RU{Посмотрим, как CPU обходится с байтами там как с 64-битным значением:}
 \EN{Let's see how the CPU treating the bytes there as a 64-bit value:}
@@ -178,7 +178,7 @@ so it just the month names.}
 \lstinputlisting[caption=\RU{Исполняемый файл в}\EN{Executable file in} IDA]{patterns/13_arrays/45_month_1D/MSVC2012_win64_2.lst}
 
 \RU{И это}\EN{And this is} 0x797261756E614A.
-\RU{После этого, какая-от другая ф-ция (вероятно, работающая со строками) попытается загружать байты
+\RU{После этого, какая-от другая функция (вероятно, работающая со строками) попытается загружать байты
 по этому адресу, ожидая найти там Си-строку.}
 \EN{Soon after, some other function (presumably, one that processes strings) may try to read bytes at 
 this address, expecting a C-string there.}
@@ -189,7 +189,7 @@ this address, expecting a C-string there.}
 \epigraph{\RU{Если какая-нибудь неприятность может случиться, она случается}
 \EN{If something can go wrong, it will}}{\RU{Закон Мерфи}\EN{Murphy's Law}}
 
-\RU{Немного наивно ожидать что всякий программист, кто будет использовать вашу ф-цию или библиотеку,
+\RU{Немного наивно ожидать что всякий программист, кто будет использовать вашу функцию или библиотеку,
 никогда не передаст аргумент больше 11.}
 \EN{It's a bit naïve to expect that every programmer who use your function or library will never pass
 an argument larger than 11.}
@@ -207,13 +207,13 @@ which teaches to report problems as early as possible and stop.}
 
 \lstinputlisting[caption=assert() \RU{добавлен}\EN{added}]{patterns/13_arrays/45_month_1D/month1_assert.c}
 
-\RU{Макрос будет проверять на верные значения во время каждого старта ф-ции и падать если не выражение.}
+\RU{Макрос будет проверять на верные значения во время каждого старта функции и падать если не выражение.}
 \EN{The assertion macro checks for valid values at every function start and fails if the expression is false.}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/13_arrays/45_month_1D/MSVC2013_x64_Ox_checked.asm}
 
-\RU{На самом деле, assert() это не ф-ция, а макрос. Он проверяет условие и передает также номер строки и название
-файла в другую ф-цию, которая покажет эту информацию пользователю.}
+\RU{На самом деле, assert() это не функция, а макрос. Он проверяет условие и передает также номер строки и название
+файла в другую функцию, которая покажет эту информацию пользователю.}
 \EN{In fact, assert() is not a function, but macro. It checks for a condition, then passes also the line number and file
 name to another function which reports this information to the user.}
 
@@ -227,13 +227,13 @@ name to another function which reports this information to the user.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 x64]{patterns/13_arrays/45_month_1D/GCC491_x64_O3_checked.s}
 
-\RU{Так что макрос в GCC также передает и имя ф-ции, для удобства.}
+\RU{Так что макрос в GCC также передает и имя функции, для удобства.}
 \EN{So the macro in GCC also passes the function name for convenience.}
 
 \RU{Ничего не бывает бесплатным: и проверки на корректность тоже.}
 \EN{Nothing is really free, and this is true for the sanitizing checks as well.}
 \RU{Это может замедлить работу вашей программы, особенно если макрос assert() используется в маленькой
-критичной ко времени ф-ции.}
+критичной ко времени функции.}
 \EN{They make your program slower, especially if the assert() macros used in small time-critical functions.}
 \RU{Так что, например, MSVC оставляет проверки в Debug-билдах, но в Release-билдах они исчезают.}
 \EN{So MSVC, for example, leaves the checks in Debug builds, but in Release builds they all disappear.}

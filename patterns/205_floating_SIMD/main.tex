@@ -58,7 +58,7 @@ one value of type \Tdouble by another, stored in the lower halves of operands}.
 \TT{MULSD} \AndENRU \TT{ADDSD} \RU{работают так же, только производят умножение и сложение}
 \EN{work just as the same, but do multiplication and addition}.
 
-\RU{Результат работы ф-ции типа \Tdouble ф-ция оставляет в регистре \XMM{0}}
+\RU{Результат работы функции типа \Tdouble функция оставляет в регистре \XMM{0}}
 \EN{The result of the function's execution in type \Tdouble is left in the in \XMM{0} register}.\\
 \\
 \RU{Как работает неоптимизирующий MSVC}\EN{That is how non-optimizing MSVC works}:
@@ -88,7 +88,7 @@ MSVC 2012 uses SSE2 instructions:}
 \EN{It's almost the same code, however, there are some differences related to calling conventions:}
 1) \RU{аргументы передаются не в XMM-регистрах, а через стек, как и прежде, в примерах с FPU (\myref{sec:FPU});}
 \EN{the arguments are passed not in XMM registers, but in the stack, like in the FPU examples (\myref{sec:FPU});}
-2) \RU{результат работы ф-ции возвращается через \ST{0} --- для этого он через стек
+2) \RU{результат работы функции возвращается через \ST{0} --- для этого он через стек
 (через локальную переменную \TT{tv}) копируется из XMM-регистра в \ST{0}.}
 \EN{the result of the function is returned in \ST{0} --- in order to do so, it's copied
 (through local variable \TT{tv}) from one of the XMM registers to \ST{0}.}
@@ -134,7 +134,7 @@ in} \XMM{0}}
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/205_floating_SIMD/simple_olly5.png}
-\caption{\olly: \FLD \RU{оставляет результат ф-ции в}\EN{left function result in} \ST{0}}
+\caption{\olly: \FLD \RU{оставляет результат функции в}\EN{left function result in} \ST{0}}
 \label{fig:FPU_SIMD_simple_olly5}
 \end{figure}
 
@@ -180,7 +180,7 @@ the lower half of a XMM register}.
 \RU{Далее он перекладывается в}\EN{It is then moved to} \RDX \ForENRU \printf. 
 \RU{Почему}\EN{Why}? 
 \RU{Честно говоря, не знаю, может быть, это потому что}\EN{Honestly speaking, I don't know, maybe because} 
-\printf\EMDASH{}\RU{ф-ция с переменным количеством аргументов}\EN{is a variable arguments function}?
+\printf\EMDASH{}\RU{функция с переменным количеством аргументов}\EN{is a variable arguments function}?
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/205_floating_SIMD/pow_GCC446_x64_O3.s.\LANG}
 
@@ -302,7 +302,7 @@ were evolved in a less chaotic way than the FPU ones in the past.}
 только с суффиксом}
 % FIXME1 ... but their -SS versions
 \EN{in these examples, the same instructions will be used, but prefixed with} \TT{-SS} 
-(``Scalar Single-Precision''), \RU{например}\EN{for example}, \TT{MOVSS}, \TT{COMISS}, \TT{ADDSS}, \RU{и т.д.}\EN{etc.}
+(``Scalar Single-Precision''), \RU{например}\EN{for example}, \TT{MOVSS}, \TT{COMISS}, \TT{ADDSS}, \etc{}.
 
 ``Scalar'' \RU{означает что SIMD-регистр будет хранить только одно значение, вместо нескольких.}
 \EN{implies that the SIMD register containing only one value instead of several.}
