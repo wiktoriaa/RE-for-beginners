@@ -6,12 +6,12 @@ let's trace it in} \olly.\\
 \\
 \olly \RU{может распознавать подобные switch()-конструкции, так что он добавляет полезные комментарии}\EN{can 
 detect such switch() constructs, and it can add some useful comments}.
-\EAX \RU{в начале}\EN{is} $2$\EN{ in the beginning}, \RU{это входное значение ф-ции}\EN{that's the function's input value}: 
+\EAX \RU{в начале}\EN{is} $2$\EN{ in the beginning}, \RU{это входное значение функции}\EN{that's the function's input value}: 
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/08_switch/1_few/olly1.png}
-\caption{\olly: \EAX \RU{содержит первый (и единственный) аргумент ф-ции}
+\caption{\olly: \EAX \RU{содержит первый (и единственный) аргумент функции}
 \EN{now contain the first (and only) function argument}}
 \label{fig:switch_few_olly1}
 \end{figure}
@@ -68,14 +68,14 @@ gets set, because the result is zero}:
 \label{fig:switch_few_olly5}
 \end{figure}
 
-\RU{Обратите внимание: текущий аргумент ф-ции это $2$ и $2$ прямо сейчас в стеке по адресу}\EN{Please note: 
+\RU{Обратите внимание: текущий аргумент функции это $2$ и $2$ прямо сейчас в стеке по адресу}\EN{Please note: 
 the current argument of the function is $2$ and $2$ is now in the stack at the address} \TT{0x0020FA44}.
 
 \clearpage
 \MOV \RU{записывает указатель на строку по адресу}\EN{writes the pointer to the string at address} 
 \TT{0x0020FA44} (\RU{см. окно стека}\EN{see the stack window}).
 \RU{Переход сработал}\EN{Then, jump happens}.
-\RU{Это самая первая инструкция ф-ции}\EN{This is the first instruction of the} \printf \RU{в}\EN{function in} 
+\RU{Это самая первая инструкция функции}\EN{This is the first instruction of the} \printf \RU{в}\EN{function in} 
 MSVCR100.DLL (\RU{я скомпилировал этот пример с опцией /MD}\EN{I compiled the example with /MD switch}): 
 
 \begin{figure}[H]
@@ -89,7 +89,7 @@ MSVCR100.DLL (\RU{я скомпилировал этот пример с опц�
 \RU{как свой единственный аргумент и выводит строку}\EN{as its only argument and prints the string}.
 
 \clearpage
-\RU{Это самая последняя инструкция ф-ции}\EN{This is the last instruction of} \printf:
+\RU{Это самая последняя инструкция функции}\EN{This is the last instruction of} \printf:
 
 \begin{figure}[H]
 \centering
@@ -102,7 +102,7 @@ MSVCR100.DLL (\RU{я скомпилировал этот пример с опц�
 
 \clearpage
 \RU{Нажмем}\EN{Now let's press} F7 \OrENRU F8 (\stepover) \RU{и вернемся}\EN{and return}\dots
-\RU{нет, не в ф-цию}\EN{not to} \ttf \RU{но в}\EN{, but rather to} \main:
+\RU{нет, не в функцию}\EN{not to} \ttf \RU{но в}\EN{, but rather to} \main:
 
 \begin{figure}[H]
 \centering
@@ -113,7 +113,7 @@ MSVCR100.DLL (\RU{я скомпилировал этот пример с опц�
 
 \RU{Да, это прямой переход из внутренностей}\EN{Yes, the jump was direct, from the guts of} \printf 
 \RU{в}\EN{to} \main.
-\RU{Потому как}\EN{Because} \ac{RA} \RU{в стеке указывает не на какое-то место в ф-ции}\EN{in the stack points 
+\RU{Потому как}\EN{Because} \ac{RA} \RU{в стеке указывает не на какое-то место в функции}\EN{in the stack points 
 not to some place in} \ttf \RU{а в}\EN{, but rather to} \main.
-\RU{И}\EN{And} \CALL \TT{0x00FF1000} \RU{это инструкция вызывающая ф-цию}\EN{was the actual instruction which called} 
+\RU{И}\EN{And} \CALL \TT{0x00FF1000} \RU{это инструкция вызывающая функцию}\EN{was the actual instruction which called} 
 \ttf.

@@ -13,7 +13,7 @@
 \EN{This optimization method can move some \gls{basic block}s to another section of the executable binary
 file}.
 
-\RU{Очевидно, в ф-ции есть места которые исполняются чаще всего (например, тела циклов)
+\RU{Очевидно, в функции есть места которые исполняются чаще всего (например, тела циклов)
 и реже всего (например, код обработки ошибок, обработчики исключений)}
 \EN{Obviously, there are parts of a function which are executed more frequently (e.g., loop bodies)
 and less often (e.g., error reporting code, exception handlers)}.
@@ -27,7 +27,7 @@ a lot of tests to collect statistics.}
 \EN{Then the compiler, with the help of the statistics gathered,
 prepares final the executable file with all infrequently executed code moved into another section}.
 
-\RU{В результате, весь часто исполняемый код ф-ции становится компактным, что очень важно для скорости
+\RU{В результате, весь часто исполняемый код функции становится компактным, что очень важно для скорости
 исполнения и кэш-памяти}
 \EN{As a result, all frequently executed function code is compacted, and that is very important
 for execution speed and cache usage}.
@@ -100,19 +100,19 @@ error:
 \EN{The distance of addresses between these two code fragments is almost 9 MB.}
 
 \RU{Весь редко исполняемый код помещен в конце секции кода DLL-файла, среди редко
-исполняемых частей прочих ф-ций}
+исполняемых частей прочих функций}
 \EN{All infrequently executed code was placed at the end of the code section of the DLL file,
 among all function parts}.
-\RU{Эта часть ф-ции была отмечена компилятором Intel C++ префиксом \TT{VInfreg}}
+\RU{Эта часть функции была отмечена компилятором Intel C++ префиксом \TT{VInfreg}}
 \EN{This part of the function was marked by the Intel C++ compiler with the \TT{VInfreq} prefix}.
-\RU{Мы видим часть ф-ции которая записывает в лог-файл (вероятно, в случае ошибки или предупреждения,
+\RU{Мы видим часть функции которая записывает в лог-файл (вероятно, в случае ошибки или предупреждения,
 или чего-то в этом роде) которая, наверное, не исполнялась слишком часто, когда разработчики Oracle
 собирали статистику (если вообще исполнялась).}
 \EN{Here we see that a part of the function that writes to a log file (presumably in case of error or warning
 or something like that) which was probably not executed very often when Oracle's developers gathered 
 statistics (if it was executed at all).}
 \RU{Basic block записывающий в лог-файл, в конце концов возвращает управление в ``горячую'' часть
-ф-ции}
+функции}
 \EN{The writing to log basic block eventually returns the control flow to the ``hot'' part of the function.}
 
 \RU{Другая ``редкая'' часть --- это \gls{basic block} возвращающий код ошибки 27050}
@@ -123,7 +123,7 @@ statistics (if it was executed at all).}
 \EN{In Linux ELF files, all infrequently executed code is moved by Intel C++ into the separate 
 \TT{text.unlikely} section, leaving all ``hot'' code in the \TT{text.hot} section}.
 
-\RU{С точки зрения reverse engineer-а, эта информация может помочь разделить ф-цию на её основу
+\RU{С точки зрения reverse engineer-а, эта информация может помочь разделить функцию на её основу
 и части, отвечающие за обработку ошибок}
 \EN{From a reverse engineer's perspective, this information may help to split the function
 into its core and error handling parts}.

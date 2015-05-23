@@ -24,8 +24,8 @@ single instruction (because 16 bits of signed offset could be encoded in single 
 \RU{Выделенный регистр называется ``глобальный указатель'' (``global pointer'') и он указывает на середину
 области 64KiB.}
 \EN{This allocated register is called ``global pointer'' and it points to the middle of the 64KiB area.}
-\RU{Эта область обычно содержит глобальные переменные и адреса импортированных ф-ций вроде \printf,
-потому что разработчики GCC решили что получение адреса ф-ции должно быть как можно более быстрой операцией,
+\RU{Эта область обычно содержит глобальные переменные и адреса импортированных функций вроде \printf,
+потому что разработчики GCC решили что получение адреса функции должно быть как можно более быстрой операцией,
 чтобы она исполнялась со скоростью исполнения одной инструкции вместо двух.}
 \EN{This area usually contains global variables and addresses of imported functions like \printf, 
 because GCC developers decided that getting address of some function must be as fast as single instruction
@@ -53,14 +53,14 @@ or the MS-DOS memory managers like XMS/EMS where all memory was divided in 64KiB
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),numbers=left]{patterns/01_helloworld/MIPS/hw_O3.s.\LANG}
 
-\RU{Так что регистр \$GP в прологе ф-ции выставляется в середину этой области.}
+\RU{Так что регистр \$GP в прологе функции выставляется в середину этой области.}
 \EN{The \$GP register is set in the function prologue to point the middle of this area.}
 \RU{Регистр \ac{RA} также сохраняется в локальном стеке.}
 \EN{The \ac{RA} register is also saved in the local stack.}
 \RU{Здесь также используется \puts вместо \printf.}
 \EN{\puts is also used here instead of \printf.}
 \index{MIPS!\Instructions!LW}
-\RU{Адрес ф-ции \puts загружается в \$25 используя инструкцию LW (``Load Word'').}
+\RU{Адрес функции \puts загружается в \$25 используя инструкцию LW (``Load Word'').}
 \EN{The address of the \puts function is loaded into \$25 using LW the instruction (``Load Word'').}
 \index{MIPS!\Instructions!LUI}
 \index{MIPS!\Instructions!ADDIU}
@@ -74,7 +74,7 @@ ADDIU (``Add Immediate Unsigned Word'') instruction pair.}
 the lower 16 bits of the address.}
 \RU{ADDIU следует за JALR (помните о \IT{branch delay slots}?).}
 \EN{ADDIU follows JALR (remember \IT{branch delay slots}?).}
-\RU{Регистр \$4 также называется \$A0, который используется для передачи первого аргумента ф-ции}
+\RU{Регистр \$4 также называется \$A0, который используется для передачи первого аргумента функции}
 \EN{The register \$4 is also called \$A0, which is used for passing the first function argument}
 \footnote{\RU{Таблица регистров в MIPS доступна в приложении}\EN{The MIPS registers table 
 is available in appendix} \myref{MIPS_registers_ref}}.
@@ -97,7 +97,7 @@ but the address of the instruction after the next one (after the \IT{delay slot}
 instruction next to ADDIU.}
 
 \RU{LW (``Load Word'') в строке 19 восстанавливает \ac{RA} из локального стека 
-(эта инструкция скорее часть эпилога ф-ции).}
+(эта инструкция скорее часть эпилога функции).}
 \EN{LW (``Load Word'') at line 19 restores \ac{RA} from the local stack 
 (this instruction is rather part of function epilogue).}
 
@@ -123,10 +123,10 @@ so let's just use \$0 register every time zero is needed.}
 \EN{Most likely, the \ac{CPU} optimizes these pseudoinstructions and \ac{ALU} is never used.}
 
 \index{MIPS!\Instructions!J}
-\RU{J в строке 24 делает переход по адресу в \ac{RA}, и это работает как выход из ф-ции.}
+\RU{J в строке 24 делает переход по адресу в \ac{RA}, и это работает как выход из функции.}
 \EN{J at line 24 jumps to the address in \ac{RA}, which is effectively performing return from the function.}
 \RU{ADDIU после J на самом деле исполняется перед J (помните о \IT{branch delay slots}?) 
-и это часть эпилога ф-ции.}
+и это часть эпилога функции.}
 \EN{ADDIU after J is in fact executed before J (remember \IT{branch delay slots}?) 
 and is part of function epilogue.}
 
@@ -136,15 +136,15 @@ and is part of function epilogue.}
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\IDA),numbers=left]{patterns/01_helloworld/MIPS/hw_O3_IDA.lst.\LANG}
 
 \RU{Инструкция на строке 15 сохраняет GP в локальном стеке, и эта инструкция мистическим образом отсутствует
-в листинге от GCC, может быть из-за ошибки в самом GCC\footnote{Очевидно, ф-ция вывода листингов не так критична
+в листинге от GCC, может быть из-за ошибки в самом GCC\footnote{Очевидно, функция вывода листингов не так критична
 для пользователей GCC, поэтому там вполне могут быть неисправленные ошибки.}.}
 \EN{The instruction at line 15 saves GP value into the local stack, and this instruction is missing mysteriously from the GCC output listing, maybe by a GCC error\footnote{Apparently, functions generating listings 
 are not so critical to GCC users, so some unfixed errors may still exist.}.}
-\RU{Значение GP должно быть сохранено, потому что всякая ф-ция может работать со своим собственным окном данных
+\RU{Значение GP должно быть сохранено, потому что всякая функция может работать со своим собственным окном данных
 размером 64KiB.}
 \EN{The GP value has to be saved indeed, because each function can use its own 64KiB data window.}
 
-\RU{Регистр, содержащий адрес ф-ции \puts называется \$T9, потому что регистры с префиксом T- называются
+\RU{Регистр, содержащий адрес функции \puts называется \$T9, потому что регистры с префиксом T- называются
 ``temporaries'' и их содержимое можно не сохранять.}
 \EN{The register containing the \puts address is called \$T9, because registers prefixed with T- are called
 ``temporaries'' and their contents may not be preserved.}
@@ -204,7 +204,7 @@ with zero, which is, of course, idle instruction.}
 (потому что вызывается \printf) и для этого используется локальный стек.}
 \EN{The reason for this lies in the fact that registers \ac{RA} and GP's values has to be saved somewhere 
 (because \printf is called), and the local stack is used for this purpose.}
-\RU{Если бы это была \gls{leaf function}, тогда можно было бы избавиться от пролога и эпилога ф-ции,
+\RU{Если бы это была \gls{leaf function}, тогда можно было бы избавиться от пролога и эпилога функции,
 например:}
 \EN{If this was a \gls{leaf function}, it would have been possible to get rid of the function prologue and epilogue,
 for example:} \myref{MIPS_leaf_function_ex1}.

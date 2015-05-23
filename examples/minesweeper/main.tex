@@ -8,11 +8,11 @@
 \index{\CStandardLibrary!rand()}
 \index{Windows!PDB}
 \RU{Как мы знаем, Сапёр располагает мины случайным образом, так что там должен быть генератор случайных чисел
-или вызов стандартной ф-ции Си \TT{rand()}.}
+или вызов стандартной функции Си \TT{rand()}.}
 \EN{As we know, Minesweeper places mines randomly, so there has to be some kind of random number generator or
 a call to the standard \TT{rand()} C-function.}
 \RU{Вот что хорошо в реверсинге продуктов от Microsoft, так это то что часто есть \gls{PDB}-файл со всеми
-символами (имена ф-ций, и т.д.).}
+символами (имена функций, и т.д.).}
 \EN{What is really cool about reversing Microsoft products is that there are \gls{PDB} 
 file with symbols (function names, etc).}
 \RU{Когда я загружаю}\EN{When I load} \TT{winmine.exe} \RU{в}\EN{into} \IDA, \RU{она скачивает}\EN{it downloads the} 
@@ -20,7 +20,7 @@ file with symbols (function names, etc).}
 executable and shows all names}.
 
 \RU{И вот оно, только один вызов}\EN{So here it is, the only call to} \TT{rand()} \RU{в этой 
-ф-ции}\EN{is this function}:
+функции}\EN{is this function}:
 
 \begin{lstlisting}
 .text:01003940 ; __stdcall Rnd(x)
@@ -55,7 +55,7 @@ int Rnd(int limit)
 \RU{Так что она возвращает случайное число в пределах от нуля до заданного предела}\EN{So it returns 
 a random value from 0 to a specified limit}.
 
-\TT{Rnd()} \RU{вызывается только из одного места, это ф-ция с названием}\EN{is called only from one place, 
+\TT{Rnd()} \RU{вызывается только из одного места, это функция с названием}\EN{is called only from one place, 
 a function called} \TT{StartGame()}, 
 \RU{и как видно, это именно тот код, что расставляет мины}\EN{and as it seems, this is exactly 
 the code which place the mines}:
@@ -85,7 +85,7 @@ the code which place the mines}:
 coordinates are generated}.
 \RU{Мина устанавливается инструкцией}\EN{A mine is placed by the} \TT{OR} \RU{на}\EN{instruction at} \TT{0x010036FA}. 
 \RU{И если она уже была установлена до этого}\EN{And if it was placed before} 
-(\RU{это возможно, если пара ф-ций}\EN{it's possible if the pair of} \TT{Rnd()} 
+(\RU{это возможно, если пара функций}\EN{it's possible if the pair of} \TT{Rnd()} 
 \RU{сгенерирует пару, которая уже была сгенерирована}\EN{generates a coordinates pair which was already 
 was generated}), 
 \RU{тогда}\EN{then} \TT{TEST} \AndENRU \TT{JNZ} \RU{на}\EN{at} \TT{0x010036E6} 

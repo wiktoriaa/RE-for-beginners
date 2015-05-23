@@ -1,7 +1,7 @@
 \section{x64}
 
 \index{x86-64}
-\RU{В x86-64 всё немного иначе, здесь аргументы ф-ции (4 или 6) передаются через регистры, 
+\RU{В x86-64 всё немного иначе, здесь аргументы функции (4 или 6) передаются через регистры, 
 а \gls{callee} из регистров их и читает, вместо того чтобы обращаться к стеку}\EN{The story is a bit different
 in x86-64, function arguments (first 4 or first 6 of them) are passed in registers i.e. the \gls{callee} reads them from there instead of reading them from the stack}.
 
@@ -11,7 +11,7 @@ in x86-64, function arguments (first 4 or first 6 of them) are passed in registe
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/05_passing_arguments/x64_MSVC_Ox.asm.\LANG}
 
-\RU{Как видно, очень компактная ф-ция \ttf, берет аргументы прямо из регистров}
+\RU{Как видно, очень компактная функция \ttf, берет аргументы прямо из регистров}
 \EN{As we can see, the compact function \ttf takes all its arguments from the registers}.
 \RU{Инструкция \LEA используется здесь для сложения чисел, 
 должно быть компилятор посчитал что так будет эффективнее нежели использование \TT{ADD}}
@@ -32,19 +32,19 @@ apparently the compiler considered it faster than \TT{ADD}}.
 \label{shadow_space}
 \RU{Это называется}\EN{This is called} ``shadow space''
 \footnote{\href{http://go.yurichev.com/17256}{MSDN}}: 
-\RU{каждая ф-ция в Win64 может (хотя и не обязана) сохранять значения 4-х регистров там}
+\RU{каждая функция в Win64 может (хотя и не обязана) сохранять значения 4-х регистров там}
 \EN{every Win64 may (but is not required to) save all 4 register values there}.
 \RU{Это делается по крайней мере из-за двух причин}\EN{This is done for two reasons}: 
-1) \RU{в большой ф-ции отвести целый регистр (а тем более 4 регистра) для входного аргумента, 
+1) \RU{в большой функции отвести целый регистр (а тем более 4 регистра) для входного аргумента, 
 это слишком расточительно, так что к нему будет обращение через стек}
 \EN{it is too lavish to allocate a whole register (or even 4 registers) for an input argument,
 so it will be accessed via stack};
-2) \RU{отладчик всегда знает где найти аргументы ф-ции в момент останова}\EN{the debugger is always
+2) \RU{отладчик всегда знает где найти аргументы функции в момент останова}\EN{the debugger is always
 aware where to find the function arguments at a break}
 \footnote{\href{http://go.yurichev.com/17257}{MSDN}}.
 
-\RU{Так что, какие-то большие ф-ции могут сохранять входные аргументы в ``shadows space'' 
-для использования в будущем, а небольшие ф-ции, как наша, могут этого и не делать.}
+\RU{Так что, какие-то большие функции могут сохранять входные аргументы в ``shadows space'' 
+для использования в будущем, а небольшие функции, как наша, могут этого и не делать.}
 \EN{So, some large functions can save their input arguments in the ``shadows space'' if they need to use them
 during execution, but some small functions (like ours) may not do this.}
 

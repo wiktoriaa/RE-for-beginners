@@ -77,23 +77,23 @@ popular user-land win32 debuggers}.
 \RU{Мы можем компилировать наш пример в}\EN{We can compile our example in} MSVC 2012 
 \RU{с опцией}\EN{with} \TT{/MD} \RU{что означает, линковать с библиотекой}\EN{option, which means to link 
 with} \TT{MSVCR*.DLL},
-\RU{чтобы импортируемые ф-ции были хорошо видны в отладчике.}
+\RU{чтобы импортируемые функции были хорошо видны в отладчике.}
 \EN{so we can see the imported functions clearly in the debugger.}
 
 \RU{Затем загружаем исполняемый файл в}\EN{Then load the executable in} \olly.
 \RU{Самый первый брякпойнт в}\EN{The very first breakpoint is in} \TT{ntdll.dll}, \RU{нажмите}\EN{press} 
 F9 (\RU{запустить}\EN{run}).
 \RU{Второй брякпойнт в}\EN{The second breakpoint is in} \ac{CRT}-\RU{коде}\EN{code}.
-\RU{Теперь мы должны найти ф-цию}\EN{Now we have to find the} \main\EN{ function}.
+\RU{Теперь мы должны найти функцию}\EN{Now we have to find the} \main\EN{ function}.
 
-\RU{Найдите этот код скроллируя окно кода до самого верха (MSVC располагает ф-цию \main в самом начале
+\RU{Найдите этот код скроллируя окно кода до самого верха (MSVC располагает функцию \main в самом начале
 секции кода)}\EN{Find this code by scrolling the code to the very top (MSVC allocates the \main function at
 the very beginning of the code section)}: 
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/03_printf/x86/olly3_1.png}
-\caption{\olly: \RU{самое начало ф-ции}\EN{the very start of the} \main\EN{ function}}
+\caption{\olly: \RU{самое начало функции}\EN{the very start of the} \main\EN{ function}}
 \label{fig:printf3_olly_1}
 \end{figure}
 
@@ -179,16 +179,16 @@ have changed}:
 The value of \EIP has changed: indeed, now it contains the address of the instruction coming after 
 \TT{CALL printf}.}
 \RU{Значения регистров }\ECX \AndENRU \EDX \RU{также изменились}\EN{values have changed as well}.
-\RU{Очевидно, внутренности ф-ции \printf используют их для каких-то своих нужд}\EN{Apparently, the 
+\RU{Очевидно, внутренности функции \printf используют их для каких-то своих нужд}\EN{Apparently, the 
 \printf function's hidden machinery used them for its own needs}.
 
 \RU{Очень важный момент в том, что значение \ESP не изменилось. И аргументы-значения в стеке также!}
 \EN{A very important fact is that neither the \ESP value, nor the stack state have been changed!}
 \RU{Мы ясно видим здесь и строку формата и соответствующие ей 3 значения, они все еще здесь.}
 \EN{We clearly see that the format string and corresponding 3 values are still there.}
-\RU{Действительно, по соглашению вызовов \IT{cdecl}, вызываемая ф-ция не возвращает \ESP назад.}
+\RU{Действительно, по соглашению вызовов \IT{cdecl}, вызываемая функция не возвращает \ESP назад.}
 \EN{This is indeed the \IT{cdecl} calling convention behaviour: \gls{callee} does not return \ESP back to its previous value.}
-\RU{Это должна делать вызывающая ф-ция}\EN{The \gls{caller} is responsible to do so}.
+\RU{Это должна делать вызывающая функция}\EN{The \gls{caller} is responsible to do so}.
 
 \clearpage
 \RU{Нажмите}\EN{Press} F8 \RU{снова, чтобы исполнилась инструкция}\EN{again to execute} 
@@ -280,7 +280,7 @@ Breakpoint 1 at 0x80482f0
 \end{lstlisting}
 
 \RU{Запукаем}\EN{Run}.
-\RU{Здесь у нас нет исходного кода ф-ции}\EN{We don't have the} \printf 
+\RU{Здесь у нас нет исходного кода функции}\EN{We don't have the} \printf 
 \RU{так что \ac{GDB} не может показать его исходный код, но могла бы}\EN{function source code here, 
 so \ac{GDB} can't show it, but may do so}.
 
@@ -326,16 +326,16 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
 0x80484f0:	"a=%d; b=%d; c=%d"
 \end{lstlisting}
 
-\RU{Остальные 3 элемента}\EN{Next 3 elements} (1, 2, 3) \RU{это аргументы ф-ции}\EN{are the} 
+\RU{Остальные 3 элемента}\EN{Next 3 elements} (1, 2, 3) \RU{это аргументы функции}\EN{are the} 
 \printf\EN{ arguments}.
 \RU{Остальные элементы это может быть и мусор в стеке, но могут быть и значения
-от других ф-ций, их локальные переменные, и т.д.}
+от других функций, их локальные переменные, и т.д.}
 \EN{The rest of the elements could be just ``garbage'' on the stack,
 but could also be values from other functions, their local variables, etc.}
 \RU{Пока что мы можем игнорировать их}\EN{We can ignore them for now}.
 
 \RU{Исполняем}\EN{Run} ``finish''. 
-\RU{Это значит, исполнять все инструкции до самого конца ф-ции}\EN{The command instructs GDB to ``execute all instructions until the end of the function''}. 
+\RU{Это значит, исполнять все инструкции до самого конца функции}\EN{The command instructs GDB to ``execute all instructions until the end of the function''}. 
 \RU{Здесь это означает: исполнять до завершения}\EN{In this case: execute till the end of} \printf.
 
 \begin{lstlisting}
@@ -426,7 +426,7 @@ End of assembler dump.
 \end{lstlisting}
 
 \RU{Исполняем следующую инструкцию}\EN{Execute next instruction}.
-\ac{GDB} \RU{покажет закрывающуюся скобку, означая, что это конец блока в ф-ции}\EN{shows ending bracket, 
+\ac{GDB} \RU{покажет закрывающуюся скобку, означая, что это конец блока в функции}\EN{shows ending bracket, 
 meaning, this ends the block}.
 
 \begin{lstlisting}

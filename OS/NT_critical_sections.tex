@@ -31,7 +31,7 @@ typedef struct _RTL_CRITICAL_SECTION {
 } RTL_CRITICAL_SECTION, *PRTL_CRITICAL_SECTION;
 \end{lstlisting}
 
-\RU{Вот как работает ф-ция}\EN{That's is how} EnterCriticalSection()\EN{ function works}:
+\RU{Вот как работает функция}\EN{That's is how} EnterCriticalSection()\EN{ function works}:
 
 \index{x86!\Instructions!LOCK}
 \begin{lstlisting}[caption=Windows 2008/ntdll.dll/x86 (begin)]
@@ -82,13 +82,13 @@ loc_7DE922DD:
 \EN{blocking all other CPUs' access to this piece of memory 
 (see the \TT{LOCK} prefix before the \TT{BTR} instruction).}
 \RU{Если бит в}\EN{If the bit at} \TT{LockCount} \RU{является}\EN{is} 1, 
-\RU{хорошо, сбросить его и вернуться из ф-ции: мы в критической секции}
+\RU{хорошо, сбросить его и вернуться из функции: мы в критической секции}
 \EN{fine, reset it and return from the function: we are in a critical section}.
 \RU{Если нет ~--- критическая секция уже занята другим тредом, тогда ждем}
 \EN{If not~---the critical section is already occupied by other thread, so wait}. \\
 \RU{Ожидание там сделано через вызов}\EN{The wait is done there using} WaitForSingleObject(). \\
 \\
-\RU{А вот как работает ф-ция}\EN{And here is how the} LeaveCriticalSection()\EN{ function works}:
+\RU{А вот как работает функция}\EN{And here is how the} LeaveCriticalSection()\EN{ function works}:
 
 \begin{lstlisting}[caption=Windows 2008/ntdll.dll/x86 (begin)]
 _RtlLeaveCriticalSection@4 proc near

@@ -67,7 +67,7 @@ so this is maybe the file's signature.}
 \RU{Мы также видим, что в общем-то, формат файла это: OSYM + какие-то бинарные данные + 
 текстовые строки разделенные нулем + OSYM.}
 \EN{We also see that basically, the file format is: OSYM + some binary data + zero delimited text strings + OSYM.}
-\RU{Строки --- это, очевидно, имена ф-ций и глобальных переменных}\EN{The strings are, obviously, function and global 
+\RU{Строки --- это, очевидно, имена функций и глобальных переменных}\EN{The strings are, obviously, function and global 
 variable names}.
 
 \clearpage
@@ -183,7 +183,7 @@ there are two 32-bit values for each symbol, but maybe there are two arrays}?
 \EN{This is a .SYM file for a DLL after all, and the default base address of
 win32 DLLs is \TT{0x10000000}, and the code usually starts at \TT{0x10001000}.}
 
-\RU{Когда я открываю файл orawtc8.dll в IDA, базовый адрес другой, но тем не менее, первая ф-ция это:}
+\RU{Когда я открываю файл orawtc8.dll в IDA, базовый адрес другой, но тем не менее, первая функция это:}
 \EN{When I open the orawtc8.dll file in IDA, the base address is different, but nevertheless, the first function is:}
 
 \begin{lstlisting}
@@ -220,9 +220,9 @@ win32 DLLs is \TT{0x10000000}, and the code usually starts at \TT{0x10001000}.}
 \RU{Ух ты}\EN{Wow}, ``ax\_reg'' \RU{звучит знакомо}\EN{string sounds familiar}. 
 \RU{Действительно, это самая первая строка в блоке строк!}
 \EN{It's indeed the first string in the strings block!}
-\RU{Так что имя этой ф-ции, похоже}\EN{So the name of this function seems to be} ``ax\_reg''.
+\RU{Так что имя этой функции, похоже}\EN{So the name of this function seems to be} ``ax\_reg''.
 
-\RU{Вторая ф-ция}\EN{The second function is}:
+\RU{Вторая функция}\EN{The second function is}:
 
 \begin{lstlisting}
 .text:60351080 sub_60351080    proc near
@@ -256,14 +256,14 @@ win32 DLLs is \TT{0x10000000}, and the code usually starts at \TT{0x10001000}.}
 
 \RU{Строка ``ax\_unreg'' также это вторая строка в строке блок!}
 \EN{The ``ax\_unreg'' string is also the second string in the strings block!}
-\RU{Адрес начала второй ф-ции это \TT{0x60351080}, а второе значение в бинарном блоке это \TT{10001080}.}
+\RU{Адрес начала второй функции это \TT{0x60351080}, а второе значение в бинарном блоке это \TT{10001080}.}
 \EN{The starting address of the second function is \TT{0x60351080}, and the second value in the binary 
 block is \TT{10001080}.}
 \RU{Так что это адрес, но для DLL с базовым адресом по умолчанию}\EN{So this is the address, 
 but for a DLL with the default base address}.
 
 \RU{Я могу быстро проверить и убедиться, что первые 66 значений в массиве (т.е., первая половина)
-это просто адреса ф-ций в DLL, включая некоторые метки, и т.д.}
+это просто адреса функций в DLL, включая некоторые метки, и т.д.}
 \EN{I can quickly check and be sure that the first 66 values in the array (i.e., the first half of the array) 
 are just function addresses in the DLL, including some labels, etc.}
 \RU{Хорошо, что же тогда остальная часть массива}\EN{Well, what's the other part of array then}? 
@@ -278,7 +278,7 @@ the series of numbers is increasing}.
 
 \RU{Спросим себя: что еще разработчики \oracle хранили бы здесь, в этом файле?}
 \EN{Let's ask ourselves: what else \oracle's developers would save here, in this file?}
-\RU{Случайная догадка: это может быть адрес текстовой строки (название ф-ции).}
+\RU{Случайная догадка: это может быть адрес текстовой строки (название функции).}
 \EN{Quick wild guess: it could be the address of the text string (function name).}
 \RU{Это можно легко проверить, и да, каждое число --- это просто позиция первого символа в блоке строк.}
 \EN{It can be quickly checked, and yes, each number is just the position of the first character in the strings block.}
@@ -287,7 +287,7 @@ the series of numbers is increasing}.
 
 \index{IDA}
 \RU{Я написал утилиту для конвертирования .SYM-файлов в \IDA-скрипт, 
-так что я могу загружать .idc-скрипт и он выставит имена ф-ций:}
+так что я могу загружать .idc-скрипт и он выставит имена функций:}
 \EN{I wrote an utility to convert these .SYM files into \IDA script, 
 so I can load the .idc script and it sets the function names:}
 
@@ -333,6 +333,6 @@ static main() {
 я полагаю}\EN{to distinguish the target platform, I suppose}.\\
 \\
 \RU{Вот и всё}\EN{This is it}!
-\RU{Вот также моя библиотека в которой есть ф-ция для доступа к .SYM-файлам \oracle}\EN{Here is also my 
+\RU{Вот также моя библиотека в которой есть функция для доступа к .SYM-файлам \oracle}\EN{Here is also my 
 library in which I have functions to access \oracle .SYM-files}:
 \href{http://go.yurichev.com/17007}{GitHub}.

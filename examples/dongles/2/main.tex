@@ -39,12 +39,12 @@ by a company that disappeared a long time ago}.
 \EN{Yes, indeed, the program needs to communicate with the driver somehow}.
 
 \index{thunk-\RU{функции}\EN{functions}}
-\RU{Единственное место где вызывается ф-ция}\EN{The only place where the} \TT{SSQC()}
+\RU{Единственное место где вызывается функция}\EN{The only place where the} \TT{SSQC()}
 \RU{это}\EN{function is called is the} \gls{thunk function}:
 
 \lstinputlisting{examples/dongles/2/2.lst}
 
-\RU{А вот }SSQ() \RU{вызывается по крайней мере из двух разных ф-ций}
+\RU{А вот }SSQ() \RU{вызывается по крайней мере из двух разных функций}
 \EN{is called from at least 2 functions}.
 
 \RU{Одна из них}\EN{One of these is}:
@@ -53,7 +53,7 @@ by a company that disappeared a long time ago}.
 
 ``\TT{3C}'' \AndENRU ``\TT{3E}'' \RU{~--- это звучит знакомо: когда-то была донгла}
 \EN{sound familiar: there was a} Sentinel Pro \RU{от Rainbow без памяти,
-предоставляющая только одну секретную крипто-хеширующую ф-цию}\EN{dongle by Rainbow with no memory,
+предоставляющая только одну секретную крипто-хеширующую функцию}\EN{dongle by Rainbow with no memory,
 providing only one crypto-hashing secret function}.
 
 \RU{О том, что такое хэш-функция, было описано здесь}\EN{You can read a short description
@@ -65,7 +65,7 @@ of what hash function is here}: \myref{hash_func}.
 \RU{Никакой больше информации в такую донглу без памяти записать нельзя}
 \EN{No other information can be written to such dongle, as it has no memory}.
 \RU{Двухсимвольные коды ~--- это команды}\EN{The two-character codes are commands}
-(\RU{можно увидеть, как они обрабатываются в ф-ции}\EN{we can see how the commands are handled in the} 
+(\RU{можно увидеть, как они обрабатываются в функции}\EN{we can see how the commands are handled in the} 
 \TT{SSQC()}\EN{ function}) 
 \RU{а все остальные строки хешируются внутри донглы превращаясь в 16-битное число}
 \EN{and all other strings are hashed inside the dongle, being transformed into a 16-bit number}.
@@ -111,7 +111,7 @@ dongle can be connected to a LPT port)}.
 
 \lstinputlisting{examples/dongles/2/4.lst}
 
-\RU{Если оно 0, шифрованное сообщение об ошибке будет передано в ф-цию дешифрования, и оно будет 
+\RU{Если оно 0, шифрованное сообщение об ошибке будет передано в функцию дешифрования, и оно будет 
 показано}\EN{If it is 0, an encrypted error message is passed to a decryption routine and printed}.
 
 \index{x86!\Instructions!XOR}
@@ -125,10 +125,10 @@ dongle can be connected to a LPT port)}.
 \EN{That's why I was unable to find the error messages in the executable files, because they are encrypted
 (which is is popular practice)}.
 
-\RU{Еще один вызов хеширующей ф-ции передает строку}\EN{Another call to the \TT{SSQ()} hashing function passes the}
+\RU{Еще один вызов хеширующей функции передает строку}\EN{Another call to the \TT{SSQ()} hashing function passes the}
 ``offln'' \RU{и сравнивает результат с константами}\EN{string to it and compares the result with}
 \TT{0xFE81} \AndENRU \TT{0x12A9}.
-\RU{Если результат не сходится, происходит работа с какой-то ф-цией}
+\RU{Если результат не сходится, происходит работа с какой-то функцией}
 \EN{If they don't match, it works with some} \TT{timer()} 
 \RU{(может быть для ожидания плохо подключенной донглы и нового запроса?), затем дешифрует
 еще одно сообщение об ошибке и выводит его}\EN{function (maybe waiting for a poorly
@@ -146,7 +146,7 @@ connected dongle to be reconnected and check again?) and then decrypts another e
 
 \RU{Кстати, мы также можем дешифровать все сообщения об ошибке}\EN{By the way, we can also 
 try to decrypt all error messages}.
-\RU{Алгоритм, находящийся в ф-ции}\EN{The algorithm that is located in the} \TT{err\_warn()} 
+\RU{Алгоритм, находящийся в функции}\EN{The algorithm that is located in the} \TT{err\_warn()} 
 \RU{действительно, крайне прост}\EN{function is very simple, indeed}:
 
 \lstinputlisting[caption=\RU{Ф-ция дешифровки}\EN{Decryption function}]
@@ -197,7 +197,7 @@ other encrypted messages with their corresponding keys}.
 to decrypt them without their keys}.
 \RU{В начале, мы можем заметить, что ключ --- это просто байт}\EN{First, we can see that the key 
 is in fact a byte}.
-\RU{Это потому что самая важная часть ф-ции дешифровки}\EN{It is because the core decryption instruction}
+\RU{Это потому что самая важная часть функции дешифровки}\EN{It is because the core decryption instruction}
 (\XOR) \RU{оперирует байтами}\EN{works on byte level}. 
 \RU{Ключ находится в регистре}\EN{The key is located in the} \ESI\RU{, но только младшие 8 бит
 (т.е., байт) регистра используются}\EN{ register, but only one byte part of \ESI is used}.
@@ -218,7 +218,7 @@ the messages that contain unprintable characters}.
 \RU{Тут есть какой-то мусор, но мы можем быстро отыскать сообщения на английском языке}\EN{There 
 is some garbage, but we can quickly find the English-language messages}!
 
-\RU{Кстати, так как алгоритм использует простой \XOR, та же ф-ция может использоваться и для шифрования
+\RU{Кстати, так как алгоритм использует простой \XOR, та же функция может использоваться и для шифрования
 сообщения}\EN{By the way, since the algorithm is a simple xoring encryption, the very same function can be used
 to encrypt messages}.
 \RU{Если нужно, мы можем зашифровать наши собственные сообщения, и пропатчить программу вставив

@@ -2,18 +2,18 @@
 
 \RU{Представим, что нам нужно вычислить \glslink{arithmetic mean}{среднее арифметическое}, 
 и по какой-то странной причине, 
-нам нужно задать все числа в аргументах ф-ции.}
+нам нужно задать все числа в аргументах функции.}
 \EN{Let's imagine that we need to calculate \gls{arithmetic mean}, and for some weird reason 
 we need to specify all the values as function arguments.}
 
-\RU{Но в \CCpp ф-ции с переменным кол-вом аргументов невозможно определить кол-во аргументов,
+\RU{Но в \CCpp функции с переменным кол-вом аргументов невозможно определить кол-во аргументов,
 так что обозначим значение $-1$ как конец списка.}
 \EN{But it's impossible to get the number of arguments in a variadic function in \CCpp, so I'll denote 
 the value of $-1$ as a terminator.}
 
 \RU{Имеется стандартный заголовочный файл stdarg.h, который определяет макросы для работы с такими аргументами.}
 \EN{There is the standard stdarg.h header file which define macros for dealing with such arguments.}
-\RU{Их так же используют ф-ции \printf и \scanf.}
+\RU{Их так же используют функции \printf и \scanf.}
 \EN{The \printf and \scanf functions use them as well.}
 
 \lstinputlisting{\CURPATH/arith.c.\LANG}
@@ -48,7 +48,7 @@ and does this in an infinite loop, until $-1$ is found.}
 возвращается.}
 \EN{When it's found, the sum is divided by the number of all values (excluding $-1$) and the \gls{quotient} is returned.}
 
-\RU{Так что, другими словами, я бы сказал, ф-ция обходится с фрагментом стека как с массивом целочисленных
+\RU{Так что, другими словами, я бы сказал, функция обходится с фрагментом стека как с массивом целочисленных
 значений, бесконечной длины.}
 \EN{So, in other words, the function treats the stack fragment as an array of integer values of infinite
 length.}
@@ -56,7 +56,7 @@ length.}
 заталкивается в стек последним.}
 \EN{Now we can understand why the \IT{cdecl} calling convention forces us to push the first argument 
 into the stack as last.}
-\RU{Потому что иначе будет невозможно найти первый аргумент, или, для ф-ции вроде \printf, невозможно
+\RU{Потому что иначе будет невозможно найти первый аргумент, или, для функции вроде \printf, невозможно
 будет найти строку формата.}
 \EN{Because otherwise, it would not be possible to find the first argument, 
 or, for printf-like functions, it would not be possible to find the address of the format-string.}
@@ -78,8 +78,8 @@ or, for printf-like functions, it would not be possible to find the address of t
 \EN{The \TT{arith\_mean()} function first places these 4 arguments into the \IT{Shadow Space} and then treats
 the \IT{Shadow Space} and stack behind it as a single continuous array!}
 
-\RU{Что насчет GCC? Тут немного неуклюже всё, потому что ф-ция делится на две части: первая часть
-сохраняет регистры в ``red zone'', обрабатывает это пространство, а вторая часть ф-ции обрабатывает стек:}
+\RU{Что насчет GCC? Тут немного неуклюже всё, потому что функция делится на две части: первая часть
+сохраняет регистры в ``red zone'', обрабатывает это пространство, а вторая часть функции обрабатывает стек:}
 \EN{What about GCC? Things are slightly clumsier here, because now the function is divided in two parts:
 the first part saves the registers into the ``red zone'', processes that space, and the second part of the function processes 
 the stack:}
