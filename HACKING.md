@@ -15,3 +15,6 @@ Some points of interest are:
 
 As a shortcoming, some references may broke (in case it's referencing to the part had been omitted), 
 like "?? on page ??" -- but that's normal.
+
+It's also possible to reorder parts.
+
