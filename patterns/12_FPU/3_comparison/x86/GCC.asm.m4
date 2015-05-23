@@ -33,7 +33,7 @@ b_second_half   = dword ptr  14h
 
 ; _EN(`current stack state')_RU(`текущее состояние стека'): ST(0) - a; ST(1) - b
 
-    fucompp    ; _EN(``compare a and b and pop two values from stack, i.e., a and b'')_RU(``сравнить a и b и выдернуть из стека два значения, т.е., a и b'')
+    fucompp    ; _EN(``compare a and b and pop two values from stack, i.e., a and b'')_RU(``сравнить a и b и выдернуть из стека два значения, т.е. a и b'')
     fnstsw  ax ; _EN(`store FPU status to AX')_RU(`записать статус FPU в AX')
     sahf       ; _EN(``load SF, ZF, AF, PF, and CF flags state from AH'')_RU(``загрузить состояние флагов SF, ZF, AF, PF, и CF из AH'')
     setnbe  al ; _EN(``store 1 to AL, if CF=0 and ZF=0'')_RU(``записать 1 в AL, если CF=0 и ZF=0'')

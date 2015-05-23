@@ -16,8 +16,8 @@ saved_RA           = -4
                 jalr    $t9
 ; _EN(`input string address is still in')_RU(`адрес входной строки всё еще в') $a0, _EN(`put it to')_RU(`переложить его в') $s0:
                 move    $s0, $a0   ; branch delay slot
-; _EN(`result of')_RU(`результат') strlen() (_EN(``i.e, length of string'')_RU(``т.е., длина строки'')) _EN(`is in \$v0 now')_RU(`теперь в \$v0')
-; _EN(``jump to exit if'')_RU(``перейти на выход, если'') $v0==0 (_EN(``i.e., if length of string is'')_RU(``т.е., если длина строки это'') 0):
+; _EN(`result of')_RU(`результат') strlen() (_EN(``i.e, length of string'')_RU(``т.е. длина строки'')) _EN(`is in \$v0 now')_RU(`теперь в \$v0')
+; _EN(``jump to exit if'')_RU(``перейти на выход, если'') $v0==0 (_EN(``i.e., if length of string is'')_RU(``т.е. если длина строки это'') 0):
                 beqz    $v0, exit
                 or      $at, $zero ; branch delay slot, NOP
                 addiu   $a1, $v0, -1
