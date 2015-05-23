@@ -1,7 +1,7 @@
-\section{\RU{Условный оператор}\EN{Conditional operator}}
+\section{\RU{Тернарный оператор}\EN{Ternary operator}}
 \label{chap:cond}
 
-\RU{Условный оператор (conditional operator) в}\EN{The conditional operator in} \CCpp \RU{это}\EN{has the following syntax}:
+\RU{Тернарный оператор (ternary operator) в}\EN{The ternary operator in} \CCpp \RU{это}\EN{has the following syntax}:
 
 \begin{lstlisting}
 expression ? expression : expression
@@ -14,14 +14,14 @@ expression ? expression : expression
 \subsection{x86}
 
 \RU{Старые и неоптимизирующие компиляторы генерируют код так, как если бы выражение \TT{if/else} было использовано
-вместо:}
+вместо него:}
 \EN{Old and non-optimizing compilers generate assembly code just as if an \TT{if/else} statement was used:}
 
 \lstinputlisting[caption=\NonOptimizing MSVC 2008]{patterns/07_jcc/cond_operator/MSVC2008.asm.\LANG}
 
 \lstinputlisting[caption=\Optimizing MSVC 2008]{patterns/07_jcc/cond_operator/MSVC2008_Ox.asm.\LANG}
 
-\RU{Более новые компиляторы могут быть более краткими}\EN{Newer compilers are more concise}:
+\RU{Новые компиляторы могут быть более краткими}\EN{Newer compilers are more concise}:
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/07_jcc/cond_operator/MSVC2012_Ox_x64.asm.\LANG}
 
@@ -38,11 +38,11 @@ expression ? expression : expression
 
 \lstinputlisting[label=cond_Keil_ARM_O3,caption=\OptimizingKeilVI (\ARMMode)]{patterns/07_jcc/cond_operator/Keil_ARM_O3.s.\LANG}
 
-\RU{Без внешнего вмешательства, инструкции \TT{ADREQ} и \TT{ADRNE} никогда не исполнятся одновременно.}
+\RU{Без внешнего вмешательства инструкции \TT{ADREQ} и \TT{ADRNE} никогда не исполнятся одновременно.}
 \EN{Without manual intervention, the two instructions \TT{ADREQ} and \TT{ADRNE} cannot be executed in the same run.}
 
 \Optimizing Keil \ForENRU \RU{режима Thumb вынужден использовать инструкции условного перехода, потому
-что тут нет инструкции загрузки значения поддерживающую флаги условия}\EN{Thumb mode needs to use 
+что тут нет инструкции загрузки значения, поддерживающей флаги условия}\EN{Thumb mode needs to use 
 conditional jump instructions, since there are no load instructions
 that support conditional flags}:
 
@@ -67,7 +67,7 @@ that support conditional flags}:
 \ifdefined\IncludeMIPS
 \subsection{MIPS}
 
-\RU{А GCC 4.4.5 для MIPS не так хорош, к сожалению}\EN{Unfortunately, GCC 4.4.5 for MIPS is not very smart, either}:
+\RU{GCC 4.4.5 для MIPS тоже не так хорош, к сожалению}\EN{Unfortunately, GCC 4.4.5 for MIPS is not very smart, either}:
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/07_jcc/cond_operator/MIPS_O3.s.\LANG}
 

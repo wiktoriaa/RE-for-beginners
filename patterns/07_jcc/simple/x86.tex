@@ -9,11 +9,11 @@
 \index{x86!\Instructions!JLE}
 \RU{Первая инструкция \JLE значит}
 \EN{The first instruction, \JLE, stands for} \IT{Jump if Less or Equal}. 
-\RU{То есть, если второй операнд больше первого или 
+\RU{Если второй операнд больше первого или 
 равен ему, произойдет переход туда, где будет следующая проверка.}
 \EN{In other words, if the second operand is 
 larger or equal to the first one, the control flow will be passed to the specified in the instruction address or label.}
-\RU{А если это условие не срабатывает, то есть второй операнд меньше первого, то перехода не будет, 
+\RU{А если это условие не срабатывает (то есть второй операнд меньше первого), то перехода не будет, 
 и сработает первый \printf.}
 \EN{If this condition does not trigger because the second operand is smaller than the first one, the control flow would not be altered and the first \printf would be executed.}
 \index{x86!\Instructions!JNE}
@@ -26,28 +26,26 @@ equal}.
 если первый операнд больше второго или равен ему}\EN{jump if the first operand is larger than 
 the second or if they are equal}.
 \RU{Кстати, если все три условных перехода сработают, ни один \printf не вызовется. 
-Но, без внешнего вмешательства, это невозможно.}
+Но без внешнего вмешательства это невозможно.}
 \EN{So, if all three conditional jumps are triggered, none of the \printf calls would be executed whatsoever. 
 This is impossible without special intervention.}
 
 \EN{Now let's take a look at the \TT{f\_unsigned()} function.}
 \EN{The}\RU{Функция} \TT{f\_unsigned()} \RU{точно такая же, за тем исключением, что используются инструкции 
-\JBE и \JAE вместо \JLE и \JGE, об этом читайте ниже}
+\JBE и \JAE вместо \JLE и \JGE:}
 \EN{function is the same as \TT{f\_signed()}, with the exception that the \JBE and \JAE instructions
-are used instead of \JLE and \JGE, as follows}:
-\RU{Далее функция \TT{f\_unsigned()}}
-
+are used instead of \JLE and \JGE, as follows:}
 
 \lstinputlisting[caption=GCC]{patterns/07_jcc/simple/unsigned_MSVC.asm}
 
 \index{x86!\Instructions!JBE}
 \index{x86!\Instructions!JAE}
-\RU{Здесь все то же самое, только инструкции условных переходов немного другие}
-\EN{As already mentioned, the branch instructions are different}:
+\RU{Здесь всё то же самое, только инструкции условных переходов немного другие:}
+\EN{As already mentioned, the branch instructions are different:}
 \JBE\EMDASH{}\IT{Jump if Below or Equal} \AndENRU \JAE\EMDASH{}\IT{Jump if Above or Equal}.
 \RU{Эти инструкции}\EN{These instructions} (\JA/\JAE/\JB/\JBE) 
-\RU{отличаются от}\EN{differ from} \JG/\JGE/\JL/\JLE \RU{тем, что работают с беззнаковыми переменными}
-\EN{in the fact that they work with unsigned numbers}.
+\RU{отличаются от}\EN{differ from} \JG/\JGE/\JL/\JLE \RU{тем, что работают с беззнаковыми переменными.}
+\EN{in the fact that they work with unsigned numbers.}
 
 \index{x86!\Instructions!JA}
 \index{x86!\Instructions!JB}
@@ -62,8 +60,8 @@ are used instead of \JLE and \JGE, as follows}:
 \EN{That is why if we see \JG/\JL in use instead of \JA/\JB or vice-versa, 
 we could be almost sure that the variables are signed or unsigned, respectively.}
 
-\RU{Далее функция \main, где ничего нового для нас нет}
-\EN{Here is also the \main function, where there is nothing much new to us}:
+\RU{Далее функция \main, где ничего нового для нас нет:}
+\EN{Here is also the \main function, where there is nothing much new to us:}
 
 \lstinputlisting[caption=\main]{patterns/07_jcc/simple/main_MSVC.asm}
 
@@ -76,7 +74,7 @@ we could be almost sure that the variables are signed or unsigned, respectively.
 \index{Hiew}
 
 \RU{Можем попробовать модифицировать исполняемый файл так,}\EN{We can try to patch the executable file in a way} 
-\RU{чтобы ф-ция}\EN{that the} \TT{f\_unsigned()} \RU{всегда показывала}\EN{function would always print} ``a==b'', 
+\RU{чтобы функция}\EN{that the} \TT{f\_unsigned()} \RU{всегда показывала}\EN{function would always print} ``a==b'', 
 \RU{при любых входящих значениях}\EN{no matter the input values}.
 \RU{Вот как она выглядит в}\EN{Here is how it looks in} Hiew:
 
@@ -87,7 +85,7 @@ we could be almost sure that the variables are signed or unsigned, respectively.
 \label{fig:jcc_hiew_1}
 \end{figure}
 
-\RU{Собственно, задаче три}\EN{Essentially, we need to accomplish three tasks}:
+\RU{Собственно, задач три}\EN{Essentially, we need to accomplish three tasks}:
 \begin{itemize}
 \item \RU{заставить первый переход срабатывать всегда}\EN{force the first jump to always trigger};
 \item \RU{заставить второй переход не срабатывать никогда}\EN{force the second jump to never trigger};
@@ -98,23 +96,23 @@ we could be almost sure that the variables are signed or unsigned, respectively.
 to always pass through the second} \printf,
 \RU{и он всегда будет срабатывать и выводить на консоль}\EN{and output} ``a==b''.
 
-\RU{Для этого нужно пропатчить три инструкции (или байта)}\EN{Three instructions (or bytes) has to be patched}:
+\RU{Для этого нужно изменить три инструкции (или байта)}\EN{Three instructions (or bytes) has to be patched}:
 
 \begin{itemize}
 \item \RU{Первый переход теперь будет}\EN{The first jump becomes} \JMP, \RU{но смещение перехода 
 (\gls{jump offset}) останется прежним}\EN{but the \gls{jump offset} would remain the same}.
 
 \item \RU{Второй переход может быть и будет срабатывать иногда, но в любом случае он будет совершать переход
-только на следующую инструкцию, потому что мы выставляем смещение перехода (\gls{jump offset}) в 0}
+только на следующую инструкцию, потому что мы выставляем смещение перехода (\gls{jump offset}) в 0.}
 \EN{The second jump might be triggered sometimes, but in any case it will jump to the next
-instruction, because, we set the \gls{jump offset} to 0}.
-\RU{В этих инструкциях, смещение перехода просто прибавляется к адресу следующей инструкции}
-\EN{In these instructions the \Gls{jump offset} is added to the address for the next instruction}.
-\RU{И когда смещение 0, то тогда и переход будет на следующую инструкцию}\EN{So if the offset is 0,
-the jump will transfer the control to the next instruction}.
+instruction, because, we set the \gls{jump offset} to 0.}
+\RU{В этих инструкциях смещение перехода просто прибавляется к адресу следующей инструкции.}
+\EN{In these instructions the \Gls{jump offset} is added to the address for the next instruction.}
+\RU{Когда смещение 0, переход будет на следующую инструкцию.}\EN{So if the offset is 0,
+the jump will transfer the control to the next instruction.}
 
-\item \RU{Третий переход конвертируем в \JMP точно так же, как и первый, он будет срабатывать всегда}
-\EN{The third jump we replace with \JMP just as we do with the first one, so it will always trigger}.
+\item \RU{Третий переход конвертируем в \JMP точно так же, как и первый, он будет срабатывать всегда.}
+\EN{The third jump we replace with \JMP just as we do with the first one, so it will always trigger.}
 
 \end{itemize}
 
@@ -151,24 +149,24 @@ if the flags has the same values after each execution}?
 
 % should be here instead of 'switch' section?
 \RU{Мы здесь также видим}\EN{We also see} \TT{JMP puts} \RU{вместо}\EN{here instead of} \TT{CALL puts / RETN}.
-\RU{Этот прием описан немного позже}
+\RU{Этот прием описан немного позже}%
 \EN{This kind of trick will have explained later}: \myref{JMP_instead_of_RET}.
 
 \RU{Нужно сказать, что x86-код такого типа редок}\EN{This type of x86 code 
 is somewhat rare}.
 MSVC 2012\RU{, как видно, не может генерировать подобное}\EN{ as it seems, can't generate such code}.
-\RU{С другой стороны, программисты на ассемблере прекрасно осведомлены о том, что инструкции}\EN{On the other hand, assembly language programmers are fully aware of the fact that} \TT{Jcc} \RU{можно располагать последовательно}
-\EN{instructions can be stacked}.
-\RU{Так что если вы видите это где-то, имеется немалая вероятность, что этот фрагмент кода был написан вручную}
-\EN{So if you see such stacking somewhere, it is highly probable that the code was hand-written}.
+\RU{С другой стороны, программисты на ассемблере прекрасно осведомлены о том, что инструкции}\EN{On the other hand, assembly language programmers are fully aware of the fact that} \TT{Jcc} \RU{можно располагать последовательно.}
+\EN{instructions can be stacked.}
+\RU{Так что если вы видите это где-то, имеется немалая вероятность, что этот фрагмент кода был написан вручную.}
+\EN{So if you see such stacking somewhere, it is highly probable that the code was hand-written.}
 
-\EN{The}\RU{Ф-ция} \TT{f\_unsigned()} \RU{получилась не настолько эстетически короткой}\EN{function is not that 
+\EN{The}\RU{Функция} \TT{f\_unsigned()} \RU{получилась не настолько эстетически короткой}\EN{function is not that 
 \ae{}sthetically short}:
 
 \lstinputlisting[caption=GCC 4.8.1 f\_unsigned()]{patterns/07_jcc/simple/GCC_O3_unsigned.asm.\LANG}
 
-\RU{Но тем не менее, здесь 2 инструкции \TT{CMP} вместо трех.}
+\RU{Тем не менее, здесь 2 инструкции \TT{CMP} вместо трех.}
 \EN{Nevertheless, there are two \TT{CMP} instructions instead of three.}
-\RU{Так что, алгоритмы оптимизации GCC 4.8.1, наверное, еще пока не идеальны.}
+\RU{Так что, алгоритмы оптимизации GCC 4.8.1, наверное, ещё пока не идеальны.}
 \EN{So optimization algorithms of GCC 4.8.1 are probably not perfect yet.} 
 \fi

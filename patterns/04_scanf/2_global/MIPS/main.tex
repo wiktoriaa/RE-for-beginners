@@ -14,7 +14,7 @@ since the variable is not initialized at the start.}
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/04_scanf/2_global/MIPS/O3_IDA.lst.\LANG}
 
 \RU{IDA уменьшает количество информации, так что я также сделал листинг используя objdump и добавил туда
-своих комментариев:}
+свои комментарии:}
 \EN{IDA reduces the amount of information, so I also made a listing using objdump and commented it:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump),numbers=left]{patterns/04_scanf/2_global/MIPS/O3_objdump.txt.\LANG}
@@ -23,10 +23,10 @@ since the variable is not initialized at the start.}
 к нему отрицательного смещения (строка 18).}
 \EN{Now we see the $x$ variable address is read from a 64KiB data buffer using GP and adding
 negative offset to it (line 18).}
-\RU{И даже более того: адреса трех внешних ф-ций используемых в нашем примере (\puts, \scanf, \printf)
+\RU{И даже более того: адреса трех внешних функций, используемых в нашем примере (\puts, \scanf, \printf)
 также берутся из буфера 64KiB используя GP (строки 9, 16 и 26).}
 \EN{More than that, the addresses of the three external functions  which are used in our example (\puts, \scanf, \printf), are also read from the 64KiB global data buffer using GP (lines 9, 16 and 26).}
-\RU{GP указывает на середину буфера, так что такие смещения могут нам подсказать, что адреса всех трех ф-ций,
+\RU{GP указывает на середину буфера, так что такие смещения могут нам подсказать, что адреса всех трех функций,
 а также адрес переменной $x$ расположены где-то в самом начале буфера.}
 \EN{GP points to the middle of the buffer, and such offset suggests that all three function's addresses,
 and also the address of the $x$ variable, are all stored somewhere at the beginning of that buffer.}
@@ -34,8 +34,8 @@ and also the address of the $x$ variable, are all stored somewhere at the beginn
 
 \index{MIPS!\Pseudoinstructions!MOVE}
 \index{MIPS!\Pseudoinstructions!NOP}
-\RU{Еще нужно отметить что ф-ция заканчивается двумя \ac{NOP}-ами (\TT{MOVE \$AT,\$AT} --- 
-это холостая инструкция), чтобы выровнять начало следующей ф-ции по 16-байтной границе.}
+\RU{Ещё нужно отметить что функция заканчивается двумя \ac{NOP}-ами (\TT{MOVE \$AT,\$AT}~--- 
+это холостая инструкция), чтобы выровнять начало следующей функции по 16-байтной границе.}
 \EN{Another thing worth mentioning is that the function ends with two \ac{NOP}s (\TT{MOVE \$AT,\$AT} --- 
 an idle instruction), in order to align next function's start on 16-byte boundary.}
 
@@ -62,11 +62,11 @@ how to work with variables there.}
 \index{MIPS!\Instructions!ADDIU}
 \RU{Адрес переменной должен быть сформирован парой инструкций.}
 \EN{The variable's address must be formed using a pair of instructions.}
-\RU{В нашем случае это LUI (``Load Upper Immediate'' --- загрузить старшие 16 бит) и 
-ADDIU (``Add Immediate Unsigned Word'' --- прибавить значение).}
+\RU{В нашем случае это LUI (``Load Upper Immediate''~--- загрузить старшие 16 бит) и 
+ADDIU (``Add Immediate Unsigned Word''~--- прибавить значение).}
 \EN{In our case those are LUI (``Load Upper Immediate'') and ADDIU (``Add Immediate Unsigned Word'').}
 
-\RU{Вот так же листинг сгенерированный objdump-ом для л\'{у}чшего рассмотрения:}
+\RU{Вот так же листинг сгенерированный objdump-ом для лучшего рассмотрения:}
 \EN{Here is also the objdump listing for close inspection:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump)]{patterns/04_scanf/2_global/MIPS/O3_objdump_init.txt.\LANG}
@@ -74,23 +74,23 @@ ADDIU (``Add Immediate Unsigned Word'' --- прибавить значение).
 \index{MIPS!\Instructions!LUI}
 \index{MIPS!\Instructions!ADDIU}
 \index{MIPS!\Instructions!LW}
-\RU{Мы видим, что во-первых, адрес формируется используя LUI и ADDIU, но старшая часть адреса
-все еще в регистре \$S0, и можно закодировать смещение в инструкции LW (``Load Word''), так что одной
+\RU{Адрес формируется используя LUI и ADDIU, но старшая часть адреса
+всё ещё в регистре \$S0, и можно закодировать смещение в инструкции LW (``Load Word''), так что одной
 LW достаточно для загрузки значения из переменной и передачи его в \printf.}
 \EN{We see that the address is formed using LUI and ADDIU, but the high part of address is still in
 the \$S0 register, and it is possible to encode the offset in a LW (``Load Word'') instruction, so one single LW is enough 
 to load a value from the variable and pass it to \printf.}
 
 \RU{Регистры хранящие временные данные имеют префикс T-, но здесь есть также регистры с префиксом S-,
-содержимое которых должно быть сохранено в других ф-циях (т.е., ``saved'').}
+содержимое которых должно быть сохранено в других функциях (т.е. ``saved'').}
 \EN{Registers holding temporary data are prefixed with T-, but here we also see some prefixed with S-, 
 the contents of which is need to be preserved before use in other functions (i.e., ``saved'').}
 % FIXME:
 % This needs to be clarified a bit, e.g. "the registers need to be preserved if a function is called and it wants to use them
-\RU{Вот почему \$S0 был установлен по адресу 0x4006cc, и затем был использован по адресу 0x4006e8,
+\RU{Вот почему \$S0 был установлен по адресу 0x4006cc и затем был использован по адресу 0x4006e8
 после вызова \scanf.}
 \EN{That is why the value of \$S0 was set at address 0x4006cc and was used again
 at address 0x4006e8, after the \scanf call. }
-\RU{Ф-ция \scanf не изменяет это значение.}\EN{The \scanf function does not change its value.}
+\RU{Функция \scanf не изменяет это значение.}\EN{The \scanf function does not change its value.}
 
 % TODO non-optimizing example?
