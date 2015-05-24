@@ -30,7 +30,7 @@ but this function usually does nothing.}
 \index{MS-DOS}
 \RU{В начале всякого PE-файла есть крохотная DOS-программа,
 выводящая на консоль сообщение вроде}\EN{Every PE file begins with tiny DOS program that prints a
-message like} ``This program cannot be run in DOS mode.'' --- 
+message like} \q{This program cannot be run in DOS mode.} ---
 \RU{если запустить эту программу в DOS либо Windows 3.1 (\ac{OS} не знающие о PE-формате), 
 выведется это сообщение.}
 \EN{if you run this program in DOS or Windows 3.1 (\ac{OS}-es which are not aware of the PE format), 
@@ -277,8 +277,8 @@ typedef struct _IMAGE_SECTION_HEADER {
 
 \index{Hiew}
 \RU{Еще немного терминологии}\EN{A word about terminology}:
-\IT{PointerToRawData} \RU{называется}\EN{it called} ``Offset''
-\AndENRU \IT{VirtualAddress} \RU{называется}\EN{is called} ``RVA'' \InENRU Hiew.
+\IT{PointerToRawData} \RU{называется}\EN{it called} \q{Offset}
+\AndENRU \IT{VirtualAddress} \RU{называется}\EN{is called} \q{RVA} \InENRU Hiew.
 
 \subsection{\RU{Релоки}\EN{Relocations (relocs)}}
 \label{subsec:relocs}
@@ -368,12 +368,12 @@ the places in memory to which relocs are to be applied, for example}: \figref{fi
 \EN{It can be said that functions from one module (usually DLL) must be connected somehow to the points of their
 calls in other modules (.exe-file or another DLL)}.
 
-\RU{Для этого, у каждой DLL есть ``экспорты'', это таблица функций плюс их адреса в модуле}
-\EN{For this, each DLL has an ``exports'' table, which consists of functions plus their addresses in a module}.
+\RU{Для этого, у каждой DLL есть \q{экспорты}, это таблица функций плюс их адреса в модуле}
+\EN{For this, each DLL has an \q{exports} table, which consists of functions plus their addresses in a module}.
 
-\RU{А у .exe-файла, либо DLL, есть ``импорты'', это таблица функций требующихся для исполнения 
+\RU{А у .exe-файла, либо DLL, есть \q{импорты}, это таблица функций требующихся для исполнения
 включая список имен DLL-файлов}
-\EN{And every .exe file or DLL has ``imports'', a table of functions it needs for execution including
+\EN{And every .exe file or DLL has \q{imports}, a table of functions it needs for execution including
 list of DLL filenames}.
 
 \RU{Загрузчик \ac{OS}, после загрузки основного .exe-файла, проходит по таблице импортов:
@@ -386,15 +386,15 @@ among the DLL exports and writes their addresses down in the \ac{IAT} of the mai
 \index{Windows!Win32!Ordinal}
 \RU{Как видно, во время загрузки, загрузчику нужно много сравнивать одни имена функций с другими,
 а сравнение строк ~--- это не очень быстрая процедура, так что,
-имеется также поддержка ``ординалов'' или 
-``hint''-ов, это когда в таблице импортов проставлены номера функций вместо их имен}
+имеется также поддержка \q{ординалов} или
+\q{hint}-ов, это когда в таблице импортов проставлены номера функций вместо их имен}
 \EN{As we can see, during loading the loader must compare a lot of function names, but string comparison is not a very
-fast procedure, so there is a support for ``ordinals'' or ``hints'',
+fast procedure, so there is a support for \q{ordinals} or \q{hints},
 which are function numbers stored in the table, instead of their names}.
 
 \RU{Так их быстрее находить в загружаемой DLL}
 \EN{That is how they can be located faster when loading a DLL}.
-\RU{В таблице экспортов ординалы присутствуют всегда}\EN{Ordinals are always present in the ``export'' table}.
+\RU{В таблице экспортов ординалы присутствуют всегда}\EN{Ordinals are always present in the \q{export} table}.
 
 \index{MFC}
 \RU{К примеру}\EN{For example}, \RU{программы использующие библиотеки}\EN{a program using the} 
@@ -440,7 +440,7 @@ however, this is not a strict rule}.
 \RU{каждый из которых указывает на текстовую строку где записано имя функции}
 \EN{each of which points to a text string with a function name}. 
 \RU{Каждую строку предваряет 16-битное число}\EN{Each string is prefixed by a 16-bit integer} 
-(``hint'')\EMDASH\RU{``ординал'' функции}\EN{``ordinal'' of function}.
+(\q{hint})\EMDASH\RU{\q{ординал} функции}\EN{\q{ordinal} of function}.
 
 \RU{Если при загрузке удается найти функцию по ординалу, тогда сравнение текстовых строк не будет происходить.
 Массив оканчивается нулем.}
@@ -484,17 +484,17 @@ relocs table significantly}.
 инструкцию \JMP плюс релок на эту инструкцию}
 \EN{For each imported function, there is only one jump allocated, using the \JMP instruction 
 plus a reloc to it}.
-\RU{Такие места-``переходники'' называются также ``thunk''-ами}\EN{Such points are also called ``thunks''}.
-\RU{А все вызовы импортируемой функции это просто инструкция \CALL на соответствующий ``thunk''}
-\EN{All calls to the imported functions are just \CALL instructions to the corresponding ``thunk''}.
+\RU{Такие места-\q{переходники} называются также \q{thunk}-ами}\EN{Such points are also called \q{thunks}}.
+\RU{А все вызовы импортируемой функции это просто инструкция \CALL на соответствующий \q{thunk}}
+\EN{All calls to the imported functions are just \CALL instructions to the corresponding \q{thunk}}.
 \RU{В данном случае, дополнительные релоки не нужны, потому что эти CALL-ы имеют относительный адрес,
 и корректировать их не надо}\EN{In this case, additional relocs are not necessary because these CALL-s
 have relative addresses and do not need to be corrected}.
 \end{itemize}
 
 \RU{Оба этих два метода могут комбинироваться}\EN{These two methods can be combined}.
-\RU{Вероятно, линкер создает отдельный ``thunk'', если вызовов слишком много, но по умолчанию --- не создает.}
-\EN{Possible, the linker creates individual ``thunk''s if there are too many calls to the function,
+\RU{Вероятно, линкер создает отдельный \q{thunk}, если вызовов слишком много, но по умолчанию --- не создает.}
+\EN{Possible, the linker creates individual \q{thunk}s if there are too many calls to the function,
 but not done by default.} \\
 \\
 \RU{Кстати, массив адресов функций, на который указывает FirstThunk,
@@ -542,9 +542,9 @@ is it possible to speed up the loading process?}
 \EN{If a value is present there, then the loader compares this value with the date-time of the DLL file}.
 \RU{И если они равны, то загрузчик больше ничего не делает, и загрузка может происходить быстрее.}
 \EN{If the values are equal, then the loader does not do anything, and the loading of the process can be faster.}
-\RU{Это называется}\EN{This is called} ``old-style binding''
+\RU{Это называется}\EN{This is called} \q{old-style binding}
 \footnote{\href{http://go.yurichev.com/17050}{MSDN}.
-\RU{Существует также}\EN{There is also the} ``new-style binding'',
+\RU{Существует также}\EN{There is also the} \q{new-style binding},
 \RU{про него напишу позже}\EN{I'm going to write about it in the future}}.
 \index{BIND.EXE}
 \RU{В Windows SDK для этого имеется утилита BIND.EXE}
@@ -569,10 +569,10 @@ installation on the computer of the end user}. \\
 \EN{In the standard DLLs from the Windows installation, \ac{IAT} often is located right in the beginning of the PE file.}
 \RU{Возможно это для оптимизации}\EN{Supposedly, it is done for optimization}.
 \RU{Ведь .exe-файл при загрузке не загружается в память весь 
-(вспомните что инсталляторы огромного размера подозрительно быстро запускаются), он ``мапится'' (map), 
+(вспомните что инсталляторы огромного размера подозрительно быстро запускаются), он \q{мапится} (map), 
 и подгружается в память частями по мере обращения к этой памяти.}
 \EN{While loading, the .exe file is not loaded into memory as a whole (recall huge install programs which are
-started suspiciously fast), it is ``mapped'', and loaded into memory in parts as they are accessed.}
+started suspiciously fast), it is \q{mapped}, and loaded into memory in parts as they are accessed.}
 \RU{И возможно в Microsoft решили что так будет быстрее.}
 \EN{Probably, Microsoft developers decided it will be faster.}
 

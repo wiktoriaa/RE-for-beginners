@@ -8,7 +8,7 @@
 \EN{\Tint type requires 32 bits for storage (or 4 bytes),}
 \RU{так что для хранения 20 переменных типа \Tint, нужно $80$ (\TT{0x50}) байт.}
 \EN{so to store 20 \Tint variables $80$ (\TT{0x50}) bytes are needed.}
-\RU{Поэтому инструкция}\EN{So that is why the} \TT{``SUB SP, SP, \#0x50''} 
+\RU{Поэтому инструкция}\EN{So that is why the} \TT{\q{SUB SP, SP, \#0x50}} 
 \RU{в прологе функции выделяет в локальном стеке под массив именно столько места.}
 \EN{instruction in the function's prologie allocates exactly this amount of space in the stack.}
 
@@ -17,12 +17,12 @@
 
 \index{ARM!Optional operators!LSL}
 \RU{Число, которое нужно записать в массив, вычисляется так: $i*2$, и это эквивалентно 
-сдвигу на 1 бит влево, так что инструкция \TT{``MOV R0, R4,LSL\#1''} делает это.}
+сдвигу на 1 бит влево, так что инструкция \TT{\q{MOV R0, R4,LSL\#1}} делает это.}
 \EN{The number that is to be written into the array is calculated as $i*2$, which is effectively equivalent 
-to shifting it left by one bit, so \TT{``MOV R0, R4,LSL\#1''} instruction does this.}
+to shifting it left by one bit, so \TT{\q{MOV R0, R4,LSL\#1}} instruction does this.}
 
 \index{ARM!\Instructions!STR}
-\TT{``STR R0, [SP,R4,LSL\#2]''} \RU{записывает содержимое \Reg{0} в массив}\EN{writes the contents of \Reg{0} into the array}.
+\TT{\q{STR R0, [SP,R4,LSL\#2]}} \RU{записывает содержимое \Reg{0} в массив}\EN{writes the contents of \Reg{0} into the array}.
 \RU{Указатель на элемент массива вычисляется так: \ac{SP} указывает на начало массива, \Reg{4} это $i$.}
 \EN{Here is how a pointer to array element is calculated: \ac{SP} points to the start of the array, \Reg{4} is $i$.}
 \RU{Так что сдвигаем $i$ на 2 бита влево, что эквивалентно умножению на $4$ 
@@ -31,9 +31,9 @@ to shifting it left by one bit, so \TT{``MOV R0, R4,LSL\#1''} instruction does t
 (since each array element has a size of 4 bytes) and then it's added to the address of the start of the array.}
 
 \index{ARM!\Instructions!LDR}
-\RU{Во втором цикле используется обратная инструкция \TT{``LDR R2, [SP,R4,LSL\#2]''},
+\RU{Во втором цикле используется обратная инструкция \TT{\q{LDR R2, [SP,R4,LSL\#2]}},
 она загружает из массива нужное значение, и указатель на него вычисляется точно так же.}
-\EN{The second loop has an inverse \TT{``LDR R2, [SP,R4,LSL\#2]''}
+\EN{The second loop has an inverse \TT{\q{LDR R2, [SP,R4,LSL\#2]}}
 instruction, it loads the value we need from the array, and the pointer to it is calculated likewise.}
 
 \subsubsection{\OptimizingKeilVI (\ThumbMode)}

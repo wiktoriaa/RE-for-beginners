@@ -185,7 +185,7 @@ Thus, the \EAX, \EDX and \ECX registers are to be used.}
 \subsection{Watcom/OpenWatcom}
 \index{OpenWatcom}
 
-\RU{Здесь это называется}\EN{Here it is called} ``register calling convention''.
+\RU{Здесь это называется}\EN{Here it is called} \q{register calling convention}.
 \RU{Первые 4 аргумента передаются через регистры}\EN{The first 4 arguments are passed via the}
 \EAX, \EDX, \EBX \AndENRU \ECX\EN{ registers}.
 \RU{Все остальные}\EN{All the rest}\EMDASH{}\RU{через стек}\EN{via the stack}.
@@ -247,23 +247,23 @@ but larger ones may save their values for further use.}
 \index{Scratch space}
 \RU{Здесь мы легко видим, как 7 аргументов передаются: 4 через регистры и остальные 3 через стек}
 \EN{Here we clearly see how 7 arguments are passed: 4 via registers and the remaining 3 via the stack}.
-\RU{Код пролога функции f1() сохраняет аргументы в ``scratch space'' --- место в стеке предназначенное
+\RU{Код пролога функции f1() сохраняет аргументы в \q{scratch space} --- место в стеке предназначенное
 именно для этого}
-\EN{The code of the f1() function's prologue saves the arguments in the ``scratch space''---a space in the stack
+\EN{The code of the f1() function's prologue saves the arguments in the \q{scratch space}---a space in the stack
 intended exactly for this purpose}.
 \RU{Это делается потому что компилятор может быть не уверен, достаточно ли ему будет остальных регистров
 для работы исключая эти 4, которые иначе будут заняты аргументами до конца исполнения функции}
 \EN{This is done because the compiler can not be sure that there will be enough registers to use without these 4,
 which will otherwise be occupied by the arguments until the function's execution end}.
-\RU{Выделение ``scratch space'' в стеке лежит на ответственности вызывающей функции.}
-\EN{The ``scratch space'' allocation in the stack is the caller's duty.}
+\RU{Выделение \q{scratch space} в стеке лежит на ответственности вызывающей функции.}
+\EN{The \q{scratch space} allocation in the stack is the caller's duty.}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 /0b]{OS/calling_conventions/x64_MSVC_Ox_Ob.asm}
 
 \RU{Если компилировать этот пример с оптимизацией, то выйдет почти то же самое, 
-только ``scratch space'' не используется, потому что незачем.}
+только \q{scratch space} не используется, потому что незачем.}
 \EN{If we compile the example with optimizations, it is to be almost the same, 
-but the ``scratch space'' will not be used, because it won't be needed.}
+but the \q{scratch space} will not be used, because it won't be needed.}
 
 \index{x86!\Instructions!LEA}
 \label{using_MOV_and_pack_of_LEA_to_load_values}
@@ -284,10 +284,10 @@ but the ``scratch space'' will not be used, because it won't be needed.}
 \subsection{Linux x64}
 
 \RU{Метод передачи аргументов в Linux для x86-64 почти такой же, как и в Windows, но 6 регистров
-используется вместо 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}), и здесь нет ``scratch space'', 
+используется вместо 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}), и здесь нет \q{scratch space}, 
 но \gls{callee} может сохранять значения регистров в стеке, если ему это нужно.}
 \EN{The way arguments are passed in Linux for x86-64 is almost the same as in Windows, but 6 registers are
-used instead of 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}) and there is no ``scratch space'', 
+used instead of 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}) and there is no \q{scratch space}, 
 although the \gls{callee} may save the register values in the stack, if it needs/wants to.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.7.3]{OS/calling_conventions/x64_linux_O3.s}
