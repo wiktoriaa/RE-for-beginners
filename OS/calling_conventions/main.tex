@@ -9,7 +9,7 @@
 \EN{This is the most popular method for passing arguments to functions in the \CCpp languages.}
 
 \RU{Вызывающая функция заталкивает в стек аргументы в обратном порядке: сначала последний аргумент в стек, 
-затем предпоследний, и в самом конце ~--- первый аргумент. 
+затем предпоследний, и в самом конце\EMDASH{}первый аргумент. 
 Вызывающая функция должна также затем вернуть \glslink{stack pointer}{указатель стека} в нормальное состояние, 
 после возврата вызываемой функции.}
 \EN{The \Gls{caller} pushes the arguments in the stack in reverse order: the last argument, then the penultimate element 
@@ -28,7 +28,7 @@ add esp, 12 ; returns ESP
 \label{sec:stdcall}
 \index{stdcall}
 
-\newcommand{\SIZEOFINT}{\RU{Размер переменной типа \Tint ~--- 4 в x86-системах и 8 в x64-системах}
+\newcommand{\SIZEOFINT}{\RU{Размер переменной типа \Tint\EMDASH{}4 в x86-системах и 8 в x64-системах}
 \EN{The size of an \Tint type variable is 4 in x86 systems and 8 in x64 systems}}
 
 \RU{Это почти то же что и \IT{cdecl}, за исключением того, что вызываемая функция сама возвращает \ESP 
@@ -107,7 +107,7 @@ Thus it is not suitable for such functions to use \IT{stdcall}, \IT{cdecl} is be
 \label{fastcall}
 \index{fastcall}
 
-\RU{Это общее название для передачи некоторых аргументов через регистры, а всех остальных ~--- через стек.На более старых процессорах, это работало потенциально быстрее чем \IT{cdecl}/\IT{stdcall} (ведь стек
+\RU{Это общее название для передачи некоторых аргументов через регистры, а всех остальных\EMDASH{}через стек.На более старых процессорах, это работало потенциально быстрее чем \IT{cdecl}/\IT{stdcall} (ведь стек
 в памяти использовался меньше).
 Впрочем, на современных (намного более сложных) CPU, выигрыша может и не быть.}
 \EN{That's the general naming for the method of passing some arguments via registers and the 
@@ -217,13 +217,13 @@ Thus it will be very visible that internally: all function-methods have an extra
 \label{sec:callingconventions_win64}
 
 \RU{В win64 метод передачи всех параметров немного похож на \TT{fastcall}. 
-Первые 4 аргумента записываются в регистры \RCX, \RDX, \Reg{8}, \Reg{9}, а остальные ~--- в стек. 
+Первые 4 аргумента записываются в регистры \RCX, \RDX, \Reg{8}, \Reg{9}, а остальные\EMDASH{}в стек. 
 Вызывающая функция также должна подготовить место из 32 байт или для четырех 64-битных значений, 
 чтобы вызываемая функция могла сохранить там первые 4 аргумента. 
 Короткие функции могут использовать переменные прямо из регистров, 
 но б\'{о}льшие могут сохранять их значения на будущее.}
 \EN{The method of for passing arguments in Win64 somewhat resembles \TT{fastcall}.
-The first 4 arguments are passed via \RCX, \RDX, \Reg{8} and \Reg{9}, the rest~---via the stack.
+The first 4 arguments are passed via \RCX, \RDX, \Reg{8} and \Reg{9}, the rest\EMDASH{}via the stack.
 The \Gls{caller} also must prepare space for 32 bytes or 4 64-bit values,
 so then the \gls{callee} can save there the first 4 arguments.
 Short functions may use the arguments' values just from the registers,
@@ -247,9 +247,9 @@ but larger ones may save their values for further use.}
 \index{Scratch space}
 \RU{Здесь мы легко видим, как 7 аргументов передаются: 4 через регистры и остальные 3 через стек}
 \EN{Here we clearly see how 7 arguments are passed: 4 via registers and the remaining 3 via the stack}.
-\RU{Код пролога функции f1() сохраняет аргументы в \q{scratch space} --- место в стеке предназначенное
+\RU{Код пролога функции f1() сохраняет аргументы в \q{scratch space}\EMDASH{}место в стеке предназначенное
 именно для этого}
-\EN{The code of the f1() function's prologue saves the arguments in the \q{scratch space}---a space in the stack
+\EN{The code of the f1() function's prologue saves the arguments in the \q{scratch space}\EMDASH{}a space in the stack
 intended exactly for this purpose}.
 \RU{Это делается потому что компилятор может быть не уверен, достаточно ли ему будет остальных регистров
 для работы исключая эти 4, которые иначе будут заняты аргументами до конца исполнения функции}

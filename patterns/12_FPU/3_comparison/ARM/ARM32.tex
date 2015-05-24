@@ -102,10 +102,14 @@ each of them has a predicate suffix.}
 \RU{Теперь более сложный пример. Кстати, из}\EN{Here is a more complex code fragment, by the way, from} 
 Angry Birds (\RU{для}\EN{for} iOS):
 
+% FIXME russian listing:
 \begin{lstlisting}[caption=Angry Birds Classic]
+...
 ITE NE
 VMOVNE          R2, R3, D16
 VMOVEQ          R2, R3, D17
+BLX             _objc_msgSend ; not prefixed
+...
 \end{lstlisting}
 
 \TT{ITE} \RU{означает}\EN{stands for} \IT{if-then-else} 
@@ -118,16 +122,23 @@ VMOVEQ          R2, R3, D17
 second---if the condition is not true}.
 (\RU{Обратное условие от}\EN{The inverse condition of} \TT{NE} \RU{это}\EN{is} \TT{EQ} (\IT{equal})).
 
+\EN{The instruction followed after the second VMOV (or VMOVEQ) is a normal one, not prefixed (BLX).}
+\RU{Инструкция следующая за второй VMOV (или VMOEQ) нормальная, без префикса (BLX).}
+
 \index{Angry Birds}
 \RU{Ещё чуть сложнее}\EN{One more that's slightly harder}, 
 \RU{и снова этот фрагмент из}\EN{which is also from} Angry Birds:
 
+% FIXME russian listing:
 \begin{lstlisting}[caption=Angry Birds Classic]
+...
 ITTTT EQ
 MOVEQ           R0, R4
 ADDEQ           SP, SP, #0x20
 POPEQ.W         {R8,R10}
 POPEQ           {R4-R7,PC}
+BLX             ___stack_chk_fail ; not prefixed
+...
 \end{lstlisting}
 
 \RU{Четыре символа \q{T} в инструкции означают, что четыре последующие инструкции будут исполнены если условие соблюдается.}
@@ -152,12 +163,17 @@ to each one of them}.
 \index{Angry Birds}
 \RU{Ещё фрагмент из}\EN{Another fragment from} Angry Birds:
 
+% FIXME russian listing:
 \begin{lstlisting}[caption=Angry Birds Classic]
+...
 CMP.W           R0, #0xFFFFFFFF
 ITTE LE
 SUBLE.W         R10, R0, #1
 NEGLE           R0, R0
 MOVGT           R10, R0
+MOVS            R6, #0         ; not prefixed
+CBZ             R0, loc_1E7E32 ; not prefixed
+...
 \end{lstlisting}
 
 \TT{ITTE} (\IT{if-then-then-else}) 

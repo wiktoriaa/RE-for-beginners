@@ -142,14 +142,19 @@ N.B. \RU{Самая первая инструкция \TT{STMFD} сохрани�
 \main function when calling \printf}.
 \RU{А затем, в конце функции, это значение можно сразу записать прямо в \ac{PC}, таким образом, передав управление туда, откуда была вызвана наша функция}%
 \EN{In the function's end, this value can be written directly to the \ac{PC} register, thus passing control to where our function was called}.
+
 \RU{Так как функция \main обычно самая главная в \CCpp, управление будет возвращено в загрузчик \ac{OS}, либо куда-то в \ac{CRT} 
 или что-то в этом роде.}
 \EN{Since \main is usually the primary function in \CCpp,
 the control will be returned to the \ac{OS} loader or to a point in a \ac{CRT},
 or something like that.}
 
+\EN{All that allows to omit \TT{BX LR} instruction at the end of the function.}
+\RU{Всё это позволяет избавиться от инструкции \TT{BX LR} в самом конце функции.}
+
 \index{ARM!DCB}
 \TT{DCB}\RU{~--- директива ассемблера, описывающая массивы байт или ASCII-строк, аналог директивы DB в 
 x86-ассемблере}%
 \EN{~is an assembly language directive defining an array of bytes or ASCII strings, akin to the DB directive 
 in x86-assembly language}.
+
