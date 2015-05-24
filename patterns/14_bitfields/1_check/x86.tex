@@ -77,11 +77,11 @@ if ((dwDesiredAccess&0x40000000) == 0) goto loc_7C83D417
 \RU{Если после операции \ANDIns останется этот бит, то флаг \ZF не будет поднят и условный переход 
 \JZ не сработает. 
 Переход возможен только если в переменной \TT{dwDesiredAccess} отсутствует бит \TT{0x40000000} ~--- 
-тогда результат \ANDIns будет $0$, флаг \ZF будет поднят и переход сработает.}
+тогда результат \ANDIns будет 0, флаг \ZF будет поднят и переход сработает.}
 \EN{If \ANDIns instruction leaves this bit, the \ZF flag is to be cleared and the 
 \JZ conditional jump is not to be triggered.
 The conditional jump is triggered only if the \TT{0x40000000} bit is absent in \TT{dwDesiredAccess} variable
-~---then the result of \ANDIns is $0$, \ZF is to be set and the conditional jump is to be triggered.}
+~---then the result of \ANDIns is 0, \ZF is to be set and the conditional jump is to be triggered.}
 
 \ifdefined\IncludeGCC
 \RU{Попробуем GCC 4.4.1 и Linux:}\EN{Let's try GCC 4.4.1 and Linux:}
@@ -182,9 +182,9 @@ and that would be too tight environment for the compiler's \gls{register allocat
 \lstinputlisting[caption=do\_filp\_open() (linux kernel 2.6.31)]{patterns/14_bitfields/1_check/check3.asm}
 
 \RU{\TT{0x40} ~--- это то чему равен макрос \TT{O\_CREAT}. 
-\TT{open\_flag} проверяется на наличие бита \TT{0x40} и если бит равен $1$, то выполняется следующие 
+\TT{open\_flag} проверяется на наличие бита \TT{0x40} и если бит равен 1, то выполняется следующие 
 за \JNZ инструкции.}
 \EN{\TT{0x40}~---is what the \TT{O\_CREAT} macro equals to.
-\TT{open\_flag} gets checked for the presence of the \TT{0x40} bit, and if this bit is $1$, 
+\TT{open\_flag} gets checked for the presence of the \TT{0x40} bit, and if this bit is 1, 
 the next \JNZ instruction is triggered.}
 \fi

@@ -20,14 +20,14 @@
 \EN{The first one ~--- \MOVSX ~---  takes a byte from an address in memory and stores the value in a 32-bit register. 
 \MOVSX stands for \IT{MOV with Sign-Extend}. 
 \MOVSX sets the rest of the bits, from the 8th to the 31th, 
-to $1$ if the source byte is \IT{negative} or to 0 if is \IT{positive}.}
+to 1 if the source byte is \IT{negative} or to 0 if is \IT{positive}.}
 
 \RU{И вот зачем все это.}\EN{And here is why.}
 
 \RU{По умолчанию, в MSVC и GCC, тип \Tchar ~--- знаковый. Если у нас есть две переменные, одна \Tchar, а другая \Tint 
 (\Tint тоже знаковый), и если в первой переменной лежит $-2$ (что кодируется как \TT{0xFE}) и мы просто 
 переложим это в \Tint, 
-то там будет \TT{0x000000FE}, а это, с точки зрения \Tint, даже знакового, будет $254$, но никак не $-2$. 
+то там будет \TT{0x000000FE}, а это, с точки зрения \Tint, даже знакового, будет 254, но никак не $-2$. 
 $-2$ в переменной \Tint кодируется как \TT{0xFFFFFFFE}. И для того чтобы значение \TT{0xFE} из переменной типа 
 \Tchar переложить 
 в знаковый \Tint с сохранением всего, нужно узнать его знак, и затем заполнить остальные биты. 
@@ -35,7 +35,7 @@ $-2$ в переменной \Tint кодируется как \TT{0xFFFFFFFE}. 
 \EN{By default, the \Tchar type is signed in MSVC and GCC. If we have two values of which one is \Tchar 
 and the other is \Tint, (\Tint is signed too), and if the first value contain $-2$ (coded as \TT{0xFE}) 
 and we just copy this byte into the \Tint container, it makes \TT{0x000000FE}, and this 
-from the point of signed \Tint view is $254$, but not $-2$. In signed int, $-2$ is coded as \TT{0xFFFFFFFE}. 
+from the point of signed \Tint view is 254, but not $-2$. In signed int, $-2$ is coded as \TT{0xFFFFFFFE}. 
 So if we need to transfer \TT{0xFE} from a variable of \Tchar type to \Tint, 
 we need to identify its sign and extend it. That is what \MOVSX does.}
 
@@ -51,10 +51,10 @@ we need to identify its sign and extend it. That is what \MOVSX does.}
 \index{ARM!\Instructions!TEST}
 \RU{Позже выполняется \TT{TEST EDX, EDX}. 
 Об инструкции \TEST читайте в разделе о битовых полях~(\myref{sec:bitfields}).
-Но конкретно здесь, эта инструкция просто проверяет состояние регистра \EDX на $0$.}
+Но конкретно здесь, эта инструкция просто проверяет состояние регистра \EDX на 0.}
 \EN{Then we see \TT{TEST EDX, EDX}. 
 You can read more about the \TEST instruction in the section about bit fields~(\myref{sec:bitfields}).
-Here this instruction just checks if the value in \EDX equals to $0$.}
+Here this instruction just checks if the value in \EDX equals to 0.}
 
 \ifdefined\IncludeGCC
 \subsubsection{\NonOptimizing GCC}
@@ -67,12 +67,12 @@ Here this instruction just checks if the value in \EDX equals to $0$.}
 \index{x86!\Instructions!MOVZX}
 \RU{Результат очень похож на MSVC, вот только здесь используется \MOVZX а не \MOVSX. 
 \MOVZX означает \IT{MOV with Zero-Extend}. Эта инструкция перекладывает какое-либо значение 
-в регистр и остальные биты выставляет в $0$.
+в регистр и остальные биты выставляет в 0.
 Фактически, преимущество этой инструкции только в том, что она позволяет 
 заменить две инструкции сразу: \TT{xor eax, eax / mov al, [...]}.}
 \EN{The result is almost the same as in MSVC, but here we see \MOVZX instead of \MOVSX. 
 \MOVZX stands for \IT{MOV with Zero-Extend}. 
-This instruction copies a 8-bit or 16-bit value into a 32-bit register and sets the rest of the bits to $0$. 
+This instruction copies a 8-bit or 16-bit value into a 32-bit register and sets the rest of the bits to 0. 
 In fact, this instruction is convenient only because it enable us to replace this instruction pair: 
 \TT{xor eax, eax / mov al, [...]}.}
 
@@ -89,14 +89,14 @@ Strictly speaking, the compiler is not obliged to emit understandable (to humans
 
 \index{x86!\Instructions!SETcc}
 \RU{Следующая новая инструкция для нас ~--- \SETNZ. В данном случае, если в \AL был не ноль, 
-то \TT{test al, al} выставит флаг \ZF в $0$, а \SETNZ, если \TT{ZF==0} 
-(\IT{NZ} значит \IT{not zero}) выставит $1$ в \AL. 
+то \TT{test al, al} выставит флаг \ZF в 0, а \SETNZ, если \TT{ZF==0} 
+(\IT{NZ} значит \IT{not zero}) выставит 1 в \AL. 
 Смысл этой процедуры в том, что, если говорить человеческим языком, 
 \IT{если AL не ноль, то выполнить переход на} \TT{loc\_80483F0}.
 Компилятор выдал немного избыточный код, но не будем забывать, что оптимизация выключена.}
 \EN{The next new instruction for us is \SETNZ. 
 Here, if \AL doesn't contain zero, \TT{test al, al} 
-sets the \ZF flag to $0$, but \SETNZ, if \TT{ZF==0} (\IT{NZ} stands for \IT{not zero}) sets \AL to $1$.
+sets the \ZF flag to 0, but \SETNZ, if \TT{ZF==0} (\IT{NZ} stands for \IT{not zero}) sets \AL to 1.
 Speaking in natural language, \IT{if \AL is not zero, let's jump to loc\_80483F0}. 
 The compiler emits some redundant code, but let's not forget that the optimizations are turned off.}
 \fi
@@ -119,7 +119,7 @@ only in small functions with a few local variables.}
 \index{x86!\Instructions!DEC}
 \INC/\DEC\EMDASH\RU{это инструкции \glslink{increment}{инкремента}-\glslink{decrement}{декремента}, попросту говоря: 
 увеличить на единицу или уменьшить.}
-\EN{are \gls{increment}/\gls{decrement} instructions, in other words: add or substract $1$ to/from a variable.}
+\EN{are \gls{increment}/\gls{decrement} instructions, in other words: add or substract 1 to/from a variable.}
 
 \ifdefined\IncludeOlly
 \input{patterns/10_strings/1_strlen/olly.tex}
