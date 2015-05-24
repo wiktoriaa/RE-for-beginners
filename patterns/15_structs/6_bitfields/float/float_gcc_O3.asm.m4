@@ -9,7 +9,7 @@ arg_0  = dword ptr  8
        mov     ebp, esp
        sub     esp, 4
        mov     eax, [ebp+arg_0]
-       or      eax, 80000000h  ; _EN(`set minus sig ')_RU(`выставить знак минуса')
+       or      eax, 80000000h  ; _EN(`set minus sign')_RU(`выставить знак минуса')
        mov     edx, eax
        and     eax, 807FFFFFh  ; _EN(`leave only significand and exponent in EAX')_RU(`оставить в EAX только знак и мантиссу')
        shr     edx, 23         ; _EN(`prepare exponent')_RU(`подготовить экспоненту')
