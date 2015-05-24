@@ -52,12 +52,12 @@ with 9 arguments from the previous section}: \myref{example_printf8_x64}.
 
 \index{ARM!\Instructions!SUB}
 \RU{Вторая инструкция}\EN{The second} \TT{SUB SP, SP, \#0x14}
-\RU{уменьшает \glslink{stack pointer}{указатель стека} \ac{SP}, но, на самом деле, эта процедура нужна для выделения в локальном стеке места размером \TT{0x14} (20) байт}%
+\RU{уменьшает \glslink{stack pointer}{указатель стека} \ac{SP}, но, на самом деле, эта процедура нужна для выделения в локальном стеке места размером \TT{0x14} (20) байт.}
 \EN{instruction decreases
 \ac{SP} (the \gls{stack pointer}) in order to 
-allocate \TT{0x14} (20) bytes on the stack}.
-\RU{Действительно, нам нужно передать 5 32-битных значений через стек в \printf. Каждое значение занимает 4 байта, все вместе~--- $5*4=20$}%
-\EN{Indeed, we need to pass 5 32-bit values via the stack to the \printf function, and each one occupies 4 bytes, which is exactly $5*4=20$}.
+allocate \TT{0x14} (20) bytes on the stack.}
+\RU{Действительно, нам нужно передать 5 32-битных значений через стек в \printf. Каждое значение занимает 4 байта, все вместе~--- $5*4=20$.}
+\EN{Indeed, we need to pass 5 32-bit values via the stack to the \printf function, and each one occupies 4 bytes, which is exactly $5*4=20$.}
 \RU{Остальные 4 32-битных значения будут переданы через регистры.}
 \EN{The other 4 32-bit values are to be passed through registers.}
 
@@ -68,18 +68,18 @@ allocate \TT{0x14} (20) bytes on the stack}.
 \RU{записывает в регистр \TT{R12} адрес места в стеке, куда будут помещены эти 4 значения}%
 \EN{instruction writes the stack address where these 4 variables are to be stored, into the \TT{R12} register}.
 \index{IDA!var\_?}
-\IT{var\_14}\RU{~--- это макрос ассемблера}\EN{ is an assembly macro}, \RU{равный}\EN{equal to} $-0x14$\RU{.}%
-\RU{Такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку.}%
-\EN{, created by \IDA to conveniently display the code accessing the stack}.
+\IT{var\_14}\RU{~--- это макрос ассемблера}\EN{ is an assembly macro}, \RU{равный}\EN{equal to} -0x14\RU{.}
+\RU{Такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку.}
+\EN{, created by \IDA to conveniently display the code accessing the stack.}
 \RU{Макросы \IT{var\_?}, создаваемые \IDA, отражают локальные переменные в стеке}\EN{The \IT{var\_?} macros generated
-by \IDA reflect local variables in the stack}.
-\RU{Так что в \TT{R12} будет записано $SP+4$.}
-\EN{So, $SP+4$ is to be stored into the \TT{R12} register.}
+by \IDA reflect local variables in the stack.}
+\RU{Так что в \TT{R12} будет записано \TT{SP+4}.}
+\EN{So, \TT{SP+4} is to be stored into the \TT{R12} register.}
 \index{ARM!\Instructions!STMIA}
 \RU{Следующая инструкция}\EN{The next} \TT{STMIA R12, {R0-R3}} 
-\RU{записывает содержимое регистров \Reg{0}-\Reg{3} по адресу в памяти, на который указывает \TT{R12}}
+\RU{записывает содержимое регистров \Reg{0}-\Reg{3} по адресу в памяти, на который указывает \TT{R12}.}
 \EN{instruction
-writes registers \Reg{0}-\Reg{3} contents to the memory pointed by \TT{R12}}.
+writes registers \Reg{0}-\Reg{3} contents to the memory pointed by \TT{R12}.}
 \RU{Инструкция }\TT{STMIA} \RU{означает}\EN{abbreviates} \IT{Store Multiple Increment After}. 
 \IT{\q{Increment After}} 
 \RU{означает, что \TT{R12} будет увеличиваться на 4 после записи каждого значения регистра.}
@@ -89,7 +89,7 @@ writes registers \Reg{0}-\Reg{3} contents to the memory pointed by \TT{R12}}.
 \RU{4 записывается в \Reg{0}, затем инструкция}\EN{4 is stored in \Reg{0} and then
 this value, with the help of the} \TT{STR R0, [SP,\#0x18+var\_18]} \RU{записывает его в стек}\EN{instruction is saved
 on the stack}.
-\IT{var\_18} \RU{равен}\EN{is} $-0x18$, \RU{смещение будет 0}\EN{so the offset is to be 0}, 
+\IT{var\_18} \RU{равен}\EN{is} -0x18, \RU{смещение будет 0}\EN{so the offset is to be 0}, 
 \RU{так что значение из регистра \Reg{0} (4) запишется туда, куда указывает \ac{SP}}%
 \EN{thus the value from the \Reg{0} register (4) is to be written to the address written in \ac{SP}}.
 
