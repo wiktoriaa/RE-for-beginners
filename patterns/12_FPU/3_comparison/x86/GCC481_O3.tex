@@ -4,14 +4,14 @@
 
 \EN{Some new FPU instructions were added in the P6 Intel family}\RU{В линейке процессоров P6 от Intel 
 появились новые FPU-инструкции}\footnote{\EN{Starting at}\RU{Начиная с} Pentium Pro, 
-Pentium-II, \etc{}.}
+Pentium-II, \etc.}.
 \index{x86!\Instructions!FUCOMI}
 \RU{Это}\EN{These are} \TT{FUCOMI} (\RU{сравнить операнды и выставить флаги основного CPU}\EN{compare 
 operands and set flags of the main CPU}) \AndENRU 
 \index{x86!\Instructions!FCMOVcc}
 \TT{FCMOVcc} (\RU{работает как}\EN{works like} \TT{CMOVcc}, \RU{но на регистрах FPU}\EN{but on FPU registers}).
-\RU{Очевидно, разработчики GCC решили отказаться от поддержки процессоров до линейки P6 (ранние Pentium, \etc{}.)}
-\EN{Apparently, the maintainers of GCC decided to drop support of pre-P6 Intel CPUs (early Pentiums, \etc{})}.
+\RU{Очевидно, разработчики GCC решили отказаться от поддержки процессоров до линейки P6 (ранние Pentium)}
+\EN{Apparently, the maintainers of GCC decided to drop support of pre-P6 Intel CPUs (early Pentiums)}.
 
 \RU{И кстати, FPU уже давно не отдельная часть процессора в линейке P6, так что флаги основного CPU можно
 модифицировать из FPU.}
@@ -22,11 +22,11 @@ of the main CPU from the FPU.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.8.1]{patterns/12_FPU/3_comparison/x86/GCC481_O3.s.\LANG}
 
-\RU{Не совсем понимаю, зачем здесь \TT{FXCH} (поменять местами операнды)}
-\EN{I'm not sure why \TT{FXCH} (swap operands) is here}.
+\RU{Не совсем понимаю, зачем здесь \TT{FXCH} (поменять местами операнды).}
+\EN{I'm not sure why \TT{FXCH} (swap operands) is here.}
 \RU{От нее легко избавиться поменяв местами инструкции \FLD либо заменив 
-\TT{FCMOVBE} (\IT{below or equal} --- меньше или равно) на 
-\TT{FCMOVA} (\IT{above} --- больше).}
+\TT{FCMOVBE} (\IT{below or equal}~--- меньше или равно) на 
+\TT{FCMOVA} (\IT{above}~--- больше).}
 \EN{It's possible to get rid of it easily by swapping the first two \FLD instructions or by replacing 
 \TT{FCMOVBE} (\IT{below or equal}) by \TT{FCMOVA} (\IT{above}).}
 \RU{Должно быть, неаккуратность компилятора}\EN{Probably it's a compiler inaccuracy}.
@@ -53,14 +53,14 @@ of the main CPU from the FPU.}
 
 \RU{Как я писал ранее, регистры FPU это скорее кольцевой буфер, нежели стек}
 \EN{As I wrote before, the FPU registers set is a circular buffer rather than a stack} (\myref{FPU_is_rather_circular_buffer}).
-\RU{И}\EN{And} GDB \RU{показывает не регистры}\EN{doesn't show} \TT{STx} \RU{а внутренние регистры FPU}
+\RU{И}\EN{And} GDB \RU{показывает не регистры}\EN{doesn't show} \TT{STx}\RU{, а внутренние регистры FPU}
 \EN{registers, but internal the FPU registers} (\TT{Rx}). 
 \RU{Стрелка}\EN{The arrow} (\RU{на строке}\EN{at line} 35) 
 \RU{указывает на текущую вершину стека.}
 \EN{points to the current top of the stack.}
-\RU{Вы можете также увидеть содержимое регистра \TT{TOP} в \q{Status Word} (строка 44), там сейчас 6, так что
+\RU{Вы можете также увидеть содержимое регистра \TT{TOP} в \q{Status Word} (строка 44). Там сейчас 6, так что
 вершина стека сейчас указывает на внутренний регистр 6.}
-\EN{You can also see the \TT{TOP} register contents in \IT{Status Word} (line 44) ~--- it is 6 now, 
+\EN{You can also see the \TT{TOP} register contents in \IT{Status Word} (line 44)---it is 6 now, 
 so the stack top is now pointing to internal register 6.}
 
 \RU{Значения $a$ и $b$ меняются местами после исполнения \TT{FXCH}}\EN{The values of $a$ and $b$ are swapped 
