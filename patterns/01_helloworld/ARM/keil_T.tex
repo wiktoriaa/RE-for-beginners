@@ -1,6 +1,6 @@
 \subsection{\NonOptimizingKeilVI (\ThumbMode)}
 
-\RU{Скомпилируем тот же пример в Keil для режима thumb}\EN{Let's compile the same example using Keil in thumb mode}:
+\RU{Скомпилируем тот же пример в Keil для режима Thumb}\EN{Let's compile the same example using Keil in Thumb mode}:
 
 \begin{lstlisting}
 armcc.exe --thumb --c90 -O0 1.c 
@@ -19,8 +19,8 @@ armcc.exe --thumb --c90 -O0 1.c
 .text:00000304 68 65 6C 6C+aHelloWorld  DCB "hello, world",0    ; DATA XREF: main+2
 \end{lstlisting}
 
-\RU{Сразу бросаются в глаза двухбайтные (16-битные) опкоды~--- это, как я уже упоминал, thumb}%
-\EN{We can easily spot the 2-byte (16-bit) opcodes. This is, as I mentioned, thumb}.
+\RU{Сразу бросаются в глаза двухбайтные (16-битные) опкоды~--- это, как я уже упоминал, Thumb}%
+\EN{We can easily spot the 2-byte (16-bit) opcodes. This is, as I mentioned, Thumb}.
 \index{ARM!\Instructions!BL}
 \RU{Кроме инструкции \TT{BL}.}\EN{The \TT{BL} instruction, however, }
 \RU{Но на самом деле она состоит из двух 16-битных инструкций}%
@@ -30,14 +30,14 @@ armcc.exe --thumb --c90 -O0 1.c
 \RU{Так что первая 16-битная инструкция загружает старшие 10 бит смещения, а вторая~--- младшие 11 бит смещения}%
 \EN{Therefore, the first 16-bit instruction loads the higher 10 bits of the offset and the second instruction loads 
 the lower 11 bits of the offset}.
-\RU{Как я уже упоминал, все инструкции в thumb-режиме имеют длину 2 байта (или 16 бит)}%
-\EN{As I mentioned, all instructions in thumb mode have a size of 2 bytes (or 16 bits)}.
-\RU{Поэтому невозможна такая ситуация, когда thumb-инструкция начинается по нечетному адресу.}
-\EN{This implies it is impossible for a thumb-instruction to be at an odd address whatsoever.}
+\RU{Как я уже упоминал, все инструкции в Thumb-режиме имеют длину 2 байта (или 16 бит)}%
+\EN{As I mentioned, all instructions in Thumb mode have a size of 2 bytes (or 16 bits)}.
+\RU{Поэтому невозможна такая ситуация, когда Thumb-инструкция начинается по нечетному адресу.}
+\EN{This implies it is impossible for a Thumb-instruction to be at an odd address whatsoever.}
 \RU{Учитывая сказанное, последний бит адреса можно не кодировать}%
 \EN{Given the above, the last address bit may be omitted while encoding instructions}.
-\RU{Таким образом, в thumb-инструкции \TT{BL} можно закодировать адрес}
-\EN{In summary, \TT{BL} thumb-instruction can encode the address} $current\_PC \pm{}\approx{}2M$.
+\RU{Таким образом, в Thumb-инструкции \TT{BL} можно закодировать адрес}
+\EN{In summary, \TT{BL} Thumb-instruction can encode the address} $current\_PC \pm{}\approx{}2M$.
 
 \index{ARM!\Instructions!PUSH}
 \index{ARM!\Instructions!POP}
