@@ -125,6 +125,17 @@ Notes may meet each other somewhere in between, in case of lack of free space.}
 \input{patterns/02_stack/05_SEH}
 \input{patterns/02_stack/06_BO_protection}
 
+\subsection{\EN{Automatic deallocation of data in stack}\RU{Автоматическое освобождение данных в стеке}}
+
+\RU{Возможно, причина хранения локальных переменных и SEH-записей в стеке в том, что после выхода из функции, всё эти данные освобождаются автоматически,
+используя только одну инструкцию корректирования указателя стека (часто это ADD).}
+\EN{Perhaps, the reason of storing local variables and SEH records in stack is because they are freed automatically upon function exit,
+using just one instruction of stack pointer correcting (it is often ADD).}
+\RU{Аргументы функций, можно сказать, тоже освобождаются автоматически в конце функции.}
+\EN{Function arguments, as we could say, also deallocated automatically at the end of function.}
+\RU{А всё что хранится в куче (\IT{heap}) нужно освобождать явно.}
+\EN{On contrary, everything stored in \IT{heap} must be deallocated explicitly.}
+
 % sections
 \input{patterns/02_stack/07_layout}
 \ifx\LITE\undefined

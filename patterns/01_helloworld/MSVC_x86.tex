@@ -104,14 +104,14 @@ If it was x64 code we would need 8 bytes.}
 \RU{Некоторые компиляторы, например, Intel C++ Compiler, в этой же ситуации могут вместо 
 \ADD сгенерировать \TT{POP ECX} (подобное можно встретить, например, в коде \oracle{}, им скомпилированном),
 что почти то же самое, только портится значение в регистре \ECX.}
-\EN{Some compilers (like the Intel C++ Compiler) in the same situation may emit \TT{POP ECX} 
+\EN{Some compilers (like the Intel C++ Compiler) for the same purpose may emit \TT{POP ECX} 
 instead of \ADD (e.g., such a pattern can be observed in the \oracle{} code as it is compiled with the Intel C++ compiler).
 This instruction has almost the same effect but the \ECX register contents will be overwritten.}
-\RU{Возможно, компилятор применяет \TT{POP ECX}, потому что эта инструкция короче (1 байт против 3).}
+\RU{Возможно, компилятор применяет \TT{POP ECX}, потому что эта инструкция короче (1 байт у \TT{POP} против 3 у \TT{ADD}).}
 \EN{The Intel C++ compiler probably uses \TT{POP ECX} since this instruction's opcode is shorter than 
-\TT{ADD ESP, x} (1 byte against 3).}
+\TT{ADD ESP, x} (1 byte for \TT{POP} against 3 for \TT{ADD}).}
 
-\RU{Вот пример оттуда}\EN{Here is an example}:
+\RU{Вот пример использования \TT{POP} вместо \TT{ADD} из \oracle}\EN{Here is an example of using \TT{POP} instead of \TT{ADD} from \oracle}:
 
 \begin{lstlisting}[caption=\oracle 10.2 Linux (\RU{файл }app.o\EN{ file})]
 .text:0800029A                 push    ebx
@@ -119,9 +119,8 @@ This instruction has almost the same effect but the \ECX register contents will 
 .text:080002A0                 pop     ecx
 \end{lstlisting}
 
-\RU{О стеке можно прочитать в соответствующем разделе}
-\EN{Read more about the stack in section}~(\myref{sec:stack}).
-
+%\RU{О стеке можно прочитать в соответствующем разделе}
+%\EN{Read more about the stack in section}~(\myref{sec:stack}).
 \index{\CLanguageElements!return}
 \RU{После вызова \printf в оригинальном коде на \CCpp указано \TT{return 0}~--- вернуть 0 
 в качестве результата функции \main.} 
@@ -137,8 +136,8 @@ This instruction has almost the same effect but the \ECX register contents will 
 \footnote{\href{http://go.yurichev.com/17118}{wikipedia}}
 \RU{, но компиляторы часто используют его вместо простого}
 \EN{but the compilers often use it instead of}
-\TT{MOV EAX, 0}\RU{~--- снова потому, что опкод короче (2 байта против 5).}
-\EN{~---again because it is a slightly shorter opcode (2 bytes against 5).}
+\TT{MOV EAX, 0}\EMDASH{}\RU{снова потому, что опкод короче (2 байта у \TT{XOR} против 5 у \TT{MOV}).}
+\EN{again because it is a slightly shorter opcode (2 bytes for \TT{XOR} against 5 for \TT{MOV}).}
 
 \index{x86!\Instructions!SUB}
 \RU{Некоторые компиляторы генерируют}\EN{Some compilers emit}
