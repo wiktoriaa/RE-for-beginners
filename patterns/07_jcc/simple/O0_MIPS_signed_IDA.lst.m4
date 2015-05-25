@@ -61,7 +61,7 @@ include(`commons.m4').text:00000000 f_signed:                                # C
 .text:00000098                 or      $at, $zero ; NOP
 ; _EN(`check if')_RU(`проверить условие') $v1<$v0 (a<b), _EN(`set')_RU(`установить') $v0 _EN(`to 1 if condition is true')_RU(``в 1, если условие верно''):
 .text:0000009C                 slt     $v0, $v1, $v0
-; _EN(``if condition is not true (i.e., \$v0==0), jump to loc\_c8'')_RU(``если условие не верно (т.е., \$v0==0), перейти на loc\_c8''):
+; _EN(``if condition is not true (i.e., \$v0==0), jump to loc\_c8'')_RU(``если условие не верно (т.е. \$v0==0), перейти на loc\_c8''):
 .text:000000A0                 beqz    $v0, loc_C8
 .text:000000A4                 or      $at, $zero ; branch delay slot, NOP
 ; _EN(``condition is true, print "a<b" and finish'')_RU(``условие верно, вывести "a<b" и закончить'')

@@ -2,7 +2,7 @@
 
 \lstinputlisting{patterns/04_scanf/1_simple/ex1.c}
 
-\RU{Да, согласен, использовать \scanf в наши времена для того, чтобы спросить у пользователя что-то, 
+\RU{Согласен, использовать \scanf в наши времена для того, чтобы спросить у пользователя что-то~--- 
 не самая хорошая идея.
 Но я хотел проиллюстрировать передачу указателя на переменную типа \Tint.}
 \EN{OK, I agree, it is not clever to use \scanf for user interactions nowadays. 
@@ -11,26 +11,26 @@ I wanted, however, to illustrate passing a pointer to a variable of type \Tint.}
 \subsection{\RU{Об указателях}\EN{About pointers}}
 \index{\CLanguageElements!\Pointers}
 
-\RU{Это одна из фундаментальных вещей в компьютерных науках.}\EN{Pointers are one of the fundamental concepts in computer science.}
-\RU{Часто большой массив, структуру или объект передавать в другую функцию никак не выгодно, 
-а передать её адрес куда проще.}
+\RU{Это одна из фундаментальных вещей в информатике.}\EN{Pointers are one of the fundamental concepts in computer science.}
+\RU{Часто большой массив, структуру или объект передавать в другую функцию путем копирования данных невыгодно, 
+а передать адрес массива, структуры или объекта куда проще.}
 \EN{Often, passing a large array, structure or object as an argument to another function is too expensive, 
 while passing their address is much cheaper.}
 \RU{К тому же, если вызываемая функция (\gls{callee}) должна изменить что-то в этом большом массиве или структуре,
-то возвращать её полностью\EMDASH{}это так же абсурдно.}
+то возвращать её полностью так же абсурдно.}
 \EN{In addition if the \gls{callee} function needs to modify something in the large array or structure received as a parameter and return back the entire structure then the situation is close to absurd.}
 \RU{Так что самое простое, что можно сделать, это передать в функцию-\gls{callee} адрес массива или структуры,
 и пусть \gls{callee} что-то там изменит.}
 \EN{So the simplest thing to do is to pass the address of the array or structure to the \gls{callee} function,
 and let it change what needs to be changed.}
 
-\RU{Указатель в}\EN{A pointer in} \CCpp \RU{\EMDASH{}это просто адрес какого-либо места в памяти.}
-\EN{is simply an address of some memory location.}
+\RU{Указатель в}\EN{A pointer in} \CCpp\RU{\EMDASH{}это просто адрес какого-либо места в памяти.}
+\EN{ is simply an address of some memory location.}
 
 \index{x86-64}
-\RU{В x86 адрес представляется в виде 32-битного числа (т.е., занимает 4 байта), а в x86--64 как 64-битное число 
+\RU{В x86 адрес представляется в виде 32-битного числа (т.е. занимает 4 байта), а в x86-64 как 64-битное число 
 (занимает 8 байт).}
-\EN{In x86, the address is represented as a 32-bit number (i.e., it is occupying 4 bytes), while in x86--64 it is a 64-bit number (occupying 8 bytes).}
+\EN{In x86, the address is represented as a 32-bit number (i.e., it occupies 4 bytes), while in x86-64 it is a 64-bit number (occupying 8 bytes).}
 \RU{Кстати, отсюда негодование некоторых людей, связанное с переходом на x86-64\EMDASH{}на этой архитектуре все указатели
 занимают в 2 раза больше места, в том числе и в ``дорогой'' кэш-памяти.}
 \EN{By the way, that is the reason behind some people's indignation related to switching to x86-64\EMDASH{}all pointers
@@ -44,20 +44,20 @@ It is possible to work with untyped pointers only, given some effort}; \RU{на�
 \RU{принимает на вход 2 указателя типа}\EN{takes 2 pointers of type } \TT{void*}\EN{ as arguments}, 
 \RU{потому что нельзя
 заранее предугадать, какого типа блок вы собираетесь копировать. 
-Да в общем, тип данных не важен, важен только размер блока.}
+Для копирования тип данных не важен, важен только размер блока.}
 \EN{since it is impossible to predict the type of the data you would like to copy. 
 Data types are not important, only the block size matters.}
 
 \RU{Также указатели широко используются, когда функции нужно вернуть более одного значения}
 \EN{Pointers are also widely used when a function needs to return more than one value}
-(\RU{мы еще вернемся к этому в будущем}\EN{we are going to get back to this later}
+(\RU{мы ещё вернемся к этому в будущем}\EN{we are going to get back to this later}
 \ifx\LITE\undefined
 ~(\myref{label_pointers})
 \fi
 ).
-\IT{scanf()} \RU{\EMDASH{}это как раз такой случай}\EN{is such a case}. 
+\RU{Функция }\IT{scanf()}\RU{\EMDASH{}это как раз такой случай}\EN{ is such a case}. 
 \RU{Помимо того, что этой функции нужно показать, сколько значений
-было прочитано успешно, ей еще и нужно вернуть сами значения.}
+было прочитано успешно, ей ещё и нужно вернуть сами значения.}
 \EN{Besides the fact that the function needs to indicate how many values were successfully read, 
 it also needs to return all these values.}
 

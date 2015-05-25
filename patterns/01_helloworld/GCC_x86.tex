@@ -1,12 +1,12 @@
 \subsection{GCC}
 
-\RU{Теперь скомпилируем то же самое компилятором GCC 4.4.1 в Linux}
+\RU{Теперь скомпилируем то же самое компилятором GCC 4.4.1 в Linux}%
 \EN{Now let's try to compile the same \CCpp code in the GCC 4.4.1 compiler in Linux}: \TT{gcc 1.c -o 1}
 
-\RU{Затем, при помощи \IDA{}, посмотрим, как скомпилировалась функция \main.}
+\RU{Затем при помощи \IDA посмотрим как скомпилировалась функция \main.}
 \EN{Next, with the assistance of the \IDA disassembler, let's see how the \main function was created.} 
 
-(\IDA, \RU{как и MSVC, показывает код в синтаксисе Intel}\EN{like MSVC, uses Intel-syntax})
+\IDA, \RU{как и MSVC, показывает код в синтаксисе Intel}\EN{like MSVC, uses Intel-syntax}%
 \footnote{N.B. \RU{Мы также можем заставить GCC генерировать листинги в этом формате при помощи ключей}
 \EN{We could also have GCC produce assembly listings in Intel-syntax by applying the options} 
 \TT{-S -masm=intel}.}.
@@ -32,13 +32,13 @@ main            endp
 \index{Function prologue}
 \index{x86!\Instructions!AND}
 \RU{Почти то же самое. 
-Адрес строки ``hello, world'', лежащей в сегменте данных, вначале сохраняется в \EAX, затем записывается в стек.
+Адрес строки \TT{hello, world}, лежащей в сегменте данных, вначале сохраняется в \EAX, затем записывается в стек.
 А ещё в прологе функции мы видим \TT{AND ESP, 0FFFFFFF0h}~--- 
 эта инструкция выравнивает значение в \ESP по 16-байтной границе, делая все значения 
 в стеке также выровненными по этой границе (процессор более эффективно работает с переменными, расположенными
 в памяти по адресам кратным 4 или 16)\footnote{\URLWPDA}.}
 \EN{The result is almost the same.
-The address of the ``hello, world'' string (stored in the data segment) is loaded in the \EAX register first and then it is saved onto the stack.
+The address of the \TT{hello, world} string (stored in the data segment) is loaded in the \EAX register first and then it is saved onto the stack.
 In addition, the function prologue contains \TT{AND ESP, 0FFFFFFF0h}~---this 
 instruction aligns the \ESP register value on a 16-byte boundary.
 This results in all values in the stack being aligned the same way (The CPU performs better if the values it is dealing with are located in memory at addresses aligned 
@@ -73,15 +73,15 @@ it emits \TT{MOV EAX, 0} instead of a shorter opcode.}
 pair~---in other words, this instruction sets the \gls{stack pointer} (\ESP) back and restores 
 the \EBP register to its initial state.}
 
-\RU{Это необходимо, т.к., в начале функции мы модифицировали регистры \ESP и \EBP (при помощи}
+\RU{Это необходимо, т.к. в начале функции мы модифицировали регистры \ESP и \EBP (при помощи}
 \EN{This is necessary since we modified these register values (\ESP and \EBP) at the 
-beginning of the function (executing}
+beginning of the function (by executing}
 \TT{\MOV EBP, ESP} / \TT{AND ESP, \ldots}).
 
 \subsection{GCC: \ATTSyntax}
 \label{ATT_syntax}
 
-\RU{Попробуем посмотреть, как выглядит то же самое в AT\&T-синтаксисе языка ассемблера.}
+\RU{Попробуем посмотреть, как выглядит то же самое в синтаксисе AT\&T языка ассемблера.}
 \EN{Let's see how this can be represented in assembly language AT\&T syntax.}
 \RU{Этот синтаксис больше распространен в UNIX-мире.}
 \EN{This syntax is much more popular in the UNIX-world.}
@@ -126,16 +126,16 @@ encodes a null-terminated character sequence just like a C-string). Then we'll s
 \EN{In AT\&T syntax: <instruction> <source operand> <destination operand>.}
 
 \RU{Чтобы легче понимать разницу, можно запомнить следующее}%
-\EN{Here is a way to easy memorise the difference}: \RU{когда вы работаете с Intel-синтаксисом~--- можете в уме ставить знак равенства ($=$) между операндами,}
+\EN{Here is a way to easy memorise the difference}: \RU{когда вы работаете с синтаксисом Intel~--- можете в уме ставить знак равенства ($=$) между операндами,}
 \EN{when you deal with Intel-syntax, you can imagine that there is an equality sign ($=$) between operands}
-\RU{а когда с AT\&T-синтаксисом~--- мысленно ставьте стрелку направо}
+\RU{а когда с синтаксисом AT\&T~--- мысленно ставьте стрелку направо}
 \EN{and when you deal with AT\&T-syntax imagine there is a right arrow} 
 ($\rightarrow$)
 \footnote{
 \index{\CStandardLibrary!memcpy()}
 \index{\CStandardLibrary!strcpy()}
 \RU{Кстати, в некоторых стандартных функциях библиотеки Си (например, memcpy(), strcpy()) также применяется 
-расстановка аргументов как в Intel-синтаксисе: вначале указатель в памяти на блок назначения, 
+расстановка аргументов как в синтаксисе Intel: вначале указатель в памяти на блок назначения, 
 затем указатель на блок-источник.}\EN{By the way, in some C standard functions (e.g., memcpy(), strcpy()) the arguments
 are listed in the same way as in Intel-syntax: pointer to the destination memory block at the beginning and then
 pointer to the source memory block.}}.

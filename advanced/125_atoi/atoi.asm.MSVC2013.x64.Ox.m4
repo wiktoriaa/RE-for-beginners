@@ -5,7 +5,7 @@ my_atoi	PROC
 ; _EN(`EAX is allocated for "rt" variable')_RU(`EAX выделен для переменной "rt"')
 ; _EN(`it's 0 at start')_RU(`в начале там 0')
 	xor	eax, eax
-; _EN(``first character is zero-byte, i.e., string terminator?'')_RU(``первый символ - это нулевой байт, т.е., конец строки?'')
+; _EN(``first character is zero-byte, i.e., string terminator?'')_RU(``первый символ - это нулевой байт, т.е. конец строки?'')
 ; _EN(`exit then')_RU(`тогда выходим').
 	test	r8b, r8b
 	je	SHORT $LN9@my_atoi
