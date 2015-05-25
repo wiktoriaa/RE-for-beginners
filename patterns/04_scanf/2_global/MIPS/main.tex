@@ -6,9 +6,9 @@
 \EN{So now the $x$ variable is global.}
 \RU{Я сделал исполняемый файл вместо объектного и загрузил его в IDA.}
 \EN{I have compiled to executable file rather than object file and I have loaded it into IDA.}
-\RU{IDA показывает присутствие переменной $x$ в ELF-секции .sbss (помните о ``Global Pointer''? \myref{MIPS_GP}),
+\RU{IDA показывает присутствие переменной $x$ в ELF-секции .sbss (помните о \q{Global Pointer}? \myref{MIPS_GP}),
 так как переменная не инициализируется в самом начале.}
-\EN{IDA displays the $x$ variable in the .sbss ELF section (remember the ``Global Pointer''? \myref{MIPS_GP}),
+\EN{IDA displays the $x$ variable in the .sbss ELF section (remember the \q{Global Pointer}? \myref{MIPS_GP}),
 since the variable is not initialized at the start.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/04_scanf/2_global/MIPS/O3_IDA.lst.\LANG}
@@ -62,9 +62,9 @@ how to work with variables there.}
 \index{MIPS!\Instructions!ADDIU}
 \RU{Адрес переменной должен быть сформирован парой инструкций.}
 \EN{The variable's address must be formed using a pair of instructions.}
-\RU{В нашем случае это LUI (``Load Upper Immediate''~--- загрузить старшие 16 бит) и 
-ADDIU (``Add Immediate Unsigned Word''~--- прибавить значение).}
-\EN{In our case those are LUI (``Load Upper Immediate'') and ADDIU (``Add Immediate Unsigned Word'').}
+\RU{В нашем случае это LUI (\q{Load Upper Immediate}~--- загрузить старшие 16 бит) и 
+ADDIU (\q{Add Immediate Unsigned Word}~--- прибавить значение).}
+\EN{In our case those are LUI (\q{Load Upper Immediate}) and ADDIU (\q{Add Immediate Unsigned Word}).}
 
 \RU{Вот так же листинг сгенерированный objdump-ом для лучшего рассмотрения:}
 \EN{Here is also the objdump listing for close inspection:}
@@ -75,16 +75,16 @@ ADDIU (``Add Immediate Unsigned Word''~--- прибавить значение).
 \index{MIPS!\Instructions!ADDIU}
 \index{MIPS!\Instructions!LW}
 \RU{Адрес формируется используя LUI и ADDIU, но старшая часть адреса
-всё ещё в регистре \$S0, и можно закодировать смещение в инструкции LW (``Load Word''), так что одной
+всё ещё в регистре \$S0, и можно закодировать смещение в инструкции LW (\q{Load Word}), так что одной
 LW достаточно для загрузки значения из переменной и передачи его в \printf.}
 \EN{We see that the address is formed using LUI and ADDIU, but the high part of address is still in
-the \$S0 register, and it is possible to encode the offset in a LW (``Load Word'') instruction, so one single LW is enough 
+the \$S0 register, and it is possible to encode the offset in a LW (\q{Load Word}) instruction, so one single LW is enough 
 to load a value from the variable and pass it to \printf.}
 
 \RU{Регистры хранящие временные данные имеют префикс T-, но здесь есть также регистры с префиксом S-,
-содержимое которых должно быть сохранено в других функциях (т.е. ``saved'').}
+содержимое которых должно быть сохранено в других функциях (т.е. \q{saved}).}
 \EN{Registers holding temporary data are prefixed with T-, but here we also see some prefixed with S-, 
-the contents of which is need to be preserved before use in other functions (i.e., ``saved'').}
+the contents of which is need to be preserved before use in other functions (i.e., \q{saved}).}
 % FIXME:
 % This needs to be clarified a bit, e.g. "the registers need to be preserved if a function is called and it wants to use them
 \RU{Вот почему \$S0 был установлен по адресу 0x4006cc и затем был использован по адресу 0x4006e8

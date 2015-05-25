@@ -1,11 +1,11 @@
 \section{MIPS}
 
-\subsection{\RU{О ``глобальном указателе'' (``global pointer'')}\EN{A word about ``global pointer''}}
+\subsection{\RU{О \q{глобальном указателе} (\q{global pointer})}\EN{A word about \q{global pointer}}}
 \label{MIPS_GP}
 
 \index{MIPS!\GlobalPointer}
-\RU{``Глобальный указатель'' (``global pointer'')~--- это важная концепция в MIPS.}
-\EN{One important MIPS concept is ``global pointer''.}
+\RU{\q{Глобальный указатель} (\q{global pointer})~--- это важная концепция в MIPS.}
+\EN{One important MIPS concept is \q{global pointer}.}
 \RU{Как мы уже возможно знаем, каждая инструкция в MIPS имеет размер 32 бита, поэтому невозможно
 закодировать 32-битный адрес внутри одной инструкции. Вместо этого нужно использовать пару инструкций
 (как это сделал GCC для загрузки адреса текстовой строки в нашем примере).}
@@ -21,26 +21,26 @@ single instruction (because 16 bits of signed offset could be encoded in single 
 \RU{Так мы можем выделить какой-то регистр для этих целей и ещё выделить буфер в 64KiB для самых 
 частоиспользуемых данных.}
 \EN{So we can allocate some register for this purpose and also allocate 64KiB area of most used data.}
-\RU{Выделенный регистр называется ``глобальный указатель'' (``global pointer'') и он указывает на середину
+\RU{Выделенный регистр называется \q{глобальный указатель} (\q{global pointer}) и он указывает на середину
 области 64KiB.}
-\EN{This allocated register is called ``global pointer'' and it points to the middle of the 64KiB area.}
+\EN{This allocated register is called \q{global pointer} and it points to the middle of the 64KiB area.}
 \RU{Эта область обычно содержит глобальные переменные и адреса импортированных функций вроде \printf,
 потому что разработчики GCC решили, что получение адреса функции должно быть как можно более быстрой операцией,
 исполняющейся за одну инструкцию вместо двух.}
 \EN{This area usually contains global variables and addresses of imported functions like \printf, 
 because GCC developers decided that getting address of some function must be as fast as single instruction
 execution instead of two.}
-\RU{В ELF-файле эта 64KiB-область находится частично в секции .sbss (``small \ac{BSS}'') для неинициализированных
-данных и в секции .sdata (``small data'') для инициализированных данных.}
-\EN{In an ELF file this 64KiB area is located partly in sections .sbss (``small \ac{BSS}'') for not initialized data and 
-.sdata (``small data'') for initialized data.}
+\RU{В ELF-файле эта 64KiB-область находится частично в секции .sbss (\q{small \ac{BSS}}) для неинициализированных
+данных и в секции .sdata (\q{small data}) для инициализированных данных.}
+\EN{In an ELF file this 64KiB area is located partly in sections .sbss (\q{small \ac{BSS}}) for not initialized data and 
+.sdata (\q{small data}) for initialized data.}
 
 \RU{Это значит что программист может выбирать, к чему нужен как можно более быстрый доступ, и затем расположить
 это в секциях .sdata/.sbss.}
 \EN{This implies that the programmer may choose what data he/she wants to be accessed fast and place it into 
 .sdata/.sbss.}
 
-\RU{Некоторые программисты ``старой школы'' могут вспомнить модель памяти в MS-DOS \myref{8086_memory_model} 
+\RU{Некоторые программисты \q{старой школы} могут вспомнить модель памяти в MS-DOS \myref{8086_memory_model} 
 или в менеджерах памяти вроде XMS/EMS, где вся память делилась на блоки по 64KiB.}
 \EN{Some old-school programmers may recall the MS-DOS memory model \myref{8086_memory_model} 
 or the MS-DOS memory managers like XMS/EMS where all memory was divided in 64KiB blocks.}
@@ -51,8 +51,8 @@ or the MS-DOS memory managers like XMS/EMS where all memory was divided in 64KiB
 
 \subsection{\Optimizing GCC}
 
-\EN{Lets consider the following example which illustrates ``global pointer'' concept.}
-\RU{Рассмотрим следующий пример, иллюстрирующий концепцию ``глобального указателя''.}
+\EN{Lets consider the following example which illustrates \q{global pointer} concept.}
+\RU{Рассмотрим следующий пример, иллюстрирующий концепцию \q{глобального указателя}.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),numbers=left]{patterns/01_helloworld/MIPS/hw_O3.s.\LANG}
 
@@ -63,17 +63,17 @@ or the MS-DOS memory managers like XMS/EMS where all memory was divided in 64KiB
 \RU{Здесь также используется \puts вместо \printf.}
 \EN{\puts is also used here instead of \printf.}
 \index{MIPS!\Instructions!LW}
-\RU{Адрес функции \puts загружается в \$25 инструкцией LW (``Load Word'').}
-\EN{The address of the \puts function is loaded into \$25 using LW the instruction (``Load Word'').}
+\RU{Адрес функции \puts загружается в \$25 инструкцией LW (\q{Load Word}).}
+\EN{The address of the \puts function is loaded into \$25 using LW the instruction (\q{Load Word}).}
 \index{MIPS!\Instructions!LUI}
 \index{MIPS!\Instructions!ADDIU}
-\RU{Затем адрес текстовой строки загружается в \$4 парой инструкций LUI (``Load Upper Immediate'') и
-ADDIU (``Add Immediate Unsigned Word'').}
-\EN{Then the address of the text string is loaded to \$4 using LUI (``Load Upper Immediate'') and 
-ADDIU (``Add Immediate Unsigned Word'') instruction pair.}
-\RU{LUI устанавливает старшие 16 бит регистра (поэтому в имени инструкции присутствует ``upper'') и ADDIU
+\RU{Затем адрес текстовой строки загружается в \$4 парой инструкций LUI (\q{Load Upper Immediate}) и
+ADDIU (\q{Add Immediate Unsigned Word}).}
+\EN{Then the address of the text string is loaded to \$4 using LUI (\q{Load Upper Immediate}) and 
+ADDIU (\q{Add Immediate Unsigned Word}) instruction pair.}
+\RU{LUI устанавливает старшие 16 бит регистра (поэтому в имени инструкции присутствует \q{upper}) и ADDIU
 прибавляет младшие 16 бит к адресу.}
-\EN{LUI sets the high 16 bits of the register (hence ``upper'' word in instruction name) and ADDIU adds
+\EN{LUI sets the high 16 bits of the register (hence \q{upper} word in instruction name) and ADDIU adds
 the lower 16 bits of the address.}
 \RU{ADDIU следует за JALR (помните о \IT{branch delay slots}?).}
 \EN{ADDIU follows JALR (remember \IT{branch delay slots}?).}
@@ -83,9 +83,9 @@ the lower 16 bits of the address.}
 is available in appendix} \myref{MIPS_registers_ref}}.
 
 \index{MIPS!\Instructions!JALR}
-\RU{JALR (``Jump and Link Register'') делает переход по адресу в регистре \$25 (там адрес \puts) 
+\RU{JALR (\q{Jump and Link Register}) делает переход по адресу в регистре \$25 (там адрес \puts) 
 при этом сохраняя адрес следующей инструкции (LW) в \ac{RA}.}
-\EN{JALR (``Jump and Link Register'') jumps to the address stored in the \$25 register (address of \puts) 
+\EN{JALR (\q{Jump and Link Register}) jumps to the address stored in the \$25 register (address of \puts) 
 while saving the address of the next instruction (LW) in \ac{RA}.}
 \RU{Это так же как и в ARM}\EN{This is very similar to ARM}.
 \RU{И ещё одна важная вещь: адрес сохраняемый в \ac{RA} это адрес не следующей инструкции (потому что
@@ -99,9 +99,9 @@ but the address of the instruction after the next one (after the \IT{delay slot}
 \EN{Hence, $PC + 8$ is written to \ac{RA} during the execution of \TT{JALR}, in our case, this is the address of the LW
 instruction next to ADDIU.}
 
-\RU{LW (``Load Word'') в строке 19 восстанавливает \ac{RA} из локального стека 
+\RU{LW (\q{Load Word}) в строке 19 восстанавливает \ac{RA} из локального стека 
 (эта инструкция скорее часть эпилога функции).}
-\EN{LW (``Load Word'') at line 19 restores \ac{RA} from the local stack 
+\EN{LW (\q{Load Word}) at line 19 restores \ac{RA} from the local stack 
 (this instruction is rather part of function epilogue).}
 
 \index{MIPS!\Pseudoinstructions!MOVE}
@@ -148,9 +148,9 @@ are not so critical to GCC users, so some unfixed errors may still exist.}.}
 \EN{The GP value has to be saved indeed, because each function can use its own 64KiB data window.}
 
 \RU{Регистр, содержащий адрес функции \puts называется \$T9, потому что регистры с префиксом T- называются
-``temporaries'' и их содержимое можно не сохранять.}
+\q{temporaries} и их содержимое можно не сохранять.}
 \EN{The register containing the \puts address is called \$T9, because registers prefixed with T- are called
-``temporaries'' and their contents may not be preserved.}
+\q{temporaries} and their contents may not be preserved.}
 
 \subsection{\NonOptimizing GCC}
 
@@ -177,9 +177,9 @@ instructions and then, if optimization is turned on, maybe eliminates them.}
 
 \index{MIPS!\Pseudoinstructions!LA}
 \RU{Интересно что \IDA распознала пару инструкций LUI/ADDIU и собрала их в одну псевдоинструкцию 
-LA (``Load Address'') в строке 15.}
+LA (\q{Load Address}) в строке 15.}
 \EN{Interestingly, \IDA recognized LUI/ADDIU instructions pair and coalesces them into one 
-LA (``Load Address'') pseudoinstruction at line 15.}
+LA (\q{Load Address}) pseudoinstruction at line 15.}
 \RU{Мы также видим, что размер этой псевдоинструкции 8 байт!}
 \EN{We may also see that this pseudoinstruction has size of 8 bytes!}
 \RU{Это псевдоинструкция (или \IT{макрос}), потому что это не настоящая инструкция MIPS, а скорее

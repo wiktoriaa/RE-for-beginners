@@ -7,8 +7,8 @@
 \lstinputlisting[numbers=left,label=hw_ARM64_GCC,caption=\NonOptimizing GCC 4.8.1 + objdump]
 {patterns/01_helloworld/ARM/hw.lst}
 
-\RU{В ARM64 нет режима thumb и thumb-2, только ARM, так что тут только 32-битные инструкции.}
-\EN{There are no thumb and thumb-2 modes in ARM64, only ARM, so there are 32-bit instructions only.}
+\RU{В ARM64 нет режима Thumb и Thumb-2, только ARM, так что тут только 32-битные инструкции.}
+\EN{There are no Thumb and Thumb-2 modes in ARM64, only ARM, so there are 32-bit instructions only.}
 \RU{Регистров тут в 2 раза больше}\EN{Registers count is doubled}: \myref{ARM64_GPRs}.
 \RU{64-битные регистры теперь имеют префикс}\EN{64-bit registers has} 
 \TT{X-}\EN{ prefixes, while its 32-bit parts}\RU{, а их 32-битные части}\EMDASH{}\TT{W-}.
@@ -45,7 +45,7 @@ values from registers pair are to be written into the stack.}
 \label{pointers_ADRP_and_ADD}
 \index{ARM!\Instructions!ADRP/ADD pair}
 \RU{Инструкции }\TT{ADRP} \AndENRU \ADD \EN{instructions are used to fill the 
-string}\RU{нужны для формирования адреса строки} ``Hello!'' \EN{address into the \RegX{0} register}\RU{в регистре \RegX{0}}, 
+string}\RU{нужны для формирования адреса строки} \q{Hello!} \EN{address into the \RegX{0} register}\RU{в регистре \RegX{0}}, 
 \RU{ведь первый аргумент функции передается через этот регистр}\EN{because the first function argument is passed
 in this register}.
 \RU{Но в ARM нет инструкций, при помощи которых можно записать в регистр длинное число}\EN{There are
@@ -59,22 +59,22 @@ located into \RegX{0}}\RU{записывает в \RegX{0} адрес 4-кило
 reminder to the address}.
 \EN{More about that in}\RU{Читайте больше об этом}: \myref{ARM64_relocs}.
 
-\TT{0x400000 + 0x648 = 0x400648}, \EN{and we see our ``Hello!'' C-string in the \TT{.rodata} data segment at this
+\TT{0x400000 + 0x648 = 0x400648}, \EN{and we see our \q{Hello!} C-string in the \TT{.rodata} data segment at this
 address}\RU{и мы видим, что в секции данных \TT{.rodata} по этому адресу как раз находится наша
-Си-строка ``Hello!''}.
+Си-строка \q{Hello!}}.
 
 \index{ARM!\Instructions!BL}
 \RU{Затем при помощи инструкции \TT{BL} вызывается \puts. Это уже рассматривалось ранее: \myref{puts}.}
 \EN{\puts is called afterwards using \TT{BL} instruction. This was already discussed: \myref{puts}.}
 
-\RU{Инструкция }\MOV \EN{instruction writes $0$ into}\RU{записывает $0$ в} \RegW{0}. 
+\RU{Инструкция }\MOV \EN{instruction writes 0 into}\RU{записывает 0 в} \RegW{0}. 
 \RegW{0} \RU{это младшие 32 бита 64-битного регистра}\EN{is low 32 bits of 64-bit} \RegX{0}\EN{ register}:
 
 \input{ARM_X0_register}
 
-\RU{А результат функции возвращается через \RegX{0}, и \main возвращает $0$, 
+\RU{А результат функции возвращается через \RegX{0}, и \main возвращает 0, 
 так что вот так готовится возвращаемый результат.}
-\EN{The function result is returned via \RegX{0} and \main returns $0$, so that's how the return
+\EN{The function result is returned via \RegX{0} and \main returns 0, so that's how the return
 result is prepared.}
 \RU{Почему именно 32-битная часть}\EN{But why using the 32-bit part}?
 \RU{Потому в ARM64, как и в x86-64, тип \Tint оставили 32-битным, для лучшей совместимости.}

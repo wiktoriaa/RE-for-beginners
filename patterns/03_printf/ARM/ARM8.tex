@@ -52,12 +52,12 @@ with 9 arguments from the previous section}: \myref{example_printf8_x64}.
 
 \index{ARM!\Instructions!SUB}
 \RU{Вторая инструкция}\EN{The second} \TT{SUB SP, SP, \#0x14}
-\RU{уменьшает \glslink{stack pointer}{указатель стека} \ac{SP}, но, на самом деле, эта процедура нужна для выделения в локальном стеке места размером \TT{0x14} ($20$) байт}%
+\RU{уменьшает \glslink{stack pointer}{указатель стека} \ac{SP}, но, на самом деле, эта процедура нужна для выделения в локальном стеке места размером \TT{0x14} (20) байт.}
 \EN{instruction decreases
 \ac{SP} (the \gls{stack pointer}) in order to 
-allocate \TT{0x14} ($20$) bytes on the stack}.
-\RU{Действительно, нам нужно передать 5 32-битных значений через стек в \printf. Каждое значение занимает 4 байта, все вместе~--- $5*4=20$}%
-\EN{Indeed, we need to pass 5 32-bit values via the stack to the \printf function, and each one occupies 4 bytes, which is exactly $5*4=20$}.
+allocate \TT{0x14} (20) bytes on the stack.}
+\RU{Действительно, нам нужно передать 5 32-битных значений через стек в \printf. Каждое значение занимает 4 байта, все вместе~--- $5*4=20$.}
+\EN{Indeed, we need to pass 5 32-bit values via the stack to the \printf function, and each one occupies 4 bytes, which is exactly $5*4=20$.}
 \RU{Остальные 4 32-битных значения будут переданы через регистры.}
 \EN{The other 4 32-bit values are to be passed through registers.}
 
@@ -68,30 +68,30 @@ allocate \TT{0x14} ($20$) bytes on the stack}.
 \RU{записывает в регистр \TT{R12} адрес места в стеке, куда будут помещены эти 4 значения}%
 \EN{instruction writes the stack address where these 4 variables are to be stored, into the \TT{R12} register}.
 \index{IDA!var\_?}
-\IT{var\_14}\RU{~--- это макрос ассемблера}\EN{ is an assembly macro}, \RU{равный}\EN{equal to} $-0x14$\RU{.}%
-\RU{Такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку.}%
-\EN{, created by \IDA to conveniently display the code accessing the stack}.
+\IT{var\_14}\RU{~--- это макрос ассемблера}\EN{ is an assembly macro}, \RU{равный}\EN{equal to} -0x14\RU{.}
+\RU{Такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку.}
+\EN{, created by \IDA to conveniently display the code accessing the stack.}
 \RU{Макросы \IT{var\_?}, создаваемые \IDA, отражают локальные переменные в стеке}\EN{The \IT{var\_?} macros generated
-by \IDA reflect local variables in the stack}.
-\RU{Так что в \TT{R12} будет записано $SP+4$.}
-\EN{So, $SP+4$ is to be stored into the \TT{R12} register.}
+by \IDA reflect local variables in the stack.}
+\RU{Так что в \TT{R12} будет записано \TT{SP+4}.}
+\EN{So, \TT{SP+4} is to be stored into the \TT{R12} register.}
 \index{ARM!\Instructions!STMIA}
 \RU{Следующая инструкция}\EN{The next} \TT{STMIA R12, {R0-R3}} 
-\RU{записывает содержимое регистров \Reg{0}-\Reg{3} по адресу в памяти, на который указывает \TT{R12}}
+\RU{записывает содержимое регистров \Reg{0}-\Reg{3} по адресу в памяти, на который указывает \TT{R12}.}
 \EN{instruction
-writes registers \Reg{0}-\Reg{3} contents to the memory pointed by \TT{R12}}.
+writes registers \Reg{0}-\Reg{3} contents to the memory pointed by \TT{R12}.}
 \RU{Инструкция }\TT{STMIA} \RU{означает}\EN{abbreviates} \IT{Store Multiple Increment After}. 
-\IT{``Increment After''} 
+\IT{\q{Increment After}} 
 \RU{означает, что \TT{R12} будет увеличиваться на 4 после записи каждого значения регистра.}
-\EN{implies that \TT{R12} is to be increased by $4$ after each register value is written.}
+\EN{implies that \TT{R12} is to be increased by 4 after each register value is written.}
 
-\item \RU{Передача $4$ через стек}\EN{Passing $4$ via the stack}:
-\RU{$4$ записывается в \Reg{0}, затем инструкция}\EN{$4$ is stored in \Reg{0} and then
+\item \RU{Передача 4 через стек}\EN{Passing 4 via the stack}:
+\RU{4 записывается в \Reg{0}, затем инструкция}\EN{4 is stored in \Reg{0} and then
 this value, with the help of the} \TT{STR R0, [SP,\#0x18+var\_18]} \RU{записывает его в стек}\EN{instruction is saved
 on the stack}.
-\IT{var\_18} \RU{равен}\EN{is} $-0x18$, \RU{смещение будет $0$}\EN{so the offset is to be $0$}, 
-\RU{так что значение из регистра \Reg{0} ($4$) запишется туда, куда указывает \ac{SP}}%
-\EN{thus the value from the \Reg{0} register ($4$) is to be written to the address written in \ac{SP}}.
+\IT{var\_18} \RU{равен}\EN{is} -0x18, \RU{смещение будет 0}\EN{so the offset is to be 0}, 
+\RU{так что значение из регистра \Reg{0} (4) запишется туда, куда указывает \ac{SP}}%
+\EN{thus the value from the \Reg{0} register (4) is to be written to the address written in \ac{SP}}.
 
 \item \RU{Передача 1, 2 и 3 через регистры}\EN{Passing 1, 2 and 3 via registers}:
 
@@ -126,7 +126,7 @@ thus causing the function to exit.}
 куда указывает \ac{SP}}
 ($4+var\_4=4+(-4)=0$, \RU{так что эта инструкция аналогична}\EN{so this instruction is 
 analogous to} \TT{LDR PC, [SP],\#4}), \RU{затем}\EN{and then} \ac{SP} \RU{увеличивается 
-на}\EN{is increased by} $4$.
+на}\EN{is increased by} 4.
 \RU{Это называется}\EN{This is referred as} \IT{post-index}\footnote{\RU{Читайте больше об 
 этом}\EN{Read more about it}: \myref{ARM_postindex_vs_preindex}.}.
 \RU{Почему}\EN{Why does} \IDA \RU{показывает инструкцию именно так}\EN{display the instruction like that}?
@@ -170,11 +170,11 @@ set \TT{IP/EIP/RIP} value using \POP in x86, but anyway, you get the idea, I hop
 .text:00000040 00 BD        POP     {PC}
 \end{lstlisting}
 
-\RU{Это почти то же самое что и в предыдущем примере, только код для thumb и значения помещаются в 
-стек немного иначе: сначала $8$ за первый раз, затем $5$, $6$, $7$ за второй раз и $4$ за третий раз}\EN{The output is almost 
+\RU{Это почти то же самое что и в предыдущем примере, только код для Thumb и значения помещаются в 
+стек немного иначе: сначала 8 за первый раз, затем 5, 6, 7 за второй раз и 4 за третий раз}\EN{The output is almost 
 like in
-the previous example. However, this is thumb code and the values are packed into stack differently: 
-$8$ goes first, then $5$, $6$, $7$, and $4$ goes third}.
+the previous example. However, this is Thumb code and the values are packed into stack differently: 
+8 goes first, then 5, 6, 7, and 4 goes third}.
 
 \subsubsection{\OptimizingXcodeIV: \ARMMode}
 
@@ -271,9 +271,9 @@ __text:00002BD8 80 BD          POP      {R7,PC}
 \end{lstlisting}
 
 \RU{Почти то же самое, что и в предыдущем примере,
-лишь за тем исключением, что здесь используются thumb-инструкции}%
+лишь за тем исключением, что здесь используются Thumb-инструкции}%
 \EN{The output is almost the same as in the previous example,
-with the exception that thumb-instructions are used instead}.
+with the exception that Thumb-instructions are used instead}.
 % FIXME: also STMIA is used instead of STMIB,
 % which is why it uses LR, which is 4 bytes ahead of SP
 
@@ -291,8 +291,8 @@ requires a 64-bit register, so it's passed in} \RegX{0}.
 части регистров (W-).}
 \EN{All other values have a \Tint 32-bit type, so they are stored in the 32-bit part of 
 the registers (W-).}
-\RU{Девятый аргумент ($8$) передается через стек.}
-\EN{The 9th argument ($8$) is passed via the stack.}
+\RU{Девятый аргумент (8) передается через стек.}
+\EN{The 9th argument (8) is passed via the stack.}
 \RU{Действительно, невозможно передать большое количество аргументов в регистрах, потому
 что количество регистров ограничено.}
 \EN{Indeed: it's not possible to pass large number of arguments through registers, 

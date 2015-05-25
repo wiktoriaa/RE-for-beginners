@@ -47,7 +47,7 @@ but the \Tdouble values are 64 bit, so only lower register half is used}.
 
 \index{x86!\Instructions!DIVSD}
 \TT{DIVSD} \RU{это SSE-инструкция, означает}\EN{is an SSE-instruction that stands for} 
-``Divide Scalar Double-Precision Floating-Point Values'', 
+\q{Divide Scalar Double-Precision Floating-Point Values}, 
 \RU{и просто делит значение типа \Tdouble на другое, лежащие в младших половинах операндов}\EN{it just divides
 one value of type \Tdouble by another, stored in the lower halves of operands}.
 
@@ -67,7 +67,7 @@ one value of type \Tdouble by another, stored in the lower halves of operands}.
 
 \index{Shadow space}
 \RU{Чуть более избыточно}\EN{Slightly redundant}. 
-\RU{Входные аргументы сохраняются в}\EN{The input arguments are saved in the} ``shadow space'' (\myref{shadow_space}), 
+\RU{Входные аргументы сохраняются в}\EN{The input arguments are saved in the} \q{shadow space} (\myref{shadow_space}), 
 \RU{причем, только младшие половины регистров, т.е. только 64-битные значения типа \Tdouble}
 \EN{but only their lower register halves, i.e., only 64-bit values of type \Tdouble}.
 \ifdefined\IncludeGCC
@@ -202,8 +202,8 @@ just as the standard requires} \cite{SysVABI}.
 \Optimizing MSVC \RU{генерирует очень понятный код}\EN{generates a code very easy to understand}.
 
 \index{x86!\Instructions!COMISD}
-\RU{Инструкция }\TT{COMISD} \RU{это}\EN{is} ``Compare Scalar Ordered Double-Precision Floating-Point 
-Values and Set EFLAGS''. \RU{Собственно, это она и делает}\EN{Essentially, that is what it does}.\\
+\RU{Инструкция }\TT{COMISD} \RU{это}\EN{is} \q{Compare Scalar Ordered Double-Precision Floating-Point 
+Values and Set EFLAGS}. \RU{Собственно, это она и делает}\EN{Essentially, that is what it does}.\\
 \\
 \NonOptimizing MSVC \RU{генерирует более избыточно, но тоже всё понятно}\EN{generates more redundant code,
 but it is still not hard to understand}:
@@ -212,8 +212,8 @@ but it is still not hard to understand}:
 
 \index{x86!\Instructions!MAXSD}
 \RU{А вот}\EN{However,} GCC 4.4.6 \RU{дошел в оптимизации дальше и применил инструкцию}
-\EN{did more optimizations and used the} \TT{MAXSD} (``Return Maximum Scalar 
-Double-Precision Floating-Point Value'')\RU{, которая просто выбирает максимальное значение}\EN{ instruction,
+\EN{did more optimizations and used the} \TT{MAXSD} (\q{Return Maximum Scalar 
+Double-Precision Floating-Point Value})\RU{, которая просто выбирает максимальное значение}\EN{ instruction,
 which just choose the maximum value}!
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
@@ -246,8 +246,8 @@ is left in} \ST{0}.
 \section{\RU{Вычисление машинного эпсилона}\EN{Calculating machine epsilon}: x64 \AndENRU SIMD}
 \label{machine_epsilon_x64_and_SIMD}
 
-\RU{Вернемся к примеру ``вычисление машинного эпсилона'' для \Tdouble \lstref{machine_epsilon_double_c}.}
-\EN{Let's revisit the ``calculating machine epsilon'' example for \Tdouble \lstref{machine_epsilon_double_c}.}
+\RU{Вернемся к примеру \q{вычисление машинного эпсилона} для \Tdouble \lstref{machine_epsilon_double_c}.}
+\EN{Let's revisit the \q{calculating machine epsilon} example for \Tdouble \lstref{machine_epsilon_double_c}.}
 
 \RU{Теперь скомпилируем его для x64}\EN{Now we compile it for x64}:
 
@@ -268,7 +268,7 @@ eliminate the usage of the local stack}.}.
 
 \RU{Так или иначе, значение затем перезагружается в XMM-регистр и происходит вычитание.}
 \EN{Nevertheless, the value is then reloaded to a XMM register and subtraction occurs.}
-SUBSD \RU{это}\EN{is} ``Subtract Scalar Double-Precision Floating-Point Values'', 
+SUBSD \RU{это}\EN{is} \q{Subtract Scalar Double-Precision Floating-Point Values}, 
 \RU{т.е. операция производится над младшей 64-битной частью 128-битного XMM-регистра}
 \EN{i.e., it operates on the lower 64-bit part of 128-bit XMM register}.
 \RU{Результат возвращается в регистре XMM0}\EN{The result is returned in the XMM0 register}.
@@ -282,7 +282,7 @@ SUBSD \RU{это}\EN{is} ``Subtract Scalar Double-Precision Floating-Point Value
 to store number in IEEE 754 format}.
 
 \RU{Собственно, все инструкции с суффиксом}\EN{Essentially, all instructions prefixed by} 
-\TT{-SD} (``Scalar Double-Precision'')\EMDASH{}\RU{это инструкции для работы с числами с плавающей 
+\TT{-SD} (\q{Scalar Double-Precision})\EMDASH{}\RU{это инструкции для работы с числами с плавающей 
 запятой в формате IEEE 754, 
 хранящиеся в младшей 64-битной половине XMM-регистра}\EN{are instructions working with floating point numbers
 in IEEE 754 format, stored in the lower 64-bit half of a XMM register}.
@@ -302,12 +302,12 @@ were evolved in a less chaotic way than the FPU ones in the past.}
 только с суффиксом}
 % FIXME1 ... but their -SS versions
 \EN{in these examples, the same instructions will be used, but prefixed with} \TT{-SS} 
-(``Scalar Single-Precision''), \RU{например}\EN{for example}, \TT{MOVSS}, \TT{COMISS}, \TT{ADDSS}, \etc{}.
+(\q{Scalar Single-Precision}), \RU{например}\EN{for example}, \TT{MOVSS}, \TT{COMISS}, \TT{ADDSS}, \etc{}.
 
-``Scalar'' \RU{означает что SIMD-регистр будет хранить только одно значение, вместо нескольких.}
+\q{Scalar} \RU{означает что SIMD-регистр будет хранить только одно значение, вместо нескольких.}
 \EN{implies that the SIMD register containing only one value instead of several.}
-\RU{Инструкции, работающие с несколькими значениями в регистре одновременно, имеют ``Packed'' в названии}
-\EN{Instructions working with several values in a register simultaneously has ``Packed'' in their name}.
+\RU{Инструкции, работающие с несколькими значениями в регистре одновременно, имеют \q{Packed} в названии}
+\EN{Instructions working with several values in a register simultaneously have \q{Packed} in their name}.
 
 \RU{Нужно также обратить внимание, что SSE2-инструкции работают с 64-битными числами (\Tdouble) в формате IEEE 754,
 в то время как внутреннее представление в FPU --- 80-битные числа.}

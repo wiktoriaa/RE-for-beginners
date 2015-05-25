@@ -79,8 +79,8 @@ encoding characters}.
 \RU{Все символы латиницы кодируются так же, как и в ASCII-кодировке, а символы, выходящие за пределы
 ASCII-7-таблицы, кодируются несколькими байтами}\EN{All Latin symbols are encoded just like in ASCII,
 and the symbols beyond the ASCII table are encoded using several bytes}.
-\RU{$0$ кодируется, как и прежде, нулевыми байтом, так что все стандартные
-функции Си продолжают работать с UTF-8-строками так же как и с обычными строками}\EN{$0$ is encoded as
+\RU{0 кодируется, как и прежде, нулевыми байтом, так что все стандартные
+функции Си продолжают работать с UTF-8-строками так же как и с обычными строками}\EN{0 is encoded as
 before, so all standard C string functions work with UTF-8 strings just like any other string}.
 
 \RU{Посмотрим, как символы из разных языков кодируются в UTF-8 и как это выглядит в FAR, в кодировке 437}
@@ -106,8 +106,8 @@ before, so all standard C string functions work with UTF-8 strings just like any
 \RU{Здесь видно, что эти буквы кодируются несколькими байтами, я подчеркнул их красным}
 \EN{These symbols are encoded using several bytes, I underscored them with red}.
 \RU{То же самое с исландским и польским языками}\EN{It's the same story with the Icelandic and Polish languages}.
-\RU{В самом начале я также применил символ валюты ``Евро'', который кодируется тремя байтами}
-\EN{I also used the ``Euro'' currency symbol at the start, which is encoded with 3 bytes}.
+\RU{В самом начале я также применил символ валюты \q{Евро}, который кодируется тремя байтами}
+\EN{I also used the \q{Euro} currency symbol at the start, which is encoded with 3 bytes}.
 \RU{Остальные системы письма здесь никак не связаны с латиницей}
 \EN{The rest of the writing systems here have no connection with Latin}.
 \RU{По крайней мере о русском, арабском, иврите и хинди мы можем сказать, что здесь видны повторяющиеся
@@ -117,8 +117,8 @@ before, so all standard C string functions work with UTF-8 strings just like any
 all symbols from a writing system are usually located in the same Unicode table, so their code begins with
 the same numbers}.
 
-\RU{В самом начале, перед строкой ``How much?'', видны три байта, которые на самом деле \ac{BOM}}
-\EN{At the beginning, before the ``How much?'' string we see 3 bytes, which are in fact the \ac{BOM}}.
+\RU{В самом начале, перед строкой \q{How much?}, видны три байта, которые на самом деле \ac{BOM}}
+\EN{At the beginning, before the \q{How much?} string we see 3 bytes, which are in fact the \ac{BOM}}.
 \EN{The }\ac{BOM} \RU{показывает, какой способ кодирования будет сейчас использоваться}\EN{defines the encoding system to be
 used}.
 
@@ -160,7 +160,7 @@ system files}:
 
 \index{IDA}
 \RU{В \IDA, уникодом называется именно строки с символами, занимающими 2 байта}\EN{Strings with characters
-that occupy exactly 2 bytes are called ``Unicode'' in \IDA}:
+that occupy exactly 2 bytes are called \q{Unicode} in \IDA}:
 
 \begin{lstlisting}
 .data:0040E000 aHelloWorld:
@@ -169,7 +169,7 @@ that occupy exactly 2 bytes are called ``Unicode'' in \IDA}:
 \end{lstlisting}
 
 \RU{Вот как может выглядеть строка на русском языке}\EN{Here is how the Russian language 
-string}\RU{ (``И снова здравствуйте!'')} \RU{закодированная в UTF-16LE}\EN{is encoded in UTF-16LE}:
+string}\RU{ (\q{И снова здравствуйте!})} \RU{закодированная в UTF-16LE}\EN{is encoded in UTF-16LE}:
 
 \begin{figure}[H]
 \centering
@@ -209,14 +209,14 @@ string written in multiple languages}.
 \EN{The base64 encoding is highly popular for the cases when you need to transfer binary data as a text string.}
 \RU{По сути, этот алгоритм кодирует 3 двоичных байта в 4 печатаемых символа:}
 \EN{In essence, this algorithm encodes 3 binary bytes into 4 printable characters:}
-\RU{все 26 букв латинского алфавита (в обоих регистрах), цифры, знак плюса (``+'') и слэша (``/''),}
-\EN{all 26 Latin letters (both lower and upper case), digits, plus sign (``+'') and slash sign (``/''),}
+\RU{все 26 букв латинского алфавита (в обоих регистрах), цифры, знак плюса (\q{+}) и слэша (\q{/}),}
+\EN{all 26 Latin letters (both lower and upper case), digits, plus sign (\q{+}) and slash sign (\q{/}),}
 \RU{в итоге это получается 64 символа}\EN{64 characters in total}.
 
 \RU{Одна отличительная особенность строк в формате base64, это то что они часто (хотя и не всегда) заканчиваются
-одним или двумя символами знака равенства (``='') для выравнивания, например:}
+одним или двумя символами знака равенства (\q{=}) для выравнивания, например:}
 \EN{One distinctive feature of base64 strings is that they often (but not always) end with 1 or 2 padding 
-equality symbol(s) (``=''), for example:}
+equality symbol(s) (\q{=}), for example:}
 
 \begin{lstlisting}
 AVjbbVSVfcUMu1xvjaMgjNtueRwBbxnyJw8dpGnLW8ZW8aKG3v4Y0icuQT+qEJAp9lAOuWs=
@@ -226,5 +226,5 @@ AVjbbVSVfcUMu1xvjaMgjNtueRwBbxnyJw8dpGnLW8ZW8aKG3v4Y0icuQT+qEJAp9lAOuWs=
 WVjbbVSVfcUMu1xvjaMgjNtueRwBbxnyJw8dpGnLW8ZW8aKG3v4Y0icuQT+qEJAp9lAOuQ==
 \end{lstlisting}
 
-\RU{Так что знак равенства (``='') никогда не встречается в середине строк закодированных в base64.}
-\EN{The equality sign (``='') is never encounter in the middle of base64-encoded strings.}
+\RU{Так что знак равенства (\q{=}) никогда не встречается в середине строк закодированных в base64.}
+\EN{The equality sign (\q{=}) is never encounter in the middle of base64-encoded strings.}

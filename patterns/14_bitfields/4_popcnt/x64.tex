@@ -17,27 +17,27 @@
 \lstinputlisting[caption=\Optimizing GCC 4.8.2,numbers=left,label=shifts64_GCC_O3]{patterns/14_bitfields/4_popcnt/shifts64_GCC_O3.s.\LANG}
 
 \RU{Код более лаконичный, но содержит одну необычную вещь}\EN{This code is terser, but has a quirk}.
-\RU{Во всех примерах, что мы пока видели, инкремент значения переменной ``rt'' происходит после сравнения 
-определенного бита с единицей, но здесь ``rt'' увеличивается на 1 до этого (строка 6), записывая новое значение
+\RU{Во всех примерах, что мы пока видели, инкремент значения переменной \q{rt} происходит после сравнения 
+определенного бита с единицей, но здесь \q{rt} увеличивается на 1 до этого (строка 6), записывая новое значение
 в регистр \EDX.}
-\EN{In all examples that we see so far, we were incrementing the ``rt'' value after comparing a specific bit,
-but the code here increments ``rt'' before (line 6), writing the new value into register \EDX .}
+\EN{In all examples that we see so far, we were incrementing the \q{rt} value after comparing a specific bit,
+but the code here increments \q{rt} before (line 6), writing the new value into register \EDX .}
 \RU{Затем, если последний бит был 1, инструкция}\EN{Thus, if the last bit is 1, the} \TT{CMOVNE}
 \footnote{Conditional MOVe if Not Equal\RU{ (MOV если не равно)}}\EN{ instruction} 
 (\RU{которая синонимична}\EN{which is a synonym for} \TT{CMOVNZ}
 \footnote{Conditional MOVe if Not Zero\RU{ (MOV если не ноль)}}) \IT{\RU{фиксирует}\EN{commits}} 
-\RU{новое значение}\EN{the new value of} ``rt''
-\RU{копируя значение из}\EN{by moving} \EDX (``\RU{предполагаемое значение rt}\EN{proposed rt value}'') 
+\RU{новое значение}\EN{the new value of} \q{rt}
+\RU{копируя значение из}\EN{by moving} \EDX (\q{\RU{предполагаемое значение rt}\EN{proposed rt value}}) 
 \RU{в}\EN{into} \EAX 
-(``\RU{текущее}\EN{current} rt'' \RU{которое будет возвращено в конце функции}\EN{to be returned at the end}).
+(\q{\RU{текущее}\EN{current} rt} \RU{которое будет возвращено в конце функции}\EN{to be returned at the end}).
 \RU{Следовательно, инкремент происходит на каждом шаге цикла, т.е. 64 раза, вне всякой связи с входным
 значением.}
 \EN{Hence, the incrementing is done at each step of loop, i.e., 64 times, without any relation to the input value.}
 
 \RU{Преимущество этого кода в том, что он содержит только один условный переход (в конце цикла) вместо
-двух (пропускающий инкремент ``rt'' и еще один в конце цикла).}
+двух (пропускающий инкремент \q{rt} и еще один в конце цикла).}
 \EN{The advantage of this code is that it contain only one conditional jump (at the end of the loop) instead of 
-two jumps (skipping the ``rt'' value increment and at the end of loop).}
+two jumps (skipping the \q{rt} value increment and at the end of loop).}
 \RU{И это может работать быстрее на современных CPU с предсказателем переходов}
 \EN{And that might work faster on the modern CPUs with branch predictors}: \myref{branch_predictors}.
 
@@ -58,13 +58,13 @@ which is recommended by AMD to be placed at the end of function, if \RET goes ri
 
 \index{x86!\Instructions!ROL}
 \RU{Здесь используется инструкция}\EN{Here the} \TT{ROL} \RU{вместо}\EN{instruction is used instead of} 
-\TT{SHL}, \RU{которая на самом деле}\EN{which is in fact} ``rotate left''\RU{ (прокручивать влево)} 
-\RU{вместо}\EN{instead of} ``shift left''\RU{ (сдвиг влево)},
+\TT{SHL}, \RU{которая на самом деле}\EN{which is in fact} \q{rotate left}\RU{ (прокручивать влево)} 
+\RU{вместо}\EN{instead of} \q{shift left}\RU{ (сдвиг влево)},
 \RU{но здесь, в этом примере, она работает так же как и}
 \EN{but in this example it works just as} \TT{SHL}.
 
 \ifx\LITE\undefined
-\RU{Об этих ``прокручивающих'' инструкциях больше читайте здесь}\EN{You can read more about the rotate instruction 
+\RU{Об этих \q{прокручивающих} инструкциях больше читайте здесь}\EN{You can read more about the rotate instruction 
 here}: \myref{ROL_ROR}.
 \fi
 
