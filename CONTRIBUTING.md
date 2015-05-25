@@ -20,8 +20,8 @@ Commenting right in the LaTeX source code may be good idea.
 LaTeX comments are started with percent ('%') sign.
 
 It's fine to write comments like:
-"I would love to read more about X and Y right here at this place" and/or
-"It's also a great idea to mention X and Y right here".
+"I would love to read more about this and that right here at this place" and/or
+"It's also a great idea to mention this and that right here".
 
 [For example](https://github.com/dennis714/RE-for-beginners/blob/b0fe5ef304fa3303c502c4f94ee147683a2ffb50/patterns/main.tex#L105).
 
