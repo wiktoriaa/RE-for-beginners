@@ -6,7 +6,7 @@
 \index{ARM!\Instructions!MADD}
 \RU{Тут всё просто}\EN{Everything here is simple}.
 \EN{\TT{MADD} is just an instruction doing fused multiply/add (similar to the \TT{MLA} we already saw).}
-\RU{\TT{MADD} это просто инструкция производящая умножение/сложение одновременно (как \TT{MLA}, 
+\RU{\TT{MADD} это просто инструкция, производящая умножение и сложение одновременно (как \TT{MLA}, 
 которую мы уже видели).}
 \EN{All 3 arguments are passed in the 32-bit parts of X-registers.}
 \RU{Все 3 аргумента передаются в 32-битных частях X-регистров.}
@@ -45,8 +45,8 @@ main:
 \end{lstlisting}
 
 \EN{The \ttf{} function is the same, only the whole 64-bit X-registers are now used.}
-\RU{Ф-ция \ttf{} точно такая же, только теперь используются полные части 64-битных X-регистров.}
-\RU{Длинные 64-битные значения загружаются в регистры по частям, я описал это здесь}
+\RU{Функция \ttf{} точно такая же, только теперь используются полные части 64-битных X-регистров.}
+\RU{Длинные 64-битные значения загружаются в регистры по частям, я описал это здесь}%
 \EN{Long 64-bit values are loaded into the registers by parts, I have described it also here}: \myref{ARM_big_constants_loading}.
 
 \subsubsection{\NonOptimizing GCC (Linaro) 4.9}
@@ -73,11 +73,11 @@ f:
 in case someone (or something) in this function needs using the \TT{W0...W2} 
 registers. This prevents overwriting the original
 function arguments, which may be needed again in the future.}
-\RU{Код сохраняет входные аргументы в локальном стеке, на случай если кому-то (или чему-то) в этой функции
+\RU{Код сохраняет входные аргументы в локальном стеке на случай если кому-то (или чему-то) в этой функции
 понадобится использовать регистры \TT{W0...W2}, перезаписывая оригинальные аргументы функции, которые
 могут понадобится в будущем.}
 \RU{Это называется}\EN{This is called} \IT{Register Save Area.} \cite{ARM64_PCS}
-\RU{хотя, вызываемая функция не обязана сохранять их}\EN{ The callee, however, is not obliged to save them}.
+\RU{Вызываемая функция не обязана сохранять их.}\EN{ The callee, however, is not obliged to save them.}
 \RU{Это то же что и}\EN{This is somewhat similar to} ``Shadow Space'': \myref{shadow_space}.
 
 \RU{Почему оптимизирующий GCC 4.9 убрал этот, сохраняющий аргументы, код?}

@@ -31,8 +31,8 @@ _TEXT	ENDS
 \end{lstlisting}
 
 \ifx\LITE\undefined
-\RU{MSVC выдает листинги в Intel-овском синтаксисе.}\EN{MSVC produces assembly listings in Intel-syntax.} 
-\RU{Разница между Intel-синтаксисом и AT\&T будет рассмотрена немного позже:}
+\RU{MSVC выдает листинги в синтаксисе Intel.}\EN{MSVC produces assembly listings in Intel-syntax.} 
+\RU{Разница между синтаксисом Intel и AT\&T будет рассмотрена немного позже:}
 \EN{The difference between Intel-syntax and AT\&T-syntax will be discussed in} \myref{ATT_syntax}.
 \fi
 
@@ -44,12 +44,12 @@ _TEXT	ENDS
 
 \index{\CLanguageElements!const}
 \label{string_is_const_char}
-\RU{Строка \TT{``hello, world''} в \CCpp имеет тип \TT{const char[]} \cite[p176, 7.3.2]{TCPPPL}, 
+\RU{Строка \TT{hello, world} в \CCpp имеет тип \TT{const char[]} \cite[p176, 7.3.2]{TCPPPL}, 
 однако не имеет имени.}
-\EN{The string \TT{``hello, world''} in \CCpp has type \TT{const char[]} \cite[p176, 7.3.2]{TCPPPL},
+\EN{The string \TT{hello, world} in \CCpp has type \TT{const char[]} \cite[p176, 7.3.2]{TCPPPL},
 however it does not have its own name.}
 
-\RU{Но компилятору нужно как-то с ней работать, так что он дает ей внутреннее имя \TT{\$SG3830}.}
+\RU{Но компилятору нужно как-то с ней работать, поэтому он дает ей внутреннее имя \TT{\$SG3830}.}
 \EN{The compiler needs to deal with the string somehow so it defines the internal name \TT{\$SG3830} for it.}
 
 \RU{Поэтому пример можно было бы переписать вот так}\EN{That is why the example may be rewritten as follows}:
@@ -62,13 +62,13 @@ however it does not have its own name.}
 As we can see, the string is terminated by a zero byte, which is standard for \CCpp strings}.
 \RU{Больше о строках в Си}\EN{More about C strings}: \myref{C_strings}.
 
-\RU{В сегменте кода \TT{\_TEXT} находится пока только одна функция}
+\RU{В сегменте кода \TT{\_TEXT} находится пока только одна функция}%
 \EN{In the code segment, \TT{\_TEXT}, there is only one function so far}: \main.
 
-\RU{Функция \main, как и практически все функции, начинается с пролога и заканчивается эпилогом}
-\EN{The function \main starts with prologue code and ends with epilogue code (like almost any function)}
-\footnote{\RU{Об этом смотрите подробнее в разделе о прологе и эпилоге функции}
-\EN{You can read more about it in section about function prolog and epilog}
+\RU{Функция \main, как и практически все функции, начинается с пролога и заканчивается эпилогом}%
+\EN{The function \main starts with prologue code and ends with epilogue code (like almost any function)}%
+\footnote{\RU{Об этом смотрите подробнее в разделе о прологе и эпилоге функции}%
+\EN{You can read more about it in section about function prolog and epilog}%
 ~(\myref{sec:prologepilog}).}.
 
 \index{x86!\Instructions!CALL}
@@ -122,17 +122,17 @@ This instruction has almost the same effect but the \ECX register contents will 
 %\RU{О стеке можно прочитать в соответствующем разделе}
 %\EN{Read more about the stack in section}~(\myref{sec:stack}).
 \index{\CLanguageElements!return}
-\RU{После вызова \printf в оригинальном коде на \CCpp указано \TT{return 0}~--- вернуть $0$ 
+\RU{После вызова \printf в оригинальном коде на \CCpp указано \TT{return 0}~--- вернуть 0 
 в качестве результата функции \main.} 
-\EN{After calling \printf, the original \CCpp code contains the statement \TT{return 0}~---return $0$ as the result of the \main function.}
+\EN{After calling \printf, the original \CCpp code contains the statement \TT{return 0}~---return 0 as the result of the \main function.}
 
 \index{x86!\Instructions!XOR}
 \RU{В сгенерированном коде это обеспечивается инструкцией}
 \EN{In the generated code this is implemented by the instruction} \TT{XOR EAX, EAX}.
 
 \index{x86!\Instructions!MOV}
-\RU{\XOR, как легко догадаться~--- ``исключающее ИЛИ''}
-\EN{\XOR is in fact just ``eXclusive OR''}
+\RU{\XOR, как легко догадаться~--- ``исключающее ИЛИ''}%
+\EN{\XOR is in fact just ``eXclusive OR''}%
 \footnote{\href{http://go.yurichev.com/17118}{wikipedia}}
 \RU{, но компиляторы часто используют его вместо простого}
 \EN{but the compilers often use it instead of}
