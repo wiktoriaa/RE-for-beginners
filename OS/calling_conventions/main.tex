@@ -12,9 +12,7 @@
 затем предпоследний, и в самом конце\EMDASH{}первый аргумент. 
 Вызывающая функция должна также затем вернуть \glslink{stack pointer}{указатель стека} в нормальное состояние, 
 после возврата вызываемой функции.}
-\EN{The \Gls{caller} pushes the arguments in the stack in reverse order: the last argument, then the penultimate element 
-and finally the first argument.
-The \Gls{caller} also must return the value of the \gls{stack pointer} (\ESP) to its initial state after the \gls{callee} function exits.}
+\EN{The gls{caller} also must return the value of the \gls{stack pointer} (\ESP) to its initial state after the \gls{callee} function exits.}
 
 \begin{lstlisting}[caption=cdecl]
 push arg3
@@ -38,7 +36,7 @@ add esp, 12 ; returns ESP
 там нет инструкции \TT{add esp, x}.}
 \EN{It's almost the same as \IT{cdecl}, with the exception that the \gls{callee} must set \ESP to the initial state by executing the \TT{RET x} instruction instead of \RET, where
 \TT{x = arguments number * sizeof(int)\footnote{\SIZEOFINT}}.
-The \Gls{caller} is not adjusting the \gls{stack pointer}, 
+The \gls{caller} is not adjusting the \gls{stack pointer}, 
 there are no \TT{add esp, x} instruction.}
 
 \begin{lstlisting}[caption=stdcall]
@@ -107,19 +105,19 @@ Thus it is not suitable for such functions to use \IT{stdcall}, \IT{cdecl} is be
 \label{fastcall}
 \index{fastcall}
 
-\RU{Это общее название для передачи некоторых аргументов через регистры, а всех остальных\EMDASH{}через стек.На более старых процессорах, это работало потенциально быстрее чем \IT{cdecl}/\IT{stdcall} (ведь стек
-в памяти использовался меньше).
-Впрочем, на современных (намного более сложных) CPU, выигрыша может и не быть.}
+\RU{Это общее название для передачи некоторых аргументов через регистры, а всех остальных\EMDASH{}через стек.
+На более старых процессорах, это работало потенциально быстрее чем \IT{cdecl}/\IT{stdcall} (ведь стек в памяти использовался меньше).
+Впрочем, на современных (намного более сложных) CPU, существенного выигрыша может и не быть.}
 \EN{That's the general naming for the method of passing some arguments via registers and the 
 rest via the stack. It worked faster than \IT{cdecl}/\IT{stdcall} on older CPUs 
 (because of smaller stack pressure).
-It may not help to gain performance on modern (much more complex) CPUs, however.}
+It may not help to gain any significant performance on modern (much more complex) CPUs, however.}
 
 \RU{Это не стандартизированный способ, поэтому разные компиляторы делают это по-своему. 
 Разумеется, если у вас есть, скажем, две DLL, одна использует другую, и обе они собраны с \IT{fastcall}
 но разными компиляторами, очень вероятно, будут проблемы.}
 \EN{It is not standardized, so the various compilers can do it differently.
-It's a well known caveat: if you have two DLLs and the first uses the second, and they are built by different compilers with 
+It's a well known caveat: if you have two DLLs and the one uses another one, and they are built by different compilers with 
 different \IT{fastcall} calling conventions, you can expect problems.}
 
 \RU{MSVC и GCC передает первый и второй аргумент через \ECX и \EDX а остальные аргументы через стек.}
@@ -127,7 +125,7 @@ different \IT{fastcall} calling conventions, you can expect problems.}
 
 \RU{\glslink{stack pointer}{Указатель стека} должен быть возвращен в первоначальное состояние вызываемой функцией, 
 как в случае \IT{stdcall}.}
-\EN{The \Gls{stack pointer} must be restored to its initial state by the \gls{callee} (like in \IT{stdcall}).}
+\EN{The \gls{stack pointer} must be restored to its initial state by the \gls{callee} (like in \IT{stdcall}).}
 
 \begin{lstlisting}[caption=fastcall]
 push arg3
@@ -178,7 +176,7 @@ Thus, the \EAX, \EDX and \ECX registers are to be used.}
 \EN{Of course, if the number the of arguments is less than 3, not all 3 registers are to be used.}
 
 \RU{Вызывающая функция возвращает \glslink{stack pointer}{указатель стека} в первоначальное состояние.}
-\EN{The \Gls{caller} restores the \gls{stack pointer} to its initial state.}
+\EN{The \gls{caller} restores the \gls{stack pointer} to its initial state.}
 
 \RU{Для примера, см.}\EN{For example, see} (\myref{regparm}).
 
@@ -189,9 +187,9 @@ Thus, the \EAX, \EDX and \ECX registers are to be used.}
 \RU{Первые 4 аргумента передаются через регистры}\EN{The first 4 arguments are passed via the}
 \EAX, \EDX, \EBX \AndENRU \ECX\EN{ registers}.
 \RU{Все остальные}\EN{All the rest}\EMDASH{}\RU{через стек}\EN{via the stack}.
-\RU{Функции имеют символ подчеркивания, добавленный к концу имени функции, для отличия их от тех,
+\RU{Эти функции имеют символ подчеркивания, добавленный к концу имени функции, для отличия их от тех,
 которые имеют другой способ передачи аргументов}
-\EN{The functions have an underscore added to the function name in order to distinguish them from 
+\EN{These functions has an underscore appended to the function name in order to distinguish them from 
 those having a different calling convention}.
 
 \section{thiscall}
@@ -224,14 +222,14 @@ Thus it will be very visible that internally: all function-methods have an extra
 но б\'{о}льшие могут сохранять их значения на будущее.}
 \EN{The method of for passing arguments in Win64 somewhat resembles \TT{fastcall}.
 The first 4 arguments are passed via \RCX, \RDX, \Reg{8} and \Reg{9}, the rest\EMDASH{}via the stack.
-The \Gls{caller} also must prepare space for 32 bytes or 4 64-bit values,
+The \gls{caller} also must prepare space for 32 bytes or 4 64-bit values,
 so then the \gls{callee} can save there the first 4 arguments.
 Short functions may use the arguments' values just from the registers,
 but larger ones may save their values for further use.}
 
 \RU{Вызывающая функция должна вернуть \glslink{stack pointer}{указатель стека} 
 в первоначальное состояние}
-\EN{The \Gls{caller} also must return the \gls{stack pointer} into its initial state}.
+\EN{The \gls{caller} also must return the \gls{stack pointer} into its initial state}.
 
 \RU{Это же соглашение используется и в системных библиотеках Windows x86-64 
 (вместо \IT{stdcall} в win32).}
@@ -275,7 +273,7 @@ but the \q{scratch space} will not be used, because it won't be needed.}
 
 \RU{Еще один пример подобного}\EN{Another example of such thing is}: \myref{TaskMgr_LEA}.
 
-\subsubsection{\RU{Передача \ITthis}\EN{Passing \ITthis} (\CCpp)}
+\subsubsection{Windows x64: \RU{Передача \ITthis}\EN{Passing \ITthis} (\CCpp)}
 
 \EN{The}\RU{Указатель} \ITthis \RU{передается через}\EN{pointer is passed in} \RCX, 
 \RU{первый аргумент метода через}\EN{the first argument of the method is in} \RDX, \etc{}.
@@ -292,15 +290,16 @@ although the \gls{callee} may save the register values in the stack, if it needs
 
 \lstinputlisting[caption=\Optimizing GCC 4.7.3]{OS/calling_conventions/x64_linux_O3.s}
 
+\index{AMD}
 \RU{N.B.: здесь значения записываются в 32-битные части регистров (например EAX) а не в весь 64-битный
 регистр (RAX).
 Это связано с тем что в x86-64,
 запись в младшую 32-битную часть 64-битного регистра автоматически обнуляет старшие 32 бита.
-Вероятно, это сделано для упрощения портирования кода под x86-64.}
+Вероятно, это так решили в AMD для упрощения портирования кода под x86-64.}
 \EN{N.B.: here the values are written into the 32-bit parts of the registers (e.g., EAX) but not in the whole 64-bit 
 register (RAX).
 This is because each write to the low 32-bit part of a register automatically clears the high 32 bits.
-Supposedly, it was done to simplify porting code to x86-64.}
+Supposedly, it was decided in AMD to do so to simplify porting code to x86-64.}
 
 \section{\RU{Возвращение переменных типа \Tfloat, \Tdouble}\EN{Return values of \Tfloat and \Tdouble type}}
 \index{float}
@@ -342,11 +341,11 @@ that is where the modification takes place.}
 \RU{Теоретически, после возврата из \gls{callee},
 функция-\gls{caller} могла бы получить модифицированный аргумент и использовать его как-то.
 Может быть, если бы она была написана на языке ассемблера.
-Но языки \CCpp не предлагают никакого способа доступиться к ним.}
+Но стандарты языков \CCpp не предлагают никакого способа доступиться к ним.}
 \EN{Theoretically, after the \gls{callee}'s return, 
 the \gls{caller} could get the modified argument and use it somehow.
 Maybe if it is written directly in assembly language.
-But the \CCpp languages don't offer any way to access them.}
+But the \CCpp languages standards don't offer any way to access them.}
 
 % sections
 \input{OS/calling_conventions/ptr_to_argument/main}

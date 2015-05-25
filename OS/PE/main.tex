@@ -57,13 +57,16 @@ works with}.
 
 \item
 \index{VA}
-\ac{VA}\EMDASH{}\RU{это адрес, который будет использоваться в самой программе.}
-\EN{an address which is to be used in program.}
+\ac{VA}\EMDASH{}\RU{это адрес, который будет использоваться в самой программе во время исполнения.}
+\EN{an address which is to be used in program while runtime.}
 
 \item
 \index{\RU{Базовый адрес}\EN{Base address}}
-\RU{Базовый адрес}\EN{Base address}\EMDASH{}\RU{это адрес, по которому модуль будет загружен 
-в пространство процесса}\EN{the address within the process memory at which the module is to be loaded}.
+\RU{Базовый адрес (модуля)}\EN{Base address (of module)}\EMDASH{}
+\RU{это адрес, по которому модуль должен быть загружен в пространство процесса.}
+\EN{the address within the process memory at which the module is to be loaded.}
+\EN{\ac{OS} loader may change it, if the base address is already occupied by another module just loaded before.}
+\RU{Загрузчик \ac{OS} может его изменить, если этот базовый адрес уже занят другим модулем, загруженным перед ним.}
 
 \item
 \index{RVA}
@@ -125,9 +128,8 @@ and each virtual addresses in the second DLL will be corrected.} \\
 \RU{Это}\EN{It is} \ac{ASLR}\footnote{\RU{\href{http://go.yurichev.com/17042}{wikipedia}}\EN{\href{http://go.yurichev.com/17140}{wikipedia}}}.
 
 \index{Shellcode}
-\RU{Дело в том, что некий шеллкод, пытающийся исполниться на зараженной системе, 
-должен вызывать какие-то системные функции}\EN{A shellcode trying to get executed on a compromised
-system must call system functions}.
+\RU{Дело в том, что некий шеллкод, пытающийся исполниться на зараженной системе, должен вызывать какие-то системные функции, а следовательно, знать их адреса.}
+\EN{A shellcode trying to get executed on a compromised system must call system functions, hence, know their addresses.}
 
 \RU{И в старых}\EN{In older} \ac{OS} (\RU{в линейке \gls{Windows NT}: до}\EN{in \gls{Windows NT} line: before} Windows Vista),
 \RU{системные}\EN{system} DLL (\RU{такие как}\EN{like} kernel32.dll, user32.dll) \RU{загружались все время
@@ -149,9 +151,13 @@ fixed and shellcode could call them directly}.
 
 \RU{Имеется также поле \IT{subsystem}, обычно это}\EN{There is also a \IT{subsystem} field, usually it is}:
 
+\index{Native API}
 \begin{itemize}
-\item native (.sys-\RU{драйвер}\EN{driver}), 
+\item native\footnote{\EN{Meaning, the module use Native API instead of Win32}\RU{Что означает, что модуль использует Native API а не Win32}} 
+(.sys-\RU{драйвер}\EN{driver}), 
+
 \item console (\RU{консольное приложение}\EN{console application}) \OrENRU 
+
 \item \ac{GUI} (\RU{не консольное}\EN{non-console}).
 \end{itemize}
 
@@ -188,8 +194,8 @@ it is possible to force it to compile for Windows XP.}
 \RU{Разделение на секции присутствует, по-видимому, во всех форматах исполняемых файлов.}
 \EN{Division in sections, as it seems, is present in all executable file formats.}
 
-\RU{Сделано это для того, чтобы отделить код от данных, а данные\EMDASH{}от константных данных.}
-\EN{It is done in order to separate code from data, and data\EMDASH{}from constant data.}
+\RU{Придумано это для того, чтобы отделить код от данных, а данные\EMDASH{}от константных данных.}
+\EN{It is devised in order to separate code from data, and data\EMDASH{}from constant data.}
 
 \begin{itemize}
 \item
@@ -277,8 +283,8 @@ typedef struct _IMAGE_SECTION_HEADER {
 
 \index{Hiew}
 \RU{Еще немного терминологии}\EN{A word about terminology}:
-\IT{PointerToRawData} \RU{называется}\EN{it called} \q{Offset}
-\AndENRU \IT{VirtualAddress} \RU{называется}\EN{is called} \q{RVA} \InENRU Hiew.
+\IT{PointerToRawData} \RU{называется}\EN{it called} \q{Offset} \InENRU Hiew
+\AndENRU \IT{VirtualAddress} \RU{называется}\EN{is called} \q{RVA} \RU{там же}\EN{there}.
 
 \subsection{\RU{Релоки}\EN{Relocations (relocs)}}
 \label{subsec:relocs}
@@ -288,7 +294,10 @@ typedef struct _IMAGE_SECTION_HEADER {
 \RU{Это также присутствует почти во всех форматах загружаемых и исполняемых файлов}
 \EN{They are also present in almost all executable file formats}
 \footnote{\RU{Даже .exe-файлы в}\EN{Even in .exe files for} MS-DOS}.
+\EN{Exceptions are shared dynamic libraries compiled with \ac{PIC}, or any other \ac{PIC}-code.}
+\RU{Исключения это динамические библиотеки явно скомпилированные с \ac{PIC} или любой другой \ac{PIC}-код.}
 
+\RU{Зачем они нужны?}\EN{What are they for?}
 \RU{Как видно, модули могут загружаться по другим базовым адресам,
 но как же тогда работать с глобальными переменными, например?}
 \EN{Obviously, modules can be loaded on various base addresses,
@@ -338,7 +347,7 @@ of the global variable must be} \TT{0x510000}.
 \RU{и прибавляет к нему новый базовый адрес}\EN{and adds the new base address to it}.
 
 \RU{А если модуль загружается по своему оригинальному базовому адресу, ничего не происходит}
-\EN{If module is loaded at its original base address, nothing happens}.
+\EN{If a module is loaded at its original base address, nothing happens}.
 
 \RU{Так можно обходиться со всеми глобальными переменными}
 \EN{All global variables can be treated like that}.
@@ -530,8 +539,8 @@ code section is usually write-protected}, \RU{так что, моя утилит
 5 (access denied). \\
 \\
 \RU{Может возникнуть вопрос: а что если я поставляю программу с набором DLL,
-которые никогда не будут меняться, может как-то можно ускорить процесс загрузки?}
-\EN{One might ask: what if I supply a program with a set of DLL files which is not supposed to change,
+которые никогда не будут меняться (в т.ч., адреса всех функций в этих DLL), может как-то можно ускорить процесс загрузки?}
+\EN{One might ask: what if I supply a program with a set of DLL files which is not supposed to change (including addresses of all DLL functions),
 is it possible to speed up the loading process?}
 
 \RU{Да, можно прописать адреса импортируемых функций в массивы FirstThunk заранее}
@@ -588,9 +597,9 @@ started suspiciously fast), it is \q{mapped}, and loaded into memory in parts as
 and it would be simpler to pick text or picture for the language that is currently set in the \ac{OS}}. \\
 \\
 \RU{В качестве побочного эффекта, их легко редактировать и сохранять обратно в исполняемый файл,
-даже не обладая специальными знаниями,
-например, редактором}\EN{As a side effect, they can be edited easily and saved back to the executable file,
-even if one does not have special knowledge, by using for example the} ResHack\EN{ editor}(\myref{ResHack}).
+даже не обладая специальными знаниями, например, редактором ResHack}%
+\EN{As a side effect, they can be edited easily and saved back to the executable file, even if one does not have special knowledge, 
+by using the ResHack editor, for example} (\myref{ResHack}).
 
 \subsection{.NET}
 
@@ -627,7 +636,7 @@ data for the} \ac{TLS}(\myref{TLS}) (\RU{если нужно}\EN{if needed}).
 \index{TLS!Callbacks}
 \RU{Помимо всего прочего, спецификация PE-файла предусматривает инициализацию}
 \EN{Aside from that, the PE file specification also provides initialization of the}
-\ac{TLS}\RU{-секции, т.н.,}\EN{section, the so-called} TLS callbacks.
+\ac{TLS}\RU{-секции, т.н.,}\EN{ section, the so-called} TLS callbacks.
 \RU{Если они присутствуют, то они будут вызваны перед тем как передать управление на главную точку входа}
 \EN{If they are present, they are to be called before the control is passed to the main entry point} (\ac{OEP}).
 \RU{Это широко используется запаковщиками/защифровщиками PE-файлов.}
