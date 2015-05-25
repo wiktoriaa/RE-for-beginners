@@ -4,7 +4,7 @@
 \newcommand{\TDWNC}{TDW\_NOCOMPRESS\xspace}
 
 \RU{(Трассировка связи между переменной окружения \TDWNC{} SAPGUI\footnote{GUI-клиент от SAP}
-до ``назойливого всплывающего окна'' и самой функции сжатия данных.)}
+до \q{назойливого всплывающего окна} и самой функции сжатия данных.)}
 \EN{(Tracing the connection between the \TDWNC{} SAPGUI\footnote{SAP GUI client} environment variable and 
 the pesky nagging pop-up window and the actual data compression routine.)}
 
@@ -32,15 +32,15 @@ the pesky nagging pop-up window and the actual data compression routine.)}
 \RU{Но в начале давайте посмотрим, что мы уже знаем}\EN{But before this, let's see what we already know}.
 \RU{Первое: мы знаем, что переменна окружения \IT{\TDWNC} проверяется где-то внутри клиента SAPGUI.}
 \EN{First: we know that the environment variable \IT{\TDWNC} is checked somewhere inside the SAPGUI client.}
-\RU{Второе: строка вроде ``data compression switched off'' также должна где-то присутствовать.}
-\EN{Second: a string like ``data compression switched off'' must be present somewhere in it.}
+\RU{Второе: строка вроде \q{data compression switched off} также должна где-то присутствовать.}
+\EN{Second: a string like \q{data compression switched off} must be present somewhere in it.}
 \newcommand{\FNURLFAR}{\footnote{\url{http://go.yurichev.com/17347}}}
 \RU{При помощи файлового менеджера FAR\FNURLFAR я нашел обе эти строки в файле SAPguilib.dll.}
 \EN{With the help of the FAR file manager\FNURLFAR I found that both of these strings are stored in the SAPguilib.dll file.}
 
-\RU{Так что давайте откроем файл SAPguilib.dll в \IDA и поищем там строку \IT{``\TDWNC''}.
+\RU{Так что давайте откроем файл SAPguilib.dll в \IDA и поищем там строку \IT{\q{\TDWNC}}.
 Да, она присутствует и имеется только одна ссылка на эту строку.}
-\EN{So let's open SAPguilib.dll in \IDA and search for the \IT{``\TDWNC''} string. 
+\EN{So let's open SAPguilib.dll in \IDA and search for the \IT{\q{\TDWNC}} string. 
 Yes, it is present and there is only one reference to it.}
 
 \RU{Мы увидим такой фрагмент кода
@@ -230,7 +230,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 .text:6440EE1F                 call    FEWTraceError
 \end{lstlisting}
 
-\RU{А теперь, можем ли мы найти строку \IT{``data record mode switched on''}?}\EN{Now, can we find the \IT{``data record mode switched on''} string?}
+\RU{А теперь, можем ли мы найти строку \IT{\q{data record mode switched on}}?}\EN{Now, can we find the \IT{\q{data record mode switched on}} string?}
 \RU{Да, и есть только одна ссылка на эту строку в функции}
 \EN{Yes, and the only reference is in} \\
 \TT{CDwsGui::PrepareInfoWindow()}.
@@ -257,7 +257,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 
 \RU{Они \IT{очень} полезны}\EN{It is \IT{very} useful}.
 
-\RU{Посмотрим содержимое функции ``назойливого всплывающего окна''}
+\RU{Посмотрим содержимое функции \q{назойливого всплывающего окна}}
 \EN{So let's see the contents of this pesky nagging pop-up window's function}:
 
 \begin{lstlisting}

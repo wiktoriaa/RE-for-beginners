@@ -30,12 +30,12 @@ The process will halt, but that is much better than a remote attack to your host
 \newcommand{\CANARYURL}{\RU{\href{http://go.yurichev.com/17135}{miningwiki}}\EN{\href{http://go.yurichev.com/17134}{wikipedia}}}
 
 \index{Canary}
-\RU{Это случайное значение иногда называют ``канарейкой''
-\footnote{``canary'' в англоязычной литературе}, 
+\RU{Это случайное значение иногда называют \q{канарейкой}
+\footnote{\q{canary} в англоязычной литературе}, 
 по аналогии с шахтной канарейкой\footnote{\CANARYURL},
 их использовали шахтеры в свое время, чтобы определять, есть ли в шахте опасный газ.
 }
-\EN{This random value is called a ``canary'' sometimes, it is related to the miners' canary\footnote{\CANARYURL},
+\EN{This random value is called a \q{canary} sometimes, it is related to the miners' canary\footnote{\CANARYURL},
 they were used by miners in the past days in order to detect poisonous gases quickly.}
 \RU{Канарейки очень к нему чувствительны и либо проявляли сильное беспокойство, либо гибли от газа.}
 \EN{Canaries are very sensitive to mine gases, they become very agitated in case of danger, or even die.}
@@ -44,24 +44,24 @@ they were used by miners in the past days in order to detect poisonous gases qui
 \EN{If we compile our very simple array example}~(\myref{arrays_simple}) \InENRU \ac{MSVC}
 \RU{с опцией RTC1 или RTCs}\EN{with RTC1 and RTCs option}, \RU{в конце функции будет вызов 
 функции}\EN{you can see a call to}\\
-\TT{@\_RTC\_CheckStackVars@8}\RU{, проверяющей корректность ``канарейки''.}
-\EN{ a function at the end of the function that checks if the ``canary'' is correct.}
+\TT{@\_RTC\_CheckStackVars@8}\RU{, проверяющей корректность \q{канарейки}.}
+\EN{ a function at the end of the function that checks if the \q{canary} is correct.}
 
 \RU{Посмотрим, как дела обстоят в GCC}\EN{Let's see how GCC handles this}. 
 \RU{Возьмем пример из секции про}\EN{Let's take an} \TT{alloca()}~(\myref{alloca})\EN{ example}:
 
 \lstinputlisting{patterns/02_stack/04_alloca/2_1.c}
 
-\RU{По умолчанию, без дополнительных ключей, GCC 4.7.3 вставит в код проверку ``канарейки''}
-\EN{By default, without any additional options, GCC 4.7.3 inserts a ``canary'' check into the code}:
+\RU{По умолчанию, без дополнительных ключей, GCC 4.7.3 вставит в код проверку \q{канарейки}}
+\EN{By default, without any additional options, GCC 4.7.3 inserts a \q{canary} check into the code}:
 
 \lstinputlisting[caption=GCC 4.7.3]{patterns/13_arrays/3_BO_protection/gcc_canary.asm.\LANG}
 
 \index{x86!\Registers!GS}
 \RU{Случайное значение находится в}\EN{The random value is located in} \TT{gs:20}. 
 \RU{Оно записывается в стек, затем, в конце функции, значение в стеке
-сравнивается с корректной ``канарейкой'' в}\EN{It gets written on the stack and then at the end of the function
-the value in the stack is compared with the correct ``canary'' in} \TT{gs:20}. 
+сравнивается с корректной \q{канарейкой} в}\EN{It gets written on the stack and then at the end of the function
+the value in the stack is compared with the correct \q{canary} in} \TT{gs:20}. 
 \RU{Если значения не равны, будет вызвана функция}\EN{If the values are not equal, the} 
 \TT{\_\_stack\_chk\_fail} \RU{и в консоли мы увидим что-то вроде такого}
 \EN{function is called and we can see in the console something like that} (Ubuntu 13.04 x86):

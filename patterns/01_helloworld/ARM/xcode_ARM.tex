@@ -20,16 +20,16 @@ __cstring:00003F62 48 65 6C 6C+aHelloWorld_0  DCB "Hello world!",0
 \RU{Инструкции}\EN{The instructions} \TT{STMFD} \AndENRU \TT{LDMFD} \RU{нам уже знакомы}\EN{are already familiar to us}.
 
 \index{ARM!\Instructions!MOV}
-\RU{Инструкция \MOV просто записывает число \TT{0x1686} в регистр \Reg{0}~--- это смещение, указывающее на строку ``Hello world!''}%
+\RU{Инструкция \MOV просто записывает число \TT{0x1686} в регистр \Reg{0}~--- это смещение, указывающее на строку \q{Hello world!}}%
 \EN{The \MOV instruction just writes the number \TT{0x1686} into the \Reg{0} register.
-This is the offset pointing to the ``Hello world!'' string}.
+This is the offset pointing to the \q{Hello world!} string}.
 
 \RU{Регистр \TT{R7} (по стандарту, принятому в \cite{IOSABI}) это frame pointer, о нем будет рассказано позже.}
 \EN{The \TT{R7} register (as it is standardized in \cite{IOSABI}) is a frame pointer. More on that below.}
 
 \index{ARM!\Instructions!MOVT}
-\RU{Инструкция}\EN{The} \TT{MOVT R0, \#0} (MOVe Top) \RU{записывает $0$ в старшие 16 бит регистра}%
-\EN{instruction writes $0$ into higher 16 bits of the register}.
+\RU{Инструкция}\EN{The} \TT{MOVT R0, \#0} (MOVe Top) \RU{записывает 0 в старшие 16 бит регистра}%
+\EN{instruction writes 0 into higher 16 bits of the register}.
 \RU{Дело в том, что обычная инструкция \MOV в режиме ARM может записывать какое-либо значение только в младшие 16 бит регистра, ведь в ней нельзя закодировать больше}%
 \EN{The issue here is that the generic \MOV instruction in ARM mode may write only the lower 16 bits of the register}.
 \RU{Помните, что в режиме ARM опкоды всех инструкций ограничены длиной в 32 бита. Конечно, это ограничение не касается перемещений данных между регистрами.}
@@ -41,9 +41,9 @@ This is the offset pointing to the ``Hello world!'' string}.
 \RU{Возможно, это недочет компилятора}\EN{This is probably a shortcoming of the compiler}.
 
 \index{ARM!\Instructions!ADD}
-\RU{Инструкция}\EN{The} \TT{ADD R0, PC, R0} \RU{прибавляет \ac{PC} к \Reg{0} для вычисления действительного адреса строки ``Hello world!''. Как нам уже известно, это ``\PICcode'', поэтому такая корректива необходима}%
-\EN{instruction adds the value in the \ac{PC} to the value in the \Reg{0}, to calculate absolute address of the ``Hello world!'' string. 
-As we already know, it is ``\PICcode'' so this correction is essential here}.
+\RU{Инструкция}\EN{The} \TT{ADD R0, PC, R0} \RU{прибавляет \ac{PC} к \Reg{0} для вычисления действительного адреса строки \q{Hello world!}. Как нам уже известно, это \q{\PICcode}, поэтому такая корректива необходима}%
+\EN{instruction adds the value in the \ac{PC} to the value in the \Reg{0}, to calculate absolute address of the \q{Hello world!} string. 
+As we already know, it is \q{\PICcode} so this correction is essential here}.
 
 \RU{Инструкция \TT{BL} вызывает \puts вместо \printf}%
 \EN{The \TT{BL} instruction calls the \puts function instead of \printf}.
@@ -55,7 +55,6 @@ As we already know, it is ``\PICcode'' so this correction is essential here}.
 Действительно, \printf с одним аргументом это почти аналог \puts.}
 \EN{GCC replaced the first \printf call with \puts.
 Indeed: \printf with a sole argument is almost analogous to \puts.} 
-
 \RU{\IT{Почти}, если принять условие, что в строке не будет управляющих символов \printf, 
 начинающихся со знака процента. Тогда эффект от работы этих двух функций будет разным}%
 \EN{\IT{Almost}, because the two functions are producing the same result only in case the 

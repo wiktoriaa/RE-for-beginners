@@ -13,8 +13,8 @@ armcc.exe --arm --c90 -O0 1.c
 \EN{but it has high-level ARM-processor related macros}\footnote{
 \RU{например, он показывает инструкции \PUSH/\POP, отсутствующие в режиме ARM}
 \EN{e.g. ARM mode lacks \PUSH/\POP instructions}}, 
-\RU{а нам важнее увидеть инструкции ``как есть'', так что посмотрим скомпилированный результат в \IDA.}
-\EN{but it is more important for us to see the instructions ``as is'' so let's see the compiled result in \IDA.}
+\RU{а нам важнее увидеть инструкции \q{как есть}, так что посмотрим скомпилированный результат в \IDA.}
+\EN{but it is more important for us to see the instructions \q{as is} so let's see the compiled result in \IDA.}
 
 \begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode) \IDA]
 .text:00000000             main
@@ -29,8 +29,8 @@ armcc.exe --arm --c90 -O0 1.c
 
 \RU{В вышеприведённом примере можно легко увидеть, что каждая инструкция имеет размер 4 байта.}
 \EN{In the example, we can easily see each instruction has a size of 4 bytes.}
-\RU{Действительно, ведь мы же компилировали наш код для режима ARM, а не thumb.}
-\EN{Indeed, we compiled our code for ARM mode, not for thumb.}
+\RU{Действительно, ведь мы же компилировали наш код для режима ARM, а не Thumb.}
+\EN{Indeed, we compiled our code for ARM mode, not for Thumb.}
 
 \index{ARM!\Instructions!STMFD}
 \index{ARM!\Instructions!POP}
@@ -41,9 +41,9 @@ armcc.exe --arm --c90 -O0 1.c
 \RU{Действительно, в выдаваемом листинге на ассемблере компилятор \IT{armcc} для упрощения указывает здесь инструкцию}
 \EN{Indeed, in the output listing from the \IT{armcc} compiler, for the sake of simplification, 
 actually shows the} \TT{PUSH \{r4,lr\}}\EN{ instruction}.
-\RU{Но это не совсем точно, инструкция \PUSH доступна только в режиме thumb, поэтому,
+\RU{Но это не совсем точно, инструкция \PUSH доступна только в режиме Thumb, поэтому,
 во избежание путаницы, я предложил работать в \IDA}%
-\EN{But that is not quite precise. The \PUSH instruction is only available in thumb mode.
+\EN{But that is not quite precise. The \PUSH instruction is only available in Thumb mode.
 So, to make things less confusing, we're doing this in \IDA}.
 
 \RU{Итак, эта инструкция уменьшает \ac{SP}, чтобы он указывал на место в стеке, свободное для записи
@@ -53,8 +53,8 @@ So, to make things less confusing, we're doing this in \IDA}.
 that is free for new entries, then it saves the values of the \Reg{4} and \ac{LR} registers at the address
 stored in the modified \ac{SP}}.
 
-\RU{Эта инструкция, как и инструкция \PUSH в режиме thumb, может сохранить в стеке одновременно несколько значений регистров, что может быть очень удобно}%
-\EN{This instruction (like the \PUSH instruction in thumb mode) is able to save several register values at once which can be very useful}. 
+\RU{Эта инструкция, как и инструкция \PUSH в режиме Thumb, может сохранить в стеке одновременно несколько значений регистров, что может быть очень удобно}%
+\EN{This instruction (like the \PUSH instruction in Thumb mode) is able to save several register values at once which can be very useful}. 
 \RU{Кстати, такого в x86 нет}\EN{By the way, this has no equivalent in x86}.
 \RU{Также следует заметить, что \TT{STMFD}~--- генерализация инструкции \PUSH (то есть расширяет её возможности), потому что может работать с любым регистром, а не только с \ac{SP}.}
 \EN{It can also be noted that the \TT{STMFD} instruction is a generalization 
@@ -69,7 +69,7 @@ of the \PUSH instruction (extending its features), since it can work with any re
 \EN{instruction adds or subtracts the value in the \ac{PC} register to the offset where the}
 \TT{hello, world}\EN{ string is located}.
 \RU{Причем здесь \ac{PC}, можно спросить}\EN{How is the \TT{PC} register used here, one might ask}?
-\RU{Притом, что это так называемый ``\PICcode''}\EN{This is so-called ``\PICcode''.}
+\RU{Притом, что это так называемый \q{\PICcode}}\EN{This is so-called \q{\PICcode}.}
 \footnote{
 	\RU{Читайте больше об этом в соответствующем разделе}
 	\EN{Read more about it in relevant section}~(\myref{sec:PIC})
@@ -104,9 +104,9 @@ of the \PUSH instruction (extending its features), since it can work with any re
 \EN{When \printf finishes its execution it must have information about where it needs to return the control to.
 That's why each function passes control to the address stored in the \ac{LR} register}.
 
-\RU{В этом разница между ``чистыми'' \ac{RISC}-процессорами вроде ARM и \ac{CISC}-процессорами как x86,
+\RU{В этом разница между \q{чистыми} \ac{RISC}-процессорами вроде ARM и \ac{CISC}-процессорами как x86,
 где адрес возврата обычно записывается в стек}%
-\EN{That is a difference between ``pure'' \ac{RISC}-processors like ARM and \ac{CISC}-processors like x86,
+\EN{That is a difference between \q{pure} \ac{RISC}-processors like ARM and \ac{CISC}-processors like x86,
 where the return address is usually stored on the stack}\footnote{\RU{Подробнее об этом будет описано в следующей главе}\EN{Read more about this in next section}~(\myref{sec:stack})}.
 
 \RU{Кстати, 32-битный абсолютный адрес (либо смещение) невозможно закодировать в 32-битной инструкции \TT{BL}, в ней есть место только для 24-х бит}%
@@ -121,7 +121,7 @@ This implies that the last 2 bits of the instruction address (which are always z
 
 \index{ARM!\Instructions!MOV}
 \RU{Следующая инструкция}\EN{Next, the} \TT{MOV R0, \#0}\footnote{MOVe}
-\RU{просто записывает 0 в регистр \Reg{0}}\EN{instruction just writes $0$ into the \Reg{0} register}.
+\RU{просто записывает 0 в регистр \Reg{0}}\EN{instruction just writes 0 into the \Reg{0} register}.
 \RU{Ведь наша Си-функция возвращает 0, а возвращаемое значение всякая функция оставляет в \Reg{0}}%
 \EN{That's because our C-function returns 0 and the return value is to be placed in the \Reg{0} register}.
 
