@@ -32,3 +32,5 @@ GitHub
 Feel free to create pull requests for this.
 
 Otherwise, just send me email: dennis(a)yurichev.com.
+
+Do not worry to contribute more errors and mistakes - I'll fix them during merging.
