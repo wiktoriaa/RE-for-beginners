@@ -1,16 +1,19 @@
 \section{\RU{Многомерные массивы}\EN{Multidimensional arrays}}
 
-\RU{Внутри, многомерный массив выглядит так же, как и линейный.}
+\RU{Внутри многомерный массив выглядит так же как и линейный.}
 \EN{Internally, a multidimensional array is essentially the same thing as a linear array.}
-
 \RU{Ведь память компьютера линейная, это одномерный массив.
-Но для удобства, этот одномерный массив легко представить как многомерный.}
+Но для удобства этот одномерный массив легко представить как многомерный.}
 \EN{Since the computer memory is linear, it is an one-dimensional array.
 For convenience, this multi-dimensional array can be easily represented as one-dimensional.}
 
-\RU{К примеру, вот как элементы массива $a[3][4]$ расположены в одномерном массиве из 12-и ячеек:}
-\EN{For example, thit is how the elements of the $a[3][4]$ array are placed in one-dimensional array of 12 cells:}
+\RU{К примеру, вот как элементы массива 3x4 расположены в одномерном массиве из 12 ячеек:}
+\EN{For example, this is how the elements of the 3x4 array are placed in one-dimensional array of 12 cells:}
 
+% TODO FIXME not clear. First, horizontal would be better. Second, why two columns?
+% I'd first show 3x4 with numbered elements (e.g. 32-bit ints) in colored lines,
+% then linear with the same numbered elements (and colored blocks)
+% then linear with addresses (offsets) - assuming let say 32-bit ints.
 \begin{table}[H]
 \centering
 \begin{tabular}{ | l | }
@@ -63,15 +66,15 @@ For convenience, this multi-dimensional array can be easily represented as one-d
 \end{table}
 
 \index{row-major order}
-\RU{То есть, чтобы вычислить адрес нужного элемента, в начале умножаем первый индекс на 4 (ширину матрицы), 
-затем прибавляем второй индекс.}
+\RU{Чтобы вычислить адрес нужного элемента, сначала умножаем первый индекс (строку) на 4 (ширину массива), 
+затем прибавляем второй индекс (столбец).}
 \EN{So, in order to calculate the address of the element we need, we first multiply the first index by
-4 (matrix width) and then add the second index.}
+4 (array width) and then add the second index.}
 \RU{Это называется}\EN{That's called} \IT{row-major order}, 
 \RU{и такой способ представления массивов и матриц используется по крайней мере в}
 \EN{and this method of array and matrix representation is used in at least} \CCpp \AndENRU Python. 
 \EN{The term}\RU{Термин} \IT{row-major order} \RU{означает по-русски
-примерно следующее: \q{в начале записываем элементы первой строки, затем второй \dots и элементы последней 
+примерно следующее: \q{сначала записываем элементы первой строки, затем второй,~\dots~и~элементы последней 
 строки в самом конце}.}
 \EN{in plain English language means: \q{first, write the elements of the first row, then the second row \dots 
 and finally the elements of the last row}.}
@@ -83,13 +86,13 @@ and finally the elements of the last row}.}
 (\RU{индексы массива используются в обратном порядке}\EN{the array indices are used in reverse order}) 
 \RU{и это используется по крайней мере в}\EN{and it is used at least in} FORTRAN, MATLAB \AndENRU R. 
 \RU{Термин }\IT{column-major order} \RU{означает по-русски
-следующее: \q{в начале записываем элементы первого столбца, затем второго \dots и элементы последнего столбца
+следующее: \q{сначала записываем элементы первого столбца, затем второго,~\dots~и~элементы последнего столбца
 в самом конце}.}
 \EN{term in plain English language means: \q{first, write the elements of the first column, then the second column \dots
 and finally the elements of the last column}.}
 
 \RU{Какой из способов лучше}\EN{Which method is better}?
-\RU{Вообще, в терминах производительности и кэш-памяти, лучший метод организации данных это тот,
+\RU{В терминах производительности и кэш-памяти, лучший метод организации данных это тот,
 при котором к данным обращаются последовательно.}
 \EN{In general, in terms of performance and cache memory, 
 the best scheme for data organization is the one,
@@ -104,9 +107,9 @@ in which the elements are accessed sequentially.}
 \input{patterns/13_arrays/5_multidimensional/3D}
 
 \ifx\LITE\undefined
-\subsection{\RU{Еще примеры}\EN{More examples}}
+\subsection{\RU{Ещё примеры}\EN{More examples}}
 
-\RU{Компьютерный экран представляет собой двухмерный массив, но видеобуфер это линейный
+\RU{Компьютерный экран представляет собой двумерный массив, но видеобуфер это линейный
 одномерный массив}\EN{The computer screen is represented as a 2D array, but the video-buffer is 
 a linear 1D array}. 
 \RU{Мы рассматриваем это здесь}\EN{We talk about it here}: \myref{Mandelbrot_demo}.

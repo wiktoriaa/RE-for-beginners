@@ -7,8 +7,8 @@
 \lstinputlisting[caption=MSVC 2008]{patterns/13_arrays/1_simple/simple_msvc.asm}
 
 \index{x86!\Instructions!SHL}
-\RU{Однако, ничего особенного, просто два цикла, один заполняет цикл, второй печатает его содержимое. 
-Команда \TT{shl ecx, 1} используется для умножения \ECX на 2, об этом ниже~(\myref{SHR}).}
+\RU{Ничего особенного, просто два цикла. Один изменяет массив, второй печатает его содержимое. 
+Команда \INS{shl ecx, 1} используется для умножения \ECX на 2, об этом ниже~(\myref{SHR}).}
 \EN{Nothing very special, just two loops: the first is a filling loop and second is a printing loop.
 The \TT{shl ecx, 1} instruction is used for value multiplication by 2 in \ECX, more about below~\myref{SHR}.}
 
@@ -21,8 +21,8 @@ The \TT{shl ecx, 1} instruction is used for value multiplication by 2 in \ECX, m
 \index{\olly}
 
 \RU{Видно, как заполнился массив}\EN{We see how the array gets filled}: 
-\RU{каждый элемент это 32-битное слово типа \Tint, с шагом 2}
-\EN{each element is 32-bit word of \Tint type and its value is the index multiplied by 2}:
+\RU{каждый элемент это 32-битное слово типа \Tint, с шагом 2:}
+\EN{each element is 32-bit word of \Tint type and its value is the index multiplied by 2:}
 
 \begin{figure}[H]
 \centering
@@ -39,22 +39,28 @@ The \TT{shl ecx, 1} instruction is used for value multiplication by 2 in \ECX, m
 \ifdefined\IncludeGCC
 \subsubsection{GCC}
 
-\RU{То, что делает GCC 4.4.1:}\EN{Here is what GCC 4.4.1 does:}
+\RU{Рассмотрим результат работы GCC 4.4.1:}\EN{Here is what GCC 4.4.1 does:}
 
 \lstinputlisting[caption=GCC 4.4.1]{patterns/13_arrays/1_simple/simple_gcc.asm}
 
-\RU{Кстати, переменная $a$ в нашем примере имеет тип \IT{int*} (то есть, указатель на \Tint{}) ~--- вы можете попробовать передать в другую функцию указатель на массив, но точнее было бы сказать, что передается указатель на первый элемент массива (а адреса остальных элементов массива можно вычислить очевидным образом).}\EN{By the way, variable $a$ is of type  \IT{int*} 
-(the pointer to \Tint{})~---you can pass a pointer to an array to another function, but it's more correct to say that a pointer to the first element of the array is passed (the addresses of rest of the elements are calculated in an obvious way).}
+\RU{Переменная $a$ в нашем примере имеет тип \IT{int*} (указатель на \Tint{}).
+Вы можете попробовать передать в другую функцию указатель на массив,
+но точнее было бы сказать, что передается указатель на первый элемент массива
+(а адреса остальных элементов массива можно вычислить очевидным образом).}
+\EN{By the way, variable $a$ is of type  \IT{int*} 
+(the pointer to \Tint{})---you can pass a pointer to an array to another function,
+but it's more correct to say that a pointer to the first element of the array is passed
+(the addresses of rest of the elements are calculated in an obvious way).}
 \RU{Если индексировать этот указатель как \IT{a[idx]}, \IT{idx} просто прибавляется к указателю 
 и возвращается элемент, расположенный там, куда ссылается вычисленный указатель.}
 \EN{If you index this pointer as \IT{a[idx]}, \IT{idx} is just to be added to the pointer 
 and the element placed there (to which calculated pointer is pointing) is to be returned.}
 
-\RU{Вот любопытный пример: строка символов вроде \IT{\q{string}} это массив из символов, 
-и она имеет тип \IT{const char[]}.}\EN{An interesting example: a string of characters like 
+\RU{Вот любопытный пример. Строка символов вроде \IT{\q{string}} это массив из символов. 
+Она имеет тип \IT{const char[]}.}\EN{An interesting example: a string of characters like 
 \IT{\q{string}} is an array of characters and it has a type of \IT{const char[]}.}
 \RU{К этому указателю также можно применять индекс.}
 \EN{An index can also be applied to this pointer.}
-\RU{И поэтому можно написать даже так:  \TT{\q{string}[i]} ~--- это совершенно легальное выражение в \CCpp!}
-\EN{And that is why it is possible to write things like \TT{\q{string}[i]}~---this is a correct \CCpp expression!}
+\RU{Поэтому можно написать даже так:  \TT{\q{string}[i]}~--- это совершенно легальное выражение в \CCpp!}
+\EN{And that is why it is possible to write things like \TT{\q{string}[i]}---this is a correct \CCpp expression!}
 \fi

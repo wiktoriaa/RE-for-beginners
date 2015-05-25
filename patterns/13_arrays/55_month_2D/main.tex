@@ -1,6 +1,6 @@
 \section{\RU{Набор строк как двухмерный массив}\EN{Pack of strings as a two-dimensional array}}
 
-\RU{Снова вернемся к примеру, который возвращает название месяца:}
+\RU{Снова вернемся к примеру, который возвращает название месяца:}%
 \EN{Let's revisit the function that returns the name of a month:} \lstref{get_month1}.
 \RU{Как видно, нужна как минимум одна операция загрузки из памяти для подготовки указателя на строку,
 состоящую из имени месяца.}
@@ -8,7 +8,7 @@
 that's the month's name.}
 \RU{Возможно ли избавиться от операции загрузки из памяти?}
 \EN{Is it possible to get rid of this memory load operation?}
-\RU{На самом деле, да, если представить список строк как двухмерный массив:}
+\RU{Да, если представить список строк как двумерный массив:}
 \EN{In fact yes, if you represent the list of strings as a two-dimensional array:}
 
 \lstinputlisting{patterns/13_arrays/55_month_2D/month2.c.\LANG}
@@ -18,15 +18,15 @@ that's the month's name.}
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/13_arrays/55_month_2D/MSVC2013_x64_Ox.asm.\LANG}
 
 \RU{Здесь нет обращений к памяти вообще}\EN{There are no memory accesses at all}.
-\RU{Всё что делает эта функция это вычисляет место, где находится первый символ названия месяца:}
+\RU{Эта функция только вычисляет место, где находится первый символ названия месяца:}
 \EN{All this function does is to calculate a point at which the first character of the name of the month is:} 
 $pointer\_to\_the\_table + month * 10$.
-\RU{Там также две инструкции LEA, которые работают как несколько инструкций MUL и MOV.}
-\EN{There are also two LEA instructions, which effectively work as several MUL and MOV instructions.}
+\RU{Там также две инструкции \LEA, которые работают как несколько инструкций \MUL и \MOV.}
+\EN{There are also two \LEA instructions, which effectively work as several \MUL and \MOV instructions.}
 
-\RU{Ширина массива --- 10 байт}\EN{The width of the array is 10 bytes}. 
-\RU{Действительно, самая длинная строка здесь это \q{September} (9 байт) плюс оконечивающий ноль --- это 10 байт.}
-\EN{Indeed, the longest string here --- \q{September} --- is 9 bytes, and plus the terminating zero is 10 bytes.}
+\RU{Ширина массива~--- 10 байт}\EN{The width of the array is 10 bytes}. 
+\RU{Действительно, самая длинная строка это \q{September} (9 байт) плюс оконечивающий ноль, получается 10 байт.}
+\EN{Indeed, the longest string here---\q{September}---is 9 bytes, and plus the terminating zero is 10 bytes.}
 \RU{Остальные названия месяцев дополнены нулевыми байтами, чтобы они занимали столько же места (10 байт).}
 \EN{The rest of the month names are padded by zero bytes, so they all occupy the same space (10 bytes).}
 \RU{Таким образом, наша функция и работает быстрее, потому что все строки начинаются с тех адресов, 
@@ -34,7 +34,7 @@ $pointer\_to\_the\_table + month * 10$.
 \EN{Thus, our function works even faster, because all string start at an address which can be
 calculated easily.}
 
-\Optimizing GCC 4.9 \RU{может еще короче}\EN{can do it even shorter}:
+\Optimizing GCC 4.9 \RU{может ещё короче}\EN{can do it even shorter}:
 
 \begin{lstlisting}[caption=\Optimizing GCC 4.9 x64]
 	movsx	rdi, edi
@@ -43,28 +43,29 @@ calculated easily.}
 	ret
 \end{lstlisting}
 
-\RU{LEA здесь также используется для умножения на 10.}
-\EN{LEA is also used here for multiplication by 10.}
+\RU{\LEA здесь также используется для умножения на 10.}
+\EN{\LEA is also used here for multiplication by 10.}
 
 \RU{Неоптимизирующие компиляторы делают умножение по-разному.}
 \EN{Non-optimizing compilers do multiplication differently.}
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.9 x64]{patterns/13_arrays/55_month_2D/x64_GCC49_O0.asm.\LANG}
 
-\NonOptimizing MSVC \RU{просто использует инструкцию IMUL}\EN{just use IMUL instruction}:
+\NonOptimizing MSVC \RU{просто использует инструкцию \IMUL}\EN{just uses \IMUL instruction}:
 \index{x86!\Instructions!IMUL}
 
 \lstinputlisting[caption=\NonOptimizing MSVC 2013 x64]{patterns/13_arrays/55_month_2D/MSVC2013_x64.asm.\LANG}
 
 \index{\CompilerAnomaly}
 \label{MSVC2013_anomaly}
-\dots \RU{но вот что странно: зачем добавлять умножение на ноль и добавлять ноль к конечному результату?}
-\EN{but one thing is weird here: why add multiplication by zero and adding zero to the final result?}
-\RU{Я не знаю, это выглядит как выверт кодегенератора компилятора, который не был покрыт тестами
-компилятора (так или иначе, итоговый код работает корректно).}
+\RU{Но вот что странно: зачем добавлять умножение на ноль и добавлять ноль к конечному результату?}
+\EN{But one thing is weird here: why add multiplication by zero and adding zero to the final result?}
+\RU{Я не знаю, это выглядит как странность кодегенератора компилятора, который не был покрыт тестами
+компилятора. Но так или иначе, итоговый код работает корректно.}
 \EN{I don't know, this looks like a compiler code generator quirk, which wasn't caught by the compiler's tests
 (the resulting code works correctly, after all).}
-\RU{Я сознательно добавляю сюда такие фрагменты кода, чтобы читатель понимал, что иногда не нужно
+% класс!
+\RU{Я сознательно добавляю такие фрагменты кода, чтобы читатель понимал, что иногда не нужно
 ломать себе голову над подобными артефактами компиляторов.}
 \EN{I intentionally add such pieces of code so the reader would understand, 
 that sometimes one shouldn't puzzle over such compiler artifacts.}
@@ -73,7 +74,7 @@ that sometimes one shouldn't puzzle over such compiler artifacts.}
 \subsection{32-bit ARM}
 
 \Optimizing Keil \RU{для режима Thumb использует инструкцию умножения}
-\EN{for Thumb mode uses the multiplication instruction} MULS:
+\EN{for Thumb mode uses the multiplication instruction} \INS{MULS}:
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/13_arrays/55_month_2D/Keil_O3_thumb.asm.\LANG}
 
@@ -88,13 +89,13 @@ shift operations}:
 
 \index{ARM!\Instructions!SXTW}
 \index{ARM!\Instructions!ADRP/ADD pair}
-\RU{SXTW используется для знакового расширения и расширения входного 32-битного значения в 64-битное и сохранения
-его в X0.}
-\EN{SXTW is used for sign-extension and promoting input 32-bit value into a 64-bit one and storing it in X0.}
-\RU{Пара ADRP/ADD используется для загрузки адреса таблицы.}
-\EN{ADRP/ADD pair is used for loading the address of the table.}
-\RU{У инструкции ADD также есть суффикс LSL, что помогает с умножением.}
-\EN{The ADD instructions also has a LSL suffix, which helps with multiplications.}
+\RU{\INS{SXTW} используется для знакового расширения и расширения
+входного 32-битного значения в 64-битное и сохранения его в X0.}
+\EN{\INS{SXTW} is used for sign-extension and promoting input 32-bit value into a 64-bit one and storing it in X0.}
+\RU{Пара \ADRP/\ADD используется для загрузки адреса таблицы.}
+\EN{\ADRP/\ADD pair is used for loading the address of the table.}
+\RU{У инструкции \ADD также есть суффикс \LSL, что помогает с умножением.}
+\EN{The \ADD instructions also has a \LSL suffix, which helps with multiplications.}
 \fi
 
 \ifdefined\IncludeMIPS
@@ -104,11 +105,11 @@ shift operations}:
 
 \subsection{\Conclusion{}}
 
-\RU{Это немного олд-скульная техника для хранения текстовых строк.}
+\RU{Это немного старинная техника для хранения текстовых строк.}
 \EN{This is a bit old-school technique to store text strings.}
-\RU{Такого можно много найти в \oracle, например.}
+\RU{Много такого можно найти в \oracle, например.}
 \EN{You may find a lot of it in \oracle, for example.}
 \RU{Но я не уверен, стоит ли оно того на современных компьютерах.}
 \EN{But I don't really know if it's worth doing on modern computers.}
-\RU{Так или иначе, это был хороший пример массивов, так что я добавил его в эту книгу.}
+\RU{Так или иначе, это был хороший пример массивов, поэтому я добавил его в эту книгу.}
 \EN{Nevertheless, it was a good example of arrays, so I added it to this book.}
