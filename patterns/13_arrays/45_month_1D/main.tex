@@ -1,7 +1,7 @@
 ﻿\section{\RU{Массив указателей на строки}\EN{Array of pointers to strings}}
 \label{array_of_pointers_to_strings}
 
-\RU{Вот также пример массива указателей.}\EN{Here is an example for an array of pointers.}
+\RU{Вот пример массива указателей.}\EN{Here is an example for an array of pointers.}
 
 \lstinputlisting[caption=\RU{Получить имя месяца}\EN{Get month name},label=get_month1]{patterns/13_arrays/45_month_1D/month1.c.\LANG}
 
@@ -15,16 +15,16 @@
 
 \item
 \index{x86!\Instructions!MOVSXD}
-\RU{Первая инструкция MOVSXD копирует 32-битное значение из ECX (где передается аргумент $month$)
-в RAX с знаковым расширением (потому что аргумент $month$ имеет тип \Tint).}
-\EN{The first MOVSXD instruction copies a 32-bit value from ECX (where $month$ argument is passed) 
-to RAX with sign-extension (because the $month$ argument is of type \Tint).}
+\RU{Первая инструкция \INS{MOVSXD} копирует 32-битное значение из \ECX (где передается аргумент :$month$)
+в \RAX с знаковым расширением (потому что аргумент $month$ имеет тип \Tint).}
+\EN{The first \INS{MOVSXD} instruction copies a 32-bit value from \ECX (where $month$ argument is passed) 
+to \RAX with sign-extension (because the $month$ argument is of type \Tint).}
 \RU{Причина расширения в том, что это значение будет использоваться в вычислениях наряду с другими 64-битными
 значениями.}
 \EN{The reason for the sign extension is that this 32-bit value is to be used in calculations
 with other 64-bit values.}
-\RU{Таким образом, оно должно быть расширено до 64-битного}
-\EN{Hence, it has to be promoted to 64-bit}
+\RU{Таким образом, оно должно быть расширено до 64-битного}%
+\EN{Hence, it has to be promoted to 64-bit}%
 \footnote{\RU{Это немного странная вещь, но отрицательный индекс массива может быть передан как $month$ 
 \ifx\LITE\undefined
 (отрицательные индексы массивов будут рассмотрены позже: \myref{negative_array_indices})
@@ -41,8 +41,8 @@ and the corresponding element before table is picked.
 It is not going to work correctly without sign-extension.}}.
 
 \item
-\RU{Затем адрес таблицы указателей загружается в RCX.}
-\EN{Then the address of the pointer table is loaded into RCX.}
+\RU{Затем адрес таблицы указателей загружается в \RCX.}
+\EN{Then the address of the pointer table is loaded into \RCX.}
 
 \item
 \RU{В конце концов, входное значение ($month$) умножается на 8 и прибавляется к адресу.}
@@ -53,19 +53,19 @@ It is not going to work correctly without sign-extension.}}.
 for storage.}
 \RU{Следовательно, каждый элемент таблицы имеет ширину в 8 байт.}
 \EN{Hence, each table element is 8 bytes wide.}
-\RU{И вот почему для выбора элемента под нужным номером, нужно пропустить $month*8$ байт от начала.}
+\RU{Вот почему для выбора элемента под нужным номером нужно пропустить $month*8$ байт от начала.}
 \EN{And that's why to pick a specific element, $month*8$ bytes has to be skipped from the start.}
-\RU{Это то, что делает MOV}\EN{That's what MOV does}.
-\RU{В дополнении, эта инструкция также загружает элемент по этому адресу.}
+\RU{Это то, что делает \MOV}\EN{That's what \MOV does}.
+\RU{Эта инструкция также загружает элемент по этому адресу.}
 \EN{In addition, this instruction also loads the element at this address.}
-\RU{Для 1, элемент будет указателем на строку, содержащую \q{February}, \etc{}.}
-\EN{For 1, an element would be a pointer to a string that contains \q{February}, \etc{}.}
+\RU{Для 1, элемент будет указателем на строку, содержащую \q{February}, \etc.}
+\EN{For 1, an element would be a pointer to a string that contains \q{February}, \etc.}
 
 \end{itemize}
 
-\Optimizing GCC 4.9 \RU{может это сделать даже лучше}\EN{can do the job even better}
-\footnote{\RU{В листинге осталось \q{0+}, потому что вывод ассемблера GCC не так скрупулёзен, чтобы убрать это}
-\EN{\q{0+} was left in the listing because GCC assembler output is not tidy enough to eliminate it}.
+\Optimizing GCC 4.9 \RU{может это сделать даже лучше}\EN{can do the job even better}%
+\footnote{\RU{В листинге осталось \q{0+}, потому что вывод ассемблера GCC не так скрупулёзен, чтобы убрать это.}
+\EN{\q{0+} was left in the listing because GCC assembler output is not tidy enough to eliminate it.}
 \RU{Это \IT{displacement} и он здесь нулевой.}\EN{It's \IT{displacement}, and it's zero here.}}:
 
 \begin{lstlisting}[caption=\Optimizing GCC 4.9 x64]
@@ -93,11 +93,12 @@ for storage.}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/13_arrays/45_month_1D/month1_Keil_ARM_O3.s}
 
+% TODO Fix R1s
 \RU{Адрес таблицы загружается в R1.}
 \EN{The address of the table is loaded in R1.}
 \index{ARM!\Instructions!LDR}
-\RU{Всё остальное делается, используя только одну инструкцию LDR.}
-\EN{All the rest is done using just one LDR instruction.}
+\RU{Всё остальное делается, используя только одну инструкцию \LDR.}
+\EN{All the rest is done using just one \LDR instruction.}
 \RU{Входное значение $month$ сдвигается влево на 2 (что тоже самое что и умножение на 4), это значение
 прибавляется к R1 (где находится адрес таблицы) и затем элемент таблицы загружается по этому адресу.}
 \EN{Then input value $month$ is shifted left by 2 (which is the same as multiplying by 4), then added
@@ -107,8 +108,8 @@ to R1 (where the address of the table is) and then a table element is loaded fro
 
 \subsubsection{ARM \RU{в режиме Thumb}\EN{in Thumb mode}}
 
-\RU{Код почти такой же, только менее плотный, потому что здесь, в инструкции LDR, нельзя задать суффикс LSL:}
-\EN{The code is mostly the same, but less dense, because the LSL suffix cannot be specified in the LDR instruction here:}
+\RU{Код почти такой же, только менее плотный, потому что здесь, в инструкции \LDR, нельзя задать суффикс \LSL:}
+\EN{The code is mostly the same, but less dense, because the \LSL suffix cannot be specified in the \LDR instruction here:}
 
 \begin{lstlisting}
 get_month1 PROC
@@ -124,13 +125,13 @@ get_month1 PROC
 \lstinputlisting[caption=\Optimizing GCC 4.9 ARM64]{patterns/13_arrays/45_month_1D/month1_GCC49_ARM64_O3.s}
 
 \index{ARM!\Instructions!ADRP/ADD pair}
-\RU{Адрес таблицы загружается в X1 используя пару ADRP/ADD.}
-\EN{The address of the table is loaded in X1 using ADRP/ADD pair.}
-\RU{Соответствующий элемент выбирается используя одну инструкцию LDR, которая берет W0
-(регистр где находится значение входного аргумента $month$), сдвигает его на 3 бита влево
+\RU{Адрес таблицы загружается в X1 используя пару \ADRP/\ADD.}
+\EN{The address of the table is loaded in X1 using \ADRP/\ADD pair.}
+\RU{Соответствующий элемент выбирается используя одну инструкцию \LDR, которая берет W0
+(регистр, где находится значение входного аргумента $month$), сдвигает его на 3 бита влево
 (что то же самое что и умножение на 8),
-расширяет его учитывая знак (это то что означает суффикс \q{sxtw}) и прибавляет к X0.}
-\EN{Then corresponding element is picked using just one LDR, which takes W0 
+расширяет его, учитывая знак (это то, что означает суффикс \q{sxtw}) и прибавляет к X0.}
+\EN{Then corresponding element is picked using just one \LDR, which takes W0 
 (the register where input argument $month$ is), shifts it 3 bits to the left (which is the same as multiplying by 8), 
 sign-extends it (this is what \q{sxtw} suffix implies) and adds to X0.}
 \RU{Затем 64-битное значение загружается из таблицы в X0.}\EN{Then the 64-bit value is loaded from the table into X0.}
@@ -145,8 +146,8 @@ sign-extends it (this is what \q{sxtw} suffix implies) and adds to X0.}
 \ifx\LITE\undefined
 \subsection{\RU{Переполнение массива}\EN{Array overflow}}
 
-\RU{Наша функция принимает значения в пределах $0..11$, но что будет, если будет передано 12?}
-\EN{Our function accepts values in the range of $0..11$, but what if 12 is passed?}
+\RU{Наша функция принимает значения в пределах 0..11, но что будет, если будет передано 12?}
+\EN{Our function accepts values in the range of 0..11, but what if 12 is passed?}
 \RU{В таблице в этом месте нет элемента.}\EN{There is no element in table at this place.}
 \RU{Так что функция загрузит какое-то значение, которое волею случая находится там, и вернет его.}
 \EN{So the function will load some value which happens to be there, and return it.}
@@ -160,23 +161,23 @@ sign-extends it (this is what \q{sxtw} suffix implies) and adds to X0.}
 \lstinputlisting[caption=\RU{Исполняемый файл в}\EN{Executable file in} IDA]{patterns/13_arrays/45_month_1D/MSVC2012_win64_1.lst}
 
 \RU{Имена месяцев идут сразу после.}\EN{Month names are came right after.}
-\RU{Наша программа все-таки крошечная, так что здесь не так уж много данных для расположения их в сегменте
-данных, так что это имена месяцев.}
+\RU{Наша программа все-таки крошечная,
+так что здесь не так уж много данных (всего лишь названия месяцев) для расположения их в сегменте данных.}
 \EN{Our program is tiny, so there isn't much data to pack in the data segment, 
 so it just the month names.}
-\RU{Но я должен заметить, что там может быть действительно \IT{что угодно}, что линкер решит там расположить,
-случайным образом.}
-\EN{But I have to note that there might be really \IT{anything} that linker has decided to put by chance.}
+\RU{Но я должен заметить, что там может быть действительно \emph{что угодно},
+что линкер решит там расположить, случайным образом.}
+\EN{But I have to note that there might be really \emph{anything} that linker has decided to put by chance.}
 
 \RU{Так что будет если 12 будет передано в функцию?}\EN{So what if 12 is passed to the function?}
 \RU{Вернется 13-й элемент таблицы}\EN{The 13th element will be returned}.
-\RU{Посмотрим, как CPU обходится с байтами там как с 64-битным значением:}
-\EN{Let's see how the CPU treating the bytes there as a 64-bit value:}
+\RU{Посмотрим, как CPU обходится с байтами как с 64-битным значением:}
+\EN{Let's see how the CPU treats the bytes there as a 64-bit value:}
 
 \lstinputlisting[caption=\RU{Исполняемый файл в}\EN{Executable file in} IDA]{patterns/13_arrays/45_month_1D/MSVC2012_win64_2.lst}
 
 \RU{И это}\EN{And this is} 0x797261756E614A.
-\RU{После этого, какая-от другая функция (вероятно, работающая со строками) попытается загружать байты
+\RU{После этого, какая-то другая функция (вероятно, работающая со строками) попытается загружать байты
 по этому адресу, ожидая найти там Си-строку.}
 \EN{Soon after, some other function (presumably, one that processes strings) may try to read bytes at 
 this address, expecting a C-string there.}
@@ -191,12 +192,10 @@ this address, expecting a C-string there.}
 никогда не передаст аргумент больше 11.}
 \EN{It's a bit naïve to expect that every programmer who use your function or library will never pass
 an argument larger than 11.}
-
 \RU{Существует также хорошая философия \q{fail early and fail loudly} или \q{fail-fast},
 которая учит сообщать об ошибках как можно раньше и останавливаться.}
 \EN{There exists the philosophy that says \q{fail early and fail loudly} or \q{fail-fast}, 
 which teaches to report problems as early as possible and stop.}
-
 \index{\CStandardLibrary!assert()}
 \RU{Один из таких методов в \CCpp это макрос assert().}
 \EN{One such method in \CCpp is assertions.}
@@ -205,7 +204,7 @@ which teaches to report problems as early as possible and stop.}
 
 \lstinputlisting[caption=assert() \RU{добавлен}\EN{added}]{patterns/13_arrays/45_month_1D/month1_assert.c}
 
-\RU{Макрос будет проверять на верные значения во время каждого старта функции и падать если не выражение.}
+\RU{Макрос будет проверять на верные значения во время каждого старта функции и падать если выражение возвращает false.}
 \EN{The assertion macro checks for valid values at every function start and fails if the expression is false.}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/13_arrays/45_month_1D/MSVC2013_x64_Ox_checked.asm}
@@ -214,7 +213,6 @@ which teaches to report problems as early as possible and stop.}
 файла в другую функцию, которая покажет эту информацию пользователю.}
 \EN{In fact, assert() is not a function, but macro. It checks for a condition, then passes also the line number and file
 name to another function which reports this information to the user.}
-
 \RU{Мы видим, что здесь и имя файла и выражение закодировано в UTF-16.}
 \EN{Here we see that both file name and condition are encoded in UTF-16.}
 \RU{Номер строки также передается (это 29)}\EN{The line number is also passed (it's 29)}.
@@ -228,19 +226,19 @@ name to another function which reports this information to the user.}
 \RU{Так что макрос в GCC также передает и имя функции, для удобства.}
 \EN{So the macro in GCC also passes the function name for convenience.}
 
-\RU{Ничего не бывает бесплатным: и проверки на корректность тоже.}
+\RU{Ничего не бывает бесплатным и проверки на корректность тоже.}
 \EN{Nothing is really free, and this is true for the sanitizing checks as well.}
 \RU{Это может замедлить работу вашей программы, особенно если макрос assert() используется в маленькой
 критичной ко времени функции.}
 \EN{They make your program slower, especially if the assert() macros used in small time-critical functions.}
-\RU{Так что, например, MSVC оставляет проверки в Debug-билдах, но в Release-билдах они исчезают.}
-\EN{So MSVC, for example, leaves the checks in Debug builds, but in Release builds they all disappear.}
+\RU{Так что, например, MSVC оставляет проверки в отладочных сборках, но в окончательных сборках они исчезают.}
+\EN{So MSVC, for example, leaves the checks in debug builds, but in release builds they all disappear.}
  
-\RU{Ядра Microsoft \gls{Windows NT} также идут в виде билдов \q{checked} и \q{free}}
-\EN{Microsoft \gls{Windows NT} kernels come in \q{checked} and \q{free} builds}
-\footnote{\href{http://go.yurichev.com/17259}{MSDN}}.
-\RU{Первые имеют проверки на валидность аргументов (отсюда \q{checked}), вторые нет (отсюда \q{free},
-т.е. \q{свободные} от проверок).}
+\RU{Ядра Microsoft \gls{Windows NT} также идут в виде сборок \q{checked} и \q{free}}%
+\EN{Microsoft \gls{Windows NT} kernels come in \q{checked} and \q{free} builds}%
+\footnote{\href{http://go.yurichev.com/17259}{msdn.microsoft.com/en-us/library/windows/hardware/ff543450(v=vs.85).aspx}}.
+\RU{В первых есть проверки на корректность аргументов (отсюда \q{checked}), а во вторых~--- нет (отсюда \q{free},
+т.е.~\q{свободные} от проверок).}
 \EN{The first has validation checks (hence, \q{checked}), the second one doesn't (hence, \q{free} of checks).}
 
 % FIXME: ARM? MIPS?

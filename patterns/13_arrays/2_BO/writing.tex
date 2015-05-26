@@ -19,8 +19,8 @@
 \clearpage
 \index{\olly}
 
-\RU{Загружаем в}\EN{Let's load it into} \olly, \RU{трассируем, пока запишутся все 30 элементов}
-\EN{and trace until all 30 elements are written}:
+\RU{Загружаем в}\EN{Let's load it into} \olly, \RU{трассируем пока запишутся все 30 элементов:}
+\EN{and trace until all 30 elements are written:}
 
 \begin{figure}[H]
 \centering
@@ -43,19 +43,19 @@
 \RU{Итак, следите внимательно за регистрами.}
 \EN{Now please keep your eyes on the registers.}
 
-\RU{\EIP теперь 0x15. Это явно нелегальный адрес для кода ~--- по крайней мере, win32-кода! 
+\RU{\EIP теперь 0x15. Это явно нелегальный адрес для кода~--- по крайней мере, win32-кода! 
 Мы там как-то очутились, причем, сами того не хотели. Интересен также тот факт, что в \EBP хранится 0x14, 
-а в \ECX и \EDX ~--- 0x1D.}
-\EN{\EIP is 0x15 now. It is not a legal address for code~---at least for win32 code!
+а в \ECX и \EDX~--- 0x1D.}
+\EN{\EIP is 0x15 now. It is not a legal address for code---at least for win32 code!
 We got there somehow against our will.
 It is also interesting that the \EBP register contain 0x14,
-\ECX and \EDX{}~---0x1D.}
+\ECX and \EDX---0x1D.}
 
-\RU{И еще немного изучим разметку стека.}\EN{Let's study stack layout a bit more.}
+\RU{Ещё немного изучим разметку стека.}\EN{Let's study stack layout a bit more.}
 
 \RU{После того как управление передалось в \main, в стек было сохранено значение \EBP. 
-Затем, для массива + переменной $i$ было выделено 84 байта. Это \TT{(20+1)*sizeof(int)}. 
-\ESP сейчас указывает на переменную \TT{\_i} в локальном стеке и при исполнении следующего \TT{PUSH что-либо}, 
+Затем для массива и переменной $i$ было выделено 84 байта. Это \TT{(20+1)*sizeof(int)}. 
+\ESP сейчас указывает на переменную \TT{\_i} в локальном стеке и при исполнении следующего \INS{PUSH что-либо}, 
 \IT{что-либо} появится рядом с \TT{\_i}.}
 \EN{After the control flow was passed to \TT{\main}, the value in the \EBP register was saved on the stack.
 Then, 84 bytes were allocated for the array and the $i$ variable.
@@ -80,15 +80,15 @@ the next \TT{PUSH something}, \IT{something} is appearing next to \TT{\_i}.}
 \end{tabular}
 \end{center}
 
-\RU{Выражение \TT{a[19]=чего\_нибудь} записывает последний \Tint в пределах массива (пока что в пределах!)}
+\RU{Выражение \TT{a[19]=что\_нибудь} записывает последний \Tint в пределах массива (пока что в пределах!)}
 \EN{\TT{a[19]=something} statement writes the last \Tint in the bounds of the array (in bounds so far!)}
 
-\RU{Выражение \TT{a[20]=чего\_нибудь} записывает \IT{чего\_нибудь} на место где сохранено значение \EBP.}
+\RU{Выражение \TT{a[20]=что\_нибудь} записывает \IT{что\_нибудь} на место где сохранено значение \EBP.}
 \EN{\TT{a[20]=something} statement writes \IT{something} to the place where the value of \EBP is saved.}
 
-\RU{Обратите внимание на состояние регистров на момент падения процесса. В нашем случае, 
+\RU{Обратите внимание на состояние регистров на момент падения процесса. В нашем случае 
 в 20-й элемент записалось значение 20. 
-И вот все дело в том, что заканчиваясь, эпилог функции восстанавливал значение \EBP. 
+И вот всё дело в том, что заканчиваясь, эпилог функции восстанавливал значение \EBP 
 (20 в десятичной системе это как раз \TT{0x14} в шестнадцатеричной). 
 Далее выполнилась инструкция \RET, которая на самом деле эквивалентна \TT{POP EIP}.}
 \EN{Please take a look at the register state at the moment of the crash. In our case,
@@ -112,15 +112,15 @@ but there is no executable code there, so exception gets raised.}
 \EN{Welcome! It is called a} \IT{buffer overflow}\footnote{\href{http://go.yurichev.com/17132}{wikipedia}}.
 
 \RU{Замените массив \Tint на строку (массив \Tchar), нарочно создайте слишком длинную строку, 
-просуньте её в ту программу, 
+передайте её в ту программу, 
 в ту функцию, которая не проверяя длину строки скопирует её в слишком короткий буфер, 
 и вы сможете указать программе, по какому именно адресу перейти. 
-Не все так просто в реальности, конечно, но началось все с этого
+Не всё так просто в реальности, конечно, но началось всё с этого%
 \footnote{Классическая статья об этом: \cite{Phrack4914}}.}
 \EN{Replace the \Tint array with a string (\Tchar array), create a long string deliberately
 and pass it to the program, to the function, which doesn't check the length of the string and copies it in a short buffer,
 and you'll able to point the program to an address to which it must jump.
-It's not that simple in reality, but that is how it emerged
+It's not that simple in reality, but that is how it emerged%
 \footnote{Classic article about it: \cite{Phrack4914}.}}
 
 \ifdefined\IncludeGCC
@@ -163,7 +163,7 @@ gs             0x33	51
 (gdb) 
 \end{lstlisting}
 
-\RU{Значения регистров немного другие чем в примере win32, это потому что разметка стека чуть другая.}
+\RU{Значения регистров немного другие, чем в примере win32, потому что разметка стека чуть другая.}
 \EN{The register values are slightly different than in win32 example, 
 since the stack layout is slightly different too.}
 \fi
