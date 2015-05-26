@@ -12,10 +12,8 @@ is to be faster than the usual \strlen{} work + the cost of calling it and retur
 \index{\CStandardLibrary!strlen()}
 \RU{Первая инструкция функции \strlen{} вставленная здесь, это}\EN{The first instruction of 
 the inlined \strlen{} is} \TT{OR RAX, 0xFFFFFFFFFFFFFFFF}. 
-\RU{Я не знаю, почему MSVC использовала \TT{OR} вместо \TT{MOV RAX, 0xFFFFFFFFFFFFFFFF}, 
-но он делает это часто.}
-\EN{I don't know why MSVC uses \TT{OR} instead of \TT{MOV RAX, 0xFFFFFFFFFFFFFFFF}, 
-but it does this often.}
+\RU{Трудно сказать, почему MSVC использовала \TT{OR} вместо \TT{MOV RAX, 0xFFFFFFFFFFFFFFFF}, но он делает это часто.}
+\EN{It's hard to say why MSVC uses \TT{OR} instead of \TT{MOV RAX, 0xFFFFFFFFFFFFFFFF}, but it does this often.}
 \RU{И конечно, это эквивалентно друг другу: все биты просто выставляются, а все выставленные
 биты это -1 в дополнительном коде (two's complement): \myref{sec:signednumbers}.}
 \EN{And of course, it is equivalent: all bits are set, and a number with all bits set is $-1$ 
@@ -30,12 +28,12 @@ in two's complement arithmetic: \myref{sec:signednumbers}.}
 
 \RU{Попробуйте написать короче, если хотите инициализировать счетчик нулем!}
 \EN{Try to write shorter if you want to initialize the counter at 0!}
-\RU{Вот моя попытка}\EN{Here is my attempt}:
+\RU{Ну, например}\EN{OK, let' try}:
 
-\lstinputlisting[caption=\RU{Моя версия}\EN{My version of} \strlen{}]{\CURPATH/my_strlen.asm.\LANG}
+\lstinputlisting[caption=\RU{Наша версия}\EN{Our version of} \strlen{}]{\CURPATH/my_strlen.asm.\LANG}
 
-\RU{У меня не получилось. Нам придется вводить дополнительную инструкцию JMP!}
-\EN{I failed. We need to use additional JMP instruction!}
+\RU{Не получилось. Нам придется вводить дополнительную инструкцию JMP!}
+\EN{We failed. We need to use additional JMP instruction!}
 
 \RU{Что сделал MSVC 2013, так это передвинул инструкцию \TT{INC} в место перед загрузкой символа.}
 \EN{So what the MSVC 2013 compiler did is to move the \TT{INC} instruction to the place before 
@@ -73,7 +71,7 @@ if possible:} \myref{branch_predictors}.
 
 \lstinputlisting{\CURPATH/GCC491_x64_O0.asm.\LANG}
 
-\RU{Я добавил комментариев}\EN{I have added my comments}.
+\RU{Комментарии\EMDASH{}автора книги}\EN{Comments are added by the author of the book}.
 \RU{После исполнения \strlen{}, управление передается на метку L2,
 и там проверяются два выражения, одно после другого.}
 \EN{After the execution of \strlen{}, the control is passed to the L2 label, 

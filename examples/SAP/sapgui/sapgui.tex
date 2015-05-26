@@ -35,8 +35,8 @@ the pesky nagging pop-up window and the actual data compression routine.)}
 \RU{Второе: строка вроде \q{data compression switched off} также должна где-то присутствовать.}
 \EN{Second: a string like \q{data compression switched off} must be present somewhere in it.}
 \newcommand{\FNURLFAR}{\footnote{\url{http://go.yurichev.com/17347}}}
-\RU{При помощи файлового менеджера FAR\FNURLFAR я нашел обе эти строки в файле SAPguilib.dll.}
-\EN{With the help of the FAR file manager\FNURLFAR I found that both of these strings are stored in the SAPguilib.dll file.}
+\RU{При помощи файлового менеджера FAR\FNURLFAR мы можем найти обе эти строки в файле SAPguilib.dll.}
+\EN{With the help of the FAR file manager\FNURLFAR we can found that both of these strings are stored in the SAPguilib.dll file.}
 
 \RU{Так что давайте откроем файл SAPguilib.dll в \IDA и поищем там строку \IT{\q{\TDWNC}}.
 Да, она присутствует и имеется только одна ссылка на эту строку.}
@@ -83,8 +83,8 @@ Yes, it is present and there is only one reference to it.}
 \TT{atoi()}\footnote{standard C library function that converts the digits in a string to a number} is called. 
 After that, the numerical value is stored in \TT{edi+15h}}.
 
-\RU{Обратите также внимание на функцию \TT{chk\_env} (это я так назвал её)}
-\EN{Also take a look at the \TT{chk\_env()} function (I gave this name to it)}:
+\RU{Обратите также внимание на функцию \TT{chk\_env} (это мы так назвали её вручную)}%
+\EN{Also take a look at the \TT{chk\_env()} function (we gave this name to it manually)}:
 
 \begin{lstlisting}
 .text:64413F20 ; int __cdecl chk_env(char *VarName, int)
@@ -234,8 +234,8 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 \RU{Да, и есть только одна ссылка на эту строку в функции}
 \EN{Yes, and the only reference is in} \\
 \TT{CDwsGui::PrepareInfoWindow()}.
-\RU{Откуда я узнал имена классов/методов? Здесь много специальных отладочных вызовов, пишущих в лог-файл вроде}
-\EN{How do I know the class/method names? There are a lot of special debugging calls that write to the log files, like}:
+\RU{Откуда мы узнали имена классов/методов? Здесь много специальных отладочных вызовов, пишущих в лог-файл вроде}%
+\EN{How do we get know the class/method names? There are a lot of special debugging calls that write to the log files, like}:
 
 \begin{lstlisting}
 .text:64405160                 push    dword ptr [esi+2854h]
@@ -545,16 +545,16 @@ Depending on the option turned on in the object, a specific message part is to b
 \EN{replace it with just \JMP, and we get SAPGUI working without the pesky nagging pop-up window appearing!}
 
 \RU{Копнем немного глубже и проследим связь между смещением 0x15 в \TT{load\_command\_line()}
-(Это я дал имя этой функции) и переменной \TT{this+0x3D} в \IT{CDwsGui::PrepareInfoWindow}. 
+(Это мы дали имя этой функции) и переменной \TT{this+0x3D} в \IT{CDwsGui::PrepareInfoWindow}. 
 Уверены ли мы что это одна и та же переменная?}
 \EN{Now let's dig deeper and find a connection between the $0x15$ offset in the \TT{load\_command\_line()} 
-(I gave it this name) function and the \TT{this+0x3D} variable in \IT{CDwsGui::PrepareInfoWindow}. 
+(we gave it this name) function and the \TT{this+0x3D} variable in \IT{CDwsGui::PrepareInfoWindow}. 
 Are we sure the value is the same?}
 
-\RU{Начинаю искать все места где в коде используется константа \TT{0x15}.
-Для таких небольших программ как SAPGUI, это иногда срабатывает. Вот первое что я нашел:}
-\EN{I'm starting to search for all occurrences of the \TT{0x15} value in code. 
-For a small programs like SAPGUI, it sometimes works. Here is the first occurrence I got:}
+\RU{Начинаем искать все места где в коде используется константа \TT{0x15}.
+Для таких небольших программ как SAPGUI, это иногда срабатывает. Вот первое что находим:}
+\EN{We are starting to search for all occurrences of the \TT{0x15} value in code. 
+For a small programs like SAPGUI, it sometimes works. Here is the first occurrence we've got:}
 
 \begin{lstlisting}
 .text:64404C19 sub_64404C19    proc near
