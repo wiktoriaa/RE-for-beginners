@@ -1,5 +1,5 @@
-\chapter{\RU{``QR9'': Любительская криптосистема, вдохновленная кубиком Рубика}
-\EN{``QR9'': Rubik's cube inspired amateur crypto-algorithm}}
+\chapter{\RU{\q{QR9}: Любительская криптосистема, вдохновленная кубиком Рубика}
+\EN{\q{QR9}: Rubik's cube inspired amateur crypto-algorithm}}
 
 \RU{Любительские криптосистемы иногда встречаются довольно странные.}
 \EN{Sometimes amateur cryptosystems appear to be pretty bizarre.}
@@ -81,7 +81,7 @@ It is almost the same.}
 \end{lstlisting}
 
 \index{\CStandardLibrary!calloc()}
-\RU{Вызвать memset(), т.е., очистить выделенный буфер\footnote{malloc() + memset() можно было бы 
+\RU{Вызвать memset(), т.е. очистить выделенный буфер\footnote{malloc() + memset() можно было бы 
 заменить на calloc()}.}\EN{Call memset(), e.g., clear the allocated buffer\footnote{malloc() + memset() could 
 be replaced by calloc()}.}
 
@@ -123,8 +123,8 @@ The file opening result is being checked, though.}
 .text:005413C1                 mov     edi, eax
 \end{lstlisting}
 
-\RU{Теперь хэндл созданного файла в регистре \EDI. Записываем сигнатуру ``QR9''.}
-\EN{The newly created file handle is in the \EDI register now. Write signature ``QR9''.}
+\RU{Теперь хэндл созданного файла в регистре \EDI. Записываем сигнатуру \q{QR9}.}
+\EN{The newly created file handle is in the \EDI register now. Write signature \q{QR9}.}
 
 \begin{lstlisting}
 .text:005413C3                 push    edi             ; File
@@ -400,8 +400,8 @@ void decrypt_file(char *fin, char* fout, char *pw)
 \end{lstlisting}
 
 \index{x86!\Instructions!MOVSD}
-\RU{Этот фрагмент кода копирует часть входного буфера во внутренний буфер, который я позже назвал ``cube64''.}
-\EN{This fragment of code copies a part of the input buffer to an internal array I later named ``cube64''.}
+\RU{Этот фрагмент кода копирует часть входного буфера во внутренний буфер, который я позже назвал \q{cube64}.}
+\EN{This fragment of code copies a part of the input buffer to an internal array I later named \q{cube64}.}
 \RU{Длина в регистре \ECX. \TT{MOVSD} означает \IT{скопировать 32-битное слово}, так что, 16 32-битных слов
 это как раз 64 байта.}\EN{The size is in the \ECX register. \TT{MOVSD} stands for \IT{move 32-bit dword}, so, 
 16 32-bit dwords are exactly 64 bytes.}
@@ -422,8 +422,8 @@ void decrypt_file(char *fin, char* fout, char *pw)
 .text:0054127F                 call    rotate_all_with_password
 \end{lstlisting}
 
-\RU{Скопировать зашифрованное содержимое из ``cube64'' назад в буфер}
-\EN{Copy encrypted contents back from ``cube64'' to buffer}:
+\RU{Скопировать зашифрованное содержимое из \q{cube64} назад в буфер}
+\EN{Copy encrypted contents back from \q{cube64} to buffer}:
 
 \begin{lstlisting}
 .text:00541284                 mov     eax, [esp+18h+arg_4]
@@ -471,10 +471,10 @@ void crypt (BYTE *buf, int sz, char *pw)
 \RU{OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. Она берет на вход два аргумента: 
 строку пароля и число.}\EN{OK, now let's go deeper in function \TT{rotate\_all\_with\_password()}. 
 It takes two arguments: password string and a number.}
-\RU{В функции \TT{crypt()}, число $1$ используется и в \TT{decrypt()} (где \TT{rotate\_all\_with\_password()}
-функция вызывается также), число $3$.}
-\EN{In \TT{crypt()}, the number $1$ is used, and in the \TT{decrypt()} function (where \TT{rotate\_all\_with\_password()} function 
-is called too), the number is $3$.}
+\RU{В функции \TT{crypt()}, число 1 используется и в \TT{decrypt()} (где \TT{rotate\_all\_with\_password()}
+функция вызывается также), число 3.}
+\EN{In \TT{crypt()}, the number 1 is used, and in the \TT{decrypt()} function (where \TT{rotate\_all\_with\_password()} function 
+is called too), the number is 3.}
 
 \begin{lstlisting}
 .text:005411B0 rotate_all_with_password proc near
@@ -525,14 +525,14 @@ they seem to be ignored.}
 .text:005411DC                 movsx   ecx, al
 \end{lstlisting}
 
-\RU{Отнимем значение ``a'' (97) от символа.}\EN{Subtract the value of ``a'' (97) from the character.}
+\RU{Отнимем значение \q{a} (97) от символа.}\EN{Subtract the value of \q{a} (97) from the character.}
 
 \begin{lstlisting}
 .text:005411DF                 sub     ecx, 'a'  ; 97
 \end{lstlisting}
 
-\RU{После вычитания, тут будет 0 для ``a'', 1 для ``b'', и так далее. И 25 для ``z''.}
-\EN{After subtracting, we'll get 0 for ``a'' here, 1 for ``b'', etc. And 25 for ``z''.}
+\RU{После вычитания, тут будет 0 для \q{a}, 1 для \q{b}, и так далее. И 25 для \q{z}.}
+\EN{After subtracting, we'll get 0 for \q{a} here, 1 for \q{b}, etc. And 25 for \q{z}.}
 
 \begin{lstlisting}
 .text:005411E2                 cmp     ecx, 24
@@ -540,11 +540,11 @@ they seem to be ignored.}
 .text:005411E7                 sub     ecx, 24
 \end{lstlisting}
 
-\RU{Похоже, символы ``y'' и ``z'' также исключительные.
-После этого фрагмента кода, ``y'' становится 0, а ``z'' ~--- 1.
+\RU{Похоже, символы \q{y} и \q{z} также исключительные.
+После этого фрагмента кода, \q{y} становится 0, а \q{z} ~--- 1.
 Это значит, что 26 латинских букв становятся значениями в интервале 0..23, (всего 24).}
-\EN{It seems, ``y'' and ``z'' are exceptional characters too. 
-After that fragment of code, ``y'' becomes 0 and ``z''~---1. 
+\EN{It seems, \q{y} and \q{z} are exceptional characters too. 
+After that fragment of code, \q{y} becomes 0 and \q{z}~---1. 
 This implies that the 26 Latin alphabet symbols become values in the range of 0..23, (24 in total).}
 
 \begin{lstlisting}
@@ -553,9 +553,9 @@ This implies that the 26 Latin alphabet symbols become values in the range of 0.
 \end{lstlisting}
 
 \RU{Это, на самом деле, деление через умножение.
-Читайте об этом больше в секции ``\DivisionByNineSectionName''~(\myref{sec:divisionbynine}).}
+Читайте об этом больше в секции \q{\DivisionByNineSectionName}~(\myref{sec:divisionbynine}).}
 \EN{This is actually division via multiplication. 
-You can read more about it in the ``\DivisionByNineSectionName'' section~(\myref{sec:divisionbynine}).}
+You can read more about it in the \q{\DivisionByNineSectionName} section~(\myref{sec:divisionbynine}).}
 
 \RU{Это код, на самом деле, делит значение символа пароля на 3.}
 \EN{The code actually divides the password character's value by 3.}
@@ -573,7 +573,7 @@ You can read more about it in the ``\DivisionByNineSectionName'' section~(\myref
 .text:00541202                 idiv    ecx
 \end{lstlisting}
 
-\RU{\EDX ~--- остаток от деления.}\EN{\EDX is the remainder of the division.}
+\RU{\EDX\EMDASH{}остаток от деления.}\EN{\EDX is the remainder of the division.}
 
 \lstinputlisting{\RU{examples/qr9/4ru.asm}\EN{examples/qr9/4en.asm}}
 
@@ -737,7 +737,7 @@ Isolate the lowest bit and return it.}
 
 \RU{\TT{DL} тут равно 1. Сдвигаем эту единицу на количество, указанное в arg\_8. Например, если в arg\_8 число 4,
 тогда значение в \TT{DL} станет 0x10 или 1000b в двоичной системе счисления.}
-\EN{The value in the \TT{DL} is $1$ here. It gets shifted left by arg\_8.
+\EN{The value in the \TT{DL} is 1 here. It gets shifted left by arg\_8.
 For example, if arg\_8 is 4, the value in the \TT{DL} register is to be 
 0x10 or 1000b in binary form.}
 
@@ -1010,12 +1010,12 @@ If you want to get back, do the same in reverse order and direction!
 If you need to undo the effect of rotating one place in clockwise direction, 
 rotate it once in counter-clockwise direction, or thrice in clockwise direction.}
 
-\RU{\TT{rotate1()}, вероятно, поворот ``лицевой'' плоскости. 
-\TT{rotate2()}, вероятно, поворот ``верхней'' плоскости.
-\TT{rotate3()}, вероятно, поворот ``левой'' плоскости.}
-\EN{\TT{rotate1()} is apparently for rotating the ``front'' plane. 
-\TT{rotate2()} is apparently for rotating the ``top'' plane. 
-\TT{rotate3()} is apparently for rotating the ``left'' plane.}
+\RU{\TT{rotate1()}, вероятно, поворот \q{лицевой} плоскости. 
+\TT{rotate2()}, вероятно, поворот \q{верхней} плоскости.
+\TT{rotate3()}, вероятно, поворот \q{левой} плоскости.}
+\EN{\TT{rotate1()} is apparently for rotating the \q{front} plane. 
+\TT{rotate2()} is apparently for rotating the \q{top} plane. 
+\TT{rotate3()} is apparently for rotating the \q{left} plane.}
 
 \RU{Вернемся к ядру функции \TT{rotate\_all()}}\EN{Let's get back to the core of the \TT{rotate\_all()} function:}
 

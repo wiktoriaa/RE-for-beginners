@@ -13,7 +13,7 @@ using a single instruction.}
 \EN{The address is formed using the \TT{ADRP} and \ADD instruction pair in ARM64.}
 \RU{Первая загружает в регистр адрес 4Kb-страницы, а вторая прибавляет остаток.}
 \EN{The first loads a 4Kb-page address and the second one adds the remainder.}
-\RU{Я скомпилировал пример из}\EN{I compiled the example from} ``\HelloWorldSectionName'' 
+\RU{Я скомпилировал пример из}\EN{I compiled the example from} \q{\HelloWorldSectionName} 
 (\lstref{hw_c}) \InENRU GCC (Linaro) 4.9 \RU{под}\EN{under} win32:
 
 \begin{lstlisting}[caption=GCC (Linaro) 4.9 \AndENRU objdump \EN{of object file}\RU{объектного файла}]
@@ -59,7 +59,7 @@ and the ADRP instruction has space only for 21 bits.}
 \item \RU{Второй ---- 12 бит адреса, относительного от начала страницы, в поля инструкции \ADD.}
 \EN{The second one puts the 12 bits of the address relative to the page start into the \ADD instruction's bit fields.}
 
-\item \RU{Последний, 26-битный, накладывается на инструкцию по адресу \TT{0x10}, где переход на ф-цию \printf.}
+\item \RU{Последний, 26-битный, накладывается на инструкцию по адресу \TT{0x10}, где переход на функцию \printf.}
 \EN{The last, 26-bit one, is applied to the instruction at address \TT{0x10} where the 
 jump to the \printf function is.}
 \RU{Все адреса инструкций в ARM64 (да и в ARM в режиме ARM) имеют нули в двух младших битах
@@ -72,8 +72,8 @@ so one need to encode only the highest 26 bits of 28-bit address space ($\pm 128
 \end{itemize}
 
 \RU{В слинкованном исполняемом файле релоков в этих местах нет: потому что там уже точно известно, 
-где будет находится строка ``Hello!'', и в какой странице, а также известен адрес ф-ции \puts.}
-\EN{There are no such relocs in the executable file: because it's known where the ``Hello!'' string
+где будет находится строка \q{Hello!}, и в какой странице, а также известен адрес функции \puts.}
+\EN{There are no such relocs in the executable file: because it's known where the \q{Hello!} string
 is located, in which page, and the address of \puts is also known.}
 \RU{И поэтому там, в инструкциях \TT{ADRP}, \ADD и \TT{BL}, уже проставлены нужные значения 
 (их проставил линкер во время компоновки):}

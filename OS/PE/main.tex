@@ -10,7 +10,7 @@ Windows}.
 
 \index{OEP}
 \RU{У \ac{DLL}, как и у всех PE-файлов, есть точка входа (\ac{OEP})
-(там располагается ф-ция DllMain()), но обычно эта ф-ция ничего не делает.}
+(там располагается функция DllMain()), но обычно эта функция ничего не делает.}
 \EN{A \ac{DLL}, just like any other PE-file, has an entry point (\ac{OEP}) (the function DllMain() is located there) 
 but this function usually does nothing.}
 
@@ -30,7 +30,7 @@ but this function usually does nothing.}
 \index{MS-DOS}
 \RU{В начале всякого PE-файла есть крохотная DOS-программа,
 выводящая на консоль сообщение вроде}\EN{Every PE file begins with tiny DOS program that prints a
-message like} ``This program cannot be run in DOS mode.'' --- 
+message like} \q{This program cannot be run in DOS mode.}\EMDASH{}%
 \RU{если запустить эту программу в DOS либо Windows 3.1 (\ac{OS} не знающие о PE-формате), 
 выведется это сообщение.}
 \EN{if you run this program in DOS or Windows 3.1 (\ac{OS}-es which are not aware of the PE format), 
@@ -40,30 +40,33 @@ this message will be printed.}
 
 \begin{itemize}
 \item
-\RU{Модуль}\EN{Module} --- \RU{это отдельный файл}\EN{a separate file}, .exe \OrENRU{} .dll.
+\RU{Модуль}\EN{Module}\EMDASH{}\RU{это отдельный файл}\EN{a separate file}, .exe \OrENRU{} .dll.
 
 \item
-\RU{Процесс}\EN{Process} --- \RU{это некая загруженная в память и работающая программа}\EN{a program
+	\RU{Процесс}\EN{Process}\EMDASH{}\RU{это некая загруженная в память и работающая программа}\EN{a program
 loaded into memory and currently running}.
 \RU{Как правило состоит из одного .exe-файла и массы .dll-файлов}\EN{Commonly consists of 
 one .exe file and bunch of .dll files}.
 
 \item
-\RU{Память процесса}\EN{Process memory} --- \RU{память с которой работает процесс}\EN{the memory a process
+	\RU{Память процесса}\EN{Process memory}\EMDASH{}\RU{память с которой работает процесс}\EN{the memory a process
 works with}.
-\RU{У каждого процесса --- своя}\EN{Each process has its own}.
-\RU{Там обычно имеются загруженные модули, память стека, \glslink{heap}{кучи}, и т.д}\EN{There usually are 
-loaded modules, memory of the stack, \gls{heap}(s), etc}.
+\RU{У каждого процесса\EMDASH{}своя}\EN{Each process has its own}.
+\RU{Там обычно имеются загруженные модули, память стека, \glslink{heap}{кучи},}
+\EN{There usually are loaded modules, memory of the stack, \gls{heap}(s),}\etc{}.
 
 \item
 \index{VA}
-\ac{VA} --- \RU{это адрес, который будет использоваться в самой программе.}
-\EN{an address which is to be used in program.}
+\ac{VA}\EMDASH{}\RU{это адрес, который будет использоваться в самой программе во время исполнения.}
+\EN{an address which is to be used in program while runtime.}
 
 \item
 \index{\RU{Базовый адрес}\EN{Base address}}
-\RU{Базовый адрес}\EN{Base address}\EMDASH{}\RU{это адрес, по которому модуль будет загружен 
-в пространство процесса}\EN{the address within the process memory at which the module is to be loaded}.
+\RU{Базовый адрес (модуля)}\EN{Base address (of module)}\EMDASH{}
+\RU{это адрес, по которому модуль должен быть загружен в пространство процесса.}
+\EN{the address within the process memory at which the module is to be loaded.}
+\EN{\ac{OS} loader may change it, if the base address is already occupied by another module just loaded before.}
+\RU{Загрузчик \ac{OS} может его изменить, если этот базовый адрес уже занят другим модулем, загруженным перед ним.}
 
 \item
 \index{RVA}
@@ -101,10 +104,10 @@ to reach an agreement which addresses is to be assigned to whose modules.}
 
 \RU{Поэтому, если у двух необходимых для загрузки процесса DLL одинаковые базовые адреса,
 одна из них будет загружена по этому базовому адресу, 
-а вторая ~--- по другому свободному месту в памяти процесса, и все виртуальные адреса
+а вторая\EMDASH{}по другому свободному месту в памяти процесса, и все виртуальные адреса
 во второй DLL будут скорректированы.}
-\EN{So that is why if two necessary DDLs for a process have the same base address,
-one of them will be loaded at this base address, and the other~---at some other free space in process memory,
+\EN{So that is why if two necessary DLLs for a process have the same base address,
+	one of them will be loaded at this base address, and the other\EMDASH{}at some other free space in process memory,
 and each virtual addresses in the second DLL will be corrected.} \\
 \\
 \RU{Очень часто линкер в}\EN{Often,} \ac{MSVC} \RU{генерирует .exe-файлы с базовым адресом}
@@ -112,7 +115,7 @@ and each virtual addresses in the second DLL will be corrected.} \\
 \footnote{\RU{Причина выбора такого адреса описана здесь}
 \EN{The origin of this address choice is described here}: \href{http://go.yurichev.com/17041}{MSDN}},
 \RU{и с секцией кода начинающейся с}\EN{and with the code section starting at} \TT{0x401000}.
-\RU{Это значит, что}\EN{This mean that the} \ac{RVA} \RU{начала секции кода ~---}\EN{of the start of the code section is} \TT{0x1000}.
+\RU{Это значит, что}\EN{This mean that the} \ac{RVA} \RU{начала секции кода\EMDASH{}}\EN{of the start of the code section is} \TT{0x1000}.
 \RU{А \ac{DLL} часто генерируются MSVC-линкером с базовым адресом}
 \EN{DLLs are often generated by MSVC's linker with a base address of} \TT{0x10000000}
 \footnote{\RU{Это можно изменять опцией /BASE в линкере}\EN{This can be changed by the /BASE linker option}}.
@@ -125,16 +128,15 @@ and each virtual addresses in the second DLL will be corrected.} \\
 \RU{Это}\EN{It is} \ac{ASLR}\footnote{\RU{\href{http://go.yurichev.com/17042}{wikipedia}}\EN{\href{http://go.yurichev.com/17140}{wikipedia}}}.
 
 \index{Shellcode}
-\RU{Дело в том, что некий шеллкод, пытающийся исполниться на зараженной системе, 
-должен вызывать какие-то системные ф-ции}\EN{A shellcode trying to get executed on a compromised
-system must call system functions}.
+\RU{Дело в том, что некий шеллкод, пытающийся исполниться на зараженной системе, должен вызывать какие-то системные функции, а следовательно, знать их адреса.}
+\EN{A shellcode trying to get executed on a compromised system must call system functions, hence, know their addresses.}
 
 \RU{И в старых}\EN{In older} \ac{OS} (\RU{в линейке \gls{Windows NT}: до}\EN{in \gls{Windows NT} line: before} Windows Vista),
 \RU{системные}\EN{system} DLL (\RU{такие как}\EN{like} kernel32.dll, user32.dll) \RU{загружались все время
 по одним и тем же адресам}\EN{were always loaded at known addresses}, 
 \RU{а если еще и вспомнить, что версии этих DLL редко менялись}\EN{and if we also recall
 that their versions rarely changed}, \RU{то адреса отдельных
-ф-ций, можно сказать, фиксированы и шеллкод может вызывать их напрямую}\EN{the addresses of functions were
+функций, можно сказать, фиксированы и шеллкод может вызывать их напрямую}\EN{the addresses of functions were
 fixed and shellcode could call them directly}.
 
 \RU{Чтобы избежать этого, методика}\EN{In order to avoid this, the} \ac{ASLR}
@@ -149,9 +151,13 @@ fixed and shellcode could call them directly}.
 
 \RU{Имеется также поле \IT{subsystem}, обычно это}\EN{There is also a \IT{subsystem} field, usually it is}:
 
+\index{Native API}
 \begin{itemize}
-\item native (.sys-\RU{драйвер}\EN{driver}), 
+\item native\footnote{\EN{Meaning, the module use Native API instead of Win32}\RU{Что означает, что модуль использует Native API а не Win32}} 
+(.sys-\RU{драйвер}\EN{driver}), 
+
 \item console (\RU{консольное приложение}\EN{console application}) \OrENRU 
+
 \item \ac{GUI} (\RU{не консольное}\EN{non-console}).
 \end{itemize}
 
@@ -188,8 +194,8 @@ it is possible to force it to compile for Windows XP.}
 \RU{Разделение на секции присутствует, по-видимому, во всех форматах исполняемых файлов.}
 \EN{Division in sections, as it seems, is present in all executable file formats.}
 
-\RU{Сделано это для того, чтобы отделить код от данных, а данные ~--- от константных данных.}
-\EN{It is done in order to separate code from data, and data~---from constant data.}
+\RU{Придумано это для того, чтобы отделить код от данных, а данные\EMDASH{}от константных данных.}
+\EN{It is devised in order to separate code from data, and data\EMDASH{}from constant data.}
 
 \begin{itemize}
 \item
@@ -218,7 +224,7 @@ it is not very important}.
 \RU{Часто (но не всегда)}\EN{Often (but not always)} \RU{секция кода называется}\EN{the code section is named} \TT{.text}, 
 \index{TLS}
 \index{BSS}
-\RU{секция данных}\EN{the data section} --- \TT{.data}, \RU{константных данных}\EN{the constant data section} --- \TT{.rdata} 
+\RU{секция данных}\EN{the data section}\EMDASH{}\TT{.data}, \RU{константных данных}\EN{the constant data section} --- \TT{.rdata} 
 \IT{(readable data)}.
 \RU{Еще популярные имена секций}\EN{Other popular section names are}: 
 
@@ -277,8 +283,8 @@ typedef struct _IMAGE_SECTION_HEADER {
 
 \index{Hiew}
 \RU{Еще немного терминологии}\EN{A word about terminology}:
-\IT{PointerToRawData} \RU{называется}\EN{it called} ``Offset''
-\AndENRU \IT{VirtualAddress} \RU{называется}\EN{is called} ``RVA'' \InENRU Hiew.
+\IT{PointerToRawData} \RU{называется}\EN{it called} \q{Offset} \InENRU Hiew
+\AndENRU \IT{VirtualAddress} \RU{называется}\EN{is called} \q{RVA} \RU{там же}\EN{there}.
 
 \subsection{\RU{Релоки}\EN{Relocations (relocs)}}
 \label{subsec:relocs}
@@ -288,13 +294,16 @@ typedef struct _IMAGE_SECTION_HEADER {
 \RU{Это также присутствует почти во всех форматах загружаемых и исполняемых файлов}
 \EN{They are also present in almost all executable file formats}
 \footnote{\RU{Даже .exe-файлы в}\EN{Even in .exe files for} MS-DOS}.
+\EN{Exceptions are shared dynamic libraries compiled with \ac{PIC}, or any other \ac{PIC}-code.}
+\RU{Исключения это динамические библиотеки явно скомпилированные с \ac{PIC} или любой другой \ac{PIC}-код.}
 
+\RU{Зачем они нужны?}\EN{What are they for?}
 \RU{Как видно, модули могут загружаться по другим базовым адресам,
 но как же тогда работать с глобальными переменными, например?}
 \EN{Obviously, modules can be loaded on various base addresses,
 but how to deal with global variables, for example?}
 \RU{Ведь нужно обращаться к ним по адресу}\EN{They must be accessed by address}.
-\RU{Одно из решений --- это}\EN{One solution is} \PICcode{} (\myref{sec:PIC}).
+\RU{Одно из решений\EMDASH{}это}\EN{One solution is} \PICcode{} (\myref{sec:PIC}).
 \RU{Но это далеко не всегда удобно}\EN{But it is not always convenient}.
 
 \RU{Поэтому имеется таблица релоков. 
@@ -338,7 +347,7 @@ of the global variable must be} \TT{0x510000}.
 \RU{и прибавляет к нему новый базовый адрес}\EN{and adds the new base address to it}.
 
 \RU{А если модуль загружается по своему оригинальному базовому адресу, ничего не происходит}
-\EN{If module is loaded at its original base address, nothing happens}.
+\EN{If a module is loaded at its original base address, nothing happens}.
 
 \RU{Так можно обходиться со всеми глобальными переменными}
 \EN{All global variables can be treated like that}.
@@ -368,45 +377,45 @@ the places in memory to which relocs are to be applied, for example}: \figref{fi
 \EN{It can be said that functions from one module (usually DLL) must be connected somehow to the points of their
 calls in other modules (.exe-file or another DLL)}.
 
-\RU{Для этого, у каждой DLL есть ``экспорты'', это таблица ф-ций плюс их адреса в модуле}
-\EN{For this, each DLL has an ``exports'' table, which consists of functions plus their addresses in a module}.
+\RU{Для этого, у каждой DLL есть \q{экспорты}, это таблица функций плюс их адреса в модуле}
+\EN{For this, each DLL has an \q{exports} table, which consists of functions plus their addresses in a module}.
 
-\RU{А у .exe-файла, либо DLL, есть ``импорты'', это таблица ф-ций требующихся для исполнения 
+\RU{А у .exe-файла, либо DLL, есть \q{импорты}, это таблица функций требующихся для исполнения
 включая список имен DLL-файлов}
-\EN{And every .exe file or DLL has ``imports'', a table of functions it needs for execution including
+\EN{And every .exe file or DLL has \q{imports}, a table of functions it needs for execution including
 list of DLL filenames}.
 
 \RU{Загрузчик \ac{OS}, после загрузки основного .exe-файла, проходит по таблице импортов:
 загружает дополнительные DLL-файлы, 
-находит имена ф-ций среди экспортов в DLL и прописывает их адреса в \ac{IAT} в головном .exe-модуле}
+находит имена функций среди экспортов в DLL и прописывает их адреса в \ac{IAT} в головном .exe-модуле}
 \EN{After loading the main .exe-file, the \ac{OS} loader processes imports table: 
 it loads the additional DLL-files, finds function names
 among the DLL exports and writes their addresses down in the \ac{IAT} of the main .exe-module}.
 
 \index{Windows!Win32!Ordinal}
-\RU{Как видно, во время загрузки, загрузчику нужно много сравнивать одни имена ф-ций с другими,
-а сравнение строк ~--- это не очень быстрая процедура, так что,
-имеется также поддержка ``ординалов'' или 
-``hint''-ов, это когда в таблице импортов проставлены номера ф-ций вместо их имен}
+\RU{Как видно, во время загрузки, загрузчику нужно много сравнивать одни имена функций с другими,
+а сравнение строк\EMDASH{}это не очень быстрая процедура, так что,
+имеется также поддержка \q{ординалов} или
+\q{hint}-ов, это когда в таблице импортов проставлены номера функций вместо их имен}
 \EN{As we can see, during loading the loader must compare a lot of function names, but string comparison is not a very
-fast procedure, so there is a support for ``ordinals'' or ``hints'',
+fast procedure, so there is a support for \q{ordinals} or \q{hints},
 which are function numbers stored in the table, instead of their names}.
 
 \RU{Так их быстрее находить в загружаемой DLL}
 \EN{That is how they can be located faster when loading a DLL}.
-\RU{В таблице экспортов ординалы присутствуют всегда}\EN{Ordinals are always present in the ``export'' table}.
+\RU{В таблице экспортов ординалы присутствуют всегда}\EN{Ordinals are always present in the \q{export} table}.
 
 \index{MFC}
 \RU{К примеру}\EN{For example}, \RU{программы использующие библиотеки}\EN{a program using the} 
 \ac{MFC}\RU{, обычно загружают mfc*.dll по ординалам}\EN{ library usually loads mfc*.dll by ordinals},
-\RU{и в таких программах, в \ac{INT}, нет имен ф-ций \ac{MFC}}
+\RU{и в таких программах, в \ac{INT}, нет имен функций \ac{MFC}}
 \EN{and in such programs there are no \ac{MFC} function names in \ac{INT}}.
 
 % TODO example!
 \RU{При загрузке такой программы в \IDA, она спросит у вас путь к файлу mfc*.dll,
-чтобы установить имена ф-ций}\EN{When loading such programs in \IDA, it will ask for a path to the mfc*.dll files
+чтобы установить имена функций}\EN{When loading such programs in \IDA, it will ask for a path to the mfc*.dll files
 in order to determine the function names}.
-\RU{Если в \IDA не указать путь к этой DLL, то вместо имен ф-ций будет что-то вроде}
+\RU{Если в \IDA не указать путь к этой DLL, то вместо имен функций будет что-то вроде}
 \EN{If you don't tell \IDA the path to these DLLs, there will be}
 \IT{mfc80\_123}\EN{ instead of function names}.
 
@@ -418,7 +427,7 @@ in order to determine the function names}.
 \EN{Often a separate section is allocated for the imports table and everything related to it (with name like \TT{.idata}),
 however, this is not a strict rule}.
 
-\RU{Импорты ~--- это запутанная тема еще и из-за терминологической путаницы. Попробуем собрать всё в одно место.}
+\RU{Импорты\EMDASH{}это запутанная тема еще и из-за терминологической путаницы. Попробуем собрать всё в одно место.}
 \EN{Imports are also a confusing subject because of the terminological mess. Let's try to collect all information in one place.}
 
 \begin{figure}[H]
@@ -428,7 +437,7 @@ however, this is not a strict rule}.
 \EN{A scheme that unites all PE-file structures related to imports}}
 \end{figure}
 
-\RU{Самая главная структура ~--- это массив}\EN{The main structure is the array} \IT{IMAGE\_IMPORT\_DESCRIPTOR}.
+\RU{Самая главная структура\EMDASH{}это массив}\EN{The main structure is the array} \IT{IMAGE\_IMPORT\_DESCRIPTOR}.
 \RU{Каждый элемент на каждую импортируемую DLL}\EN{Each element for each DLL being imported}.
 
 \RU{У каждого элемента есть}\EN{Each element holds the} \ac{RVA}\RU{-адрес}\EN{ address} 
@@ -437,23 +446,23 @@ however, this is not a strict rule}.
 \IT{OriginalFirstThink} \RU{это}\EN{is the} \ac{RVA} \RU{-адрес таблицы \ac{INT}}\EN{address of the \ac{INT} table}. 
 \RU{Это массив}\EN{This is an array of} 
 \ac{RVA}\RU{-адресов}\EN{ addresses},
-\RU{каждый из которых указывает на текстовую строку где записано имя ф-ции}
+\RU{каждый из которых указывает на текстовую строку где записано имя функции}
 \EN{each of which points to a text string with a function name}. 
 \RU{Каждую строку предваряет 16-битное число}\EN{Each string is prefixed by a 16-bit integer} 
-(``hint'')\EMDASH\RU{``ординал'' ф-ции}\EN{``ordinal'' of function}.
+(\q{hint})\EMDASH\RU{\q{ординал} функции}\EN{\q{ordinal} of function}.
 
-\RU{Если при загрузке удается найти ф-цию по ординалу, тогда сравнение текстовых строк не будет происходить.
+\RU{Если при загрузке удается найти функцию по ординалу, тогда сравнение текстовых строк не будет происходить.
 Массив оканчивается нулем.}
 \EN{While loading, if it is possible to find a function by ordinal,
 then the strings comparison will not occur. The array is terminated by zero.}
 \RU{Есть также указатель на таблицу \ac{IAT} с названием}
 \EN{There is also a pointer to the \ac{IAT} table named} \IT{FirstThunk},
 \RU{это просто}\EN{it is just the} \ac{RVA}\RU{-адрес}\EN{ address} 
-\RU{места, где загрузчик будет проставлять адреса найденных ф-ций}\EN{of the place where the loader
+\RU{места, где загрузчик будет проставлять адреса найденных функций}\EN{of the place where the loader
 writes the addresses of the resolved functions}.
 
-\RU{Места где загрузчик проставляет адреса, \IDA именует их так}\EN{The points where
-the loader writes addresses are marked by \IDA like this}: \IT{\_\_imp\_CreateFileA}, \RU{и т.д}\EN{etc}.
+\RU{Места где загрузчик проставляет адреса, \IDA именует их так}
+\EN{The points where the loader writes addresses are marked by \IDA like this}: \IT{\_\_imp\_CreateFileA}, \etc{}.
 
 \RU{Есть по крайней мере два способа использовать адреса, проставленные загрузчиком}
 \EN{There are at least two ways to use the addresses written by the loader}.
@@ -463,7 +472,7 @@ the loader writes addresses are marked by \IDA like this}: \IT{\_\_imp\_CreateFi
 \item
 \RU{В коде будут просто инструкции вроде}\EN{The code will have instructions like} 
 \IT{call \_\_imp\_CreateFileA}, 
-\RU{а так как, поле с адресом импортируемой ф-ции это как бы глобальная переменная}
+\RU{а так как, поле с адресом импортируемой функции это как бы глобальная переменная}
 \EN{and since the field with the address of the imported function is a global variable in some sense}, 
 \RU{то в таблице релоков добавляется адрес (плюс 1 или 2) в инструкции \IT{call}}
 \EN{the address of the \IT{call} instruction (plus 1 or 2) is to be added to the relocs table},
@@ -472,7 +481,7 @@ the loader writes addresses are marked by \IDA like this}: \IT{\_\_imp\_CreateFi
 
 \RU{Но как видно, это приводит к увеличению таблицы релоков}\EN{But, obviously, this may enlarge
 relocs table significantly}.
-\RU{Ведь вызовов импортируемой ф-ции у вас в модуле может быть очень много}
+\RU{Ведь вызовов импортируемой функции у вас в модуле может быть очень много}
 \EN{Because there are might be a lot of calls to imported functions in the module}.
 \RU{К тому же, чем больше таблица релоков, тем дольше загрузка}
 \EN{Furthermore, large relocs table slows down the process of loading modules}.
@@ -480,30 +489,30 @@ relocs table significantly}.
 \index{x86!\Instructions!JMP}
 \index{thunk-\RU{функции}\EN{functions}}
 \item
-\RU{На каждую импортируемую ф-цию выделяется только один переход на импортируемую ф-цию используя
+\RU{На каждую импортируемую функцию выделяется только один переход на импортируемую функцию используя
 инструкцию \JMP плюс релок на эту инструкцию}
 \EN{For each imported function, there is only one jump allocated, using the \JMP instruction 
 plus a reloc to it}.
-\RU{Такие места-``переходники'' называются также ``thunk''-ами}\EN{Such points are also called ``thunks''}.
-\RU{А все вызовы импортируемой ф-ции это просто инструкция \CALL на соответствующий ``thunk''}
-\EN{All calls to the imported functions are just \CALL instructions to the corresponding ``thunk''}.
+\RU{Такие места-\q{переходники} называются также \q{thunk}-ами}\EN{Such points are also called \q{thunks}}.
+\RU{А все вызовы импортируемой функции это просто инструкция \CALL на соответствующий \q{thunk}}
+\EN{All calls to the imported functions are just \CALL instructions to the corresponding \q{thunk}}.
 \RU{В данном случае, дополнительные релоки не нужны, потому что эти CALL-ы имеют относительный адрес,
 и корректировать их не надо}\EN{In this case, additional relocs are not necessary because these CALL-s
 have relative addresses and do not need to be corrected}.
 \end{itemize}
 
 \RU{Оба этих два метода могут комбинироваться}\EN{These two methods can be combined}.
-\RU{Вероятно, линкер создает отдельный ``thunk'', если вызовов слишком много, но по умолчанию --- не создает.}
-\EN{Possible, the linker creates individual ``thunk''s if there are too many calls to the function,
+\RU{Вероятно, линкер создает отдельный \q{thunk}, если вызовов слишком много, но по умолчанию\EMDASH{}не создает.}
+\EN{Possible, the linker creates individual \q{thunk}s if there are too many calls to the function,
 but not done by default.} \\
 \\
-\RU{Кстати, массив адресов ф-ций, на который указывает FirstThunk,
+\RU{Кстати, массив адресов функций, на который указывает FirstThunk,
 не обязательно может быть в секции \ac{IAT}}\EN{By the way, the array of function addresses to which FirstThunk is
 pointing is not necessary to be located in the \ac{IAT} section}.
-\RU{К примеру, я написал утилиту}\EN{For example, I once wrote the}
+\RU{К примеру, автор сих строк написал утилиту}\EN{For example, author of these lines once wrote the}
 PE\_add\_import\footnote{\href{http://go.yurichev.com/17049}{yurichev.com}} 
 \RU{для добавления импорта в уже существующий .exe-файл}\EN{utility for adding imports to an existing .exe-file}.
-\RU{Раньше, в прошлых версиях утилиты, на месте ф-ции, вместо которой вы хотите подставить вызов в другую DLL,
+\RU{Раньше, в прошлых версиях утилиты, на месте функции, вместо которой вы хотите подставить вызов в другую DLL,
 моя утилита вписывала такой код:}
 \EN{Some time earlier, in the previous versions of the utility, 
 at the place of the function you want to substitute with a call to another DLL,
@@ -516,7 +525,7 @@ JMP EAX
 
 \RU{При этом, FirstThunk указывает прямо на первую инструкцию.
 Иными словами, загрузчик, загружая yourdll.dll, 
-прописывает адрес ф-ции \IT{function} прямо в коде.}
+прописывает адрес функции \IT{function} прямо в коде.}
 \EN{FirstThunk points to the first instruction. In other words, when loading yourdll.dll,
 the loader writes the address of the \IT{function} function right in the code.}
 
@@ -530,11 +539,11 @@ code section is usually write-protected}, \RU{так что, моя утилит
 5 (access denied). \\
 \\
 \RU{Может возникнуть вопрос: а что если я поставляю программу с набором DLL,
-которые никогда не будут меняться, может как-то можно ускорить процесс загрузки?}
-\EN{One might ask: what if I supply a program with a set of DLL files which is not supposed to change,
+которые никогда не будут меняться (в т.ч., адреса всех функций в этих DLL), может как-то можно ускорить процесс загрузки?}
+\EN{One might ask: what if I supply a program with a set of DLL files which is not supposed to change (including addresses of all DLL functions),
 is it possible to speed up the loading process?}
 
-\RU{Да, можно прописать адреса импортируемых ф-ций в массивы FirstThunk заранее}
+\RU{Да, можно прописать адреса импортируемых функций в массивы FirstThunk заранее}
 \EN{Yes, it is possible to write the addresses of the functions to be imported into the FirstThunk arrays in advance}.
 \RU{Для этого в структуре}\EN{The \IT{Timestamp} field is present in the} \\
 \IT{IMAGE\_IMPORT\_DESCRIPTOR} \RU{имеется поле \IT{Timestamp}}\EN{structure}.
@@ -542,9 +551,9 @@ is it possible to speed up the loading process?}
 \EN{If a value is present there, then the loader compares this value with the date-time of the DLL file}.
 \RU{И если они равны, то загрузчик больше ничего не делает, и загрузка может происходить быстрее.}
 \EN{If the values are equal, then the loader does not do anything, and the loading of the process can be faster.}
-\RU{Это называется}\EN{This is called} ``old-style binding''
+\RU{Это называется}\EN{This is called} \q{old-style binding}
 \footnote{\href{http://go.yurichev.com/17050}{MSDN}.
-\RU{Существует также}\EN{There is also the} ``new-style binding'',
+\RU{Существует также}\EN{There is also the} \q{new-style binding},
 \RU{про него напишу позже}\EN{I'm going to write about it in the future}}.
 \index{BIND.EXE}
 \RU{В Windows SDK для этого имеется утилита BIND.EXE}
@@ -560,26 +569,27 @@ installation on the computer of the end user}. \\
 \EN{In this case, the Windows loader, of course, will not load all necessary DLLs}.
 \index{Windows!Win32!LoadLibrary}
 \index{Windows!Win32!GetProcAddress}
-% FIXME1 поэтому эти импорты часто только и присутствуют в запакованных файлах...
 \RU{Поэтому распаковщик/расшифровщик делает это сам, при помощи вызовов}
 \EN{Therefore, the packer/encryptor does this on its own, with the help of} 
-\IT{LoadLibrary()} \AndENRU \EN{the }\IT{GetProcAddress()}\EN{ functions}. \\
+\IT{LoadLibrary()} \AndENRU \EN{the }\IT{GetProcAddress()}\EN{ functions}.
+\RU{Вот почему в запакованных файлах эти две функции часто присутствуют в \ac{IAT}.}
+\EN{That is why these two functions are often present in \ac{IAT} in packed files.}\\
 \\
 \RU{В стандартных DLL входящих в состав Windows, часто, \ac{IAT} находится в самом начале PE-файла.}
 \EN{In the standard DLLs from the Windows installation, \ac{IAT} often is located right in the beginning of the PE file.}
 \RU{Возможно это для оптимизации}\EN{Supposedly, it is done for optimization}.
 \RU{Ведь .exe-файл при загрузке не загружается в память весь 
-(вспомните что инсталляторы огромного размера подозрительно быстро запускаются), он ``мапится'' (map), 
+(вспомните что инсталляторы огромного размера подозрительно быстро запускаются), он \q{мапится} (map), 
 и подгружается в память частями по мере обращения к этой памяти.}
 \EN{While loading, the .exe file is not loaded into memory as a whole (recall huge install programs which are
-started suspiciously fast), it is ``mapped'', and loaded into memory in parts as they are accessed.}
+started suspiciously fast), it is \q{mapped}, and loaded into memory in parts as they are accessed.}
 \RU{И возможно в Microsoft решили что так будет быстрее.}
 \EN{Probably, Microsoft developers decided it will be faster.}
 
 \subsection{\RU{Ресурсы}\EN{Resources}}
 
 \label{PEresources}
-\RU{Ресурсы в PE-файле ~--- это набор иконок, картинок, текстовых строк, описаний диалогов}
+\RU{Ресурсы в PE-файле\EMDASH{}это набор иконок, картинок, текстовых строк, описаний диалогов}
 \EN{Resources in a PE file are just a set of icons, pictures, text strings, dialog descriptions}.
 \RU{Возможно, их в свое время решили отделить от основного кода, чтобы все эти вещи были многоязычными,
 и было проще выбирать текст или картинку того языка, который установлен в \ac{OS}}
@@ -587,9 +597,9 @@ started suspiciously fast), it is ``mapped'', and loaded into memory in parts as
 and it would be simpler to pick text or picture for the language that is currently set in the \ac{OS}}. \\
 \\
 \RU{В качестве побочного эффекта, их легко редактировать и сохранять обратно в исполняемый файл,
-даже не обладая специальными знаниями,
-например, редактором}\EN{As a side effect, they can be edited easily and saved back to the executable file,
-even if one does not have special knowledge, by using for example the} ResHack\EN{ editor}(\myref{ResHack}).
+даже не обладая специальными знаниями, например, редактором ResHack}%
+\EN{As a side effect, they can be edited easily and saved back to the executable file, even if one does not have special knowledge, 
+by using the ResHack editor, for example} (\myref{ResHack}).
 
 \subsection{.NET}
 
@@ -626,7 +636,7 @@ data for the} \ac{TLS}(\myref{TLS}) (\RU{если нужно}\EN{if needed}).
 \index{TLS!Callbacks}
 \RU{Помимо всего прочего, спецификация PE-файла предусматривает инициализацию}
 \EN{Aside from that, the PE file specification also provides initialization of the}
-\ac{TLS }\RU{-секции, т.н.,}\EN{section, the so-called} TLS callbacks.
+\ac{TLS}\RU{-секции, т.н.,}\EN{ section, the so-called} TLS callbacks.
 \RU{Если они присутствуют, то они будут вызваны перед тем как передать управление на главную точку входа}
 \EN{If they are present, they are to be called before the control is passed to the main entry point} (\ac{OEP}).
 \RU{Это широко используется запаковщиками/защифровщиками PE-файлов.}
@@ -645,34 +655,34 @@ objdump (\RU{имеется в}\EN{present in} cygwin) \RU{для вывода �
 Hiew(\myref{Hiew}) \RU{как редактор}\EN{as editor}.
 
 \item
-pefile --- Python-\RU{библиотека для работы с PE-файлами}\EN{library for PE-file processing}
+	pefile\EMDASH{}Python-\RU{библиотека для работы с PE-файлами}\EN{library for PE-file processing}
 \footnote{\url{http://go.yurichev.com/17052}}.
 
 \item
 \label{ResHack}
-ResHack \acs{AKA} Resource Hacker --- \RU{редактор ресурсов}\EN{resources editor}
+ResHack \acs{AKA} Resource Hacker\EMDASH{}\RU{редактор ресурсов}\EN{resources editor}
 \footnote{\url{http://go.yurichev.com/17052}}.
 
 \item
-PE\_add\_import\footnote{\url{http://go.yurichev.com/17049}} ---
+	PE\_add\_import\footnote{\url{http://go.yurichev.com/17049}}\EMDASH{}
 \RU{простая утилита для добавления символа/-ов в таблицу импортов PE-файла}
 \EN{simple tool for adding symbol(s) to PE executable import table}.
 
 \item
-PE\_patcher\footnote{\href{http://go.yurichev.com/17054}{yurichev.com}} --- 
+	PE\_patcher\footnote{\href{http://go.yurichev.com/17054}{yurichev.com}}\EMDASH{} 
 \RU{простая утилита для модификации PE-файлов}\EN{simple tool for patching PE executables}.
 
 \item
-PE\_search\_str\_refs\footnote{\href{http://go.yurichev.com/17055}{yurichev.com}} --- 
-\RU{простая утилита для поиска ф-ции в PE-файле, где используется некая текстовая строка}
+	PE\_search\_str\_refs\footnote{\href{http://go.yurichev.com/17055}{yurichev.com}}\EMDASH{} 
+\RU{простая утилита для поиска функции в PE-файле, где используется некая текстовая строка}
 \EN{simple tool for searching for a function in PE executables which use some text string}.
 \end{itemize}
 
 \subsection{Further reading}
 
-% FIXME1: bibliography per chapter or section
+% FIXME: bibliography per chapter or section
 \begin{itemize}
 \item
-Daniel Pistelli --- The .NET File Format \footnote{\url{http://go.yurichev.com/17056}}
+Daniel Pistelli\EMDASH{}The .NET File Format \footnote{\url{http://go.yurichev.com/17056}}
 \end{itemize}
 

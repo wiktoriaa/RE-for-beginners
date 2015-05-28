@@ -119,8 +119,8 @@ gcc -fPIC -shared -O3 -o 1.so 1.c
 \newcommand{\retstring}{\IT{<<returning \%d\textbackslash{}n>>}}
 \newcommand{\globvar}{\IT{global\_variable}}
 
-\RU{Так и есть: указатели на строку \retstring{} и переменную \globvar{} корректируются при каждом исполнении функции}
-\EN{That's it: the pointers to \retstring{} and \globvar{} are to be corrected at each function execution.}
+\RU{Так и есть: указатели на строку \retstring{} и переменную \globvar{} корректируются при каждом исполнении функции}%
+\EN{That's it: the pointers to \retstring{} and \globvar{} are to be corrected at each function execution.}\\
 \RU{Функция}\EN{The} \TT{\_\_x86\_get\_pc\_thunk\_bx()} \RU{возвращает адрес точки после вызова самой себя (здесь: \TT{0x57C}) в \EBX}\EN{function returns in \EBX the address of the point after a call to itself (\TT{0x57C} here)}.
 \RU{Это очень простой способ получить значение указателя на текущую инструкцию (\EIP) в произвольном месте}
 \EN{That's a simple way to get the value of the program counter (\EIP) at some point}.
@@ -145,7 +145,7 @@ the \TT{GOT}), \TT{0xC} must be subtracted}.
 \index{x86-64}
 \index{x86!\Registers!RIP}
 \RU{Кстати, вот зачем в AMD64 появилась поддержка адресации относительно RIP\footnote{указатель инструкций в AMD64}, просто для упрощения PIC-кода}
-\EN{By the way, that is the reason why the AMD64 instruction set supports RIP\footnote{program counter in AMD64}-relative addressing ~--- to simplify PIC-code}.
+\EN{By the way, that is the reason why the AMD64 instruction set supports RIP\footnote{program counter in AMD64}-relative addressing\EMDASH{}to simplify PIC-code}.
 
 \RU{Скомпилируем тот же код на Си при помощи той же версии GCC, но для x64}\EN{Let's compile the same C code using the same GCC version, but for x64}.
 
@@ -189,13 +189,13 @@ so I'm going to use \IT{objdump} instead to see the everything}:
 \index{Windows!Win32}
 
 \RU{Такой механизм не используется в Windows DLL. Если загрузчику в Windows приходится загружать DLL 
-в другое место, он ``патчит'' DLL прямо в памяти (на местах \IT{FIXUP}-ов) чтобы скорректировать 
+в другое место, он \q{патчит} DLL прямо в памяти (на местах \IT{FIXUP}-ов) чтобы скорректировать 
 все адреса.}\EN{The PIC mechanism is not used in Windows DLLs. If the Windows loader needs to load DLL 
-on another base address, it ``patches'' the DLL in memory (at the \IT{FIXUP} places) in order to correct 
+on another base address, it \q{patches} the DLL in memory (at the \IT{FIXUP} places) in order to correct 
 all addresses.}
 \RU{Это приводит к тому что загруженную один раз DLL нельзя использовать одновременно в разных 
-процессах, желающих расположить её по разным адресам ~--- потому что каждый загруженный в память 
+	процессах, желающих расположить её по разным адресам\EMDASH{}потому что каждый загруженный в память 
 экземпляр DLL \IT{доводится} до того чтобы работать только по этим адресам.}
 \EN{This implies that several Windows processes cannot share an once loaded DLL 
 at different addresses in different process' memory 
-blocks~---since each instance that's loaded in memory is \IT{fixed} to work only at these addresses..}
+blocks\EMDASH{}since each instance that's loaded in memory is \IT{fixed} to work only at these addresses..}

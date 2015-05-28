@@ -5,7 +5,7 @@
 
 \section{\RU{Текстовые строки}\EN{Text strings}}
 
-\RU{Как я указывал в}\EN{As I explained in} (\myref{sec:digging_strings}) \RU{текстовые строки могут быть крайне
+\RU{Как мы увидели в}\EN{As we saw in} (\myref{sec:digging_strings}) \RU{текстовые строки могут быть крайне
 полезны}\EN{, text strings may be really helpful}.
 \RU{Знающие об этом программисты могут попытаться их спрятать так, чтобы их не было видно в \IDA{} или любом
 шестнадцатеричном редакторе}
@@ -53,7 +53,7 @@ jz	it_is_john
 \EN{By the way, this is a way to work with the strings when it is impossible
 to allocate space for them in the data segment, for example in a \ac{PIC} or in shellcode.}
 
-\RU{Еще один виденный мною метод с использованием ф-ции}\EN{Another method I once saw is to use} \TT{sprintf()} 
+\RU{Еще метод с использованием функции}\EN{Another method is to use} \TT{sprintf()} 
 \RU{для конструирования}\EN{for the construction}:
 
 \begin{lstlisting}
@@ -64,7 +64,7 @@ sprintf(buf, "%s%c%s%c%s", "hel",'l',"o w",'o',"rld");
 \EN{The code looks weird, but as a simple anti-reversing measure, it may be helpful.}
 
 \RU{Текстовые строки могут также присутствовать в зашифрованном виде, в таком случае,
-их использование будет предварять вызов ф-ции для дешифровки.}
+их использование будет предварять вызов функции для дешифровки.}
 \EN{Text strings may also be present in encrypted form, 
 then every string usage is to be preceded by a string decrypting routine.}
 \RU{Например}\EN{For example}: \myref{examples_SCO}.
@@ -73,7 +73,7 @@ then every string usage is to be preceded by a string decrypting routine.}
 
 \subsection{\RU{Вставка мусора}\EN{Inserting garbage}}
 
-\RU{Обфускация исполняемого кода --- это вставка случайного мусора (между настоящим кодом), который исполняется, но не делает
+\RU{Обфускация исполняемого кода\EMDASH{}это вставка случайного мусора (между настоящим кодом), который исполняется, но не делает
 ничего полезного}\EN{Executable code obfuscation implies inserting random garbage code between real one,
 which executes but does nothing useful}.
 
@@ -98,10 +98,10 @@ may be used by the garbage instructions for some extra mess}\EMDASH{}\RU{поч�
 \item \TT{MOV op1, op2} \RU{может быть заменена на пару}\EN{can be replaced by the} \TT{PUSH op2 / POP op1}\EN{ pair}.
 \item \TT{JMP label} \RU{может быть заменена на пару}\EN{can be replaced by the} \TT{PUSH label / RET}\EN{ pair}. 
 \IDA{} \RU{не покажет ссылок на эту метку}\EN{will not show the references to the label}.
-\item \TT{CALL label} \RU{может быть заменена на тройку}\EN{can be replaced by the}
-\TT{PUSH label\_after\_CALL\_instruction / PUSH label / RET}\EN{ triplet}.
-\item \TT{PUSH op} \RU{также можно заменить на пару}\EN{can also be replaced with the} 
-\TT{SUB ESP, 4 (\OrENRU 8) / MOV [ESP], op}\EN{ pair}.
+\item \TT{CALL label} \RU{может быть заменена на следующую тройку инструкций}\EN{can be replaced by the following instructions triplet}:
+\TT{PUSH label\_after\_CALL\_instruction / PUSH label / RET}.
+\item \TT{PUSH op} \RU{также можно заменить на пару инструкций}\EN{can also be replaced with the following instructions pair}: 
+\TT{SUB ESP, 4 (\OrENRU 8) / MOV [ESP], op}.
 \end{itemize}
 
 \subsection{\RU{Всегда исполняющийся/никогда не исполняющийся код}\EN{Always executed/never executed code}}
@@ -172,7 +172,7 @@ func		endp
 \IDA{} \RU{покажет ссылки на}\EN{will show references only to} \TT{dummy\_data1} \AndENRU \TT{dummy\_data2}, 
 \RU{но не на сами текстовые строки}\EN{but not to the text strings}.
 
-\RU{К глобальным переменным и даже ф-циям можно обращаться так же}
+\RU{К глобальным переменным и даже функциям можно обращаться так же}
 \EN{Global variables and even functions may be accessed like that}.
 
 \section{\RU{Виртуальная машина / псевдо-код}\EN{Virtual machine / pseudo-code}}

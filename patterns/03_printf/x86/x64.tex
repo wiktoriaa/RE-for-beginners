@@ -2,10 +2,10 @@
 
 \index{x86-64}
 \label{example_printf8_x64}
-\RU{Для того, чтобы посмотреть, как остальные аргументы будут передаваться через стек, 
-изменим пример еще раз, 
+\RU{Для того чтобы посмотреть, как остальные аргументы будут передаваться через стек, 
+изменим пример ещё раз, 
 увеличив количество передаваемых аргументов до 9 
-(строка формата \printf и 8 переменных типа \Tint)}
+(строка формата \printf и 8 переменных типа \Tint)}%
 \EN{To see how other arguments are passed via the stack, let's change our example again 
 by increasing the number of arguments to 9 (\printf format string + 8 \Tint variables)}:
 
@@ -13,11 +13,11 @@ by increasing the number of arguments to 9 (\printf format string + 8 \Tint vari
 
 \subsubsection{MSVC}
 
-\RU{Как уже было сказано раннее, первые 4 аргумента в Win64 передаются в регистрах}
+\RU{Как уже было сказано ранее, первые 4 аргумента в Win64 передаются в регистрах}
 \EN{As it was mentioned earlier, the first 4 arguments has to be passed through the} \RCX, \RDX, \Reg{8}, \Reg{9}
-\RU{, а остальные --- через стек}\EN{ registers in Win64, while all the rest---via the stack}.
+\RU{, а остальные~--- через стек}\EN{ registers in Win64, while all the rest---via the stack}.
 \RU{Здесь мы это и видим}\EN{That is exactly what we see here}.
-\RU{Впрочем, инструкция \PUSH не используется, вместо нее, при помощи \MOV, значения сразу записываются в стек}
+\RU{Впрочем, инструкция \PUSH не используется, вместо неё при помощи \MOV значения сразу записываются в стек}%
 \EN{However, the \MOV instruction, instead of \PUSH, is used for preparing the stack, so the values are stored
 to the stack in a straightforward manner}.
 
@@ -42,11 +42,11 @@ to the stack in a straightforward manner}.
 \RU{В *NIX-системах для x86-64 ситуация похожая, вот только первые 6 аргументов передаются через}
 \EN{The picture is similar for x86-64 *NIX OS-es, except that the first 6 arguments are passed through the} \RDI, \RSI,
 \RDX, \RCX, \Reg{8}, \Reg{9}\EN{ registers}.
-\RU{Остальные --- через стек}\EN{All the rest---via the stack}.
-\RU{GCC генерирует код записывающий указатель на строку в \EDI вместо \RDI --- 
+\RU{Остальные~--- через стек}\EN{All the rest---via the stack}.
+\RU{GCC генерирует код, записывающий указатель на строку в \EDI вместо \RDI~--- 
 это мы уже рассмотрели чуть раньше}\EN{GCC generates the code storing the string pointer into \EDI instead of \RDI{}---we noted that previously}: \myref{hw_EDI_instead_of_RDI}.
 
-\RU{Почему перед вызовом \printf очищается регистр \EAX, мы уже рассмотрели раннее}
+\RU{Почему перед вызовом \printf очищается регистр \EAX мы уже рассмотрели ранее}%
 \EN{We also noted earlier that the \EAX register has been cleared before a \printf call}: \myref{SysVABI_input_EAX}.
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/03_printf/x86/2_GCC_x64.s.\LANG}
@@ -75,7 +75,7 @@ For bug reporting instructions, please see:
 Reading symbols from /home/dennis/polygon/2...done.
 \end{lstlisting}
 
-\begin{lstlisting}[caption=\RU{ставим брякпойнт на \printf{,} запускаем}\EN{let's set the breakpoint to \printf{,} and run}]
+\begin{lstlisting}[caption=\RU{ставим точку останова на \printf{,} запускаем}\EN{let's set the breakpoint to \printf{,} and run}]
 (gdb) b printf
 Breakpoint 1 at 0x400410
 (gdb) run
@@ -87,7 +87,7 @@ Breakpoint 1, __printf (format=0x400628 "a=%d; b=%d; c=%d; d=%d; e=%d; f=%d; g=%
 
 \RU{В регистрах}\EN{Registers} \RSI/\RDX/\RCX/\Reg{8}/\Reg{9} 
 \RU{всё предсказуемо}\EN{have the expected values}.
-\RU{А }\RIP \RU{содержит адрес самой первой инструкции ф-ции}\EN{has the address of the very first instruction
+\RU{А }\RIP \RU{содержит адрес самой первой инструкции функции}\EN{has the address of the very first instruction
 of the} \printf\EN{ function}.
 
 \begin{lstlisting}
@@ -118,7 +118,7 @@ rip            0x7ffff7a65f60	0x7ffff7a65f60 <__printf>
 \end{lstlisting}
 
 \RU{Дампим стек на этот раз с командой x/g}\EN{Let's dump the stack with the x/g command this time}\EMDASH{}g 
-\RU{означает}\EN{stands for} \IT{giant words}, \RU{т.е., 64-битные слова}\EN{i.e., 64-bit words}.
+\RU{означает}\EN{stands for} \IT{giant words}, \RU{т.е. 64-битные слова}\EN{i.e., 64-bit words}.
 
 \begin{lstlisting}
 (gdb) x/10g $rsp
@@ -132,15 +132,14 @@ rip            0x7ffff7a65f60	0x7ffff7a65f60 <__printf>
 \RU{Самый первый элемент стека, как и в прошлый раз, это}\EN{The very first stack element, 
 just like in the previous case, is the} \ac{RA}.
 \RU{Через стек также передаются 3 значения}\EN{3 values are also passed through the stack}: 6, 7, 8.
-\RU{Видно, что 8 передается с не очищенной старшей 32-битной частью}\EN{We also see that 8 is passed
+\RU{Видно, что 8 передается с неочищенной старшей 32-битной частью}\EN{We also see that 8 is passed
 with the high 32-bits not cleared}: \TT{0x00007fff00000008}.
 \RU{Это нормально, ведь передаются числа типа \Tint, а они 32-битные}\EN{That's OK, because the values have
 \Tint type, which is 32-bit}.
-\RU{Так что в старшей части регистра или памяти стека остался ``случайный мусор''}\EN{So, the high register
-or stack element part may contain ``random garbage''}.
+\RU{Так что в старшей части регистра или памяти стека остался \q{случайный мусор}}\EN{So, the high register
+or stack element part may contain \q{random garbage}}.
 
-\RU{\ac{GDB} показывает всю ф-цию \main, если попытаться посмотреть, куда возвратится управление после
-исполнения \printf}
+\RU{\ac{GDB} показывает всю функцию \main, если попытаться посмотреть, куда вернется управление после исполнения \printf}%
 \EN{If you take a look at where the control will return after the \printf execution,
 \ac{GDB} will show the entire \main function}:
 
@@ -171,7 +170,7 @@ End of assembler dump.
 \RU{Заканчиваем исполнение \printf, исполняем инструкцию обнуляющую \EAX, 
 удостоверяемся что в регистре \EAX именно ноль}\EN{Let's finish executing \printf, execute the instruction
 zeroing \EAX, and note that the \EAX register has a value of exactly zero}.
-\RIP \RU{указывает сейчас на инструкцию}\EN{now points to the} \TT{LEAVE}\RU{, т.е., предпоследнюю в ф-ции \main}
+\RIP \RU{указывает сейчас на инструкцию}\EN{now points to the} \TT{LEAVE}\RU{, т.е. предпоследнюю в функции \main}
 \EN{ instruction, i.e., the penultimate one in the \main function}.
 
 \begin{lstlisting}

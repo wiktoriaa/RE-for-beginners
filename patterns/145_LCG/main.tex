@@ -5,7 +5,7 @@
 \RU{Линейный конгруэнтный генератор, пожалуй, самый просто способ генерировать псевдослучайные числа.}
 \EN{The linear congruential generator is probably the simplest possible way to generate random numbers.}
 \RU{Он не в почете в наше время\footnote{Вихрь Мерсенна куда лучше}, но он настолько прост
-(только одно умножение, одно сложение и одна операция ``И''),
+(только одно умножение, одно сложение и одна операция \q{И}),
 что мы можем использовать его в качестве примера.}
 \EN{It's not in favour in modern times\footnote{Mersenne twister is better}, but it's so simple 
 (just one multiplication, one addition and one AND operation), 
@@ -13,7 +13,7 @@ we can use it as an example.}
 
 \lstinputlisting{patterns/145_LCG/rand.c.\LANG}
 
-\RU{Так что здесь две ф-ции: одна используется для инициализации внутреннего состояния, и вторая
+\RU{Так что здесь две функции: одна используется для инициализации внутреннего состояния, и вторая
 вызывается собственно для генерации псевдослучайных чисел.}
 \EN{There are two functions: the first one is used to initialize the internal state, and the second one is called
 to generate pseudorandom numbers.}
@@ -32,11 +32,11 @@ and they don't take any memory, unlike variables.}
 \RU{Можно взять указатель (или адрес) переменной-константы, но это невозможно сделать с макросом.}
 \EN{It's possible to take a pointer (or address) of a constant variable, but impossible to do so with a macro.}
 
-\RU{Последняя операция ``И'' нужно из-за стандарта Си, \TT{my\_rand()} должна возвращать значение в пределах
+\RU{Последняя операция \q{И} нужно из-за стандарта Си, \TT{my\_rand()} должна возвращать значение в пределах
 $0..32767$.}
 \EN{The last AND operation is needed because by C-standard, \TT{my\_rand()} has to return a value in 
 the $0..32767$ range.}
-\RU{Если вы хотите получать 32-битные псевдослучайные значения, просто уберите последнюю операцию ``И''.}
+\RU{Если вы хотите получать 32-битные псевдослучайные значения, просто уберите последнюю операцию \q{И}.}
 \EN{If you want to get 32-bit pseudorandom values, just omit the last AND operation.}
 
 \section{x86}
@@ -46,7 +46,7 @@ the $0..32767$ range.}
 \RU{Вот мы это и видим: обе константы встроены в код.}
 \EN{Here we see it: both constants are embedded into the code.}
 \RU{Память для них не выделяется.}\EN{There is no memory allocated for them.}
-\RU{Ф-ция \TT{my\_srand()} просто копирует входное значение во внутреннюю переменную \TT{rand\_state}.}
+\RU{Функция \TT{my\_srand()} просто копирует входное значение во внутреннюю переменную \TT{rand\_state}.}
 \EN{The \TT{my\_srand()} function just copies its input value into the internal \TT{rand\_state} variable.}
 
 \RU{\TT{my\_rand()} берет её, вычисляет следующее состояние \TT{rand\_state}, 
@@ -63,7 +63,7 @@ the $0..32767$ range.}
 (потому что мы работаем здесь с переменными типа \Tint).}
 \EN{The x64 version is mostly the same and uses 32-bit registers instead of 64-bit ones 
 (because we are working with \Tint values here).}
-\RU{Но ф-ция \TT{my\_srand()} берет входной аргумент из регистра ECX а не из стека:}
+\RU{Но функция \TT{my\_srand()} берет входной аргумент из регистра ECX а не из стека:}
 \EN{But \TT{my\_srand()} takes its input argument from the ECX register rather than from stack:}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/145_LCG/rand_MSVC_2013_x64_Ox.asm.\LANG}

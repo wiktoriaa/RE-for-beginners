@@ -8,19 +8,19 @@
 \index{\CStandardLibrary!rand()}
 \index{Windows!PDB}
 \RU{Как мы знаем, Сапёр располагает мины случайным образом, так что там должен быть генератор случайных чисел
-или вызов стандартной ф-ции Си \TT{rand()}.}
+или вызов стандартной функции Си \TT{rand()}.}
 \EN{As we know, Minesweeper places mines randomly, so there has to be some kind of random number generator or
 a call to the standard \TT{rand()} C-function.}
 \RU{Вот что хорошо в реверсинге продуктов от Microsoft, так это то что часто есть \gls{PDB}-файл со всеми
-символами (имена ф-ций, и т.д.).}
+символами (имена функций, \etc{}.).}
 \EN{What is really cool about reversing Microsoft products is that there are \gls{PDB} 
-file with symbols (function names, etc).}
-\RU{Когда я загружаю}\EN{When I load} \TT{winmine.exe} \RU{в}\EN{into} \IDA, \RU{она скачивает}\EN{it downloads the} 
+file with symbols (function names, \etc{}).}
+\RU{Когда мы загружаем}\EN{When we load} \TT{winmine.exe} \RU{в}\EN{into} \IDA, \RU{она скачивает}\EN{it downloads the} 
 \gls{PDB} \RU{файл именно для этого исполняемого файла и добавляет все имена}\EN{file exactly for this 
 executable and shows all names}.
 
 \RU{И вот оно, только один вызов}\EN{So here it is, the only call to} \TT{rand()} \RU{в этой 
-ф-ции}\EN{is this function}:
+функции}\EN{is this function}:
 
 \begin{lstlisting}
 .text:01003940 ; __stdcall Rnd(x)
@@ -40,7 +40,7 @@ executable and shows all names}.
 \RU{Так её назвала \IDA и это было имя данное ей разработчиками Сапёра.}
 \EN{\IDA named it so, and it was the name given to it by Minesweeper's developers.}
 
-\RU{Ф-ция очень простая}\EN{The function is very simple}:
+\RU{Функция очень простая}\EN{The function is very simple}:
 
 \begin{lstlisting}
 int Rnd(int limit)
@@ -49,13 +49,13 @@ int Rnd(int limit)
 };
 \end{lstlisting}
 
-\RU{(В \gls{PDB}-файле не было имени ``limit''; это я назвал этот аргумент так.)}
-\EN{(There was no ``limit'' name in the \gls{PDB} file; I named this argument.)}
+\RU{(В \gls{PDB}-файле не было имени \q{limit}; это мы назвали этот аргумент так, вручную.)}
+\EN{(There was no \q{limit} name in the \gls{PDB} file; we manually named this argument like this.)}
 
 \RU{Так что она возвращает случайное число в пределах от нуля до заданного предела}\EN{So it returns 
 a random value from 0 to a specified limit}.
 
-\TT{Rnd()} \RU{вызывается только из одного места, это ф-ция с названием}\EN{is called only from one place, 
+\TT{Rnd()} \RU{вызывается только из одного места, это функция с названием}\EN{is called only from one place, 
 a function called} \TT{StartGame()}, 
 \RU{и как видно, это именно тот код, что расставляет мины}\EN{and as it seems, this is exactly 
 the code which place the mines}:
@@ -85,7 +85,7 @@ the code which place the mines}:
 coordinates are generated}.
 \RU{Мина устанавливается инструкцией}\EN{A mine is placed by the} \TT{OR} \RU{на}\EN{instruction at} \TT{0x010036FA}. 
 \RU{И если она уже была установлена до этого}\EN{And if it was placed before} 
-(\RU{это возможно, если пара ф-ций}\EN{it's possible if the pair of} \TT{Rnd()} 
+(\RU{это возможно, если пара функций}\EN{it's possible if the pair of} \TT{Rnd()} 
 \RU{сгенерирует пару, которая уже была сгенерирована}\EN{generates a coordinates pair which was already 
 was generated}), 
 \RU{тогда}\EN{then} \TT{TEST} \AndENRU \TT{JNZ} \RU{на}\EN{at} \TT{0x010036E6} 
@@ -114,21 +114,18 @@ between the} \TT{rgBlk}
 $864/32=27$.
 
 \RU{Так что размер массива}\EN{So the array size is} $27*32$?
-\RU{Это близко к тому что мы знаем: когда я попытался установить размер доски в установках Сапёра на}\EN{It is 
-close to what we know: when I try to set board size to} $100*100$\RU{, то он установил размер}\EN{ in Minesweeper 
-settings, it fallbacks to a board of size} $24*30$.
+\RU{Это близко к тому что мы знаем: если попытаемся установить размер доски в установках Сапёра на $100*100$, то он установит размер $24*30$}%
+\EN{It is close to what we know: when we try to set board size to $100*100$ in Minesweeper settings, it fallbacks to a board of size $24*30$}.
 \RU{Так что это максимальный размер доски здесь}\EN{So this is the maximal board size here}.
 \RU{И размер массива фиксирован для доски любого размера}\EN{And the array has a fixed size for any board size}.
 
 \RU{Посмотрим на всё это в}\EN{So let's see all this in} \olly.
-\RU{Я запустил Сапёр, присоединил (attach) \olly к нему и увидел содержимое памяти по адресу где массив}\EN{I ran 
-Minesweeper, attaching \olly to it and I now see the memory dump at the address of the} 
-\TT{rgBlk}\EN{ array}(\TT{0x01005340})
-\footnote{\RU{Все адреса здесь для Сапёра под}\EN{All addresses here are for Minesweeper for} 
-Windows XP SP3 English. 
+\RU{Я запустил Сапёр, присоединил (attach) \olly к нему и увидел содержимое памяти по адресу где массив \TT{rgBlk} (\TT{0x01005340})}
+\EN{I ran Minesweeper, attaching \olly to it and I now see the memory dump at the address of the \TT{rgBlk} array (\TT{0x01005340})}
+\footnote{\RU{Все адреса здесь для Сапёра под}\EN{All addresses here are for Minesweeper for} Windows XP SP3 English. 
 \RU{Они могут отличаться для других сервис-паков}\EN{They may differ for other service packs}.}.
 
-\RU{Так что у меня вышел такой дамп памяти массива}\EN{So I got this memory dump of the array}:
+\RU{Так что у нас выходит такой дамп памяти массива}\EN{So we got this memory dump of the array}:
 
 \lstinputlisting{examples/minesweeper/1.lst}
 
@@ -142,10 +139,10 @@ exactly 2 lines here}.
 \RU{Тут еще какая-то квадратная структура, заметная визуально (байты 0x10)}\EN{There is some square 
 structure can be seen visually (0x10 bytes)}.
 
-\RU{Я нажал}\EN{I clicked} ``Run'' \InENRU \olly 
-\RU{чтобы разморозить процесс Сапёра, потом нажал в случайное место окна Сапёра, попался на мине, но теперь
-видны все мины}\EN{to unfreeze the Minesweeper process, then I clicked randomly at the Minesweeper window
-and trapped into mine, but now I see all mines}:
+\RU{Нажмем \q{Run} \InENRU \olly чтобы разморозить процесс Сапёра, потом нажмем в случайное место окна Сапёра, попадаемся на мине, но теперь
+видны все мины}%
+\EN{We will click \q{Run} \InENRU \olly to unfreeze the Minesweeper process, then we'll clicked randomly at the Minesweeper window 
+and trapped into mine, but now all mines are visible}:
 
 \begin{figure}[H]
 \centering
@@ -154,17 +151,17 @@ and trapped into mine, but now I see all mines}:
 \label{fig:minesweeper1}
 \end{figure}
 
-\RU{Сравнивая места с минами и дамп, мы можем обнаружить что 0x10 это граница, 0x0F --- пустой блок, 
-0x8F --- мина.}
-\EN{By comparing the mine places and the dump, we can conclude that 0x10 stands for border, 0x0F---empty block, 0x8F---mine.}
+\RU{Сравнивая места с минами и дамп, мы можем обнаружить что 0x10 это граница, 0x0F\EMDASH{}пустой блок, 
+0x8F\EMDASH{}мина.}
+\EN{By comparing the mine places and the dump, we can conclude that 0x10 stands for border, 0x0F\EMDASH{}empty block, 0x8F---mine.}
 
-\RU{Теперь я добавил комментариев и также включил все байты 0x8F в квадратные скобки:}
-\EN{Now I added comments and also enclosed all 0x8F bytes into square brackets:}
+\RU{Теперь добавим комментариев и также заключим все байты 0x8F в квадратные скобки:}%
+\EN{Now we'll add comments and also enclose all 0x8F bytes into square brackets:}
 
 \lstinputlisting{examples/minesweeper/2.lst}
 
-\RU{Теперь я убрал все байты связанные с границами (0x10) и всё что за ними:}
-\EN{Now I removed all \IT{border bytes} (0x10) and what's beyond those:}
+\RU{Теперь уберем все байты связанные с границами (0x10) и всё что за ними:}%
+\EN{Now we'll remove all \IT{border bytes} (0x10) and what's beyond those:}
 
 \lstinputlisting{examples/minesweeper/3.lst}
 
@@ -172,37 +169,37 @@ and trapped into mine, but now I see all mines}:
 \EN{Yes, these are mines, now it can be clearly seen and compared with the screenshot.}
 
 \clearpage
-\RU{Вот что интересно, это то что я могу модифицировать массив прямо в \olly.}
-\EN{What is interesting is that I can modify the array right in \olly.}
-\RU{Я убрал все мины заменив все байты 0x8F на 0x0F, и вот что у меня получилось в Сапёре}\EN{I removed 
-all mines by changing all 0x8F bytes by 0x0F, and here is what I got in Minesweeper}:
+\RU{Вот что интересно, это то что мы можем модифицировать массив прямо в \olly.}%
+\EN{What is interesting is that we can modify the array right in \olly.}
+\RU{Уберем все мины заменив все байты 0x8F на 0x0F, и вот что получится в Сапёре}%
+\EN{We can remove all mines by changing all 0x8F bytes by 0x0F, and here is what we'll get in Minesweeper}:
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{examples/minesweeper/3.png}
-\caption{\RU{Я убрал все мины в отладчике}\EN{I removed all mines in debugger}}
+\caption{\RU{Все мины убраны в отладчике}\EN{All mines are removed in debugger}}
 \label{fig:minesweeper3}
 \end{figure}
 
-\RU{Я также убрал их все и добавил их в первом ряду}\EN{I also moved all of them to the first line}: 
+\RU{Также уберем их все и добавим их в первом ряду}\EN{We can also move all of them to the first line}: 
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{examples/minesweeper/2.png}
-\caption{\RU{Мины, установленные мною в отладчике}\EN{Mines I set in debugger}}
+\caption{\RU{Мины, установленные в отладчике}\EN{Mines set in debugger}}
 \label{fig:minesweeper2}
 \end{figure}
 
-\RU{Отладчик не очень удобен для подсматривания (а это была моя изначальная цель), так что я написал маленькую
-утилиту для показа содержимого доски:}
-\EN{Well, the debugger is not very convenient for eavesdropping (which was my goal anyway), so I wrote small utility
+\RU{Отладчик не очень удобен для подсматривания (а это была наша изначальная цель), так что напишем маленькую
+утилиту для показа содержимого доски:}%
+\EN{Well, the debugger is not very convenient for eavesdropping (which was our goal anyway), so we'll write a small utility
 to dump the contents of the board:}
 
 \lstinputlisting{examples/minesweeper/minesweeper_cheater.c}
 
 \RU{Просто установите}\EN{Just set the} \ac{PID}
 \footnote{PID \RU{можно увидеть в}\EN{it can be seen in} Task Manager 
-(\RU{это можно включить в}\EN{enable it in} ``View $\rightarrow$ Select Columns'')} 
+(\RU{это можно включить в}\EN{enable it in} \q{View $\rightarrow$ Select Columns})} 
 \RU{и адрес массива}\EN{and the address of the array} (\TT{0x01005340} \RU{для}\EN{for} Windows XP SP3 English) 
 \RU{и она покажет его}\EN{and it will dump it}
 \footnote{\RU{Скомпилированная версия здесь}\EN{The compiled executable is here}: 
@@ -222,8 +219,8 @@ to dump the contents of the board:}
 \RU{Как можно обойтись без них}\EN{How could it work without them}?
 
 \item \RU{Как выясняется, здесь больше возможных значений (для открытых блоков, для тех на которых игрок установил
-флажок, и т.д.).}
-\EN{As it turns out, there are more values possible (for open blocks, for flagged by user, etc).}
+	флажок, \etc{}.).}
+	\EN{As it turns out, there are more values possible (for open blocks, for flagged by user, \etc{}).}
 \RU{Попробуйте найти значение каждого}\EN{Try to find the meaning of each one}.
 
 \item \RU{Измените мою утилиту так, чтобы она в запущенном процессе Сапёра убирала все мины, 

@@ -2,31 +2,31 @@
 \label{sec:stack}
 \index{\Stack}
 
-\RU{Стек в компьютерных науках ~--- это одна из наиболее фундаментальных вещей}
-\EN{The stack is one of the most fundamental data structures in computer science}
-\footnote{\href{http://go.yurichev.com/17119}{wikipedia}}.
+\RU{Стек в информатике~--- это одна из наиболее фундаментальных структур данных}%
+\EN{The stack is one of the most fundamental data structures in computer science}%
+\footnote{\href{http://go.yurichev.com/17119}{wikipedia.org/wiki/Call\_stack}}.
 
-\RU{Технически, это просто блок памяти в памяти процесса + регистр \ESP или \RSP в x86 или x64, либо \ac{SP} в ARM, который указывает где-то в пределах этого блока.}
+\RU{Технически это просто блок памяти в памяти процесса + регистр \ESP в x86 или \RSP в x64, либо \ac{SP} в ARM, который указывает где-то в пределах этого блока.}
 \EN{Technically, it is just a block of memory in process memory along with the \ESP or \RSP register in x86 or x64, or the \ac{SP} register in ARM, as a pointer within that block.}
 
 \index{ARM!\Instructions!PUSH}
 \index{ARM!\Instructions!POP}
 \index{x86!\Instructions!PUSH}
 \index{x86!\Instructions!POP}
-\RU{Часто используемые инструкции для работы со стеком ~--- это \PUSH и \POP (в x86 и thumb-режиме ARM). 
-\PUSH уменьшает \ESP/\RSP/\ac{SP} на $4$ в 32-битном режиме (или на $8$ в 64-битном),
+\RU{Часто используемые инструкции для работы со стеком~--- это \PUSH и \POP (в x86 и Thumb-режиме ARM). 
+\PUSH уменьшает \ESP/\RSP/\ac{SP} на 4 в 32-битном режиме (или на 8 в 64-битном),
 затем записывает по адресу, на который указывает \ESP/\RSP/\ac{SP}, содержимое своего единственного операнда.}
-\EN{The most frequently used stack access instructions are \PUSH and \POP (in both x86 and ARM thumb-mode). 
-\PUSH subtracts from \ESP/\RSP/\ac{SP} $4$ in 32-bit mode (or $8$ in 64-bit mode) and then writes the contents of its sole operand to the memory address pointed by \ESP/\RSP/\ac{SP}.} 
+\EN{The most frequently used stack access instructions are \PUSH and \POP (in both x86 and ARM Thumb-mode). 
+\PUSH subtracts from \ESP/\RSP/\ac{SP} 4 in 32-bit mode (or 8 in 64-bit mode) and then writes the contents of its sole operand to the memory address pointed by \ESP/\RSP/\ac{SP}.} 
 
-\RU{\POP это обратная операция ~--- сначала достает из \glslink{stack pointer}{указателя стека} значение и помещает его в операнд 
-(который очень часто является регистром) и затем увеличивает указатель стека на $4$ (или $8$).}
+\RU{\POP это обратная операция~--- сначала достает из \glslink{stack pointer}{указателя стека} значение и помещает его в операнд 
+(который очень часто является регистром) и затем увеличивает указатель стека на 4 (или 8).}
 \EN{\POP is the reverse operation: retrieve the data from memory pointed by \ac{SP}, 
-loads it into the instruction operand (often a register) and then add $4$ (or $8$) to the \gls{stack pointer}.}
+loads it into the instruction operand (often a register) and then add 4 (or 8) to the \gls{stack pointer}.}
 
 \RU{В самом начале \glslink{stack pointer}{регистр-указатель} указывает на конец стека.}
 \EN{After stack allocation, the \gls{stack pointer} points at the bottom of the stack.}
-\RU{\PUSH уменьшает \glslink{stack pointer}{регистр-указатель}, а \POP ~--- увеличивает.}
+\RU{\PUSH уменьшает \glslink{stack pointer}{регистр-указатель}, а \POP~--- увеличивает.}
 \EN{\PUSH decreases the \gls{stack pointer} and \POP increases it.}
 \RU{Конец стека находится в начале блока памяти, выделенного под стек. Это странно, но это так.}
 \EN{The bottom of the stack is actually at the beginning of the memory allocated for the stack block. 
@@ -44,6 +44,7 @@ It seems strange, but that's the way it is.}
 \index{ARM!\Instructions!LDMFA}
 \index{ARM!\Instructions!STMEA}
 \index{ARM!\Instructions!LDMEA}
+
 \RU{Например, инструкции}\EN{For example the} 
 \ac{STMFD}/\ac{LDMFD}, \ac{STMED}/\ac{LDMED} 
 \RU{предназначены для descending-стека 
@@ -64,12 +65,12 @@ It seems strange, but that's the way it is.}
 т.е. в сторону увеличения адресов}\EN{Intuitively, we might think that the stack grow upwards, i.e. towards
 higher addresses, like any other data structure}.
 
-\RU{Причина, почему стек растет назад, вероятно, историческая}
+\RU{Причина, почему стек растет назад, вероятно, историческая}%
 \EN{The reason that the stack grows backward is probably historical}.
-\RU{Когда компьютеры были большие и занимали целую комнату, было очень легко разделить сегмент на две части,
-для \glslink{heap}{кучи} и стека}\EN{When the computers were big and occupied a whole room, 
+\RU{Когда компьютеры были большие и занимали целую комнату, было очень легко разделить сегмент на две части:
+для \glslink{heap}{кучи} и для стека}\EN{When the computers were big and occupied a whole room, 
 it was easy to divide memory into two parts, one for the \gls{heap} and one for the stack}.
-\RU{Конечно, ведь заранее было неизвестно, насколько большой может быть \glslink{heap}{куча} или стек, 
+\RU{Заранее было неизвестно, насколько большой может быть \glslink{heap}{куча} или стек, 
 так что это решение было самым простым}\EN{Of course, 
 it was unknown how big the \gls{heap} and the stack would be during program execution, 
 so this solution was the simplest possible}.
@@ -105,8 +106,8 @@ The user-core part of an image is divided into three logical segments. The progr
 \end{quotation}
 \end{framed}
 
-\RU{Это немного напоминает как некоторые студенты, имея только одну тетрадку, 
-пишут в ней два конспекта:
+\RU{Это немного напоминает как некоторые студенты
+пишут два конспекта в одной тетрадке:
 первый конспект начинается обычным образом, второй пишется с конца, перевернув тетрадку.
 Конспекты могут встретиться где-то посредине, в случае недостатка свободного места.}
 \EN{This reminds us how some students write two lecture notes using only one notebook:
@@ -123,6 +124,17 @@ Notes may meet each other somewhere in between, in case of lack of free space.}
 \input{patterns/02_stack/04_alloca/main}
 \input{patterns/02_stack/05_SEH}
 \input{patterns/02_stack/06_BO_protection}
+
+\subsection{\EN{Automatic deallocation of data in stack}\RU{Автоматическое освобождение данных в стеке}}
+
+\RU{Возможно, причина хранения локальных переменных и SEH-записей в стеке в том, что после выхода из функции, всё эти данные освобождаются автоматически,
+используя только одну инструкцию корректирования указателя стека (часто это ADD).}
+\EN{Perhaps, the reason of storing local variables and SEH records in stack is because they are freed automatically upon function exit,
+using just one instruction of stack pointer correcting (it is often ADD).}
+\RU{Аргументы функций, можно сказать, тоже освобождаются автоматически в конце функции.}
+\EN{Function arguments, as we could say, also deallocated automatically at the end of function.}
+\RU{А всё что хранится в куче (\IT{heap}) нужно освобождать явно.}
+\EN{On contrary, everything stored in \IT{heap} must be deallocated explicitly.}
 
 % sections
 \input{patterns/02_stack/07_layout}

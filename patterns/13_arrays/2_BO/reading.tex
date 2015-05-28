@@ -1,6 +1,6 @@
 \subsection{\RU{Чтение за пределами массива}\EN{Reading outside array bounds}}
 
-\RU{Итак, индексация массива ~--- это просто \IT{массив\lbrack{}индекс\rbrack}.  % TODO1 как-то плохо отображаются []
+\RU{Итак, индексация массива\EMDASH{}это просто \IT{массив\lbrack{}индекс\rbrack}.  % TODO1 как-то плохо отображаются []
 Если вы присмотритесь к коду, в цикле печати значений массива через \printf вы 
 не увидите проверок индекса, \IT{меньше ли он двадцати?} 
 А что будет если он будет 20 или больше? 
@@ -11,16 +11,16 @@ which could check \IT{if it is less than 20}.
 What if the index is 20 or greater?
 That's the one \CCpp feature it is often blamed for.}
 
-\RU{Вот код который и компилируется и работает:}
+\RU{Вот код, который и компилируется и работает:}
 \EN{Here is a code that successfully compiles and works:}
 
 \lstinputlisting{patterns/13_arrays/2_BO/r.c}
 
-\RU{Вот в это}\EN{Compilation results} (MSVC 2008):
+\RU{Вот результат компиляции в}\EN{Compilation results} (MSVC 2008):
 
 \lstinputlisting[caption=\NonOptimizing MSVC 2008]{patterns/13_arrays/2_BO/r_msvc.asm}
 
-\RU{У меня оно при запуске выдало вот это:}\EN{When I run it, I get:}
+\RU{У меня данный код при запуске выдал вот такой результат:}\EN{When I run it, I get:}
 
 \begin{figure}[h]
 \centering
@@ -38,8 +38,8 @@ That's the one \CCpp feature it is often blamed for.}
 \index{\olly}
 \RU{Попробуем узнать в \olly, что это за значение}\EN{Let's try to find out where did this value
 come from, using \olly}.
-\RU{Загружаем и находим это значение, находящееся точно после последнего элемента массива}
-\EN{Let's load and find the value located right after the last array element}:
+\RU{Загружаем и находим это значение, находящееся точно после последнего элемента массива:}
+\EN{Let's load and find the value located right after the last array element:}
 
 \begin{figure}[H]
 \centering
@@ -64,10 +64,10 @@ it gets restored}:
 
 \RU{Действительно, а как могло бы быть иначе? Компилятор мог бы встроить какой-то код, 
 каждый раз проверяющий индекс на соответствие пределам массива, как в языках программирования 
-более высокого уровня\footnote{Java, Python, и т.д.}, что делало бы запускаемый код медленнее.}
+более высокого уровня\footnote{Java, Python, \etc{}.}, что делало бы запускаемый код медленнее.}
 \EN{Indeed, how it could be different?
 The compiler may generate some additional code to check the index value to be always
-in the array's bounds (like in higher-level programming languages\footnote{Java, Python, etc})
+in the array's bounds (like in higher-level programming languages\footnote{Java, Python, \etc{}})
 but this makes the code slower.}
 
 \fi

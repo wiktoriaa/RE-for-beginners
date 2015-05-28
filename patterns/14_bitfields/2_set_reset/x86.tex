@@ -13,11 +13,11 @@
 \index{x86!\Instructions!AND}
 \RU{А \ANDIns сбрасывает некий бит. Можно также сказать, что \ANDIns здесь копирует все биты, кроме одного. 
 Действительно, во втором операнде \ANDIns выставлены в единицу те биты, которые нужно сохранить, 
-кроме одного, копировать который мы не хотим (и который $0$ в битовой маске).
+кроме одного, копировать который мы не хотим (и который 0 в битовой маске).
 Так проще понять и запомнить.}
 \EN{\ANDIns resets one bit. It can be said that \ANDIns just copies all bits except one.
 Indeed, in the second \ANDIns operand only the bits that need to be saved are set,
-just the one do not want to copy is not (which is $0$ in the bitmask).
+just the one do not want to copy is not (which is 0 in the bitmask).
 It is the easier way to memorize the logic.}
 
 \ifdefined\IncludeOlly
@@ -29,12 +29,12 @@ It is the easier way to memorize the logic.}
 \EN{First, let's see the binary form of the constants we are going to use}:
 
 \TT{0x200} (0000000000000000000{\color{red}1}000000000) 
-(\RU{т.е., 10-й бит (считая с первого)}\EN{i.e., the 10th bit (counting from 1st)}).
+(\RU{т.е. 10-й бит (считая с первого)}\EN{i.e., the 10th bit (counting from 1st)}).
 
 \RU{Инвертированное}\EN{Inverted} \TT{0x200} \RU{это}\EN{is} \TT{0xFFFFFDFF} 
 (1111111111111111111{\color{red}0}111111111).
 
-\TT{0x4000} (00000000000000{\color{red}1}00000000000000) (\RU{т.е., 15-й бит}\EN{i.e., the 15th bit}).
+\TT{0x4000} (00000000000000{\color{red}1}00000000000000) (\RU{т.е. 15-й бит}\EN{i.e., the 15th bit}).
 
 \RU{Входное значение это}\EN{The input value is}: \TT{0x12340678} (10010001101000000011001111000).
 \RU{Видим, как оно загрузилось}\EN{We see how it's loaded}:
@@ -133,13 +133,13 @@ its \IT{older parts} may be still accessed as \AX/\AH/\AL.}
 
 \RU{Из-за того, что все x86 процессоры ~--- наследники 16-битного 8086, эти \IT{старые} 16-битные опкоды короче 
 нежели более новые 32-битные. 
-Поэтому, инструкция \TT{``or ah, 40h''} занимает только 3 байта. 
-Было бы логичнее сгенерировать здесь \TT{``or eax, 04000h''}, но это уже 5 байт, или даже 6 
+Поэтому, инструкция \TT{\q{or ah, 40h}} занимает только 3 байта. 
+Было бы логичнее сгенерировать здесь \TT{\q{or eax, 04000h}}, но это уже 5 байт, или даже 6 
 (если регистр в первом операнде не \EAX).}
 \EN{Since all x86 CPUs are successors of the 16-bit 8086 CPU, these \IT{older} 16-bit opcodes are shorter 
 than the newer 32-bit ones.
-That's why the \TT{``or ah, 40h''} instruction occupies only 3 bytes.
-It would be more logical way to emit here \TT{``or eax, 04000h''}
+That's why the \TT{\q{or ah, 40h}} instruction occupies only 3 bytes.
+It would be more logical way to emit here \TT{\q{or eax, 04000h}}
 but that is 5 bytes, or even 6
 (in case the register in the first operand is not \EAX).}
 
@@ -153,14 +153,14 @@ but that is 5 bytes, or even 6
 
 \index{Inline code}
 \RU{Действительно ~--- первый аргумент уже загружен в \EAX, и прямо здесь можно начинать с ним работать. 
-Интересно, что и пролог функции (\TT{``push ebp / mov ebp,esp''}) и эпилог (\TT{``pop ebp''}) 
+Интересно, что и пролог функции (\TT{\q{push ebp / mov ebp,esp}}) и эпилог (\TT{\q{pop ebp}}) 
 функции можно смело выкинуть
 за ненадобностью, 
 но возможно GCC еще не так хорош для подобных оптимизаций по размеру кода. 
 Впрочем, в реальной жизни, подобные короткие функции лучше всего автоматически делать в виде 
 \IT{inline-функций} (\myref{inline_code}).}
 \EN{Indeed~---the first argument is already loaded in \EAX, so it is possible to work with it in-place.
-It is worth noting that both the function prologue (\TT{``push ebp / mov ebp,esp''}) and epilogue (\TT{``pop ebp''})
+It is worth noting that both the function prologue (\TT{\q{push ebp / mov ebp,esp}}) and epilogue (\TT{\q{pop ebp}})
 can easily be omitted
 here, but GCC probably is not good enough to do such code size optimizations.
 However, such short functions are better to be \IT{inlined functions} (\myref{inline_code}).}

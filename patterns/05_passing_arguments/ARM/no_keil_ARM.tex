@@ -21,9 +21,9 @@
 
 \RU{В функции \main просто вызываются две функции, в первую (\ttf) передается три значения.}
 \EN{The \main function simply calls two other functions, with three values passed to the 
-first one ~---(\ttf).}
+first one~---(\ttf).}
 
-\RU{Как я уже упоминал, первые 4 значения, в ARM обычно передаются в 
+\RU{Как я уже упоминал, первые 4 значения в ARM обычно передаются в 
 первых 4-х регистрах (\Reg{0}-\Reg{3}).}
 \EN{As I mentioned before, in ARM the first 4 values are usually passed in 
 the first 4 registers (\Reg{0}-\Reg{3}).}
@@ -41,32 +41,32 @@ the result into the zeroth register (\Reg{0}), via which, by standard, functions
 
 \index{Fused multiply–add}
 \RU{Умножение и сложение одновременно}\EN{Multiplication and addition at once}\footnote{\WPMAO} 
-(\IT{Fused multiply–add}) \RU{это много где применяемая операция, кстати, аналогичной
-инструкции в x86 не было до появления FMA-инструкций в SIMD}
+(\IT{Fused multiply–add}) \RU{это часто применяемая операция. Кстати, аналогичной
+инструкции в x86 не было до появления FMA-инструкций в SIMD}%
 \EN{is a very useful operation. By the way, there was no such instruction in x86 
-before FMA-instructions appeared in SIMD}
+before FMA-instructions appeared in SIMD}%
 \footnote{\href{http://go.yurichev.com/17103}{wikipedia}}.
 
-\RU{Самая первая инструкция}\EN{The very first} \TT{MOV R3, R0}, \RU{по-видимому, избыточна (можно было бы обойтись только одной инструкцией \TT{MLA})}
-\EN{instruction is, apparently, redundant (a single \TT{MLA} instruction could be used here instead)}, 
-\RU{компилятор не оптимизировал её, ведь, это компиляция без оптимизации}\EN{the compiler has not optimized it,
-since this is non-optimizing compilation}.
+\RU{Самая первая инструкция}\EN{The very first} \TT{MOV R3, R0}, \RU{по-видимому, избыточна (можно было бы обойтись только одной инструкцией \TT{MLA}).}
+\EN{instruction is, apparently, redundant (a single \TT{MLA} instruction could be used here instead).} 
+\RU{Компилятор не оптимизировал её, ведь, это компиляция без оптимизации.}
+\EN{The compiler has not optimized it, since this is non-optimizing compilation.}
 
 \index{ARM!\RU{Переключение режимов}\EN{Mode switching}}
 \index{ARM!\Instructions!BX}
 \RU{Инструкция \TT{BX} возвращает управление по адресу, записанному в \ac{LR} и, если нужно, 
-переключает режимы процессора с thumb на ARM или наоборот.}
+переключает режимы процессора с Thumb на ARM или наоборот.}
 \EN{The \TT{BX} instruction returns the control to the address stored in the \ac{LR} register and, if necessary, 
-switches the processor mode from thumb to ARM or vice versa.}
+switches the processor mode from Thumb to ARM or vice versa.}
 \RU{Это может быть необходимым потому, что, как мы видим, 
-функции \ttf неизвестно, из какого кода она будет вызываться, из ARM или thumb.}
+функции \ttf неизвестно, из какого кода она будет вызываться, из ARM или Thumb.}
 \EN{This can be necessary since, as we can see, function \ttf is not aware from what kind of code it may be
-called, ARM or thumb.}
-\RU{Поэтому, если она будет вызываться из кода thumb, \TT{BX} не только возвращает
-управление в вызывающую функцию, но также переключает процессор в режим thumb.}
-\EN{Thus, if it gets called from thumb code, 
+called, ARM or Thumb.}
+\RU{Поэтому, если она будет вызываться из кода Thumb, \TT{BX} не только возвращает
+управление в вызывающую функцию, но также переключает процессор в режим Thumb.}
+\EN{Thus, if it gets called from Thumb code, 
 \TT{BX} is not only returns control to the calling function,
-but also switches the processor mode to thumb.}
+but also switches the processor mode to Thumb.}
 \RU{Либо не переключит, если функция вызывалась из кода для режима ARM: \cite[A2.3.2]{ARMref}.}
 \EN{Or not switch, if the function was called from ARM code \cite[A2.3.2]{ARMref}.}
 % look for "BXWritePC()" in manual

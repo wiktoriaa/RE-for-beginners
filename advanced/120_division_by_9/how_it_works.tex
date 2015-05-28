@@ -68,9 +68,32 @@ division instruction though: the result is just taken from} \EDX.
 (таким образом, оставляя знак в самом младшем бите \EAX).}
 \EN{The sign is also taken from the multiplication result: the high 32 bits of the result are shifted by 31
 (leaving the sign in the least significant bit of \EAX).}
-$1$ \RU{прибавляется к конечному результату, если знак отрицательный, для коррекции результата}
+1 \RU{прибавляется к конечному результату, если знак отрицательный, для коррекции результата}
 \EN{is added to the final result if the sign is negative, for result correction}.
 
 \lstinputlisting[caption=\Optimizing MSVC 2012]{\CURPATH/2.asm.\LANG}
+
+\subsection{\EN{More theory}\RU{Больше теории}}
+
+\EN{It works, because that is how it's possible to replace division by multiplication:}
+\RU{Это работает, потому что можно заменить деление на умножение вот так:}
+
+\[
+	\frac{x}{c} = x\frac{1}{c}
+\]
+
+\EN{$\frac{1}{c}$ is called \IT{multiplicative inverse} and can be precomputed by compiler.}
+\RU{$\frac{1}{c}$ называется \IT{обратное число} и может быть предвычислено компилятором.}
+
+\EN{But this is for floating point arithmetics.}
+\RU{Но это для арифметики с плавающей точкой.}
+\EN{What about integers?}\RU{Что насчет целых чисел?}
+\EN{It's possible to find \IT{multiplicative inverse} for integer in the environment of modulo arithmetics}
+\RU{Можно найти \IT{обратное число по модулю} для целого числа в среде модульной арифметики}
+\footnote{\href{http://go.yurichev.com/17359}{Wikipedia}}.
+\EN{\ac{CPU} registers fits nicely: each is limited by 32 or 64 bits, so almost any arithmetic operation on registers are in fact
+opeartions on modulo $2^{32}$ or $2^{64}$.}
+\RU{Регистры \ac{CPU} подходят идеально: каждый ограничен 32 или 64-ю битами, так что практически любая арифметическая операция над регистрами
+это на самом деле операции по модулю $2^{32}$ или $2^{64}$.}
 
 \RU{Читайте больше об этом в}\EN{Read more about it in} \cite[10-3]{Warren:2002:HD:515297}.

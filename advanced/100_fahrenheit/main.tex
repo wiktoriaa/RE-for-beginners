@@ -8,14 +8,14 @@ programming books for beginners is a small program that converts Fahrenheit temp
 	C=\frac{5 \cdot (F-32)}{9}
 \]
 
-\RU{Я также добавил простейшую обработку ошибок}\EN{I have also added simple error handling}:
+\RU{Мы также добавим простейшую обработку ошибок}\EN{We can also add simple error handling}:
 1) \RU{мы должны проверять правильность ввода пользователем}\EN{we must check if the user has entered a correct number};
 2) \RU{мы должны проверять результат, не ниже ли он $-273$ по Цельсию (что, как мы можем помнить из школьных
 уроков физики, ниже абсолютного ноля)}\EN{we must check if the Celsius temperature is not below $-273$ 
 (which is below absolute zero, as we may remember from school physics lessons)}.
 
 \index{\CStandardLibrary!exit()}
-\EN{The}\RU{Ф-ция} \TT{exit()} \RU{заканчивает программу тут же, без возврата в вызывающую ф-цию}\EN{function terminates 
+\EN{The}\RU{Функция} \TT{exit()} \RU{заканчивает программу тут же, без возврата в вызывающую функцию}\EN{function terminates 
 the program instantly, without returning to the \gls{caller} function}.
 
 \section{\RU{Целочисленные значения}\EN{Integer values}}
@@ -29,11 +29,11 @@ the program instantly, without returning to the \gls{caller} function}.
 \RU{Что мы можем сказать об этом}\EN{What we can say about it}:
 
 \begin{itemize}
-\item \RU{Адрес ф-ции}\EN{The address of} \printf \RU{в начале загружается в регистр}\EN{is first loaded in the} 
+\item \RU{Адрес функции}\EN{The address of} \printf \RU{в начале загружается в регистр}\EN{is first loaded in the} 
 \ESI \RU{так что последующие вызовы}\EN{register, so the subsequent}
 \printf \RU{происходят просто при помощи инструкции}\EN{calls are done just by the} \TT{CALL ESI}\EN{ instruction}.
 \RU{Это очень популярная техника компиляторов, может присутствовать, если имеются несколько вызовов
-одной и той же ф-ции в одном месте, и/или имеется свободный регистр для этого}\EN{It's a very popular compiler 
+одной и той же функции в одном месте, и/или имеется свободный регистр для этого}\EN{It's a very popular compiler 
 technique, possible if several consequent calls to the same function are present
 in the code, and/or if there is a free register which can be used for this}.
 
@@ -49,18 +49,18 @@ the value is to be multiplied by} 5: \TT{lea ecx, DWORD PTR [eax+eax*4]}.
 \RU{Да}\EN{Yes}, $i+i*4$ \RU{эквивалентно}\EN{is equivalent to} $i*5$ \AndENRU \LEA \RU{работает быстрее чем}
 \EN{works faster then} \TT{IMUL}.
 \RU{Кстати, пара инструкций}\EN{By the way, the} \TT{SHL EAX, 2 / ADD EAX, EAX} \RU{может быть использована здесь
-вместо \LEA --- некоторые компиляторы так и делают}\EN{instruction pair could be also used here instead---
+вместо \LEA\EMDASH{}некоторые компиляторы так и делают}\EN{instruction pair could be also used here instead---
 some compilers do it like}.
 
 \item \RU{Деление через умножение}\EN{The division by multiplication trick} (\myref{sec:divisionbynine}) 
 \RU{также используется здесь}\EN{is also used here}.
 
-\item \RU{Ф-ция }\main \RU{возвращает}\EN{returns} 0 \RU{хотя}\EN{if we don't have} \TT{return 0} 
-\RU{в конце ф-ции отсутствует}\EN{at its end}.
+\item \RU{Функция }\main \RU{возвращает}\EN{returns} 0 \RU{хотя}\EN{if we don't have} \TT{return 0} 
+\RU{в конце функции отсутствует}\EN{at its end}.
 \RU{В стандарте C99}\EN{The C99 standard tells us} \cite[5.1.2.2.3]{C99TC3} \RU{указано что}\EN{that} \main 
-\RU{будет возвращать}\EN{will return} $0$ \RU{в случае отсутствия выражения}\EN{in case the} 
+\RU{будет возвращать}\EN{will return} 0 \RU{в случае отсутствия выражения}\EN{in case the} 
 \TT{return}\EN{ statement is missing}.
-\RU{Это правило работает только для ф-ции \main}\EN{This rule works only for the \main function}.
+\RU{Это правило работает только для функции \main}\EN{This rule works only for the \main function}.
 \RU{И хотя, MSVC официально не поддерживает C99, может быть частично и поддерживает?}
 \EN{Though, MSVC doesn't officially support C99, but maybe it support it partially?}
 \end{itemize}
@@ -76,9 +76,9 @@ some compilers do it like}.
 	int	3
 \end{lstlisting}
 
-\TT{INT 3} \RU{это брякпойнт для отладчика}\EN{is a debugger breakpoint}.
+\TT{INT 3} \RU{это точка останова для отладчика}\EN{is a debugger breakpoint}.
 
-\RU{Известно что ф-ция}\EN{It is known that} \TT{exit()} \RU{из тех, что никогда не возвращают
+\RU{Известно что функция}\EN{It is known that} \TT{exit()} \RU{из тех, что никогда не возвращают
 управление}\EN{is one of the functions which can never return}
 \footnote{\RU{еще одна популярная из того же ряда это}\EN{another popular one is} \TT{longjmp()}},
 \RU{так что если управление все же возвращается, значит происходит что-то крайне странное, и пришло

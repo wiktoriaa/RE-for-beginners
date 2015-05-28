@@ -8,7 +8,7 @@
 \EN{A pointer to a function, as any other pointer, is just the address of the function's start in its code segment.}
 
 \index{Callbacks}
-\RU{Это применяется часто в т.н. callback-ах}\EN{They are often used as callbacks}
+\RU{Это часто применяется для вызовов т.н. callback-функций}\EN{They are often used for calling callback functions}
 \footnote{\href{http://go.yurichev.com/17071}{wikipedia}}.
 
 \RU{Известные примеры:}\EN{Well-known examples are:}
@@ -29,29 +29,28 @@
 
 \item
 \EN{lots of places in the Linux kernel, for example the filesystem driver functions are called via
-callbacks}\RU{множество мест в ядре Linux, например, ф-ции драйверов файловой системы вызываются
+callbacks}\RU{множество мест в ядре Linux, например, функции драйверов файловой системы вызываются
 через callback-и}: 
 \url{http://go.yurichev.com/17076}
 
 \item
-\EN{The GCC plugin functions are also called via callbacks}\RU{ф-ции плагинов GCC также вызываются
+\EN{The GCC plugin functions are also called via callbacks}\RU{функции плагинов GCC также вызываются
 через callback-и}: 
 \url{http://go.yurichev.com/17077}
 
 \item
-\RU{Один из примеров указателей на ф-ции это таблица в оконном менеджере ``dwm'' для Linux,
+\RU{Один из примеров указателей на функции это таблица в оконном менеджере \q{dwm} для Linux,
 описывающая шорт-каты.}
-\EN{Another example of function pointers is a table in the ``dwm'' Linux window manager that 
+\EN{Another example of function pointers is a table in the \q{dwm} Linux window manager that 
 defines shortcuts.}
-\RU{Каждый шорт-кат имеет соответствующую ф-цию, которую нужно вызвать, если эта клавиша нажата:}
-\EN{Each shortcut has a corresponding function to call if a specific key is pressed:}\\
-\href{http://go.yurichev.com/17078}{GitHub}\\
+\RU{Каждый шорт-кат имеет соответствующую функцию, которую нужно вызвать, если эта клавиша нажата:}
+\EN{Each shortcut has a corresponding function to call if a specific key is pressed:} \href{http://go.yurichev.com/17078}{GitHub}.
 \RU{Как мы видим, с такой таблицей намного легче обходится чем с большим выражением switch().}
 \EN{As we can see, such table is easier to handle than a large switch() statement.}
 \end{itemize}
 
 \index{\CStandardLibrary!qsort()}
-\RU{Итак, функция \qsort это реализация алгоритма ``быстрой сортировки''. 
+\RU{Итак, функция \qsort это реализация алгоритма \q{быстрой сортировки}. 
 Функция может сортировать что угодно, 
 любые типы данных, но при условии, что вы имеете функцию сравнения этих двух элементов данных и 
 \qsort может вызывать её.}
@@ -81,7 +80,7 @@ int (*compare)(const void *, const void *)
 
 \RU{Ничего особо удивительного здесь мы не видим. В качестве четвертого аргумента, 
 в \qsort просто передается адрес метки \TT{\_comp}, где собственно и располагается функция \comp,
-или, можно сказать, самая первая инструкция этой ф-ции.}
+или, можно сказать, самая первая инструкция этой функции.}
 \EN{Nothing surprising so far.
 As a fourth argument, the address of label \TT{\_comp} is passed, which is just a place
 where \comp is located, or, in other words, the address of the very first instruction of 
@@ -134,13 +133,13 @@ silent about the potential problems while compiling.}
 
 \RU{Я нашел адрес первой инструкции}\EN{I got the address of the first} \CMP 
 \RU{в}\EN{instruction in} \comp, \RU{и это}\EN{it is} \TT{0x0040100C} 
-\RU{и я ставлю брякпойнт на нем}\EN{and I've set a breakpoint on it}:
+\RU{и я ставлю точку останова на нем}\EN{and I've set a breakpoint on it}:
 
 \begin{lstlisting}
 tracer.exe -l:17_1.exe bpx=17_1.exe!0x0040100C
 \end{lstlisting}
 
-\RU{Получаю информацию о регистрах на брякпойнте}
+\RU{Получаю информацию о регистрах на точке останова}
 \EN{Now I get some information about the registers at the breakpoint}:
 
 \begin{lstlisting}
@@ -214,7 +213,7 @@ EAX=0x0000002d ECX=0x00000058
 и показать их в \IDA}\EN{We can also use the tracer's feature to collect all possible register values
 and show them in \IDA}.
 
-\RU{Трассируем все инструкции в ф-ции \comp}\EN{Let's trace all instructions in \comp}:
+\RU{Трассируем все инструкции в функции \comp}\EN{Let's trace all instructions in \comp}:
 
 \begin{lstlisting}
 tracer.exe -l:17_1.exe bpf=17_1.exe!0x00401000,trace:cc
@@ -231,8 +230,8 @@ tracer.exe -l:17_1.exe bpf=17_1.exe!0x00401000,trace:cc
 \label{fig:qsort_tracer_cc}
 \end{figure}
 
-\RU{Имя этой ф-ции (PtFuncCompare) дала \IDA}\EN{\IDA gave the function a name (PtFuncCompare)}
-\EMDASH{}\RU{видимо, потому что видит что указатель на эту ф-цию передается в \qsort}
+\RU{Имя этой функции (PtFuncCompare) дала \IDA}\EN{\IDA gave the function a name (PtFuncCompare)}
+\EMDASH{}\RU{видимо, потому что видит что указатель на эту функцию передается в \qsort}
 \EN{because \IDA sees that the pointer to this function is passed to \qsort}.
 
 \RU{Мы видим, что указатели $a$ и $b$ указывают на разные места внутри массива, 
@@ -243,7 +242,7 @@ them is 4, as 32-bit values are stored in the array}.
 \RU{Видно, что инструкции по адресам}\EN{We see that the instructions at} \TT{0x401010} \AndENRU 
 \TT{0x401012} \RU{никогда не исполнялись}\EN{were never executed} 
 (\RU{они и остались белыми}\EN{so they left as white}): 
-\RU{действительно, ф-ция}\EN{indeed,} \comp \RU{никогда не возвращала 0,
+\RU{действительно, функция}\EN{indeed,} \comp \RU{никогда не возвращала 0,
 потому что в массиве нет одинаковых элементов}\EN{has never returned 0, because there no equal elements in the array}.
 
 \ifdefined\IncludeGCC
@@ -324,7 +323,7 @@ comp            endp
 \index{GDB}
 
 \RU{Очевидно, у нас есть исходный код нашего примера на Си (\myref{qsort_c_src}), 
-так что мы можем установить брякпойнт ($b$) на
+так что мы можем установить точку останова ($b$) на
 номере строки}\EN{Obviously, we have the C-source code of our example (\myref{qsort_c_src}), 
 so we can set a breakpoint ($b$) on line number}
 (\RU{11-й --- это номер строки где происходит первое сравнение}\EN{11---the line where 
@@ -341,7 +340,7 @@ local stack element contains which variable}.
 
 \index{Glibc}
 \RU{Мы можем также увидеть стек}\EN{We can also see the stack} (\TT{bt}) 
-\RU{и обнаружить что в Glibc используется какая-то вспомогательная ф-ция с именем}
+\RU{и обнаружить что в Glibc используется какая-то вспомогательная функция с именем}
 \EN{and find out that there is some intermediate function} 
 \TT{msort\_with\_tmp()}\EN{ used in Glibc}.
 
@@ -350,14 +349,14 @@ local stack element contains which variable}.
 \subsection{GCC + GDB (\RU{без исходных кодов}\EN{no source code})}
 \index{GDB}
 
-\RU{Но часто никаких исходных кодов нет вообще, так что мы можем дизассемблировать ф-цию \comp}
+\RU{Но часто никаких исходных кодов нет вообще, так что мы можем дизассемблировать функцию \comp}
 \EN{But often there is no source code at all, so we can disassemble the \comp function} (\TT{disas}), 
-\RU{найти самую первую инструкцию \CMP и установить брякпойнт}\EN{find the very first
+\RU{найти самую первую инструкцию \CMP и установить точку останова}\EN{find the very first
 \CMP instruction and set a breakpoint} ($b$) \RU{по этому адресу}\EN{at that address}.
-\RU{На каждом брякпойнте мы будем видеть содержимое регистров}
+\RU{На каждой точке останова мы будем видеть содержимое регистров}
 \EN{At each breakpoint, we are going to dump all register contents} (\TT{info registers}).
 \RU{Информация из стека так же доступна}\EN{The stack information is also available} (\TT{bt}), 
-\RU{но частичная: здесь нет номеров строк для ф-ции \comp}
+\RU{но частичная: здесь нет номеров строк для функции \comp}
 \EN{but partially: there is no line number information for \comp}.
 
 \lstinputlisting[caption=GDB\RU{-сессия}\EN{ session}]{patterns/18_pointers_to_functions/GDB_no_source.txt}

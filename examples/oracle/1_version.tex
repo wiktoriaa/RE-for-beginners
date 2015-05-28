@@ -3,7 +3,7 @@
 \index{\oracle}
 \index{Linux}
 \index{Windows!ntoskrnl.exe}
-\RU{\oracle 11.2 это очень большая программа, основной модуль \TT{oracle.exe} содержит около 124 тысячи функций.}\EN{\oracle 11.2 is a huge program, its main module \TT{oracle.exe} contain approx. 124,000 functions.} \RU{Для сравнения, ядро Windows 7 x64 (ntoskrnl.exe) ~--- около 11 тысяч функций, а ядро Linux 3.9.8 (с драйверами по умолчанию) ~--- 31 тысяч функций.}\EN{For comparison, the Windows 7 x86 kernel (ntoskrnl.exe) contains approx. 11,000 functions and the Linux 3.9.8 kernel (with default drivers compiled)~---31,000 functions.}
+\RU{\oracle 11.2 это очень большая программа, основной модуль \TT{oracle.exe} содержит около 124 тысячи функций.}\EN{\oracle 11.2 is a huge program, its main module \TT{oracle.exe} contain approx. 124,000 functions.} \RU{Для сравнения, ядро Windows 7 x64 (ntoskrnl.exe)\EMDASH{}около 11 тысяч функций, а ядро Linux 3.9.8 (с драйверами по умолчанию)\EMDASH{}31 тысяч функций.}\EN{For comparison, the Windows 7 x86 kernel (ntoskrnl.exe) contains approx. 11,000 functions and the Linux 3.9.8 kernel (with default drivers compiled)\EMDASH{}31,000 functions.}
 
 \RU{Начнем с одного простого вопроса. Откуда \oracle берет информацию, когда мы в SQL*Plus пишем вот такой вот простой запрос:}\EN{Let's start with an easy question. Where does \oracle get all this information, when we execute this simple statement in SQL*Plus:}
 
@@ -135,7 +135,7 @@ GV$VERSION
 select inst_id, banner from x$version
 \end{lstlisting}
 
-\RU{Таблицы с префиксом X\$ в \oracle ~--- это также служебные таблицы, они не документированы, не могут изменятся пользователем, и обновляются динамически.}\EN{The tables prefixed with X\$ in the \oracle are service tables too, undocumented, cannot be changed by the user and are refreshed dynamically.}
+\RU{Таблицы с префиксом X\$ в \oracle\EMDASH{}это также служебные таблицы, они не документированы, не могут изменятся пользователем, и обновляются динамически.}\EN{The tables prefixed with X\$ in the \oracle are service tables too, undocumented, cannot be changed by the user and are refreshed dynamically.}
 
 \RU{Попробуем поискать текст}\EN{If we search for the text} 
 \TT{select  BANNER from GV\$VERSION where inst\_id = USERENV('Instance')} 
@@ -169,11 +169,11 @@ rodata:080185A0 kqfvip          dd offset _2__STRING_11126_0 ; DATA XREF: kqfgvc
 By the way, there are 1023 elements in it, again.}
 \RU{Второе поле указывает на другую таблицу, содержащую поля этого \IT{fixed view}.}
 \EN{The second field points to another table that contains the table fields for this \IT{fixed view}.}
-\RU{Для \TT{V\$VERSION}, эта таблица только из двух элементов, первый это $6$ и второй это строка 
-\TT{BANNER} (число --- это длина строки) и далее \IT{терминирующий} элемент содержащий $0$ и \IT{нулевую} 
-Си-строку:}\EN{As for \TT{V\$VERSION}, this table contains only two elements, the first is $6$ and the second is 
-the \TT{BANNER} string (the number ($6$) is this string's length) and after, a \IT{terminating} element that contains 
-$0$ and a \IT{null} C string:}
+\RU{Для \TT{V\$VERSION}, эта таблица только из двух элементов, первый это 6 и второй это строка 
+\TT{BANNER} (число 6 это длина строки) и далее \IT{терминирующий} элемент содержащий 0 и \IT{нулевую} 
+Си-строку:}\EN{As for \TT{V\$VERSION}, this table contains only two elements, the first is 6 and the second is 
+the \TT{BANNER} string (the number 6 is this string's length) and after, a \IT{terminating} element that contains 
+0 and a \IT{null} C string:}
 
 \begin{lstlisting}[caption=kqf.o]
 .rodata:080BBAC4 kqfv133_c_0     dd 6                    ; DATA XREF: .rodata:08019574
@@ -184,7 +184,8 @@ $0$ and a \IT{null} C string:}
 
 \RU{Объединив данные из таблиц \TT{kqfviw} и \TT{kqfvip}, мы получим SQL-запросы, которые исполняются, когда пользователь хочет получить информацию из какого-либо \IT{fixed view}.}\EN{By joining data from both \TT{kqfviw} and \TT{kqfvip} tables, we can get the SQL statements which are executed when the user wants to query information from a specific \IT{fixed view}.}
 
-\RU{Я написал программу \oracletables, которая собирает всю эту информацию из объектных файлов от \oracle под Linux.}\EN{So I wrote an \oracletables program, to gather all this information from \oracle for Linux's object files.}
+\RU{Напишем программу \oracletables, которая собирает всю эту информацию из объектных файлов от \oracle под Linux.}%
+\EN{So we can write an \oracletables program, to gather all this information from \oracle for Linux's object files.}
 \RU{Для \TT{V\$VERSION}, мы можем найти следующее:}\EN{For \TT{V\$VERSION}, we find this:}
 
 \begin{lstlisting}[caption=\RU{Результат работы}\EN{Result of} \OracleTablesName]
@@ -260,8 +261,8 @@ Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
 \EN{I have no idea what does the \TT{kqvt} string stands for.} 
 \RU{Вообще, префикс \TT{kq} может означать \IT{kernel} и \IT{query}.}
 \EN{The \TT{kq} prefix may mean \IT{kernel} or \IT{query}.} 
-\RU{\TT{v}, может быть, \IT{version}, а \TT{t} ~--- \IT{type}?}
-\EN{\TT{v} apparently stands for \IT{version} and \TT{t}~---\IT{type}?} 
+\RU{\TT{v}, может быть, \IT{version}, а \TT{t}\EMDASH{}\IT{type}?}
+\EN{\TT{v} apparently stands for \IT{version} and \TT{t}\EMDASH{}\IT{type}?} 
 \RU{Я не знаю, честно говоря.}\EN{Frankly speaking, I do not know.}
 
 \RU{Таблицу с очень похожим названием мы можем найти в}\EN{A table with a similar name can be found in} \TT{kqf.o}:
@@ -306,7 +307,7 @@ kqftap_element.fn2=NULL
 \end{lstlisting}
 
 \index{tracer}
-\RU{При помощи \tracer, можно легко проверить, что эта ф-ция вызывается 6 раз кряду (из ф-ции \TT{qerfxFetch()}) при получении строк из \TT{X\$VERSION}.}\EN{With the help of \tracer, it is easy to check that this function is called 6 times in row (from the \TT{qerfxFetch()} function) while querying the \TT{X\$VERSION} table.}
+\RU{При помощи \tracer, можно легко проверить, что эта функция вызывается 6 раз кряду (из функции \TT{qerfxFetch()}) при получении строк из \TT{X\$VERSION}.}\EN{With the help of \tracer, it is easy to check that this function is called 6 times in row (from the \TT{qerfxFetch()} function) while querying the \TT{X\$VERSION} table.}
 
 \RU{Запустим \tracer в режиме \TT{cc} (он добавит комментарий к каждой исполненной инструкции):}
 \EN{Let's run \tracer in \TT{cc} mode (it comments each executed instruction):}
@@ -317,7 +318,7 @@ tracer -a:oracle.exe bpf=oracle.exe!_kqvrow,trace:cc
 
 \lstinputlisting{examples/oracle/VERSION_kqvrow.asm}
 
-\RU{Так можно легко увидеть, что номер строки таблицы задается извне. Сама ф-ция возвращает строку, формируя её так:}
+\RU{Так можно легко увидеть, что номер строки таблицы задается извне. Сама функция возвращает строку, формируя её так:}
 \EN{Now it is easy to see that the row number is passed from outside. The function returns the string, constructing it as follows:}
 
 \begin{center}
@@ -332,6 +333,6 @@ tracer -a:oracle.exe bpf=oracle.exe!_kqvrow,trace:cc
 \end{tabular}
 \end{center}
 
-\RU{Так вызываются соответствующие ф-ции для определения номеров версий отдельных модулей.}
+\RU{Так вызываются соответствующие функции для определения номеров версий отдельных модулей.}
 \EN{That's how the corresponding functions are called for determining each module's version.}
 

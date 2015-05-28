@@ -15,7 +15,7 @@
 \RU{Придется использовать эти трюки в \CCpp с типами данных чтобы копировать из/в значение типа \Tfloat
 без конверсии.}
 \EN{We need this trickery in \CCpp to copy to/from \Tfloat value without actual conversion.}
-\RU{Так что здесь три ф-ции: my\_abs() сбрасывает \ac{MSB}; set\_sign() устанавливает \ac{MSB} и 
+\RU{Так что здесь три функции: my\_abs() сбрасывает \ac{MSB}; set\_sign() устанавливает \ac{MSB} и 
 negate() меняет его на противоположный.}
 \EN{So there are three functions: my\_abs() resets \ac{MSB}; set\_sign() sets \ac{MSB} and negate() flips it.}
 
@@ -51,8 +51,8 @@ negate() меняет его на противоположный.}
 \EN{The input value is passed in XMM0, then it is copied into the local stack and then we see 
 some instructions that are new to us: BTR, BTS, BTC.}
 
-\RU{Эти инструкции используются для сброса определенного бита (BTR: ``reset''), 
-установки (BTS: ``set'') и инвертирования (BTC: ``complementing'').}
+\RU{Эти инструкции используются для сброса определенного бита (BTR: \q{reset}), 
+установки (BTS: \q{set}) и инвертирования (BTC: \q{complementing}).}
 \EN{These instructions are used for resetting (BTR), setting (BTS) and inverting (or complementing: BTC) 
 specific bits.}
 \RU{31-й бит это \ac{MSB}, если считать с нуля}\EN{The 31st bit is \ac{MSB}, counting from 0}.
@@ -90,7 +90,7 @@ LUI is clearing the low 16 bits and these are zeroes in the constant, so one LUI
 \RU{В ARM есть инструкция BIC для сброса заданных бит.}
 \EN{ARM has the BIC instruction, which explicitly clears specific bit(s).}
 \RU{EOR это инструкция в ARM которая делает то же что и XOR}\EN{EOR is the ARM instruction name for XOR} 
-(``Exclusive OR'').
+(\q{Exclusive OR}).
 
 \subsubsection{\OptimizingKeilVI (\ThumbMode)}
 
@@ -110,9 +110,9 @@ MOVS/LSLS instruction pair is used for forming the 0x80000000 constant.}
 \RU{Но тем не менее, когда исполняется $input<<1$, \ac{MSB} (бит знака) просто выбрасывается.}
 \EN{But nevertheless, when $input<<1$ is executed, the \ac{MSB} (sign bit) is just dropped.}
 \RU{Когда исполняется следующее выражение $result>>1$, все биты становятся на свои места,
-а \ac{MSB} ноль, потому что все ``новые'' биты появляющиеся во время операций сдвига это всегда нули.}
+а \ac{MSB} ноль, потому что все \q{новые} биты появляющиеся во время операций сдвига это всегда нули.}
 \EN{When the subsequent $result>>1$ statement is executed, all bits are now in their own places,
-but \ac{MSB} is zero, because all ``new'' bits appearing from the shift operations are always zeroes.}
+but \ac{MSB} is zero, because all \q{new} bits appearing from the shift operations are always zeroes.}
 \RU{Таким образом, пара инструкций LSLS/LSRS сбрасывают \ac{MSB}.}
 \EN{That is how the LSLS/LSRS instruction pair clears \ac{MSB}.}
 
@@ -135,7 +135,7 @@ my\_abs() \AndENRU set\_sign() \RU{выглядят предсказуемо, н
 \index{ARM!\Instructions!XOR}
 \index{ARM!\Instructions!ADD}
 \RU{Трудно поверить, но инструкция}\EN{It's hard to believe, but the instruction} 
-``ADD register, 0x80000000'' \RU{работает так же как и}\EN{works just like} ``XOR register, 0x80000000''.
+\q{ADD register, 0x80000000} \RU{работает так же как и}\EN{works just like} \q{XOR register, 0x80000000}.
 \RU{Прежде всего, какая наша цель}\EN{First of all, what's our goal}?
 \RU{Цель в том, чтобы поменять \ac{MSB} на противоположный, и давайте забудем пока об операции XOR.}
 \EN{The goal is to flip the \ac{MSB}, so let's forget about the XOR operation.}
@@ -146,7 +146,7 @@ the last 3 digits.}
 \RU{Например}\EN{For example}: $1234567 + 10000 = 1244567$ (\RU{последние 4 цифры никогда не меняются}
 \EN{last 4 digits are never affected}).
 \RU{Но мы работаем с двоичной системой исчисления, и 0x80000000 это 100000000000000000000000000000000
-в двоичной системе, т.е., только старший бит установлен.}
+в двоичной системе, т.е. только старший бит установлен.}
 \EN{But here we operate in binary base and 0x80000000 is 100000000000000000000000000000000, i.e.,
 only the highest bit is set.}
 \RU{Прибавление 0x80000000 к любому значению никогда не затронет младших 31 бит, но только \ac{MSB}.}

@@ -34,6 +34,8 @@ See also the [ChangeLog](https://github.com/dennis714/RE-for-beginners/blob/mast
 
 Please [donate](http://beginners.re/donate.html)!
 
+Want to contribute in some way? Read [here](https://github.com/dennis714/RE-for-beginners/blob/master/CONTRIBUTING.md).
+
 Want to translate this book into some other language? Read [here](https://github.com/dennis714/RE-for-beginners/blob/master/Translation.md).
 
 It's also possible to build your own version of book, see the [HACKING.md](https://github.com/dennis714/RE-for-beginners/blob/master/HACKING.md) file.

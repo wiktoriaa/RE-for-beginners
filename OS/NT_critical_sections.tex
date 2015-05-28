@@ -31,7 +31,7 @@ typedef struct _RTL_CRITICAL_SECTION {
 } RTL_CRITICAL_SECTION, *PRTL_CRITICAL_SECTION;
 \end{lstlisting}
 
-\RU{Вот как работает ф-ция}\EN{That's is how} EnterCriticalSection()\EN{ function works}:
+\RU{Вот как работает функция}\EN{That's is how} EnterCriticalSection()\EN{ function works}:
 
 \index{x86!\Instructions!LOCK}
 \begin{lstlisting}[caption=Windows 2008/ntdll.dll/x86 (begin)]
@@ -71,7 +71,7 @@ loc_7DE922DD:
 
 \index{x86!\Instructions!BTR}
 \index{x86!\Prefixes!LOCK}
-\RU{Самая важная инструкция в этом фрагменте кода --- это}
+\RU{Самая важная инструкция в этом фрагменте кода\EMDASH{}это}
 \EN{The most important instruction in this code fragment is} \TT{BTR} 
 (\RU{с префиксом}\EN{prefixed with} \TT{LOCK}): 
 \RU{нулевой бит сохраняется в флаге CF и очищается в памяти}
@@ -82,13 +82,13 @@ loc_7DE922DD:
 \EN{blocking all other CPUs' access to this piece of memory 
 (see the \TT{LOCK} prefix before the \TT{BTR} instruction).}
 \RU{Если бит в}\EN{If the bit at} \TT{LockCount} \RU{является}\EN{is} 1, 
-\RU{хорошо, сбросить его и вернуться из ф-ции: мы в критической секции}
+\RU{хорошо, сбросить его и вернуться из функции: мы в критической секции}
 \EN{fine, reset it and return from the function: we are in a critical section}.
-\RU{Если нет ~--- критическая секция уже занята другим тредом, тогда ждем}
-\EN{If not~---the critical section is already occupied by other thread, so wait}. \\
+\RU{Если нет\EMDASH{}критическая секция уже занята другим тредом, тогда ждем}
+\EN{If not\EMDASH{}the critical section is already occupied by other thread, so wait}. \\
 \RU{Ожидание там сделано через вызов}\EN{The wait is done there using} WaitForSingleObject(). \\
 \\
-\RU{А вот как работает ф-ция}\EN{And here is how the} LeaveCriticalSection()\EN{ function works}:
+\RU{А вот как работает функция}\EN{And here is how the} LeaveCriticalSection()\EN{ function works}:
 
 \begin{lstlisting}[caption=Windows 2008/ntdll.dll/x86 (begin)]
 _RtlLeaveCriticalSection@4 proc near
@@ -127,10 +127,10 @@ loc_7DE922B2:
 \end{lstlisting}
 
 \index{x86!\Instructions!XADD}
-\TT{XADD} \RU{это ``обменять и прибавить''}\EN{is ``exchange and add''}. 
+\TT{XADD} \RU{это \q{обменять и прибавить}}\EN{is \q{exchange and add}}.
 \RU{В данном случае, это значит прибавить 1 к значению в \TT{LockCount}, сохранить результат
 в регистре \TT{EBX}, и в то же время 1 записывается в \TT{LockCount}}
-\EN{In this case, it adds $1$ to \TT{LockCount} and stores the result in the \TT{EBX} register, 
+\EN{In this case, it adds 1 to \TT{LockCount} and stores the result in the \TT{EBX} register, 
 and at the same time 1 goes to \TT{LockCount}}.
 \RU{Эта операция также атомарная, потому что также имеет префикс \TT{LOCK}, что означает, что другие CPU
 или ядра CPU в системе не будут иметь доступа к этой ячейке памяти}
