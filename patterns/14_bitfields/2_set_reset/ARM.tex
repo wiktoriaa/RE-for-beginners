@@ -7,14 +7,14 @@
 \end{lstlisting}
 
 \index{ARM!\Instructions!BIC}
-\TT{BIC} (\IT{BItwise bit Clear}) \RU{это инструкция сбрасывающая заданные биты. 
-Это как аналог \TT{AND}, но только с инвертированным операндом.}\EN{is an instruction for clearing 
-specific bits. This is just like the \TT{AND} instruction, but with inverted operand.}
-\EN{I.e., it's analogous to a NOT+AND instruction pair.}
-\RU{Т.е., это аналог инструкций NOT+AND.}
+\INS{BIC} (\IT{BItwise bit Clear}) \RU{это инструкция сбрасывающая заданные биты. 
+Это как аналог \AND, но только с инвертированным операндом.}\EN{is an instruction for clearing 
+specific bits. This is just like the \AND instruction, but with inverted operand.}
+\EN{I.e., it's analogous to a \NOT+\AND instruction pair.}
+\RU{Т.е. это аналог инструкций \NOT+\AND.}
 
 \index{ARM!\Instructions!ORR}
-\TT{ORR} \RU{это \q{логическое или}, аналог}\EN{is \q{logical or}, analogous to} \OR \InENRU x86.
+\INS{ORR} \RU{это \q{логическое или}, аналог}\EN{is \q{logical or}, analogous to} \OR \InENRU x86.
 
 \RU{Пока всё понятно}\EN{So far it's easy}.
 
@@ -28,16 +28,16 @@ specific bits. This is just like the \TT{AND} instruction, but with inverted ope
 70 47                BX      LR
 \end{lstlisting}
 
-\RU{Вероятно, Keil решил, что код в режиме Thumb}
-\EN{Seems like Keil decided that the code in Thumb mode},
+\RU{Вероятно, Keil решил, что код в режиме Thumb,}
+\EN{Seems like Keil decided that the code in Thumb mode,}
 \RU{получающий}\EN{making} \TT{0x200} \RU{из}\EN{from} \TT{0x4000}, 
 \RU{более компактный, нежели код,}\EN{is more compact than the code} 
 \RU{записывающий}\EN{for writing} \TT{0x200} \RU{в какой-нибудь регистр}\EN{to an arbitrary register}.
 % TODO1 пример, как компилятор при помощи сдвигов оптизирует такое: a=0x1000; b=0x2000; c=0x4000, etc
 
 \index{ARM!\Instructions!ASRS}
-\RU{Поэтому, при помощи инструкции}
-\EN{So that is why, with the help of} \TT{ASRS} 
+\RU{Поэтому при помощи инструкции}
+\EN{So that is why, with the help of} \INS{ASRS} 
 (\ASRdesc), \RU{это значение вычисляется как}\EN{this value is calculated as} $\TT{0x4000} \gg 5$.
 
 \subsection{ARM + \OptimizingXcodeIV (\ARMMode)}
@@ -58,12 +58,12 @@ specific bits. This is just like the \TT{AND} instruction, but with inverted ope
     SET_BIT (rt, 0x4000);
 \end{lstlisting}
 
-\RU{И он делает то же самое что нам нужно}\EN{And it does exactly what we need}. 
+\RU{И он делает в точности что нам нужно}\EN{And it does exactly what we need}. 
 \RU{Но почему}\EN{But why} \TT{0x4200}? 
-\RU{Возможно, это артефакт оптимизатора LLVM}
-\EN{Perhaps, that an artifact from LLVM's optimizer}
+\RU{Возможно, это артефакт оптимизатора LLVM}%
+\EN{Perhaps, that an artifact from LLVM's optimizer}%
 \footnote{\RU{Это был}\EN{It was} LLVM build 2410.2.00 \RU{входящий в состав}\EN{bundled with} Apple Xcode 4.6.3}.
-\RU{Возможно, ошибка оптимизатора компилятора, но создаваемый код все же работает верно.}
+\RU{Возможно, ошибка оптимизатора компилятора, но создаваемый код всё же работает верно.}
 \EN{Probably a compiler's optimizer error, but the generated code works correctly anyway.}
 
 \RU{Об аномалиях компиляторов, подробнее читайте здесь}
@@ -72,7 +72,7 @@ specific bits. This is just like the \TT{AND} instruction, but with inverted ope
 \OptimizingXcodeIV \RU{для режима Thumb генерирует точно такой же код.}
 \EN{for Thumb mode generates the same code.}
 
-\subsection{ARM: \RU{еще об инструкции \TT{BIC}}\EN{more about the \TT{BIC} instruction}}
+\subsection{ARM: \RU{ещё об инструкции \INS{BIC}}\EN{more about the \INS{BIC} instruction}}
 \index{ARM!\Instructions!BIC}
 
 \RU{Если немного переделать пример}\EN{Let's rework the example slightly}:
@@ -99,17 +99,17 @@ f PROC
         ENDP
 \end{lstlisting}
 
-\EN{There are two \TT{BIC} instructions, i.e., bit \TT{0x1234} are cleared in two passes.}
-\RU{Здесь две инструкции \TT{BIC}, т.е. биты \TT{0x1234} сбрасываются в два прохода.}
-\EN{This is because it's not possible to encode \TT{0x1234} in a \TT{BIC} instruction, 
+\EN{There are two \INS{BIC} instructions, i.e., bits \TT{0x1234} are cleared in two passes.}
+\RU{Здесь две инструкции \INS{BIC}, т.е. биты \TT{0x1234} сбрасываются в два прохода.}
+\EN{This is because it's not possible to encode \TT{0x1234} in a \INS{BIC} instruction, 
 but it's possible to encode \TT{0x1000} and \TT{0x234}.}
-\RU{Это потому что в инструкции \TT{BIC} нельзя закодировать самое значение \TT{0x1234}, 
+\RU{Это потому что в инструкции \INS{BIC} нельзя закодировать значение \TT{0x1234}, 
 но можно закодировать \TT{0x1000} либо \TT{0x234}.}
 
 \subsection{ARM64: \Optimizing GCC (Linaro) 4.9}
 
-\Optimizing GCC \RU{компилирующий для ARM64 может использовать \TT{AND} вместо}\EN{compiling for ARM64 can use 
-the \TT{AND} instruction instead of} \TT{BIC}:
+\Optimizing GCC\RU{, компилирующий для ARM64, может использовать \AND вместо}\EN{compiling for ARM64 can use 
+the \AND instruction instead of} \INS{BIC}:
 
 \begin{lstlisting}[caption=\Optimizing GCC (Linaro) 4.9]
 f:
