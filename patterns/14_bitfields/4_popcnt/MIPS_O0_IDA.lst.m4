@@ -1,5 +1,5 @@
 include(`commons.m4')f:
-; _EN(``IDA is not aware of variable names, I gave them manually'')_RU(``IDA не знает об именах переменных, я присвоил их вручную''):
+; _EN(``IDA is not aware of variable names, we gave them manually'')_RU(``IDA не знает об именах переменных, мы присвоили их вручную''):
 rt              = -0x10
 i               = -0xC
 var_4           = -4

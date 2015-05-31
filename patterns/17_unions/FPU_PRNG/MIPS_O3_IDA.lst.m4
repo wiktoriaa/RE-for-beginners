@@ -20,7 +20,7 @@ var_4           = -4
 ; $a0=0x3F800000
                 or      $v1, $a0
 ; $v1=_EN(`pseudorandom value')_RU(`псевдослучайное значение') & 0x7FFFFF | 0x3F800000
-; _EN(`I still don't get matter of the following instruction:')_RU(`Я всё еще не понимаю смысл этой инструкции:')
+; _EN(`matter of the following instruction is still hard to get:')_RU(`смысл этой инструкции всё так же трудно понять:')
                 lui     $v0, ($LC0 >> 16)
 ; _EN(`load 1.0 into')_RU(`загрузить 1.0 в') $f0:
                 lwc1    $f0, $LC0

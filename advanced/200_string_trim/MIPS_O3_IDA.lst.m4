@@ -1,5 +1,5 @@
 include(`commons.m4')str_trim:
-; _EN(``IDA is not aware of local variable names, I gave them manually'')_RU(``IDA не в курсе об именах переменных, я присвоил их сам''):
+; _EN(``IDA is not aware of local variable names, we gave them manually'')_RU(``IDA не в курсе об именах переменных, мы присвоили их сами''):
 saved_GP          = -0x10
 saved_S0           = -8
 saved_RA           = -4
