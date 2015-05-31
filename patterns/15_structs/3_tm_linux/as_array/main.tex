@@ -48,8 +48,8 @@ same order as they were declared in the function.}
 \EN{Indeed, the compiler is not aware that these are to be filled by} 
 \TT{localtime\_r()}\EN{ function}.
 
-\EN{I chose this example, since all structure fields are of type \Tint.}
-\RU{Я выбрал именно этот пример для иллюстрации, потому что все члены структуры имеют тип \Tint.}
+\EN{We chose this example, since all structure fields are of type \Tint.}%
+\RU{Мы выбрали именно этот пример для иллюстрации, потому что все члены структуры имеют тип \Tint.}
 \RU{Это не сработает, если поля структуры будут иметь размер 16 бит (\TT{WORD}), как в случае
 со структурой \TT{SYSTEMTIME}}\EN{This would not work if structure fields are 16-bit (\TT{WORD}), 
 like in the case of the \TT{SYSTEMTIME} structure}\EMDASH{}\TT{GetSystemTime()} 
@@ -59,31 +59,24 @@ like in the case of the \TT{SYSTEMTIME} structure}\EMDASH{}\TT{GetSystemTime()}
 \RU{Читайте об этом в следующей секции}\EN{Read more about it in next section}: 
 \q{\StructurePackingSectionName} (\myref{structure_packing}).
 
-\index{\SyntacticSugar}
-\RU{Так что, структура ~--- это просто набор переменных лежащих в одном месте, рядом.}
+\RU{Так что, структура\EMDASH{}это просто набор переменных лежащих в одном месте, рядом.}%
 \EN{So, a structure is just a pack of variables laying on one place, side-by-side.}
-\RU{Я мог бы сказать, что структура ~--- это такой синтаксический сахар, 
-заставляющий компилятор удерживать их в одном месте.}
-\EN{I could say that the structure is syntactic sugar, directing
-the compiler to hold them in one place.}
-\RU{Впрочем, я не специалист по языкам программирования, так что, скорее всего, ошибаюсь с этим термином.}
-\EN{However, I'm not an expert on programming languages, so most likely I'm wrong with this term.}
-\RU{Кстати, когда-то, в очень ранних версиях Си (перед 1972) структур не было вовсе}
-\EN{By the way, in some very early C versions (before 1972), 
-there were no structures at all} \cite{Ritchie:1993:DCL:155360.155580}.
+\RU{Можно было бы сказать, что структура\EMDASH{}это инструкция компилятору, заставляющая его удерживать переменные в одном месте.}%
+\EN{We could say that the structure is the instruction to the compiler, directing it to hold variables in one place.}
+\RU{Кстати, когда-то, в очень ранних версиях Си (перед 1972) структур не было вовсе}%
+\EN{By the way, in some very early C versions (before 1972), there were no structures at all} \cite{Ritchie:1993:DCL:155360.155580}.
 
-\RU{Здесь я не добавляю пример с отладчиком: потому что он будет полностью идентичным тому, что вы уже
-видели.}\EN{I'm not adding a debugger example here: it is just the same as you already
-saw.}
+\RU{Здесь нет примера с отладчиком: потому что он будет полностью идентичным тому, что вы уже видели.}%
+\EN{There is no debugger example here: it is just the same as you already saw.}
 
 \subsection{\RU{Структура как массив 32-битных слов}\EN{Structure as an array of 32-bit words}}
 
 \lstinputlisting{patterns/15_structs/3_tm_linux/as_array/GCC_tm3.c}
 
-\RU{Я просто привожу (cast) указатель на структуру к массиву \Tint{}-ов}\EN{I just cast a pointer to structure 
-to an array of \Tint{}'s}.
+\RU{Мы просто приводим (\IT{cast}) указатель на структуру к массиву \Tint{}-ов}%
+\EN{We just \IT{cast} a pointer to structure to an array of \Tint{}'s}.
 \RU{И это работает}\EN{And that works}!
-\RU{Я запустил пример}\EN{I ran the example at} 23:51:45 26-July-2014.
+\RU{Запускаем пример}\EN{We run the example at} 23:51:45 26-July-2014.
 
 \begin{lstlisting}[label=GCC_tm3_output]
 0x0000002D (45)
@@ -124,8 +117,8 @@ an array.}
 
 \subsection{\RU{Структура как массив байт}\EN{Structure as an array of bytes}}
 
-\RU{Я могу даже больше. Можно привести (cast) указатель к массиву байт и вывести его:}
-\EN{I can do even more. Let's cast the pointer to an array of bytes and dump it:}
+\RU{Можно пойти еще дальше. Можно привести (\IT{cast}) указатель к массиву байт и вывести его:}%
+\EN{We can go even further. Let's \IT{cast} the pointer to an array of bytes and dump it:}
 
 \lstinputlisting{patterns/15_structs/3_tm_linux/as_array/GCC_tm4.c}
 
@@ -141,7 +134,9 @@ an array.}
 0x01 0x00 0x00 0x00 
 \end{lstlisting}
 
-\RU{Я также запустил этот пример}\EN{I ran this example also at} 23:51:45 26-July-2014.
+\RU{Мы также запускаем этот пример в}\EN{We also run this example also at} 23:51:45 26-July-2014
+\footnote{\EN{The time and date are the same for demonstration purposes. Byte values are fixed up.}%
+\RU{Время и дата такая же в целях демонстрации. Значения байт были подправлены.}}.
 \RU{Переменные точно такие же, как и в предыдущем выводе}\EN{The values are just the same as in the previous dump} 
 (\myref{GCC_tm3_output}), \RU{и конечно, младший байт идет в самом начале, потому что это архитектура 
 little-endian}\EN{and of course, the lowest byte goes first, because this is a little-endian architecture} 

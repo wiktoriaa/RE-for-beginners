@@ -1,45 +1,43 @@
 \part{\RU{Образцы кода}\EN{Code patterns}}
 
 \RU{\epigraph{Всё познается в сравнении}{Автор неизвестен}} % FIXME: english version?
-\RU{Когда я учил Си, а затем \Cpp, я просто писал небольшие фрагменты кода, компилировал и смотрел, что 
+\RU{Когда автор этой книги учил Си, а затем \Cpp, он просто писал небольшие фрагменты кода, компилировал и смотрел, что 
 получилось на ассемблере. Так было намного проще понять%
-\footnote{Честно говоря, я до сих пор так делаю, когда я не понимаю, как работает некий код.}. 
-Я делал это такое количество раз, 
-что связь между кодом на \CCpp и тем, что генерирует компилятор, вбилась мне в подсознание достаточно 
-глубоко. Поэтому я могу, глядя на код на ассемблере, сразу в общих чертах понимать, что там было написано 
-на Си. Возможно это поможет кому-то ещё, попробую описать некоторые примеры.}
-\EN{When I first started learning C and later, \Cpp, I used to write small pieces of code, compile them, 
+\footnote{Честно говоря, он и до сих пор так делаю, когда не понимают, как работает некий код.}. 
+Он делал это такое количество раз, что связь между кодом на \CCpp и тем, что генерирует компилятор, вбилась в его подсознание достаточно глубоко.
+После этого не трудно, глядя на код на ассемблере, сразу в общих чертах понимать, что там было написано на Си. 
+Возможно это поможет кому-то ещё.}
+\EN{When the author of this book first started learning C and later, \Cpp, he used to write small pieces of code, compile them, 
 and then look at the assembly language output. This made it very easy for me to understand what was going on in the code that I had written.
-\footnote{In fact, I still do when I can't understand what a particular bit of code does.}. 
-I did it so many times that the relationship between the \CCpp code and what the compiler produced was imprinted deeply in my mind. That's why that when I look at assembly code, I can instantly imagine a rough outline of C code's appearance and function. 
-Perhaps this technique could be helpful for someone else and so I'm going to describe some examples here.}
+\footnote{In fact, he still does it when he can't understand what a particular bit of code does.}. 
+He did it so many times that the relationship between the \CCpp code and what the compiler produced was imprinted deeply in his mind. 
+It's easy to imagine instantly a rough outline of C code's appearance and function. 
+Perhaps this technique could be helpful for someone else.}
 %
 %\RU{Здесь много примеров и для x86/x64 и для ARM}\EN{There are a lot of examples for both x86/x64 
 %and ARM}. 
 %\RU{Те, кто уже хорошо знаком с одной из архитектур, могут легко пролистывать страницы}
 %\EN{Those who already familiar with one of architectures, may freely skim over pages}.
 
-\RU{Иногда я использую достаточно древние компиляторы, 
-чтобы получить самый короткий (или простой) фрагмент кода.}
-\EN{Sometimes I use ancient compilers, in order to get the shortest (or simplest) possible
-code snippet.}
+\RU{Иногда здесь используются достаточно древние компиляторы, чтобы получить самый короткий (или простой) фрагмент кода.}%
+\EN{Sometimes an ancient compilers are used here, in order to get the shortest (or simplest) possible code snippet.}
 
 \ifdefined\IncludeExercises
 \section*{\Exercises}
 
-\RU{Когда я учил ассемблер, я также часто компилировал короткие функции на Си и затем постепенно 
-переписывал их на ассемблер, с целью получить как можно более короткий код.}
-\EN{When I studied assembly language, I also often compiled small C-functions and then rewrote
+\RU{Когда автор этой книги учил ассемблер, он также часто компилировал короткие функции на Си и затем постепенно 
+переписывал их на ассемблер, с целью получить как можно более короткий код.}%
+\EN{When the author of this book studied assembly language, he also often compiled small C-functions and then rewrote
 them gradually to assembly, trying to make their code as short as possible.}
 \RU{Наверное, этим не стоит заниматься в наше время на практике (потому что конкурировать с современными
 компиляторами в плане эффективности очень трудно), но это очень хороший способ разобраться в ассемблере
-лучше.}
+лучше.}%
 \EN{This probably is not worth doing in real-world scenarios today, 
 because it's hard to compete with modern compilers in terms of efficiency. It is, however, a very good way to gain a better understanding of assembly.}
-\RU{Так что вы можете взять любой фрагмент кода на ассемблере в этой книге и постараться сделать его короче.}
+\RU{Так что вы можете взять любой фрагмент кода на ассемблере в этой книге и постараться сделать его короче.}%
 \EN{Feel free, therefore, to take any assembly code from this book and try to make it shorter.}
-\RU{Но не забывайте о тестировании своих результатов!}
-\EN{However, don't forget to test what you have written!}
+\RU{Но не забывайте о тестировании своих результатов.}%
+\EN{However, don't forget to test what you have written.}
 \fi
 
 % rewrote to show that debug\release and optimisations levels are orthogonal concepts.
