@@ -10,7 +10,7 @@
 \EN{The author of this book was once asked to reverse engineer an amateur cryptoalgorithm of some data encryption utility, 
 the source code for which was lost\footnote{He also got permission from the customer to publish the algorithm's details}.}
 
-\RU{Вот листинг этой утилиты для шифрования, полученный при помощи \IDA}
+\RU{Вот листинг этой утилиты для шифрования, полученный при помощи \IDA}%
 \EN{Here is the listing exported from \IDA for the original encryption utility}:
 
 \lstinputlisting{examples/qr9/qr9_original.lst}
@@ -400,8 +400,8 @@ void decrypt_file(char *fin, char* fout, char *pw)
 \end{lstlisting}
 
 \index{x86!\Instructions!MOVSD}
-\RU{Этот фрагмент кода копирует часть входного буфера во внутренний буфер, который я позже назвал \q{cube64}.}
-\EN{This fragment of code copies a part of the input buffer to an internal array I later named \q{cube64}.}
+\RU{Этот фрагмент кода копирует часть входного буфера во внутренний буфер, который мы позже назовем \q{cube64}.}%
+\EN{This fragment of code copies a part of the input buffer to an internal array we later name \q{cube64}.}
 \RU{Длина в регистре \ECX. \TT{MOVSD} означает \IT{скопировать 32-битное слово}, так что, 16 32-битных слов
 это как раз 64 байта.}\EN{The size is in the \ECX register. \TT{MOVSD} stands for \IT{move 32-bit dword}, so, 
 16 32-bit dwords are exactly 64 bytes.}
@@ -437,7 +437,7 @@ void decrypt_file(char *fin, char* fout, char *pw)
 .text:0054129F                 rep movsd
 \end{lstlisting}
 
-\RU{Если \EBP не больше чем длина во входном аргументе, тогда переходим к следующему блоку.}
+\RU{Если \EBP не больше чем длина во входном аргументе, тогда переходим к следующему блоку.}%
 \EN{If \EBP is not bigger that the size input argument, then continue to the next block.}
 
 \begin{lstlisting}
@@ -579,12 +579,12 @@ You can read more about it in the \q{\DivisionByNineSectionName} section~(\myref
 
 \RU{Если остаток 2, вызываем \TT{rotate3()}. 
 \EDX это второй аргумент функции \TT{rotate\_all\_with\_password()}. 
-Как я уже писал, 1 это для шифрования, 3 для дешифрования.
+Как мы уже заметили, 1 это для шифрования, 3 для дешифрования.
 Так что здесь цикл, функции rotate1/2/3 будут вызываться столько же раз, сколько значение переменной
 в первом аргументе.}
 \EN{If the remainder is 2, call \TT{rotate3()}. 
 \EDI is the second argument of the \TT{rotate\_all\_with\_password()} function.
-As I already said, 1 is for the encryption operations and 3 is for the decryption. 
+As we already noted, 1 is for the encryption operations and 3 is for the decryption. 
 So, here is a loop. When encrypting, rotate1/2/3 are to be called the same number of times as 
 given in the first argument.}
 
@@ -685,10 +685,10 @@ void rotate_all (char *pwd, int v)
 
 \RU{Углубимся еще дальше и исследуем функции rotate1/2/3.
 Каждая функция вызывает еще две.
-В итоге я назвал их \TT{set\_bit()} и \TT{get\_bit()}.}
+В итоге мы назовем их \TT{set\_bit()} и \TT{get\_bit()}.}%
 \EN{Now let's go deeper and investigate the rotate1/2/3 functions. 
 Each function calls another two functions. 
-I eventually named them \TT{set\_bit()} and \TT{get\_bit()}.}
+We eventually will name them \TT{set\_bit()} and \TT{get\_bit()}.}
 
 \RU{Начнем с \TT{get\_bit()}:}\EN{Let's start with \TT{get\_bit()}:}
 
@@ -968,8 +968,8 @@ These three functions are one for each cube side and the \TT{v} argument sets th
 
 \RU{Да, действительно.}\EN{Yes, indeed.}
 
-\RU{Рассмотрим функцию \TT{decrypt()}, я переписал её:}\EN{Let's look closer into the \TT{decrypt()} function, 
-I rewrote it here:}
+\RU{Рассмотрим функцию \TT{decrypt()}, вот её переписанная версия:}%
+\EN{Let's look closer into the \TT{decrypt()} function, here is its rewritten version:}
 
 \begin{lstlisting}
 void decrypt (BYTE *buf, int sz, char *pw)

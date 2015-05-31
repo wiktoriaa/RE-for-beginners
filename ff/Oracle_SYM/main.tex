@@ -81,11 +81,11 @@ variable names}.
 \end{figure}
 
 \RU{Посмотрим}\EN{Well, let's see}. 
-\RU{В Hiew я отметил весь блок со строками (исключая оконечивающую сигнатуру OSYM) и сохранил его в отдельный
-файл.}
-\EN{In Hiew, I marked the whole strings block (except the trailing OSYM signatures) and put it into a separate file.}
-\RU{Затем я запустил UNIX-утилиты \IT{strings} и \IT{wc} для подсчета строк здесь:}
-\EN{Then I ran UNIX \IT{strings} and \IT{wc} utilities to count the strings in there:}
+\RU{В Hiew отметим весь блок со строками (исключая оконечивающую сигнатуру OSYM) и сохраним его в отдельный
+файл.}%
+\EN{In Hiew, we will mark the whole strings block (except the trailing OSYM signatures) and put it into a separate file.}
+\RU{Затем запустим UNIX-утилиты \IT{strings} и \IT{wc} для подсчета текстовых строк:}%
+\EN{Then we run UNIX \IT{strings} and \IT{wc} utilities to count the text strings:}
 
 \begin{lstlisting}
 strings strings_block | wc -l
@@ -108,7 +108,7 @@ strings strings_block | wc -l
 \EN{Of course, 0x42 here is not a byte, but most likely a 32-bit value packed as little-endian, hence we see
 0x42 and then at least 3 zero bytes.}
 
-\RU{Почему я думаю, что оно 32-битное}\EN{Why do I think it's 32-bit}?
+\RU{Почему мы полагаем, что оно 32-битное}\EN{Why do we believe it's 32-bit}?
 \RU{Потому что файлы с символами в \oracle могут быть очень большими}\EN{Because, \oracle's symbol 
 files may be pretty big}.
 \RU{oracle.sym для главного исполняемого файла oracle.exe (версия 10.2.0.4) содержит \TT{0x3A38E} (238478) 
@@ -127,9 +127,9 @@ reflects the number of text strings in the file.}
 about the file.}
 
 \RU{Рассмотрим бинарный блок поближе}\EN{Now let's investigate closer what this binary block is}.
-\RU{Снова используя Hiew, я сохранил блок начиная с адреса 8 (т.е. после 32-битного значения,
-отражающего количество) до блока со строками, в отдельный файл.}
-\EN{Using Hiew again, I put the block starting at address 8 (i.e., after the 32-bit \IT{count} value) 
+\RU{Снова используя Hiew, сохраним блок начиная с адреса 8 (т.е. после 32-битного значения,
+отражающего количество) до блока со строками, в отдельный файл.}%
+\EN{Using Hiew again, we put the block starting at address 8 (i.e., after the 32-bit \IT{count} value) 
 ending at the strings block, into a separate binary file.}
 
 \clearpage
@@ -183,8 +183,8 @@ there are two 32-bit values for each symbol, but maybe there are two arrays}?
 \EN{This is a .SYM file for a DLL after all, and the default base address of
 win32 DLLs is \TT{0x10000000}, and the code usually starts at \TT{0x10001000}.}
 
-\RU{Когда я открываю файл orawtc8.dll в IDA, базовый адрес другой, но тем не менее, первая функция это:}
-\EN{When I open the orawtc8.dll file in IDA, the base address is different, but nevertheless, the first function is:}
+\RU{Когда открываем файл orawtc8.dll в \IDA, базовый адрес другой, но тем не менее, первая функция это:}%
+\EN{When we open the orawtc8.dll file in \IDA, the base address is different, but nevertheless, the first function is:}
 
 \begin{lstlisting}
 .text:60351000 sub_60351000    proc near
@@ -311,7 +311,7 @@ static main() {
 }
 \end{lstlisting}
 
-\RU{Файлы, которые я использовал в этом примере, здесь}\EN{The example files I used are here}: 
+\RU{Файлы, использованные в этом примере, здесь}\EN{The example files were used in this example are here}: 
 \href{http://go.yurichev.com/17216}{beginners.re}.
 
 \clearpage
@@ -329,10 +329,10 @@ static main() {
 
 \RU{Так что да, все таблицы здесь имеют 64-битные элементы, даже смещения строк!}
 \EN{So yes, all tables now have 64-bit elements, even string offsets!}
-\RU{Сигнатура теперь}\EN{The signature is now} \TT{OSYMAM64}, \RU{чтобы отличить целевую платформу, 
-я полагаю}\EN{to distinguish the target platform, I suppose}.\\
-\\
+\RU{Сигнатура теперь \TT{OSYMAM64}, чтобы отличить целевую платформу, очевидно.}%
+\EN{The signature is now \TT{OSYMAM64}, to distinguish the target platform, apparently.}
+
 \RU{Вот и всё}\EN{This is it}!
-\RU{Вот также моя библиотека в которой есть функция для доступа к .SYM-файлам \oracle}\EN{Here is also my 
-library in which I have functions to access \oracle .SYM-files}:
+\RU{Вот также библиотека в которой есть функция для доступа к .SYM-файлам \oracle}
+\EN{Here is also library which has functions to access \oracle .SYM-files}:
 \href{http://go.yurichev.com/17007}{GitHub}.

@@ -11,8 +11,8 @@ its format and find a way to unpack it}.
 \RU{В \oracle имеются файлы с сообщениями об ошибках в текстовом виде, так что мы можем сравнивать файлы:
 текстовый и запакованный бинарный}\EN{There are \oracle error message files in text form, 
 so we can compare the text and packed binary files}
-\footnote{\EN{Text files don't exist in \oracle for every .MSB file, so that's why I worked on their file format}
-\RU{Текстовые файлы в \oracle имеются не для каждого .MSB-файла, вот почему я работал над его форматом}}.
+\footnote{\EN{Open-source text files don't exist in \oracle for every .MSB file, so that's why we will work on their file format}
+\RU{Текстовые файлы с открытым кодом в \oracle имеются не для каждого .MSB-файла, вот почему мы будем работать над его форматом}}.
 
 \RU{Это начало файла}\EN{This is the beginning of the} ORAUS.MSG \RU{без ненужных комментариев}\EN{text file 
 with some irrelevant comments stripped}:
@@ -85,18 +85,16 @@ of the block and mark them with red lines}.
 \RU{Это значит, здесь, наверное, 6 байт информации выделено для каждого сообщения об ошибке.}
 \EN{This implies that there are probably 6 bytes of information allocated for each error message.}
 
-\RU{Первое 16-битное значение (здесь 0xA или 10) означает количество сообщений в блоке: я проверил это
-глядя на другие блоки}\EN{The first 16-bit value (0xA here or 10) mean the number of messages in each block: 
-I checked this by investigating other blocks}.
+\RU{Первое 16-битное значение (здесь 0xA или 10) означает количество сообщений в блоке: это можно проверить глядя на другие блоки.}%
+\EN{The first 16-bit value (0xA here or 10) mean the number of messages in each block: this can be checked by investigating other blocks.}
 \RU{Действительно: сообщения об ошибках имеют произвольный размер}\EN{Indeed: the error messages have arbitrary size}. 
 \RU{Некоторые длиннее, некоторые короче}\EN{Some are longer, some are shorter}. 
 \RU{Но длина блока всегда фиксирована, следовательно, никогда не знаешь, сколько сообщений можно запаковать
 в каждый блок}\EN{But block size is always fixed, hence,
 you never know how many text messages can be packed in each block}.
 
-\RU{Как я уже отметил, так как это не оканчивающиеся нулем Си-строки, длина строки должна быть закодирована
-где-то}\EN{As I already noted, since these are not null-terminating C strings, 
-their size must be encoded somewhere}.
+\RU{Как мы уже отметили, так как это не оканчивающиеся нулем Си-строки, длина строки должна быть закодирована где-то.}%
+\EN{As we already noted, since these are not null-terminating C strings, their size must be encoded somewhere.}
 \RU{Длина первой строки}\EN{The size of the first string} \q{normal, successful completion} \RU{это}\EN{is} 
 29 (0x1D) \RU{байт}\EN{bytes}.
 \RU{Длина второй строки}\EN{The size of the second string} \q{unique constraint (\%s.\%s) violated} 
@@ -139,8 +137,8 @@ we need, then we get the text string's position, then we get the position of the
 \RU{Так мы определяем границы строки}\EN{This way we determine the string's boundaries}!
 \RU{Этот метод позволяет сэкономить место в файле не записывая длину строки}\EN{This method allows to 
 save some space by not saving the text string's size in the file}!
-\RU{Нельзя сказать, что экономия большая, но это интересный трюк}\EN{I cannot say it saves a lot, 
-but it's a clever trick}.
+\RU{Нельзя сказать, что экономия памяти большая, но это интересный трюк.}%
+\EN{It's not possible to say it saves a lot of space, but it's a clever trick}.
 
 \clearpage
 \RU{Вернемся к заголовку .MSB-файла}\EN{Let's back to the header of .MSB-file}:
@@ -156,11 +154,10 @@ but it's a clever trick}.
 (marked by red)}.
 \RU{Проверяем другие .MSB-файлы и оказывается что это справедливо для всех}\EN{We can checked other .MSB-files and we see that it's true 
 for all of them}.
-\RU{Здесь есть много других значений, но я не разбирался с ними, так как моя задача (утилита для распаковки)
-уже решена.}
-\EN{There are a lot of other values, but I didn't investigate them, since my job (an unpacking utility) was done.}
-\RU{А если бы я писал запаковщик .MSB-файлов, тогда мне наверное пришлось бы понять, зачем нужны остальные.}
-\EN{If I have to write a .MSB file packer, I would probably need to understand the meaning of the other values.}
+\RU{Здесь есть много других значений, но мы не будем разбираться с ними, так как наша задача (утилита для распаковки) уже решена.}
+\EN{There are a lot of other values, but we will not investigate them, since our job (an unpacking utility) was done.}
+\RU{А если бы мы писали запаковщик .MSB-файлов, тогда нам наверное пришлось бы понять, зачем нужны остальные.}
+\EN{If we have to write a .MSB file packer, we would probably need to understand the meaning of the other values.}
 
 \clearpage
 \RU{Тут еще есть таблица после заголовка, вероятно, содержащая 16-битные значения}\EN{There is also a 
@@ -173,16 +170,15 @@ table that came after the header which probably contains 16-bit values}:
 \label{fig:oracle_MSB_4}
 \end{figure}
 
-\RU{Их длина может быть определена визуально (я нарисовал красных линий)}\EN{Their size can be determined 
-visually (I draw red lines)}.
-\RU{Когда я сдампил эти значения, я обнаружил, что каждое 16-битное число --- это последний код ошибки для
-каждого блока}\EN{While dumping these values, I found that each 16-bit number is the last error 
-code for each block}.\\
-\\
+\RU{Их длина может быть определена визуально (здесь нарисованы красные линии).}%
+\EN{Their size can be determined visually (red lines are drawn here).}
+\RU{Когда мы сдампили эти значения, мы обнаружили, что каждое 16-битное число\EMDASH{}это последний код ошибки для каждого блока.}%
+\EN{While dumping these values, we have found that each 16-bit number is the last error code for each block.}
+
 \RU{Так вот как \oracle быстро находит сообщение об ошибке}\EN{So that's how \oracle quickly finds the error message}:
 
 \begin{itemize}
-\item \RU{загружает таблицу, которую я назвал}\EN{load a table I called} last\_errnos 
+\item \RU{загружает таблицу, которую мы назовем}\EN{load a table we will call} last\_errnos 
 (\RU{содержащую последний номер ошибки для каждого блока}\EN{that contains the last error number for each block});
 \item \RU{находит блок содержащий код ошибки, полагая что все коды ошибок увеличиваются и внутри каждого блока
 и также в файле}\EN{find a block that contains the error code we need, assuming all error codes 
@@ -197,11 +193,12 @@ character from the next 6-byte block};
 \item \RU{загружает все символы сообщения в этих пределах}\EN{load all characters of the message in this range}.
 \end{itemize}
 
-\RU{Это программа на Си которую я написал для распаковки .MSB-файлов}\EN{This is C program that I wrote which 
-unpacks .MSB-files}:
+\RU{Это программа на Си которую мы написали для распаковки .MSB-файлов}
+\EN{This is C program that we wrote which unpacks .MSB-files}:
 \href{http://go.yurichev.com/17213}{beginners.re}.
 
-\RU{И еще два файла которые я использовал в этом примере}\EN{There are also the two files which I used in the example} 
+\RU{И еще два файла которые были использованы в этом примере}
+\EN{There are also the two files which were used in the example} 
 (\oracle 11.1.0.6):
 \href{http://go.yurichev.com/17214}{beginners.re},
 \href{http://go.yurichev.com/17215}{beginners.re}.
