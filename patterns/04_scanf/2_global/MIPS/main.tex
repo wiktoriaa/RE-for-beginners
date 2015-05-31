@@ -5,7 +5,7 @@
 \RU{Так что теперь переменная $x$ глобальная.}
 \EN{So now the $x$ variable is global.}
 \RU{Сделаем исполняемый файл вместо объектного и загрузим его в \IDA.}
-\EN{Let's compile to executable file rather than object file and I load it into \IDA.}
+\EN{Let's compile to executable file rather than object file and load it into \IDA.}
 \RU{IDA показывает присутствие переменной $x$ в ELF-секции .sbss (помните о \q{Global Pointer}? \myref{MIPS_GP}),
 так как переменная не инициализируется в самом начале.}
 \EN{IDA displays the $x$ variable in the .sbss ELF section (remember the \q{Global Pointer}? \myref{MIPS_GP}),
@@ -13,9 +13,8 @@ since the variable is not initialized at the start.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/04_scanf/2_global/MIPS/O3_IDA.lst.\LANG}
 
-\RU{IDA уменьшает количество информации, так что я также сделал листинг используя objdump и добавил туда
-свои комментарии:}
-\EN{IDA reduces the amount of information, so I also made a listing using objdump and commented it:}
+\RU{IDA уменьшает количество информации, так что сделаем также листинг используя objdump и добавим туда свои комментарии:}%
+\EN{IDA reduces the amount of information, so we'll also do a listing using objdump and comment it:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump),numbers=left]{patterns/04_scanf/2_global/MIPS/O3_objdump.txt.\LANG}
 
@@ -51,8 +50,8 @@ an idle instruction), in order to align next function's start on 16-byte boundar
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/04_scanf/2_global/MIPS/O3_IDA_init.lst.\LANG}
 
-\RU{Почему не .sdata? Не знаю, может быть, нужно было указать какую-то опцию в GCC?}
-\EN{Why not .sdata? I do not know, its possible that this depends on some GCC option.}
+\RU{Почему не .sdata? Может быть, нужно было указать какую-то опцию в GCC?}
+\EN{Why not .sdata? Perhaps that this depends on some GCC option?}
 \RU{Тем не менее, $x$ теперь в .data, а это уже общая память и мы можем посмотреть как происходит
 работа с переменными там.}
 \EN{Nevertheless, now $x$ is in .data, which is a general memory area, and we can take a look
