@@ -44,10 +44,10 @@ information included or something like that.}
 к ним медленнее.)}
 
 \RU{Посмотрим, сможем ли мы разобрать его формат}\EN{Let's see if we can understand its format}.
-\RU{Я выбрал самый короткий файл \TT{orawtc8.sym}, поставляемый с файлом \TT{orawtc8.dll} в Oracle 8.1.7}
-\EN{I chose the shortest \TT{orawtc8.sym} file that comes with the \TT{orawtc8.dll} file in Oracle 8.1.7}
-\footnote{\RU{Я выбрал древнюю версию \oracle сознательно, из-за более короткого размера его модулей}\EN{I chose 
-an ancient \oracle version intentionally due to the smaller size of its modules}}.
+\RU{Выберем самый короткий файл \TT{orawtc8.sym}, поставляемый с файлом \TT{orawtc8.dll} в Oracle 8.1.7}%
+\EN{We will pick the shortest \TT{orawtc8.sym} file that comes with the \TT{orawtc8.dll} file in Oracle 8.1.7}
+\footnote{\RU{Будем использовать древнюю версию \oracle сознательно, из-за более короткого размера его модулей}%
+\EN{We can chose an ancient \oracle version intentionally due to the smaller size of its modules}}.
 
 \clearpage
 \RU{Вот я открываю этот файл в}\EN{Here is the file opened in} Hiew:
@@ -71,7 +71,7 @@ so this is maybe the file's signature.}
 variable names}.
 
 \clearpage
-\RU{Я отметил сигнатуры OSYM и строки здесь}\EN{I marked the OSYM signatures and strings here}: 
+\RU{Отметим сигнатуры OSYM и строки здесь}\EN{We will mark the OSYM signatures and strings here}: 
 
 \begin{figure}[H]
 \centering
@@ -116,9 +116,9 @@ files may be pretty big}.
 \EN{The oracle.sym file for the main oracle.exe (version 10.2.0.4) executable contains \TT{0x3A38E} (238478) symbols.}
 \RU{16-битного значения тут недостаточно}\EN{A 16-bit value isn't enough here}.
 
-\RU{Я проверил другие .SYM-файлы как этот и это подтвердило мою догадку: значение после 32-битной сигнатуры OSYM
-всегда отражает количество текстовых строк в файле.}
-\EN{I checked other .SYM files like this and it proves my guess: the value after the 32-bit OSYM signature always
+\RU{Проверим другие .SYM-файлы как этот и это подтвердит нашу догадку: значение после 32-битной сигнатуры OSYM
+всегда отражает количество текстовых строк в файле.}%
+\EN{We can check other .SYM files like this and it proves our guess: the value after the 32-bit OSYM signature always
 reflects the number of text strings in the file.}
 
 \RU{Это общая особенность почти всех бинарных файлов: заголовок с сигнатурой плюс некоторая дополнительная
@@ -145,7 +145,7 @@ ending at the strings block, into a separate binary file.}
 \RU{Тут явно есть какая-то структура}\EN{There is a clear pattern in it}. 
 
 \clearpage
-\RU{Я добавил красные линии, чтобы разделить блок}\EN{I added red lines to divide the block}: 
+\RU{Добавим красные линии, чтобы разделить блок}\EN{We will add red lines to divide the block}: 
 
 \begin{figure}[H]
 \centering
@@ -262,10 +262,10 @@ block is \TT{10001080}.}
 \RU{Так что это адрес, но для DLL с базовым адресом по умолчанию}\EN{So this is the address, 
 but for a DLL with the default base address}.
 
-\RU{Я могу быстро проверить и убедиться, что первые 66 значений в массиве (т.е. первая половина)
-это просто адреса функций в DLL, включая некоторые метки,}
-\EN{I can quickly check and be sure that the first 66 values in the array (i.e., the first half of the array) 
-are just function addresses in the DLL, including some labels,}\etc{}.
+\RU{Мы можем быстро проверить и убедиться, что первые 66 значений в массиве (т.е. первая половина)
+это просто адреса функций в DLL, включая некоторые метки, \etc{}.}
+\EN{We can quickly check and be sure that the first 66 values in the array (i.e., the first half of the array) 
+are just function addresses in the DLL, including some labels, \etc{}.}
 \RU{Хорошо, что же тогда остальная часть массива}\EN{Well, what's the other part of array then}? 
 \RU{Остальные 66 значений, начинающиеся с}\EN{The other 66 values that start with} \TT{0x0000}? 
 \RU{Они похоже в пределах}\EN{These seem to be in range} \TT{[0...0x3F8]}. 
@@ -286,10 +286,10 @@ the series of numbers is increasing}.
 \RU{Вот и всё! Всё закончено.}\EN{This is it! All done.}
 
 \index{IDA}
-\RU{Я написал утилиту для конвертирования .SYM-файлов в \IDA-скрипт, 
-так что я могу загружать .idc-скрипт и он выставит имена функций:}
-\EN{I wrote an utility to convert these .SYM files into \IDA script, 
-so I can load the .idc script and it sets the function names:}
+\RU{Напишем утилиту для конвертирования .SYM-файлов в \IDA-скрипт, 
+так что сможем загружать .idc-скрипт и он выставит имена функций:}%
+\EN{We will write an utility to convert these .SYM files into \IDA script, 
+so we can load the .idc script and it sets the function names:}
 
 \lstinputlisting{ff/Oracle_SYM/unpacker.c}
 
