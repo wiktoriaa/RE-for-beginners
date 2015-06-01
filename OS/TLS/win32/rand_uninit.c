@@ -2,7 +2,7 @@
 #include <windows.h>
 #include <winnt.h>
 
-// from the Numerical Recipes book
+// from the Numerical Recipes book:
 #define RNG_a 1664525
 #define RNG_c 1013904223
 

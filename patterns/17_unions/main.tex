@@ -7,36 +7,46 @@
 \input{patterns/17_unions/FPU_PRNG/main}
 \input{patterns/17_unions/epsilon/main}
 
-\section{\RU{Быстрое вычисление обратного квадратного корня}\EN{Fast inverse square root calculation}}
+\section{\RU{Быстрое вычисление квадратного корня}\EN{Fast square root calculation}}
 
-\RU{Вот где еще можно на практике применить трактовку типа \Tfloat как целочисленного, это быстрое вычисление}
-\EN{Another well-known algorithm where \Tfloat is interpreted as integer is fast calculation of} $\frac{1}{\sqrt{x}}$.
-\index{Quake III Arena}
-\RU{Алгоритм стал известным, вероятно потому, что был применен в Quake III Arena.}
-\EN{Algorithm became popular, supposedly, because it was used in Quake III Arena.}
+\RU{Вот где еще можно на практике применить трактовку типа \Tfloat как целочисленного, это быстрое вычисление квадратного корня.}%
+\EN{Another well-known algorithm where \Tfloat is interpreted as integer is fast calculation of square root.}
 
-\RU{Фрагмент кода взят из}\EN{This piece of code was taken from} Wikipedia
-\footnote{\EN{\url{http://go.yurichev.com/17360}}\RU{\url{http://go.yurichev.com/17361}}}:
-
-\begin{lstlisting}
-float Q_rsqrt( float number )
+\begin{lstlisting}[caption=\EN{The source code is taken from Wikipedia}\RU{Исходный код взят из Wikipedia}: \url{http://go.yurichev.com/17364}]
+/* Assumes that float is in the IEEE 754 single precision floating point format
+ * and that int is 32 bits. */
+float sqrt_approx(float z)
 {
-	long i;
-	float x2, y;
-	const float threehalfs = 1.5F;
+    int val_int = *(int*)&z; /* Same bits, but as an int */
+    /*
+     * To justify the following code, prove that
+     *
+     * ((((val_int / 2^m) - b) / 2) + b) * 2^m = ((val_int - 2^m) / 2) + ((b + 1) / 2) * 2^m)
+     *
+     * where
+     *
+     * b = exponent bias
+     * m = number of mantissa bits
+     *
+     * .
+     */
  
-	x2 = number * 0.5F;
-	y  = number;
-	i  = * ( long * ) &y;                       // evil floating point bit level hacking
-	i  = 0x5f3759df - ( i >> 1 );               // what the f*ck? 
-	y  = * ( float * ) &i;
-	y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration
-//      y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
+    val_int -= 1 << 23; /* Subtract 2^m. */
+    val_int >>= 1; /* Divide by 2. */
+    val_int += 1 << 29; /* Add ((b + 1) / 2) * 2^m. */
  
-	return y;
+    return *(float*)&val_int; /* Interpret again as float */
 }
 \end{lstlisting}
 
 \RU{В качестве упражнения, вы можете попробовать скомпилировать эту функцию и разобраться, как она работает.}
-\EN{As an exercise, you can try to compile this function and to understand, how it works.}
+\EN{As an exercise, you can try to compile this function and to understand, how it works.}\\
+\\
+\RU{Имеется также известный алгоритм быстрого вычисления}\EN{There is also well-known algorithm of fast calculation of} $\frac{1}{\sqrt{x}}$.
+\index{Quake III Arena}
+\RU{Алгоритм стал известным, вероятно потому, что был применен в Quake III Arena.}%
+\EN{Algorithm became popular, supposedly, because it was used in Quake III Arena.}
+
+\RU{Описание алгоритма есть в}\EN{Algorithm description is present in} Wikipedia:
+\EN{\url{http://go.yurichev.com/17360}}\RU{\url{http://go.yurichev.com/17361}}.
 
