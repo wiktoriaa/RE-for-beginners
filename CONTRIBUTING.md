@@ -38,4 +38,4 @@ Do not worry to contribute more errors and mistakes - I'll fix them during mergi
 Worry?
 ------
 Do not worry to write me about any mistakes you found, even if you are not very confident.
-I'm writing for beginners, after all, so beginners' opinion and comments are crucial for my job.
+I'm writing for beginners, after all, so beginners' opinions and comments are crucial for my job.
