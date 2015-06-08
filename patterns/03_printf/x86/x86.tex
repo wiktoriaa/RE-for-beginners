@@ -309,7 +309,7 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
 \RU{Самый первый элемент это}\EN{The very first element is the} \ac{RA} (\TT{0x0804844a}).
 \RU{Мы можем удостовериться в этом, дизассемблируя память по этому адресу}\EN{We can verify this by disassembling the memory at this address}:
 
-\begin{lstlisting}
+\begin{lstlisting}[label=NOP_as_XCHG_example]
 (gdb) x/5i 0x0804844a
    0x804844a <main+45>:	mov    $0x0,%eax
    0x804844f <main+50>:	leave  
@@ -318,12 +318,11 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
    0x8048453:	xchg   %ax,%ax
 \end{lstlisting}
 
-\RU{Две инструкции}\EN{The two} \TT{XCHG} 
-\RU{это, вероятно, какой-то случайный мусор, который мы пока что можем игнорировать}%
-\EN{instructions are probably random garbage, which we can ignore for now}.
+\RU{Две инструкции \TT{XCHG} это холостые инструкции, аналогичные \ac{NOP}.}%
+\EN{The two \TT{XCHG} instructions are idle instructions, analogous to \ac{NOP}s.}
 
-\RU{Второй элемент}\EN{The second element} (\TT{0x080484f0}) \RU{это адрес
-строки формата}\EN{is the format string address}:
+\RU{Второй элемент (\TT{0x080484f0}) это адрес строки формата:}%
+\EN{The second element (\TT{0x080484f0}) is the format string address:}
 
 \begin{lstlisting}
 (gdb) x/s 0x080484f0
