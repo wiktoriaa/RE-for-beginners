@@ -7,6 +7,7 @@
 to MSVC}\footnote{\href{http://go.yurichev.com/17057}{MSDN}}.
 \RU{Оно не связано с исключениями в Си++}\EN{It is not related to C++ \ac{PL} exceptions}.
 
+% FIXME russian listing:
 \begin{lstlisting}
 __try
 {
@@ -18,7 +19,7 @@ __except(filter code)
 }
 \end{lstlisting}
 
-\RU{Блок ``finally'' может присутствовать вместо код обработчика}\EN{``Finally'' block may be instead of handler code}:
+\RU{Блок \q{finally} может присутствовать вместо код обработчика}\EN{\q{Finally} block may be instead of handler code}:
 
 \begin{lstlisting}
 __try
@@ -31,7 +32,7 @@ __finally
 }
 \end{lstlisting}
 
-\RU{Код-фильтр --- это выражение, отвечающее на вопрос, соответствует ли код этого обработчика к поднятому исключению}
+\RU{Код-фильтр\EMDASH{}это выражение, отвечающее на вопрос, соответствует ли код этого обработчика к поднятому исключению}
 \EN{The filter code is an expression, telling whether this handler code corresponds to the exception raised}.
 \RU{Если ваш код слишком большой и не помещается в одно выражение, отдельная функция-фильтр может быть определена}
 \EN{If your code is too big and cannot fit into one expression, a separate filter function can be defined}.\\
@@ -79,8 +80,8 @@ which handler to execute and when}.\\
 \\
 \index{Wine}
 \index{ReactOS}
-\RU{Исходный код ф-ции}\EN{The source code of the} \TT{\_except\_handler3} \RU{закрыт}\EN{function is closed}.
-\RU{Хотя, Sanos OS, имеющая слой совместимости с win32, имеет некоторые ф-ции написанные заново, которые
+\RU{Исходный код функции}\EN{The source code of the} \TT{\_except\_handler3} \RU{закрыт}\EN{function is closed}.
+\RU{Хотя, Sanos OS, имеющая слой совместимости с win32, имеет некоторые функции написанные заново, которые
 в каком-то смысле эквивалентны тем что в Windows}
 \EN{However, Sanos OS, which has a win32 compatibility layer, has the same
 functions reimplemented, which are somewhat equivalent to those in Windows}
@@ -93,7 +94,7 @@ ReactOS\footnote{\url{http://go.yurichev.com/17060}}.\\
 \RU{Если указатель}\EN{If the} \IT{filter} \RU{ноль,}\EN{pointer is NULL, the} \IT{handler} \RU{указывает на код \IT{finally}}
 \EN{pointer is the pointer to the \IT{finally} code block}.\\
 \\
-\RU{Во время исполнения, значение \IT{previous try level} в стеке меняется, чтобы ф-ция
+\RU{Во время исполнения, значение \IT{previous try level} в стеке меняется, чтобы функция
 \TT{\_except\_handler3} знала о текущем уровне вложенности, чтобы знать, какой элемент таблицы
 \IT{scope table} использовать.}
 \EN{During execution, the \IT{previous try level} value in the stack changes, so
@@ -112,18 +113,18 @@ in order to know which \IT{scope table} entry to use.}
 \RU{Интересно, как меняется переменная}\EN{An interesting thing is how the} \IT{previous try level}\EN{ variable has changed}.
 \RU{Исходное значение}\EN{The initial value is} \TT{0xFFFFFFFF} ($-1$).
 \RU{Момент, когда тело}\EN{The moment when the body of the} \TT{try} \RU{открывается, обозначен инструкцией, записывающей}
-\EN{statement is opened is marked with an instruction that writes} $0$ \RU{в эту переменную}\EN{to the variable}.
+\EN{statement is opened is marked with an instruction that writes} 0 \RU{в эту переменную}\EN{to the variable}.
 \RU{В момент, когда тело}\EN{The moment when the body of the} \TT{try} \RU{закрывается}\EN{statement is closed}, $-1$ 
 \RU{возвращается в нее назад}\EN{is written back to it}.
 \RU{Мы также видим адреса кода фильтра и обработчика}\EN{We also see the addresses of filter and handler code}.
-\RU{Так мы можем легко увидеть структуру конструкций \IT{try/except} в ф-ции}
+\RU{Так мы можем легко увидеть структуру конструкций \IT{try/except} в функции}
 \EN{Thus we can easily see the structure of the \IT{try/except} constructs in the function}.\\
 \\
-\RU{Так как код инициализации SEH-структур в прологе ф-ций может быть общим для нескольких ф-ций, иногда компилятор
-вставляет в прологе вызов ф-ции}\EN{Since the SEH setup code in the function prologue may be shared between many functions,
+\RU{Так как код инициализации SEH-структур в прологе функций может быть общим для нескольких функций, иногда компилятор
+вставляет в прологе вызов функции}\EN{Since the SEH setup code in the function prologue may be shared between many functions,
 sometimes the compiler inserts a call to the} \TT{SEH\_prolog()}\RU{, которая всё это делает}
 \EN{ function in the prologue, which does just that}.
-\RU{А код для деинициализации SEH в ф-ции \TT{SEH\_epilog()}}
+\RU{А код для деинициализации SEH в функции \TT{SEH\_epilog()}}
 \EN{The SEH cleanup code is in the \TT{SEH\_epilog()} function}.\\
 \\
 \RU{Запустим этот пример в}\EN{Let's try to run this example in} \tracer{}:
@@ -166,7 +167,7 @@ scopetable entry[0]. previous try level=-2, filter=0x771f74d0 (ntdll.dll!___safe
 \RU{Третий это SEH4 в}\EN{The third is the SEH4 one in} ntdll.dll, \RU{и четвертый это обработчик, не имеющий отношения к MSVC,
 расположенный в}
 \EN{and the fourth handler is not MSVC-related and is located in} ntdll.dll,
-\RU{имеющий ``говорящее'' название ф-ции}\EN{and has a self-describing function name}.\\
+\RU{имеющий \q{говорящее} название функции}\EN{and has a self-describing function name}.\\
 \\
 \RU{Как видно, в цепочке присутствуют обработчики трех типов}\EN{As you can see, there are 3 types of handlers in one chain}:
 \RU{один не связан с MSVC вообще (последний) и два связанных с MSVC}
@@ -184,7 +185,7 @@ scopetable entry[0]. previous try level=-2, filter=0x771f74d0 (ntdll.dll!___safe
 
 \lstinputlisting[caption=MSVC 2003]{OS/SEH/2/3_SEH3.asm}
 
-\RU{Если установить брякпойнт на ф-цию}\EN{If we set a breakpoint on the} \printf{} \RU{вызываемую из обработчика,
+\RU{Если установить точку останова на функцию}\EN{If we set a breakpoint on the} \printf{} \RU{вызываемую из обработчика,
 мы можем увидеть, что добавился еще один SEH-обработчик}\EN{function, which is called from the handler, 
 we can also see how yet another SEH handler is added}.
 \RU{Наверное, это еще какая-то дополнительная механика, скрытая внутри процесса обработки исключений}

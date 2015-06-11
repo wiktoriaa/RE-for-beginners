@@ -15,23 +15,23 @@
 \newcommand{\CThreeBits}{\Cthree/\Ctwo/\Czero}
 
 \index{x86!\Instructions!FCOMP}
-\RU{\FCOMP сравнивает содержимое \ST{0} с тем что лежит в \TT{\_a} и выставляет биты \CThreeBits в 
+\RU{\FCOMP сравнивает содержимое \ST{0} с тем, что лежит в \TT{\_a} и выставляет биты \CThreeBits в 
 регистре статуса FPU. Это 16-битный регистр отражающий текущее состояние FPU.}
 \EN{\FCOMP compares the value in \ST{0} with what is in \TT{\_a} 
 and sets \CThreeBits bits in FPU 
 status word register, accordingly. 
 This is a 16-bit register that reflects the current state of the FPU.}
 
-\RU{После этого, инструкция \FCOMP также выдергивает одно значение из стека. 
+\RU{После этого инструкция \FCOMP также выдергивает одно значение из стека. 
 Это отличает её от \FCOM, которая просто сравнивает значения, оставляя стек в таком же состоянии.}
 \EN{After the bits are set, the \FCOMP instruction also pops one variable from the stack. 
 This is what distinguishes it from \FCOM, which is just compares values, leaving the stack in the same state.}
 
-\RU{К сожалению, у процессоров до Intel P6 
-\footnote{Intel P6 это Pentium Pro, Pentium II, и далее} нет инструкций условного перехода,
-проверяющих биты \CThreeBits. 
+\RU{К сожалению, у процессоров до Intel P6%
+\footnote{Intel P6 это Pentium Pro, Pentium II, и последующие модели} нет инструкций условного перехода,
+проверяющих биты \CThreeBits.
 Возможно, так сложилось исторически (вспомните о том, что FPU когда-то был вообще отдельным чипом).\\
-А у Intel P6 появились инструкции \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP ~--- делающие тоже самое, 
+А у Intel P6 появились инструкции \FCOMI/\FCOMIP/\FUCOMI/\FUCOMIP, делающие то же самое, 
 только напрямую модифицирующие флаги \ZF/\PF/\CF.}
 \EN{Unfortunately, CPUs before Intel P6
 \footnote{Intel P6 is Pentium Pro, Pentium II, etc} don't have any conditional 
@@ -43,8 +43,8 @@ instructions~---which do the same, but modify the \ZF/\PF/\CF CPU flags.}
 \index{x86!\Instructions!FNSTSW}
 \RU{Так что \FNSTSW копирует содержимое регистра статуса в \AX. 
 Биты \CThreeBits занимают позиции, 
-соответственно, 14, 10, 8, в этих позициях они и остаются в регистре \AX, 
-и все они расположены в старшей части регистра ~--- \AH.}
+соответственно, 14, 10, 8. В этих позициях они и остаются в регистре \AX, 
+и все они расположены в старшей части регистра~--- \AH.}
 \EN{The \FNSTSW instruction copies FPU the status word register to \AX. 
 \CThreeBits bits are placed at positions 14/10/8, 
 they are at the same positions in the \AX register and all they are placed in the high part of \AX{}~---\AH{}.}
@@ -58,8 +58,8 @@ they are at the same positions in the \AX register and all they are placed in th
 \item
 \RU{Если $a=b$, то биты будут выставлены так:}\EN{If $a=b$, then the bits are:} 1, 0, 0.
 \item
-\RU{Если результат не определен (в случае ошибки), то биты будут выставлены так}
-\EN{If the result is unordered (in case of error), then the set bits are}: 1, 1, 1.
+\RU{Если результат не определен (в случае ошибки), то биты будут выставлены так:}
+\EN{If the result is unordered (in case of error), then the set bits are:} 1, 1, 1.
 \end{itemize}
 % TODO: table here?
 
@@ -73,25 +73,25 @@ they are at the same positions in the \AX register and all they are placed in th
 
 \input{C3_in_AH}
 
-\RU{После исполнения \TT{test ah, 5}\footnote{5=1001b}, % FIXME: subscript here!
+\RU{После исполнения \TT{test ah, 5}\footnote{5=101b} % FIXME: subscript here!
 будут учтены только биты \Czero и \Ctwo (на позициях 0 и 2), остальные просто проигнорированы.}
-\EN{After the execution of \TT{test ah, 5}\footnote{5=1001b}, 
+\EN{After the execution of \TT{test ah, 5}\footnote{5=101b}, 
 only \Czero and \Ctwo bits (on 0 and 2 position) are considered, all other bits are just
 ignored.}
 
 \label{parity_flag}
 \index{x86!\Registers!\Flags!\RU{Флаг четности}\EN{Parity flag}}
 \RU{Теперь немного о \IT{parity flag}\footnote{флаг четности}. 
-Еще один замечательный рудимент эпохи.}
+Ещё один замечательный рудимент эпохи.}
 \EN{Now let's talk about the \IT{parity flag}, another notable historical rudiment.}
 
-\RU{Этот флаг выставляется в $1$ если количество единиц в последнем результате ~--- четно. 
-И в $0$ если ~--- нечетно.}
-\EN{This flag is set to $1$ if the number of ones in the result of the last calculation is even, 
-and to $0$ if it is odd.}
+\RU{Этот флаг выставляется в 1 если количество единиц в последнем результате четно. 
+И в 0 если нечетно.}
+\EN{This flag is set to 1 if the number of ones in the result of the last calculation is even, 
+and to 0 if it is odd.}
 
-\RU{Заглянем в}\EN{Let's look into} Wikipedia
-\footnote{\href{http://go.yurichev.com/17131}{wikipedia}}:
+\RU{Заглянем в}\EN{Let's look into} Wikipedia%
+\footnote{\href{http://go.yurichev.com/17131}{wikipedia.org/wiki/Parity\_flag}}:
 
 \begin{framed}
 \begin{quotation}
@@ -104,16 +104,16 @@ with the FUCOM instructions.
 \end{framed}
 
 \EN{As noted in Wikipedia, the parity flag used sometimes in FPU code, let's see how.}
-\RU{Как упоминается в Wikipedia, флаг четности иногда используется в FPU-коде и сейчас увидим, как.}
+\RU{Как упоминается в Wikipedia, флаг четности иногда используется в FPU-коде и сейчас мы увидим как.}
 
 \index{x86!\Instructions!JP}
-\RU{Флаг \PF будет выставлен в $1$, если \Czero и \Ctwo 
-оба $1$ или оба $0$. 
+\RU{Флаг \PF будет выставлен в 1, если \Czero и \Ctwo 
+оба 1 или оба 0. 
 И тогда сработает последующий \JP (\IT{jump if PF==1}). 
 Если мы вернемся чуть назад и посмотрим значения \CThreeBits 
 для разных вариантов, то увидим, что условный переход \JP сработает в двух случаях: если $b>a$ или если $a=b$ 
 (ведь бит \Cthree перестал учитываться после исполнения \TT{test ah, 5}).}
-\EN{The \PF flag is to be set to 1 if both \Czero and \Ctwo are set to $0$ or both are $1$, in which case
+\EN{The \PF flag is to be set to 1 if both \Czero and \Ctwo are set to 0 or both are 1, in which case
 the subsequent \JP (\IT{jump if PF==1}) is triggering. 
 If we recall the values of \CThreeBits for various cases,
 we can see that the conditional jump 
@@ -121,7 +121,7 @@ we can see that the conditional jump
 (\Cthree bit is not considered here, since it was cleared by 
 the \TT{test ah, 5} instruction).}
 
-\RU{Дальше все просто. Если условный переход сработал, то \FLD загрузит значение \TT{\_b} в \ST{0}, 
+\RU{Дальше всё просто. Если условный переход сработал, то \FLD загрузит значение \TT{\_b} в \ST{0}, 
 а если не сработал, то загрузится \TT{\_a} и произойдет выход из функции.}
 \EN{It is all simple after that. 
 If the conditional jump was triggered, 
@@ -130,8 +130,8 @@ in \ST{0}, and if it was not triggered, the value of \TT{\_a} is loaded there.}
 
 \myparagraph{\RU{А как же проверка флага \Ctwo}\EN{And what about checking \Ctwo}?}
 
-\RU{Флаг \Ctwo включается в случае ошибки (\gls{NaN}, и т.д.), но наш код его не проверяет.}
-\EN{The \Ctwo flag is set in case of error (\gls{NaN}, etc), but our code doesn't check it.}
+\RU{Флаг \Ctwo включается в случае ошибки (\gls{NaN}, \etc{}.), но наш код его не проверяет.}
+\EN{The \Ctwo flag is set in case of error (\gls{NaN}, \etc{}), but our code doesn't check it.}
 \RU{Если программисту нужно знать, не произошла ли FPU-ошибка, он должен позаботиться об этом
 дополнительно, добавив соответствующие проверки.}
 \EN{If the programmer cares about FPU errors, he/she must add additional checks.}

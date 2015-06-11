@@ -3,20 +3,20 @@
 \RU{Вот этот несложный пример иллюстрирует функцию, считающую количество бит-единиц во входном значении.}
 \EN{Here is a simple example of a function that calculates the number of bits set in the input value.}
 
-\RU{Эта операция также называется}\EN{This operation is also called} ``population count''
+\RU{Эта операция также называется}\EN{This operation is also called} \q{population count}%
 \footnote{\RU{современные x86-процессоры (поддерживающие SSE4) даже имеют инструкцию POPCNT для этого}
 \EN{modern x86 CPUs (supporting SSE4) even have a POPCNT instruction for it}}.
 
 \lstinputlisting{patterns/14_bitfields/4_popcnt/shifts.c}
 
-\RU{В этом цикле, счетчик итераций $i$ считает от $0$ до $31$, а $1 \ll i$ будет от $1$ до \TT{0x80000000}. 
-Описывая это словами, можно сказать, 
+\RU{В этом цикле счетчик итераций $i$ считает от 0 до 31, а $1 \ll i$ будет от 1 до \TT{0x80000000}. 
+Описывая это словами, можно сказать 
 \IT{сдвинуть единицу на $n$ бит влево}.
-Т.е., в некотором смысле, выражение $1 \ll i$ последовательно выдает все возможные позиции бит в 32-битном числе. 
+Т.е. в некотором смысле, выражение $1 \ll i$ последовательно выдает все возможные позиции бит в 32-битном числе. 
 Освободившийся бит справа всегда обнуляется.}
-\EN{In this loop, the iteration count value $i$ is counting from $0$ to $31$, 
-so the $1 \ll i$ statement is counting from $1$ to \TT{0x80000000}.
-Describing this operation in natural language, we would say \IT{shift $1$ by n bits left}.
+\EN{In this loop, the iteration count value $i$ is counting from 0 to 31, 
+so the $1 \ll i$ statement is counting from 1 to \TT{0x80000000}.
+Describing this operation in natural language, we would say \IT{shift 1 by n bits left}.
 In other words, $1 \ll i$ statement consequently produces all possible bit positions in a 32-bit number.
 The freed bit at right is always cleared.}
 
@@ -103,7 +103,7 @@ $1 \ll 31$ & $2^{31}$ & 2147483648 & 0x80000000 \\
 \EN{These constant numbers (bit masks) very often appear in code and a practicing reverse engineer 
 must be able to spot them quickly.}
 \RU{Числа в десятичном виде заучивать, пожалуй, незачем, а числа в шестнадцатеричном
-виде итак легко запомнить.}
+виде их легко запомнить.}
 \EN{You probably haven't to memorize the decimal numbers, but the hexadecimal ones are very easy to remember.}
 
 \RU{Эти константы очень часто используются для определения отдельных бит как флагов.}
@@ -129,17 +129,16 @@ must be able to spot them quickly.}
 
 \RU{Макрос \TT{IS\_SET} проверяет наличие этого бита в $a$.}
 \EN{The \TT{IS\_SET} macro checks bit presence in $a$.}
-
 \index{x86!\Instructions!AND}
 \RU{Макрос \TT{IS\_SET} на самом деле это операция логического И (\IT{AND}) 
-и она возвращает $0$ если бита там нет, 
+и она возвращает 0 если бита там нет, 
 либо эту же битовую маску, если бит там есть. 
-В \CCpp, конструкция \TT{if()} срабатывает, если выражение внутри её не ноль, пусть хоть $123456$, 
+В \CCpp, конструкция \TT{if()} срабатывает, если выражение внутри её не ноль, пусть хоть 123456, 
 поэтому все будет работать.}
 \EN{The \TT{IS\_SET} macro is in fact the logical AND operation (\IT{AND}) 
-and it returns $0$ if the specific bit is absent there,
+and it returns 0 if the specific bit is absent there,
 or the bit mask, if the bit is present.
-\IT{The if()} operator in \CCpp triggers if the expression in it is not zero, it might be even $123456$, that is why
+\IT{The if()} operator in \CCpp triggers if the expression in it is not zero, it might be even 123456, that is why
 it always works correctly.}
 
 % subsections

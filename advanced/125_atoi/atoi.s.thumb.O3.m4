@@ -20,7 +20,7 @@ include(`commons.m4')my_atoi PROC
         LDRB     r2,[r1,#0]
 ; _EN(`is it zero')_RU(`это ноль')?
         CMP      r2,#0
-; _EN(``jump to loop body if it's not'')_RU(``перейти на тело цикла, если нет'')
+; _EN(`jump to loop body if it is not')_RU(``перейти на тело цикла, если нет'')
         BNE      |L0.6|
 ; _EN(``rt variable in R0 now, ready to be used in caller function'')_RU(``переменная rt сейчас в R0, готовая для использования в вызывающей ф-ции'')
         BX       lr

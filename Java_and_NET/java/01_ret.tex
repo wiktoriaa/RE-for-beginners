@@ -2,18 +2,18 @@
 \section{\RU{Возврат значения}\EN{Returning a value}}
 
 \EN{Probably the simplest Java function is one which returns some value.}
-\RU{Наверное, самая простая из всех возможных ф-ций на Java это та, что возвращает 
+\RU{Наверное, самая простая из всех возможных функций на Java это та, что возвращает 
 некоторое значение.}
-\EN{Oh, and we must keep in mind that there are no ``free'' functions in Java in common sense,
-they are ``methods''. }
-\RU{О, и мы не должны забывать что в Java нет ``свободных'' ф-ций в общем смысле,
-это ``методы''.}
+\EN{Oh, and we must keep in mind that there are no \q{free} functions in Java in common sense,
+they are \q{methods}. }
+\RU{О, и мы не должны забывать что в Java нет \q{свободных} функций в общем смысле,
+это \q{методы}.}
 \EN{Each method is related to some class, so it's not possible to define
 method outside of a class.}
 \RU{Каждый метод принадлежит какому-то классу, так что невозможно объявить метод 
 вне какого-либо класса.}
-\EN{But I'll also call them ``functions'' anyway, because I used to.}
-\RU{Но я все равно буду называть их ``функциями'', потому что я так привык.}
+\EN{But we'll call them \q{functions} anyway, for simplicity.}
+\RU{Но мы все равно будем называть их \q{функциями}, для простоты.}
 
 \begin{lstlisting}
 public class ret
@@ -25,7 +25,7 @@ public class ret
 }
 \end{lstlisting}
 
-\RU{Я компилирую это}\EN{I'll compile it}:
+\RU{Компилируем это}\EN{Let's compile it}:
 
 \begin{lstlisting}
 javac ret.java
@@ -37,7 +37,7 @@ javac ret.java
 javap -c -verbose ret.class
 \end{lstlisting}
 
-\EN{And what I've got}\RU{И получаю}:
+\EN{And what we've got}\RU{И получаем}:
 
 \begin{lstlisting}[caption=JDK 1.7 (excerpt)]
   public static int main(java.lang.String[]);
@@ -126,9 +126,9 @@ public class ret
 developers didn't left such possibility.}
 \RU{Невозможно закодировать 32-битное число в опкоде какой-либо JVM-инструкции, 
 разработчики не оставили такой возможности.}
-\EN{So 32-bit number 12345678 is stored in so called ``constant pool'' which is, let's say,
+\EN{So 32-bit number 12345678 is stored in so called \q{constant pool} which is, let's say,
 library of most used constants (including strings, objects, etc).}
-\RU{Так что 32-битное число 12345678 сохранено в так называемом ``constant pool'' (пул констант),
+\RU{Так что 32-битное число 12345678 сохранено в так называемом \q{constant pool} (пул констант),
 который, так скажем, является библиотекой наиболее используемых констант (включая строки, объекты,
 итд).}
 
@@ -142,14 +142,14 @@ in several steps, or to keep them in data segment:}
 в несколько шагов, или держать их в сегменте данных:}
 \myref{ARM_big_constants}, \myref{MIPS_big_constants}.
 
-\EN{MIPS code is also traditionally has constant pool, named ``literal pool'', these are segments
-called ``.lit4'' (for 32-bit single precision float point number constants storage) and ``.lit8''
+\EN{MIPS code is also traditionally has constant pool, named \q{literal pool}, these are segments
+called \q{.lit4} (for 32-bit single precision float point number constants storage) and \q{.lit8}
 (for 64-bit double precision float point number constants storage).}
-\RU{Код для MIPS также традиционно имеет пул констант, называемый ``literal pool'', это сегменты
-с названиями ``.lit4'' (для хранения 32-битных чисел с плавающей точкой одинарной точности) и
-``.lit8''(для хранения 64-битных чисел с плавающей точкой двойной точности).}
+\RU{Код для MIPS также традиционно имеет пул констант, называемый \q{literal pool}, это сегменты
+с названиями \q{.lit4} (для хранения 32-битных чисел с плавающей точкой одинарной точности) и
+\q{.lit8}(для хранения 64-битных чисел с плавающей точкой двойной точности).}
 
-\RU{Попробуем другие типы данных}\EN{Let's also try other data types}!
+\RU{Попробуем некоторые другие типы данных}\EN{Let's also try some other data types}!
 
 Boolean:
 
@@ -176,10 +176,9 @@ public class ret
 \RU{Этот JVM-байткод не отличается от того, что возвращает целочисленную 1.}
 \EN{32-bit data slots in stack are also used here for boolean values, like in \CCpp.}
 \RU{32-битные слоты данных в стеке также используются для булевых значений, как в \CCpp.}
-\EN{But one could not use returned boolean value as integer or vice versa --- 
-type information is stored in a class file and checked at runtime.}
-\RU{Но нельзя использовать возвращаемое значение булевого типа как целочисленное и наоборот ---
-информация о типах сохраняется в class-файлах и проверяется при запуске.}
+\EN{But one could not use returned boolean value as integer or vice versa\EMDASH{}type information is stored in a class file and checked at runtime.}
+\RU{Но нельзя использовать возвращаемое значение булевого типа как целочисленное и наоборот\EMDASH{}информация 
+о типах сохраняется в class-файлах и проверяется при запуске.}
 
 \EN{The same story about 16-bit}\RU{Та же история с 16-битным} \IT{short}:
 
@@ -223,12 +222,12 @@ public class ret
          2: ireturn       
 \end{lstlisting}
 
-\TT{bipush} \RU{означает}\EN{mean} ``push byte''.
+\TT{bipush} \RU{означает}\EN{mean} \q{push byte}.
 \EN{Needless to say that \IT{char} in Java is 16-bit UTF-16 character, 
-and it's equivalent to \IT{short}, but ASCII code of ``A'' character is 65, and it's possible
+and it's equivalent to \IT{short}, but ASCII code of \q{A} character is 65, and it's possible
 to use instruction for passing byte into stack.}
 \RU{Нужно сказать что \IT{char} в Java, это 16-битный символ в кодировке UTF-16,
-и он эквивалентен \IT{short}, но ASCII-код символа ``A'' это 65, и можно воспользоваться
+и он эквивалентен \IT{short}, но ASCII-код символа \q{A} это 65, и можно воспользоваться
 инструкцией для передачи байта в стек.}
 
 \RU{Попробуем также}\EN{Let's also try} \IT{byte}:
@@ -336,8 +335,8 @@ public class ret
          3: dreturn       
 \end{lstlisting}
 
-\EN{\TT{dreturn} stands for ``return double''.}
-\RU{\TT{dreturn} означает ``return double''.}
+\EN{\TT{dreturn} stands for \q{return double}.}
+\RU{\TT{dreturn} означает \q{return double}.}
 
 \EN{And finally, single precision floating point number:}
 \RU{И наконец, числа с плавающей точкой одинарной точности:}
@@ -371,11 +370,11 @@ public class ret
 from constant pool.}
 \RU{Используемая здесь инструкция \TT{ldc} та же, что и для загрузки 32-битных целочисленных чисел
 из пула констант.}
-\EN{\TT{freturn} stands for ``return float''.}
-\RU{\TT{freturn} означает ``return float''.}
+\EN{\TT{freturn} stands for \q{return float}.}
+\RU{\TT{freturn} означает \q{return float}.}
 
 \EN{Now what about function returning nothing?}
-\RU{А что насчет тех случаев, когда ф-ция ничего не возвращает?}
+\RU{А что насчет тех случаев, когда функция ничего не возвращает?}
 
 \begin{lstlisting}
 public class ret
@@ -399,7 +398,7 @@ public class ret
 actual value.}
 \RU{Это означает, что инструкция \TT{return} используется для возврата управления 
 без возврата какого-либо значения.}
-\EN{Knowing all this, it's very easy to deduct function (or method) returning type 
+\EN{Knowing all this, it's very easy to deduce function (or method) returning type 
 from the last instruction.}
 \RU{Зная все это, по последней инструкции очень легко определить тип возвращаемого 
-значения ф-ции (или метода).}
+значения функции (или метода).}

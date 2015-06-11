@@ -1,7 +1,7 @@
 \chapter{\RU{Пример вычисления адреса сети}\EN{Network address calculation example}}
 
 \EN{As we know, a TCP/IP address (IPv4) consists of four numbers in the $0 \ldots 255$ range, i.e., four bytes.}
-\RU{Как мы знаем, TCP/IP-адрес (IPv4) состоит из четырех чисел в пределах $0 \ldots 255$, т.е., 4 байта.}
+\RU{Как мы знаем, TCP/IP-адрес (IPv4) состоит из четырех чисел в пределах $0 \ldots 255$, т.е. 4 байта.}
 \EN{Four bytes can be fit in a 32-bit variable easily, so an IPv4 host address, network mask or network address
 can all be 32-bit integers.}
 \RU{4 байта легко помещаются в 32-битную переменную, так что адрес хоста в IPv4, сетевая маска или адрес сети
@@ -10,7 +10,7 @@ can all be 32-bit integers.}
 \EN{From the user's point of view, the network mask is defined as four numbers and is formatted like 255.255.255.0 or so,
 but network engineers (sysadmins) use a more compact notation (\ac{CIDR}), like /8, /16 or similar.}
 \RU{С точки зрения пользователя, маска сети определяется четырьмя числами в формате вроде 255.255.255.0,
-но сетевые инженеры (сисадмины) используют более компактную нотацию (\ac{CIDR}), вроде  /8, /16, и т.д.}
+но сетевые инженеры (сисадмины) используют более компактную нотацию (\ac{CIDR}), вроде  /8, /16, \etc{}.}
 \EN{This notation just defines the number of bits the mask has, starting at the \ac{MSB}.}
 \RU{Эта нотация просто определяет количество бит в сетевой маске, начиная с \ac{MSB}.}
 
@@ -66,13 +66,13 @@ but network engineers (sysadmins) use a more compact notation (\ac{CIDR}), like 
 
 \RU{Функция }\TT{calc\_network\_address()} \RU{самая простая}\EN{function is simplest one}: 
 \EN{it just ANDs the host address with the network mask, resulting in the network address.}
-\RU{она просто умножает (логически, используя \ANDIns) адрес хоста на сетевую маску, в итоге давая адрес
+\RU{она просто умножает (логически, используя \AND) адрес хоста на сетевую маску, в итоге давая адрес
 сети.}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,numbers=left]{\CURPATH/calc_network_address_MSVC_2012_Ox.asm}
 
-\EN{At line 22 we see the most important \ANDIns --- here the network address is calculated.}
-\RU{На строке 22 мы видим самую важную инструкцию \ANDIns --- так вычисляется адрес сети.}
+\EN{At line 22 we see the most important \AND\EMDASH{}here the network address is calculated.}
+\RU{На строке 22 мы видим самую важную инструкцию \AND\EMDASH{}так вычисляется адрес сети.}
 
 \section{form\_IP()}
 
@@ -146,10 +146,10 @@ and then the return value is shifted left by one byte at each step.}
 \\
 \RU{Вот и всё}\EN{That's it}! \EN{Unfortunately, there are probably no other ways to do it.}
 \RU{К сожалению, наверное, нет способа делать это иначе.}
-\EN{I've never heard of a \ac{CPU}s or \ac{ISA}s which has instruction for composing a value from
-bits or bytes.}
-\RU{Я никогда не слышал о \ac{CPU} или \ac{ISA}, где есть некая инструкция для сборки значения из бит или байт.}
-\EN{It's all usually done by bit shifting and ORing.}
+\EN{There are no popular \ac{CPU}s or \ac{ISA}s which has instruction for composing a value from
+bits or bytes.}%
+\RU{Не существует более-менее популярных \ac{CPU} или \ac{ISA}, где имеется инструкция для сборки значения из бит или байт.}
+\EN{It's all usually done by bit shifting and ORing.}%
 \RU{Обычно всё это делает сдвигами бит и логическим сложением (OR).}
 
 \section{print\_as\_IP()}
@@ -173,21 +173,21 @@ bits from zeroth to seventh (lowest byte), and that's it:}
 
 \TT{form\_netmask()} \EN{makes a network mask value from \ac{CIDR} notation}\RU{делает сетевую маску из
 \ac{CIDR}-нотации}.
-\EN{Of course, it would be much effective to use here some kind of a precalculated table, but I wrote it in this
+\EN{Of course, it would be much effective to use here some kind of a precalculated table, but we consider it in this
 way intentionally, to demonstrate bit shifts.}
-\RU{Конечно, было бы куда эффективнее использовать здесь какую-то уже готовую таблицу, но я написал
+\RU{Конечно, было бы куда эффективнее использовать здесь какую-то уже готовую таблицу, но мы рассматриваем
 это именно так, сознательно, для демонстрации битовых сдвигов.}
-\RU{Я также сделал отдельную ф-цию}\EN{I also wrote a separate function} \TT{set\_bit()}. 
+\RU{Мы также сделаем отдельную функцию}\EN{We will also write a separate function} \TT{set\_bit()}. 
 \EN{It's a not very good idea to create a function
 for such primitive operation, but it would be easy to understand how it all works.}
-\RU{Не очень хорошая идея выделять отдельную ф-цию для такой примитивной операции, но так будет проще понять,
+\RU{Не очень хорошая идея выделять отдельную функцию для такой примитивной операции, но так будет проще понять,
 как это всё работает.}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0]{\CURPATH/form_netmask_MSVC_2012_Ox.asm}
 
 \TT{set\_bit()} \RU{примитивна: просто сдвигает единицу на нужное количество бит, затем складывает (логически) с
-входным значением ``input''}\EN{is primitive: it just shift left 1 to number of bits we need and then 
-ORs it with the ``input'' value}.
+входным значением \q{input}}\EN{is primitive: it just shift left 1 to number of bits we need and then 
+ORs it with the \q{input} value}.
 \TT{form\_netmask()} \EN{has a loop: it will set as many bits (starting from the \ac{MSB}) as 
 passed in the \TT{netmask\_bits} argument}\RU{имеет цикл: он выставит столько бит (начиная с \ac{MSB}), 
 сколько передано в аргументе \TT{netmask\_bits}.}
@@ -195,7 +195,7 @@ passed in the \TT{netmask\_bits} argument}\RU{имеет цикл: он выст
 \section{\RU{Итог}\EN{Summary}}
 
 \RU{Вот и всё}\EN{That's it}!
-\RU{Я запускаю и вижу}\EN{I run it and get}:
+\RU{Мы запускаем и видим}\EN{We run it and getting}:
 
 \begin{lstlisting}
 netmask=255.255.255.0

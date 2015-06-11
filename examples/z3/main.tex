@@ -9,10 +9,10 @@ very weak and can be broken easily---for cryptographers, of course}.
 \RU{Но представим на время что мы не в числе этих профессионалов}
 \EN{But let's pretend we are not among these crypto-professionals}.
 
-\RU{Я нашел эту необратимую хэш-ф-цию (читайте больше о них: \myref{hash_func}), 
+\RU{Вот необратимая хэш-функцию (читайте больше о них: \myref{hash_func}), 
 которая конвертирует одно 64-битное значение в другое,
 и нам нужно попытаться развернуть её работу назад.}
-\EN{I once found this one-way hash function (read more about them: \myref{hash_func}),
+\EN{Here is one-way hash function (read more about them: \myref{hash_func}),
 that converted a 64-bit value to another and we need to try
 to reverse its flow back.}
 
@@ -82,7 +82,7 @@ Out[1]:=60.
 \RU{Так как мы не криптоаналитики, мы не можем найти простой способ найти входное значение
 для определенного выходного значения}\EN{Since we are not cryptoanalysts we can't find an easy way to 
 generate the input value for some specific output value}.
-\RU{Коэффициенты инструкций сдвигов выглядят очень пугающе --- это гарантия что ф-ция не биективная,
+\RU{Коэффициенты инструкций сдвигов выглядят очень пугающе --- это гарантия что функция не биективная,
 она имеет коллизии, или, говоря проще, возможны несколько значений на входе для одного на выходе}
 \EN{The rotate instruction's coefficients look frightening---it's a warranty that the function is not bijective,
 it has collisions, or, speaking more simply, many inputs may be possible for one output}.
@@ -118,12 +118,12 @@ Z3\footnote{\url{http://go.yurichev.com/17314}}.
 \RU{Самый последний констрайнт в строке 17 это наиболее важный: мы будем искать входное значение для
 нашего алгоритма, при котором он выдаст на выходе}
 \EN{The last constraint at 17 is the most important one: 
-we are going to try to find an input value for which our algorithm will produce} $10816636949158156260$.
+we are going to try to find an input value for which our algorithm will produce} 10816636949158156260.
 
 \RU{Собственно, SMT-солвер ищет (любые) значения, удовлетворяющие всем констрайнтам}
 \EN{Essentially, the SMT-solver searches for (any) values that satisfies all constraints}.
 
-RotateRight, RotateLeft, URem\EMDASH{}\RU{это ф-ции из Питоновского Z3 \ac{API} для описания выражений, 
+RotateRight, RotateLeft, URem\EMDASH{}\RU{это функции из Питоновского Z3 \ac{API} для описания выражений, 
 они не связаны с ЯП Python}
 \EN{are functions from the Z3 Python \ac{API}, not related to Python \ac{PL}}.
 
@@ -143,22 +143,22 @@ sat
 outp=0x961C69FF0AEFD7E4
 \end{lstlisting}
 
-``sat'' \RU{означает}\EN{mean} ``satisfiable'', \RU{т.е., солвер нашел по крайней мере одно решение}
+\q{sat} \RU{означает}\EN{mean} \q{satisfiable}, \RU{т.е. солвер нашел по крайней мере одно решение}
 \EN{i.e., the solver was able to found at least one solution}.
 \RU{Решение выведено внутри квадратных скобок}\EN{The solution is printed in the square brackets}.
 \RU{Две последние строки это пара входного/выходного значения в шестнадцатеричном виде}
 \EN{The last two lines are the input/output pair in hexadecimal form}.
-\RU{Да, действительно, если мы запустим нашу ф-цию с}\EN{Yes, indeed, if we run our function with} 
+\RU{Да, действительно, если мы запустим нашу функцию с}\EN{Yes, indeed, if we run our function with} 
 \TT{0x12EE577B63E80B73} \RU{на входе, алгоритм выдаст искомое значение}
 \EN{as input, the algorithm will produce the value we were looking for}.
 
-\RU{Но, как мы заметили раннее, ф-ция не биективная, так что тут могут быть и другие корректные входные значения}
+\RU{Но, как мы заметили ранее, функция не биективная, так что тут могут быть и другие корректные входные значения}
 \EN{But, as we noticed before, the function we work with is not bijective, so there may be other correct
 input values}.
 \RU{Z3 SMT-солвер не выдает результаты больше одного, но мы можем хакнуть наш пример немного, 
 добавив констрайнт в строке 19, означая, что мы ищем какие угодно другие результаты кроме этого}
 \EN{The Z3 SMT solver is not capable of producing more than one result, but let's hack our example slightly, 
-by adding line 19, which implies ``look for any other results than this''}:
+by adding line 19, which implies \q{look for any other results than this}}:
 
 \lstinputlisting[numbers=left]{examples/z3/2.py}
 
@@ -210,9 +210,9 @@ results total= 16
 \RU{Так что имеется 16 верных входных значений для}\EN{So there are 16 correct input values for} 
 \TT{0x92EE577B63E80B73} \RU{на выходе}\EN{as a result}.
 
-\RU{Второй это}\EN{The second is} $1234567890$\EMDASH{}\RU{действительно, я это и использовал изначально,
-когда готовил этот пример}
-\EN{it is indeed the value I used originally while preparing this example}.
+\RU{Второй это}\EN{The second is} 1234567890\EMDASH{}\RU{действительно, это значение было использовано изначально,
+при подготовке этого примера}%
+\EN{it is indeed the value which was used originally while preparing this example}.
 
 \RU{Попробуем изучить алгоритм немного больше}\EN{Let's also try to research our algorithm a bit more}.
 \RU{В порыве садистских желаний, попробуем найти, есть ли здесь какая-нибудь возможная пара входов/выходов,
@@ -267,9 +267,9 @@ outp=0x5D177215F961234
 
 \RU{Можно ли попытаться сделать что-то подобное с настоящими криптоалгоритмами этими методами}
 \EN{Is it possible to tackle real cryptography by these methods}? 
-\RU{Настоящие алгоритмы, такие как}\EN{Real algorithms like} AES, RSA, \RU{и т.д., так же могут быть представлены
+\RU{Настоящие алгоритмы, такие как}\EN{Real algorithms like} AES, RSA, \RU{\etc{}, так же могут быть представлены
 в виде огромных систем уравнений, но они большие настолько, что с ними нельзя работать на компьютерах,
-ни сейчас, ни в обозримом будущем}\EN{etc, can also be represented as huge system of equations, 
+ни сейчас, ни в обозримом будущем}\EN{\etc{}, can also be represented as huge system of equations, 
 but these are so huge that they are impossible to work with on computers, now or in the near future}.
 \RU{Разумеется, криптографы об этом всем прекрасно знают}\EN{Of course, cryptographers are aware of this}.
 
@@ -278,4 +278,4 @@ it's a very good idea to try a SMT/SAT solver (like Z3).}
 \RU{Подводя итоги, нужно сказать, что работая с любительской криптографией, 
 попробовать SMT/SAT-солвер (как Z3) это всегда хорошая идея.}
 
-\RU{Еще одна статья которую я написал о Z3:}\EN{Another article I wrote about Z3 is} \cite{Rockey}.
+\RU{Еще одна статья о Z3:}\EN{Another article about Z3 is} \cite{Rockey}.

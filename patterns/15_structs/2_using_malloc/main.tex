@@ -26,19 +26,19 @@ and that is why it is not saved here and continues to be used after the \TT{GetS
 \RU{
 Новая инструкция ~--- \MOVZX (\IT{Move with Zero eXtend}). 
 Она нужна почти там же где и \MOVSX, 
-только всегда очищает остальные биты в $0$. Дело в том, что \printf требует 32-битный тип \Tint, 
+только всегда очищает остальные биты в 0. Дело в том, что \printf требует 32-битный тип \Tint, 
 а в структуре лежит WORD ~--- это 16-битный беззнаковый тип. Поэтому копируя значение из WORD в \Tint, 
 нужно очистить биты от 16 до 31, иначе там будет просто случайный мусор, оставшийся от предыдущих действий 
 с регистрами.}
 \EN{New instruction~---\MOVZX (\IT{Move with Zero eXtend}).
-It may be used in most cases as \MOVSX, but it sets the remaining bits to $0$.
+It may be used in most cases as \MOVSX, but it sets the remaining bits to 0.
 That's because \printf requires a 32-bit \Tint, but we got a WORD in the structure~---that
 is 16-bit unsigned type.
 That's why by copying the value from a WORD into \Tint{}, bits from 16 to 31 must be cleared, 
 because a random noise may be there, which is left from the previous operations on the register(s).}
 
-\RU{В этом примере я тоже могу представить структуру как массив 8-и WORD-ов:}
-\EN{In this example, I again can represent the structure as an array of 8 WORDs:}
+\RU{В этом примере можно также представить структуру как массив 8-и WORD-ов:}
+\EN{In this example, it's possible to represent the structure as an array of 8 WORDs:}
 
 \lstinputlisting{patterns/15_structs/2_using_malloc/systemtime_malloc2.c}
 
@@ -48,7 +48,7 @@ because a random noise may be there, which is left from the previous operations 
 
 \RU{И снова мы получаем идентичный код, неотличимый от предыдущего.}
 \EN{Again, we got the code cannot be distinguished from the previous one.}
-\RU{Но и снова я должен отметить, что в реальности так лучше не делать, 
+\RU{Но и снова нужно отметить, что в реальности так лучше не делать, 
 если только вы не знаете точно, что вы делаете.}
-\EN{And again I have to note, you haven't to do this in practice, unless you really know what you are doing.}
+\EN{And again it should be noted, you haven't to do this in practice, unless you really know what you are doing.}
 

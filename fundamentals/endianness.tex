@@ -53,11 +53,11 @@
 
 \section{\Example}
 
-\RU{У меня есть big-endian Linux для MIPS заинсталированный в QEMU}
-\EN{I have big-endian MIPS Linux installed and ready in QEMU}
-\footnote{\RU{Я скачал его здесь}\EN{I've uploaded it here}: \url{http://go.yurichev.com/17008}}.
+\RU{Возьмем big-endian Linux для MIPS заинсталированный в QEMU}%
+\EN{Let's take big-endian MIPS Linux installed and ready in QEMU}
+\footnote{\RU{Доступен для скачивания здесь}\EN{Available for download here}: \url{http://go.yurichev.com/17008}}.
 
-\RU{И вот я сделал простой пример}\EN{And I have compiled this simple example}:
+\RU{И скомпилируем этот простой пример}\EN{And let's compile this simple example}:
 
 \begin{lstlisting}
 #include <stdio.h>
@@ -76,7 +76,7 @@ int main()
 };
 \end{lstlisting}
 
-\RU{И запустил его}\EN{And after running it I get}:
+\RU{И запустим его}\EN{And after running it we get}:
 
 \begin{lstlisting}
 root@debian-mips:~# ./a.out 
@@ -92,7 +92,7 @@ but here it is the last one, because the highest byte goes first.}
 
 \RU{Вот почему имеются разные дистрибутивы Linux для MIPS}
 \EN{That's why there are separate Linux distributions for MIPS} 
-(``mips'' (big-endian) \AndENRU ``mipsel'' (little-endian)).
+(\q{mips} (big-endian) \AndENRU \q{mipsel} (little-endian)).
 \RU{Программа скомпилированная для одного соглашения об endiannes, не сможет работать в OS использующей
 другое соглашение.}
 \EN{It is impossible for a binary compiled for one endianness to work on an OS with different endianness.}\\
@@ -103,7 +103,7 @@ but here it is the last one, because the highest byte goes first.}
 \section{Bi-endian\RU{ (переключаемый порядок)}}
 
 \RU{CPU поддерживающие оба порядка, и его можно переключать, включают в себя}
-\EN{CPUs that may switch between endianness are} ARM, PowerPC, SPARC, MIPS, \ac{IA64}, \RU{и т.д.}\EN{etc.}
+\EN{CPUs that may switch between endianness are} ARM, PowerPC, SPARC, MIPS, \ac{IA64}, \etc{}.
 
 \section{\RU{Конвертирование}\EN{Converting data}}
 
@@ -117,14 +117,14 @@ but here it is the last one, because the highest byte goes first.}
 \EN{TCP/IP network data packets use the big-endian conventions, so that is why a program working on a little-endian architecture
 has to convert the values.} 
 
-\RU{Обычно, используются ф-ции}\EN{The} \TT{htonl()} \AndENRU \TT{htons()}\EN{ functions are usually used}.
+\RU{Обычно, используются функции}\EN{The} \TT{htonl()} \AndENRU \TT{htons()}\EN{ functions are usually used}.
 
 \RU{Порядок байт big-endian в среде TCP/IP также называется}
-\EN{In TCP/IP, big-endian is also called} ``network byte order'',
-\RU{а порядок байт на компьютере}\EN{while byte order on the computer}\EMDASH{}``host byte order''.
-\RU{На архитектуре Intel x86, и других little-endian архитектурах, ``host byte order'' это little-endian, 
+\EN{In TCP/IP, big-endian is also called} \q{network byte order},
+\RU{а порядок байт на компьютере}\EN{while byte order on the computer}\EMDASH{}\q{host byte order}.
+\RU{На архитектуре Intel x86, и других little-endian архитектурах, \q{host byte order} это little-endian, 
 а вот на IBM POWER это может быть big-endian, так что на последней, 
 \TT{htonl()} и \TT{htons()} не меняют порядок байт.}
-\EN{``host byte order'' is little-endian on Intel x86 and other little-endian architectures,
+\EN{\q{host byte order} is little-endian on Intel x86 and other little-endian architectures,
 but it is big-endian on IBM POWER, so \TT{htonl()} and \TT{htons()} are not shuffle any bytes
 on latter.}

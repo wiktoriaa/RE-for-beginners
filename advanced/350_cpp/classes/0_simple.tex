@@ -31,9 +31,9 @@ For \IT{c2} another constructor \TT{??0c@@QAE@HH@Z} is called and two numbers ar
 \label{thiscall}
 \index{x86!\Registers!ECX}
 \RU{А указатель на объект (\ITthis в терминологии \Cpp) передается в регистре \ECX. 
-Это называется thiscall~(\myref{thiscall}) ~--- метод передачи указателя на объект.}
+Это называется thiscall~(\myref{thiscall})\EMDASH{}метод передачи указателя на объект.}
 \EN{A pointer to the object (\ITthis in \Cpp terminology) is passed in the \ECX register.
-This is called thiscall~(\myref{thiscall})~---the method for passing a pointer to the object.}
+This is called thiscall~(\myref{thiscall})\EMDASH{}the method for passing a pointer to the object.}
 
 \RU{В данном случае, MSVC делает это через \ECX. Необходимо помнить, что это не стандартизированный метод, 
 и другие компиляторы могут делать это иначе, например, через первый аргумент функции (как GCC).}
@@ -48,10 +48,10 @@ differently, e.g., via the first function argument (like GCC).}
 That's \gls{name mangling}.}
 
 \RU{В \Cpp, у класса, может иметься несколько методов с одинаковыми именами, 
-но аргументами разных типов ~--- это полиморфизм. 
+но аргументами разных типов\EMDASH{}это полиморфизм. 
 Ну и конечно, у разных классов могут быть методы с одинаковыми именами.}
 \EN{A \Cpp class may contain several methods sharing the same name but having different 
-arguments~---that is polymorphism.
+arguments\EMDASH{}that is polymorphism.
 And of course, different classes may have their own methods with the same name.}
 
 \index{\RU{Компоновщик}\EN{Linker}}
@@ -71,7 +71,7 @@ the DLL exports as well) knows anything about \Cpp or \ac{OOP}.}
 
 \lstinputlisting[caption=MSVC]{\CURPATH/classes/simple_2_msvc.asm}
 
-\RU{Конструкторы ~--- это просто функции, они используют указатель на структуру в \ECX, 
+\RU{Конструкторы\EMDASH{}это просто функции, они используют указатель на структуру в \ECX, 
 копируют его себе в локальную переменную, хотя это и не обязательно.}
 \EN{The constructors are just functions, they use a pointer to the structure in \ECX,
 copying the pointer into their own local variable, however, it is not necessary.}
@@ -106,7 +106,7 @@ At the same time, the constructor has \TT{ret 8} instead of \RET at the end.}
 
 \index{thiscall}
 \RU{Это потому что здесь используется thiscall~(\myref{thiscall}), который, вместе с stdcall~(\myref{sec:stdcall})
-(все это ~--- методы передачи аргументов через стек), предлагает вызываемой функции корректировать стек. 
+(все это\EMDASH{}методы передачи аргументов через стек), предлагает вызываемой функции корректировать стек. 
 Инструкция \TT{ret X} сначала прибавляет \TT{X} к \ESP, затем передает управление вызывающей функции.}
 \EN{This is all because the thiscall~(\myref{thiscall}) calling convention is used here,
 which together with the stdcall~(\myref{sec:stdcall}) method offers the \gls{callee} to correct the stack
@@ -116,21 +116,20 @@ The \TT{ret x} instruction adds \TT{X} to the value in \ESP, then passes the con
 \RU{См. также в соответствующем разделе о способах передачи аргументов через стек}
 \EN{See also the section about calling conventions}~(\myref{sec:callingconventions}).
 
-\RU{Еще, кстати, нужно отметить, что именно компилятор решает, когда вызывать конструктор и деструктор ~--- 
+\RU{Еще, кстати, нужно отметить, что именно компилятор решает, когда вызывать конструктор и деструктор\EMDASH{} 
 но это и так известно из основ языка \Cpp.}
 \EN{It also has to be noted that the compiler decides when to call the constructor and 
-destructor~---but we already know that from the \Cpp language basics.}
+destructor\EMDASH{}but we already know that from the \Cpp language basics.}
 
 \subsubsection{MSVC\EMDASH{}x86-64}
 \label{simple_CPP_MSVC_x64}
 
-\RU{Как мы уже знаем, в x86-64 первые 4 аргумента ф-ции передаются через регистры \RCX, \RDX, \Reg{8}, 
+\RU{Как мы уже знаем, в x86-64 первые 4 аргумента функции передаются через регистры \RCX, \RDX, \Reg{8}, 
 \Reg{9}, а остальные\EMDASH{}через стек}
 \EN{As we already know, the first 4 function arguments in x86-64 are passed in \RCX, \RDX, \Reg{8} and 
 \Reg{9} registers, all the rest\EMDASH{}via the stack}.
-\RU{Тем не менее, указатель на объект \ITthis передается через \RCX, 
-а первый аргумент метода\EMDASH{}в \RDX, и т.д.}
-\EN{Nevertheless, the \ITthis pointer to the object is passed in \RCX, the first argument of the method in \RDX, etc.}
+\RU{Тем не менее, указатель на объект \ITthis передается через \RCX, а первый аргумент метода\EMDASH{}в \RDX,}
+\EN{Nevertheless, the \ITthis pointer to the object is passed in \RCX, the first argument of the method in \RDX,}\etc{}.
 \RU{Здесь это видно во внутренностях метода}\EN{We can see this in the} 
 \TT{c(int a, int b)}\EN{ method internals}:
 
@@ -143,7 +142,7 @@ destructor~---but we already know that from the \Cpp language basics.}
 \footnote{Apparently, for easier porting of 32-bit \CCpp code to x64}, 
 so that is why 32-bit register parts are used here}.
 
-\RU{В методе \TT{dump()} вместо \RET мы видим \TT{JMP printf}, этот \IT{хак} мы рассматривали раннее}
+\RU{В методе \TT{dump()} вместо \RET мы видим \TT{JMP printf}, этот \IT{хак} мы рассматривали ранее}
 \EN{We also see \TT{JMP printf} instead of \RET in the \TT{dump()} method, that \IT{hack} we already saw
 earlier}: \myref{JMP_instead_of_RET}.
 
@@ -156,13 +155,13 @@ earlier}: \myref{JMP_instead_of_RET}.
 
 \RU{Здесь мы видим, что применяется иной \IT{name mangling} характерный для стандартов GNU
 \footnote{Еще о name mangling разных компиляторов: \cite{AgnerFogCC}.}
-Во-вторых, указатель на экземпляр передается как первый аргумент функции ~--- 
+Во-вторых, указатель на экземпляр передается как первый аргумент функции\EMDASH{} 
 конечно же, скрыто от программиста.}
 \EN{Here we see another \IT{name mangling} style, specific to GNU
 \footnote{There is a good document about the various name mangling conventions in different compilers:
 \cite{AgnerFogCC}.}
 It can also be noted that the pointer to the object is passed as the first function 
-argument~---invisible to programmer, of course.}
+argument\EMDASH{}invisible to programmer, of course.}
 
 \RU{Это первый конструктор:}\EN{First constructor:}
 

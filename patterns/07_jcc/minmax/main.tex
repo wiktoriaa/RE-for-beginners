@@ -7,16 +7,16 @@
 \lstinputlisting[caption=\NonOptimizing MSVC 2013]{patterns/07_jcc/minmax/minmax_MSVC_2013.asm.\LANG}
 
 \index{x86!\Instructions!Jcc}
-\RU{Эти две ф-ции отличаются друг от друга только инструкцией условного перехода:
-JGE (``Jump if Greater or Equal'' --- переход если больше или равно) используется в первой
-и JLE (``Jump if Less or Equal'' --- переход если меньше или равно) во второй.}
+\RU{Эти две функции отличаются друг от друга только инструкцией условного перехода:
+JGE (\q{Jump if Greater or Equal}~--- переход если больше или равно) используется в первой
+и JLE (\q{Jump if Less or Equal}~--- переход если меньше или равно) во второй.}
 \EN{These two functions differ only in the conditional jump instruction: 
-JGE (``Jump if Greater or Equal'') is used in the first one
-and JLE (``Jump if Less or Equal'') in the second.}
+JGE (\q{Jump if Greater or Equal}) is used in the first one
+and JLE (\q{Jump if Less or Equal}) in the second.}
 
 \index{\CompilerAnomaly}
 \label{MSVC_double_JMP_anomaly}
-\RU{Здесь есть ненужная инструкция \JMP в каждой ф-ции, которую, MSVC, наверное, оставила по ошибке.}
+\RU{Здесь есть ненужная инструкция \JMP в каждой функции, которую MSVC, наверное, оставил по ошибке.}
 \EN{There is one unneeded \JMP instruction in each function, which MSVC probably left by mistake.}
 
 \ifx\LITE\undefined
@@ -28,7 +28,7 @@ and JLE (``Jump if Less or Equal'') in the second.}
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/07_jcc/minmax/minmax_Keil_Thumb_O3.s.\LANG}
 
 \index{ARM!\Instructions!Bcc}
-\RU{Ф-ции отличаются только инструкцией перехода: BGT и BLT.}
+\RU{Функции отличаются только инструкцией перехода: BGT и BLT.}
 \EN{The functions differ in the branching instruction: BGT and BLT.}
 
 \RU{А в режиме ARM можно использовать условные суффиксы, так что код более плотный.}
@@ -57,7 +57,7 @@ and JLE (``Jump if Less or Equal'') in the second.}
 
 \subsubsection{\RU{Без переходов}\EN{Branchless}}
 
-\RU{Нет нужды загружать аргументы ф-ции из стека, они уже в регистрах:}
+\RU{Нет нужды загружать аргументы функции из стека, они уже в регистрах:}
 \EN{No need to load function arguments from the stack, as they are already in the registers:}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/07_jcc/minmax/minmax64_GCC_49_x64_O3.s.\LANG}
@@ -68,7 +68,7 @@ MSVC 2013 \RU{делает то же самое}\EN{does almost the same}.
 \RU{В ARM64 есть инструкция CSEL, которая работает точно также, как и MOVcc в ARM и CMOVcc в x86, но название
 другое:}
 \EN{ARM64 has the CSEL instruction, which works just as MOVcc in ARM or CMOVcc in x86, just the name is different:}
-``Conditional SELect''.
+\q{Conditional SELect}.
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O3.s.\LANG}
 

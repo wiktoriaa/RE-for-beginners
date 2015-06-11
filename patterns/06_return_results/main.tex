@@ -1,13 +1,13 @@
-\chapter{\RU{Еще о возвращаемых результатах}\EN{More about results returning}}
+\chapter{\RU{Ещё о возвращаемых результатах}\EN{More about results returning}}
 
 \index{x86!\Registers!EAX}
-\RU{Результат выполнения функции в x86 обычно возвращается}
-\EN{In x86, the result of function execution is usually returned}
+\RU{Результат выполнения функции в x86 обычно возвращается}%
+\EN{In x86, the result of function execution is usually returned}%
 \footnote{\Seealso: 
 MSDN: Return Values (C++): \href{http://go.yurichev.com/17258}{MSDN}}
 \RU{через регистр \EAX, 
 а если результат имеет тип байт или символ (\Tchar), 
-то в самой младшей части \EAX ~--- \AL. Если функция возвращает число с плавающей запятой, 
+то в самой младшей части \EAX~--- \AL. Если функция возвращает число с плавающей запятой, 
 то будет использован регистр FPU \ST{0}.
 \ifdefined\IncludeARM
 \index{ARM!\Registers!R0}
@@ -23,10 +23,10 @@ In ARM, the result is usually returned in the \Reg{0} register.
 \fi
 }
 
-\section{\RU{Попытка использовать результат ф-ции возвращающей \Tvoid}
+\section{\RU{Попытка использовать результат функции возвращающей \Tvoid}
 \EN{Attempt to use the result of a function returning \Tvoid}}
 
-\RU{Кстати, что будет если возвращаемое значение в ф-ции \main объявлять не как \Tint а как \Tvoid?}
+\RU{Кстати, что будет, если возвращаемое значение в функции \main объявлять не как \Tint, а как \Tvoid?}
 \EN{So, what if the \main function return value was declared of type \Tvoid and not \Tint?}
 
 \RU{Т.н. startup-код вызывает \main примерно так:}
@@ -41,7 +41,7 @@ push eax
 call exit
 \end{lstlisting}
 
-\RU{Т.е., иными словами:}\EN{In other words:}
+\RU{Иными словами:}\EN{In other words:}
 
 \begin{lstlisting}
 exit(main(argc,argv,envp));
@@ -54,14 +54,14 @@ exit(main(argc,argv,envp));
 (using the \IT{return} statement),
 then something random, that was stored in the \EAX register at the end of \main becomes 
 the sole argument of the exit() function.}
-\RU{Там, скорее всего, будет какие-то случайное число, оставшееся от работы вашей ф-ции.
-Так что, код завершения программы будет псевдослучайным.}
+\RU{Там, скорее всего, будет какие-то случайное число, оставшееся от работы вашей функции.
+Так что код завершения программы будет псевдослучайным.}
 \EN{Most likely, there will be a random value, left from your function execution,
 so the exit code of program is pseudorandom.} \\
 
-\RU{Я могу это проиллюстрировать}\EN{I can illustrate this fact}. 
-\RU{Заметьте что у ф-ции}\EN{Please note that here the} \main \RU{тип возвращаемого значения именно}\EN{function 
-has a} \Tvoid\EN{ return type}:
+\RU{Мы можем это проиллюстрировать}\EN{We can illustrate this fact}. 
+\RU{Заметьте, что у функции}\EN{Please note that here the} \main
+\RU{тип возвращаемого значения именно}\EN{function has a} \Tvoid\EN{ return type}:
 
 \begin{lstlisting}
 #include <stdio.h>
@@ -81,9 +81,9 @@ GCC 4.8.1 \RU{заменила}\EN{replaced} \printf \RU{на}\EN{with} \puts
 \fi
 , \RU{но это нормально, потому что}\EN{but that's OK, since} \puts \RU{возвращает количество
 выведенных символов, так же как и}\EN{returns the number of characters printed out, just like} \printf.
-\RU{Обратите внимание на то что}\EN{Please notice that} \EAX \RU{не обнуляется перед выходом их}\EN{is not 
+\RU{Обратите внимание на то, что}\EN{Please notice that} \EAX \RU{не обнуляется перед выходом их}\EN{is not 
 zeroed before} \main\EN{'s end}.
-\RU{Это значит, \EAX перед выходом из \main содержит то, что \puts оставляет там.}
+\RU{Это значит что \EAX перед выходом из \main содержит то, что \puts оставляет там.}
 \EN{This implies that the value of \EAX at the end of \main contains what \puts has left there.}
 
 \begin{lstlisting}[caption=GCC 4.8.1]
@@ -101,7 +101,7 @@ main:
 \end{lstlisting}
 
 \index{bash}
-\RU{Напишем небольшой скрипт на bash, показывающий статус возврата (``exit status'' или ``exit code'')}
+\RU{Напишем небольшой скрипт на bash, показывающий статус возврата (\q{exit status} или \q{exit code})}
 \EN{Let' s write a bash script that shows the exit status}:
 
 \begin{lstlisting}[caption=tst.sh]
@@ -118,15 +118,15 @@ Hello, world!
 14
 \end{lstlisting}
 
-$14$ \RU{это как раз количество выведенных символов}\EN{is the number of characters printed}.
+14 \RU{это как раз количество выведенных символов}\EN{is the number of characters printed}.
 
-\section{\RU{Что если не использовать результат ф-ции?}\EN{What if we do not use the function result?}}
+\section{\RU{Что если не использовать результат функции?}\EN{What if we do not use the function result?}}
 
-\RU{\printf возвращает количество успешно выведенных символов, но результат работы этой ф-ции 
+\RU{\printf возвращает количество успешно выведенных символов, но результат работы этой функции 
 редко используется на практике.}
 \EN{\printf returns the count of characters successfully output, but the result of this function 
 is rarely used in practice.}
-\RU{Можно даже явно вызывать ф-ции, чей смысл именно в возвращаемых значениях, но явно не использовать их:}
+\RU{Можно даже явно вызывать функции, чей смысл именно в возвращаемых значениях, но явно не использовать их:}
 \EN{It is also possible to call a function whose essence is in returning a value, and not use it:}
 
 \begin{lstlisting}
@@ -144,26 +144,26 @@ int f()
 \EN{The result of the rand() function is left in \EAX, in all four cases.}
 \RU{Результат работы rand() остается в \EAX во всех четырех случаях.}
 \EN{But in the first 3 cases, the value in \EAX is just thrown away.}
-\RU{Но в первых трех случаях, значение лежащее в \EAX, просто выбрасывается.}
+\RU{Но в первых трех случаях значение, лежащее в \EAX, просто выбрасывается.}
 
 \ifx\LITE\undefined
 \section{\RU{Возврат структуры}\EN{Returning a structure}}
 
 \index{\CLanguageElements!return}
-\RU{Вернемся к тому факту, что возвращаемое значение остается в регистре \EAX}
-\EN{Let's go back to the fact that the return value is left in the \EAX register}.
+\RU{Вернемся к тому факту, что возвращаемое значение остается в регистре \EAX.}
+\EN{Let's go back to the fact that the return value is left in the \EAX register.}
 \RU{Вот почему старые компиляторы Си не способны создавать функции, возвращающие нечто большее, нежели 
 помещается 
-в один регистр (обычно, тип \Tint), а когда нужно, приходится возвращать через указатели, указываемые 
+в один регистр (обычно тип \Tint), а когда нужно, приходится возвращать через указатели, указываемые 
 в аргументах.}
 \EN{That is why old C compilers cannot create functions capable of returning something that does not fit in one 
 register (usually \Tint), but if one needs it, one have to return information via pointers passed 
 as function's arguments.}
-\RU{Так что, как правило, если ф-ция должна вернуть несколько значений, она возвращает только одно, 
-а остальные --- через указатели.}
+\RU{Так что как правило, если функция должна вернуть несколько значений, она возвращает только одно, 
+а остальные~--- через указатели.}
 \EN{So, usually, if a function needs to return several values, it returns only one, and 
 all the rest---via pointers.}
-\RU{Хотя, позже и стало возможным, вернуть, скажем, целую структуру, но этот метод до сих пор не 
+\RU{Хотя позже и стало возможным, вернуть, скажем, целую структуру, но этот метод до сих пор не 
 очень популярен. 
 Если функция должна вернуть структуру, вызывающая функция должна сама, скрыто и прозрачно для программиста, 
 выделить место и передать указатель на него в качестве первого аргумента. Это почти то же самое 
@@ -180,8 +180,8 @@ That is almost the same as to pass a pointer in the first argument manually, but
 
 \lstinputlisting{patterns/06_return_results/6_1.asm}
 
-\RU{Имя внутреннего макроса для передачи указателя на структуру здесь это \TT{\$T3853}.}
-\EN{The macro name for internal passing of pointer to a structure her is \TT{\$T3853}.}
+\RU{\TT{\$T3853} это имя внутреннего макроса для передачи указателя на структуру.}
+\EN{The macro name for internal passing of pointer to a structure here is \TT{\$T3853}.}
 
 \index{\CLanguageElements!C99}
 \RU{Этот пример можно даже переписать, используя расширения C99}\EN{This example can be rewritten using
@@ -191,7 +191,7 @@ the C99 language extensions}:
 
 \lstinputlisting[caption=GCC 4.8.1]{patterns/06_return_results/6_1_C99.asm}
 
-\RU{Как видно, ф-ция просто заполняет поля в структуре, выделенной вызывающей ф-цией. 
+\RU{Как видно, функция просто заполняет поля в структуре, выделенной вызывающей функцией. 
 Как если бы передавался просто указатель на структуру.
 Так что никаких проблем с эффективностью нет.}
 \EN{As we see, the function is just filling the structure's fields allocated by

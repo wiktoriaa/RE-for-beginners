@@ -1,9 +1,9 @@
-\chapter{\RU{Ф-ция \IT{abs()} без переходов}\EN{Branchless \IT{abs()} function}}
+\chapter{\RU{Функция \IT{abs()} без переходов}\EN{Branchless \IT{abs()} function}}
 \label{chap:branchless_abs}
 
-\RU{Снова вернемся к уже рассмотренному раннее примеру \myref{sec:abs} и спросим себя, возможно ли
+\RU{Снова вернемся к уже рассмотренному ранее примеру \myref{sec:abs} и спросим себя, возможно ли
 сделать версию этого кода под x86 без переходов?}
-\EN{Let's revisit an example I gave earlier \myref{sec:abs} and ask ourselves, is it possible
+\EN{Let's revisit an example we considered earlier \myref{sec:abs} and ask ourselves, is it possible
 to make a branchless version of the function in x86 code?}
 
 \lstinputlisting{abs.c}
@@ -32,11 +32,11 @@ all 32 bits are to be filled with 1, or with 0 if otherwise.}
 \RU{После исполнения \TT{SAR}, это значение у нас в \EDX.}
 \EN{After the execution of \TT{SAR}, we have this value in \EDX.}
 \index{x86!\Instructions!XOR}
-\RU{Затем, если значение \TT{0xFFFFFFFF} (т.е., знак отрицательный) входное значение инвертируется
+\RU{Затем, если значение \TT{0xFFFFFFFF} (т.е. знак отрицательный) входное значение инвертируется
 (потому что \TT{XOR REG, 0xFFFFFFFF} работает как операция инвертирования всех бит).}
 \EN{Then, if the value is \TT{0xFFFFFFFF} (i.e., the sign is negative), the input value is inverted 
 (because \TT{XOR REG, 0xFFFFFFFF} is effectively an inverse all bits operation).}
-\RU{Затем, снова, если значение \TT{0xFFFFFFFF} (т.е., знак отрицательный), 1 прибавляется к итоговому результату
+\RU{Затем, снова, если значение \TT{0xFFFFFFFF} (т.е. знак отрицательный), 1 прибавляется к итоговому результату
 (потому что вычитание $-1$ из значения это то же что и инкремент).}
 \EN{Then, again, if the value is \TT{0xFFFFFFFF} (i.e., the sign is negative), 1 is added to the final result (because
 subtracting $-1$ from some value resulting in incrementing it).}
@@ -51,17 +51,16 @@ subtracting $-1$ from some value resulting in incrementing it).}
 \EN{Otherwise (if the sign is positive) they do nothing at all, leaving the input value untouched.}
 
 \RU{Алгоритм разъяснен в}\EN{The algorithm is explained in} \cite[2-4]{Warren:2002:HD:515297}.
-\RU{Не уверен, как именно GCC сгенерировал его, соптимизировал сам или просто нашел подходящий шаблон среди
-известных?}
-\EN{I'm not sure, how GCC did it, deduced it by itself or found a suitable pattern among known ones?}
+\RU{Трудно сказать, как именно GCC сгенерировал его, соптимизировал сам или просто нашел подходящий шаблон среди известных?}%
+\EN{It's hard to say, how GCC did it, deduced it by itself or found a suitable pattern among known ones?}
 
 \section{\Optimizing GCC 4.9 ARM64}
 
 \RU{GCC 4.9 для ARM64 делает почти то же, только использует полные 64-битные регистры.}
 \EN{GCC 4.9 for ARM64 generates mostly the same, just decides to use the full 64-bit registers.}
-\RU{Здесь меньше инструкций, потому что входное значение может быть сдвинуто используя суффикс инструкции (``asr'')
+\RU{Здесь меньше инструкций, потому что входное значение может быть сдвинуто используя суффикс инструкции (\q{asr})
 вместо отдельной инструкции.}
-\EN{There are less instructions, because the input value can be shifted using a suffixed instruction (``asr'')
+\EN{There are less instructions, because the input value can be shifted using a suffixed instruction (\q{asr})
 instead of using a separate instruction.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 ARM64]{\CURPATH/abs_GCC49_ARM64_O3.s.\LANG}

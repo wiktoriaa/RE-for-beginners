@@ -9,8 +9,10 @@
 10=0xA, 100=0x64, 1000=0x3E8, 10000=0x2710.
 
 \RU{Иногда попадаются константы}\EN{The constants} \TT{0xAAAAAAAA} (10101010101010101010101010101010) \AndENRU \\
-\TT{0x55555555} (01010101010101010101010101010101) \RU{--- это чередующиеся биты}\EN{ are also popular---those
+\TT{0x55555555} (01010101010101010101010101010101) \RU{\EMDASH{}это чередующиеся биты}\EN{ are also popular\EMDASH{}those
 are composed of alternating bits}.
+\RU{Это помогает отличить некоторый сигнал от сигнала где все биты включены (1111 \dots) или выключены (0000 \dots).}
+\EN{That may help to distinguish some signal from the signal where all bits are turned on (1111 \dots) or off (0000 \dots).}
 \RU{Например, константа}\EN{For example, the} \TT{0x55AA} \RU{используется как минимум в бут-секторе}\EN{constant
 is used at least in the boot sector}, \ac{MBR}, 
 \AndENRU \InENRU \EN{the }\ac{ROM} \RU{плат-расширений IBM-компьютеров}\EN{of IBM-compatible extension cards}.
@@ -33,8 +35,7 @@ var int h2 := 0x98BADCFE
 var int h3 := 0x10325476
 \end{verbatim}
 
-\RU{Если в коде найти использование этих четырех констант подряд ~--- 
-очень высокая вероятность что эта функция имеет отношение к MD5.}
+\RU{Если в коде найти использование этих четырех констант подряд\EMDASH{} очень высокая вероятность что эта функция имеет отношение к MD5.}
 \EN{If you find these four constants used in the code in a row, it is very highly probable that this function is related to MD5.} \\
 \\
 \RU{Еще такой пример это алгоритмы CRC16/CRC32, часто, алгоритмы вычисления контрольной суммы по CRC 
@@ -58,17 +59,17 @@ u16 const crc16_table[256] = {
 
 \newcommand{\FNURLMAGIC}{\footnote{\href{http://go.yurichev.com/17112}{wikipedia}}}
 
-\RU{Немало форматов файлов определяет стандартный заголовок файла где используются \IT{magic numbers}\FNURLMAGIC{}.}
-\EN{A lot of file formats define a standard file header where a \IT{magic number}\FNURLMAGIC{} is used.}
+\RU{Немало форматов файлов определяет стандартный заголовок файла где используются \IT{magic number}\FNURLMAGIC{}, один или даже несколько.}
+\EN{A lot of file formats define a standard file header where a \IT{magic number(s)}\FNURLMAGIC{} is used, single one or even several.}
 
 \index{MS-DOS}
 \RU{Скажем, все исполняемые файлы для Win32 и MS-DOS начинаются с двух символов}
-\EN{For example, all Win32 and MS-DOS executables start with the two characters} ``MZ''\footnote{\href{http://go.yurichev.com/17113}{wikipedia}}.
+\EN{For example, all Win32 and MS-DOS executables start with the two characters} \q{MZ}\footnote{\href{http://go.yurichev.com/17113}{wikipedia}}.
 
 \index{MIDI}
-\RU{В начале MIDI-файла должно быть ``MThd''. Если у нас есть использующая для чего-нибудь MIDI-файлы программа
+\RU{В начале MIDI-файла должно быть \q{MThd}. Если у нас есть использующая для чего-нибудь MIDI-файлы программа
 очень вероятно, что она будет проверять MIDI-файлы на правильность хотя бы проверяя первые 4 байта.}
-\EN{At the beginning of a MIDI file the ``MThd'' signature must be present. 
+\EN{At the beginning of a MIDI file the \q{MThd} signature must be present. 
 If we have a program which uses MIDI files for something,
 it's very likely that it must check the file for validity by checking at least the first 4 bytes.}
 
@@ -77,10 +78,10 @@ it's very likely that it must check the file for validity by checking at least t
 \RU{(\IT{buf} указывает на начало загруженного в память файла)}
 \EN{(\IT{buf} points to the beginning of the loaded file in memory)}
 
-\begin{verbatim}
+\begin{lstlisting}
 cmp [buf], 0x6468544D ; "MThd"
 jnz _error_not_a_MIDI_file
-\end{verbatim}
+\end{lstlisting}
 
 \index{\CStandardLibrary!memcmp()}
 \index{x86!\Instructions!CMPSB}
@@ -153,7 +154,7 @@ like} \TT{DhcpExtractOptionsForValidation()} \AndENRU \TT{DhcpExtractFullOptions
 \EN{It is easy in \IDA: Alt-B or Alt-I.}
 \index{binary grep}
 \RU{А для поиска константы в большом количестве файлов, либо для поиска их в неисполняемых файлах, 
-я написал небольшую утилиту}
+имеется небольшая утилита}%
 \EN{And for searching for a constant in a big pile of files, or for searching in non-executable files,
-I wrote small utility called}
+there is a small utility called}
 \IT{binary grep}\footnote{\BGREPURL}.

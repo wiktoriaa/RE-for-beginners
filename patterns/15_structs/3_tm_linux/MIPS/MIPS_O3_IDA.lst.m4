@@ -1,6 +1,6 @@
 include(`commons.m4')main:
 
-; _EN(``IDA is not aware of structure field names, I named them manually'')_RU(``IDA не в курсе имен полей структуры, я назвал их так вручную''):
+; _EN(``IDA is not aware of structure field names, we named them manually'')_RU(``IDA не в курсе имен полей структуры, мы назвали их так вручную''):
 
 var_40          = -0x40
 var_38          = -0x38

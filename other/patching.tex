@@ -50,12 +50,12 @@ longer strings}.
 
 \index{x86!\Instructions!RET}
 \index{stdcall}
-\item \RU{Исполнение ф-ции может быть запрещено, если записать}\EN{A function's execution can be disabled by writing}
+\item \RU{Исполнение функции может быть запрещено, если записать}\EN{A function's execution can be disabled by writing}
 \RETN (0xC3) \RU{в её начале}\EN{at its beginning}.
-\RU{Это справедливо для всех ф-ций кроме}\EN{This is true for all functions excluding} \TT{stdcall} 
+\RU{Это справедливо для всех функций кроме}\EN{This is true for all functions excluding} \TT{stdcall} 
 (\myref{sec:stdcall}).
-\RU{При модификации ф-ций}\EN{While patching} \TT{stdcall}\RU{, нужно в начале определить количество аргументов 
-(например, отыскав \RETN в этой ф-ции),
+\RU{При модификации функций}\EN{While patching} \TT{stdcall}\RU{, нужно в начале определить количество аргументов 
+(например, отыскав \RETN в этой функции),
 и использовать}\EN{ functions, one has to determine the number of arguments (for example, 
 by finding \RETN in this function), 
 and use} \RETN \RU{с 16-битным аргументом}\EN{with a 16-bit argument} (0xC2).
@@ -63,7 +63,7 @@ and use} \RETN \RU{с 16-битным аргументом}\EN{with a 16-bit arg
 \index{x86!\Instructions!MOV}
 \index{x86!\Instructions!XOR}
 \index{x86!\Instructions!INC}
-\item \RU{Иногда, запрещенная ф-ция должна возвращать}\EN{Sometimes, a disabled functions has to return} 0 \OrENRU 1.
+\item \RU{Иногда, запрещенная функция должна возвращать}\EN{Sometimes, a disabled functions has to return} 0 \OrENRU 1.
 \RU{Это можно сделать при помощи}\EN{This can be done by} \TT{MOV EAX, 0} \OrENRU \TT{MOV EAX, 1}, 
 \RU{но это слишком многословно}\EN{but it's slightly verbose}.
 \RU{Способ получше это}\EN{A better way is} \TT{XOR EAX, EAX} (2 \RU{байта}\EN{bytes} \TT{0x31 0xC0}) 
@@ -77,7 +77,7 @@ and use} \RETN \RU{с 16-битным аргументом}\EN{with a 16-bit arg
 \EN{This protection is often done by reading the executable code and calculating a checksum}.
 \RU{Следовательно, код должен быть прочитан перед тем как защита сработает}\EN{Therefore, 
 the code must be read before protection is triggered}.
-\RU{Это можно определить установив брякпойнт на чтение памяти}
+\RU{Это можно определить установив точку останова на чтение памяти}
 \EN{This can be determined by setting a breakpoint on reading memory}.
 
 \index{tracer}

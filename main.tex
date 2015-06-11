@@ -7,16 +7,24 @@
 \newcommand{\FigScale}{\NormalScale} 
 \fi
 
-\usepackage{cmap}
-\usepackage{fancyhdr}
-
-\def\cyrillicencoding{EU1}
+\usepackage{fontspec}
+% fonts
+\setmonofont{Droid Sans Mono}
+\setmainfont[Ligatures=TeX]{PT Sans}
+\usepackage{polyglossia}
+\defaultfontfeatures{Scale=MatchLowercase} % ensure all fonts have the same 1ex
+\usepackage{ucharclasses}
+\usepackage{csquotes}
 \ifdefined\RUSSIAN
-\usepackage[english,russian]{babel}
+\setmainlanguage{russian}
+\newfontfamily\cyrillicfonttt{Droid Sans Mono}
+\setotherlanguage{english}
 \else
-\usepackage[english]{babel}
+\setmainlanguage{english}
 \fi
 
+\usepackage{microtype}
+\usepackage{fancyhdr}
 \usepackage{listings}
 \usepackage{ulem}
 \usepackage{url}
@@ -31,12 +39,6 @@
 \usepackage{tabularx}
 \usepackage{framed}
 \usepackage{parskip}
-
-\usepackage{fontspec}
-% fonts
-\setmonofont{Droid Sans Mono}
-\setmainfont[Ligatures=TeX]{PT Sans}
-
 \usepackage{epigraph}
 \usepackage{ccicons}
 \usepackage[nottoc]{tocbibind}
@@ -44,6 +46,7 @@
 \usepackage[footnote,printonlyused,withpage]{acronym}
 \usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
 \usepackage[]{bookmark,hyperref} % must be last
+\usepackage[official]{eurosym}
 
 % ************** myref
 % http://tex.stackexchange.com/questions/228286/how-to-mix-ref-and-pageref#228292
@@ -109,8 +112,8 @@
 \fi
 }
 \fancyhf{}
-\fancyhead[LE,RO]{\changefont \slshape \rightmark} %section
-\fancyhead[RE,LO]{\changefont \slshape \leftmark} %chapter
+\fancyhead[L,RO]{\changefont \slshape \rightmark} %section
+\fancyhead[R,LO]{\changefont \slshape \leftmark} %chapter
 \fancyfoot[C]{\changefont \thepage} %footer
 % *****************************************************************
 %\fi
@@ -132,17 +135,21 @@
 \newcommand{\EMAIL}{dennis(a)yurichev.com}
 
 \hypersetup{
-    pdftex,
     colorlinks=true,
     allcolors=blue,
     pdfauthor={\AUTHOR},
     pdftitle={\TITLE}
     }
 
+%\ifdefined\RUSSIAN
+\newcommand{\LstStyle}{\ttfamily\small}
+%\else
+%\newcommand{\LstStyle}{\ttfamily}
+%\fi 
+
 \lstset{
     backgroundcolor=\color{lstbgcolor},
-    basicstyle=\ttfamily\small,
-    %basicstyle=\ttfamily,
+    basicstyle=\LstStyle,
     breaklines=true,
     %prebreak=\raisebox{0ex}[0ex][0ex]{->},
     %postbreak=\raisebox{0ex}[0ex][0ex]{->},

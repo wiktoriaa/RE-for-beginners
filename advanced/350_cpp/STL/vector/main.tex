@@ -1,7 +1,8 @@
 \subsection{std::vector}
 \index{\Cpp!STL!std::vector}
 
-\RU{Я бы назвал}\EN{I would call} \TT{std::vector} \EN{a }``\RU{безопасной оболочкой (wrapper)}\EN{safe wrapper}'' \EN{of the}\ac{PODT} \RU{массива в Си}\EN{C array}.
+\RU{Мы бы назвали \TT{std::vector} \q{безопасной оболочкой} (wrapper) \ac{PODT} массива в Си.}
+\EN{We would call \TT{std::vector} a safe wrapper of the \ac{PODT} C array.}
 \RU{Изнутри он очень похож на}\EN{Internally it is somewhat similar to} \TT{std::string} (\myref{std_string}):
 \RU{он имеет указатель на выделенный буфер, указатель на конец массива и указатель на конец выделенного буфера.}
 \EN{it has a pointer to the allocated buffer, a pointer to the end of the array, and a pointer to the end of the allocated buffer.}
@@ -27,18 +28,18 @@ C-like code for dumping the structure of} \TT{std::vector}:
 
 \lstinputlisting{\CURPATH/STL/vector/MSVC.txt}
 
-\RU{Как можно заметить, выделенного буфера в самом начале ф-ции \main пока нет}
+\RU{Как можно заметить, выделенного буфера в самом начале функции \main пока нет}
 \EN{As it can be seen, there is no allocated buffer when \main starts}.
 \RU{После первого вызова}\EN{After the first} \TT{push\_back()} \RU{буфер выделяется}\EN{call, a buffer is allocated}.
 \RU{И далее, после каждого вызова}\EN{And then, after each} \TT{push\_back()} 
 \RU{и длина массива и вместимость буфера (\IT{capacity}) увеличиваются}
 \EN{call, both array size and buffer size (\IT{capacity}) are increased}.
-\RU{Но адрес буфера также меняется, потому что вызов ф-ции}\EN{But the buffer address changes as well, because} \TT{push\_back()} \RU{перевыделяет буфер в \glslink{heap}{куче} каждый раз}
+\RU{Но адрес буфера также меняется, потому что вызов функции}\EN{But the buffer address changes as well, because} \TT{push\_back()} \RU{перевыделяет буфер в \glslink{heap}{куче} каждый раз}
 \EN{reallocates the buffer in the \gls{heap} each time}.
 \RU{Это дорогая операция, вот почему очень важно предсказать размер будущего массива и зарезервировать место для него
 при помощи метода}\EN{It is costly operation, that's why it is very important to predict the size of the array in the future and reserve 
 enough space for it with the} \TT{.reserve()}\EN{ method}.
-\RU{Самое последнее число --- это мусор: там нет элементов массива в этом месте, вот откуда это случайное число}
+\RU{Самое последнее число\EMDASH{}это мусор: там нет элементов массива в этом месте, вот откуда это случайное число}
 \EN{The last number is garbage: there are no array elements at this point, so a random number is printed}.
 \RU{Это иллюстрация того факта что метод}\EN{This illustrates the fact that} \TT{operator[]} \RU{в}\EN{of} 
 \TT{std::vector} \RU{не проверяет индекс на правильность}\EN{does not check of the index is in the array's bounds}.
@@ -56,10 +57,9 @@ enough space for it with the} \TT{.reserve()}\EN{ method}.
 проверок}\EN{call prints is just taken from the memory, without any checks}.
 
 \RU{Читатель может спросить, почему бы не использовать переменные}
-\EN{One may ask, why not use the variables like} ``size'' \AndENRU ``capacity'', 
+\EN{One may ask, why not use the variables like} \q{size} \AndENRU \q{capacity}, 
 \RU{как это сделано в}\EN{like it was done in} \TT{std::string}.
-\RU{Я подозреваю что это для более быстрой проверки границ}\EN{I suppose that this was done for faster bounds checking}.
-\RU{Но я не уверен}\EN{But I'm not sure}.
+\RU{Вероятно, это для более быстрой проверки границ}\EN{Supposedly, this was done for faster bounds checking}.
 
 \index{Inline code}
 \RU{Код генерируемый GCC почти такой же, в целом, но метод}
@@ -83,6 +83,6 @@ enough space for it with the} \TT{.reserve()}\EN{ method}.
 \RU{При помощи простых экспериментов становится ясно, что в реализации MSVC буфер увеличивается
 на}\EN{Simple experimentation shows that in MSVC's implementation the buffer grows by} \textasciitilde{}50\% \RU{каждый раз,
 когда он должен был увеличен}\EN{each time it needs to be enlarged},
-\RU{а у GCC он увеличивается на}\EN{while GCC's code enlarges it by} 100\% \RU{каждый раз, т.е., удваивается}
+\RU{а у GCC он увеличивается на}\EN{while GCC's code enlarges it by} 100\% \RU{каждый раз, т.е. удваивается}
 \EN{each time, i.e., doubles it}.
 

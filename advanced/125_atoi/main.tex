@@ -1,7 +1,7 @@
 \chapter{\RU{Конверсия строки в число}\EN{String to number conversion} (atoi())}
 
 \index{\CStandardLibrary!atoi()}
-\RU{Попробуем реализовать стандарту ф-цию Си atoi().}
+\RU{Попробуем реализовать стандарту функцию Си atoi().}
 \EN{Let's try to reimplement the standard atoi() C function.}
 
 \section{\RU{Простой пример}\EN{Simple example}}
@@ -17,19 +17,19 @@
 \EN{So what the algorithm does is just reading digits from left to right.}
 \RU{Символ нуля в \ac{ASCII} вычитается из каждой цифры.}
 \EN{The zero \ac{ASCII} character is subtracted from each digit. }
-\RU{Цифры от ``0'' до ``9'' расположены по порядку в таблице \ac{ASCII}, так что мы даже можем
-и не знать точного значения символа ``0''.}
-\EN{The digits from ``0'' to ``9'' are consecutive in the \ac{ASCII} table, so 
-we do not even need to know the exact value of the ``0'' character.}
-\RU{Всё что нам нужно знать это то что ``0'' минус ``0'' --- это 0, а ``9'' минус ``0'' это 9, и т.д.}
-\EN{All we need to know is that ``0'' minus ``0'' is 0, ``9'' minus ``0'''is 9 and so on.}
-\RU{Вычитание ``0'' от каждого символа в итоге дает число от 0 до 9 включительно.}
-\EN{Subtracting ``0'' from each character results in a number from 0 to 9 inclusive.}
+\RU{Цифры от \q{0} до \q{9} расположены по порядку в таблице \ac{ASCII}, так что мы даже можем
+и не знать точного значения символа \q{0}.}
+\EN{The digits from \q{0} to \q{9} are consecutive in the \ac{ASCII} table, so 
+we do not even need to know the exact value of the \q{0} character.}
+\RU{Всё что нам нужно знать это то что \q{0} минус \q{0}\EMDASH{}это 0, а \q{9} минус \q{0} это 9, \etc{}.}
+\EN{All we need to know is that \q{0} minus \q{0} is 0, \q{9} minus \q{0}'is 9 and so on.}
+\RU{Вычитание \q{0} от каждого символа в итоге дает число от 0 до 9 включительно.}
+\EN{Subtracting \q{0} from each character results in a number from 0 to 9 inclusive.}
 \RU{Любой другой символ, конечно, приведет к неверному результату!}
 \EN{Any other character leads to an incorrect result, of course!}
-\RU{Каждая цифра добавляется к итоговому результату (в переменной ``rt''), но итоговый результат
+\RU{Каждая цифра добавляется к итоговому результату (в переменной \q{rt}), но итоговый результат
 также умножается на 10 на каждой цифре.}
-\EN{Each digit has to be added to the final result (in variable ``rt''), but the final result
+\EN{Each digit has to be added to the final result (in variable \q{rt}), but the final result
 is also multiplied by 10 at each digit.}
 \RU{Другими словами, на каждой итерации, результат сдвигается влево на одну позицию в десятичном виде.}
 \EN{In other words, the result is shifted left by one position in decimal form on each iteration.}
@@ -51,8 +51,8 @@ is also multiplied by 10 at each digit.}
 \RU{MSVC иногда использует инструкцию ADD с отрицательной константой вместо SUB.}
 \EN{MSVC sometimes uses the ADD instruction with a negative constant instead of SUB.}
 \RU{Это тот случай}\EN{This is the case}.
-\RU{Честно говоря, я не знаю, чем это лучше, чем SUB.}
-\EN{I truly don't know why this is better then SUB.}
+\RU{Честно говоря, трудно сказать, чем это лучше, чем SUB.}
+\EN{It's very hard to say why this is better then SUB.}
 \RU{Но MSVC делает так часто}\EN{But MSVC does this often}.
 
 \subsection{\Optimizing GCC 4.9.1 x64}
@@ -93,9 +93,9 @@ is added to it.}
 
 \section{\RU{Немного расширенный пример}\EN{A slightly advanced example}}
 
-\RU{Новый пример более расширенный, теперь здесь есть проверка знака ``минус'' в самом начале,
+\RU{Новый пример более расширенный, теперь здесь есть проверка знака \q{минус} в самом начале,
 и еще он может сообщать об ошибке если не-цифра была найдена во входной строке:}
-\EN{My new code snippet is more advanced, now it checks for the ``minus'' sign at the first character
+\EN{My new code snippet is more advanced, now it checks for the \q{minus} sign at the first character
 and reports an error if a non-digit was found in the input string:}
 
 \lstinputlisting{\CURPATH/atoi2.c}
@@ -105,15 +105,15 @@ and reports an error if a non-digit was found in the input string:}
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{\CURPATH/atoi2.s.GCC491.O3.x64.\LANG}
 
 \index{x86!\Instructions!NEG}
-\RU{Если знак ``минус'' был найден в начале строки, инструкция NEG будет исполнена в конце.}
-\EN{If the ``minus'' sign was encountered at the string start, the NEG instruction is to be executed at the end.}
+\RU{Если знак \q{минус} был найден в начале строки, инструкция NEG будет исполнена в конце.}
+\EN{If the \q{minus} sign was encountered at the string start, the NEG instruction is to be executed at the end.}
 \RU{Она просто меняет знак числа}\EN{It just negates the number}.
 
 \label{one_comparison_instead_of_two}
 \RU{Еще кое-что надо отметить}\EN{There is one more thing that needs mentioning}.
 \RU{Как среднестатистический программист будет проверять, является ли символ цифрой?}
 \EN{How would a common programmer check if the character is not a digit?}
-\RU{Так же, как я и написал в исходном коде}\EN{Just how I wrote it in the source code}:
+\RU{Так же, как и у нас в исходном коде}\EN{Just how we have it in the source code}:
 
 \begin{lstlisting}
 if (*s<'0' || *s>'9')
@@ -123,16 +123,16 @@ if (*s<'0' || *s>'9')
 \RU{Здесь две операции сравнения}\EN{There are two comparison operations}.
 \RU{Но что интересно, так это то что мы можем заменить обе операции на одну:}
 \EN{What is interesting is that we can replace both operations by single one:}
-\RU{просто вычитайте ``0'' из значения символа}\EN{just subtract ``0'' from character value},
+\RU{просто вычитайте \q{0} из значения символа}\EN{just subtract \q{0} from character value},
 \RU{считается результат за беззнаковое значение (это важно) и проверьте, не больше ли он чем 9.}
 \EN{treat result as unsigned value (this is important) and check if it's greater than 9.}
 
-\RU{Например, скажем, строка на входе имеет символ точки (``.''), которая имеет код 46 в таблице \ac{ASCII}.}
-\EN{For example, let's say that the user input contains the dot character (``.'') which has \ac{ASCII} code 46.}
+\RU{Например, скажем, строка на входе имеет символ точки (\q{.}), которая имеет код 46 в таблице \ac{ASCII}.}
+\EN{For example, let's say that the user input contains the dot character (\q{.}) which has \ac{ASCII} code 46.}
 $46-48=-2$ \RU{если считать результат за знаковое число}\EN{if we treat the result as a signed number}.
-\RU{Действительно, символ точки расположен на два места раньше, чем символ ``0'' в таблице \ac{ASCII}.}
-\EN{Indeed, the dot character is located two places earlier than the ``0'' character in the \ac{ASCII} table.}
-\RU{Но это}\EN{But it is} \TT{0xFFFFFFFE} ($4294967294$) \RU{если считать результат за беззнаковое значение, 
+\RU{Действительно, символ точки расположен на два места раньше, чем символ \q{0} в таблице \ac{ASCII}.}
+\EN{Indeed, the dot character is located two places earlier than the \q{0} character in the \ac{ASCII} table.}
+\RU{Но это}\EN{But it is} \TT{0xFFFFFFFE} (4294967294) \RU{если считать результат за беззнаковое значение, 
 и это точно больше чем 9!}
 \EN{if we treat the result as an unsigned value, and that's definitely bigger than 9!}
 
@@ -149,13 +149,13 @@ $46-48=-2$ \RU{если считать результат за знаковое 
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),numbers=left]{\CURPATH/atoi2.s.ARM.O3.\LANG}
 
-\RU{В 32-битном ARM нет инструкции NEG, так что вместо этого используется операция ``Reverse Subtraction''
+\RU{В 32-битном ARM нет инструкции NEG, так что вместо этого используется операция \q{Reverse Subtraction}
 (строка 31).}
-\EN{There is no NEG instruction in 32-bit ARM, so the ``Reverse Subtraction'' operation (line 31) 
+\EN{There is no NEG instruction in 32-bit ARM, so the \q{Reverse Subtraction} operation (line 31) 
 is used here.}
-\RU{Она сработает если результат инструкции CMP (на строке 29) был ``Not Equal'' 
+\RU{Она сработает если результат инструкции CMP (на строке 29) был \q{Not Equal} 
 (не равно, отсюда суффикс -NE suffix).}
-\EN{It is triggered if the result of the CMP instruction (at line 29) was ``Not Equal'' (hence -NE suffix).}
+\EN{It is triggered if the result of the CMP instruction (at line 29) was \q{Not Equal} (hence -NE suffix).}
 \index{ARM!\Instructions!RSB}
 \RU{Что делает RSBNE это просто вычитает результирующее значение из нуля.}
 \EN{So what RSBNE does is to subtract the resulting value from 0.}
@@ -172,5 +172,16 @@ GCC 4.9 \ForENRU ARM64 \RU{может использовать инструкц�
 \EN{can use the NEG instruction, which is available in} ARM64.
 \fi
 
-% FIXME1: security researchers deals often with behaviour of handling of incorrect data,
-% so try enter non-digits and see what happens. explain, why, etc.
+\section{\Exercise{}}
+
+\index{Fuzzing}
+\EN{Oh, by the way, security researchers deals often with unpredictable behaviour of program while handling of incorrect data.}
+\RU{Кстати, security research-еры часто имеют дело с непредсказуемым поведением программ во время обработки некорректных данных.}
+\RU{Например, во время fuzzing-а.}
+\EN{For example, while fuzzing.}
+\EN{As an exercise, you may try to enter non-digit characters and see what happens.}
+\RU{В качестве упражнения, вы можете попробовать ввести символы не относящиеся к числам и посмотреть, что случится.}
+\EN{Try to explain, what happened and why.}
+\RU{Попробуйте объяснить, что произошло, и почему.}
+
+

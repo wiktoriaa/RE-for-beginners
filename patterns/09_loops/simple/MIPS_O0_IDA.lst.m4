@@ -1,7 +1,7 @@
 include(`commons.m4')main:
 
 ; _EN(`IDA is not aware of variable names in local stack')_RU(`IDA не знает названия переменных в локальном стеке')
-; _EN(`I gave them names manually')_RU(`Это я назвал их вручную'):
+; _EN(`We gave them names manually')_RU(`Это мы назвали их вручную'):
 i               = -0x10
 saved_FP        = -8
 saved_RA        = -4

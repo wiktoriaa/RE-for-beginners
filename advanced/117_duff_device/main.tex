@@ -9,22 +9,22 @@ Duff's device
 \RU{Развернутый цикл реализован используя fallthrough-выражение switch().}
 \EN{The unrolled loop is implemented using a fallthrough switch() statement.}
 
-\RU{Я буду использовать здесь упрощенную версию кода Тома Даффа.}
-\EN{I would use here a slightly simplified version of Tom Duff's original code.}
+\RU{Мы будем использовать здесь упрощенную версию кода Тома Даффа.}
+\EN{We would use here a slightly simplified version of Tom Duff's original code.}
 
-\RU{Скажем, нам нужно написать ф-цию, очищающую регион в памяти.}
+\RU{Скажем, нам нужно написать функцию, очищающую регион в памяти.}
 \EN{Let's say, we need to write a function that clears a region in memory.}
 \RU{Кто-то может подумать о простом цикле, очищающем байт за байтом.}
 \EN{One can come with a simple loop, clearing byte by byte.}
 \RU{Это, очевидно, медленно, так как все современные компьютеры имеют намного более широкую шину памяти.}
 \EN{It's obviously slow, since all modern computers have much wider memory bus.}
-\RU{Так что более правильный способ --- это очищать регион в памяти блоками по 4 или 8 байт.}
+\RU{Так что более правильный способ\EMDASH{}это очищать регион в памяти блоками по 4 или 8 байт.}
 \EN{So the better way is to clear the memory region using 4 or 8 byte blocks.}
 \RU{Так как мы будем работать с 64-битным примером, мы будем очищать память блоками по 8 байт.}
 \EN{Since we are going to work with a 64-bit example here, we are going to clear the memory in 8 byte blocks.}
 \RU{Пока всё хорошо}\EN{So far so good}.
 \RU{Но что насчет хвоста}\EN{But what about the tail}? 
-\RU{Ф-ция очистки памяти будет также вызываться и для блоков с длиной не кратной 8.}
+\RU{Функция очистки памяти будет также вызываться и для блоков с длиной не кратной 8.}
 \EN{Memory clearing routine can also be called for regions of size that's not a multiple of 8.}
 
 \RU{Вот алгоритм}\EN{So here is the algorithm}:
@@ -64,8 +64,8 @@ Duff's device
 \end{bytefield}
 \end{center}
 
-\RU{( ``B'' это количество 8-байтных блоков и ``S'' это длина хвоста в байтах ).}
-\EN{( ``B'' is number of 8-byte blocks and ``S'' is length of the tail in bytes ).}
+\RU{( \q{B} это количество 8-байтных блоков и \q{S} это длина хвоста в байтах ).}
+\EN{( \q{B} is number of 8-byte blocks and \q{S} is length of the tail in bytes ).}
 
 \RU{Если разделить размер входного блока в памяти на 8, то значение просто сдвигается на 3 бита вправо.}
 \EN{When we divide the input memory region size by 8, the value is just shifted right by 3 bits.}
@@ -100,22 +100,22 @@ even if he/she is not using them, nevertheless has to understand them.}
 в память.}
 \EN{So the first part is simple: get the number of 8-byte blocks and write 64-bit zero values to memory.}
 
-\RU{Вторая часть --- это развернутый цикл реализованный как fallthrough-выражение switch().}
+\RU{Вторая часть\EMDASH{}это развернутый цикл реализованный как fallthrough-выражение switch().}
 \EN{The second part is an unrolled loop implemented as fallthrough switch() statement.}
 \RU{В начале, выразим на обычном русском языке, что мы хотим сделать.}
 \EN{First, let's express in plain English what we have to do here.}
-\RU{Мы должны ``записать столько нулевых байт в память, сколько значение $count\&7$ нам говорит''.}
-\EN{We have to ``write as many zero bytes in memory, as $count\&7$ value tells us''.}
+\RU{Мы должны \q{записать столько нулевых байт в память, сколько значение $count\&7$ нам говорит}.}
+\EN{We have to \q{write as many zero bytes in memory, as $count\&7$ value tells us}.}
 \RU{Если это 0, перейти на конец, больше ничего делать не нужно.}
 \EN{If it's 0, jump to the end, there is no work to do.}
 \RU{Если это 1, перейти на место внутри выражения switch(), где произойдет только одна операция записи.}
 \EN{If it's 1, jump to the place inside switch() statement where only one storage operation
 is to be executed.}
-\RU{Если это 2, перейти на другое место, где две операции записи будут исполнены, и т.д.}
-\EN{If it's 2, jump to another place, where two storage operation are to be executed, etc.}
+\RU{Если это 2, перейти на другое место, где две операции записи будут исполнены,}
+\EN{If it's 2, jump to another place, where two storage operation are to be executed,}\etc{}.
 \RU{7 во входном значении приведет к тому что исполнятся все 7 операций.}
 \EN{7 as input value leads to the execution of all 7 operations.}
-\RU{8 здесь нет, потому что регион памяти размером в 8 байт будет обработан первой частью нашей ф-ции.}
+\RU{8 здесь нет, потому что регион памяти размером в 8 байт будет обработан первой частью нашей функции.}
 \EN{There is no 8, because a memory region of 8 bytes is to be processed by the first part of our function.}
 
 \RU{Так что мы сделали развернутый цикл}\EN{So we wrote an unrolled loop}.
@@ -130,9 +130,9 @@ modern CPUs works better for short loops than for unrolled ones).}
 
 \lstinputlisting{\CURPATH/duff_MSVC2012_x64_Ox.asm.\LANG}
 
-\RU{Первая часть ф-ции выглядит для нас предсказуемо.}
+\RU{Первая часть функции выглядит для нас предсказуемо.}
 \EN{The first part of the function is predictable.}
-\RU{Вторая часть --- это просто развернутый цикл и переход передает управление на нужную инструкцию
+\RU{Вторая часть\EMDASH{}это просто развернутый цикл и переход передает управление на нужную инструкцию
 внутри него.}
 \EN{The second part is just an unrolled loop and a jump passing control flow to the correct instruction
 inside it.}

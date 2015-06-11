@@ -11,9 +11,9 @@ elements}.
 \EN{This implies that the memory footprint is enlarged by 2 \glslink{word}{words} for each element (8 bytes in 32-bit environment or 16
 bytes in 64-bit)}.
 
-\RU{STL в \Cpp просто добавляет указатели ``next'' и ``previous'' к той вашей структуре, которую вы желаете
+\RU{STL в \Cpp просто добавляет указатели \q{next} и \q{previous} к той вашей структуре, которую вы желаете
 объединить в список}
-\EN{\Cpp STL just adds the ``next'' and ``previous'' pointers to the existing structure of the type that you want to 
+\EN{\Cpp STL just adds the \q{next} and \q{previous} pointers to the existing structure of the type that you want to 
 unite in a list}.
 
 \RU{Попробуем разобраться с примером в котором простая структура из двух переменных, мы объединим её в список}
@@ -44,7 +44,7 @@ ptr=0x0028fe90 _Next=0x0028fe90 _Prev=0x0028fe90 x=3 y=0
 в переменных $x$ и $y$.}
 \EN{Despite the fact it is empty, it has one element with garbage (\ac{AKA} \IT{dummy node})
 in $x$ and $y$.}
-\RU{Оба указателя}\EN{Both the} ``next'' \AndENRU ``prev'' \RU{указывают на себя}
+\RU{Оба указателя}\EN{Both the} \q{next} \AndENRU \q{prev} \RU{указывают на себя}
 \EN{pointers are pointing to the self node}:
 
 \input{\CURPATH/STL/list/empty_list}
@@ -78,7 +78,7 @@ it not to be moved until the list's disposal.}
 
 \RU{Переменная}\EN{The} $l$ \RU{всегда указывает на первый элемент}\EN{variable always points to the first node}.
 
-\RU{Итераторы .begin() и .end() это не переменные, а ф-ции,
+\RU{Итераторы .begin() и .end() это не переменные, а функции,
 возвращающие указатели на соответствующие узлы.}
 \EN{The .begin() and .end() iterators are not variables, but functions, 
 which when called return pointers to the corresponding nodes.}
@@ -105,7 +105,7 @@ ptr=0x0028fe90 _Next=0x000349a0 _Prev=0x00034b40 x=5 y=6
 \EN{The fact that the last element has a pointer to the first and the first element has a pointer 
 to the last one remind us circular list.}
 
-\RU{Это очень помогает: если иметь указатель только на первый элемент, т.е.,
+\RU{Это очень помогает: если иметь указатель только на первый элемент, т.е.
 тот что в переменной $l$, очень легко получить указатель на последний элемент, без необходимости
 обходить все элементы списка}
 \EN{This is very helpful here: having a pointer to the first list element,
@@ -123,7 +123,7 @@ it is easy to get a pointer to the last one quickly, without the need to travers
 \EN{work just as the same, but in reverse}.
 
 \TT{operator*} \RU{на итераторе просто возвращает указатель на место в структуре, где начинается пользовательская
-структура, т.е., указатель на самый первый элемент структуры}\EN{just returns a pointer to the point 
+структура, т.е. указатель на самый первый элемент структуры}\EN{just returns a pointer to the point 
 in the node structure, where the user's structure starts, i.e., a pointer to the 
 first element of the structure} ($x$).
 
@@ -147,7 +147,7 @@ cannot be used anymore.}
 другого способа получить эту информацию}
 \EN{The GCC implementation (as of 4.8.1) doesn't store the current size of the list: this implies a slow .size() method:
 it has to traverse the whole list to count the elements, because it doesn't have any other way to get the information}.
-\RU{Это означает что эта операция $O(n)$, т.е., она работает тем медленнее, чем больше элементов в списке}
+\RU{Это означает что эта операция $O(n)$, т.е. она работает тем медленнее, чем больше элементов в списке}
 \EN{This mean that this operation is $O(n)$, i.e., it gets slower steadily as the list grows}.
 
 \lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline-small-functions]{\CURPATH/STL/list/GCC.asm.\LANG}
@@ -174,9 +174,9 @@ it has to traverse the whole list to count the elements, because it doesn't have
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 /Fa2.asm /GS- /Ob1]{\CURPATH/STL/list/MSVC.asm.\LANG}
 
-\RU{В отличие от GCC, код MSVC выделяет элемент-пустышку в самом начале ф-ции при помощи
-ф-ции ``Buynode'', она также используется и во время выделения остальных элементов}
-\EN{Unlike GCC, MSVC's code allocates the dummy element at the start of the function with the help of the ``Buynode'' function,
+\RU{В отличие от GCC, код MSVC выделяет элемент-пустышку в самом начале функции при помощи
+функции \q{Buynode}, она также используется и во время выделения остальных элементов}
+\EN{Unlike GCC, MSVC's code allocates the dummy element at the start of the function with the help of the \q{Buynode} function,
 it is also used to allocate the rest of the nodes} (\RU{код GCC выделяет самый первый элемент в локальном стеке}
 \EN{GCC's code allocates the first element in the local stack}).
 
@@ -185,9 +185,9 @@ it is also used to allocate the rest of the nodes} (\RU{код GCC выделя�
 \subsubsection{C++11 std::forward\_list}
 \index{\Cpp!STL!std::forward\_list}
 
-\RU{Это то же самое что и std::list, но только односвязный список, т.е., имеющий только поле ``next'' в каждом
+\RU{Это то же самое что и std::list, но только односвязный список, т.е. имеющий только поле \q{next} в каждом
 элементе}
-\EN{The same thing as std::list, but singly-linked one, i.e., having only the ``next'' field at each node}.
+\EN{The same thing as std::list, but singly-linked one, i.e., having only the \q{next} field at each node}.
 \RU{Таким образом расход памяти меньше, но возможности идти по списку назад здесь нет}
 \EN{It has a smaller memory footprint, but also don't offer the ability to traverse list backwards}.
 

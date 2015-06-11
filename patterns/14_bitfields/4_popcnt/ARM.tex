@@ -3,7 +3,7 @@
 \lstinputlisting[caption=\OptimizingXcodeIV (\ARMMode),label=ARM_leaf_example4]{patterns/14_bitfields/4_popcnt/ARM_Xcode_O3.lst.\LANG}
 
 \index{ARM!\Instructions!TST}
-\TT{TST} \RU{это то же что и}\EN{is the same things as} \TEST \InENRU x86.
+\TST \RU{это то же что и}\EN{is the same things as} \TEST \InENRU x86.
 
 \index{ARM!Optional operators!LSL}
 \index{ARM!Optional operators!LSR}
@@ -16,7 +16,7 @@
 \index{ARM!\Instructions!ADD}
 \index{ARM!\Instructions!SUB}
 \index{ARM!\Instructions!RSB}
-\RU{Как я уже указывал}\EN{As I mentioned before}~(\myref{shifts_in_ARM_mode}),
+\RU{Как уже было указано}\EN{As was noted before}~(\myref{shifts_in_ARM_mode}),
 \RU{в режиме ARM нет отдельной инструкции для сдвигов.}
 \EN{there are no separate shifting instructions in ARM mode.}
 \RU{Однако, модификаторами}\EN{However, there are modifiers} 
@@ -25,15 +25,15 @@ LSR (\IT{Logical Shift Right}),
 ASR (\IT{Arithmetic Shift Right}), 
 ROR (\IT{Rotate Right}) \AndENRU 
 RRX (\IT{Rotate Right with Extend}) \RU{можно дополнять некоторые инструкции, такие как}
-\EN{, which may be added to such instructions as} \MOV, \TT{TST},
-\CMP, \ADD, \SUB, \TT{RSB}\footnote{\DataProcessingInstructionsFootNote}.
+\EN{, which may be added to such instructions as} \MOV, \TST,
+\CMP, \ADD, \SUB, \RSB\footnote{\DataProcessingInstructionsFootNote}.
 
 \RU{Эти модификаторы указывают, как сдвигать второй операнд, и на сколько.}
 \EN{These modificators define how to shift the second operand and by how many bits.}
 
 \index{ARM!\Instructions!TST}
 \index{ARM!Optional operators!LSL}
-\RU{Таким образом, инструкция }\EN{Thus the} \TT{``TST R1, R2,LSL R3''} 
+\RU{Таким образом, инструкция }\EN{Thus the} \TT{\q{TST R1, R2,LSL R3}} 
 \RU{здесь работает как}\EN{instruction works here as} $R1 \land (R2 \ll R3)$.
 
 \subsection{ARM + \OptimizingXcodeIV (\ThumbTwoMode)}
@@ -42,11 +42,11 @@ RRX (\IT{Rotate Right with Extend}) \RU{можно дополнять некот
 \index{ARM!\Instructions!LSL}
 \RU{Почти такое же}\EN{Almost the same}, 
 \RU{только здесь применяется пара инструкций}\EN{but here are two} 
-\TT{LSL.W}/\TT{TST} 
+\INS{LSL.W}/\TST 
 \RU{вместо одной}\EN{instructions are used instead of a single} 
-\TT{TST},
-\RU{ведь в режиме thumb нельзя добавлять указывать модификатор}\EN{because in thumb mode it is not
-possible to define} \TT{LSL} \RU{прямо в}\EN{modifier directly in} \TT{TST}.
+\TST,
+\RU{ведь в режиме Thumb нельзя добавлять модификатор}\EN{because in Thumb mode it is not
+possible to define} \LSL \RU{прямо в}\EN{modifier directly in} \TST.
 
 \begin{lstlisting}[label=ARM_leaf_example5]
                 MOV             R1, R0
@@ -66,7 +66,7 @@ loc_2F7A
 
 \subsection{ARM64 + \Optimizing GCC 4.9}
 
-\RU{Я взял 64-битный пример, который уже использовал}\EN{I took the 64-bit example I already used}: 
+\RU{Возьмем 64-битный пример, который уже был здесь использован}\EN{Let's take the 64-bit example which has been already used}: 
 \myref{popcnt_x64_example}.
 
 \lstinputlisting[caption=\Optimizing GCC (Linaro) 4.8]{patterns/14_bitfields/4_popcnt/ARM64_GCC_O3.s.\LANG}
@@ -75,15 +75,15 @@ loc_2F7A
 generates for x64}: \myref{shifts64_GCC_O3}.
 
 \index{ARM!\Instructions!CSEL}
-\EN{The}\RU{Инструкция} \TT{CSEL} \RU{это}\EN{instruction is} ``Conditional SELect''\RU{ (выбор при условии)}, 
-\RU{она просто выбирает одну из переменных, в зависимости от флагов выставленных}\EN{it just choose one 
-variable of two depending on the flags set by} \TT{TST} \RU{и копирует значение в регистр}\EN{and copies the value 
-into} \RegW{2}\RU{, содержащий переменную ``rt''}\EN{ , which holds the ``rt'' variable}.
+\EN{The}\RU{Инструкция} \CSEL \RU{это}\EN{instruction is} \q{Conditional SELect}\RU{ (выбор при условии)}. 
+\RU{Она просто выбирает одну из переменных, в зависимости от флагов выставленных}\EN{It just chooses one 
+variable of two depending on the flags set by} \TST \RU{и копирует значение в регистр}\EN{and copies the value 
+into} \RegW{2}\RU{, содержащий переменную \q{rt}}\EN{, which holds the \q{rt} variable}.
 
 \subsection{ARM64 + \NonOptimizing GCC 4.9}
 
-\RU{И снова, я использовал 64-битный пример, который я уже использовал раннее}\EN{And again, the 64-bit 
-example I already used}: \myref{popcnt_x64_example}.
+\RU{И снова будем использовать 64-битный пример, который мы использовали ранее}
+\EN{And again, we'll work on the 64-bit example which was already used}: \myref{popcnt_x64_example}.
 
 \RU{Код более многословный, как обычно}\EN{The code is more verbose, as usual}.
 

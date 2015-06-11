@@ -6,7 +6,7 @@ include(`commons.m4')d_max:
                 bc1t    locret_14
 ; _EN(`this instruction is always executed')_RU(`эта инструкция всегда исполняется') (_EN(`set return value to')_RU(`установить значение для возврата в') "a"):
                 mov.d   $f0, $f12  ; branch delay slot
-; _EN(``this instruction is executed only if branch was not taken (i.e., if b>=a)'')_RU(``эта инструкция исполняется только если переход не произошел (т.е., если b>=a)'')
+; _EN(``this instruction is executed only if branch was not taken (i.e., if b>=a)'')_RU(``эта инструкция исполняется только если переход не произошел (т.е. если b>=a)'')
 ; _EN(`set return value to')_RU(`установить значение для возврата в') "b":
                 mov.d   $f0, $f14
 

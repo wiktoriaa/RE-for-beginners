@@ -39,20 +39,19 @@
 .data:00000048 ; .data         ends
 \end{lstlisting}
 
-\RU{Итак, переменная \TT{x} теперь глобальная, и она расположена, почему-то, в другом сегменте, 
-а именно сегменте данных}\EN{So, the \TT{x} variable is now global and for this reason 
-located in another segment, namely the data segment} (\IT{.data}).
-\RU{Можно спросить, почему текстовые строки расположены в сегменте кода (\IT{.text}) 
-а \TT{x} нельзя было разместить тут же?}\EN{One could ask, why are the text strings located in the code segment
-(\IT{.text}) and \TT{x} is located right here?}
-\RU{Потому что эта переменная, и как следует из определения, она может меняться. 
-И может даже быть, меняться часто.}
+\RU{Итак, переменная \TT{x} теперь глобальная, и она расположена, почему-то, в другом сегменте, а именно сегменте данных}
+\EN{So, the \TT{x} variable is now global and for this reason located in another segment, namely the data segment} (\IT{.data}).
+\RU{Можно спросить, почему текстовые строки расположены в сегменте кода (\IT{.text}), а \TT{x} нельзя было разместить тут же?}
+\EN{One could ask, why are the text strings located in the code segment (\IT{.text}) and \TT{x} is located right here?}
+\RU{Потому что эта переменная, и как следует из определения, она может меняться. И может быть, меняться часто.}
 \EN{Because it is a variable and by definition its value could change. Moreover it could possibly change often.}
+\RU{Ну а текстовые строки имеют тип констант, они не будут меняться, поэтому они располагаются в сегменте \IT{.text}.}
+\EN{While text strings has constant type, they will not be changed, so they are located in the \IT{.text} segment.}
 \index{\RAM}
 \index{\ROM}
 \RU{Сегмент кода иногда может быть расположен в ПЗУ микроконтроллера (не забывайте, 
-мы сейчас имеем дело с embedded-микроэлектроникой, где дефицит памяти ~--- это обычное дело),
-а изменяемые переменные ~--- в ОЗУ.}
+мы сейчас имеем дело с embedded-микроэлектроникой, где дефицит памяти~--- обычное дело),
+а изменяемые переменные~--- в ОЗУ.}
 \EN{The code segment might sometimes be located in a \ac{ROM} chip (remember, we now deal
 with embedded microelectronics, and memory scarcity is common here), and changeable 
 variables~---in \ac{RAM}.}
@@ -63,19 +62,19 @@ variables~---in \ac{RAM}.}
 \EN{Furthermore, constant variables in RAM must be initialized, because after powering on, the RAM, obviously, contains random information.}
 
 \index{\RU{Компоновщик}\EN{Linker}}
-\RU{Далее, мы видим, в сегменте кода, хранится указатель на переменную \TT{x} (\TT{off\_2C}) и вообще, 
-все операции с переменной, происходят через этот указатель.}
+\RU{Далее мы видим в сегменте кода хранится указатель на переменную \TT{x} (\TT{off\_2C}) и 
+все операции с переменной происходят через этот указатель.}
 \EN{Moving forward, we see a pointer to the \TT{x} (\TT{off\_2C}) variable in the code segment, and that all
 operations with the variable occur via this pointer.}
-\RU{Это связано с тем что переменная \TT{x} может быть расположена где-то довольно далеко от 
+\RU{Это связано с тем, что переменная \TT{x} может быть расположена где-то довольно далеко от 
 данного участка кода, так что её адрес нужно сохранить в непосредственной близости к этому коду.}
 \EN{That is because the \TT{x} variable could be located somewhere far from this particular code fragment, so its address
 must be saved somewhere in close proximity to the code.}
 \index{ARM!\Instructions!LDR}
-\RU{Инструкция \TT{LDR} в thumb-режиме может адресовать только переменные в пределах вплоть 
-до 1020 байт от места где она находится.}
-\EN{The \TT{LDR} instruction in thumb mode can only address variables in a range of 1020 bytes from its location, }
-\RU{Эта же инструкция в ARM-режиме ~--- переменные в пределах $\pm{}4095$ байт.}
+\RU{Инструкция \TT{LDR} в Thumb-режиме может адресовать только переменные в пределах вплоть 
+до 1020 байт от своего местоположения.}
+\EN{The \TT{LDR} instruction in Thumb mode can only address variables in a range of 1020 bytes from its location, }
+\RU{Эта же инструкция в ARM-режиме~--- переменные в пределах $\pm{}4095$ байт.}
 \EN{and in in ARM-mode~---variables in range of $\pm{}4095$ bytes.}
 \RU{Таким образом,
 адрес глобальной переменной \TT{x} нужно расположить в непосредственной близости, ведь нет никакой гарантии, 
@@ -86,11 +85,11 @@ must be located somewhere in close proximity, because there is no guarantee that
 
 \index{\CLanguageElements!const}
 \index{\ROM}
-\RU{Еще одна вещь: если переменную объявить как \IT{const}, то компилятор Keil разместит её в 
+\RU{Ещё одна вещь: если переменную объявить как \IT{const}, то компилятор Keil разместит её в 
 сегменте \TT{.constdata}.}
 \EN{One more thing: if a variable is declared as \IT{const}, the Keil compiler allocates it in 
 the \TT{.constdata} segment.}
-\RU{Должно быть, впоследствии, компоновщик и этот сегмент сможет разместить в ПЗУ, вместе
+\RU{Должно быть, впоследствии компоновщик и этот сегмент сможет разместить в ПЗУ вместе
 с сегментом кода.}
 \EN{Perhaps, thereafter, the linker could place this segment in ROM too, along with the code segment.}
 

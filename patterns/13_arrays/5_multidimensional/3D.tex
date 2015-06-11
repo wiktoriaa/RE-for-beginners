@@ -1,7 +1,6 @@
 \subsection{\RU{Пример с трехмерным массивом}\EN{Three-dimensional array example}}
 
 \RU{То же самое и для многомерных массивов.}\EN{It's thing in multidimensional arrays.}
-
 \RU{На этот раз будем работать с массивом типа \Tint: каждый элемент требует 4 байта в памяти.}
 \EN{Now we are going to work with an array of type \Tint: each element requires 4 bytes in memory.}
 
@@ -15,7 +14,7 @@
 
 \lstinputlisting[caption=MSVC 2010]{patterns/13_arrays/5_multidimensional/multi_msvc.asm.\LANG}
 
-\RU{В принципе, ничего удивительного. В \TT{insert()} для вычисления адреса нужного элемента массива, 
+\RU{В принципе, ничего удивительного. В \TT{insert()} для вычисления адреса нужного элемента массива 
 три входных аргумента перемножаются по формуле $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$, 
 чтобы представить массив трехмерным.
 Не забывайте также, что тип \Tint 32-битный (4 байта), поэтому все коэффициенты нужно умножить на 4.}
@@ -57,38 +56,38 @@ are also present here.}
 \index{ARM!\Instructions!RSB}
 \index{ARM!\Instructions!SUB}
 \RU{Также мы видим новую для себя инструкцию}\EN{Here we also see a new instruction for us:} 
-\TT{RSB} (\IT{Reverse Subtract}).
+\RSB (\IT{Reverse Subtract}).
 \RU{Она работает так же, как и \SUB, только меняет операнды местами.}
 \EN{It works just as \SUB, but it swaps its operands with each other before execution.}
 \RU{Зачем?}\EN{Why?}
 \index{ARM!Optional operators!LSL}
-\SUB \AndENRU \TT{RSB}\RU{, это те инструкции, ко второму операнду которых 
-можно применить коэффициент сдвига, как мы видим и здесь}
+\SUB \AndENRU \RSB\RU{ это те инструкции, ко второму операнду которых 
+можно применить коэффициент сдвига, как мы видим и здесь}%
 \EN{ are instructions, to the second operand of which shift coefficient may be applied}: 
-(\TT{LSL\#4}). 
+(\INS{LSL\#4}). 
 \RU{Но этот коэффициент можно применить только ко второму операнду.}
 \EN{But this coefficient can be applied only to second operand.}
 \RU{Для коммутативных операций, таких как сложение или умножение, 
-(там операнды можно менять местами и это не влияет на результат).}
+операнды можно менять местами и это не влияет на результат.}
 \EN{That's fine for commutative operations like addition or multiplication 
 (operands may be swapped there without changing the result).}
-\RU{Но вычитание ~--- операция некоммутативная, так что, для этих случаев существует инструкция \TT{RSB}.}
-\EN{But subtraction is a non-commutative operation, so \TT{RSB} exist for these cases.}
+\RU{Но вычитание~--- операция некоммутативная, так что для этих случаев существует инструкция \RSB.}
+\EN{But subtraction is a non-commutative operation, so \RSB exist for these cases.}
 
 \index{ARM!\Instructions!LDR.W}
-\EN{The}\RU{Инструкция} \TT{``LDR.W R9, [R9]''} \RU{работает как}\EN{instruction works like} \LEA~(\myref{sec:LEA})
+\EN{The}\RU{Инструкция} \INS{LDR.W R9, [R9]} \RU{работает как}\EN{instruction works like} \LEA~(\myref{sec:LEA})
 \RU{в x86, и здесь она ничего не делает, она избыточна.}
 \EN{in x86, but it does nothing here, it is redundant.}
-\RU{Вероятно, компилятор несоптимизировал её.}\EN{Apparently, the compiler did not optimize it out.}
+\RU{Вероятно, компилятор не оптимизировал её.}\EN{Apparently, the compiler did not optimize it out.}
 \fi
 
 \ifdefined\IncludeMIPS
 \subsubsection{MIPS}
 
 \index{MIPS!Global Pointer}
-\EN{My example is tiny, so the GCC compiler decided to put the $a$ table into the 64KiB area 
+\EN{My example is tiny, so the GCC compiler decided to put the $a$ array into the 64KiB area 
 addressable by the Global Pointer.}
-\RU{Мой пример такой крошечный, что компилятор GCC решил разместить таблицу $a$ в 64KiB-области,
+\RU{Мой пример такой крошечный, что компилятор GCC решил разместить массив $a$ в 64KiB-области,
 адресуемой при помощи Global Pointer.}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/13_arrays/5_multidimensional/multi_MIPS_O3_IDA.lst.\LANG}
