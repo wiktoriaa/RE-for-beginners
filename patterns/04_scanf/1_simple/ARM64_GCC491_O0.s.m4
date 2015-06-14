@@ -5,7 +5,7 @@ include(`commons.m4').LC0:
 .LC2:
 	.string	"You entered %d...\n"
 scanf_main:
-; _EN(`subtract 32 from SP, then save FP and LR in stack frame')_RU(`вычесть 32 из SP, затем сохранить FP и LR в стековом фрейме'):
+; _EN(``subtract 32 from SP, then save FP and LR in stack frame'')_RU(``вычесть 32 из SP, затем сохранить FP и LR в стековом фрейме''):
 	stp	x29, x30, [sp, -32]!
 ; _EN(`set stack frame')_RU(`установить стековый фрейм') (FP=SP)
 	add	x29, sp, 0
@@ -33,6 +33,6 @@ scanf_main:
 	bl	printf
 ; _return 0
 	mov	w0, 0
-; _EN(`restore FP and LR, then add 32 to SP')_RU(`восстановить FP и LR, затем прибавить 32 к SP'):
+; _EN(``restore FP and LR, then add 32 to SP'')_RU(``восстановить FP и LR, затем прибавить 32 к SP''):
 	ldp	x29, x30, [sp], 32
 	ret
