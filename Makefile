@@ -49,6 +49,7 @@ clean:
 	rm -f *.odt
 	rm -f *.rtf
 
+# there are two xelatex invocations at the end, because \myref{} doesn't show pages correctly otherwise
 define compile
 	rm -f *.fls
 	rm -f *.bbl
@@ -57,6 +58,7 @@ define compile
 	biber $1
 	makeindex $1
 	makeglossaries $1
+	xelatex $1
 	xelatex $1
 endef
 
