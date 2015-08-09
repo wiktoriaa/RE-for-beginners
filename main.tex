@@ -15,12 +15,26 @@
 \defaultfontfeatures{Scale=MatchLowercase} % ensure all fonts have the same 1ex
 \usepackage{ucharclasses}
 \usepackage{csquotes}
+
+\ifdefined\ENGLISH
+\setmainlanguage{english}
+\setotherlanguage{russian}
+\fi
+
 \ifdefined\RUSSIAN
 \setmainlanguage{russian}
 \newfontfamily\cyrillicfonttt{Droid Sans Mono}
 \setotherlanguage{english}
-\else
-\setmainlanguage{english}
+\fi
+
+\ifdefined\SPANISH
+\setmainlanguage{spanish}
+\setotherlanguage{english}
+\fi
+
+\ifdefined\BRAZILIAN
+\setmainlanguage{portuges}
+\setotherlanguage{english}
 \fi
 
 \usepackage{microtype}
@@ -179,7 +193,7 @@
 \include{survey}
 
 \ifx\LITE\undefined
-\shorttoc{\RU{Краткое оглавление}\EN{Abridged contents}}{-1} % Only sections
+\shorttoc{\RU{Краткое оглавление}\EN{Abridged contents}\SP{Spanish text}\PTBRph{}\SPph{}}{-1} % Only sections
 \fi
 \tableofcontents
 \cleardoublepage
@@ -208,7 +222,7 @@
 
 \clearpage
 \phantomsection
-\addcontentsline{toc}{chapter}{\RU{Глоссарий}\EN{Glossary}}
+\addcontentsline{toc}{chapter}{\RU{Глоссарий}\EN{Glossary}\PTBRph{}\SPph{}}
 \printglossaries
 
 \clearpage
@@ -217,7 +231,7 @@
 
 \clearpage
 \phantomsection
-\addcontentsline{toc}{chapter}{\RU{Библиография}\EN{Bibliography}}
+\addcontentsline{toc}{chapter}{\RU{Библиография}\EN{Bibliography}\PTBRph{}\SPph{}}
 \printbibliography
 
 \end{document}

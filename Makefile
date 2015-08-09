@@ -1,12 +1,18 @@
-.SUFFIXES: .m4 .ru .en
+.SUFFIXES: .m4 .ru .en .sp .ptbr
 .m4.en:
 	m4 --define=lang=en $*.m4 >$*.en
 .m4.ru:
 	m4 --define=lang=ru $*.m4 >$*.ru
+.m4.sp:
+	m4 --define=lang=sp $*.m4 >$*.sp
+.m4.ptbr:
+	m4 --define=lang=ptbr $*.m4 >$*.ptbr
 
 M4SOURCES := $(shell find . $(pwd) -name '*.m4')
 RU_LISTINGS := $(M4SOURCES:%.m4=%.ru)
 EN_LISTINGS := $(M4SOURCES:%.m4=%.en)
+SP_LISTINGS := $(M4SOURCES:%.m4=%.sp)
+PTBR_LISTINGS := $(M4SOURCES:%.m4=%.ptbr)
 
 all:    russian english russian-A5 english-A5 \
 	russian-lite english-lite russian-A5-lite english-A5-lite
@@ -85,3 +91,16 @@ russian-A5-lite: $(RU_LISTINGS)
 
 english-A5-lite: $(EN_LISTINGS)
 	$(call compile,Reverse_Engineering_for_Beginners-en-A5-lite)
+
+#SP:	$(SP_LISTINGS)
+#	$(call compile,Reverse_Engineering_for_Beginners-SP)
+
+#PTBR:	$(PTBR_LISTINGS)
+#	$(call compile,Reverse_Engineering_for_Beginners-PTBR)
+
+SP-lite: $(SP_LISTINGS)
+	$(call compile,Reverse_Engineering_for_Beginners-SP-lite)
+
+PTBR-lite: $(PTBR_LISTINGS)
+	$(call compile,Reverse_Engineering_for_Beginners-PTBR-lite)
+

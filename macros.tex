@@ -1,8 +1,30 @@
 \newcommand*{\TT}[1]{\texttt{#1}}
 \newcommand*{\IT}[1]{\textit{#1}}
 \newcommand*{\EN}[1]{\iflanguage{english}{#1}{}}
-\newcommand*{\RU}[1]{\iflanguage{english}{}{#1}}
-\newcommand{\LANG}{\RU{ru}\EN{en}}
+
+\ifdefined\RUSSIAN{}
+\newcommand*{\RU}[1]{\iflanguage{russian}{#1}{}}
+\else
+\newcommand*{\RU}[1]{}
+\fi
+
+\ifdefined\SPANISH{}
+\newcommand*{\SP}[1]{\iflanguage{spanish}{#1}{}}
+\else
+\newcommand*{\SP}[1]{}
+\fi
+
+\ifdefined\BRAZILIAN{}
+\newcommand*{\PTBR}[1]{\iflanguage{portuges}{#1}{}}
+\else
+\newcommand*{\PTBR}[1]{}
+\fi
+
+\newcommand{\LANG}{\RU{ru}\EN{en}\SP{sp}\PTBR{ptbr}}
+
+\newcommand{\SPph}{\SP{Spanish text placeholder}}
+\newcommand{\PTBRph}{\PTBR{Brazilian Portuguese text placeholder}}
+
 \newcommand*{\dittoclosing}{---''---}
 \newcommand*{\EMDASH}{\RU{~--- }\EN{---}}
 \newcommand*{\AsteriskOne}{${}^{*}$}
@@ -15,26 +37,26 @@
 \newcommand{\ttfone}{\TT{f1()}\xspace}
 
 % without dot!
-\newcommand{\etc}{\RU{и~т.д}\EN{etc}}
+\newcommand{\etc}{\RU{и~т.д}\EN{etc}\PTBRph{}\SPph{}}
 
 % http://tex.stackexchange.com/questions/32160/new-line-after-paragraph
 \newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\} 
 
-\newcommand{\figname}{\RU{илл}\EN{fig}.\xspace}
+\newcommand{\figname}{\RU{илл}\EN{fig}\PTBRph{}\SPph{}.\xspace}
 \newcommand{\figref}[1]{\figname{}\ref{#1}\xspace}
-\newcommand{\listingname}{\RU{листинг}\EN{listing}.\xspace}
+\newcommand{\listingname}{\RU{листинг}\EN{listing}\PTBRph{}\SPph{}.\xspace}
 \newcommand{\lstref}[1]{\listingname{}\ref{#1}\xspace}
-\newcommand{\bitENRU}{\RU{бит}\EN{bit}\xspace}
-\newcommand{\bitsENRU}{\RU{бита}\EN{bits}\xspace}
-\newcommand{\Sourcecode}{\RU{Исходный код}\EN{Source code}\xspace}
-\newcommand{\Seealso}{\RU{См. также}\EN{See also}\xspace}
+\newcommand{\bitENRU}{\RU{бит}\EN{bit}\PTBRph{}\SPph{}\xspace}
+\newcommand{\bitsENRU}{\RU{бита}\EN{bits}\PTBRph{}\SPph{}\xspace}
+\newcommand{\Sourcecode}{\RU{Исходный код}\EN{Source code}\PTBRph{}\SPph{}\xspace}
+\newcommand{\Seealso}{\RU{См. также}\EN{See also}\PTBRph{}\SPph{}\xspace}
 \newcommand{\MacOSX}{Mac OS X\xspace}
 
 % FIXME TODO non-overlapping color!
 % \newcommand{\headercolor}{\cellcolor{blue!25}}
 \newcommand{\headercolor}{}
 
-\newcommand{\tableheader}{\headercolor{} \RU{смещение}\EN{offset} & \headercolor{} \RU{описание}\EN{description}}
+\newcommand{\tableheader}{\headercolor{} \RU{смещение}\EN{offset}\PTBRph{}\SPph{} & \headercolor{} \RU{описание}\EN{description}\PTBRph{}\SPph{}}
 
 \newcommand{\IDA}{\ac{IDA}\xspace}
 
@@ -215,7 +237,7 @@
 \newcommand{\BEQ}{\TT{BEQ}\xspace}
 
 % instructions descriptions
-\newcommand{\ASRdesc}{\RU{арифметический сдвиг вправо}\EN{arithmetic shift right}}
+\newcommand{\ASRdesc}{\RU{арифметический сдвиг вправо}\EN{arithmetic shift right}\PTBRph{}\SPph{}}
 
 % x86 registers tables
 % TODO: non-overlapping color!
@@ -238,6 +260,7 @@
  2nd &
  1st &
  0th}
+\PTBRph{}\SPph{}
 }
 
 % FIXME навести порядок тут...

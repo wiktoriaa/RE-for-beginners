@@ -47,3 +47,19 @@ Korean, Chinese and Farsi translations are reserved by publishers.
 English and Russian versions I maintain by myself, but any fixes are very welcome!
 
 [Contact me](http://yurichev.com/contacts.html) for any questions.
+
+Spanish and Brazilian Portuguese macros
+---------------------------------------
+
+The macros for Spanish and Brazilian Portuguese are already defined: `\SP{}` and `\PTBR{}`.
+You may start to translate right now.
+To check your results, just run `make SP-lite` and/or `make PTBR-lite` (let's start with LITE version anyway).
+You'll see almost blank pages with only listings and screenshots, without any text.
+Grep for each `\EN{}` macro in .tex file and add your translation.
+Same story with .m4 files, there are `_SP()` and `_PTBR()` macros.
+
+There is also `\SPph{}` and `\PTBRph{}` placeholder macros in .tex files, where the translated text must be.
+You may start to translate there.
+
+Do not hesitate to contact me if you have any questions.
+
