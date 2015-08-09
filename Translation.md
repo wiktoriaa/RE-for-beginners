@@ -48,18 +48,28 @@ English and Russian versions I maintain by myself, but any fixes are very welcom
 
 [Contact me](http://yurichev.com/contacts.html) for any questions.
 
+Style
+-----
+
+I deeply convinced that technical literature should should be terse and formal.
+Imagine you've got some reference book on your bookshelf.
+You need it once a month, to get Pi exact value from it or something like that.
+Perfect reference is a book where you'll see "Pi=3.14159..." and nothing else.
+Informal or verbose language in technical books annoys you each time you looking up for the information you need.
+
 Spanish and Brazilian Portuguese macros
 ---------------------------------------
 
-The macros for Spanish and Brazilian Portuguese are already defined: `\SP{}` and `\PTBR{}`.
+The macros for Spanish and Brazilian Portuguese are already defined: `\ES{}` and `\PTBR{}`.
 You may start to translate right now.
-To check your results, just run `make SP-lite` and/or `make PTBR-lite` (let's start with LITE version anyway).
+To check your results, just run `make ES-lite` and/or `make PTBR-lite` (let's start with LITE version anyway).
 You'll see almost blank pages with only listings and screenshots, without any text.
 Grep for each `\EN{}` macro in .tex file and add your translation.
-Same story with .m4 files, there are `_SP()` and `_PTBR()` macros.
+Same story with .m4 files, there are `_ES()` and `_PTBR()` macros.
 
-There is also `\SPph{}` and `\PTBRph{}` placeholder macros in .tex files, where the translated text must be.
+There is also `\ESph{}` and `\PTBRph{}` placeholder macros in .tex files, where the translated text must be.
 You may start to translate there.
 
 Do not hesitate to contact me if you have any questions.
+
 
