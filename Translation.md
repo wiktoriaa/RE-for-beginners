@@ -57,6 +57,9 @@ You need it once a month, to get Pi exact value from it or something like that.
 Perfect reference is a book where you'll see "Pi=3.14159..." and nothing else.
 Informal or verbose language in technical books annoys you each time you looking up for the information you need.
 
+On the other hand, terminology may be informal, just as typical IT bloggers use.
+Don't hesitate to use English words in your language if this is norm in IT speech of your language and there are no good translation yet.
+
 Spanish and Brazilian Portuguese macros
 ---------------------------------------
 
