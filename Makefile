@@ -92,11 +92,11 @@ russian-A5-lite: $(RU_LISTINGS)
 english-A5-lite: $(EN_LISTINGS)
 	$(call compile,Reverse_Engineering_for_Beginners-en-A5-lite)
 
-#ES:	$(ES_LISTINGS)
-#	$(call compile,Reverse_Engineering_for_Beginners-ES)
+ES:	$(ES_LISTINGS)
+	$(call compile,Reverse_Engineering_for_Beginners-ES)
 
-#PTBR:	$(PTBR_LISTINGS)
-#	$(call compile,Reverse_Engineering_for_Beginners-PTBR)
+PTBR:	$(PTBR_LISTINGS)
+	$(call compile,Reverse_Engineering_for_Beginners-PTBR)
 
 ES-lite: $(ES_LISTINGS)
 	$(call compile,Reverse_Engineering_for_Beginners-ES-lite)
