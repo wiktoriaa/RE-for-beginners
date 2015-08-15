@@ -1,6 +1,7 @@
 divert(-1)define(`_RU', `ifelse(lang,`ru',§$1§)')
 define(`_EN', `ifelse(lang,`en',§$1§)')
 define(`_ES', `ifelse(lang,`es',§$1§)')
+define(`_PL', `ifelse(lang,`pl',§$1§)')
 define(`_PTBR', `ifelse(lang,`ptbr',§$1§)')
 define(`_if',`_EN(`if')_RU(`если')')
 define(`_or',`_EN(`or')_RU(`или')')
