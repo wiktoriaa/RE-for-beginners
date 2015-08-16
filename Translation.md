@@ -62,7 +62,7 @@ Language
 
 On the other hand, terminology may be informal, just as typical modern IT bloggers use.
 Don't hesitate to use English words in your language if this is norm in IT speech of your language and there are no good translation yet.
-Russian IT language is a mix of Russian and English words, and this is current language norm (at least in 2015), so I use this language in this book.
+For example, Russian IT language is a mix of Russian and English words, and this is current language norm (at least in 2015), so I use this language in this book.
 
 Spanish, Brazilian Portuguese and Polish macros
 -----------------------------------------------
