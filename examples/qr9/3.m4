@@ -9,4 +9,4 @@ include(`commons.m4').text:00541379 mov     ecx, esi
 .text:00541389 mov     ecx, edx
 .text:0054138B push    1               ; Count
 .text:0054138D and     ecx, 3
-.text:00541390 rep stosb               ; memset (buffer, 0, _EN(`aligned_size')_RU(`выровненный_размер'))
+.text:00541390 rep stosb               ; memset (buffer, 0, _EN(`aligned\_size')_RU(`выровненный\_размер'))
