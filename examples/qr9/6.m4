@@ -1,5 +1,5 @@
 include(`commons.m4').text:005410A0    lea     ebx, [esp+50h+internal_array_64]
-.text:005410A4    mov     edi, 7          ; _EN(`EDI is loop 1 counter, initial state is 7')_RU(`EDI здесь счетчик первого цикла, значение на старте - 7')
+.text:005410A4    mov     edi, 7          ; _EN(``EDI is loop 1 counter, initial state is 7'')_RU(``EDI здесь счетчик первого цикла, значение на старте - 7'')
 .text:005410A9
 .text:005410A9 second_loop1_begin:
 .text:005410A9    xor     esi, esi        ; _EN(`ESI is loop 2 counter')_RU(`ESI - счетчик второго цикла')
