@@ -17,4 +17,4 @@ define(`_numvecreg',`_EN(`number of vector registers passed')_RU(`количес
 define(`_print',`_EN(`print')_RU(`вывести')')
 define(`_increment',`_EN(`increment')_RU(`инкремент')')
 define(`_input_value',`_EN(`input value')_RU(`входное значение')')
-divert(0)
+divert(0)dnl
