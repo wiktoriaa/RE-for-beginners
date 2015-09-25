@@ -2,7 +2,7 @@ include(`commons.m4')$LC0:
 	.ascii	"Hello, world!\012\000"
 main:
 ; _EN(`function prologue.')_RU(`пролог функции')
-; _EN(`save the GP and FP in the stack')_RU(`сохранить GP и FP в стеке'):
+; _EN(`save the RA ($\$$31) and FP in the stack')_RU(`сохранить RA ($\$$31) и FP в стеке'):
 	addiu	$sp,$sp,-32
 	sw	$31,28($sp)
 	sw	$fp,24($sp)

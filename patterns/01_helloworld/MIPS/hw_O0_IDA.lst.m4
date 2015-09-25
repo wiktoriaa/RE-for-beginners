@@ -5,7 +5,7 @@ include(`commons.m4').text:00000000 main:
 .text:00000000 var_4           = -4
 .text:00000000
 ; _EN(`function prologue.')_RU(`пролог функции')
-; _EN(`save the GP and FP in the stack')_RU(`сохранить GP и FP в стеке'):
+; _EN(`save the RA and FP in the stack')_RU(`сохранить RA и FP в стеке'):
 .text:00000000                 addiu   $sp, -0x20
 .text:00000004                 sw      $ra, 0x20+var_4($sp)
 .text:00000008                 sw      $fp, 0x20+var_8($sp)
