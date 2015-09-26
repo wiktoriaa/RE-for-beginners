@@ -157,10 +157,6 @@ are not so critical to GCC users, so some unfixed errors may still exist.}.}
 \NonOptimizing GCC \RU{более многословный}\EN{is more verbose}.
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (\assemblyOutput),numbers=left]{patterns/01_helloworld/MIPS/hw_O0.s.\LANG}
-% Line 5 refers to the GP, but only the FP ($sp) and RA ($31) are saved.
-% It seems that saving the GP is not done,
-% and is not necessary in both the optimized (which is missing the recovery instruction in both versions) and unoptimized cases,
-% because it is not used again.
 
 \RU{Мы видим, что регистр FP используется как указатель на фрейм стека.}
 \EN{We see here that register FP is used as a pointer to the stack frame.}
@@ -178,7 +174,6 @@ instructions and then, if optimization is turned on, maybe eliminates them.}
 \EN{Here is also \IDA listing:}
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (\IDA),numbers=left]{patterns/01_helloworld/MIPS/hw_O0_IDA.lst.\LANG}
-% IDA does not see $gp in line 10, but $ra.
 
 \index{MIPS!\Pseudoinstructions!LA}
 \RU{Интересно что \IDA распознала пару инструкций LUI/ADDIU и собрала их в одну псевдоинструкцию 
