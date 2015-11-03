@@ -64,20 +64,22 @@ On the other hand, terminology may be informal, just as typical modern IT blogge
 Don't hesitate to use English words in your language if this is norm in IT speech of your language and there are no good translation yet.
 For example, Russian IT language is a mix of Russian and English words, and this is current language norm (at least in 2015), so I use this language in this book.
 
-Spanish, Brazilian Portuguese and Polish macros
------------------------------------------------
+Defined macros
+--------------
 
-The macros for Spanish and Brazilian Portuguese are already defined: `\ES{}` and `\PTBR{}`.
-Macro for Polish language is `\PL{}`.
+Spanish: `\ES{}`
+Brazilian Portuguese: `\PTBR{}`
+Polish: `\PL{}`
+Italian: `\ITA{}`
+
 You may start to translate right now.
-To check your results, just run `make ES-lite`, `make PTBR-lite` `make polish-lite` (let's start with LITE version anyway).
+To check your results, just run `make ES-lite`, `make PTBR-lite`, `make polish-lite`, `make IT-lite` (let's start with LITE version anyway).
 You'll see almost blank pages with only listings and screenshots, without any text.
 Grep for each `\EN{}` macro in .tex file and add your translation.
-Same story with .m4 files, there are `_ES()`, `_PTBR()` and `_PL()` macros.
+Same story with .m4 files, there are `_ES()`, `_PTBR()`, `_PL()` and `_IT()` macros.
 
-There is also `\ESph{}`, `\PTBRph{}` `\PLph{}` placeholder macros in .tex files, where the translated text must be.
+There is also `\ESph{}`, `\PTBRph{}`, `\PLph{}` and `\ITph{}` placeholder macros in .tex files, where the translated text must be.
 You may start to translate there.
 
 Do not hesitate to contact me if you have any questions.
-
 

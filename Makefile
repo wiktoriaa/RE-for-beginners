@@ -1,4 +1,4 @@
-.SUFFIXES: .m4 .ru .en .es .ptbr .pl
+.SUFFIXES: .m4 .ru .en .es .ptbr .pl .it
 .m4.en:
 	m4 --define=lang=en $*.m4 >$*.en
 .m4.ru:
@@ -9,6 +9,8 @@
 	m4 --define=lang=ptbr $*.m4 >$*.ptbr
 .m4.pl:
 	m4 --define=lang=es $*.m4 >$*.pl
+.m4.it:
+	m4 --define=lang=it $*.m4 >$*.it
 
 M4SOURCES := $(shell find . $(pwd) -name '*.m4')
 RU_LISTINGS := $(M4SOURCES:%.m4=%.ru)
@@ -16,6 +18,7 @@ EN_LISTINGS := $(M4SOURCES:%.m4=%.en)
 ES_LISTINGS := $(M4SOURCES:%.m4=%.es)
 PL_LISTINGS := $(M4SOURCES:%.m4=%.pl)
 PTBR_LISTINGS := $(M4SOURCES:%.m4=%.ptbr)
+IT_LISTINGS := $(M4SOURCES:%.m4=%.it)
 
 all:    russian english russian-A5 english-A5 \
 	russian-lite english-lite russian-A5-lite english-A5-lite
@@ -112,4 +115,9 @@ polish:	$(PL_LISTINGS)
 
 polish-lite: $(PL_LISTINGS)
 	$(call compile,Reverse_Engineering_for_Beginners-polish-lite)
+
+IT:	$(IT_LISTINGS)
+	$(call compile,Reverse_Engineering_for_Beginners-IT)
+IT-lite: $(IT_LISTINGS)
+	$(call compile,Reverse_Engineering_for_Beginners-IT-lite)
 
