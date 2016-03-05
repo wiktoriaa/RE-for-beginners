@@ -23,8 +23,7 @@ PTBR_LISTINGS := $(M4SOURCES:%.m4=%.ptbr)
 IT_LISTINGS := $(M4SOURCES:%.m4=%.it)
 DE_LISTINGS := $(M4SOURCES:%.m4=%.de)
 
-all:    russian english russian-A5 english-A5 \
-	russian-lite english-lite russian-A5-lite english-A5-lite
+all:    RU EN RU-A5 EN-A5 RU-lite EN-lite RU-A5-lite EN-A5-lite
 
 clean:
 	rm -f *.aux
@@ -78,28 +77,28 @@ define compile
 	xelatex $1
 endef
 
-russian: $(RU_LISTINGS)
+RU: $(RU_LISTINGS)
 	$(call compile,RE4B-RU)
 
-english: $(EN_LISTINGS)
+EN: $(EN_LISTINGS)
 	$(call compile,RE4B-EN)
 
-russian-A5: $(RU_LISTINGS)
+RU-A5: $(RU_LISTINGS)
 	$(call compile,RE4B-RU-A5)
 
-english-A5: $(EN_LISTINGS)
+EN-A5: $(EN_LISTINGS)
 	$(call compile,RE4B-EN-A5)
 
-russian-lite: $(RU_LISTINGS)
+RU-lite: $(RU_LISTINGS)
 	$(call compile,RE4B-RU-lite)
 
-english-lite: $(EN_LISTINGS)
+EN-lite: $(EN_LISTINGS)
 	$(call compile,RE4B-EN-lite)
 
-russian-A5-lite: $(RU_LISTINGS)
+RU-A5-lite: $(RU_LISTINGS)
 	$(call compile,RE4B-RU-A5-lite)
 
-english-A5-lite: $(EN_LISTINGS)
+EN-A5-lite: $(EN_LISTINGS)
 	$(call compile,RE4B-EN-A5-lite)
 
 ES:	$(ES_LISTINGS)
@@ -114,10 +113,10 @@ ES-lite: $(ES_LISTINGS)
 PTBR-lite: $(PTBR_LISTINGS)
 	$(call compile,RE4B-PTBR-lite)
 
-polish:	$(PL_LISTINGS)
+PL:	$(PL_LISTINGS)
 	$(call compile,RE4B-PL)
 
-polish-lite: $(PL_LISTINGS)
+PL-lite: $(PL_LISTINGS)
 	$(call compile,RE4B-PL-lite)
 
 IT:	$(IT_LISTINGS)
@@ -125,8 +124,8 @@ IT:	$(IT_LISTINGS)
 IT-lite: $(IT_LISTINGS)
 	$(call compile,RE4B-IT-lite)
 
-german:	$(DE_LISTINGS)
+DE:	$(DE_LISTINGS)
 	$(call compile,RE4B-DE)
-german-lite: $(DE_LISTINGS)
+DE-lite: $(DE_LISTINGS)
 	$(call compile,RE4B-DE-lite)
 

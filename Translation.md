@@ -35,8 +35,7 @@ Better way to provide translations to a sentence is to list them, like [here](ht
     `\FR{Another French sentence.}`
     ...
 
-Since this work can be done collaboratively, you may also use [my forum](http://forum.yurichev.com/viewforum.php?f=6) for coordination.
-Github may also be used as well.
+Github may be used as for coordination.
 
 Do not be discouraged by the size of the whole project. 
 Try to translate some small piece with familiar material to you.
@@ -74,7 +73,7 @@ Italian: `\ITA{}`
 German: `\DE{}`
 
 You may start to translate right now.
-To check your results, just run `make ES-lite`, `make PTBR-lite`, `make polish-lite`, `make IT-lite`, `make DE-lite` (let's start with LITE version anyway).
+To check your results, just run `make ES-lite`, `make PTBR-lite`, `make PL-lite`, `make IT-lite`, `make DE-lite` (let's start with LITE version anyway).
 You'll see almost blank pages with only listings and screenshots, without any text.
 Grep for each `\EN{}` macro in .tex file and add your translation.
 Same story with .m4 files, there are `_ES()`, `_PTBR()`, `_PL()`, `_DE()` and `_IT()` macros.
