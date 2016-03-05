@@ -1,4 +1,4 @@
-.SUFFIXES: .m4 .ru .en .es .ptbr .pl .it
+.SUFFIXES: .m4 .ru .en .es .ptbr .pl .it .de
 .m4.en:
 	m4 --define=lang=en $*.m4 >$*.en
 .m4.ru:
@@ -11,6 +11,8 @@
 	m4 --define=lang=es $*.m4 >$*.pl
 .m4.it:
 	m4 --define=lang=it $*.m4 >$*.it
+.m4.de:
+	m4 --define=lang=de $*.m4 >$*.de
 
 M4SOURCES := $(shell find . $(pwd) -name '*.m4')
 RU_LISTINGS := $(M4SOURCES:%.m4=%.ru)
@@ -19,6 +21,7 @@ ES_LISTINGS := $(M4SOURCES:%.m4=%.es)
 PL_LISTINGS := $(M4SOURCES:%.m4=%.pl)
 PTBR_LISTINGS := $(M4SOURCES:%.m4=%.ptbr)
 IT_LISTINGS := $(M4SOURCES:%.m4=%.it)
+DE_LISTINGS := $(M4SOURCES:%.m4=%.de)
 
 all:    russian english russian-A5 english-A5 \
 	russian-lite english-lite russian-A5-lite english-A5-lite
@@ -54,6 +57,7 @@ clean:
 	rm -f *.ru
 	rm -f RE_for_beginners-*.log
 	rm -f Reverse_Engineering_for_Beginners-*.log
+	rm -f RE4B-*.log
 	rm -f *~
 	rm -f *.log
 	rm -f *.lyx
@@ -75,49 +79,54 @@ define compile
 endef
 
 russian: $(RU_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-ru)
+	$(call compile,RE4B-RU)
 
 english: $(EN_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-en)
+	$(call compile,RE4B-EN)
 
 russian-A5: $(RU_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-ru-A5)
+	$(call compile,RE4B-RU-A5)
 
 english-A5: $(EN_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-en-A5)
+	$(call compile,RE4B-EN-A5)
 
 russian-lite: $(RU_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-ru-lite)
+	$(call compile,RE4B-RU-lite)
 
 english-lite: $(EN_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-en-lite)
+	$(call compile,RE4B-EN-lite)
 
 russian-A5-lite: $(RU_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-ru-A5-lite)
+	$(call compile,RE4B-RU-A5-lite)
 
 english-A5-lite: $(EN_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-en-A5-lite)
+	$(call compile,RE4B-EN-A5-lite)
 
 ES:	$(ES_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-ES)
+	$(call compile,RE4B-ES)
 
 PTBR:	$(PTBR_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-PTBR)
+	$(call compile,RE4B-PTBR)
 
 ES-lite: $(ES_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-ES-lite)
+	$(call compile,RE4B-ES-lite)
 
 PTBR-lite: $(PTBR_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-PTBR-lite)
+	$(call compile,RE4B-PTBR-lite)
 
 polish:	$(PL_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-polish)
+	$(call compile,RE4B-PL)
 
 polish-lite: $(PL_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-polish-lite)
+	$(call compile,RE4B-PL-lite)
 
 IT:	$(IT_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-IT)
+	$(call compile,RE4B-IT)
 IT-lite: $(IT_LISTINGS)
-	$(call compile,Reverse_Engineering_for_Beginners-IT-lite)
+	$(call compile,RE4B-IT-lite)
+
+german:	$(DE_LISTINGS)
+	$(call compile,RE4B-DE)
+german-lite: $(DE_LISTINGS)
+	$(call compile,RE4B-DE-lite)
 
