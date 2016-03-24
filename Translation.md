@@ -1,6 +1,24 @@
 Want to translate this book to some other language?
 ---------------------------------------------------
 
+Easy way
+--------
+
+Just send me any piece of translated text (no matter how short) and I'll put it into my LaTeX source code.
+
+Speed isn't important, because this is open-source project, after all.
+Your name will be mentioned as project contributor.
+
+Korean, Chinese and Persian languages are reserved by publishers.
+
+English and Russian versions I do by myself, but my English is still that horrible, so I'm very grateful for any notes about grammar, etc.
+Even my Russian is also flawed, so I'm grateful for notes about Russian text as well!
+
+So do not hesitate to contact me: dennis(a)yurichev.com
+
+Hard way
+--------
+
 Keep in mind, it's a very hard and tedious work.
 You'll need basic understanding of git, LaTeX and m4.
 Aside from this, I do a lot of changes, so translators may need to syncronize their
