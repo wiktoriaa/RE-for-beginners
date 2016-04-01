@@ -89,6 +89,7 @@ Brazilian Portuguese: `\PTBR{}`
 Polish: `\PL{}`
 Italian: `\ITA{}`
 German: `\DE{}`
+Thai: `\THA{}`
 
 You may start to translate right now.
 To check your results, just run `make ES-lite`, `make PTBR-lite`, `make PL-lite`, `make IT-lite`, `make DE-lite` (let's start with LITE version anyway).
