@@ -47,21 +47,23 @@ call exit
 exit(main(argc,argv,envp));
 \end{lstlisting}
 
-\RU{Если вы объявите \main как \Tvoid, и ничего не будете возвращать явно (при помощи выражения \IT{return}), 
-то в единственный аргумент exit() попадет
-то, что лежало в регистре \EAX на момент выхода из \main.}
-\EN{If you declare \main as \Tvoid, nothing is to be returned explicitly 
-(using the \IT{return} statement),
-then something random, that was stored in the \EAX register at the end of \main becomes 
-the sole argument of the exit() function.}
-\RU{Там, скорее всего, будет какие-то случайное число, оставшееся от работы вашей функции.
-Так что код завершения программы будет псевдослучайным.}
-\EN{Most likely, there will be a random value, left from your function execution,
-so the exit code of program is pseudorandom.}\PTBRph{}\ESph{}\DEph{}\PLph{}\ITAph{}\THAph{} \\
+\ifdefined\RUSSIAN
+Если вы объявите \main как \Tvoid, и ничего не будете возвращать явно (при помощи выражения \IT{return}), то в единственный аргумент exit() попадет то, что лежало в регистре \EAX на момент выхода из \main.
+Там, скорее всего, будет какие-то случайное число, оставшееся от работы вашей функции. Так что код завершения программы будет псевдослучайным.
+\par
+Мы можем это проиллюстрировать.
+Заметьте, что у функции \main тип возвращаемого значения именно \Tvoid{}:
+\fi % RUSSIAN
 
-\RU{Мы можем это проиллюстрировать}\EN{We can illustrate this fact}. 
-\RU{Заметьте, что у функции}\EN{Please note that here the} \main
-\RU{тип возвращаемого значения именно}\EN{function has a} \Tvoid\EN{ return type}:
+\ifdefined\ENGLISH
+If you declare \main as \Tvoid, nothing is to be returned explicitly (using the \IT{return} statement),
+then something random, that was stored in the \EAX register at the end of \main becomes 
+the sole argument of the exit() function.
+Most likely, there will be a random value, left from your function execution, so the exit code of program is pseudorandom.
+\par
+We can illustrate this fact. 
+Please note that here the \main function has a \Tvoid return type:
+\fi % ENGLISH
 
 \begin{lstlisting}
 #include <stdio.h>
