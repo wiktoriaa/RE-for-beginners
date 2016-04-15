@@ -138,6 +138,8 @@ DE-lite: $(DE_LISTINGS)
 TH-lite: $(TH_LISTINGS)
 	$(call compile,RE4B-TH-lite)
 
+NL: $(NL_LISTINGS)
+	$(call compile,RE4B-NL)
 NL-lite: $(NL_LISTINGS)
 	$(call compile,RE4B-NL-lite)
 

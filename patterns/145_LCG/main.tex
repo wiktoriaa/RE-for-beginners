@@ -78,25 +78,27 @@ the 0..32767 range.}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/145_LCG/rand.s_Keil_ARM_O3.s.\LANG}
 
-\RU{В ARM инструкцию невозможно встроить 32-битную константу, так что Keil-у приходится размещать
-их отдельно и дополнительно загружать.}
-\EN{It's not possible to embed 32-bit constants into ARM instructions, so Keil has to place them externally
-and load them additionally.}
-
-\RU{Вот еще что интересно: константу 0x7FFF также нельзя встроить.}
-\EN{One interesting thing is that it's not possible to embed the 0x7FFF constant as well.}
-\RU{Поэтому Keil сдвигает \TT{rand\_state} влево на 17 бит и затем сдвигает вправо на 17 бит.}
-\EN{So what Keil does is shifting \TT{rand\_state} left by 17 bits and then shifting it right by 17 bits.}
-\RU{Это аналогично \CCpp{}-выражению $(rand\_state \ll 17) \gg 17$.}
-\EN{This is analogous to the $(rand\_state \ll 17) \gg 17$ statement in \CCpp.}
-\RU{Выглядит как бессмысленная операция, но тем не менее, что она делает это очищает старшие 17 бит, оставляя
-младшие 15 бит нетронутыми, и это наша цель, в конце концов.}
-\EN{It seems to be useless operation, but
-what it does is clearing the high 17 bits, leaving the low 15 bits intact, and that's our goal after all.}
-\ESph{}\PTBRph{}\DEph{}\PLph{}\ITAph{}\\
+\ifdefined\RUSSIAN
+В ARM инструкцию невозможно встроить 32-битную константу, так что Keil-у приходится размещать их отдельно и дополнительно загружать.
+Вот еще что интересно: константу 0x7FFF также нельзя встроить.
+Поэтому Keil сдвигает \TT{rand\_state} влево на 17 бит и затем сдвигает вправо на 17 бит.
+Это аналогично \CCpp{}-выражению $(rand\_state \ll 17) \gg 17$.
+Выглядит как бессмысленная операция, но тем не менее, что она делает это очищает старшие 17 бит, оставляя младшие 15 бит нетронутыми, и это наша цель, в конце концов. \\
 \\
-\Optimizing Keil \RU{для режима Thumb делает почти такой же код}\EN{for Thumb mode generates mostly the same code}.
-\fi
+\Optimizing Keil для режима Thumb делает почти такой же код.
+\fi % RUSSIAN
+
+\ifdefined\ENGLISH
+It's not possible to embed 32-bit constants into ARM instructions, so Keil has to place them externally and load them additionally.
+One interesting thing is that it's not possible to embed the 0x7FFF constant as well.
+So what Keil does is shifting \TT{rand\_state} left by 17 bits and then shifting it right by 17 bits.
+This is analogous to the $(rand\_state \ll 17) \gg 17$ statement in \CCpp.
+It seems to be useless operation, but what it does is clearing the high 17 bits, leaving the low 15 bits intact, and that's our goal after all. \\
+\\
+\Optimizing Keil for Thumb mode generates mostly the same code.
+\fi % ENGLISH
+
+\fi % IncludeARM
 
 \ifdefined\IncludeMIPS
 \input{patterns/145_LCG/MIPS}

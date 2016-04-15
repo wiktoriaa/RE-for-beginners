@@ -1,14 +1,18 @@
-\section{GCC\EMDASH{}\EN{one more thing}\RU{ещё кое-что}}
+\section{GCC\EMDASH{}\EN{one more thing}\RU{ещё кое-что}\NL{Nog een ding}}
 \label{use_parts_of_C_strings}
 
-\RU{Тот факт, что \IT{анонимная} Си-строка имеет тип}\EN{The fact that an \IT{anonymous} C-string has} 
-\IT{const}\EN{ type} (\myref{string_is_const_char}), 
-\RU{и тот факт, что выделенные в сегменте констант Си-строки гаратировано неизменяемые (immutable), 
-ведет к интересному следствию}\EN{and
-that C-strings allocated in constants segment are guaranteed to be immutable, has an interesting consequence}:
-\RU{компилятор может использовать определенную часть строки}\EN{the compiler may use a specific part of the string}.
+\NL{Het feit dat een \IT{anonieme} C-string het type \IT{const} heeft (\myref{string_is_const_char}), 
+en dat C-string gealloceerd in het segment met de constanten gegarandeerd immuteerbaar zijn, heeft een interessant gevolg:
+De compiler kan een specifiek gedeelte van de string gebruiken.}%
+\RU{Тот факт, что \IT{анонимная} Си-строка имеет тип \IT{const} (\myref{string_is_const_char}), 
+и тот факт, что выделенные в сегменте констант Си-строки гаратировано неизменяемые (immutable), 
+ведет к интересному следствию: компилятор может использовать определенную часть строки.}%
+\EN{The fact that an \IT{anonymous} C-string has \IT{const} type (\myref{string_is_const_char}), 
+and that C-strings allocated in constants segment are guaranteed to be immutable, has an interesting consequence:
+the compiler may use a specific part of the string.}
 
-\RU{Вот простой пример}\EN{Let's try this example}:
+
+\RU{Вот простой пример}\EN{Let's try this example}\NL{Laten we dit voorbeeld proberen}:
 
 \begin{lstlisting}
 #include <stdio.h>
@@ -30,10 +34,9 @@ int main()
 }
 \end{lstlisting}
 
-\RU{Среднестатистический компилятор с \CCpp (включая MSVC) выделит место для двух строк, 
-но вот что делает GCC 4.8.1}%
-\EN{Common \CCpp{}-compilers (including MSVC) allocate two strings, 
-but let's see what GCC 4.8.1 does}:
+\RU{Среднестатистический компилятор с \CCpp (включая MSVC) выделит место для двух строк, но вот что делает GCC 4.8.1}%
+\EN{Common \CCpp{}-compilers (including MSVC) allocate two strings, but let's see what GCC 4.8.1 does}%
+\NL{Veelgebruikte \CCpp{}-compilers (inclusief MSVC) alloceren twee strings, maar laat ons eens kijken wat GCC 4.8.1 doet}:
 
 \begin{lstlisting}[caption=GCC 4.8.1 + \RU{листинг в }IDA\EN{ listing}]
 f1              proc near
@@ -62,16 +65,24 @@ aHello          db 'hello '
 s               db 'world',0xa,0
 \end{lstlisting}
 
-\RU{Действительно, когда мы выводим строку}\EN{Indeed: when we print the \q{hello world} string}, 
-\RU{эти два слова расположены в памяти впритык друг к другу и \puts, вызываясь из функции f2(), вообще не знает,
-что эти строки разделены}\EN{these two words are positioned in memory adjacently and \puts called from f2() 
-function is not aware that this string is divided}. \RU{Они и не разделены на самом деле, они разделены
-только \q{виртуально}, в нашем листинге}\EN{In fact, it's not divided; it's divided only \q{virtually}, in this
-listing}.
+\NL{Inderdaad: wanneer we de \q{hello world} string printen, 
+Worden deze twee woorden aangrenzend in het geheugen geplaatsd, en \puts, die geroepen wordt van de f2()
+functie, is er zicht niet van bewust dat deze string opgedeeld is. 
+In feite is hij ook niet opgedeeld, hij is slechts \q{virtueel} opgedeeld in deze listing.}%
+\EN{Indeed: when we print the \q{hello world} string
+these two words are positioned in memory adjacently and \puts called from f2() 
+function is not aware that this string is divided. 
+In fact, it's not divided; it's divided only \q{virtually}, in this listing.}%
+\RU{Действительно, когда мы выводим строку \q{hello world}, 
+эти два слова расположены в памяти впритык друг к другу и \puts, вызываясь из функции f2(), вообще не знает,
+что эти строки разделены. Они и не разделены на самом деле, они разделены
+только \q{виртуально}, в нашем листинге.}
 
-\RU{Когда}\EN{When} \puts \RU{вызывается из f1(), он использует строку}\EN{is called from f1(), it uses the} 
-\q{world} \RU{плюс нулевой байт}\EN{string plus a zero byte}. \puts \RU{не знает, что там ещё есть какая-то строка
-перед этой}\EN{is not aware that there is something before this string}!
+\RU{Когда \puts вызывается из f1(), он использует строку \q{world} плюс нулевой байт. \puts не знает, что там ещё есть какая-то строка перед этой!}%
+\EN{When \puts is called from f1(), it uses the \q{world} string plus a zero byte. \puts is not aware that there is something before this string!}%
+\NL{Wanneer \puts aangeroepen wordt vanuit f1(), gebruikt het de \q{world} string plus een nulbyte. \puts is er zich niet van bewust dat er nog iets voor deze string staat!}
 
-\RU{Этот трюк часто используется (по крайней мере в GCC) и может сэкономить немного памяти.}
-\EN{This clever trick is often used by at least GCC and can save some memory.}
+\RU{Этот трюк часто используется (по крайней мере в GCC) и может сэкономить немного памяти.}%
+\EN{This clever trick is often used by at least GCC and can save some memory.}%
+\NL{Dit slimme truukje wordt vaak gebruikt door op zijn minst GCC, en kan geheugen besparen.}
+
