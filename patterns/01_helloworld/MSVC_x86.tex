@@ -1,6 +1,6 @@
 \subsection{MSVC}
 
-\RU{Компилируем в}\EN{Let's compile it in}\NL{We compileren het in} MSVC 2010:
+\RU{Компилируем в}\EN{Let's compile it in}\NL{We compileren het in}\PTBR{Vamos compilar esse código no} MSVC 2010:
 
 \begin{lstlisting}
 cl 1.cpp /Fa1.asm
@@ -9,6 +9,7 @@ cl 1.cpp /Fa1.asm
 \RU{(Ключ /Fa означает сгенерировать листинг на ассемблере)}%
 \EN{(/Fa option instructs the compiler to generate assembly listing file)}%
 \NL{(/Fa optie zorgt ervoor dat de compiler het bestand met assembly listing genereert)}%
+\PTBR{(A opção /Fa instrui o compilador para gerar o arquivo de listagem em assembly)}%
 
 \begin{lstlisting}[caption=MSVC 2010]
 CONST	SEGMENT
@@ -36,74 +37,90 @@ _TEXT	ENDS
 \RU{Разница между синтаксисом Intel и AT\&T будет рассмотрена немного позже:}
 \EN{The difference between Intel-syntax and AT\&T-syntax will be discussed in} 
 \NL{Het verschil tussen Intel-syntax en AT\&T-syntax zal besproken worden in:}\myref{ATT_syntax}.
+\PTBRph{}
 \fi
 
-\RU{Компилятор сгенерировал файл \TT{1.obj}, который впоследствии будет слинкован линкером в \TT{1.exe}.}%
-\EN{The compiler generated the file, \TT{1.obj}, which is to be linked into \TT{1.exe}.}%
-\NL{De compiler heeft het bestand, \TT{1.obj} gegenereerd, hetwelk gelinkt wordt tot \TT{1.exe}.}%
-\RU{В нашем случае этот файл состоит из двух сегментов: \TT{CONST} (для данных-констант) и \TT{\_TEXT} (для кода).}%
-\EN{In our case, the file contains two segments: \TT{CONST} (for data constants) and \TT{\_TEXT} (for code).}%
-\NL{In ons geval bevat het bestand twee segmenten: \TT{CONST} (voor data constanten) en \TT{\_TEXT}(voor code).}%
+\RU{Компилятор сгенерировал файл \TT{1.obj}, который впоследствии будет слинкован линкером в \TT{1.exe}.
+В нашем случае этот файл состоит из двух сегментов: \TT{CONST} (для данных-констант) и \TT{\_TEXT} (для кода).}%
+\EN{The compiler generated the file, \TT{1.obj}, which is to be linked into \TT{1.exe}.
+In our case, the file contains two segments: \TT{CONST} (for data constants) and \TT{\_TEXT} (for code).}%
+\NL{De compiler heeft het bestand, \TT{1.obj} gegenereerd, hetwelk gelinkt wordt tot \TT{1.exe}.
+In ons geval bevat het bestand twee segmenten: \TT{CONST} (voor data constanten) en \TT{\_TEXT}(voor code).}%
+\PTBR{O compilador gerou o arquivo \TT{1.obj}, que está ligado a \TT{1.exe}.
+No nosso caso, o arquivo contém dois segmentos: \TT{CONST} (para informações que são constantes) e \TT{\_TEXT} (para o código).}
 
 \index{\CLanguageElements!const}
 \label{string_is_const_char}
-\RU{Строка \TT{hello, world} в \CCpp имеет тип \TT{const char[]} \cite[p176, 7.3.2]{TCPPPL}, 
-однако не имеет имени.}%
-\EN{The string \TT{hello, world} in \CCpp has type \TT{const char[]} \cite[p176, 7.3.2]{TCPPPL},
-but it does not have its own name.}%
-\NL{De string \TT{hello, world} in \CCpp is van het type \TT{const char[]} \cite[p176, 7.3.2]{TCPPPL},
-maar heeft geen eigen naam.}%
-\RU{Но компилятору нужно как-то с ней работать, поэтому он дает ей внутреннее имя \TT{\$SG3830}.}%
-\EN{The compiler needs to deal with the string somehow so it defines the internal name \TT{\$SG3830} for it.}%
-\NL{De compiler moet een manier hebben om met de string om te kunnen, en definieert er daarom de interne naam \TT{\$SG3830} voor.}%
+\RU{Строка \TT{hello, world} в \CCpp имеет тип \TT{const char[]}\cite[p176, 7.3.2]{TCPPPL}, однако не имеет имени.
+Но компилятору нужно как-то с ней работать, поэтому он дает ей внутреннее имя \TT{\$SG3830}.}%
+\EN{The string \TT{hello, world} in \CCpp has type \TT{const char[]}\cite[p176, 7.3.2]{TCPPPL}, but it does not have its own name.
+The compiler needs to deal with the string somehow so it defines the internal name \TT{\$SG3830} for it.}%
+\NL{De string \TT{hello, world} in \CCpp is van het type \TT{const char[]}\cite[p176, 7.3.2]{TCPPPL}, maar heeft geen eigen naam.
+De compiler moet een manier hebben om met de string om te kunnen, en definieert er daarom de interne naam \TT{\$SG3830} voor.}%
+\PTBR{A string \TT{hello, word} em \CCpp tem seu tipo const \TT{const char[]}\cite[p176, 7.3.2]{TCPPPL}, mas não tem um nome.
+O compilador precisa lidar com essa string de alguma maneira, definindo então o nome de \TT{\$SG3830} para ela.}%
 
-\RU{Поэтому пример можно было бы переписать вот так}\EN{That is why the example may be rewritten as follows}\NL{Daarom kan het voorbeeld herschreven worden als volgt}:
+\RU{Поэтому пример можно было бы переписать вот так:}%
+\EN{That is why the example may be rewritten as follows:}%
+\NL{Daarom kan het voorbeeld herschreven worden als volgt:}%
+\PTBR{Assim, o código pode ser reescrito da seguinte maneira:}%
 
 \lstinputlisting{patterns/01_helloworld/hw_2.c}
 
 \RU{Вернемся к листингу на ассемблере. Как видно, строка заканчивается нулевым байтом~--- это требования стандарта \CCpp для строк.}%
 \EN{Let's go back to the assembly listing. As we can see, the string is terminated by a zero byte, which is standard for \CCpp strings.}%
 \NL{Laten we terug gaan naar de assembly listing. Zoals je kan zien, wordt de string beeindigd door een nul-byte. Dit is standaard voor \CCpp strings.}%
-\RU{Больше о строках в Си}\EN{More about C strings}\NL{Meer over C strings}: \myref{C_strings}.
+\PTBR{Vamos voltar para a listagem em assembly. Como podemos ver, a string é delimitada por um byte de valor zero, o que é padrão para strings em \CCpp.}%
+\RU{Больше о строках в \CCpp}\EN{More about \CCpp strings}\NL{Meer over \CCpp strings}\PTBR{Mais sobre strings em \CCpp}: \myref{C_strings}.
 
-\RU{В сегменте кода \TT{\_TEXT} находится пока только одна функция}%
-\EN{In the code segment, \TT{\_TEXT}, there is only one function so far}%
-\NL{In het code segment, \TT{\_TEXT}, is er slechts een functie tot nu toe}: \main.
+\RU{В сегменте кода \TT{\_TEXT} находится пока только одна функция: \main{}.}%
+\EN{In the code segment, \TT{\_TEXT}, there is only one function so far: \main{}.}%
+\NL{In het code segment, \TT{\_TEXT}, is er slechts een functie tot nu toe: \main{}.}%
+\PTBR{No segmento de código \TT{\_TEXT}, só há uma função por enquanto: \main{}.}%
 \RU{Функция \main, как и практически все функции, начинается с пролога и заканчивается эпилогом}%
 \EN{The function \main starts with prologue code and ends with epilogue code (like almost any function)}%
 \NL{De functie \main begint met een proloog code en eindigt met een epiloog code (zoals bijna elke functie)}%
+\PTBR{A função \main{} começa com um código como cabeçalho e termina com outro como rodapé (quase como qualquer outra função)}%
 \footnote{\RU{Об этом смотрите подробнее в разделе о прологе и эпилоге функции}%
 \EN{You can read more about it in the section about function prologues and epilogues}%
 \NL{Je kan hier meer over lezen in de sectie over functieprologen en epilogen}%
+\PTBRph{}
 ~(\myref{sec:prologepilog}).}.
 
 \index{x86!\Instructions!CALL}
-\RU{Далее следует вызов функции \printf}
-\EN{After the function prologue we see the call to the \printf function}
-\NL{Na de functie proloog zien we de call naar de \printf functie}: \TT{CALL \_printf}. 
+\RU{Далее следует вызов функции \printf{}: \TT{CALL \_printf}.}%
+\EN{After the function prologue we see the call to the \printf{} function: \TT{CALL \_printf}.}%
+\NL{Na de functie proloog zien we de call naar de \printf{} functie: \TT{CALL \_printf}.}%
+\PTBR{Depois do cabeçalho da função, podemos ver a chamada para a função \printf{}: \TT{CALL \_printf}.}%
 \index{x86!\Instructions!PUSH}
 \RU{Перед этим вызовом адрес строки (или указатель на неё) с нашим приветствием при помощи инструкции \PUSH помещается в стек.}
 \EN{Before the call the string address (or a pointer to it) containing our greeting is placed on the stack with the help of the \PUSH instruction.}
 \NL{Voor de call wordt het adres van de string (of een pointer ernaar) die onze begroeting bevat, op de stack geplaatsd met de hulp van de \PUSH instructie.}
+\PTBR{Antes da chamada, o endereço da string (ou um ponteiro para o mesmo) contendo nossa saudação (``Hello, world!'') é colocado na stack com a ajuda a instrução \PUSH.}
 
-\RU{После того, как функция \printf возвращает управление в функцию \main, адрес строки (или указатель на неё) всё ещё лежит в стеке.}%
-\EN{When the \printf function returns the control to the \main function, the string address (or a pointer to it) is still on the stack.}%
-\NL{Wanneer de \printf functie de controle teruggeeft aan de \main functie, staat het string adres (of de pointer ernaar) nog steeds op de stack.}%
-\RU{Так как он больше не нужен, то \glslink{stack pointer}{указатель стека} (регистр \ESP) корректируется.}%
-\EN{Since we do not need it anymore, the \gls{stack pointer} (the \ESP register) needs to be corrected.}%
-\NL{Aangezien we dit niet meer nodig hebben, moet de \gls{stack pointer} (het \ESP register) gecorrigeerd worden.}%
+\RU{После того, как функция \printf возвращает управление в функцию \main, адрес строки (или указатель на неё) всё ещё лежит в стеке.
+Так как он больше не нужен, то \glslink{stack pointer}{указатель стека} (регистр \ESP) корректируется.}%
+\EN{When the \printf function returns the control to the \main function, the string address (or a pointer to it) is still on the stack.
+Since we do not need it anymore, the \gls{stack pointer} (the \ESP register) needs to be corrected.}%
+\NL{Wanneer de \printf functie de controle teruggeeft aan de \main functie, staat het string adres (of de pointer ernaar) nog steeds op de stack.
+Aangezien we dit niet meer nodig hebben, moet de \gls{stack pointer} (het \ESP register) gecorrigeerd worden.}%
+\PTBR{Quando o a função printf() retorna o controle para a função main(), o endereço da string (ou o ponteiro para a mesma) ainda está na stack.
+Como não precisamos mais dela, o apontador da stack (registrador \ESP) precisa ser corrigido.}
 
 \index{x86!\Instructions!ADD}
-\TT{ADD ESP, 4} \RU{означает прибавить 4 к значению в регистре \ESP.}
-\EN{means add 4 to the \ESP register value.}
-\NL{betekent dat er 4 wordt opgeteld bij de \ESP registerwaarde.}
-\RU{Почему 4? Так как это 32-битный код, для передачи адреса нужно 4 байта. В x64-коде это 8 байт.}
-\EN{Why 4? Since this is a 32-bit program, we need exactly 4 bytes for address passing through the stack. If it was x64 code we would need 8 bytes.}
-\NL{Waarom 4? Aangezien dit een 32-bit programma is, hebben we exact 4 bytes nodig om een adres door te geven via de stack. als het x64 code was, zouden we 8 bytes nodig gehad hebben.}
-\TT{ADD ESP, 4} \RU{эквивалентно \TT{POP регистр}, но без использования какого-либо регистра\footnote{Флаги
-процессора, впрочем, модифицируются}.}
-\EN{is effectively equivalent to \TT{POP register} but without using any register\footnote{CPU flags, however, are modified}.}
-\NL{is een effectief equivalent voor \TT{POP register} maar zonder gebruik van een register\footnote{CPU flags worden echter wel aangepast}.}
+\RU{\TT{ADD ESP, 4} означает прибавить 4 к значению в регистре \ESP.}%
+\EN{\TT{ADD ESP, 4} means add 4 to the \ESP register value.}%
+\NL{\TT{ADD ESP, 4} betekent dat er 4 wordt opgeteld bij de \ESP registerwaarde.}%
+\PTBR{\TT{ADD ESP, 4} significa adicionar 4 para o valor do registrador \ESP.}%
+
+\RU{Почему 4? Так как это 32-битный код, для передачи адреса нужно 4 байта. В x64-коде это 8 байт.
+\TT{ADD ESP, 4} эквивалентно \TT{POP регистр}, но без использования какого-либо регистра\footnote{Флаги процессора, впрочем, модифицируются}.}%
+\EN{Why 4? Since this is a 32-bit program, we need exactly 4 bytes for address passing through the stack. If it was x64 code we would need 8 bytes.
+\TT{ADD ESP, 4} is effectively equivalent to \TT{POP register} but without using any register\footnote{CPU flags, however, are modified}.}%
+\NL{Waarom 4? Aangezien dit een 32-bit programma is, hebben we exact 4 bytes nodig om een adres door te geven via de stack. als het x64 code was, zouden we 8 bytes nodig gehad hebben.
+\TT{ADD ESP, 4} is een effectief equivalent voor \TT{POP register} maar zonder gebruik van een register\footnote{CPU flags worden echter wel aangepast}.}%
+\PTBR{Mas por que 4? Como esse é um programa de 32-bits, nós precisamos exatamente 4 bytes para endereço passando pela stack.
+\TT{ADD ESP, 4} é equivalente a um POP mas sem precisar de nenhum registrador\footnote{\ac{TBT}: CPU flags worden echter wel aangepast}.}%
 
 \index{Intel C++}
 \index{\oracle}
@@ -111,24 +128,26 @@ maar heeft geen eigen naam.}%
 
 \RU{Некоторые компиляторы, например, Intel C++ Compiler, в этой же ситуации могут вместо 
 \ADD сгенерировать \TT{POP ECX} (подобное можно встретить, например, в коде \oracle{}, им скомпилированном),
-что почти то же самое, только портится значение в регистре \ECX.}
+что почти то же самое, только портится значение в регистре \ECX.
+Возможно, компилятор применяет \TT{POP ECX}, потому что эта инструкция короче (1 байт у \TT{POP} против 3 у \TT{ADD}).}%
 \EN{For the same purpose, some compilers (like the Intel C++ Compiler) may emit \TT{POP ECX} 
 instead of \ADD (e.g., such a pattern can be observed in the \oracle{} code as it is compiled with the Intel C++ compiler).
-This instruction has almost the same effect but the \ECX register contents will be overwritten.}
+This instruction has almost the same effect but the \ECX register contents will be overwritten.
+The Intel C++ compiler probably uses \TT{POP ECX} since this instruction's opcode is shorter than \TT{ADD ESP, x} (1 byte for \TT{POP} against 3 for \TT{ADD}).}%
 \NL{Met dezelfde reden zullen sommige compilers (zoals de Intel C++ Compiler) gebruik maken van \TT{POP ECX}
 in plaats van \ADD (een dergelijk patroon kan waargenomen worden in de \oracle{} code aangezien deze gecompileerd is met de Intel C++ compiler).
-Deze instructie heeft bijna hetzelfde effect, maar de inhoud van het \ECX register zal overschreven worden.}
-\RU{Возможно, компилятор применяет \TT{POP ECX}, потому что эта инструкция короче (1 байт у \TT{POP} против 3 у \TT{ADD}).}
-\EN{The Intel C++ compiler probably uses \TT{POP ECX} since this instruction's opcode is shorter than 
-\TT{ADD ESP, x} (1 byte for \TT{POP} against 3 for \TT{ADD}).}
-\NL{De Intel C++ Compiler gebruikt waarschijnlijk \TT{POP ECX} aangezien de opcode van deze instructie
-korter is dan \TT{ADD ESP, x} (1 byte voor \TT{POP} tegen 3 voor \TT{ADD}).}
+Deze instructie heeft bijna hetzelfde effect, maar de inhoud van het \ECX register zal overschreven worden.
+De Intel C++ Compiler gebruikt waarschijnlijk \TT{POP ECX} aangezien de opcode van deze instructie korter is dan \TT{ADD ESP, x} (1 byte voor \TT{POP} tegen 3 voor \TT{ADD}).}%
+\PTBR{Pelos mesmos motivos, alguns compiladores (como o Intel C++ Compiler) podem emitir \TT{POP ECX} ao invés de \ADD (esse padrão pode ser observado no código do \oracle{} pois ele é compilado com o Intel C++ Compiler).
+Essa instrução tem quase o mesmo efeito mas o conteúdo de ECX seria apagado.
+O Intel C++ provavelmente usa \TT{POP ECX} pois o opcode é menor do que \TT{ADD ESP, x} (1 byte para \POP ao invés de 3 para \ADD).}%
 
-\RU{Вот пример использования \TT{POP} вместо \TT{ADD} из \oracle{}:}
-\EN{Here is an example of using \TT{POP} instead of \TT{ADD} from \oracle{}:}
-\NL{Hier is een voorbeeld van het gebruik van \TT{POP} in plaats van \TT{ADD} van \oracle{}:}
+\RU{Вот пример использования \POP вместо \ADD из \oracle{}:}%
+\EN{Here is an example of using \POP instead of \ADD from \oracle{}:}%
+\NL{Hier is een voorbeeld van het gebruik van \POP in plaats van \ADD van \oracle{}:}%
+\PTBR{Aqui está um exemplo do uso de \POP ao invés de \ADD do \oracle{}:}%
 
-\begin{lstlisting}[caption=\oracle 10.2 Linux (\RU{файл }app.o\EN{ file}\NL{ bestand})]
+\begin{lstlisting}[caption=\oracle 10.2 Linux (\RU{файл }app.o\EN{ file}\NL{ bestand}\PTBR{ file})]
 .text:0800029A                 push    ebx
 .text:0800029B                 call    qksfroChild
 .text:080002A0                 pop     ecx
@@ -138,42 +157,37 @@ korter is dan \TT{ADD ESP, x} (1 byte voor \TT{POP} tegen 3 voor \TT{ADD}).}
 %\EN{Read more about the stack in section}
 %\NL{Lees meer over de stack in de sectie} ~(\myref{sec:stack}).
 \index{\CLanguageElements!return}
-\RU{После вызова \printf в оригинальном коде на \CCpp указано \TT{return 0}~--- вернуть 0 
-в качестве результата функции \main.}
-\EN{After calling \printf, the original \CCpp code contains the statement \TT{return 0}~---return 0 as the result of the \main function.}
-\NL{Na \printf aan te roepen, bevat de originele \CCpp code het statement \TT{return 0}~---return 0 als resultaat van de \main functie.}
+\RU{После вызова \printf в оригинальном коде на \CCpp указано \TT{return 0}~--- вернуть 0 в качестве результата функции \main.}%
+\EN{After calling \printf, the original \CCpp code contains the statement \TT{return 0}~---return 0 as the result of the \main function.}%
+\NL{Na \printf aan te roepen, bevat de originele \CCpp code het statement \TT{return 0}~---return 0 als resultaat van de \main functie.}%
+\PTBR{Depois de chamar \printf{}, o código original em \CCpp contém a declaração \TT{return 0} --- return 0 como o resultado da função \main{}.}%
+
 \index{x86!\Instructions!XOR}
-\RU{В сгенерированном коде это обеспечивается инструкцией \INS{XOR EAX, EAX}.}
-\EN{In the generated code this is implemented by the instruction \INS{XOR EAX, EAX}.}
-\NL{In de gegenereerde code wordt dit geimplementeerd door de instructie \INS{XOR EAX, EAX}.}
+\RU{В сгенерированном коде это обеспечивается инструкцией \INS{XOR EAX, EAX}.}%
+\EN{In the generated code this is implemented by the instruction \INS{XOR EAX, EAX}.}%
+\NL{In de gegenereerde code wordt dit geimplementeerd door de instructie \INS{XOR EAX, EAX}.}%
+\PTBR{No código gerado, isso é implementado pela instrução \INS{XOR EAX, EAX}.}%
+
 \index{x86!\Instructions!MOV}
-\RU{\XOR, как легко догадаться~--- \q{исключающее ИЛИ}}%
-\EN{\XOR is in fact just \q{eXclusive OR}}%
-\NL{\XOR is feitelijk simpelweg \q{eXclusive OR}}%
-\footnote{\href{http://go.yurichev.com/17118}{wikipedia}}
-\RU{, но компиляторы часто используют его вместо простого}
-\EN{but the compilers often use it instead of}
-\NL{maar de compilers gebruiken het vaak in plaats van}
-\TT{MOV EAX, 0}\EMDASH{}\RU{снова потому, что опкод короче (2 байта у \TT{XOR} против 5 у \TT{MOV}).}
-\EN{again because it is a slightly shorter opcode (2 bytes for \TT{XOR} against 5 for \TT{MOV}).}
-\NL{wederom omdat de opcode hiervoor iets korter is (2 bytes voor \TT{XOR} tegenover 5 voor \TT{MOV}).}
+
+\RU{\XOR, как легко догадаться~--- \q{исключающее ИЛИ}\footnote{\href{http://go.yurichev.com/17118}{wikipedia}}, но компиляторы часто используют его вместо простого
+\INS{MOV EAX, 0} --- снова потому, что опкод короче (2 байта у \XOR против 5 у \MOV).}%
+\EN{\XOR is in fact just \q{eXclusive OR}\footnote{\href{http://go.yurichev.com/17118}{wikipedia}} but the compilers often use it instead of
+\INS{MOV EAX, 0}---again because it is a slightly shorter opcode (2 bytes for \XOR against 5 for \MOV).}%
+\NL{\XOR is feitelijk simpelweg \q{eXclusive OR}\footnote{\href{http://go.yurichev.com/17118}{wikipedia}} maar de compilers gebruiken het vaak in plaats van
+\INS{MOV EAX, 0} --- wederom omdat de opcode hiervoor iets korter is (2 bytes voor \XOR tegenover 5 voor \MOV).}%
+\PTBR{\XOR é a condição lógica ``ou exclusivo''\footnote{\href{http://go.yurichev.com/17118}{wikipedia}} que os compiladores geralmente usam ao invés de 
+\INS{MOV EAX, 0} --- de novo por causa de um pequeno decréscimo no número de bytes necessários (2 bytes para \XOR contra 5 para a instrução \MOV).}%
 
 \index{x86!\Instructions!SUB}
-\RU{Некоторые компиляторы генерируют}\EN{Some compilers emit}\NL{Sommige compilers gebruiken}
-\INS{SUB EAX, EAX},
-\RU{что значит \IT{отнять значение в} \EAX \IT{от значения в }\EAX,
-что в любом случае даст 0 в результате.}
-\EN{which means \IT{SUBtract the value in the} \EAX \IT{from the value in} \EAX,
-which, in any case, results in zero.}
-\NL{wat staat voor \IT{verminder de waarde in} \EAX \IT{met de waarde in} \EAX,
-wat in elke situatie resulteert in nul.}
+\RU{Некоторые компиляторы генерируют \INS{SUB EAX, EAX}, что значит \IT{отнять значение в} \EAX \IT{от значения в }\EAX, что в любом случае даст 0 в результате.}%
+\EN{Some compilers emit \INS{SUB EAX, EAX}, which means \IT{SUBtract the value in the} \EAX \IT{from the value in} \EAX, which, in any case, results in zero.}%
+\NL{Sommige compilers gebruiken \INS{SUB EAX, EAX}, wat staat voor \IT{verminder de waarde in} \EAX \IT{met de waarde in} \EAX, wat in elke situatie resulteert in nul.}%
+\PTBR{Alguns compiladores também usam \INS{SUB EAX, EAX}, que significa, SUBtrair o valor contido em \EAX do valor em \EAX, que, em qualquer caso, resultará em zero.}%
 
 \index{x86!\Instructions!RET}
-\RU{Самая последняя инструкция \RET возвращает управление в вызывающую функцию.
-Обычно это код \CCpp \ac{CRT}, который, в свою очередь, 
-вернёт управление операционной системе.}
-\EN{The last instruction \RET returns the control to the \gls{caller}.
-Usually, this is \CCpp \ac{CRT} code, which, in turn, returns control to the \ac{OS}.}
-\NL{De laatste instructie \RET geeft de controle terug aan de \gls{caller}.
-Gewoonlijk is dit \CCpp \ac{CRT} code, die op zijn beurt de controle teruggeeft aan het \ac{OS}.}
+\RU{Самая последняя инструкция \RET возвращает управление в вызывающую функцию. Обычно это код \CCpp \ac{CRT}, который, в свою очередь, вернёт управление в \ac{OS}.}
+\EN{The last instruction \RET returns the control to the \gls{caller}. Usually, this is \CCpp \ac{CRT} code, which, in turn, returns control to the \ac{OS}.}
+\NL{De laatste instructie \RET geeft de controle terug aan de \gls{caller}. Gewoonlijk is dit \CCpp \ac{CRT} code, die op zijn beurt de controle teruggeeft aan het \ac{OS}.}
+\PTBR{A última instrução \RET retorna o controle para onde a função foi chamada. Geralmente, isso é código \CCpp \ac{CRT}, que retorna o controle para o sistema operacional.}
 
