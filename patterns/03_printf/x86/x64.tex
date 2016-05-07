@@ -1,40 +1,48 @@
-\subsection{x64: \RU{8 аргументов}\EN{8 arguments}}
+\subsection{x64: \RU{8 аргументов}\EN{8 arguments}\PTBR{8 argumentos}}
 
 \index{x86-64}
 \label{example_printf8_x64}
 \RU{Для того чтобы посмотреть, как остальные аргументы будут передаваться через стек, 
 изменим пример ещё раз, 
 увеличив количество передаваемых аргументов до 9 
-(строка формата \printf и 8 переменных типа \Tint)}%
+(строка формата \printf и 8 переменных типа \Tint):}%
 \EN{To see how other arguments are passed via the stack, let's change our example again 
-by increasing the number of arguments to 9 (\printf format string + 8 \Tint variables)}:
+by increasing the number of arguments to 9 (\printf format string + 8 \Tint variables):}%
+\PTBR{Para ver como outros argumentos são passados pela pilha,
+vamos mudar nosso exemplo novamente aumentando o numero de argumentos para 9 (\printf + 8 variáveis \Tint):}%
 
 \lstinputlisting{patterns/03_printf/2.c}
 
 \subsubsection{MSVC}
 
-\RU{Как уже было сказано ранее, первые 4 аргумента в Win64 передаются в регистрах}
-\EN{As it was mentioned earlier, the first 4 arguments has to be passed through the} \RCX, \RDX, \Reg{8}, \Reg{9}
-\RU{, а остальные~--- через стек}\EN{ registers in Win64, while all the rest---via the stack}.
-\RU{Здесь мы это и видим}\EN{That is exactly what we see here}.
-\RU{Впрочем, инструкция \PUSH не используется, вместо неё при помощи \MOV значения сразу записываются в стек}%
-\EN{However, the \MOV instruction, instead of \PUSH, is used for preparing the stack, so the values are stored
-to the stack in a straightforward manner}.
+\RU{Как уже было сказано ранее, первые 4 аргумента в Win64 передаются в регистрах \RCX, \RDX, \Reg{8}, \Reg{9}, а остальные~--- через стек.
+Здесь мы это и видим.
+Впрочем, инструкция \PUSH не используется, вместо неё при помощи \MOV значения сразу записываются в стек.}%
+\EN{As it was mentioned earlier, the first 4 arguments has to be passed through the \RCX, \RDX, \Reg{8}, \Reg{9} registers in Win64, while all the rest---via the stack.
+That is exactly what we see here.
+However, the \MOV instruction, instead of \PUSH, is used for preparing the stack, so the values are stored to the stack in a straightforward manner.}%
+\PTBR{Como mencionado anteriormente, os primeiros 4 argumentos tem de ser passados pelos registradores \RCX, \RDX, \Reg{8}, \Reg{9} no Win64, enquanto o resto pela pilha.
+Isso é exatamente o que veremos aqui.
+Entretanto, a instrução \MOV, ao invés de \PUSH, é usada para preparar a pilha, portanto os valores são armazenados de uma maneira direta.}%
 
 \lstinputlisting[caption=MSVC 2012 x64]{patterns/03_printf/x86/2_MSVC_x64.asm.\LANG}
 
-\RU{Наблюдательный читатель может спросить, почему для значений типа \Tint отводится 8 байт,
-ведь нужно только 4?}
-\EN{The observant reader may ask why are 8 bytes allocated for \Tint values, when 4 is enough?}
-\RU{Да, это нужно запомнить: для значений всех типов более коротких чем 64-бита, отводится 8 байт.}
-\EN{Yes, one has to remember: 8 bytes are allocated for any data type shorter than 64 bits.}
-\RU{Это сделано для удобства: так всегда легко рассчитать адрес того или иного аргумента.}
-\EN{This is established for the convenience's sake: it makes it easy to calculate the address of arbitrary argument.}
-\RU{К тому же, все они расположены по выровненным адресам в памяти.}
-\EN{Besides, they are all located at aligned memory addresses.}
+\RU{Наблюдательный читатель может спросить, почему для значений типа \Tint отводится 8 байт, ведь нужно только 4?
+Да, это нужно запомнить: для значений всех типов более коротких чем 64-бита, отводится 8 байт.
+Это сделано для удобства: так всегда легко рассчитать адрес того или иного аргумента.
+К тому же, все они расположены по выровненным адресам в памяти.
+В 32-битных средах точно также: для всех типов резервируется 4 байта в стеке.}%
+\EN{The observant reader may ask why are 8 bytes allocated for \Tint values, when 4 is enough?
+Yes, one has to remember: 8 bytes are allocated for any data type shorter than 64 bits.
+This is established for the convenience's sake: it makes it easy to calculate the address of arbitrary argument.
+Besides, they are all located at aligned memory addresses.
+It is the same in the 32-bit environments: 4 bytes are reserved for all data types.}%
+\PTBR{Um leitor observativo pode se indagar por que são alocados 8 bytes para valores int quando 4 já é suficiente?
+Sim, mas lembre-se: 8 bytes são alocados para qualquer tipo de informação menor do que 64 bits.
+Isso é estabelecido com o objetivo de ser conveniente: é mais facil calcular o endereço de um argumento arbitrário.
+Além do mais, eles são alocados em endereços de memórias alinhados. Da mesma maneira no 32-bits: 4 bytes são reservados para todos os tipos de informação.}%
+
 % also for local variables?
-\RU{В 32-битных средах точно также: для всех типов резервируется 4 байта в стеке.}
-\EN{It is the same in the 32-bit environments: 4 bytes are reserved for all data types.}
 
 \ifdefined\IncludeGCC
 \subsubsection{GCC}

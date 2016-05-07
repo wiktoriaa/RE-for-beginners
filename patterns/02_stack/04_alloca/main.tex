@@ -1,32 +1,35 @@
-\subsection{x86: \RU{Функция alloca()}\EN{alloca() function}}
+\subsection{x86: \RU{Функция alloca()}\EN{alloca() function}\PTBR{a função alloca()}}
 \label{alloca}
 \index{\CStandardLibrary!alloca()}
-\RU{Интересен случай с функцией \TT{alloca()}}%
-\EN{It is worth noting the \TT{alloca()} function}\footnote{
-\RU{В MSVC, реализацию функции можно посмотреть в файлах}%
-\EN{In MSVC, the function implementation can be found in} 
-  \TT{alloca16.asm} 
-  \AndENRU 
-  \TT{chkstk.asm} 
-  \InENRU 
-  \TT{C:\textbackslash{}Program Files (x86)\textbackslash{}Microsoft Visual Studio 10.0\textbackslash{}VC\textbackslash{}crt\textbackslash{}src\textbackslash{}intel}}. 
 
-\RU{Эта функция работает как \TT{malloc()}, но выделяет память прямо в стеке.} 
-\EN{This function works like \TT{malloc()}, but allocates memory directly on the stack.}
+\newcommand{\AllocaSrcPath}{C:\textbackslash{}Program Files (x86)\textbackslash{}Microsoft Visual Studio 10.0\textbackslash{}VC\textbackslash{}crt\textbackslash{}src\textbackslash{}intel}
+
+\RU{Интересен случай с функцией \TT{alloca()}
+\footnote{В MSVC, реализацию функции можно посмотреть в файлах \TT{alloca16.asm} и \TT{chkstk.asm} в \TT{\AllocaSrcPath{}}}. 
+Эта функция работает как \TT{malloc()}, но выделяет память прямо в стеке.}%
+\EN{It is worth noting the \TT{alloca()} function
+\footnote{In MSVC, the function implementation can be found in \TT{alloca16.asm} and \TT{chkstk.asm} in \TT{\AllocaSrcPath{}}}.
+This function works like \TT{malloc()}, but allocates memory directly on the stack.}%
+\PTBR{A função \TT{alloca()}
+\footnote{No MSVC, a implementação da função pode ser encontrada nos arquivos \TT{alloca16.asm} e \TT{chkstk.asm} em \TT{\AllocaSrcPath{}}}
+funciona da mesma maneira que \TT{malloc()}, mas aloca memória diretamente na pilha.}%
 
 \RU{Память освобождать через \TT{free()} не нужно, так как эпилог функции~(\myref{sec:prologepilog})
-вернет \ESP в изначальное состояние и выделенная память просто \IT{выкидывается}.}
+вернет \ESP в изначальное состояние и выделенная память просто \IT{выкидывается}.}%
 \EN{The allocated memory chunk does not need to be freed via a \TT{free()} function call, since the 
 function epilogue~(\myref{sec:prologepilog}) returns \ESP back to its initial state and 
-the allocated memory is just \IT{dropped}.}
+the allocated memory is just \IT{dropped}.}%
+\PTBR{O bloco de memória alocado não precisa ser limpo através da chamada da função free(),
+desde que o rodapé da função (\myref{sec:prologepilog}) retorna \ESP de volta para seu estado inicial e a memória alocada é simplesmente desassociada.}
 
-\RU{Интересна реализация функции \TT{alloca()}.}
-\EN{It is worth noting how \TT{alloca()} is implemented.}
+\RU{Интересна реализация функции \TT{alloca()}.
+Эта функция, если упрощенно, просто сдвигает \ESP вглубь стека на столько байт, сколько вам нужно и возвращает \ESP в качестве указателя на выделенный блок.}%
+\EN{It is worth noting how \TT{alloca()} is implemented.
+In simple terms, this function just shifts \ESP downwards toward the stack bottom by the number of bytes you need and sets \ESP as a pointer to the \IT{allocated} block.}%
+\PTBR{Sobre como a função \TT{alloca()} é implementada, em termos simples, essa função só desloca \ESP para baixo 
+(em direção ao fundo da pilha) pelo número de bytes que você precisa e define o ESP como um ponteiro para o bloco alocado.}%
 
-\RU{Эта функция, если упрощенно, просто сдвигает \ESP вглубь стека 
-на столько байт, сколько вам нужно и возвращает \ESP в качестве указателя на выделенный блок.}
-\EN{In simple terms, this function just shifts \ESP downwards toward the stack bottom by the number of bytes you need and sets \ESP as a pointer to the \IT{allocated} block.}
-\RU{Попробуем:}\EN{Let's try:}
+\RU{Попробуем:}\EN{Let's try:}\PTBR{Vamos tentar:}
 
 \lstinputlisting{patterns/02_stack/04_alloca/2_1.c}
 
@@ -35,21 +38,32 @@ the allocated memory is just \IT{dropped}.}
 заменить оба этих вызова на один \printf, но здесь нужно проиллюстрировать использование небольшого буфера.}%
 \EN{\TT{\_snprintf()} function works just like \printf, but instead of dumping the result into \gls{stdout} (e.g., to terminal or 
 console), it writes it to the \TT{buf} buffer. Function \puts copies the contents of \TT{buf} to \gls{stdout}. Of course, these two
-function calls might be replaced by one \printf call, but we have to illustrate small buffer usage.}
+function calls might be replaced by one \printf call, but we have to illustrate small buffer usage.}%
+\PTBR{A função \TT{\_snprintf()} funciona exatamente como \printf, mas ao invés de jogar o resultado em stdout
+(terminal ou console, por exemplo), ela escreve no buffer buf.
+A função \puts copia o conteúdo para um buf do stdout.
+Lógico, essas duas chamadas de funções podem ser substituídas por um \printf, mas nós temos que ilustrar o uso pequeno do buffer.}%
 
 \subsubsection{MSVC}
 
-\RU{Компилируем}\EN{Let's compile} (MSVC 2010):
+\RU{Компилируем}\EN{Let's compile}\PTBR{Vamos compilar} (MSVC 2010):
 
 \lstinputlisting[caption=MSVC 2010]{patterns/02_stack/04_alloca/2_2_msvc.asm}
 
 \index{Compiler intrinsic}
 \RU {Единственный параметр в \TT{alloca()} передается через \EAX, а не как обычно через стек}%
 \EN{The sole \TT{alloca()} argument is passed via \EAX (instead of pushing it into the stack)}%
+\PTBR{O único argumento da função alloca() é passado via EAX (ao invés de ser empurrado na pilha)}%
 \footnote{
 \RU{Это потому, что alloca()~--- это не сколько функция, сколько т.н. \IT{compiler intrinsic}%
 \ifx\LITE\undefined
 (\myref{sec:compiler_intrinsic})
+\fi
+}%
+\PTBR{
+Isso é devido ao fato de que alloca() é mais nativa do compilador do que uma função normal
+\ifx\LITE\undefined
+(\myref{sec:compiler_intrinsic}) 
 \fi
 }%
 \EN{It is because alloca() is rather a compiler intrinsic 
@@ -60,15 +74,17 @@ than a normal function}.
 
 \RU{Одна из причин, почему здесь нужна именно функция, а не несколько инструкций прямо в коде в том, что в реализации 
 функции alloca() от \ac{MSVC}
-есть также код, читающий из только что выделенной памяти, чтобы \ac{OS} подключила физическую память к этому региону \ac{VM}.}
+есть также код, читающий из только что выделенной памяти, чтобы \ac{OS} подключила физическую память к этому региону \ac{VM}.}%
 \EN{One of the reasons we need a separate function instead of just a couple of instructions in the code,
 is because the \ac{MSVC} alloca() implementation also has code which reads from the memory just allocated, in order to let the \ac{OS} map
-physical memory to this \ac{VM} region.}
+physical memory to this \ac{VM} region.}%
+\PTBR{Um dos motivos que se faz necessário o separamento da função ao invés de um pouco de linhas de código no código,
+é porque a implementação da alloca() no MSVC também tem código que é lido da memória que acabou de ser alocada,
+para deixar o sistema operacional mapear a memória física para essa região da memória virtual.}
 }.
-\RU{После вызова \TT{alloca()} \ESP указывает на блок в 600 байт, который 
-мы можем использовать под \TT{buf}.}
-\EN{After the \TT{alloca()} call, \ESP points to the block of 600 bytes and we can 
-use it as memory for the \TT{buf} array.}
+\RU{После вызова \TT{alloca()} \ESP указывает на блок в 600 байт, который мы можем использовать под \TT{buf}.}%
+\EN{After the \TT{alloca()} call, \ESP points to the block of 600 bytes and we can use it as memory for the \TT{buf} array.}%
+\PTBR{Depois da chamada de \TT{alloca()}, \ESP aponta para o bloco de 600 bytes que nós podemos usar como memória para o array.}%
 
 \ifdefined\IncludeGCC
 \subsubsection{GCC + \IntelSyntax}

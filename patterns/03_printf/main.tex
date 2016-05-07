@@ -1,9 +1,11 @@
 \chapter{\PrintfSeveralArgumentsSectionName}
 
 \RU{Попробуем теперь немного расширить пример \IT{\HelloWorldSectionName}~(\myref{sec:helloworld}),
-написав в теле функции \main:}
+написав в теле функции \main:}%
 \EN{Now let's extend the \IT{\HelloWorldSectionName}~(\myref{sec:helloworld}) example, replacing \printf in
-the \main function body with this:}
+the \main function body with this:}%
+\PTBR{Agora vamos extender o nosso exemplo \IT{\HelloWorldSectionName}~(\myref{sec:helloworld}),
+trocando \printf no corpo da função \main() por isso:}%
 
 \lstinputlisting[label=hw_c]{patterns/03_printf/1.c}
 
@@ -18,7 +20,7 @@ the \main function body with this:}
 
 \section{\Conclusion{}}
 
-\RU{Вот примерный скелет вызова функции}\EN{Here is a rough skeleton of the function call}:
+\RU{Вот примерный скелет вызова функции}\EN{Here is a rough skeleton of the function call}\PTBR{Aqui está uma estrutura bem rústica da chamada da função}:
 
 \lstinputlisting[caption=x86]{patterns/03_printf/skel1.lst.\LANG}
 
@@ -39,16 +41,18 @@ the \main function body with this:}
 \lstinputlisting[caption=MIPS (\RU{соглашение о вызовах O32}\EN{O32 calling convention})]{patterns/03_printf/skel_MIPS.lst.\LANG}
 \fi
 
-\section{\RU{Кстати}\EN{By the way}}
+\section{\RU{Кстати}\EN{By the way}\PTBR{A propósito}}
 
 \index{fastcall}
 \RU{Кстати, разница между способом передачи параметров принятая в x86, x64, fastcall, ARM и MIPS неплохо иллюстрирует тот важный момент, что процессору, в общем, всё равно, как будут 
 передаваться параметры функций. Можно создать гипотетический компилятор, который будет передавать их при 
-помощи указателя на структуру с параметрами, не пользуясь стеком вообще.}
+помощи указателя на структуру с параметрами, не пользуясь стеком вообще.}%
 \EN{By the way, this difference between the arguments passing in x86, x64, 
 fastcall, ARM and MIPS is a good illustration of the fact that the CPU is oblivious to how the arguments are passed to functions. 
 It is also possible to create a hypothetical compiler able to pass arguments 
-via a special structure without using stack at all.}
+via a special structure without using stack at all.}%
+\PTBR{A propósito, a diferença entre os argumentos passados em x86, x64, fastcall, ARM e MIPS  é uma boa demonstração do fato de como a CPU é indiferente sobre como os argumentos são passados para as funções.
+Também é possível criar um compilador hipotético capaz de passar argumentos por alguma outra estrutura especial sem usar a pilha de nenhuma maneira.}%
 
 \ifdefined\IncludeMIPS
 \index{MIPS!O32}
@@ -60,12 +64,17 @@ via a special structure without using stack at all.}
 to pass data or use any other calling convention.}
 \fi
 
-\EN{The }\ac{CPU} \RU{не знает о соглашениях о вызовах вообще}\EN{is not aware of calling conventions whatsoever}.
+\EN{The \ac{CPU} is not aware of calling conventions whatsoever.}%
+\RU{\ac{CPU} не знает о соглашениях о вызовах вообще.}%
+\PTBR{A \ac{CPU} não está ciente de convenções de chamada de funções.}%
 
 \RU{Можно также вспомнить, что начинающие программисты на ассемблере передают параметры 
 в другие функции обычно через регистры, без всякого явного порядка, или даже через глобальные переменные.
-И всё это нормально работает.}
+И всё это нормально работает.}%
 \EN{We may also recall how newcoming assembly language programmers passing arguments into
 other functions:
 usually via registers, without any explicit order, or even via global variables.
-Of course, it works fine.}
+Of course, it works fine.}%
+\PTBR{Agora nós podemos também relembrar de dos programadores novatos de assembly passando argumentos para outras funções:
+geralmente via registradores, sem nenhuma sequência explícita, ou mesmo por variáveis globais. Logicamente, também funciona.}%
+

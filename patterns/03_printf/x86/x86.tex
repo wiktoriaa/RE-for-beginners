@@ -1,9 +1,10 @@
-\subsection{x86: \RU{3 аргумента}\EN{3 arguments}}
+\subsection{x86: \RU{3 аргумента}\EN{3 arguments}\PTBR{3 argumentos}}
 
 \subsubsection{MSVC}
 
-\RU{Компилируем при помощи MSVC 2010 Express, и в итоге получим:}
-\EN{When we compile it with MSVC 2010 Express we get:}
+\RU{Компилируем при помощи MSVC 2010 Express, и в итоге получим:}%
+\EN{When we compile it with MSVC 2010 Express we get:}%
+\PTBR{Quando compilamos esse código com o MSVC 2010 Express temos:}%
 
 \begin{lstlisting}
 $SG3830	DB	'a=%d; b=%d; c=%d', 00H
@@ -18,38 +19,43 @@ $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 	add	esp, 16					; 00000010H
 \end{lstlisting}
 
-\RU{Всё почти то же, за исключением того, что теперь видно, что аргументы для \printf заталкиваются в стек в обратном порядке: самый первый аргумент заталкивается последним.}
-\EN{Almost the same, but now we can see the \printf arguments are pushed onto the stack in reverse order. The first argument is pushed last.}
+\RU{Всё почти то же, за исключением того, что теперь видно, что аргументы для \printf заталкиваются в стек в обратном порядке: самый первый аргумент заталкивается последним.}%
+\EN{Almost the same, but now we can see the \printf arguments are pushed onto the stack in reverse order. The first argument is pushed last.}%
+\PTBR{Quase a mesma coisa, mas agora nós podemos ver que os argumentos da função \printf são empurrados na pilha na ordem reversa. O primeiro argumento é empurrado por último.}%
 
-\RU{Кстати, вспомним, что переменные типа \Tint в 32-битной системе, как известно, имеет ширину 32 бита, это 4 байта}
-\EN{By the way, variables of \Tint type in 32-bit environment have 32-bit width, that is 4 bytes}.
+\RU{Кстати, вспомним, что переменные типа \Tint в 32-битной системе, как известно, имеет ширину 32 бита, это 4 байта.}%
+\EN{By the way, variables of \Tint type in 32-bit environment have 32-bit width, that is 4 bytes.}%
+\PTBR{A propósito, variáveis do tipo \Tint em ambientes 32-bits tem 32-bits de largura, isso é 4 bytes.}%
 
-\RU{Итак, у нас всего 4 аргумента. $4*4 = 16$~--- именно 16 байт занимают в стеке указатель на строку плюс ещё 3 числа типа \Tint.}
-\EN{So, we have 4 arguments here. $4*4 = 16$~---they occupy exactly 16 bytes in the stack: a 32-bit pointer to a string and 3 numbers of type \Tint.}
+\RU{Итак, у нас всего 4 аргумента. $4*4 = 16$~--- именно 16 байт занимают в стеке указатель на строку плюс ещё 3 числа типа \Tint.}%
+\EN{So, we have 4 arguments here. $4*4 = 16$~---they occupy exactly 16 bytes in the stack: a 32-bit pointer to a string and 3 numbers of type \Tint.}%
+\PTBR{Então, nós temos quatro argumentos aqui, $4*4=16$ --- eles ocupam exatamente 16 bytes na pilha: um ponteiro de 32-bits para uma string e três números do tipo \Tint.}%
 
 \index{x86!\Instructions!ADD}
 \index{x86!\Registers!ESP}
 \index{cdecl}
 \RU{Когда при помощи инструкции \TT{ADD ESP, X} корректируется \glslink{stack pointer}{указатель стека} \ESP 
 после вызова какой-либо функции, зачастую можно сделать вывод о том, сколько аргументов 
-у вызываемой функции было, разделив X на 4.}
+у вызываемой функции было, разделив X на 4.}%
 \EN{When the \gls{stack pointer} (\ESP register) has changed back by the \TT{ADD ESP, X}
 instruction after a function 
-call, often, the number of function arguments could be deduced by simply dividing X by 4.}
+call, often, the number of function arguments could be deduced by simply dividing X by 4.}%
+\PTBR{Quando o ponteiro da pilha (registrador \ESP) volta para seu valor anterior pela instrução \TT{ADD ESP, X} depois de uma chamada de função,
+geralmente o número de argumentos pode ser obtido simplismente por se dividir X, o argumento da função \ADD, por 4.}%
 
-\RU{Конечно, это относится только к cdecl-методу передачи аргументов через стек, 
-и только для 32-битной среды.}
-\EN{Of course, this is specific to the \IT{cdecl} calling convention, 
-and only for 32-bit environment.}
+\RU{Конечно, это относится только к cdecl-методу передачи аргументов через стек, и только для 32-битной среды.}%
+\EN{Of course, this is specific to the \IT{cdecl} calling convention, and only for 32-bit environment.}%
+\PTBR{Lógico que isso é por causa da convenção de chamada do \IT{cdecl} e somente para ambientes 32-bits.}%
 
 \ifx\LITE\undefined
-\RU{См. также в соответствующем разделе о способах передачи аргументов через стек}
-\EN{See also the calling conventions section}~(\myref{sec:callingconventions}).
+\RU{См. также в соответствующем разделе о способах передачи аргументов через стек ~(\myref{sec:callingconventions}).}%
+\EN{See also the calling conventions section ~(\myref{sec:callingconventions}).}%
+\PTBRph{}%
 \fi
 
-\RU{Иногда бывает так, что подряд идут несколько вызовов разных функций, 
-но стек корректируется только один раз, после последнего вызова:}
-\EN{In certain cases where several functions return right after one another, the compiler could merge multiple \TT{\q{ADD ESP, X}} instructions into one, after the last call:}
+\RU{Иногда бывает так, что подряд идут несколько вызовов разных функций, но стек корректируется только один раз, после последнего вызова:}%
+\EN{In certain cases where several functions return right after one another, the compiler could merge multiple \q{ADD ESP, X} instructions into one, after the last call:}%
+\PTBR{Em certos casos onde varias funções retornam uma depois da outro, o compilador pode multiplicar as instruções \q{ADD ESP, X} em uma só, depois da última chamada:}%
 
 \begin{lstlisting}
 push a1
@@ -66,8 +72,7 @@ call ...
 add esp, 24
 \end{lstlisting}
 
-\RU{Вот пример из реальной жизни:}
-\EN{Here is a real-world example:}
+\RU{Вот пример из реальной жизни:}\EN{Here is a real-world example:}\PTBR{Aqui está um exemplo do mundo real:}
 
 \lstinputlisting[caption=x86]{patterns/03_printf/x86/add_example.lst.\LANG}
 
@@ -214,7 +219,7 @@ of course; no one needs to set these values to zeroes or something like that.}
 \RU{Было бы очень затратно по времени очищать ненужные элементы стека, к тому же, никому это и не 
 нужно}\EN{It would be time consuming to clear the unused stack entries anyway, and no one really needs to}.
 
-\fi
+\fi % IncludeOlly
 
 \ifdefined\IncludeGCC
 \subsubsection{GCC}

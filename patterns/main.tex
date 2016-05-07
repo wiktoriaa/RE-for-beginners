@@ -55,6 +55,17 @@ Sometimes ancient compilers are used here, in order to get the shortest (or simp
 \fi % RUSSIAN
 
 \ifdefined\BRAZILIAN
+\part{Padrões de códigos}
+
+Quando o autor desse livro começou a aprender C e depois C++, ele costumava escrever pequenos pedaços de código, compilar e entã o olhar na sua saída em assembly.
+Isso acabou tornando muito fácil para o seu entendimento sobre o que estava acontecendo no código que ele escreveu.
+Ele fez isso tantas vezes, que a relação entre o código em \CCpp e o que o compilador produzia ficou gravada em sua mente.
+É facil imaginar a aparência e função de um rascunho em C. Algumas vezes essa técnica pode ser útil para outras pessoas.
+
+Ás vezes compiladores antigos serão usados aqui com o objetivo de conseguir o menor (ou mais simples) pedaço de código possível.
+
+\iffalse
+% other version...
 \part{Padrões de código}
 
 \epigraph{Tudo é relativo}{Autor desconhecido}
@@ -70,6 +81,7 @@ Talvez essa técnica poderia ser útil para mais alguém.
 %Aqueles já familiarizados com alguma das arquiteturas, pode ler superficialmente as próximas páginas.
 
 Em determinadas partes foram usados aqui compiladores muito antigos, para se obter o menor (ou mais simples) snippet possível.
+\fi
 \fi % BRAZILIAN
 
 \ifdefined\THAI
@@ -158,6 +170,22 @@ Because of this, we'll try to work on examples of both debug and release version
 \fi % ENGLISH
 
 \ifdefined\BRAZILIAN
+\section*{Níveis de otimização e informações de depuração}
+
+O código-fonte pode ser compilado por um número diferente de compiladores com vários níveis de otimização.
+Um compilador típico tem por volta de três desses níveis, onde o nível zero representa que a otimização está desabilitada.
+A otimização também pode ser relacionada com o tamanho ou velocidade do código.
+Um compilador não-otimizado é mais rápido e produz um código de mais fácil compreensão (embora detalhado),
+enquanto um compilador com otimização é mais lento e tenta produzir códigos que executam mais rápido (mas não necessariamente mais compactos).
+Em adição aos níveis de otimização e  direção, um compilador pode incluir no arquivo de saída algumas informações de depuração, dessa maneira produzindo código para fácil depuração.
+Uma das características de um código ``depurado'' é que ele pode conter ligações entre cada linha do código-fonte e o endereço do respectivo código de máquina.
+Compiladores otimizadores, por outro lado, tendem a produzir saídas onde linhas completas do código-fonte podem ser otimizadas e apresentadas de uma maneira completamente diferente,
+muitas vezes ainda nem estando presente no código de máquina resultate. Com a engenharia reversa podemos obter quaisquer versões,
+simplesmente porque alguns desenvolvedores ativam as otimizações do compilador e outros não.
+Por causa disso, nós tentaremos trabalhar em ambos exemplos de depuração e versões de lançamento dos códigos demonstrados nesse livro, quando possível.
+
+\iffalse
+% another version
 \section*{Níveis de otimização e informação de depuração}
 
 O código-fonte pode ser compilado por diferentes compiladores com vários níveis de otimização.
@@ -171,6 +199,7 @@ ligações entre cada linha do código-fonte e os respectivos endereços de cód
 Compiladores com otimização, por outro lado, tendem a produzir uma saída onde linhas inteiras de código-fonte podem ser otimizadas a ponto de serem removidas e portanto não estarem presentes no código de máquina resultante.
 Engenheiros Reversos podem encontrar ambas as versões, simplesmente porque alguns desenvolvedores ativam as flags de otimização do compilador e outros não ativam. 
 Por causa disso, nós tentaremos trabalhar em exemplos de ambas as versões de debug e release do código destacado neste livro, onde possível.
+\fi
 \fi % BRAZILIAN
 
 \ifdefined\SPANISH
@@ -327,6 +356,37 @@ Thumb-2 это всё ещё двухбайтные инструкции, но �
 \fi % RUSSIAN
 
 \ifdefined\BRAZILIAN
+\chapter{Uma breve introdução a CPU}
+
+A \ac{CPU} é o dispositivo que executa o código de máquina do qual consiste um programa.
+
+\textbf{Um glossário resumido:}
+
+\begin{description}
+\item[Instrução]: Um comando primário da \ac{CPU}. Os exemplos mais simples incluem: mover informação entre os registradores, trabalhar com memória, operações primárias de aritimética.
+Como regra, cada \ac{CPU} tem sua própria arquitetura do conjunto de instruções (\ac{ISA}).
+
+\item[Código de máquina]: Código que a \ac{CPU} processa diretamente, cada instrução geralmente é codificada por vários bytes.
+
+\item[Linguagem assembly]: Códigos mnemônicos e algumas extensões como macros que tem por intenção facilitar a vida do programador.
+
+\item[Registrador da CPU]: Cada \ac{CPU} tem um conjunto fixo de registradores de propósito geral (\ac{GPR}).
+Aproximadamente 8 na arquitetura x86, 16 na x86-64, 16 na ARM.
+A maneira mais fácil de entender um registrador é imaginá-lo como uma variável temporário sem tipo.
+Imagine que você está trabalhando em uma linguagem de alto nível e pudesse usar somente oito variáveis de 32-bit (ou 64).
+Ainda assim uma gama de coisas podem ser feitas usando somente estes!
+
+\end{description}
+
+Você pode pensar por quê há a necessidade dessa diferença entre código de máquina e linguagens de programação de alto nível.
+A resposta está no fato de humanos e CPUs não se parecerem nada --- é muito mais fácil para um humano usar uma linguagem de alto nível como \CCpp, Java, Python, etc., 
+mas para a CPU é mais fácil usar um nível muito mais baixo de abstração.
+Talvez seja possível inventar uma CPU que pode executar códigos em linguagem de alto nível, mas ela seria muitas vezes mais complexa que as CPUs que conhecemos hoje.
+De uma maneira similar, é muito mais inconveniente para humanos escreverem em linguagem assemly,
+devido ao fato dela ser tão baixo nível e difícil de se escrever sem cometer um alto número de erros irritantes. O programa que converte linguagem de alto nível em código assembly é chamado de compilador.
+
+\iffalse
+% another translation
 \chapter{Uma breve introdução à CPU}
 
 A \ac{CPU} é o dispositivo que executa o código de máquina que consiste num programa.
@@ -351,6 +411,7 @@ Alguém poderia perguntar por que é preciso haver diferença entre código de m
 talvez fosse possível inventar uma \ac{CPU} que pudesse executar código feito em \ac{PL} alto nível, mas seria inúmeras vezes mais complexa do que as \ac{CPU}s que conhecemos hoje.
 De forma semelhante, é muito inconveninente para os seres humanos escrever em linguagem assembly, devido ao fato dela ser tão baixo nível e difícil de escrever sem comenter uma enorme quantidade de erros irritantes.
 O programa que converte o código de \ac{PL} de alto nível em assembly é chamado \IT{compiler}.
+\fi
 
 \ifx\LITE\undefined
 \index{ARM!\ARMMode}%
