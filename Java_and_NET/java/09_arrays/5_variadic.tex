@@ -1,7 +1,7 @@
 % TODO proof-reading
 \subsection{\EN{Variadic functions}\RU{Функции с переменным кол-вом аргументов (variadic)}}
 
-\EN{Variadic functions are in fact use arrays:}
+\EN{Variadic functions actually use arrays:}
 \RU{Функции с переменным кол-вом аргументов (variadic) на самом деле используют массивы:}
 
 \begin{lstlisting}
@@ -38,9 +38,9 @@
         23: return        
 \end{lstlisting}
 
-\EN{\ttf just takes array of integers using \TT{aload\_0} at offset 3.}
+\EN{\ttf just takes an array of integers using \TT{aload\_0} at offset 3.}
 \RU{По смещению 3, \ttf просто берет массив переменных используя \TT{aload\_0}.}
-\EN{Then it getting array size, etc.}
+\EN{Then it gets the array's size, etc.}
 \RU{Затем берет размер массива, итд.}
 
 \begin{lstlisting}
@@ -74,22 +74,22 @@
         26: return        
 \end{lstlisting}
 
-\EN{Array is constructed in \main using \TT{newarray} instruction, 
+\EN{The array is constructed in \main using the \TT{newarray} instruction, 
 then it's filled, and \ttf is called.}
 \RU{Массив конструируется в \main используя инструкцию \TT{newarray}, 
 затем он заполняется, и вызывается \ttf.}
 
-\EN{Oh, by the way, array object is not destroyed upon \main end.}
+\EN{Oh, by the way, array object is not destroyed at the end of \main.}
 \RU{Кстати, объект массива не уничтожается в конце \main.}
 \index{\EN{Garbage collector}\RU{Сборщик мусора}}
-\EN{There are no destructors in Java at all, because JVM has garbage collector which does this
+\EN{There are no destructors in Java at all, because the JVM has a garbage collector which does this
 automatically, when it feels it needs to.}
 \RU{В Java вообще нет деструкторов, потому что в JVM есть сборщик мусора (garbage collector),
 делающий это автоматически, когда считает нужным.}
 
-\EN{What about \TT{format()} method?}
+\EN{What about the \TT{format()} method?}
 \RU{Как насчет метода \TT{format()}?}
-\EN{It takes two arguments at input: string and array of objects:}
+\EN{It takes two arguments at input: a string and an array of objects:}
 \RU{Он берет на вход два аргумента: строку и массив объектов:}
 
 \begin{lstlisting}
@@ -136,29 +136,29 @@ automatically, when it feels it needs to.}
         34: return        
 \end{lstlisting}
 
-\EN{So values of \IT{int} and \IT{double} types are first promoted to \TT{Integer} and \TT{Double} 
-objects using \TT{valueOf} methods.}
+\EN{So values of the \IT{int} and \IT{double} types are first promoted to \TT{Integer} and \TT{Double} 
+objects using the \TT{valueOf} methods.}
 \RU{Так что в начале значения типов \IT{int} и \IT{double} конвертируются в объекты типов 
 \TT{Integer} и \TT{Double} используя методы \TT{valueOf}.}
-\EN{\TT{format()} method needs objects of \TT{Object} type at input, and since \TT{Integer} and 
-\TT{Double} classes are inherited from root \TT{Object} class, they suitable as elements 
-in input array.}
+\EN{The \TT{format()} method needs objects of type \TT{Object} at input, and since the \TT{Integer} and 
+\TT{Double} classes are derived from the root \TT{Object} class, they suitable for elements 
+in the input array.}
 \RU{Метод \TT{format()} требует на входе объекты типа \TT{Object}, а так как классы \TT{Integer} и
 \TT{Double} наследуются от корневого класса \TT{Object}, они подходят как элементы
 во входном массиве.}
-\EN{On the other hand, array is always homogeneous, i.e., it can't contain elements of the 
-different types, which makes impossible to push values of \IT{int} and \IT{double} types to it.}
+\EN{On the other hand, an array is always homogeneous, i.e., it can't contain elements of 
+different types, which makes it impossible to push \IT{int} and \IT{double} values in it.}
 \RU{С другой стороны, массив всегда гомогенный, т.е. он не может содержать элементы разных типов,
 что делает невозможным хранение там значений типов \IT{int} и \IT{double}.}
 
-\EN{Array of \TT{Object} objects is created at offset 13, 
-\TT{Integer} objects is added into array at offset 22, 
-\TT{Double} object is added into array at offset 29.}
+\EN{An array of \TT{Object} objects is created at offset 13, 
+an \TT{Integer} object is added to the array at offset 22, 
+and a \TT{Double} object is added to the array at offset 29.}
 \RU{Массив объектов \TT{Object} создается по смещению 13, 
 объект \TT{Integer} добавляется в массив по смещению 22, 
 объект \TT{Double} добавляется в массив по смещению 29.}
 
-\EN{The penultimate \TT{pop} instruction discards element at \ac{TOS}, 
-so at the moment of \TT{return} execution, stack is to be empty (or balanced).}
+\EN{The penultimate \TT{pop} instruction discards the element at \ac{TOS}, 
+so when \TT{return} is executed, the stack becomes empty (or balanced).}
 \RU{Предпоследняя инструкция \TT{pop} удаляет элемент на \ac{TOS}, 
 так что в момент исполнения \TT{return}, стек пуст (или сбалансирован).}
