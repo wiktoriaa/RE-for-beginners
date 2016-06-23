@@ -131,7 +131,7 @@ typedef struct _SYSTEM_BASIC_INFORMATION {
 \end{figure}
 
 \RU{Самое большое число, при котором Task Manager не падает, это 64.}%
-\EN{The biggest number Task Manager is not crashes with is 64.}
+\EN{The biggest number Task Manager does not crash with is 64.}
 \RU{Должно быть, Task Manager в Windows Vista не тестировался на компьютерах с большим количеством ядер.}
 \EN{Apparently, Task Manager in Windows Vista was not tested on computers with a large number of cores.}
 \RU{И, наверное, там есть внутри какие-то статичные структуры данных, ограниченные до 64-х ядер.}
@@ -148,12 +148,8 @@ typedef struct _SYSTEM_BASIC_INFORMATION {
 \lstinputlisting[caption=taskmgr.exe (Windows Vista)]{examples/taskmgr/taskmgr2.lst}
 
 \index{x86!\Instructions!LEA}
-\RU{Честно говоря, не ясно почему, но \ac{MSVC} часто так делает.}%
-\EN{It's hard to say why, but it is what \ac{MSVC} often does.}
-\RU{Может быть, это какая-то оптимизация и \TT{LEA} работает быстрее или лучше, чем загрузка значения 
-используя \TT{MOV}?}
-\EN{Maybe this is some kind of optimization and \TT{LEA} works faster or better than loading
-values using \TT{MOV}?}
+\RU{Вероятно, \ac{MSVC} сделал так, потому что код инструкции \INS{LEA} короче чем \INS{MOV REG, 5} (было бы 5 байт вместо 4).}
+\EN{Perhaps, \ac{MSVC} did so because machine code of \INS{LEA} is shorter than \INS{MOV REG, 5} (would be 5 instead of 4).}
 
 \RU{Еще один пример подобного}\EN{Another example of such thing is}: 
 \myref{using_MOV_and_pack_of_LEA_to_load_values}.
