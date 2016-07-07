@@ -4,6 +4,7 @@
 \ES{La función más simple}%
 \NL{De meest eenvoudige functie}%
 \PTBR{A mais simples função}%
+\ITA{La funzione più semplice}%
 }
 
 \RU{Наверное, простейшая из возможных функций это та что возвращает некоторую константу:}%
@@ -11,16 +12,18 @@
 \ES{La función más simple posible es sin duda uno que simplemente devuelve un valor constante:}%
 \NL{De meest eenvoudige functie is er een die simpelweg een constante waarde terug geeft:}%
 \PTBR{A função mais simples possível é indiscutivelmente aquela que simplesmente retorna um valor constante:}%
+\ITA{La funzione più semplice possibile è probabilmente quella che restituisce un valore costante:}%
 
-\RU{Вот, например}\EN{Here it is}\ES{Ejemplo}\NL{Hier is ze}\PTBR{Aqui está}:
+\RU{Вот, например}\EN{Here it is}\ES{Ejemplo}\NL{Hier is ze}\PTBR{Aqui está}\ITA{Eccola}:
 
-\lstinputlisting[caption=\EN{\CCpp Code}\RU{Код на \CCpp}]{patterns/00_ret/1.c}
+\lstinputlisting[caption=\EN{\CCpp Code}\RU{Код на \CCpp}\ITA{\CCpp Codice}]{patterns/00_ret/1.c}
 
 \RU{Скомпилируем её!}%
 \EN{Lets compile it!}%
 \NL{Compileren maar!}%
 \ES{Vamos a compilar!}%
 \PTBR{Vamos compilar!}
+\ITA{Compiliamola!}%
 
 \section{x86}
 
@@ -29,6 +32,7 @@
 \ES{Esto es lo que optimiza el GCC  y los compiladores de MSVC los cuales se producen en la plataforma x86:}%
 \NL{Hier zie je wat zowel de optimaliserende GCC als MSVC compilers produceren op een x86 platform:}%
 \PTBR{Aqui está o que ambos compiladores, GCC com otimização e MSVC produzem na plataforma x86:}%
+\ITA{Questo è il risultato prodotto dai compilatori ottimizzanti GCC e MSVC sulla piattaforma x86:}%
 
 \lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/00_ret/1.s}
 
@@ -40,12 +44,14 @@ value and the second one is \RET, which returns execution to the \gls{caller}.}%
 \ES{Hay solo dos instrucciones: los primeros lugares el valor 123 en el registro \EAX, que se utiliza por convención para almacenar el valor de retorno y el segundo es \RET, que devuelve la ejecución al llamado.}%
 \NL{Er zijn slechts twee instructies: de eerste plaatst de waarde 123 in het \EAX register, hetwelk volgens de conventies gebruikt wordt om de return value op te slaan en de tweede is \RET, wat de programma-uitvoering terug geeft aan de \gls{caller}.}%
 \PTBR{Há somente duas instruções: a primeira coloca o valor 123 no registrador \EAX, que é usado por convenção para guardar o valor de retorno e a segunda é a \RET, que retorna a execução para onde a função foi chamada.}%
+\ITA{Ci sono solo due istruzioni: la prima mette il valore 123 nel registro \EAX, per convenzione usato per la memorizzazione del valore di ritorno, la seconda, \RET, restituisce l'esecuzione alla funzione \gls{chiamante}.}
 
 \RU{Вызывающая функция возьмет результат из регистра \EAX.}%
 \EN{The caller will take the result from the \EAX register.}%
 \ES{La persona que llama tomar el resultado del registro \EAX.}%
 \NL{De caller zal dan het resultaat uit het \EAX register halen.}%
 \PTBR{O resultado será obtido no registrador \EAX.}%
+\ITA{La funzione chiamante prenderà il risultato dal registro \EAX.}%
 
 \ifdefined\IncludeARM
 \section{ARM}
@@ -53,6 +59,7 @@ value and the second one is \RET, which returns execution to the \gls{caller}.}%
 \RU{А что насчет ARM?}\EN{There are a few differences on the ARM platform:}%
 \ES{Hay algunas diferencias en la plataforma ARM:}%
 \NL{Er zijn een aantal verschillen met het ARM platform:}
+\ITA{Sulla piattaforma ARM ci sono alcune differenze:}%
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) ASM Output]{patterns/00_ret/1_Keil_ARM_O3.s}
 
@@ -60,6 +67,7 @@ value and the second one is \RET, which returns execution to the \gls{caller}.}%
 \EN{ARM uses the register \Reg{0} for returning the results of functions, so 123 is copied into \Reg{0}.}%
 \ES{ARM utiliza el registro \Reg{0} para el retorno de los resultados de las funciones, por lo que se copia 123 en \Reg{0}.}%
 \NL{ARM gebruikt het register \Reg{0} om de resultaten van functies te returnen. 123 wordt dus gekopieerd in \Reg{0}.}
+\ITA{ARM usa il registro \Reg{0} per restituire i risultati delle funzioni, quindi 123 viene copiato in \Reg{0}.}
 
 \RU{Адрес возврата (\ac{RA}) в ARM не сохраняется в локальном стеке, а в регистре \ac{LR}.
 Так что инструкция \TT{BX LR} делает переход по этому адресу, и это то же самое что и вернуть управление
@@ -70,6 +78,8 @@ so the \TT{BX LR} instruction causes execution to jump to that address\EMDASH{}e
 \ES{La dirección que retorna no es guardada en la pila local de la ARM \ac{ISA}, sino más bien en el registro de enlace,
 entonces la instrucción \TT{BX LR} provoca que la ejecución de un salto a la dirección eficazmente retornando la ejecución a donde fue llamada(caller ``nuestro llamador'').}%
 \NL{Het return address wordt niet bijgehouden op de local stack in het ARM \ac{ISA}, maar eerder in het link register, de \TT{BX LR} instructie zorgt er dus voor dat de programma-executie naar dat adres springt, en op die manier de uitvoering terug geeft aan de \gls{caller}.}
+\ITA{Il return address sulla piattaforma ARM \ac{ISA} non viene salvato nello stack locale ma nel link register, 
+così che l'istruzione \TT{BX LR} faccia in modo che l'esecuzione "salti" a quell'indirizzo \EMDASH{} restituendo effettivamente l'esecuzione alla funzione \gls{chiamante}.}%
 \fi
 
 \index{ARM!\Instructions!MOV}
@@ -78,11 +88,13 @@ entonces la instrucción \TT{BX LR} provoca que la ejecución de un salto a la d
 \EN{It is worth noting that \MOV is a misleading name for the instruction in both x86 and ARM \ac{ISA}s.}%
 \NL{Het is een vermelding waard dat \MOV een misleidende naam is voor de instructie in zowel x86 als ARM \ac{ISA}s.}%
 \ES{Vale la pena señalar que \MOV es un nombre engañoso para la instrucción tanto en x86 y ARM \ac{ISA}s.}
+\ITA{Vale la pena notare che il nome dell'istruzione \MOV è fuorviante in entrambe le \ac{ISA} x86 e ARM. }%
 
 \RU{На самом деле, данные не \IT{перемещаются}, а скорее \IT{копируются}.}%
 \EN{The data is not in fact \IT{moved}, but \IT{copied}.}%
 \ES{Los datos de hecho, no se \IT{mueven}, sino que se \IT{copian}.}
 \NL{De data wordt feitelijk niet \IT{verplaatst}, maar \IT{gekopieerd}.}
+\ITA{Il dato non viene infatti \IT{spostato}, bensì \IT{copiato}.}%
 
 \ifdefined\IncludeMIPS
 \section{MIPS}
@@ -93,11 +105,13 @@ entonces la instrucción \TT{BX LR} provoca que la ejecución de un salto a la d
 \ES{Hay dos convenciones de nomenclatura utilizadas en el mundo de MIPS al nombrar registros: por número (de \$0 a \$31) o por seudónimo (\$V0, \$A0, etc).}%
 \NL{In de wereld van MIPS zijn er twee afspraken mbt de benaming wanneer het op registers aankomt:
 genummerd (van \$0 tot \$31) of per pseudoniem (\$V0, \$A0, \etc{}).}
+\ITA{Esistono due naming conventions (convenzioni di denominazione) usate nel mondo MIPS per fare riferimento ai registri: per numero (da \$0 a \$31) or per pseudonome (\$V0, \$A0, \etc{}).}%
 
 \RU{Вывод на ассемблере в GCC показывает регистры по номерам:}%
 \EN{The GCC assembly output below lists registers by number:}%
 \ES{El ensamblado de GCC produce una salida en listando los registros por numeros:}%
 \NL{De GCC assembly output hieronder lijst de registers genummerd op:}
+\ITA{Il seguente output assembly di GCC elenca i registri per numero:}%
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/00_ret/MIPS.s}
 
@@ -105,6 +119,7 @@ genummerd (van \$0 tot \$31) of per pseudoniem (\$V0, \$A0, \etc{}).}
 \EN{\dots while \IDA does it---by their pseudonames:}%
 \ES{\dots Mientras que \IDA lo hace por sus seudónimos:}%
 \NL{\dots terwijl \IDA dit doet per pseudoniem:}
+\EN{\dots mentre \IDA li elenca tramite i loro pseudonimi:}%
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/00_ret/MIPS_IDA.lst}
 
@@ -112,43 +127,52 @@ genummerd (van \$0 tot \$31) of per pseudoniem (\$V0, \$A0, \etc{}).}
 \EN{The \$2 (or \$V0) register is used to store the function's return value.}%
 \ES{El \$2 (o \$V0) registro es usado para almacenar el valor devuelto por la función.}%
 \NL{Het \$2 (of \$V0) register wordt gebruikt om de return value van de functie in op te slaan.}
+\ITA{Il registro \$2 (o \$V0) è usato per memorizzare il valore di ritorno di una funzione.}%
 \index{MIPS!\Pseudoinstructions!LI}
 \RU{\INS{LI} это ``Load Immediate'', и это эквивалент \MOV в MIPS.}%
 \EN{\INS{LI} stands for ``Load Immediate'' and is the MIPS equivalent to \MOV.}%
 \ES{\INS{LI} significa ``Load Immediate'' (``carga inmediata'') y es el MIPS equivalente a \MOV.}%
 \NL{\INS{LI} staat voor ``Load Immediate'' en is het MIPS equivalent voor MOV.}
+\ITA{\INS{LI} sta per ``Load Immediate'' ed è l'equivalente MIPS di \MOV.}%
 
 \index{MIPS!\Instructions!J}
 \RU{Другая инструкция это инструкция перехода (J или JR), которая возвращает управление в \glslink{caller}{вызывающую ф-цию}, переходя по адресу в регистре \$31 (или \$RA).}%
 \EN{The other instruction is the jump instruction (J or JR) which returns the execution flow to the \gls{caller}, jumping to the address in the \$31 (or \$RA) register.}%
 \ES{La otra instrucción es el jump (``salto'') que es  (J o JR) el cual retorna la ejecución fluida para el llamado, da un salto a la dirección del registro \$31 (o \$RA).}%
 \NL{De andere instructie is de jump instructie (J of JR), dewelke de uitvoering van het programma terug geeft aan de \gls{caller}, door een jump naar het adres in het \$31 (of \$RA) register.}
+\ITA{L'altra istruzione è quella di jump (salto) (J or JR) che riporta il flusso di esecuzione alla funzione \gls{chiamante}, \IT{saltando} all'indirizzo specificato nel registro \$31 (o \$RA).}%
+
+
 
 \RU{Это аналог регистра \ac{LR} в ARM.}%
 \EN{This is the register analogous to \ac{LR} in ARM.}%
 \ES{Este es el registro análoga a \ac{LR} en ARM.}%
 \NL{Dit register staat analoog tot het \ac{LR} in ARM.}
+\ITA{Questo registro è l'analogo di \ac{LR} in ARM.}
 
 \index{MIPS!Branch delay slot}
 \RU{Но почему инструкция загрузки (LI) и инструкция перехода (J или JR) поменены местами? Это артефакт \ac{RISC} и называется он ``branch delay slot''.}%
 \EN{You might be wondering why positions of the the load instruction (LI) and the jump instruction (J or JR) are swapped. This is due to a \ac{RISC} feature called ``branch delay slot''.}%
 \ES{Es posible que se pregunte por qué posiciones de la instrucción de la carga (LI) y el salto instrucciones (J y JR) se intercambian.Esto es debido a una característica llamada RISC (``ranura de retardo rama'').}%
 \NL{Je kan je wel afvragen waarom de posities van de load instructie (LI) en de jump instructie (J of JR) omgewisseld zijn. Dit komt door een \ac{RISC} feature genaamd ``branch delay slot''.}
+\ITA{Ci si potrebbe domandare perchè le posizioni delle istruzioni load (LI) e jump (J or JR) siano invertite. Cio' e' dovuto ad una feature di \ac{RISC} detta ``branch delay slot''.}%
 
 \RU{На самом деле, нам не нужно вникать в эти детали. Нужно просто запомнить: в MIPS инструкция после инструкции перехода исполняется \IT{перед} инструкцией перехода.}%
 \EN{The reason this happens is a quirk in the architecture of some RISC \ac{ISA}s and isn't important for our purposes---we just need to remember that in MIPS, the instruction following a jump or branch instruction
 is executed \IT{before} the jump/branch instruction itself.}%
 \ES{La razón por la que esto sucede es una peculiaridad en la arquitectura RISC de algunas ISA y no es importante para nuestros propósitos --– sólo tenemos que recordar que en MIPS, la instrucción que sigue a un salto o instrucción de salto se ejecuta antes de la instrucción / rama salto en sí.}%
 \NL{De reden dat dit gebeurd is een kronkel in de architectuur van sommige RISC \ac{ISA}s en is niet belangrijk voor onze doeleinden - we dienen enkel te onthouden dat in MIPS, de instructie die volgt op een jump of branch instructie uitgevoerd wordt \IT{voor} de jump/branch instructie zelf.}
+\ITA{La ragione per cui ciò avviene è una peculiarità dell'architettura di alcune \ac{ISA}s RISC e non è di importanza rilevante per il nostro scopo - sarà sufficiente semplicemente ricordare che in MIPS l'istruzione che segue un jump o branch viene eseguita \IT{prima} del jump/branch stesso.}%
 
 \RU{Таким образом, инструкция перехода всегда поменена местами с той, которая должна быть исполнена перед ней.}%
 \EN{As a consequence, branch instructions always swap places with the instruction which must be executed beforehand.}%
 \ES{Como consecuencia, las instrucciones de ramificación siempre intercambiar lugares con la instrucción que debe ser ejecutado de antemano.}%
 \NL{Bijgevolg verwisselen branch instructies steeds met de instructie die op voorhand moet worden uitgevoerd.}
+\ITA{Di conseguenza, le istruzioni branch scambiano sempre il posto con l'istruzione che deve essere eseguita prima.}%
 % A footnote/link to http://en.wikipedia.org/wiki/Delay_slot#Branch_delay_slots or
 % something similar might be useful for the people more interested in it.
 
-\subsection{\RU{Еще кое-что об именах инструкций и регистров в MIPS}\EN{A note about MIPS instruction/register names}\ES{Una nota acerca de la instrucción MIPS nombres / Registro}\NL{Nota over MIPS instructies/register benaming}}
+\subsection{\RU{Еще кое-что об именах инструкций и регистров в MIPS}\EN{A note about MIPS instruction/register names}\ES{Una nota acerca de la instrucción MIPS nombres / Registro}\NL{Nota over MIPS instructies/register benaming}\ITA{Una nota sui nomi delle istruzioni e dei registri MIPS}}
 
 \RU{Имена регистров и инструкций в мире MIPS традиционно пишутся в нижнем регистре.
 Но мы будем использовать верхний регистр, потому что имена инструкций и регистров других \ac{ISA} в этой книге так же в верхнем регистре.}%
@@ -158,5 +182,6 @@ However, for the sake of consistency, we'll stick to using uppercase letters, as
 Sin embargo, en aras de la  coherencia, que me quedo con el uso de letras mayúsculas, ya que es la convención seguida por el resto de las ISAs destacados aquí.}
 \NL{Register- en instructienamen in de wereld van MIPS zijn traditioneel geschreven in kleine letters.
 Echter, om alles consistent te houden, zullen wij gebruik blijven maken van hoofdletters, aangezien dit de gevolgde afspraken zijn die gevolgd worden door alle andere \ac{ISA}s in dit boek.}
+\ITA{I nomi dei registri e delle istruzioni nel mondo MIPS sono solitamente scritti in minuscolo. Tuttavia, per consistenza, useremo nomi in maiuscolo secondo la convenzione seguita da tutte le altre \ac{ISA}s trattate in questo libro.}%
 
 \fi
