@@ -1,0 +1,107 @@
+% TODO translate
+\section{Numeral systems}
+
+Humans accustomed to decimal numeral system probably because almost all ones has 10 fingers.
+Nevertheless, number 10 has no significant meaning in science and mathematics.
+Natural numeral system in digital electronics is binary: 0 is for absence of current in wire and 1 for presence.
+10 in binary is 2 in decimal, 100 in binary is 4 in binary and so on.
+
+How to convert from one system to another?
+
+Positional notation is used almost everywhere, this means, the digit (number placed in single character) has some weight depending on where it is placed.
+If 2 is placed at the leftmost place, it's 2.
+If it is placed at the place one digit before leftmost, it's 20.
+
+What 1234 stands for?
+
+$10^3 \cdot 3 + 10^2 \cdot 2 + 10^1 \cdot 3 + 1 \cdot 4$ = 1234 or 
+$1000 \cdot 3 + 100 \cdot 2 + 10 \cdot 3 + 4 = 1234$
+
+Same story for binary numbers, but base is 2 instead of 10.
+What 101011 stands for?
+
+$2^5 \cdot 1 + 2^4 \cdot 0 + 2^3 \cdot 1 + 2^2 \cdot 0 + 2^1 \cdot 1 + 1 \cdot 1 = 43$ or
+$32 \cdot 1 + 16 \cdot 0 + 8 \cdot 1 + 4 \cdot 0 + 2 \cdot 1 + 1 = 43$
+
+Positional notation can be opposed to non-positional notation such as Roman numeric system.
+Perhaps, humankind switched to positional notation because it's easier to do basic operations (addition, multiplication, etc) on paper by hand.
+
+Indeed, binary numbers can be added, subtracted and so on in the very same as taught in schools, but only 2 digits are available.
+
+Binary numbers are bulkey when represented in source code and dumps, so that is where hexadecimal numeral system can be used.
+Hexadecimal system uses 0..9 numbers and also 6 Latin characters: A..F.
+Each hexadecimal digit takes 4 bits or 4 binary digits.
+
+\begin{center}
+\begin{longtable}{ | l | l | l | }
+\hline
+\cellcolor{blue!25} hexadecimal & \cellcolor{blue!25} binary & \cellcolor{blue!25} decimal \\
+\hline
+0	&0000	&0 \\
+1	&0001	&1 \\
+2	&0010	&2 \\
+3	&0011	&3 \\
+4	&0100	&4 \\
+5	&0101	&5 \\
+6	&0110	&6 \\
+7	&0111	&7 \\
+8	&1000	&8 \\
+9	&1001	&9 \\
+A	&1010	&10 \\
+B	&1011	&11 \\
+C	&1100	&12 \\
+D	&1101	&13 \\
+E	&1110	&14 \\
+F	&1111	&15 \\
+\hline
+\end{longtable}
+\end{center}
+
+How to detect, which system is currently used?
+
+Decimal numbers are usually written as is, i.e., 1234. But some assemblers allows to make emphasis on decimal system and this number can be written with "d" suffix: 1234d.
+
+Binary numbers sometimes prepended with "0b" prefix: 0b100110111 (\ac{GCC} has non-standard language extension for this: \url{https://gcc.gnu.org/onlinedocs/gcc/Binary-constants.html}).
+
+Hexadecimal numbers are preprended with "0x" prefix in \CCpp and other \ac{PL}s: 0x1234ABCD.
+Or they are has "h" suffix: 1234ABCDh - this is common way of representing them in assemblers and debuggers.
+If the number is started with A..F digit, 0 should be added before: 0ABCDEFh.
+
+Should one learn to convert numbers in mind? A table of 1-digit hexadecimal numbers can easily be memorized.
+As of larger numbers, probably, it's not worth to torment yourself.
+
+Another numeral system heavily used in past of computer programming is octal: there are 8 digits (0..7) and each is mapped to 3 bits.
+It has been superseded by hexadecimal system almost everywhere, but surprisingly, there is *NIX utility used by many people often which takes octal number as argument: \TT{chmod}.
+
+As many *NIX users know, \TT{chmod} argument can be a number of 3 digits. The first one is rights for owner of file, second is rights for group (to which file belongs), third is for everyone else.
+And each digit can be represented in binary form:
+
+\begin{center}
+\begin{longtable}{ | l | l | l | }
+\hline
+\cellcolor{blue!25} decimal & \cellcolor{blue!25} binary & \cellcolor{blue!25} meaning \\
+\hline
+7	&111	&\TT{rwx} \\
+6	&110	&\TT{rw-} \\
+5	&101	&\TT{r-x} \\
+4	&100	&\TT{r--} \\
+3	&011	&\TT{-wx} \\
+2	&010	&\TT{-w-} \\
+1	&001	&\TT{--x} \\
+0	&000	&\TT{---} \\
+\hline
+\end{longtable}
+\end{center}
+
+So the each bit is mapped to flag: read/write/execute.
+
+Now the reason why I'm talking about \TT{chmod} here is that the whole number in argument can be represented as octal number.
+Let's take for example, 664.
+When you run \TT{chmod 664 file}, you set read/write permissions for owner, read permissions for group and again, read permissions for everyone else.
+Let's convert 664 octal number to binary, this will be \TT{110100100}, or \TT{110 100 100}.
+
+Now we see that each triplet describe permissions for owner/group/others: first is \TT{rw-}, second is \TT{r--} and third is \TT{r--}.
+
+Octal numeral system was also popular on old computers like PDP-8, because word there could be 12, 24 or 36 bits, and these numbers are divisible by 3, so octal system was natural on that environment.
+Nowadays, all popular computers employs word/address size of 16, 32 or 64 bits, and these numbers are divisible by 4, so hexadecimal system is more natural here.
+
