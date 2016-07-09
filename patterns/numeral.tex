@@ -30,7 +30,7 @@ Indeed, binary numbers can be added, subtracted and so on in the very same as ta
 
 Binary numbers are bulkey when represented in source code and dumps, so that is where hexadecimal numeral system can be used.
 Hexadecimal system uses 0..9 numbers and also 6 Latin characters: A..F.
-Each hexadecimal digit takes 4 bits or 4 binary digits.
+Each hexadecimal digit takes 4 bits or 4 binary digits, so it's very easy to convert from binary number to hexadecimal and back, even manually, in one's mind.
 
 \begin{center}
 \begin{longtable}{ | l | l | l | }
@@ -70,9 +70,12 @@ If the number is started with A..F digit, 0 should be added before: 0ABCDEFh.
 Should one learn to convert numbers in mind? A table of 1-digit hexadecimal numbers can easily be memorized.
 As of larger numbers, probably, it's not worth to torment yourself.
 
-Another numeral system heavily used in past of computer programming is octal: there are 8 digits (0..7) and each is mapped to 3 bits.
+\subsection{Octal numeral system}
+
+Another numeral system heavily used in past of computer programming is octal: there are 8 digits (0..7) and each is mapped to 3 bits, so it's easy to convert numbers back and forth.
 It has been superseded by hexadecimal system almost everywhere, but surprisingly, there is *NIX utility used by many people often which takes octal number as argument: \TT{chmod}.
 
+\index{UNIX!chmod}
 As many *NIX users know, \TT{chmod} argument can be a number of 3 digits. The first one is rights for owner of file, second is rights for group (to which file belongs), third is for everyone else.
 And each digit can be represented in binary form:
 
@@ -104,4 +107,19 @@ Now we see that each triplet describe permissions for owner/group/others: first 
 
 Octal numeral system was also popular on old computers like PDP-8, because word there could be 12, 24 or 36 bits, and these numbers are divisible by 3, so octal system was natural on that environment.
 Nowadays, all popular computers employs word/address size of 16, 32 or 64 bits, and these numbers are divisible by 4, so hexadecimal system is more natural here.
+
+% TODO octal in C compilers, 0277, 09
+
+\subsection{Divisibility}
+
+When you see a decimal number like 120, you can quickly deduce that it's divisible by 10, because the last digit is zero.
+In the same way, 123400 is divisible by 100, because two last digits are zeroes.
+
+Likewise, hexadecimal number 0x1230 is divisible by 0x10 (or 16), 0x123000 is divisible by 0x1000 (or 4096), etc.
+
+Binary number 0b1000101000 is divisible by 0b1000 (8), etc.
+
+This property can be used often to realize quickly if a size of some block in memory is padded to some boundary.
+For example, sections in \ac{PE} files are almost always started at addresses ending with 3 hexadecimal zeroes: 0x41000, 0x10001000, etc.
+The reason behind this is in the fact that almost all \ac{PE} sections are padded to 0x1000 (4096) boundary.
 
