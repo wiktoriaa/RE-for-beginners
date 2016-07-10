@@ -24,6 +24,9 @@ En ciertas partes, se han empleado aquí compiladores muy antiguas, con el fin d
 % it's traditionally attributed to all sorts of philosophers..
 % I don't know exact analgoue in English language, but OK, let it be so.
 
+% if i get it right, a probable english translation is  "everything is known/comprehended through comparison"
+% it also reminds of Heraclitus of Ephesus
+
 When the author of this book first started learning C and, later, \Cpp, he used to write small pieces of code, compile them, 
 and then look at the assembly language output. This made it very easy for him to understand what was going on in the code that he had written.
 \footnote{In fact, he still does it when he can't understand what a particular bit of code does.}. 
@@ -36,6 +39,24 @@ Perhaps this technique could be helpful for others.
 
 Sometimes ancient compilers are used here, in order to get the shortest (or simplest) possible code snippet.
 \fi % ENGLISH
+
+\ifdefined\ITALIAN
+\part{Forme di codice}
+% maybe "strutture di codice", find a better translation
+
+\epigraph{Tutto si comprende tramite confronto}{Proverbio russo, autore sconosciuto}
+
+Quando l'autore di questo libro ha cominciato ad imparare il C e, successivamente, \Cpp, era solito scrivere piccoli pezzi di codice, compilarli e guardare l'output prodotto in linguaggio assembly. Questo procedimento ha facilitato la comprensione del comportamento del codice che aveva scritto.
+
+\footnote{In effetti lo fa ancora oggi quando non riesce a capire cosa fa un particolare pezzo di codice.}. 
+Lo ha fatto talmente tante volte che la relazione tra il codice \CCpp e ciò che viene prodotto dal compilatore si è impressa profondamente nella sua mente. E' facile immaginare a colpo d'occhio un contorno della forma e della funzione di un dato codice C. 
+Magari questa tecnica può rivelarsi utile anche per gli altri.
+
+%There are a lot of examples for both x86/x64 and ARM.
+%Those who already familiar with one of architectures, may freely skim over pages.
+
+In queso libro sono talvolta utilizzati vecchi compilatori al fine di ottenere il frammento di codice più piccolo (o semplice) possibile.
+\fi % ITALIAN
 
 \ifdefined\RUSSIAN
 \part{Образцы кода}
@@ -114,6 +135,12 @@ Feel free, therefore, to take any assembly code from this book and try to make i
 However, don't forget to test what you have written.
 \fi % ENGLISH
 
+\ifdefined\ITALIAN
+Quando l'autore di questo libro studiava il linguaggio assembly, era solito anche compilare piccola funzioni C e riscriverle gradualmente in assembly tentando di restringere il codice il più possibile.
+Questa pratica è oggi probabilmente inutile in uno scenario reale, in quanto è molto difficile competere, in termini di efficienza, con i moderni compilatori. Rappresenta comunque un ottimo modo di acquisire una migliore conoscenza dell'assembly.
+Sentitevi quindi liberi di prendere qualunque pezzo di codice assembly da questo libro e cercare di renderlo più piccolo. Tuttavia non dimenticate di testare il vostro risultato.
+\fi % ITALIAN
+
 \ifdefined\BRAZILIAN
 Quando o autor deste livro estudou a linguagem assembly, ele também frequentemente compilava pequenas funções em C e então as reescrevia gradualmente em assembly, tentando fazer seu código o menor possível.
 Provavelmente não vale mais à pena fazer isso em cenários reais atualmente, 
@@ -168,6 +195,20 @@ can be optimized away and thus not even be present in the resulting machine code
 Reverse engineers can encounter either version, simply because some developers turn on the compiler's optimization flags and others do not. 
 Because of this, we'll try to work on examples of both debug and release versions of the code featured in this book, where possible.
 \fi % ENGLISH
+
+\ifdefined\ITALIAN
+\section*{Livelli di ottimizzazione e informazioni di debug}
+
+Il codice sorgente può essere compilato da compilatori diversi e con vari livelli di ottimizzazione.
+Un compilatore tipico ne prevede solitamente tre, dei quali il livello zero corrisponde a nessuna ottimizzazione (ottimizzazione disabilitata) 
+
+L'ottimizzazione può essere orientata verso la dimensione del codice o la sua velocità di esecuzione.
+Un compilatore non ottimizzante è più veloce e produce codice più comprensibile (sebbene prolisso), mentre un compilatore ottimizzante è più lento e cerca di produrre codice più veloce in termini di performance (ma non necesariamente più compatto).
+Oltre a livelli e direzione di ottimizzazione, un compilatore può includere informazioni di debug nel file risultante, producendo quindi codice che può essere debuggato più facilmente.
+Una delle caratteristiche più importanti del codice di ´debug' è che può contenere collegamenti tra ogni riga del codice sorgente e l'indirizzo del corrispondente codice macchina.
+I compilatori ottimizzanti tendono invece a produrre output in cui intere righe di codice sorgente possono essere ottimizzate a tal punto da non essere neanche presenti nel codice macchina risultante.
+I reverse engineers possono incontrare entrambe le version, semplicemente perchè alcuni sviluppatori utilizzano le opzioni di ottimizzazione dei compilatori ed altri no. A causa di ciò negli esempi proveremo, quando possibile, a lavorare sia sulle versioni di debug che su quelle di release del codice illustrato in questo libro.
+\fi % ITALIAN
 
 \ifdefined\BRAZILIAN
 \section*{Níveis de otimização e informações de depuração}
@@ -286,6 +327,76 @@ Therefore, we would try to add fragments of code in all three ARM \ac{ISA}s in t
 There are, by the way, many other \ac{RISC} \ac{ISA}s with fixed length 32-bit opcodes, such as MIPS, PowerPC and Alpha AXP.
 \fi % LITE
 \fi % ENGLISH
+
+\ifdefined\ITALIAN
+
+\chapter{Una breve introduzione alla CPU}
+
+La \ac{CPU} è il dispositivo che esegue il codice macchina di cui è fatto un programma.
+
+\textbf{Un breve glossario:}
+
+\begin{description}
+\item[Istruzione]: Un comando \ac{CPU} primitivo.
+L'esempio piò semplice include: spostare dati da un registro all'altro, lavorare con la memoria, effettuare operazioni aritmetiche primitive.
+Di norma ogni \ac{CPU} ha il suo insieme di istruzioni, detto instruction set architecture o (\ac{ISA}).
+
+\item[Codice macchina]: Codice che la \ac{CPU} è in grado di processare direttamente. 
+Ciascuna istruzione è solitamente codificata da diversi byte.
+\item[Linguaggio Assembly]: Codici mnemonico ed alcune estensioni come le macro introdotti per facilitare la vita del programmatore.
+\item[Registro CPU]: Ogni \ac{CPU} ha un insieme finito di registri generici (\ac{GPR}).
+$\approx 8$ in x86, $\approx 16$ in x86-64, $\approx 16$ in ARM.
+Il modo più semplice per capire un registro è quello di pensare ad esso come una variabile temporanea senza tipo.
+Immagina se stessi lavorando con un linguaggio di programmazione di alto livello \ac{PL} e potessi usare solo otto variabili a 32 (o 64) bit.
+
+Eppure solo con questi si possono fare un sacco!
+\end{description}
+
+% TODO1 add about linker: "компоновщик" и "редактор связей" в русскоязычной лит-ре
+
+% A note on the experiments in this area (like the LISP machines http://en.wikipedia.org/wiki/Lisp_machine
+% might be useful
+Qualcuno potrebbe chiedersi perchè ci debba essere una differenza tra il codice macchina ed un ac{PL}. La risposta risiede nel fatto che gli umani e i processori (\ac{CPU}) non sono uguali---%
+per un umano è molto più facille utilizzare un linguaggio di programmazione ad alto livello come \CCpp, Java, Python, etc., mentre per una \ac{CPU} è più semplice utilizzare un livello di astrazione più basso.
+Potrebbe essere forse possibile inventare una \ac{CPU} in grado di eseguire codice di un linguaggio \ac{PL} ad alto livello, ma sarebbe molto più complesso dei processori che conosciamo oggi.
+Allo stesso modo sarebbe del tutto sconveniente per gli umani scrivere in linguaggio assembly, a causa della sua natura di basso livello e la difficoltà nello scrivere senza commettere un enorme numero di fastidiosi errori.
+Il programma che converte il codice di un \ac{PL} di alto livello in assembly è detto un \IT{compilatore}.
+\footnote{La vecchia letteratura russa in materia utilizza il termine \q{traduttore}.}.
+
+\ifx\LITE\undefined
+\index{ARM!\ARMMode}%
+\index{ARM!\ThumbMode}%
+\index{ARM!\ThumbTwoMode}%
+
+\section{Qualche parola sulle diverse \ac{ISA}}
+L'architettura x86 \ac{ISA} è sempre stata una con opcodes di lunghezza variabile, e all'arrivo dell'era 64-bit l'estensione x64 non ha avuto impatti significativi sulla \ac{ISA}. Infatti l'architettura x86 contiene molte istruzioni apparse per la prima volta nelle CPU a 16-bit 8086 che si trovano ancora nei processori odierni.
+ARM è una \ac{CPU} \ac{RISC} progettata con opcodes di lunghezza costante, che in passato avevano alcuni vantaggi.
+Originariamente tutte le istruzioni ARM erano codificate in 4 byte%
+\footnote{
+A proposito, le istruzioni a lunghezza fissa sono utili perchè è possibile calcolare senza sforzo l'indirizzo della prossiama (o della precedente) istruzione. Questa caratteristica sarà discussa nella sezione dedicata all'operatore switch() operator~(\myref{sec:SwitchARMLot}) .
+}.
+Oggi è noto come \q{ARM mode}.
+Successivamente si pensò che non fosse poi tanto economico come si immaginava inizialmente.
+Infatti, le istruzioni \ac{CPU} più usate \footnote{Che sono MOV/PUSH/CALL/Jcc} , in applicazioni reali, possono essere codificate usando meno informazioni.
+Venne quindi aggiunta un'altra \ac{ISA}, detta Thumb, in cui ogni istruzione era codificata in solo 2 byte.
+Oggi detto \q{Thumb mode}.
+Tuttavia non \IT{tutte} le istruzioni ARM possono essere codificate in 2 byte, e il set di istruzioni Thumb è quindi in qualche modo limitato.
+Vale la pena notare che il codice compilato in ARM mode e Thumb mode può tranquillamente coesistere all'interno dello stesso programma.
+I creatori di ARM pensarono di estendere Thumb, dando vita a Thumb-2, appartso per la prima volta in ARMv7.
+Thumb-2 utilizza ancora istruzioni da 2-byte, ma ha anche alcune nuove istruzioni da 4 byte. 
+
+Esiste la convinzione errata che Thumb-2 sia un mix di ARM e Thumb. Questo non è corretto. 
+Thumb-2 è stato invece esteso per supportare completamente tutte le caratteristiche del processore così da competere con l'ARM mode--- un goal che è stato chiaramente raggiunto, visto che la maggior parte delle applicazioni per \idevices sono compilate per il set di istruzioni Thumb-2 (in effetti, molto probabilmente dovuto anche al fatto che Xcode lo fa per default).
+Successivamente fu la volta di ARM a 64-bit. Questa \ac{ISA} ha opcode di 4-byte, e non necessita di alcun Thumb mode aggiuntivo.
+Tuttavia i requisiti a 64-bit hanno avuto un impatto sulla \ac{ISA}, motivo per cui abbiamo oggi tre set di istruzioni ARM: ARM mode, Thumb mode (incluso Thumb-2) e ARM64.
+Queste \ac{ISA} si intersecano parzialmente, ma si può dire che sono \ac{ISA} differenti piuttosto che varianti della stessa.
+Per questo motivo cercheremo di aggiungere frammenti di codice in tutte e tre le \ac{ISA} ARM in questo libro.
+\index{PowerPC}%
+\index{MIPS}%
+\index{Alpha AXP}%
+A proposito, esistono anche molte altre \ac{ISA}s \ac{RISC} con opcode a lunghezza fissa di 32-bit, come MIPS, PowerPC e Alpha AXP.
+\fi % LITE
+\fi % ITALIAN
 
 \ifdefined\RUSSIAN
 \chapter{Краткое введение в CPU}
