@@ -2,15 +2,18 @@
 
 \RU{Теперь скомпилируем то же самое компилятором GCC 4.4.1 в Linux: \TT{gcc 1.c -o 1}.}%
 \EN{Now let's try to compile the same \CCpp code in the GCC 4.4.1 compiler in Linux: \TT{gcc 1.c -o 1}.}%
+\ITA{Proviamo adesso a compilare lo stesso codice \CCpp con il compilatore GCC 4.4.1 su Linux: \TT{gcc 1.c -o 1}.}%
 \NL{Nu zullen we dezelfde \CCpp code compileren in de GCC 4.4.1 compiler in Linux: \TT{gcc 1.c -o 1}.}%
 \RU{Затем при помощи \IDA посмотрим как скомпилировалась функция \main.}%
 \EN{Next, with the assistance of the \IDA disassembler, let's see how the \main function was created.}%
+\ITA{Successivamente, con l'aiuto del disassembler \IDA, vediamo come è stata creata la funzione \main .}%
 \NL{Vervolgens, met de assistentie van de \IDA disassembler, zullen we kijken hoe de \main functie gemaakt is.}%
 \RU{\IDA, как и MSVC, показывает код в синтаксисе Intel\footnote{Мы также можем заставить GCC генерировать листинги в этом формате при помощи ключей \TT{-S -masm=intel}.}.}%
 \EN{\IDA, like MSVC, uses Intel-syntax\footnote{We could also have GCC produce assembly listings in Intel-syntax by applying the options \TT{-S -masm=intel}.}.}%
+\ITA{\IDA, come MSVC, utilizza la sintassi Intel\footnote{Possiamo anche fare in modo che GCC produca un listato assembly con la sintassi Intel tramite l'opzione \TT{-S -masm=intel}.}.}%
 \NL{\IDA, maakt net als MSVC gebruik van de Intel-syntax\footnote{We hadden GCC ook assembly listings kunnen laten gereren in Intel-syntax door gebruik te maken van de opties \TT{-S -masm=intel}.}.}
 
-\begin{lstlisting}[caption=\RU{код в}\EN{code in}\NL{code in} \IDA]
+\begin{lstlisting}[caption=\RU{код в}\EN{code in}\ITA{codice in}\NL{code in} \IDA]
 main            proc near
 
 var_10          = dword ptr -10h
@@ -42,6 +45,11 @@ In addition, the function prologue contains \TT{AND ESP, 0FFFFFFF0h}~---this
 instruction aligns the \ESP register value on a 16-byte boundary.
 This results in all values in the stack being aligned the same way (The CPU performs better if the values it is dealing with are located in memory at addresses aligned 
 on a 4-byte or 16-byte boundary)\footnote{\URLWPDA}.}
+\ITA{Il risultato è pressoché lo stesso.
+L'indirizzo della stringa \TT{hello, world} (memorizzato nel data segment) è caricato prima nel registro \EAX e successivamente salvato sullo stack.
+Inoltre, il prologo della funzione contiene \TT{AND ESP, 0FFFFFFF0h}~---questa 
+istruzione allinea il valore del registro \ESP a 16-byte.
+Ciò fa sì che tutti i valori sullo stack siano allineati allo stesso modo (la CPU è più efficiente se i valori che tratta sono collocati in memoria ad indirizzi allineati a, ovvero multipli di, 4 o 16 byte)\footnote{\URLWPDA}.}
 \NL{Het resultaat is bijna hetzelfde.
 Het adres van de \TT{hello, world} string (opgeslagen in het data segment) wordt eerst ingeladen in het \EAX register en wordt daarna opgeslagen op de stack.
 Daarbovenop vind je in de functie proloog hetvolgende terug: \TT{AND ESP, 0FFFFFFF0h}~---
@@ -52,10 +60,12 @@ De CPU presteert beter als de waarden die hij moet behandelen gelokaliseerd zijn
 \index{x86!\Instructions!SUB}
 \RU{\INS{SUB ESP, 10h} выделяет в стеке 16 байт. Хотя, как будет видно далее, здесь достаточно только 4.}%
 \EN{\INS{SUB ESP, 10h} allocates 16 bytes on the stack. Although, as we can see hereafter, only 4 are necessary here.}%
+\ITA{\INS{SUB ESP, 10h} alloca 16 byte sullo stack. Tuttavia, come vedremo a breve, solo 4 sono necessari in questo caso.}%
 \NL{\INS{SUB ESP, 10h} reserveert 16 bytes op de stack. Zoals we hierna echter kunnen zijn, zijn er in dit geval slechts 4 nodig.}
 
 \RU{Это происходит потому, что количество выделяемого места в локальном стеке тоже выровнено по 16-байтной границе.}%
 \EN{This is because the size of the allocated stack is also aligned on a 16-byte boundary.}%
+\ITA{Ciò è dovuto al fatto che la dimensione dello stack allocato è anch'essa allineata a 16 byte.}%
 \NL{Dit komt doordat de grootte van de gereserveerde stack ook uitgelijnd is op een 16-byte begrenzing.}
 
 % TODO1: rewrite.
@@ -65,24 +75,30 @@ De CPU presteert beter als de waarden die hij moet behandelen gelokaliseerd zijn
 \EN{The string address (or a pointer to the string) is then stored directly onto the stack without using the \PUSH instruction.
 \IT{var\_10}~---is a local variable and is also an argument for \printf{}.
 Read about it below.}%
+\ITA{L'indirizzo della stringa (o un puntatore alla stringa) è quindi memorizzato direttamente sullo stack senza utilizzare l'istruzione \PUSH .
+\IT{var\_10}~--- è una variabile locale ed è anche un argomento di \printf{}.
+Maggiori dettagli in seguito.}%
 \NL{Het string adres (of een pointer naar de string) wordt dan rechtstreeks op de stack geplaatst zonder gebruik te maken van de \PUSH instructie.
 \IT{var\_10}~---is een lokale variabele en is ook een argument voor \printf{}.
 Lees er hieronder meer over}
 
-\RU{Затем вызывается \printf.}\EN{Then the \printf function is called.}\NLph{}
+\RU{Затем вызывается \printf.}\EN{Then the \printf function is called.}\ITA{Infine viene chiamata la funzione \printf.}\NLph{}
 
 \RU{В отличие от MSVC, GCC в компиляции без включенной оптимизации генерирует \TT{MOV EAX, 0} вместо более короткого опкода.}%
 \EN{Unlike MSVC, when GCC is compiling without optimization turned on, it emits \TT{MOV EAX, 0} instead of a shorter opcode.}%
+\ITA{Diversamente da MSVC, quando GCC compila senza ottimizzazione emette \TT{MOV EAX, 0} invece di un opcode più breve.}%
 \NL{In tegenstelling tot MSVC, wanneer GCC compileert zonder optimizatie, maakt het gebruik van \TT{MOV EAX, 0} in plaats van kortere opcodes.}
 
 \index{x86!\Instructions!LEAVE}
 \RU{Последняя инструкция \LEAVE~--- это аналог команд \TT{MOV ESP, EBP} и \TT{POP EBP}~--- то есть возврат \glslink{stack pointer}{указателя стека} и регистра \EBP в первоначальное состояние.}%
 \EN{The last instruction, \LEAVE~---is the equivalent of the \TT{MOV ESP, EBP} and \TT{POP EBP} instruction pair~---in other words, this instruction sets the \gls{stack pointer} (\ESP) back and restores the \EBP register to its initial state.}%
+\ITA{L'ultima istruzione, \LEAVE~---è l'equivalente della coppia di istruzioni \TT{MOV ESP, EBP} e \TT{POP EBP} ~---in altre parole, questa istruzione riporta indietro lo \gls{stack pointer} (\ESP) e ripristina il registro \EBP al suo stato iniziale.}%
 \NL{De laatste instructie, \LEAVE~---is het equivalent van het \TT{MOV ESP, EBP} en \TT{POP EBP} instructiepaar.
 Met andere woorden, deze instructie zet de \gls{stack pointer} (\ESP) terug, en herstelt het \EBP register
 terug tot zijn oorspronkelijke staat.}
 \RU{Это необходимо, т.к. в начале функции мы модифицировали регистры \ESP и \EBP (при помощи \INS{MOV EBP, ESP} / \INS{AND ESP, \ldots}).}%
 \EN{This is necessary since we modified these register values (\ESP and \EBP) at the beginning of the function (by executing \INS{MOV EBP, ESP} / \INS{AND ESP, \ldots}).}%
+\ITA{Ciò è necessario poiché abbiamo modificato i valori di questi registri (\ESP and \EBP) all'inizio della funzione ( eseguendo \INS{MOV EBP, ESP} / \INS{AND ESP, \ldots}).}%
 \NL{Dit is nodig aangezien we deze registerwaarden hebben gewijzigd (\ESP en \EBP) in het begin van de functie (door het uitvoeren van \INS{MOV EBP, ESP} / \INS{AND ESP, \ldots}).}
 
 \subsection{GCC: \ATTSyntax}
@@ -90,21 +106,24 @@ terug tot zijn oorspronkelijke staat.}
 
 \RU{Попробуем посмотреть, как выглядит то же самое в синтаксисе AT\&T языка ассемблера.}%
 \EN{Let's see how this can be represented in assembly language AT\&T syntax.}%
+\ITA{Vediamo come tutto questo può essere rappresentato nella sintassi assembly AT\&T.}%
 \NL{Laat ons eens kijken hoe dit kan weergegeven worden in assembly in de AT\&T syntax.}%
 \RU{Этот синтаксис больше распространен в UNIX-мире.}%
 \EN{This syntax is much more popular in the UNIX-world.}%
+\ITA{Questa sintassi è molto più popolare nel mondo UNIX.}%
 \NL{Deze syntax is veel populairder in de UNIX-wereld.}%
 
-\begin{lstlisting}[caption=\RU{компилируем в}\EN{let's compile in}\NLph{} GCC 4.7.3]
+\begin{lstlisting}[caption=\RU{компилируем в}\EN{let's compile in}\ITA{compiliamo in}\NLph{} GCC 4.7.3]
 gcc -S 1_1.c
 \end{lstlisting}
 
-\RU{Получим такой файл:}\EN{We get this:}\NL{We krijgen dit resultaat:}
+\RU{Получим такой файл:}\EN{We get this:}\ITA{Otteniamo questo:}\NL{We krijgen dit resultaat:}
 
 \lstinputlisting[caption=GCC 4.7.3]{patterns/01_helloworld/GCC.s}
 
 \RU{Здесь много макросов (начинающихся с точки). Они нам пока не интересны.}%
 \EN{The listing contains many macros (beginning with dot). These are not interesting for us at the moment.}%
+\ITA{Il listato contiene molte macro (iniziano con il punto). Per il momento non ci interessano.}%
 \NL{De lijst bevat vele macros (die beginnen met een punt). Maar deze zijn niet interessant voor ons momenteel.}%
 
 \RU{Пока что, ради упрощения, мы можем 
@@ -114,6 +133,8 @@ gcc -S 1_1.c
 \EN{For now, for the sake of simplification, we can ignore them (except the \IT{.string} macro which
 encodes a null-terminated character sequence just like a C-string). Then we'll see this
 \footnote{This GCC option can be used to eliminate \q{unnecessary} macros: \IT{-fno-asynchronous-unwind-tables}}:}%
+\ITA{Per il momento, e solo per una questione di semplificazione, possiamo ignorarle (fatta eccezione per la macro \IT{.string} che codifica una sequenza di caratteri che termina con il null-byte (zero) proprio come una stringa C). Consideriamo soltanto questo
+\footnote{Questa opzione di GCC può essere usata per eliminare le macro \q{superflue}: \IT{-fno-asynchronous-unwind-tables}}:}%
 \NL{Voorlopig, om het simpel te houden, kunnen we deze negeren (buiten de \IT{.string} macro, dewelke
 een null-terminated karakter reeks encodeert net als een C-string). Daarna zien we dit
 \footnote{Deze GCC optie kan gebruikt worden om alle \q{onnodige} macros te elimineren: \IT{-fno-asynchronous-unwind-tables}}:}
@@ -124,6 +145,7 @@ een null-terminated karakter reeks encodeert net als een C-string). Daarna zien 
 \index{\IntelSyntax}
 \RU{Основные отличия синтаксиса Intel и AT\&T следующие:}%
 \EN{Some of the major differences between Intel and AT\&T syntax are:}%
+\ITA{Alcune delle differenze maggiori tra la sintassi Intel e quella AT\&T sono:}%
 \NL{Sommige grote verschillen tussen de Intel en AT\&T syntax zijn:}
 
 \begin{itemize}
@@ -133,10 +155,12 @@ een null-terminated karakter reeks encodeert net als een C-string). Daarna zien 
 
 \RU{В Intel-синтаксисе: <инструкция> <операнд назначения> <операнд-источник>.}%
 \EN{In Intel-syntax: <instruction> <destination operand> <source operand>.}%
+\ITA{Sintassi Intel: <istruzione> <operando di destinazione> <operando di origine>.}%
 \NL{In Intel-syntax: <instructie> <doel> <bron>.}%
 
 \RU{В AT\&T-синтаксисе: <инструкция> <операнд-источник> <операнд назначения>.}%
 \EN{In AT\&T syntax: <instruction> <source operand> <destination operand>.}%
+\ITA{Sintassi AT\&T: <istruzione> <operando di origine> <operando di destinazione>.}%
 \NL{In AT\&T syntax: <instructie> <bron> <doel>.}%
 
 \index{\CStandardLibrary!memcpy()}
@@ -153,6 +177,9 @@ and when you deal with AT\&T-syntax imagine there is a right arrow ($\rightarrow
 \footnote{By the way, in some C standard functions (e.g., memcpy(), strcpy()) the arguments
 are listed in the same way as in Intel-syntax: first the pointer to the destination memory block, and then
 the pointer to the source memory block.}.}%
+\ITA{Ecco un modo facile per memorizzare la differenza:
+quando si tratta di sintassi Intel immagina che ci sia un segno di uguaglianza ($=$) tra i due operandi, quando si tratta di sintassi AT\&T immagina una freccia da sinistra a destra ($\rightarrow$)
+\footnote{A proposito, in alcune funzioni standard C(es., memcpy(), strcpy()) gli argomenti sono elencati nello stesso modo della sintassi Intel: prima il puntatore al blocco di memoria di destinazione, e poi il puntatore al blocco di memoria di origine.}.}%
 \NL{Een gemakkelijke manier om dit verschil te onthouden is: 
 Wanneer je met Intel-syntax te doen krijgt, kan je je inbeelden dat er een gelijkheidsteken ($=$) staat tussen de operands
 en met AT\&T-syntax beeld je je in dat er een pijl naar rechts staat ($\rightarrow$)
@@ -163,19 +190,21 @@ gevolgd door een pointer naar de bron.}.}
 \item
 AT\&T: \RU{Перед именами регистров ставится знак процента (\%), а перед числами знак доллара (\$).}
 \EN{Before register names, a percent sign must be written (\%) and before numbers a dollar sign (\$).}
+\ITA{Il simbolo di percentuale (\%) deve essere scritto prima del nome di un registro, e il dollaro (\$) prima dei numeri.}
 \NL{Voor registernamen moet een percentteken geschreven worden (\%) en voor cijfers een dollarteken (\$).}
-\RU{Вместо квадратных скобок применяются круглые.}\EN{Parentheses are used instead of brackets.}\NL{Ronde haakjes worden gebruikt in plaats van haakjes.}
+\RU{Вместо квадратных скобок применяются круглые.}\EN{Parentheses are used instead of brackets.}\ITA{Si usano le parentesi tonde invece di quelle quadre.}\NL{Ronde haakjes worden gebruikt in plaats van haakjes.}
 
 \item
 AT\&T: \RU{К каждой инструкции добавляется специальный символ, определяющий тип данных:}
 \EN{A suffix is added to instructions to define the operand size:}
+\ITA{All'istruzione si aggiunge un suffisso che definisce le dimensioni dell'operando:}
 \NL{Een suffix wordt toegevoegd aan de instructies om de operand grootte te bepalen:}
 
 \begin{itemize}
-\item q --- quad (64 \RU{бита}\EN{bits}\NL{bits})
-\item l --- long (32 \RU{бита}\EN{bits}\NL{bits})
-\item w --- word (16 \RU{бит}\EN{bits}\NL{bits})
-\item b --- byte (8 \RU{бит}\EN{bits}\NL{bits})
+\item q --- quad (64 \RU{бита}\EN{bits}\NL{bits})\ITA{bit}
+\item l --- long (32 \RU{бита}\EN{bits}\NL{bits})\ITA{bit}
+\item w --- word (16 \RU{бит}\EN{bits}\NL{bits})\ITA{bit}
+\item b --- byte (8 \RU{бит}\EN{bits}\NL{bits})\ITA{bit}
 \end{itemize}
 
 % TODO1 simple example may be? \RU{Например mov\textbf{l}, movb, movw представляют различые версии инсструкция mov} \EN {For example: movl, movb, movw are variations of the mov instruciton}
@@ -190,6 +219,10 @@ AT\&T: \RU{К каждой инструкции добавляется спец�
 With one subtle difference: \TT{0FFFFFFF0h} is presented as \TT{\$-16}.
 It is the same thing: \TT{16} in the decimal system is \TT{0x10} in hexadecimaal.
 \TT{-0x10} is equal to \TT{0xFFFFFFF0} (for a 32-bit data type).}%
+\ITA{Torniamo al risultato compilato: è identico a quello che abbiamo visto in \IDA.
+Con una piccola differenza: \TT{0FFFFFFF0h} è presentato come \TT{\$-16}.
+E' la stessa cosa: \TT{16} nel sistema decimale è \TT{0x10} in esadecimale.
+\TT{-0x10} è uguale a \TT{0xFFFFFFF0} (per un tipo di dato a 32-bit).}%
 \NL{Laten we even terugblikken op het gecompileerde resultaat: dit is identiek als wat we gezien hebben in \IDA.
 Met een klein verschil: \TT{0FFFFFFF0h} wordt weergegeven als \TT{\$-16}.
 Dit is hetzelfde: \TT{16} in het decimaalsysteem is \TT{0x10} in hexadecimaal.
@@ -202,6 +235,9 @@ Dit is hetzelfde: \TT{16} in het decimaalsysteem is \TT{0x10} in hexadecimaal.
 \EN{One more thing: the return value is to be set to 0 by using the usual \MOV, not \XOR.
 \MOV just loads a value to a register.
 Its name is a misnomer (data is not moved but rather copied). In other architectures, this instruction is named \q{LOAD} or \q{STORE} or something similar.}%
+\ITA{Ancora una cosa: il valore di ritorno viene settato a 0 usando \MOV, non \XOR.
+\MOV semplicemente carica un valore in un registro.
+Il suo nome è fuorviante (il dato non viene spostato, bensì copiato). In altre architectures questa istruzione è chiamata \q{LOAD} o \q{STORE} o qualcosa di simile.}%
 \NL{Nog een ding: de return value wordt best op 0 gezet door gebruik te maken van \MOV, niet van \XOR.
 \MOV laadt gewoon een waarde in het register.
 De naam is een foute noemer (data wordt niet verplaatst, maar eerder gekopieerd). In andere architecturen wordt deze instructie \q{LOAD} of \q{STORE} of iets soortgelijks genoemd.}

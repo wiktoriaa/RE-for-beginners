@@ -1,4 +1,4 @@
-\section{GCC\EMDASH{}\EN{one more thing}\RU{ещё кое-что}\NL{Nog een ding}}
+\section{GCC\EMDASH{}\EN{one more thing}\ITA{Ancora un'altra cosa}\RU{ещё кое-что}\NL{Nog een ding}}
 \label{use_parts_of_C_strings}
 
 \NL{Het feit dat een \IT{anonieme} C-string het type \IT{const} heeft (\myref{string_is_const_char}), 
@@ -10,9 +10,12 @@ De compiler kan een specifiek gedeelte van de string gebruiken.}%
 \EN{The fact that an \IT{anonymous} C-string has \IT{const} type (\myref{string_is_const_char}), 
 and that C-strings allocated in constants segment are guaranteed to be immutable, has an interesting consequence:
 the compiler may use a specific part of the string.}
+\ITA{Il fatto che una stringa C \IT{anonima} ha \IT{const} tipo (\myref{string_is_const_char}), 
+e che le stringhe C allocate nel constants segment siano garantite essere immutabili, hanno una conseguenza interessante:
+il compilatore potrebbe utilizzare una parte specifica della stringa.}
 
 
-\RU{Вот простой пример}\EN{Let's try this example}\NL{Laten we dit voorbeeld proberen}:
+\RU{Вот простой пример}\EN{Let's try this example}\ITA{Un esempio}\NL{Laten we dit voorbeeld proberen}:
 
 \begin{lstlisting}
 #include <stdio.h>
@@ -36,6 +39,7 @@ int main()
 
 \RU{Среднестатистический компилятор с \CCpp (включая MSVC) выделит место для двух строк, но вот что делает GCC 4.8.1}%
 \EN{Common \CCpp{}-compilers (including MSVC) allocate two strings, but let's see what GCC 4.8.1 does}%
+\ITA{I comuni compilatori \CCpp{}- (incluso MSVC) allocano due stringhe, ma vediamo cosa fa GCC 4.8.1}%
 \NL{Veelgebruikte \CCpp{}-compilers (inclusief MSVC) alloceren twee strings, maar laat ons eens kijken wat GCC 4.8.1 doet}:
 
 \begin{lstlisting}[caption=GCC 4.8.1 + \RU{листинг в }IDA\EN{ listing}]
@@ -73,6 +77,7 @@ In feite is hij ook niet opgedeeld, hij is slechts \q{virtueel} opgedeeld in dez
 these two words are positioned in memory adjacently and \puts called from f2() 
 function is not aware that this string is divided. 
 In fact, it's not divided; it's divided only \q{virtually}, in this listing.}%
+\ITA{Quando stampiamo la stringa \q{hello world} le due parole sono posizionate adiacenti in memoria e \puts chiamata dalla funzione f2() non è al corrente che la stringa è in divisa. Infatti non lo è; è divisa soltanto \q{virtualmente}, in questo listato.}%
 \RU{Действительно, когда мы выводим строку \q{hello world}, 
 эти два слова расположены в памяти впритык друг к другу и \puts, вызываясь из функции f2(), вообще не знает,
 что эти строки разделены. Они и не разделены на самом деле, они разделены
@@ -80,9 +85,11 @@ In fact, it's not divided; it's divided only \q{virtually}, in this listing.}%
 
 \RU{Когда \puts вызывается из f1(), он использует строку \q{world} плюс нулевой байт. \puts не знает, что там ещё есть какая-то строка перед этой!}%
 \EN{When \puts is called from f1(), it uses the \q{world} string plus a zero byte. \puts is not aware that there is something before this string!}%
+\ITA{Quando \puts è chiamata dalla funzione f1(), usa la stringa \q{world} più un byte zero. \puts non sa che c'è qualcos'altro prima di questa stringa!}%
 \NL{Wanneer \puts aangeroepen wordt vanuit f1(), gebruikt het de \q{world} string plus een nulbyte. \puts is er zich niet van bewust dat er nog iets voor deze string staat!}
 
 \RU{Этот трюк часто используется (по крайней мере в GCC) и может сэкономить немного памяти.}%
 \EN{This clever trick is often used by at least GCC and can save some memory.}%
+\ITA{Questo trucco intelligente è usato spesso, almeno da GCC, e può far risparmiare un po' di memoria.}%
 \NL{Dit slimme truukje wordt vaak gebruikt door op zijn minst GCC, en kan geheugen besparen.}
 
