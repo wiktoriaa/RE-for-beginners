@@ -51,8 +51,8 @@ and they are in positions 6, 2, 0 of the \AH register:}
 
 \input{C3_in_AH}
 
-\RU{Иными словами, пара инструкций \TT{fnstsw  ax / sahf} перекладывает биты \CThreeBits в флаги \ZF, \PF, \CF.}
-\EN{In other words, the \TT{fnstsw  ax / sahf} instruction pair moves \CThreeBits into \ZF, \PF and \CF.}
+\RU{Иными словами, пара инструкций \INS{fnstsw  ax / sahf} перекладывает биты \CThreeBits в флаги \ZF, \PF, \CF.}
+\EN{In other words, the \INS{fnstsw  ax / sahf} instruction pair moves \CThreeBits into \ZF, \PF and \CF.}
 
 \RU{Теперь снова вспомним, какие значения бит \CThreeBits будут при каких результатах сравнения:}
 \EN{Now let's also recall the values of \CThreeBits in different conditions:}
@@ -77,12 +77,12 @@ after three \FUCOMPP/\FNSTSW/\SAHF instructions:}
 \begin{itemize}
 \item
 \RU{Если $a>b$ в нашем случае, то флаги будут выставлены так:}
-\EN{If $a>b$, the CPU flags are to be set as:} \TT{ZF=0, PF=0, CF=0}.
+\EN{If $a>b$, the CPU flags are to be set as:} \GTT{ZF=0, PF=0, CF=0}.
 \item
 \RU{Если $a<b$, то флаги будут выставлены так:}
-\EN{If $a<b$, then the flags are to be set as:} \TT{ZF=0, PF=0, CF=1}.
+\EN{If $a<b$, then the flags are to be set as:} \GTT{ZF=0, PF=0, CF=1}.
 \item
-\RU{Если $a=b$, то так:}\EN{And if $a=b$, then:} \TT{ZF=1, PF=0, CF=0}.
+\RU{Если $a=b$, то так:}\EN{And if $a=b$, then:} \GTT{ZF=1, PF=0, CF=0}.
 \end{itemize}
 % TODO: table?
 
@@ -92,20 +92,20 @@ after three \FUCOMPP/\FNSTSW/\SAHF instructions:}
 Это почти аналог \JNBE, за тем лишь исключением, что \SETcc
 \footnote{\IT{cc} это \IT{condition code}}
 выставляет 1 или 0 в \AL, а \Jcc делает переход или нет. 
-\SETNBE запишет 1 только если \TT{CF=0} и \TT{ZF=0}. Если это не так, то запишет 0 в \AL.}
+\SETNBE запишет 1 только если \GTT{CF=0} и \GTT{ZF=0}. Если это не так, то запишет 0 в \AL.}
 \EN{Depending on the CPU flags and conditions, \SETNBE stores 1 or 0 to AL. 
 It is almost the counterpart of \JNBE, with the exception that \SETcc 
 \footnote{\IT{cc} is \IT{condition code}} stores 1 or 0 in \AL, 
 but \Jcc does actually jump or not. 
-\SETNBE stores 1 only if \TT{CF=0} and \TT{ZF=0}. 
+\SETNBE stores 1 only if \GTT{CF=0} and \GTT{ZF=0}. 
 If it is not true, 0 is to be stored into \AL.}
 
 \RU{\CF будет 0 и \ZF будет 0 одновременно только в одном случае: если $a>b$.}
 \EN{Only in one case both \CF and \ZF are 0: if $a>b$.}
 
 \RU{Тогда в \AL будет записана 1, последующий условный переход \JZ выполнен не будет 
-и функция вернет~\TT{\_a}. 
-В остальных случаях, функция вернет~\TT{\_b}.}
+и функция вернет~\GTT{\_a}. 
+В остальных случаях, функция вернет~\GTT{\_b}.}
 \EN{Then 1 is to be stored to \AL, 
 the subsequent \JZ is not to be triggered and the function will return {\_a}. 
 In all other cases, {\_b} is to be returned.}

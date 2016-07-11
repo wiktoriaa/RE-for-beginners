@@ -49,21 +49,21 @@ javap -c -verbose ret.class
 \end{lstlisting}
 
 \EN{The Java developers decided that 0 is one of the busiest constants in programming, 
-so there is a separate short one-byte \TT{iconst\_0} instruction which pushes 0}
+so there is a separate short one-byte \GTT{iconst\_0} instruction which pushes 0}
 \RU{Разработчики Java решили что 0 это самая используемая константа в программировании,
-так что здесь есть отдельная однобайтная инструкция \TT{iconst\_0}, заталкивающая 0 в стек}
+так что здесь есть отдельная однобайтная инструкция \GTT{iconst\_0}, заталкивающая 0 в стек}
 \footnote{\EN{Just like in MIPS, where a separate register for zero constant exists}
 \RU{Так же как и в MIPS, где для нулевой константы имеется отдельный регистр}: 
 \myref{MIPS_zero_register}.}.
-\EN{There are also \TT{iconst\_1} (which pushes 1), \TT{iconst\_2}, etc, 
-up to \TT{iconst\_5}.}
-\RU{Здесь есть также \TT{iconst\_1} (заталкивающая 1), \TT{iconst\_2}, итд, 
-вплоть до \TT{iconst\_5}.}
-\EN{There is also}\RU{Есть также} \TT{iconst\_m1} \RU{заталкивающая}\EN{which pushes} -1.
+\EN{There are also \GTT{iconst\_1} (which pushes 1), \GTT{iconst\_2}, etc, 
+up to \GTT{iconst\_5}.}
+\RU{Здесь есть также \GTT{iconst\_1} (заталкивающая 1), \GTT{iconst\_2}, итд, 
+вплоть до \GTT{iconst\_5}.}
+\EN{There is also}\RU{Есть также} \GTT{iconst\_m1} \RU{заталкивающая}\EN{which pushes} -1.
 
 The stack is used in JVM for passing data to called functions and also for returning values.
-So \TT{iconst\_0} pushes 0 into the stack.
-\TT{ireturn} returns an integer value (\IT{i} in name mean \IT{integer}) from the \ac{TOS}.
+So \GTT{iconst\_0} pushes 0 into the stack.
+\GTT{ireturn} returns an integer value (\IT{i} in name mean \IT{integer}) from the \ac{TOS}.
 
 \RU{Немного перепишем наш пример, теперь возвращаем}
 \EN{Let's rewrite our example slightly, now we return} 1234:
@@ -89,7 +89,7 @@ public class ret
          3: ireturn       
 \end{lstlisting}
 
-\TT{sipush} (\IT{short integer}) \RU{заталкивает значение}\EN{pushes} 1234 \RU{в стек}\EN{into the stack}.
+\GTT{sipush} (\IT{short integer}) \RU{заталкивает значение}\EN{pushes} 1234 \RU{в стек}\EN{into the stack}.
 \IT{short} \EN{in name implies a 16-bit value is to be pushed}\RU{в имени означает, что 16-битное значение будет заталкиваться в стек}. 
 \EN{The number 1234 indeed fits well in a 16-bit value.}
 \RU{Число 1234 действительно помещается в 16-битное значение.}
@@ -222,7 +222,7 @@ public class ret
          2: ireturn       
 \end{lstlisting}
 
-\TT{bipush} \RU{означает}\EN{means} \q{push byte}.
+\INS{bipush} \RU{означает}\EN{means} \q{push byte}.
 \EN{Needless to say that a \IT{char} in Java is 16-bit UTF-16 character, 
 and it's equivalent to \IT{short}, but the ASCII code of the \q{A} character is 65, and it's possible
 to use the instruction for pushing a byte in the stack.}
@@ -300,14 +300,14 @@ public class ret3
          3: lreturn       
 \end{lstlisting}
 
-\EN{The 64-bit number is also stored in a constant pool, \TT{ldc2\_w} loads it and \TT{lreturn} 
+\EN{The 64-bit number is also stored in a constant pool, \INS{ldc2\_w} loads it and \INS{lreturn} 
 (\IT{long return}) returns it.}
-\RU{64-битное число также хранится в пуле констант, \TT{ldc2\_w} загружает его и \TT{lreturn} 
+\RU{64-битное число также хранится в пуле констант, \INS{ldc2\_w} загружает его и \INS{lreturn} 
 (\IT{long return}) возвращает его.}
 
-\EN{The \TT{ldc2\_w} instruction is also used to load double precision floating point numbers 
+\EN{The \INS{ldc2\_w} instruction is also used to load double precision floating point numbers 
 (which also occupy 64 bits) from a constant pool:}
-\RU{Инструкция \TT{ldc2\_w} также используется для загрузки чисел с плавающей точкой двойной 
+\RU{Инструкция \INS{ldc2\_w} также используется для загрузки чисел с плавающей точкой двойной 
 точности (которые также занимают 64 бита) из пула констант:}
 
 \begin{lstlisting}
@@ -335,8 +335,8 @@ public class ret
          3: dreturn       
 \end{lstlisting}
 
-\EN{\TT{dreturn} stands for \q{return double}.}
-\RU{\TT{dreturn} означает \q{return double}.}
+\EN{\INS{dreturn} stands for \q{return double}.}
+\RU{\INS{dreturn} означает \q{return double}.}
 
 \EN{And finally, a single precision floating point number:}
 \RU{И наконец, числа с плавающей точкой одинарной точности:}
@@ -366,12 +366,12 @@ public class ret
          2: freturn       
 \end{lstlisting}
 
-\EN{The \TT{ldc} instruction used here is the same one as for loading 32-bit integer numbers
+\EN{The \INS{ldc} instruction used here is the same one as for loading 32-bit integer numbers
 from a constant pool.}
-\RU{Используемая здесь инструкция \TT{ldc} та же, что и для загрузки 32-битных целочисленных чисел
+\RU{Используемая здесь инструкция \INS{ldc} та же, что и для загрузки 32-битных целочисленных чисел
 из пула констант.}
-\EN{\TT{freturn} stands for \q{return float}.}
-\RU{\TT{freturn} означает \q{return float}.}
+\EN{\INS{freturn} stands for \q{return float}.}
+\RU{\INS{freturn} означает \q{return float}.}
 
 \EN{Now what about function that return nothing?}
 \RU{А что насчет тех случаев, когда функция ничего не возвращает?}
@@ -394,9 +394,9 @@ public class ret
          0: return        
 \end{lstlisting}
 
-\EN{This means that the \TT{return} instruction is used to return control without returning 
+\EN{This means that the \INS{return} instruction is used to return control without returning 
 an actual value.}
-\RU{Это означает, что инструкция \TT{return} используется для возврата управления 
+\RU{Это означает, что инструкция \INS{return} используется для возврата управления 
 без возврата какого-либо значения.}
 \EN{Knowing all this, it's very easy to deduce the function's (or method's) returning type 
 from the last instruction.}

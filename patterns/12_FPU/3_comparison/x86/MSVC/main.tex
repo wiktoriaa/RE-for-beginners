@@ -5,19 +5,19 @@
 \lstinputlisting[caption=\NonOptimizing MSVC 2010]{patterns/12_FPU/3_comparison/x86/MSVC/MSVC.asm.\LANG}
 
 \index{x86!\Instructions!FLD}
-\RU{Итак, \FLD загружает \TT{\_b} в регистр \ST{0}.}
-\EN{So, \FLD loads \TT{\_b} into \ST{0}.}
+\RU{Итак, \FLD загружает \GTT{\_b} в регистр \ST{0}.}
+\EN{So, \FLD loads \GTT{\_b} into \ST{0}.}
 
 \label{Czero_etc}
-\newcommand{\Czero}{\TT{C0}\xspace}
-\newcommand{\Ctwo}{\TT{C2}\xspace}
-\newcommand{\Cthree}{\TT{C3}\xspace}
+\newcommand{\Czero}{\GTT{C0}\xspace}
+\newcommand{\Ctwo}{\GTT{C2}\xspace}
+\newcommand{\Cthree}{\GTT{C3}\xspace}
 \newcommand{\CThreeBits}{\Cthree/\Ctwo/\Czero}
 
 \index{x86!\Instructions!FCOMP}
-\RU{\FCOMP сравнивает содержимое \ST{0} с тем, что лежит в \TT{\_a} и выставляет биты \CThreeBits в 
+\RU{\FCOMP сравнивает содержимое \ST{0} с тем, что лежит в \GTT{\_a} и выставляет биты \CThreeBits в 
 регистре статуса FPU. Это 16-битный регистр отражающий текущее состояние FPU.}
-\EN{\FCOMP compares the value in \ST{0} with what is in \TT{\_a} 
+\EN{\FCOMP compares the value in \ST{0} with what is in \GTT{\_a} 
 and sets \CThreeBits bits in FPU 
 status word register, accordingly. 
 This is a 16-bit register that reflects the current state of the FPU.}
@@ -73,9 +73,9 @@ they are at the same positions in the \AX register and all they are placed in th
 
 \input{C3_in_AH}
 
-\RU{После исполнения \TT{test ah, 5}\footnote{5=101b} % FIXME: subscript here!
+\RU{После исполнения \INS{test ah, 5}\footnote{5=101b} % FIXME: subscript here!
 будут учтены только биты \Czero и \Ctwo (на позициях 0 и 2), остальные просто проигнорированы.}
-\EN{After the execution of \TT{test ah, 5}\footnote{5=101b}, 
+\EN{After the execution of \INS{test ah, 5}\footnote{5=101b}, 
 only \Czero and \Ctwo bits (on 0 and 2 position) are considered, all other bits are just
 ignored.}
 
@@ -112,21 +112,21 @@ with the FUCOM instructions.
 И тогда сработает последующий \JP (\IT{jump if PF==1}). 
 Если мы вернемся чуть назад и посмотрим значения \CThreeBits 
 для разных вариантов, то увидим, что условный переход \JP сработает в двух случаях: если $b>a$ или если $a=b$ 
-(ведь бит \Cthree перестал учитываться после исполнения \TT{test ah, 5}).}
+(ведь бит \Cthree перестал учитываться после исполнения \INS{test ah, 5}).}
 \EN{The \PF flag is to be set to 1 if both \Czero and \Ctwo are set to 0 or both are 1, in which case
 the subsequent \JP (\IT{jump if PF==1}) is triggering. 
 If we recall the values of \CThreeBits for various cases,
 we can see that the conditional jump 
 \JP is triggering in two cases: if $b>a$ or $a=b$ 
 (\Cthree bit is not considered here, since it was cleared by 
-the \TT{test ah, 5} instruction).}
+the \INS{test ah, 5} instruction).}
 
-\RU{Дальше всё просто. Если условный переход сработал, то \FLD загрузит значение \TT{\_b} в \ST{0}, 
-а если не сработал, то загрузится \TT{\_a} и произойдет выход из функции.}
+\RU{Дальше всё просто. Если условный переход сработал, то \FLD загрузит значение \INS{\_b} в \ST{0}, 
+а если не сработал, то загрузится \GTT{\_a} и произойдет выход из функции.}
 \EN{It is all simple after that. 
 If the conditional jump was triggered, 
-\FLD loads the value of \TT{\_b} 
-in \ST{0}, and if it was not triggered, the value of \TT{\_a} is loaded there.}
+\FLD loads the value of \GTT{\_b} 
+in \ST{0}, and if it was not triggered, the value of \GTT{\_a} is loaded there.}
 
 \myparagraph{\RU{А как же проверка флага \Ctwo}\EN{And what about checking \Ctwo}?}
 

@@ -34,13 +34,13 @@ $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 \index{x86!\Instructions!ADD}
 \index{x86!\Registers!ESP}
 \index{cdecl}
-\RU{Когда при помощи инструкции \TT{ADD ESP, X} корректируется \glslink{stack pointer}{указатель стека} \ESP 
+\RU{Когда при помощи инструкции \INS{ADD ESP, X} корректируется \glslink{stack pointer}{указатель стека} \ESP 
 после вызова какой-либо функции, зачастую можно сделать вывод о том, сколько аргументов 
 у вызываемой функции было, разделив X на 4.}%
-\EN{When the \gls{stack pointer} (\ESP register) has changed back by the \TT{ADD ESP, X}
+\EN{When the \gls{stack pointer} (\ESP register) has changed back by the \INS{ADD ESP, X}
 instruction after a function 
 call, often, the number of function arguments could be deduced by simply dividing X by 4.}%
-\PTBR{Quando o ponteiro da pilha (registrador \ESP) volta para seu valor anterior pela instrução \TT{ADD ESP, X} depois de uma chamada de função,
+\PTBR{Quando o ponteiro da pilha (registrador \ESP) volta para seu valor anterior pela instrução \INS{ADD ESP, X} depois de uma chamada de função,
 geralmente o número de argumentos pode ser obtido simplismente por se dividir X, o argumento da função \ADD, por 4.}%
 
 \RU{Конечно, это относится только к cdecl-методу передачи аргументов через стек, и только для 32-битной среды.}%
@@ -85,13 +85,13 @@ add esp, 24
 \RU{Это один из наиболее популярных win32-отладчиков пользовательского режима}\EN{It is one of the most 
 popular user-land win32 debuggers}.
 \RU{Мы можем компилировать наш пример в}\EN{We can compile our example in} MSVC 2012 
-\RU{с опцией}\EN{with} \TT{/MD} \RU{что означает линковать с библиотекой}\EN{option, which means to link 
-with} \TT{MSVCR*.DLL},
+\RU{с опцией}\EN{with} \GTT{/MD} \RU{что означает линковать с библиотекой}\EN{option, which means to link 
+with} \GTT{MSVCR*.DLL},
 \RU{чтобы импортируемые функции были хорошо видны в отладчике.}
 \EN{so we can see the imported functions clearly in the debugger.}
 
 \RU{Затем загружаем исполняемый файл в}\EN{Then load the executable in} \olly.
-\RU{Самая первая точка останова в}\EN{The very first breakpoint is in} \TT{ntdll.dll}, \RU{нажмите}\EN{press} 
+\RU{Самая первая точка останова в}\EN{The very first breakpoint is in} \GTT{ntdll.dll}, \RU{нажмите}\EN{press} 
 F9 (\RU{запустить}\EN{run}).
 \RU{Вторая точка останова в}\EN{The second breakpoint is in} \ac{CRT}-\RU{коде}\EN{code}.
 \RU{Теперь мы должны найти функцию}\EN{Now we have to find the} \main\EN{ function}.
@@ -106,7 +106,7 @@ F9 (\RU{запустить}\EN{run}).
 \label{fig:printf3_olly_1}
 \end{figure}
 
-\RU{Кликните на инструкции}\EN{Click on the} \TT{PUSH EBP}\RU{, нажмите}\EN{ instruction, press} F2 
+\RU{Кликните на инструкции}\EN{Click on the} \INS{PUSH EBP}\RU{, нажмите}\EN{ instruction, press} F2 
 (\RU{установка точки останова}\EN{set breakpoint}) \RU{и нажмите}\EN{and press} F9 (\RU{запустить}\EN{run}).
 \RU{Нам нужно произвести все эти манипуляции, чтобы пропустить \ac{CRT}-код, потому что нам он пока
 не интересен}\EN{We need to perform these actions in order to skip \ac{CRT}-code, because we aren't really
@@ -124,7 +124,7 @@ interested in it yet}.
 \end{figure}
 
 \RU{Теперь}\EN{Now the} \ac{PC} \RU{указывает на инструкцию}\EN{points to the}
-\TT{CALL printf}\EN{ instruction}.
+\INS{CALL printf}\EN{ instruction}.
 \olly, \RU{как и другие отладчики, подсвечивает регистры со значениями, которые изменились.}
 \EN{like other debuggers, highlights the value of the registers which were changed.}
 \RU{Поэтому каждый раз когда мы нажимаем}\EN{So each time you press} F8, \EIP 
@@ -180,13 +180,13 @@ have changed}:
 \label{fig:printf3_olly_3}
 \end{figure}
 
-\RU{Регистр }\EN{Register }\EAX \RU{теперь содержит}\EN{now contains} \TT{0xD} (13).
+\RU{Регистр }\EN{Register }\EAX \RU{теперь содержит}\EN{now contains} \GTT{0xD} (13).
 \RU{Всё верно: \printf возвращает количество выведенных символов.
 Значение \EIP изменилось. Действительно, теперь здесь адрес инструкции после 
-\TT{CALL printf}.}
+\INS{CALL printf}.}
 \EN{That is correct, since \printf returns the number of characters printed. 
 The value of \EIP has changed: indeed, now it contains the address of the instruction coming after 
-\TT{CALL printf}.}
+\INS{CALL printf}.}
 \RU{Значения регистров }\ECX \AndENRU \EDX \RU{также изменились}\EN{values have changed as well}.
 \RU{Очевидно, внутренности функции \printf используют их для каких-то своих нужд}\EN{Apparently, the 
 \printf function's hidden machinery used them for its own needs}.
@@ -201,12 +201,12 @@ The value of \EIP has changed: indeed, now it contains the address of the instru
 
 \clearpage
 \RU{Нажмите}\EN{Press} F8 \RU{снова, чтобы исполнилась инструкция}\EN{again to execute} 
-\TT{ADD ESP, 10}\EN{ instruction}:
+\INS{ADD ESP, 10}\EN{ instruction}:
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=\FigScale]{patterns/03_printf/x86/olly3_4.png}
-\caption{\olly: \RU{после исполнения инструкции}\EN{after} \TT{ADD ESP, 10}\EN{ instruction execution}}
+\caption{\olly: \RU{после исполнения инструкции}\EN{after} \INS{ADD ESP, 10}\EN{ instruction execution}}
 \label{fig:printf3_olly_4}
 \end{figure}
 
@@ -263,7 +263,7 @@ Here the GCC is working directly with the stack without the use of \PUSH/\POP.}
 
 \RU{Попробуем также этот пример и в \ac{GDB} в Linux}\EN{Let's try this example also in \ac{GDB} in Linux}.
 
-\TT{-g} \RU{означает генерировать отладочную информацию в выходном исполняемом файле}\EN{option instructs the compiler to include debug information in the executable file}.
+\GTT{-g} \RU{означает генерировать отладочную информацию в выходном исполняемом файле}\EN{option instructs the compiler to include debug information in the executable file}.
 
 \begin{lstlisting}
 $ gcc 1.c -g -o 1
@@ -311,7 +311,7 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
 0xbffff13c:	0xb7e29905	0x00000001
 \end{lstlisting}
 
-\RU{Самый первый элемент это}\EN{The very first element is the} \ac{RA} (\TT{0x0804844a}).
+\RU{Самый первый элемент это}\EN{The very first element is the} \ac{RA} (\GTT{0x0804844a}).
 \RU{Мы можем удостовериться в этом, дизассемблируя память по этому адресу}\EN{We can verify this by disassembling the memory at this address}:
 
 \begin{lstlisting}[label=NOP_as_XCHG_example]
@@ -323,11 +323,11 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
    0x8048453:	xchg   %ax,%ax
 \end{lstlisting}
 
-\RU{Две инструкции \TT{XCHG} это холостые инструкции, аналогичные \ac{NOP}.}%
-\EN{The two \TT{XCHG} instructions are idle instructions, analogous to \ac{NOP}s.}
+\RU{Две инструкции \INS{XCHG} это холостые инструкции, аналогичные \ac{NOP}.}%
+\EN{The two \INS{XCHG} instructions are idle instructions, analogous to \ac{NOP}s.}
 
-\RU{Второй элемент (\TT{0x080484f0}) это адрес строки формата:}%
-\EN{The second element (\TT{0x080484f0}) is the format string address:}
+\RU{Второй элемент (\GTT{0x080484f0}) это адрес строки формата:}%
+\EN{The second element (\GTT{0x080484f0}) is the format string address:}
 
 \begin{lstlisting}
 (gdb) x/s 0x080484f0
@@ -359,9 +359,9 @@ Value returned is $2 = 13
 \EN{This is the number of characters printed out, just like in the \olly example}.
 
 \RU{А ещё мы видим}\EN{We also see} \q{return 0;} \RU{и что это выражение находится в файле 
-\TT{1.c} в строке 6}\EN{and the information that this expression is in the \TT{1.c} file at the line 6}.
-\RU{Действительно, файл \TT{1.c} лежит в текущем директории и \ac{GDB} находит там эту строку}
-\EN{Indeed, the \TT{1.c} file is located in the current directory, and \ac{GDB} finds the string there}.
+\GTT{1.c} в строке 6}\EN{and the information that this expression is in the \GTT{1.c} file at the line 6}.
+\RU{Действительно, файл \GTT{1.c} лежит в текущем директории и \ac{GDB} находит там эту строку}
+\EN{Indeed, the \GTT{1.c} file is located in the current directory, and \ac{GDB} finds the string there}.
 \RU{Как \ac{GDB} знает, какая строка Си-кода сейчас исполняется}\EN{How does \ac{GDB} know which C-code line
 is being currently executed}?
 \RU{Компилятор, генерируя отладочную информацию,
@@ -443,7 +443,7 @@ End of assembler dump.
 \end{lstlisting}
 
 \RU{Посмотрим регистры после исполнения инструкции}\EN{Let's examine the registers after the} 
-\TT{MOV EAX, 0}\EN{ instruction execution}. \EN{Indeed}
+\INS{MOV EAX, 0}\EN{ instruction execution}. \EN{Indeed}
 \EAX \RU{здесь уже действительно ноль}\EN{is zero at that point}.
 
 \begin{lstlisting}

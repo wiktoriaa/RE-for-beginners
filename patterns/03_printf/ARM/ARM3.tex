@@ -30,7 +30,7 @@ fastcall~(\myref{fastcall}) \OrENRU win64~(\myref{sec:callingconventions_win64})
 a pointer to the \printf format string in 
 \Reg{0}, then 1 in \Reg{1}, 2 in \Reg{2} and 3 in \Reg{3}.}
 
-\RU{Инструкция на}\EN{The instruction at} \TT{0x18} \RU{записывает}\EN{writes} 0 \RU{в}\EN{to} \Reg{0}%
+\RU{Инструкция на}\EN{The instruction at} \GTT{0x18} \RU{записывает}\EN{writes} 0 \RU{в}\EN{to} \Reg{0}%
 \EMDASH{}\RU{это выражение в Си}\EN{this is} \IT{return 0}\EN{ C-statement}.
 
 \RU{Пока что здесь нет ничего необычного}\EN{There is nothing unusual so far}.
@@ -84,16 +84,16 @@ void main()
 \index{ARM!\Instructions!B}
 \index{Function epilogue}
 \RU{Это оптимизированная версия (\Othree) для режима ARM, и здесь мы видим последнюю инструкцию 
-\TT{B} вместо привычной нам \TT{BL}}\EN{This is the optimized (\Othree) version for ARM mode and this time we see \TT{B} as the last instruction instead of the familiar \TT{BL}}.
+\INS{B} вместо привычной нам \INS{BL}}\EN{This is the optimized (\Othree) version for ARM mode and this time we see \INS{B} as the last instruction instead of the familiar \INS{BL}}.
 \RU{Отличия между этой оптимизированной версией и предыдущей, скомпилированной без оптимизации, 
 ещё и в том, 
-что здесь нет пролога и эпилога функции (инструкций, сохраняющих состояние регистров \TT{\Reg{0}} и \ac{LR})}%
+что здесь нет пролога и эпилога функции (инструкций, сохраняющих состояние регистров \Reg{0} и \ac{LR})}%
 \EN{Another difference between this optimized version and the previous one (compiled without optimization)
-is the lack of function prologue and epilogue (instructions preserving the \TT{\Reg{0}} and \ac{LR} registers values)}.
+is the lack of function prologue and epilogue (instructions preserving the \Reg{0} and \ac{LR} registers values)}.
 \index{x86!\Instructions!JMP}
-\RU{Инструкция \TT{B} просто переходит на другой адрес, без манипуляций с регистром \ac{LR}, то есть
+\RU{Инструкция \INS{B} просто переходит на другой адрес, без манипуляций с регистром \ac{LR}, то есть
 это аналог \JMP в x86}%
-\EN{The \TT{B} instruction just jumps to another address, without any manipulation of the \ac{LR} register,
+\EN{The \INS{B} instruction just jumps to another address, without any manipulation of the \ac{LR} register,
 similar to \JMP in x86}.
 \RU{Почему это работает нормально? Потому что этот код эквивалентен предыдущему.}
 \EN{Why does it work? Because this code is, in fact, effectively equivalent to the previous.}
@@ -129,19 +129,19 @@ after this call we do not to do anything else}!
 \index{ARM!\Instructions!STP}
 \RU{Итак, первая инструкция STP (Store Pair) сохраняет \ac{FP} (X29) и \ac{LR} (X30) в стеке.}
 \EN{The first instruction STP (Store Pair) saves \ac{FP} (X29) and \ac{LR} (X30) in the stack.}
-\RU{Вторая инструкция \TT{ADD X29, SP, 0} формирует стековый фрейм.}
-\EN{The second \TT{ADD X29, SP, 0} instruction forms the stack frame.}
+\RU{Вторая инструкция \INS{ADD X29, SP, 0} формирует стековый фрейм.}
+\EN{The second \INS{ADD X29, SP, 0} instruction forms the stack frame.}
 \RU{Это просто запись значения \ac{SP} в X29.}
 \EN{It is just writing the value of \ac{SP} into X29.}
 
 \index{ARM!\Instructions!ADRP/ADD pair}
-\RU{Далее уже знакомая пара инструкций \TT{ADRP}/\ADD формирует указатель на строку.}%
-\EN{Next, we see the familiar \TT{ADRP}/\ADD instruction pair, which forms a pointer to the string.}
+\RU{Далее уже знакомая пара инструкций \INS{ADRP}/\ADD формирует указатель на строку.}%
+\EN{Next, we see the familiar \INS{ADRP}/\ADD instruction pair, which forms a pointer to the string.}
 \index{ARM64!lo12}
 \RU{\IT{lo12} означает младшие 12 бит, т.е., линкер запишет младшие 12 бит адреса метки LC1 в опкод инструкции \ADD.}%
 \EN{\IT{lo12} meaning low 12 bits, i.e., linker will write low 12 bits of LC1 address into the opcode of \ADD instruction.}
 
-\RU{\TT{\%d} в формате \printf это 32-битный \Tint, так что 1, 2 и 3 заносятся в 32-битные части регистров.}
-\EN{\TT{\%d} in \printf string format is a 32-bit \Tint, so the 1, 2 and 3 are loaded into 32-bit register parts.}
+\RU{\GTT{\%d} в формате \printf это 32-битный \Tint, так что 1, 2 и 3 заносятся в 32-битные части регистров.}
+\EN{\GTT{\%d} in \printf string format is a 32-bit \Tint, so the 1, 2 and 3 are loaded into 32-bit register parts.}
 
 \Optimizing GCC (Linaro) 4.9 \RU{генерирует почти такой же код}\EN{generates the same code}.
