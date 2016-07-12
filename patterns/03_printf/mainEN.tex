@@ -1,0 +1,61 @@
+\chapter{\PrintfSeveralArgumentsSectionName}
+
+Now let's extend the \IT{\HelloWorldSectionName}~(\myref{sec:helloworld}) example, replacing \printf in
+the \main function body with this:
+
+\lstinputlisting[label=hw_c]{patterns/03_printf/1.c}
+
+% sections
+\input{patterns/03_printf/x86/main}
+\ifdefined\IncludeARM
+\input{patterns/03_printf/ARM/main}
+\fi
+\ifdefined\IncludeMIPS
+\input{patterns/03_printf/MIPS/main}
+\fi
+
+\section{\Conclusion{}}
+
+Here is a rough skeleton of the function call:
+
+\lstinputlisting[caption=x86]{patterns/03_printf/skel1.lst.\LANG}
+
+\lstinputlisting[caption=x64 (MSVC)]{patterns/03_printf/skel2.lst.\LANG}
+
+\ifdefined\IncludeGCC
+\lstinputlisting[caption=x64 (GCC)]{patterns/03_printf/skel3.lst.\LANG}
+\fi
+
+\ifdefined\IncludeARM
+\lstinputlisting[caption=ARM]{patterns/03_printf/skel4.lst.\LANG}
+
+\lstinputlisting[caption=ARM64]{patterns/03_printf/skel5.lst.\LANG}
+\fi
+
+\ifdefined\IncludeMIPS
+\index{MIPS!O32}
+\lstinputlisting[caption=MIPS (O32 calling convention)]{patterns/03_printf/skel_MIPS.lst.\LANG}
+\fi
+
+\section{By the way}
+
+\index{fastcall}
+By the way, this difference between the arguments passing in x86, x64, 
+fastcall, ARM and MIPS is a good illustration of the fact that the CPU is oblivious to how the arguments are passed to functions. 
+It is also possible to create a hypothetical compiler able to pass arguments 
+via a special structure without using stack at all.
+
+\ifdefined\IncludeMIPS
+\index{MIPS!O32}
+MIPS \$A0 \dots \$A3 registers are labelled this way only for convenience (that is in the O32 calling convention).
+Programmers may use any other register (well, maybe except \$ZERO) 
+to pass data or use any other calling convention.
+\fi
+
+The \ac{CPU} is not aware of calling conventions whatsoever.
+
+We may also recall how newcoming assembly language programmers passing arguments into
+other functions:
+usually via registers, without any explicit order, or even via global variables.
+Of course, it works fine.
+

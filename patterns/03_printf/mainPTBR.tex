@@ -1,0 +1,55 @@
+\chapter{\PrintfSeveralArgumentsSectionName}
+
+Agora vamos extender o nosso exemplo \IT{\HelloWorldSectionName}~(\myref{sec:helloworld}),
+trocando \printf no corpo da função \main() por isso:
+
+\lstinputlisting[label=hw_c]{patterns/03_printf/1.c}
+
+% sections
+\input{patterns/03_printf/x86/main}
+\ifdefined\IncludeARM
+\input{patterns/03_printf/ARM/main}
+\fi
+\ifdefined\IncludeMIPS
+\input{patterns/03_printf/MIPS/main}
+\fi
+
+\section{\Conclusion{}}
+
+Aqui está uma estrutura bem rústica da chamada da função
+
+\lstinputlisting[caption=x86]{patterns/03_printf/skel1.lst.\LANG}
+
+\lstinputlisting[caption=x64 (MSVC)]{patterns/03_printf/skel2.lst.\LANG}
+
+\ifdefined\IncludeGCC
+\lstinputlisting[caption=x64 (GCC)]{patterns/03_printf/skel3.lst.\LANG}
+\fi
+
+\ifdefined\IncludeARM
+\lstinputlisting[caption=ARM]{patterns/03_printf/skel4.lst.\LANG}
+
+\lstinputlisting[caption=ARM64]{patterns/03_printf/skel5.lst.\LANG}
+\fi
+
+\ifdefined\IncludeMIPS
+\index{MIPS!O32}
+\lstinputlisting[caption=MIPS (\PTBRph{})]{patterns/03_printf/skel_MIPS.lst.\LANG}
+\fi
+
+\section{A propósito}
+
+\index{fastcall}
+A propósito, a diferença entre os argumentos passados em x86, x64, fastcall, ARM e MIPS  é uma boa demonstração do fato de como a CPU é indiferente sobre como os argumentos são passados para as funções.
+Também é possível criar um compilador hipotético capaz de passar argumentos por alguma outra estrutura especial sem usar a pilha de nenhuma maneira.
+
+\ifdefined\IncludeMIPS
+\index{MIPS!O32}
+\PTBRph{}
+\fi
+
+A \ac{CPU} não está ciente de convenções de chamada de funções.
+
+Agora nós podemos também relembrar de dos programadores novatos de assembly passando argumentos para outras funções:
+geralmente via registradores, sem nenhuma sequência explícita, ou mesmo por variáveis globais. Logicamente, também funciona.
+
