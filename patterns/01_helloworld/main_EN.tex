@@ -1,0 +1,43 @@
+\chapter{\HelloWorldSectionName}
+\label{sec:helloworld}
+
+Let's use the famous example from the book
+``The C programming Language''\cite{Kernighan:1988:CPL:576122}:
+
+\lstinputlisting{patterns/01_helloworld/hw.c}
+
+\section{x86}
+
+\input{patterns/01_helloworld/MSVC_x86}
+\ifdefined\IncludeGCC
+\input{patterns/01_helloworld/GCC_x86}
+\fi
+
+\section{x86-64}
+\input{patterns/01_helloworld/MSVC_x64}
+\ifdefined\IncludeGCC
+\input{patterns/01_helloworld/GCC_x64}
+\fi
+
+\ifdefined\IncludeGCC
+\input{patterns/01_helloworld/GCC_one_more}
+\fi
+\ifdefined\IncludeARM
+\input{patterns/01_helloworld/ARM/main}
+\fi
+\ifdefined\IncludeMIPS
+\input{patterns/01_helloworld/MIPS/main}
+\fi
+
+\section{\Conclusion{}}
+
+The main difference between x86/ARM and x64/ARM64 code is that the pointer to the string is now 64-bits in length.
+Indeed, modern \ac{CPU}s are now 64-bit due to both the reduced cost of memory and the greater demand for it by modern applications. 
+We can add much more memory to our computers than 32-bit pointers are able to address.
+As such, all pointers are now 64-bit.
+
+% sections
+\ifdefined\IncludeExercises
+\input{patterns/01_helloworld/exercises}
+\fi
+
