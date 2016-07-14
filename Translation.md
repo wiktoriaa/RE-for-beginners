@@ -24,6 +24,8 @@ For example, main_EN.tex for English, main_RU.tex for Russian, etc.
 So just find filename_EN.tex you want to translate, copy to filename_XX.tex (where XX is your language)
 and replace English text by yours.
 Then just send it to me. Or if you familiar with git and github, add your file to source tree and create pull request.
+How to find directories with *_EN.tex files? Look here:
+https://github.com/dennis714/RE-for-beginners/search?utf8=%E2%9C%93&q=input+EN&type=Code
 
 For small files, it's OK to keep several translations in single file, like this:
 
