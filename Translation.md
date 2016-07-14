@@ -31,7 +31,6 @@ m4 (used here for assembly listings) has `_EN()` and` _RU()` macros.
 Since translation project is large, work can be done gradually.
 Try to start at ["patterns" directory] 
 (https://github.com/dennis714/RE-for-beginners/tree/master/patterns).
-There are also [lite (introductory) version](http://beginners.re/#lite), and that's a good idea to translate it first.
 Translators may use git to get to know which TeX files are in somewhat stable state so can be 
 translated before those parts which I still rework occasionally.
 
@@ -93,37 +92,13 @@ Thai: `\THA{}`
 Dutch: `\NL{}`
 
 You may start to translate right now.
-To check your results, just run `make ES-lite`, `make PTBR-lite`, `make PL-lite`, `make IT-lite`, `make DE-lite` (let's start with LITE version anyway).
+To check your results, just run `make ES`, `make PTBR`, `make PL`, `make ITA`, `make DE`.
 You'll see almost blank pages with only listings and screenshots, without any text.
 Grep for each `\EN{}` macro in .tex file and add your translation.
 Same story with .m4 files, there are `_ES()`, `_PTBR()`, `_PL()`, `_DE()` and `_IT()` macros.
 
-There is also `\ESph{}`, `\PTBRph{}`, `\PLph{}`, `\DEph{}` and `\ITph{}` placeholder macros in .tex files, where the translated text must be.
+There is also `\ESph{}`, `\PTBRph{}`, `\PLph{}`, `\DEph{}` and `\ITAph{}` placeholder macros in .tex files, where the translated text must be.
 You may start to translate there.
 
 Do not hesitate to contact me if you have any questions.
-
-How would I understand, what piece of LaTeX source code is included in LITE version, and which is not?
-------------------------------------------------------------------------------------------------------
-
-There is a `\LITE` macros for this.
-For example:
-
-    ...
-    \input{patterns/14_bitfields/1_check/main}
-    \input{patterns/14_bitfields/2_set_reset/main}
-    \input{patterns/14_bitfields/3_shifts/main}
-    \ifx\LITE\undefined
-    \input{patterns/14_bitfields/35_set_reset_FPU/main}
-    \fi
-    \input{patterns/14_bitfields/4_popcnt/main}
-    \input{patterns/14_bitfields/conclusion}
-    \ifdefined\IncludeExercises
-    \input{patterns/14_bitfields/exercises}
-    \fi
-    ...
-
-Whenever you see `\ifx\LITE\undefined` - the following part up to `\fi` is not included in LITE version, but only in full one, so you may skip it.
-
-[Another example.](https://github.com/dennis714/RE-for-beginners/blob/4b19595130c8450fad92b92503828ef922de7a00/parts.tex#L4)
 

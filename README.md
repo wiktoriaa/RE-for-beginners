@@ -17,19 +17,6 @@ Russian:
 [A4 (for browsing/printing)](http://beginners.re/Reverse_Engineering_for_Beginners-ru.pdf);
 [A5 (for e-book readers)](http://beginners.re/Reverse_Engineering_for_Beginners-ru-A5.pdf)
 
-There is also a [lite (introductory) version](http://beginners.re/#lite).
-It is approximately 6 times shorter than the full version (~150 pages) and intended for those 
-who want a very quick introduction to the basics of reverse engineering.
-It does not however, cover the topics of: MIPS, ARM, OllyDBG, GCC, GDB and IDA. There are also no exercises, examples, etc.
-
-English lite: 
-[A4 (for browsing/printing)](http://beginners.re/Reverse_Engineering_for_Beginners-en-lite.pdf);
-[A5 (for e-book readers)](http://beginners.re/Reverse_Engineering_for_Beginners-en-A5-lite.pdf)
-
-Russian lite:
-[A4 (for browsing/printing)](http://beginners.re/Reverse_Engineering_for_Beginners-ru-lite.pdf);
-[A5 (for e-book readers)](http://beginners.re/Reverse_Engineering_for_Beginners-ru-A5-lite.pdf)
-
 See also the [ChangeLog](https://github.com/dennis714/RE-for-beginners/blob/master/ChangeLog) for the latest changes.
 
 Want to contribute in some way? Read [here](https://github.com/dennis714/RE-for-beginners/blob/master/CONTRIBUTING.md).

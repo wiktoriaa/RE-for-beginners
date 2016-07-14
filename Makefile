@@ -29,7 +29,7 @@ DE_LISTINGS := $(M4SOURCES:%.m4=%.de)
 TH_LISTINGS := $(M4SOURCES:%.m4=%.th)
 NL_LISTINGS := $(M4SOURCES:%.m4=%.nl)
 
-all:    RU EN RU-A5 EN-A5 RU-lite EN-lite RU-A5-lite EN-A5-lite
+all:    RU EN RU-A5 EN-A5
 
 clean:
 	rm -f *.aux
@@ -95,51 +95,24 @@ RU-A5: $(RU_LISTINGS)
 EN-A5: $(EN_LISTINGS)
 	$(call compile,RE4B-EN-A5)
 
-RU-lite: $(RU_LISTINGS)
-	$(call compile,RE4B-RU-lite)
-
-EN-lite: $(EN_LISTINGS)
-	$(call compile,RE4B-EN-lite)
-
-RU-A5-lite: $(RU_LISTINGS)
-	$(call compile,RE4B-RU-A5-lite)
-
-EN-A5-lite: $(EN_LISTINGS)
-	$(call compile,RE4B-EN-A5-lite)
-
 ES:	$(ES_LISTINGS)
 	$(call compile,RE4B-ES)
 
 PTBR:	$(PTBR_LISTINGS)
 	$(call compile,RE4B-PTBR)
 
-ES-lite: $(ES_LISTINGS)
-	$(call compile,RE4B-ES-lite)
-
-PTBR-lite: $(PTBR_LISTINGS)
-	$(call compile,RE4B-PTBR-lite)
-
 PL:	$(PL_LISTINGS)
 	$(call compile,RE4B-PL)
 
-PL-lite: $(PL_LISTINGS)
-	$(call compile,RE4B-PL-lite)
-
 IT:	$(IT_LISTINGS)
 	$(call compile,RE4B-IT)
-IT-lite: $(IT_LISTINGS)
-	$(call compile,RE4B-IT-lite)
 
 DE:	$(DE_LISTINGS)
 	$(call compile,RE4B-DE)
-DE-lite: $(DE_LISTINGS)
-	$(call compile,RE4B-DE-lite)
 
 TH-lite: $(TH_LISTINGS)
-	$(call compile,RE4B-TH-lite)
+	$(call compile,RE4B-TH)
 
 NL: $(NL_LISTINGS)
 	$(call compile,RE4B-NL)
-NL-lite: $(NL_LISTINGS)
-	$(call compile,RE4B-NL-lite)
 
