@@ -1,0 +1,84 @@
+\subsection{Передача параметров функции}
+
+Самый распространенный способ передачи параметров в x86 называется \q{cdecl}:
+
+\begin{lstlisting}
+push arg3
+push arg2
+push arg1
+call f
+add esp, 12 ; 4*3=12
+\end{lstlisting}
+
+Вызываемая функция получает свои параметры также через указатель стека.
+
+Следовательно, так расположены значения в стеке перед исполнением самой первой инструкции функции \ttf{}:
+
+\begin{center}
+\begin{tabular}{ | l | l | }
+\hline
+ESP & адрес возврата \\
+\hline
+ESP+4 & \argument \#1, \MarkedInIDAAs{} \TT{arg\_0} \\
+\hline
+ESP+8 & \argument \#2, \MarkedInIDAAs{} \TT{arg\_4} \\
+\hline
+ESP+0xC & \argument \#3, \MarkedInIDAAs{} \TT{arg\_8} \\
+\hline
+\dots & \dots \\
+\hline
+\end{tabular}
+\end{center}
+
+\ifx\LITE\undefined
+См. также в соответствующем разделе о других способах передачи аргументов через стек~(\myref{sec:callingconventions}).
+\fi % LITE
+
+Важно отметить, что, в общем, никто не заставляет программистов передавать параметры именно через стек, это не является требованием к исполняемому коду.
+Вы можете делать это совершенно иначе, не используя стек вообще.
+
+К примеру, можно выделять в \glslink{heap}{куче} место для аргументов, заполнять их и передавать в функцию указатель на это место через \EAX. И это вполне будет работать
+\footnote{Например, в книге Дональда Кнута \q{Искусство программирования}, в разделе 1.4.1 
+посвященном подпрограммам \cite[раздел 1.4.1]{Knuth:1998:ACP:521463}, 
+мы можем прочитать о возможности располагать параметры для вызываемой подпрограммы после инструкции \JMP,
+передающей управление подпрограмме. Кнут описывает, что это было особенно удобно для компьютеров IBM System/360.}.
+% FIXME:
+% I am unsure about what this comment means.
+% My guess is that the arguments are put in the memory position after
+% the jump instruction, so you could say:
+% "one way to supply arguments to a subroutine is simply to list them in memory
+% after the \JMP instruction that passes control to the subroutine."
+% Right now, "after" also sounds like it refers to the time after
+% the jump happens, which I think is too late.
+Однако традиционно сложилось, что в x86 и ARM передача аргументов происходит именно через стек.
+
+\par
+Кстати, вызываемая функция не имеет информации о количестве переданных ей аргументов.
+Функции Си с переменным количеством аргументов (как \printf) определяют их количество по спецификаторам строки формата (начинающиеся со знака \%).
+
+Если написать что-то вроде:
+
+\begin{lstlisting}
+printf("%d %d %d", 1234);
+\end{lstlisting}
+
+\printf выведет 1234, затем ещё два случайных числа, которые волею случая оказались в стеке рядом.
+
+\par
+Вот почему не так уж и важно, как объявлять функцию \main{}: как \main{}, \TT{main(int argc, char *argv[])} либо \TT{main(int argc, char *argv[], char *envp[])}.
+
+В реальности, \ac{CRT}-код вызывает \main примерно так:
+	
+\begin{lstlisting}
+push envp
+push argv
+push argc
+call main
+...
+\end{lstlisting}
+
+Если вы объявляете \main без аргументов, они, тем не менее, присутствуют в стеке, но не используются.
+Если вы объявите \main как \TT{main(int argc, char *argv[])}, 
+вы можете использовать два первых аргумента, а третий останется для вашей функции \q{невидимым}.
+Более того, можно даже объявить \TT{main(int argc)}, и это будет работать.
+

@@ -1,0 +1,83 @@
+\subsection{Passing function arguments}
+
+The most popular way to pass parameters in x86 is called \q{cdecl}:
+
+\begin{lstlisting}
+push arg3
+push arg2
+push arg1
+call f
+add esp, 12 ; 4*3=12
+\end{lstlisting}
+
+\Gls{callee} functions get their arguments via the stack pointer.
+
+Therefore, this is how the argument values are located in the stack before the execution of the \ttf{} function's very first instruction:
+
+\begin{center}
+\begin{tabular}{ | l | l | }
+\hline
+ESP & return address \\
+\hline
+ESP+4 & \argument \#1, \MarkedInIDAAs{} \TT{arg\_0} \\
+\hline
+ESP+8 & \argument \#2, \MarkedInIDAAs{} \TT{arg\_4} \\
+\hline
+ESP+0xC & \argument \#3, \MarkedInIDAAs{} \TT{arg\_8} \\
+\hline
+\dots & \dots \\
+\hline
+\end{tabular}
+\end{center}
+
+\ifx\LITE\undefined
+For more information on other calling conventions see also section~(\myref{sec:callingconventions}).
+\fi % LITE
+It is worth noting that nothing obliges programmers to pass arguments through the stack. It is not a requirement.
+One could implement any other method without using the stack at all.
+
+For example, it is possible to allocate a space for arguments in the \gls{heap}, fill it and pass it to a function via a pointer to this block in the \EAX register. This will work
+\footnote{For example, in the \q{The Art of Computer Programming} book by Donald Knuth, 
+in section 1.4.1 dedicated to subroutines \cite[section 1.4.1]{Knuth:1998:ACP:521463},
+we could read that one way to supply arguments to a subroutine is simply to list them after the \JMP instruction
+passing control to subroutine. Knuth explains that this method was particularly convenient on IBM System/360.}.
+% FIXME:
+% I am unsure about what this comment means.
+% My guess is that the arguments are put in the memory position after
+% the jump instruction, so you could say:
+% "one way to supply arguments to a subroutine is simply to list them in memory
+% after the \JMP instruction that passes control to the subroutine."
+% Right now, "after" also sounds like it refers to the time after
+% the jump happens, which I think is too late.
+However, it is a convenient custom in x86 and ARM to use the stack for this purpose.
+
+\par
+By the way, the \gls{callee} function does not have any information about how many arguments were passed.
+C functions with a variable number of arguments (like \printf) determine their number using format string specifiers (which begin with the \% symbol).
+
+If we write something like:
+
+\begin{lstlisting}
+printf("%d %d %d", 1234);
+\end{lstlisting}
+
+\printf will print 1234, and then two random numbers, which were lying next to it in the stack.
+
+\par
+That's why it is not very important how we declare the \main function: as \main, \TT{main(int argc, char *argv[])} or \TT{main(int argc, char *argv[], char *envp[])}.
+
+In fact, the \ac{CRT}-code is calling \main roughly as:
+	
+\begin{lstlisting}
+push envp
+push argv
+push argc
+call main
+...
+\end{lstlisting}
+
+If you declare \main as \main without arguments, they are, nevertheless, still present in the stack, but are not used.
+If you declare \main as  \TT{main(int argc, char *argv[])},
+you will be able to use first two arguments, and the third will remain \q{invisible} for your function.
+Even more, it is possible to declare \TT{main(int argc)}, and it will work.
+
