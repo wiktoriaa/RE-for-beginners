@@ -33,7 +33,7 @@ funzione come l' istruzione \PUSH in x86, scrivendo i valori di due registri (\R
 Infatti il listato di output prodotto dal compilatore \IT{armcc}, per semplificazione, mostra l'istruzione \INS{PUSH \{r4,lr\}}.
 Ma cio' non e' del tutto esatto. L'istruzione\PUSH e' disponibile solo in modalita' Thumb. Utilizziamo quindi \IDA per non fare confusione.
 
-Questa istruzione dapprima \glspl{decrementa} il valore di \ac{SP} cosi' da farlo puntare alla porzione dello stack che' e' libera di ospitare nuovi dati, quindi salva il valore dei registri \Reg{4} e \ac{LR} all'indirizzo memorizzato nel registro \ac{SP} appena modificato.
+Questa istruzione dapprima \glslink{decrement}{decrementa} il valore di \ac{SP} cosi' da farlo puntare alla porzione dello stack che' e' libera di ospitare nuovi dati, quindi salva il valore dei registri \Reg{4} e \ac{LR} all'indirizzo memorizzato nel registro \ac{SP} appena modificato.
 
 Questa istruzione (esattamente come \PUSH in Thumb mode) e' in grado di salvare il valore di piu' registri contemporaneamente, cosa che e' puo' risultare molto utile. 
 A proposito, non ha un equivalente in x86.
@@ -81,7 +81,7 @@ Questo succede perche' la nostra funzione C restituisce 0, ed il valore di ritor
 \index{ARM!\Instructions!LDMFD}
 \index{ARM!\Instructions!POP}
 L'ultima istruzione \INS{LDMFD SP!, {R4,PC}}\footnote{\ac{LDMFD} e' l'istruzione inversa rispetto a  \ac{STMFD}}.
-Carica i valori dallo stack (o qualunque altra zona di memoria) per salvarli nei registri \Reg{4} e \ac{PC}, e \glslink{incrementa}{incrementa} lo \gls{stack pointer} \ac{SP}.
+Carica i valori dallo stack (o qualunque altra zona di memoria) per salvarli nei registri \Reg{4} e \ac{PC}, e \glslink{increment}{incrementa} lo \gls{stack pointer} \ac{SP}.
 In questo caso funziona come \POP.\\
 N.B. La prima istruzione \TT{STMFD} aveva salvato la coppia di registri \Reg{4} e \ac{LR} sullo stack, ma \Reg{4} e \ac{PC} vengono \IT{ripristinati} durante l'esecuzione di \TT{LDMFD}.
 

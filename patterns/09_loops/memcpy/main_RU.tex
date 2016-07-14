@@ -1,0 +1,57 @@
+﻿\section{Функция копирования блоков памяти}
+\label{loop_memcpy}
+
+Настоящие функции копирования памяти могут копировать по 4 или 8 байт на каждой итерации, использовать \ac{SIMD},
+векторизацию, \etc{}.
+
+Но ради простоты, этот пример настолько прост, насколько это возможно.
+
+\lstinputlisting{memcpy.c}
+
+\subsection{Простейшая реализация}
+
+\lstinputlisting[caption=GCC 4.9 x64 оптимизация по размеру (-Os)]{patterns/09_loops/memcpy/memcpy_GCC49_x64_Os.s.\LANG}
+
+\ifdefined\IncludeARM
+
+\lstinputlisting[caption=GCC 4.9 ARM64 оптимизация по размеру (-Os)]{patterns/09_loops/memcpy/memcpy_GCC49_ARM64_Os.s.\LANG}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/09_loops/memcpy/memcpy_Keil_Thumb_O3.s.\LANG}
+
+\subsection{ARM в режиме ARM}
+
+Keil в режиме ARM пользуется условными суффиксами:
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/09_loops/memcpy/memcpy_Keil_ARM_O3.s.\LANG}
+
+Вот почему здесь только одна инструкция перехода вместо двух.
+
+\fi
+
+\ifdefined\IncludeMIPS
+\subsection{MIPS}
+
+\lstinputlisting[caption=GCC 4.4.5 оптимизация по размеру (-Os) (IDA)]{patterns/09_loops/memcpy/memcpy_MIPS_Os_IDA.lst.\LANG}
+
+\index{MIPS!\Instructions!LBU}
+\index{MIPS!\Instructions!SB}
+Здесь две новых для нас инструкций:
+ LBU (\q{Load Byte Unsigned}) и SB (\q{Store Byte}).
+Так же как и в ARM, все регистры в MIPS имеют длину в 32 бита. Здесь нет частей регистров равных байту,
+как в x86.
+
+Так что когда нужно работать с байтами, приходится выделять целый 32-битный регистр для этого.
+
+LBU загружает байт и сбрасывает все остальные биты (\q{Unsigned}).
+
+\index{MIPS!\Instructions!LB}
+И напротив, инструкция LB (\q{Load Byte}) расширяет байт до 32-битного значения учитывая знак.
+
+SB просто записывает байт из младших 8 бит регистра в память.
+
+\fi
+
+\subsection{Векторизация}
+
+\Optimizing GCC может из этого примера сделать намного больше: 
+\myref{vec_memcpy}.

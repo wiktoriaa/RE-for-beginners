@@ -15,7 +15,7 @@ Questo è il risultato prodotto dai compilatori ottimizzanti GCC e MSVC sulla pi
 \lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/00_ret/1.s}
 
 \index{x86!\Instructions!RET}
-Ci sono solo due istruzioni: la prima mette il valore 123 nel registro \EAX, per convenzione usato per la memorizzazione del valore di ritorno, la seconda, \RET, restituisce l'esecuzione alla funzione \gls{chiamante}.
+Ci sono solo due istruzioni: la prima mette il valore 123 nel registro \EAX, per convenzione usato per la memorizzazione del valore di ritorno, la seconda, \RET, restituisce l'esecuzione alla funzione \glslink{caller}{chiamante}.
 
 La funzione chiamante prenderà il risultato dal registro \EAX.
 
@@ -29,7 +29,7 @@ Sulla piattaforma ARM ci sono alcune differenze:
 ARM usa il registro \Reg{0} per restituire i risultati delle funzioni, quindi 123 viene copiato in \Reg{0}.
 
 Il return address sulla piattaforma ARM \ac{ISA} non viene salvato nello stack locale ma nel link register, 
-così che l'istruzione \INS{BX LR} faccia in modo che l'esecuzione "salti" a quell'indirizzo \EMDASH{} restituendo effettivamente l'esecuzione alla funzione \gls{chiamante}.
+così che l'istruzione \INS{BX LR} faccia in modo che l'esecuzione "salti" a quell'indirizzo \EMDASH{} restituendo effettivamente l'esecuzione alla funzione \glslink{caller}{chiamante}.
 \fi % IncludeARM
 
 \index{ARM!\Instructions!MOV}
@@ -57,7 +57,7 @@ Il registro \$2 (o \$V0) è usato per memorizzare il valore di ritorno di una fu
 \INS{LI} sta per ``Load Immediate'' ed è l'equivalente MIPS di \MOV.
 
 \index{MIPS!\Instructions!J}
-L'altra istruzione è quella di jump (salto) (J or JR) che riporta il flusso di esecuzione alla funzione \gls{chiamante}, \IT{saltando} all'indirizzo specificato nel registro \$31 (o \$RA).
+L'altra istruzione è quella di jump (salto) (J or JR) che riporta il flusso di esecuzione alla funzione \glslink{caller}{chiamante}, \IT{saltando} all'indirizzo specificato nel registro \$31 (o \$RA).
 
 Questo registro è l'analogo di \ac{LR} in ARM.
 

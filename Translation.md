@@ -19,50 +19,30 @@ So do not hesitate to contact me: dennis(a)yurichev.com
 Hard way
 --------
 
-Keep in mind, it's a very hard and tedious work.
-You'll need basic understanding of git, LaTeX and m4.
-Aside from this, I do a lot of changes, so translators may need to syncronize their
-work often.
+For large parts, the best way is a single file for each language.
+For example, main_EN.tex for English, main_RU.tex for Russian, etc.
+So just find filename_EN.tex you want to translate, copy to filename_XX.tex (where XX is your language)
+and replace English text by yours.
+Then just send it to me. Or if you familiar with git and github, add your file to source tree and create pull request.
 
-But anyway, everything is simple: as you may see, all English text is enclosed in `\EN{}` 
+For small files, it's OK to keep several translations in single file, like this:
+
+	\ifdefined\ENGLISH
+	... English text ...
+	\fi
+	\ifdefined\RUSSIAN
+	... Russian text ...
+	\fi
+
+And finally language macros are also used: English text can enclosed in `\EN{}` 
 LaTeX macro, all Russian text in `\RU{}`.
 m4 (used here for assembly listings) has `_EN()` and` _RU()` macros.
-
-Since translation project is large, work can be done gradually.
-Try to start at ["patterns" directory] 
-(https://github.com/dennis714/RE-for-beginners/tree/master/patterns).
-Translators may use git to get to know which TeX files are in somewhat stable state so can be 
-translated before those parts which I still rework occasionally.
-
-Choose a new macro name, for example, `\FR{}` for French or `\PTBR{}` for Brazilian Portuguese.
-Create a new fork at Github and I'll setup everything to build a book in your language.
-Or just send me files you had changed to `dennis(a)yurichev.com`.
-
-In past, I often translated sentences by parts, so each sentence may contain several 
-`\RU{}` and `\EN{}` macros, like [here](https://github.com/dennis714/RE-for-beginners/blob/b06840982e0c50c661b4327cbf5e32784cfe5b51/patterns/03_printf/x86/x86.tex#L98).
-It was not a good idea, as I realized.
-Better way to provide translations to a sentence is to list them, like [here](https://github.com/dennis714/RE-for-beginners/blob/06c668a6c57546239cc9dfa7f8c9cb24b5ab258c/patterns/00_ret/main.tex#L44):
-
-    `\EN{English sentence.}`
-    `\RU{Russian sentence.}`
-    `\FR{French sentence.}`
-    ...
-    `\EN{Another English sentence.}`
-    `\RU{Another Russian sentence.}`
-    `\FR{Another French sentence.}`
-    ...
 
 Github may be used as for coordination.
 
 Do not be discouraged by the size of the whole project. 
 Try to translate some small piece with familiar material to you.
 Start the ball rolling, as they say. Some other translator may continue your work.
-
-All your work will be licensed, like this book, in CC BY-NC-ND terms.
-Korean, Chinese and Farsi translations are reserved by publishers.
-English and Russian versions I maintain by myself, but any fixes are very welcome!
-
-[Contact me](http://yurichev.com/contacts.html) for any questions.
 
 Style
 -----
