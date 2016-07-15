@@ -35,7 +35,7 @@ MSVC выдает листинги в синтаксисе Intel.
 Компилятор сгенерировал файл \TT{1.obj}, который впоследствии будет слинкован линкером в \TT{1.exe}.
 В нашем случае этот файл состоит из двух сегментов: \TT{CONST} (для данных-констант) и \TT{\_TEXT} (для кода).
 
-\index{\CLanguageElements!const}
+\myindex{\CLanguageElements!const}
 \label{string_is_const_char}
 Строка \TT{hello, world} в \CCpp имеет тип \TT{const char[]}\cite[p176, 7.3.2]{TCPPPL}, однако не имеет имени.
 Но компилятору нужно как-то с ней работать, поэтому он дает ей внутреннее имя \TT{\$SG3830}.
@@ -51,23 +51,23 @@ MSVC выдает листинги в синтаксисе Intel.
 Функция \main, как и практически все функции, начинается с пролога и заканчивается эпилогом
 \footnote{Об этом смотрите подробнее в разделе о прологе и эпилоге функции ~(\myref{sec:prologepilog}).}.
 
-\index{x86!\Instructions!CALL}
+\myindex{x86!\Instructions!CALL}
 Далее следует вызов функции \printf{}: \INS{CALL \_printf}.
-\index{x86!\Instructions!PUSH}
+\myindex{x86!\Instructions!PUSH}
 Перед этим вызовом адрес строки (или указатель на неё) с нашим приветствием (``Hello, world!'') при помощи инструкции \PUSH помещается в стек.
 
 После того, как функция \printf возвращает управление в функцию \main, адрес строки (или указатель на неё) всё ещё лежит в стеке.
 Так как он больше не нужен, то \glslink{stack pointer}{указатель стека} (регистр \ESP) корректируется.
 
-\index{x86!\Instructions!ADD}
+\myindex{x86!\Instructions!ADD}
 \INS{ADD ESP, 4} означает прибавить 4 к значению в регистре \ESP.
 
 Почему 4? Так как это 32-битный код, для передачи адреса нужно 4 байта. В x64-коде это 8 байт.
 \INS{ADD ESP, 4} эквивалентно \TT{POP регистр}, но без использования какого-либо регистра\footnote{Флаги процессора, впрочем, модифицируются}.
 
-\index{Intel C++}
-\index{\oracle}
-\index{x86!\Instructions!POP}
+\myindex{Intel C++}
+\myindex{\oracle}
+\myindex{x86!\Instructions!POP}
 
 Некоторые компиляторы, например, Intel C++ Compiler, в этой же ситуации могут вместо 
 \ADD сгенерировать \TT{POP ECX} (подобное можно встретить, например, в коде \oracle{}, им скомпилированном),
@@ -84,20 +84,20 @@ MSVC выдает листинги в синтаксисе Intel.
 
 %О стеке можно прочитать в соответствующем разделе
 % ~(\myref{sec:stack}).
-\index{\CLanguageElements!return}
+\myindex{\CLanguageElements!return}
 После вызова \printf в оригинальном коде на \CCpp указано \TT{return 0}~--- вернуть 0 в качестве результата функции \main.
 
-\index{x86!\Instructions!XOR}
+\myindex{x86!\Instructions!XOR}
 В сгенерированном коде это обеспечивается инструкцией \INS{XOR EAX, EAX}.
 
-\index{x86!\Instructions!MOV}
+\myindex{x86!\Instructions!MOV}
 
 \XOR, как легко догадаться~--- \q{исключающее ИЛИ}\footnote{\href{http://go.yurichev.com/17118}{wikipedia}}, но компиляторы часто используют его вместо простого
 \INS{MOV EAX, 0} --- снова потому, что опкод короче (2 байта у \XOR против 5 у \MOV).
 
-\index{x86!\Instructions!SUB}
+\myindex{x86!\Instructions!SUB}
 Некоторые компиляторы генерируют \INS{SUB EAX, EAX}, что значит \IT{отнять значение в} \EAX \IT{от значения в }\EAX, что в любом случае даст 0 в результате.
 
-\index{x86!\Instructions!RET}
+\myindex{x86!\Instructions!RET}
 Самая последняя инструкция \RET возвращает управление в вызывающую функцию. Обычно это код \CCpp \ac{CRT}, который, в свою очередь, вернёт управление в \ac{OS}.
 

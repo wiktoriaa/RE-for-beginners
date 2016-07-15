@@ -6,8 +6,8 @@ Let's compile:
 
 \lstinputlisting{patterns/10_strings/1_strlen/10_1_msvc.asm.\LANG}
 
-\index{x86!\Instructions!MOVSX}
-\index{x86!\Instructions!TEST}
+\myindex{x86!\Instructions!MOVSX}
+\myindex{x86!\Instructions!TEST}
 
 We get two new instructions here: \MOVSX and \TEST.
 
@@ -32,7 +32,7 @@ You can also read about it in \q{\IT{\SignedNumbersSectionName}} section~(\myref
 It's hard to say if the compiler needs to store a \Tchar variable in \EDX, it could just take a 8-bit register part 
 (for example \DL). Apparently, the compiler's \gls{register allocator} works like that.
 
-\index{ARM!\Instructions!TEST}
+\myindex{ARM!\Instructions!TEST}
 
 Then we see \TT{TEST EDX, EDX}. 
 You can read more about the \TEST instruction in the section about bit fields~(\myref{sec:bitfields}).
@@ -46,7 +46,7 @@ Let's try GCC 4.4.1:
 \lstinputlisting{patterns/10_strings/1_strlen/10_3_gcc.asm}
 
 \label{movzx}
-\index{x86!\Instructions!MOVZX}
+\myindex{x86!\Instructions!MOVZX}
 
 The result is almost the same as in MSVC, but here we see \MOVZX instead of \MOVSX. 
 \MOVZX stands for \IT{MOV with Zero-Extend}. 
@@ -60,7 +60,7 @@ the highest bits of the \EAX register will contain random noise.
 But let's think it is compiler's drawback---it cannot produce more understandable code. 
 Strictly speaking, the compiler is not obliged to emit understandable (to humans) code at all.
 
-\index{x86!\Instructions!SETcc}
+\myindex{x86!\Instructions!SETcc}
 
 The next new instruction for us is \SETNZ. 
 Here, if \AL doesn't contain zero, \TT{test al, al} 
@@ -80,8 +80,8 @@ Now it is all simpler.
 Needless to say, the compiler could use registers with such efficiency
 only in small functions with a few local variables.
 
-\index{x86!\Instructions!INC}
-\index{x86!\Instructions!DEC}
+\myindex{x86!\Instructions!INC}
+\myindex{x86!\Instructions!DEC}
 \INC/\DEC---are \gls{increment}/\gls{decrement} instructions, in other words: add or substract 1 to/from a variable.
 
 \ifdefined\IncludeOlly
@@ -104,8 +104,8 @@ is allocated for a \Tchar variable and it then can be sure that the highest bits
 at any point.
 
 \label{strlen_NOT_ADD}
-\index{x86!\Instructions!NOT}
-\index{x86!\Instructions!XOR}
+\myindex{x86!\Instructions!NOT}
+\myindex{x86!\Instructions!XOR}
 
 After that we also see a new instruction---\NOT. This instruction inverts all bits in the operand. 
 You can say that it is a synonym to the \TT{XOR ECX, 0ffffffffh} instruction. 

@@ -1,10 +1,10 @@
 ﻿\chapter{\EN{Task manager practical joke}\RU{Шутка с task manager} (Windows Vista)}
-\index{Windows!Windows Vista}
+\myindex{Windows!Windows Vista}
 
 \RU{Посмотрим, сможем ли мы немного хакнуть Task Manager, чтобы он находил больше ядер в \ac{CPU}, чем присутствует.}%
 \EN{Let's see if it's possible to hack Task Manager slightly so it would detect more \ac{CPU} cores.}
 
-\index{Windows!NTAPI}
+\myindex{Windows!NTAPI}
 \RU{В начале задумаемся, откуда Task Manager знает количество ядер?}
 \EN{Let us first think, how does the Task Manager know the number of cores?}
 \RU{В win32 имеется функция \TT{GetSystemInfo()}, при помощи которой можно узнать.}
@@ -26,7 +26,7 @@ as a first argument (which is zero}
 \RU{Так что нам нужно найти все вызовы функции \TT{NtQuerySystemInformation(0, ?, ?, ?)}.}
 \EN{So we need to find all calls to the \TT{NtQuerySystemInformation(0, ?, ?, ?)} function.}
 \RU{Откроем}\EN{Let's open} \TT{taskmgr.exe} \InENRU IDA. 
-\index{Windows!PDB}
+\myindex{Windows!PDB}
 \RU{Что всегда хорошо с исполняемыми файлами от Microsoft, это то что IDA может скачать соответствующуий 
 \gls{PDB}-файл именно для этого файла и добавить все имена функций.}
 \EN{What is always good about Microsoft executables is that IDA can download the corresponding \gls{PDB} 
@@ -147,7 +147,7 @@ typedef struct _SYSTEM_BASIC_INFORMATION {
 
 \lstinputlisting[caption=taskmgr.exe (Windows Vista)]{examples/taskmgr/taskmgr2.lst}
 
-\index{x86!\Instructions!LEA}
+\myindex{x86!\Instructions!LEA}
 \RU{Вероятно, \ac{MSVC} сделал так, потому что код инструкции \INS{LEA} короче чем \INS{MOV REG, 5} (было бы 5 байт вместо 4).}
 \EN{Perhaps \ac{MSVC} did so because machine code of \INS{LEA} is shorter than \INS{MOV REG, 5} (would be 5 instead of 4).}
 

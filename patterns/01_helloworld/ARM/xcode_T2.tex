@@ -25,9 +25,9 @@ __cstring:00003E70 48 65 6C 6C 6F 20+aHelloWorld  DCB "Hello world!",0xA,0
 % How is PC-relative addressing done in THUMB2?
 % A: it's not Thumb-related. there are just mess with two different segments. TODO: rework this listing.
 
-\index{\ThumbTwoMode}
-\index{ARM!\Instructions!BL}
-\index{ARM!\Instructions!BLX}
+\myindex{\ThumbTwoMode}
+\myindex{ARM!\Instructions!BL}
+\myindex{ARM!\Instructions!BLX}
 \RU{Инструкции \TT{BL} и \TT{BLX} в Thumb, как мы помним, кодируются как пара 16-битных инструкций, 
 а в Thumb-2 эти \IT{суррогатные} опкоды расширены так, что новые инструкции кодируются здесь как 
 32-битные инструкции}%
@@ -56,9 +56,9 @@ then the second and finally the first (due to different \gls{endianness})}.
 \item \RU{для пары 16-битных инструкций в режиме Thumb-2}\EN{for 16-bit instructions pair in Thumb-2 mode}: 2-1-4-3.
 \end{itemize}
 
-\index{ARM!\Instructions!MOVW}
-\index{ARM!\Instructions!MOVT.W}
-\index{ARM!\Instructions!BLX}
+\myindex{ARM!\Instructions!MOVW}
+\myindex{ARM!\Instructions!MOVT.W}
+\myindex{ARM!\Instructions!BLX}
 \RU{Так что мы видим здесь что инструкции \TT{MOVW}, \TT{MOVT.W} и \TT{BLX} начинаются с}
 \EN{So as we can see, the \TT{MOVW}, \TT{MOVT.W} and \TT{BLX} instructions begin with} \TT{0xFx}.
 
@@ -70,8 +70,8 @@ then the second and finally the first (due to different \gls{endianness})}.
 \EN{~works just like} 
 \TT{MOVT} \RU{из предыдущего примера, но она работает в}\EN{from the previous example only it works in} Thumb-2.
 
-\index{ARM!\RU{переключение режимов}\EN{mode switching}}
-\index{ARM!\Instructions!BLX}
+\myindex{ARM!\RU{переключение режимов}\EN{mode switching}}
+\myindex{ARM!\Instructions!BLX}
 \RU{Помимо прочих отличий, здесь используется инструкция}
 \EN{Among the other differences, the} \TT{BLX} 
 \RU{вместо}\EN{instruction is used in this case instead of the} \TT{BL}.
@@ -97,13 +97,13 @@ __symbolstub1:00003FEC 44 F0 9F E5     LDR  PC, =__imp__puts
 \RU{Но это не очень выгодно из-за экономии места и вот почему}%
 \EN{Because it is not very space-efficient}.
 
-\index{\RU{Динамически подгружаемые библиотеки}\EN{Dynamically loaded libraries}}
+\myindex{\RU{Динамически подгружаемые библиотеки}\EN{Dynamically loaded libraries}}
 \RU{Практически любая программа использует внешние динамические библиотеки (будь то DLL в Windows, .so в *NIX 
 либо .dylib в \MacOSX)}\EN{Almost any program uses external dynamic libraries (like DLL in Windows, .so in *NIX or .dylib in \MacOSX)}.
 \RU{В динамических библиотеках находятся часто используемые библиотечные функции, в том числе стандартная функция Си \puts}%
 \EN{The dynamic libraries contain frequently used library functions, including the standard C-function \puts}.
 
-\index{Relocation}
+\myindex{Relocation}
 \RU{В исполняемом бинарном файле}\EN{In an executable binary file} 
 (Windows PE .exe, ELF \RU{либо}\EN{or} Mach-O) \RU{имеется секция импортов, список символов (функций либо глобальных переменных) импортируемых из внешних модулей, а также названия самих модулей}%
 \EN{an import section is present.
@@ -124,7 +124,7 @@ This is a list of symbols (functions or global variables) imported from external
 \EN{So, in order to reduce the time the \ac{OS} loader needs for completing this procedure, 
 it is good idea to write the address of each symbol only once, to a dedicated place.}
 
-\index{thunk-\RU{функции}\EN{functions}}
+\myindex{thunk-\RU{функции}\EN{functions}}
 \RU{К тому же, как мы уже убедились, нельзя одной инструкцией загрузить в регистр 32-битное число без обращений к памяти}%
 \EN{Besides, as we have already figured out, it is impossible to load a 32-bit value into a register 
 while using only one instruction without a memory access}.
@@ -135,7 +135,7 @@ goal of passing control to the dynamic library}
 \RU{И затем ссылаться на эту короткую функцию из одной инструкции (так называемую \glslink{thunk function}{thunk-функцию}) из Thumb-кода}%
 \EN{and then to jump to this short one-instruction function (the so-called \gls{thunk function}) from the Thumb-code}.
 
-\index{ARM!\Instructions!BL}
+\myindex{ARM!\Instructions!BL}
 \RU{Кстати, в предыдущем примере (скомпилированном для режима ARM), переход при помощи инструкции \TT{BL} ведет 
 на такую же \glslink{thunk function}{thunk-функцию}, однако режим процессора не переключается (отсюда отсутствие \q{X} в мнемонике инструкции)}%
 \EN{By the way, in the previous example (compiled for ARM mode) the control is passed by the \TT{BL} to the 
@@ -143,7 +143,7 @@ same \gls{thunk function}.
 The processor mode, however, is not being switched (hence the absence of an \q{X} in the instruction mnemonic)}.
 
 \subsubsection{\EN{More about thunk-functions}\RU{Еще о thunk-функциях}}
-\index{thunk-\RU{функции}\EN{functions}}
+\myindex{thunk-\RU{функции}\EN{functions}}
 
 \RU{Thunk-функции трудновато понять, вероятно, из-за путаницы в терминах.}
 \EN{Thunk-functions are hard to understand, apparently, because of a misnomer.}

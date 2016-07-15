@@ -12,13 +12,13 @@
 
 \lstinputlisting[label=switch_few_ifelse]{patterns/08_switch/1_few/few_analogue.c}
 
-\index{\CLanguageElements!switch}
-\index{\CLanguageElements!if}
+\myindex{\CLanguageElements!switch}
+\myindex{\CLanguageElements!if}
 \RU{Когда вариантов немного и мы видим подобный код, невозможно сказать с уверенностью, был ли
 в оригинальном исходном коде switch(), либо просто набор операторов if().}
 \EN{If we work with switch() with a few cases it is impossible to be sure if it was
 a real switch() in the source code, or just a pack of if() statements.}
-\index{\SyntacticSugar}
+\myindex{\SyntacticSugar}
 \RU{То есть, switch() это синтаксический сахар для большого количества вложенных проверок 
 при помощи if().}
 \EN{This implies that switch() is like syntactic sugar for a large number of nested if()s.}
@@ -58,9 +58,9 @@ turned on (\Othree option).}
 \RU{Вот здесь уже всё немного по-другому, причем не без грязных трюков.}
 \EN{Here we can see some dirty hacks.}
 
-\index{x86!\Instructions!JZ}
-\index{x86!\Instructions!JE}
-\index{x86!\Instructions!SUB}
+\myindex{x86!\Instructions!JZ}
+\myindex{x86!\Instructions!JE}
+\myindex{x86!\Instructions!SUB}
 \RU{Первое: \TT{а} помещается в \EAX и от него отнимается 0. Звучит абсурдно, но нужно это для того, чтобы проверить, 
 0 ли в \EAX был до этого? Если да, то выставится флаг \ZF (что означает, что результат вычитания 0 от числа 
 стал 0) и первый условный переход \JE (\IT{Jump if Equal} или его синоним \JZ~--- \IT{Jump if Zero}) 
@@ -79,7 +79,7 @@ the corresponding jump is to be triggered.}
 \EN{And if no jump gets triggered at all, the control flow passes to \printf with string argument \TT{'something unknown'}.}
 
 \label{jump_to_last_printf}
-\index{\Stack}
+\myindex{\Stack}
 \RU{Второе: мы видим две, мягко говоря, необычные вещи: указатель на сообщение помещается в переменную $a$, 
 и затем \printf вызывается не через \CALL, а через \JMP. Объяснение этому простое. 
 Вызывающая функция заталкивает в стек некоторое значение и через \CALL вызывает нашу функцию. 
@@ -115,7 +115,7 @@ jumps to \printf, as if we didn't call our function \ttf, but directly \printf.
 \ac{RA} from the stack and control flow is returned not to \ttf but rather to \ttf's \gls{callee}, 
 bypassing the end of the \ttf function.}
 
-\index{\CStandardLibrary!longjmp()}
+\myindex{\CStandardLibrary!longjmp()}
 \newcommand{\URLSJ}{\href{http://go.yurichev.com/17121}{wikipedia}}
 \RU{Всё это возможно, потому что \printf вызывается в \ttf в самом конце. 
 Всё это чем-то даже похоже на \TT{longjmp()}\footnote{\URLSJ}.

@@ -2,12 +2,12 @@
 \chapter{\RU{Указатели на функции}\EN{Pointers to functions}}
 \label{sec:pointerstofunctions}
 
-\index{\CLanguageElements!\Pointers}
+\myindex{\CLanguageElements!\Pointers}
 \RU{Указатель на функцию, в целом, как и любой другой указатель, просто адрес, указывающий на начало функции 
 в сегменте кода.}
 \EN{A pointer to a function, as any other pointer, is just the address of the function's start in its code segment.}
 
-\index{Callbacks}
+\myindex{Callbacks}
 \RU{Это часто применяется для вызовов т.н. callback-функций}\EN{They are often used for calling callback functions}
 \footnote{\href{http://go.yurichev.com/17071}{wikipedia}}.
 
@@ -49,7 +49,7 @@ defines shortcuts.}
 \EN{As we can see, such table is easier to handle than a large switch() statement.}
 \end{itemize}
 
-\index{\CStandardLibrary!qsort()}
+\myindex{\CStandardLibrary!qsort()}
 \RU{Итак, функция \qsort это реализация алгоритма \q{быстрой сортировки}. 
 Функция может сортировать что угодно, 
 любые типы данных, но при условии, что вы имеете функцию сравнения этих двух элементов данных и 
@@ -88,7 +88,7 @@ that function.}
 
 \RU{Как \qsort вызывает её?}\EN{How does \qsort call it?}
 
-\index{Windows!MSVCR80.DLL}
+\myindex{Windows!MSVCR80.DLL}
 \RU{Посмотрим в MSVCR80.DLL (эта DLL куда в MSVC вынесены функции из стандартных библиотек Си):}
 \EN{Let's take a look at this function, located in MSVCR80.DLL (a MSVC DLL module with C standard library functions):}
 
@@ -125,7 +125,7 @@ silent about the potential problems while compiling.}
 \fi
 
 \subsection{MSVC + tracer}
-\index{tracer}
+\myindex{tracer}
 
 \RU{Посмотрим, какие пары сравниваются}\EN{Let's also see which pairs are compared}.
 \RU{Эти 10 чисел будут сортироваться}\EN{These 10 numbers are being sorted}: 
@@ -207,7 +207,7 @@ EAX=0x0000002d ECX=0x00000058
 
 \clearpage
 \subsection{MSVC + tracer (code coverage)}
-\index{tracer}
+\myindex{tracer}
 
 \RU{Но можно также и воспользоваться возможностью tracer накапливать все возможные состояния регистров
 и показать их в \IDA}\EN{We can also use the tracer's feature to collect all possible register values
@@ -297,7 +297,7 @@ loc_8048458:
 comp            endp
 \end{lstlisting}
 
-\index{Linux!libc.so.6}
+\myindex{Linux!libc.so.6}
 \RU{Реализация \qsort находится в \TT{libc.so.6}, и представляет собой просто wrapper
 \footnote{понятие близкое к \gls{thunk function}} для \TT{qsort\_r()}.}
 \EN{The implementation of \qsort is located in \TT{libc.so.6} and it is in fact just a wrapper
@@ -320,7 +320,7 @@ comp            endp
 
 \ifdefined\IncludeGDB
 \subsection{GCC + GDB (\RU{с исходными кодами}\EN{with source code})}
-\index{GDB}
+\myindex{GDB}
 
 \RU{Очевидно, у нас есть исходный код нашего примера на Си (\myref{qsort_c_src}), 
 так что мы можем установить точку останова ($b$) на
@@ -338,7 +338,7 @@ with addresses and corresponding line numbers is present}.
 стека находится какая переменная}\EN{the debugging information also has tells us which register and/or 
 local stack element contains which variable}.
 
-\index{Glibc}
+\myindex{Glibc}
 \RU{Мы можем также увидеть стек}\EN{We can also see the stack} (\TT{bt}) 
 \RU{и обнаружить что в Glibc используется какая-то вспомогательная функция с именем}
 \EN{and find out that there is some intermediate function} 
@@ -347,7 +347,7 @@ local stack element contains which variable}.
 \lstinputlisting[caption=GDB\RU{-сессия}\EN{ session}]{patterns/18_pointers_to_functions/GDB_source.txt}
 
 \subsection{GCC + GDB (\RU{без исходных кодов}\EN{no source code})}
-\index{GDB}
+\myindex{GDB}
 
 \RU{Но часто никаких исходных кодов нет вообще, так что мы можем дизассемблировать функцию \comp}
 \EN{But often there is no source code at all, so we can disassemble the \comp function} (\TT{disas}), 

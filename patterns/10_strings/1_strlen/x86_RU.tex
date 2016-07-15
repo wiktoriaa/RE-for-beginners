@@ -6,8 +6,8 @@
 
 \lstinputlisting{patterns/10_strings/1_strlen/10_1_msvc.asm.\LANG}
 
-\index{x86!\Instructions!MOVSX}
-\index{x86!\Instructions!TEST}
+\myindex{x86!\Instructions!MOVSX}
+\myindex{x86!\Instructions!TEST}
 Здесь две новых инструкции: \MOVSX и \TEST.
 
 \label{MOVSX}
@@ -35,7 +35,7 @@
 а не его восьмибитной части, скажем \DL. Но получилось, как получилось. Должно быть 
 \gls{register allocator} компилятора сработал именно так.
 
-\index{ARM!\Instructions!TEST}
+\myindex{ARM!\Instructions!TEST}
 Позже выполняется \TT{TEST EDX, EDX}. 
 Об инструкции \TEST читайте в разделе о битовых полях~(\myref{sec:bitfields}).
 Конкретно здесь эта инструкция просто проверяет состояние регистра \EDX на 0.
@@ -48,7 +48,7 @@
 \lstinputlisting{patterns/10_strings/1_strlen/10_3_gcc.asm}
 
 \label{movzx}
-\index{x86!\Instructions!MOVZX}
+\myindex{x86!\Instructions!MOVZX}
 Результат очень похож на MSVC, только здесь используется \MOVZX, а не \MOVSX. 
 \MOVZX означает \IT{MOV with Zero-Extend}. Эта инструкция перекладывает какое-либо значение 
 в регистр и остальные биты выставляет в 0.
@@ -61,7 +61,7 @@
 он не смог сделать код более экономным или более понятным. 
 Строго говоря, компилятор вообще не нацелен на то, чтобы генерировать понятный (для человека) код.
 
-\index{x86!\Instructions!SETcc}
+\myindex{x86!\Instructions!SETcc}
 Следующая новая инструкция для нас~--- \SETNZ. В данном случае, если в \AL был не ноль, 
 то \TT{test al, al} выставит флаг \ZF в 0, а \SETNZ, если \TT{ZF==0} 
 (\IT{NZ} значит \IT{not zero}) выставит 1 в \AL. 
@@ -82,8 +82,8 @@
 Здесь всё попроще стало. Но следует отметить, что компилятор обычно может так хорошо использовать регистры 
 только на небольших функциях с небольшим количеством локальных переменных.
 
-\index{x86!\Instructions!INC}
-\index{x86!\Instructions!DEC}
+\myindex{x86!\Instructions!INC}
+\myindex{x86!\Instructions!DEC}
 \INC/\DEC --- это инструкции \glslink{increment}{инкремента}-\glslink{decrement}{декремента}. Попросту говоря~--- 
 увеличить на единицу или уменьшить.
 
@@ -106,8 +106,8 @@
 32-битный регистр \EDX и быть уверенным в том, что старшие биты регистра не будут замусорены.
 
 \label{strlen_NOT_ADD}
-\index{x86!\Instructions!NOT}
-\index{x86!\Instructions!XOR}
+\myindex{x86!\Instructions!NOT}
+\myindex{x86!\Instructions!XOR}
 Далее мы видим новую для нас инструкцию \NOT. Эта инструкция инвертирует все биты в операнде. 
 Можно сказать, что здесь это синонимично инструкции \TT{XOR ECX, 0ffffffffh}. 
 \NOT и следующая за ней инструкция \ADD вычисляют разницу указателей и отнимают от результата единицу. 

@@ -1,6 +1,6 @@
 \section{\RU{Трюк с }\IT{LD\_PRELOAD}\EN{ hack} \InENRU Linux}
 
-\index{LD\_PRELOAD}
+\myindex{LD\_PRELOAD}
 \label{ld_preload}
 
 \RU{Это позволяет загружать свои динамические библиотеки перед другими, даже перед системными,
@@ -12,12 +12,12 @@
 \RU{Например, легко перехватывать все вызовы к}\EN{For example, it is easy to intercept all calls to} 
 time(), read(), write(), \etc{}. \\
 \\
-\index{uptime}
+\myindex{uptime}
 \RU{Попробуем узнать, сможем ли мы обмануть утилиту \IT{uptime}}\EN{Let's see if we can fool the
 \IT{uptime} utility}.
 \RU{Как известно, она сообщает, как долго компьютер работает}\EN{As we know, it tells how long the computer
 has been working}.
-\index{strace}
+\myindex{strace}
 \RU{При помощи}\EN{With the help of} strace(\myref{strace}), \RU{можно увидеть, что эту информацию утилита получает из файла}
 \EN{it is possible to see that the utility takes this information the} \TT{/proc/uptime}
 \EN{ file}:
@@ -51,9 +51,9 @@ The second number is how much of that time the machine has spent idle, in second
 \end{quotation}
 \end{framed}
 
-\index{\CStandardLibrary!open()}
-\index{\CStandardLibrary!read()}
-\index{\CStandardLibrary!close()}
+\myindex{\CStandardLibrary!open()}
+\myindex{\CStandardLibrary!read()}
+\myindex{\CStandardLibrary!close()}
 \RU{Попробуем написать свою динамическую библиотеку, в которой будет}
 \EN{Let's try to write our own dynamic library with the} open(), read(), close() 
 \RU{с нужной нам функциональностью}\EN{functions working as we need}.
@@ -69,15 +69,15 @@ and in the rest of the cases will call the original} read() \RU{из}\EN{from} l
 \RU{А также}\EN{And also} close(), \RU{будет следить, закрывается ли файл за которым мы следим.}
 \EN{will note if the file we are currently following is to be closed.}
 
-\index{dlopen()}
-\index{dlsym()}
+\myindex{dlopen()}
+\myindex{dlsym()}
 \RU{Для того чтобы найти адреса настоящих функций в libc.so.6, используем dlopen() и dlsym().}
 \EN{We are going to use the dlopen() and dlsym() functions to determine the original function addresses in libc.so.6.}
 
 \RU{Нам это нужно, потому что нам нужно передавать управление \q{настоящим} функциями.}
 \EN{We need them because we must pass control to the \q{real} functions.}
 
-\index{\CStandardLibrary!strcmp()}
+\myindex{\CStandardLibrary!strcmp()}
 \RU{С другой стороны, если бы мы перехватывали, скажем, strcmp(),
 и следили бы за всеми сравнениями строк в программе, 
 то, наверное, strcmp() можно было бы и самому реализовать, не

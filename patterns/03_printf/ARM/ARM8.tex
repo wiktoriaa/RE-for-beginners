@@ -35,11 +35,11 @@ with 9 arguments from the previous section}: \myref{example_printf8_x64}.
 
 \RU{Этот код можно условно разделить на несколько частей}\EN{This code can be divided into several parts}:
 
+\myindex{Function prologue}
 \begin{itemize}
-\index{Function prologue}
 \item \RU{Пролог функции}\EN{Function prologue}:
 
-\index{ARM!\Instructions!STR}
+\myindex{ARM!\Instructions!STR}
 \RU{Самая первая инструкция}\EN{The very first} \INS{STR LR, [SP,\#var\_4]!} 
 \RU{сохраняет в стеке \ac{LR}, ведь нам придется использовать этот регистр для вызова \printf}%
 \EN{instruction saves \ac{LR} on the stack, because we are going to use this register for the \printf call}.
@@ -50,7 +50,7 @@ with 9 arguments from the previous section}: \myref{example_printf8_x64}.
 \RU{Это аналог знакомой в x86 инструкции \PUSH}\EN{This is similar to \PUSH in x86}.
 \RU{Читайте больше об этом}\EN{Read more about it at}: \myref{ARM_postindex_vs_preindex}.
 
-\index{ARM!\Instructions!SUB}
+\myindex{ARM!\Instructions!SUB}
 \RU{Вторая инструкция}\EN{The second} \INS{SUB SP, SP, \#0x14}
 \RU{уменьшает \glslink{stack pointer}{указатель стека} \ac{SP}, но, на самом деле, эта процедура нужна для выделения в локальном стеке места размером \GTT{0x14} (20) байт.}
 \EN{instruction decreases
@@ -67,7 +67,7 @@ allocate \GTT{0x14} (20) bytes on the stack.}
 \RU{Затем инструкция}\EN{Then, the} \INS{ADD R12, SP, \#0x18+var\_14} 
 \RU{записывает в регистр \Reg{12} адрес места в стеке, куда будут помещены эти 4 значения}%
 \EN{instruction writes the stack address where these 4 variables are to be stored, into the \Reg{12} register}.
-\index{IDA!var\_?}
+\myindex{IDA!var\_?}
 \IT{var\_14}\RU{~--- это макрос ассемблера}\EN{ is an assembly macro}, \RU{равный}\EN{equal to} -0x14\RU{.}
 \RU{Такие макросы создает \IDA, чтобы удобнее было показывать, как код обращается к стеку.}
 \EN{, created by \IDA to conveniently display the code accessing the stack.}
@@ -75,7 +75,7 @@ allocate \GTT{0x14} (20) bytes on the stack.}
 by \IDA reflect local variables in the stack.}
 \RU{Так что в \Reg{12} будет записано \GTT{SP+4}.}
 \EN{So, \GTT{SP+4} is to be stored into the \Reg{12} register.}
-\index{ARM!\Instructions!STMIA}
+\myindex{ARM!\Instructions!STMIA}
 \RU{Следующая инструкция}\EN{The next} \INS{STMIA R12, {R0-R3}} 
 \RU{записывает содержимое регистров \Reg{0}-\Reg{3} по адресу в памяти, на который указывает \Reg{12}.}
 \EN{instruction
@@ -104,7 +104,7 @@ registers right before the \printf call}, \RU{а остальные 5 значе
 
 \item \RU{Вызов \printf}\EN{\printf call}.
 
-\index{Function epilogue}
+\myindex{Function epilogue}
 \item \RU{Эпилог функции}\EN{Function epilogue}:
 
 \RU{Инструкция}\EN{The} \INS{ADD SP, SP, \#0x14} \RU{возвращает \ac{SP} на прежнее место, 
@@ -116,7 +116,7 @@ thus cleaning the stack}.
 \EN{Of course, what was stored on the stack will stay there, but it will all be
 rewritten during the execution of subsequent functions.}
 
-\index{ARM!\Instructions!LDR}
+\myindex{ARM!\Instructions!LDR}
 \RU{Инструкция}\EN{The} \INS{LDR PC, [SP+4+var\_4],\#4} \RU{загружает в \ac{PC} 
 сохраненное значение \ac{LR} из стека, обеспечивая таким образом выход из функции.}
 \EN{instruction loads the saved \ac{LR} value from the stack into the \ac{PC} register, 
@@ -206,8 +206,8 @@ __text:00002954 07 D0 A0 E1   MOV    SP, R7
 __text:00002958 80 80 BD E8   LDMFD  SP!, {R7,PC}
 \end{lstlisting}
 
-\index{ARM!\Instructions!STMFA}
-\index{ARM!\Instructions!STMIB}
+\myindex{ARM!\Instructions!STMFA}
+\myindex{ARM!\Instructions!STMIB}
 \RU{Почти то же самое, что мы уже видели, за исключением того, что}%
 \EN{Almost the same as what we have already seen, with the
 exception of} \INS{STMFA} (Store Multiple Full Ascending)%

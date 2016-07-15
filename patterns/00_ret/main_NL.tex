@@ -14,7 +14,7 @@ Hier zie je wat zowel de optimaliserende GCC als MSVC compilers produceren op ee
 
 \lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/00_ret/1.s}
 
-\index{x86!\Instructions!RET}
+\myindex{x86!\Instructions!RET}
 Er zijn slechts twee instructies: de eerste plaatst de waarde 123 in het \EAX register, hetwelk volgens de conventies gebruikt wordt om de return value op te slaan en de tweede is \RET, wat de programma-uitvoering terug geeft aan de \gls{caller}.
 
 De caller zal dan het resultaat uit het \EAX register halen.
@@ -31,8 +31,8 @@ ARM gebruikt het register \Reg{0} om de resultaten van functies te returnen. 123
 Het return address wordt niet bijgehouden op de local stack in het ARM \ac{ISA}, maar eerder in het link register, de \INS{BX LR} instructie zorgt er dus voor dat de programma-executie naar dat adres springt, en op die manier de uitvoering terug geeft aan de \gls{caller}.
 \fi % IncludeARM
 
-\index{ARM!\Instructions!MOV}
-\index{x86!\Instructions!MOV}
+\myindex{ARM!\Instructions!MOV}
+\myindex{x86!\Instructions!MOV}
 Het is een vermelding waard dat \MOV een misleidende naam is voor de instructie in zowel x86 als ARM \ac{ISA}s.
 
 De data wordt feitelijk niet \IT{verplaatst}, maar \IT{gekopieerd}.
@@ -53,15 +53,15 @@ De GCC assembly output hieronder lijst de registers genummerd op:
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/00_ret/MIPS_IDA.lst}
 
 Het \$2 (of \$V0) register wordt gebruikt om de return value van de functie in op te slaan.
-\index{MIPS!\Pseudoinstructions!LI}
+\myindex{MIPS!\Pseudoinstructions!LI}
 \INS{LI} staat voor ``Load Immediate'' en is het MIPS equivalent voor MOV.
 
-\index{MIPS!\Instructions!J}
+\myindex{MIPS!\Instructions!J}
 De andere instructie is de jump instructie (J of JR), dewelke de uitvoering van het programma terug geeft aan de \gls{caller}, door een jump naar het adres in het \$31 (of \$RA) register.
 
 Dit register staat analoog tot het \ac{LR} in ARM.
 
-\index{MIPS!Branch delay slot}
+\myindex{MIPS!Branch delay slot}
 Je kan je wel afvragen waarom de posities van de load instructie (LI) en de jump instructie (J of JR) omgewisseld zijn. Dit komt door een \ac{RISC} feature genaamd ``branch delay slot''.
 
 De reden dat dit gebeurd is een kronkel in de architectuur van sommige RISC \ac{ISA}s en is niet belangrijk voor onze doeleinden - we dienen enkel te onthouden dat in MIPS, de instructie die volgt op een jump of branch instructie uitgevoerd wordt \IT{voor} de jump/branch instructie zelf.

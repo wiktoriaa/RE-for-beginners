@@ -12,7 +12,7 @@ De acordo com os padrões de \CCpp ela só deve ser visível nessa função e n�
 Tradicionalmente, variáveis locais são guardadas na pilha.
 Provavelmente há outras maneiras de alocá-las, mas no x86 é assim que é feito.
 
-\index{x86!\Instructions!PUSH}
+\myindex{x86!\Instructions!PUSH}
 O objetivo da intrução que se segue após o cabeçalho da função, \INS{PUSH ECX},
 não é para salvar o valor de \ECX
 (perceba que não há a instrução \INS{POP ECX} no fim da função).
@@ -20,14 +20,14 @@ não é para salvar o valor de \ECX
 Na verdade, esse PUSH aloca 4 bytes na pilha para guardar a variável \TT{x}.
 
 \label{stack_frame}
-\index{\Stack!\PTBRph{}}
-\index{x86!\Registers!EBP}
+\myindex{\Stack!\PTBRph{}}
+\myindex{x86!\Registers!EBP}
 \TT{x} é para ser acessada com a ajuda do macro \TT{\_x\$} (que é igual a -4) e o registrador \EBP apontando para a posição atual.
 
 Conforme a execução da função avança, \EBP está apontando para a posição atual da pilha,
 sendo possível acessar variáveis locais e argumentos da função via \TT{EBP+offset}.
 
-\index{x86!\Registers!ESP}
+\myindex{x86!\Registers!ESP}
 Também é possível usar \ESP para o mesmo objetivo, mas não é muito conveniente pois ele se altera com frequência.
 O valor de \EBP pode ser visto como uma cópia do valor de \ESP no começo da execução da função.
 
@@ -61,7 +61,7 @@ A função \scanf no nosso exemplo tem dois argumentos.
 
 O primeiro é um ponteiro para a string contendo \TT{\%d} e a segunda é o endereço da variável \TT{x}.
 
-\index{x86!\Instructions!LEA}
+\myindex{x86!\Instructions!LEA}
 Primeiro, o endereço da variável \TT{x} é carregado no registrador \EAX pela instrução \TT{lea eax, DWORD PTR \_x\$[ebp].}.
 
 \PTBRph{}

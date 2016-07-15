@@ -3,13 +3,13 @@
 
 \lstinputlisting[caption=GCC 4.4.1]{patterns/12_FPU/3_comparison/x86/GCC.asm.\LANG}
 
-\index{x86!\Instructions!FUCOMPP}
+\myindex{x86!\Instructions!FUCOMPP}
 \RU{\FUCOMPP~--- это почти то же что и \FCOM, только выкидывает из стека оба значения после сравнения, 
 а также несколько иначе реагирует на \q{не-числа}.}
 \EN{\FUCOMPP{} is almost like \FCOM, but pops both values from the stack and handles
 \q{not-a-numbers} differently.}
 
-\index{\RU{Не-числа}\EN{Non-a-numbers} (NaNs)}
+\myindex{\RU{Не-числа}\EN{Non-a-numbers} (NaNs)}
 \RU{Немного о \IT{не-числах}}\EN{A bit about \IT{not-a-numbers}}.
 
 \newcommand{\NANFN}{\footnote{\RU{\href{http://go.yurichev.com/17129}{ru.wikipedia.org/wiki/NaN}}%
@@ -26,14 +26,14 @@ These are infinity, result of division by 0, etc.
 Not-a-numbers can be \q{quiet} and \q{signaling}. It is possible to continue to work with \q{quiet} NaNs, 
 but if one tries to do any operation with \q{signaling} NaNs, an exception is to be raised.}
 
-\index{x86!\Instructions!FCOM}
-\index{x86!\Instructions!FUCOM}
+\myindex{x86!\Instructions!FCOM}
+\myindex{x86!\Instructions!FUCOM}
 \RU{Так вот, \FCOM вызовет исключение если любой из операндов какое-либо нечисло.
 \FUCOM же вызовет исключение только если один из операндов именно \q{сигнализирующее нечисло}.}
 \EN{\FCOM raising an exception if any operand is \gls{NaN}. 
 \FUCOM raising an exception only if any operand is a signaling \gls{NaN} (SNaN).}
 
-\index{x86!\Instructions!SAHF}
+\myindex{x86!\Instructions!SAHF}
 \label{SAHF}
 \RU{Далее мы видим \SAHF (\IT{Store AH into Flags})~--- это довольно редкая инструкция в коде, не использующим FPU. 
 8 бит из \AH перекладываются в младшие 8 бит регистра статуса процессора в таком порядке:}
@@ -43,7 +43,7 @@ instruction in code not related to the FPU.
 
 \input{SAHF_LAHF}
 
-\index{x86!\Instructions!FNSTSW}
+\myindex{x86!\Instructions!FNSTSW}
 \RU{Вспомним, что \FNSTSW перегружает интересующие нас биты \CThreeBits в \AH, 
 и соответственно они будут в позициях 6, 2, 0 в регистре \AH:}
 \EN{Let's recall that \FNSTSW moves the bits that interest us (\CThreeBits) into \AH 
@@ -86,8 +86,8 @@ after three \FUCOMPP/\FNSTSW/\SAHF instructions:}
 \end{itemize}
 % TODO: table?
 
-\index{x86!\Instructions!SETcc}
-\index{x86!\Instructions!JNBE}
+\myindex{x86!\Instructions!SETcc}
+\myindex{x86!\Instructions!JNBE}
 \RU{Инструкция \SETNBE выставит в \AL единицу или ноль в зависимости от флагов и условий. 
 Это почти аналог \JNBE, за тем лишь исключением, что \SETcc
 \footnote{\IT{cc} это \IT{condition code}}

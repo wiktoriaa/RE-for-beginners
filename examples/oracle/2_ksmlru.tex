@@ -1,5 +1,5 @@
 \section{\RU{Таблица \TT{X\$KSMLRU} в}\EN{\TT{X\$KSMLRU} table in} \oracle}
-\index{\oracle}
+\myindex{\oracle}
 
 \RU{В заметке}\EN{There is a mention of a special table in the} \IT{Diagnosing and Resolving Error ORA-04031 
 on the Shared Pool or Other Memory Pools [Video] [ID 146599.1]} \RU{упоминается некая служебная таблица}\EN{note}:
@@ -52,12 +52,12 @@ kqftap_element.fn1=ksmlrs
 kqftap_element.fn2=NULL
 \end{lstlisting}
 
-\index{tracer}
+\myindex{tracer}
 \RU{Действительно, при помощи \tracer легко убедиться, что эта функция вызывается каждый раз, когда мы обращаемся 
 к таблице \TT{X\$KSMLRU}.}\EN{Indeed, with \tracer's help it is easy to see that this function is called each 
 time we query the \TT{X\$KSMLRU} table.}
 
-\index{\CStandardLibrary!memset()}
+\myindex{\CStandardLibrary!memset()}
 \RU{Здесь есть ссылки на функции \TT{ksmsplu\_sp()} и \TT{ksmsplu\_jp()}, каждая из которых в итоге вызывает 
 \TT{ksmsplu()}.}\EN{Here we see a references to the \TT{ksmsplu\_sp()} and \TT{ksmsplu\_jp()} functions, each of 
 them calls the \TT{ksmsplu()} in the end.}
@@ -95,7 +95,7 @@ a call to \TT{memset()}:}
 \RU{Такие конструкции (\TT{memset (block, 0, size)}) очень часто используются для простого обнуления блока памяти.}\EN{Constructions like \TT{memset (block, 0, size)} are often used just to zero memory block.}
 \RU{Мы можем попробовать рискнуть, заблокировав вызов \TT{memset()} и посмотреть, что будет?}\EN{What if we take a risk, block the \TT{memset()} call and see what happens?}
 
-\index{tracer}
+\myindex{tracer}
 \RU{Запускаем \tracer со следующей опцией: поставить точку останова на \TT{0x434C7A} 
 (там, где начинается передача параметров для функции \TT{memset()}) так, 
 чтобы \tracer в этом месте установил указатель инструкций процессора (\TT{EIP}) на место, где уже произошла очистка переданных параметров в \TT{memset()} (по адресу \TT{0x434C8A}):}

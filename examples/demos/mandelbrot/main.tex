@@ -209,14 +209,14 @@ $320*200=64000$ (0xFA00).
 \EN{Each pixel is encoded by one byte, so the buffer size is 0xFA00 bytes.}
 \RU{Он адресуется здесь при помощи пары регистров ES:DI}\EN{It is addressed using the ES:DI registers pair}.
 
-\index{x86!\Registers!ES}
+\myindex{x86!\Registers!ES}
 ES \RU{должен быть здесь}\EN{must be} 0xA000\RU{, потому что это сегментный адрес видеобуфера, но запись
 числа 0xA000 в ES потрубет по крайней мере 4 байта}\EN{ here, because this is the segment address of 
 the VGA video buffer, but storing 0xA000 to ES requires at least 4 bytes} (\TT{PUSH 0A000h / POP ES}). 
 \RU{О 16-битной модели памяти в MS-DOS, читайте больше тут}\EN{You can read more about the 16-bit MS-DOS memory model here}: 
 \myref{8086_memory_model}.
 
-\index{x86!\Instructions!LES}
+\myindex{x86!\Instructions!LES}
 \RU{Учитывая, что BX здесь 0, и Program Segment Prefix находится по нулевому адресу, 2-байтная инструкция
 \TT{LES AX,[BX]} запишет 0x20CD в AX и 0x9FFF в ES.}
 \EN{Assuming that BX is zero here, and the Program Segment Prefix is at the zeroth
@@ -262,7 +262,7 @@ another 2 bytes of saved space}.
     \item \RU{Проверить, является ли текущая точка внутри множества Мандельброта}\EN{Check, if the current 
 point is inside the Mandelbrot set}.
           \RU{Алгоритм такой же, как и описанный здесь}\EN{The algorithm is the one that has been described here}.
-\index{x86!\Instructions!LOOP}
+\myindex{x86!\Instructions!LOOP}
      \item \RU{Цикл организуется инструкцией \TT{LOOP}, которая использует регистр CX как счетчик}\EN{The loop 
 is organized using the \TT{LOOP} instruction, which uses the CX register as counter}.
 \RU{Автор мог бы установить число итераций на какое-то число, но не сделал этого: потому что 320 уже
@@ -273,7 +273,7 @@ is organized using the \TT{LOOP} instruction, which uses the CX register as coun
 \RU{Мы здесь экономим немного места, не загружая другое значение в регистр CX}\EN{We save here some space 
 by not the reloading CX register with another value}.
 
-\index{x86!\Instructions!SAR}
+\myindex{x86!\Instructions!SAR}
      \item \RU{Здесь используется \TT{IMUL} вместо \TT{MUL}, потому что мы работаем с знаковыми значениями:
 помните, что координаты 0,0 должны быть где-то рядом с центром экрана.}
 \EN{\TT{IMUL} is used here instead of \TT{MUL}, because we work with signed values: 
@@ -323,8 +323,8 @@ because an additional check where to stop, or any user interface will result in 
 
 \RU{Еще оптимизационные трюки}\EN{Some other optimization tricks}:
 
+\myindex{x86!\Instructions!CWD}
 \begin{itemize}
-\index{x86!\Instructions!CWD}
 \item \EN{The }1-\RU{байтная}\EN{byte} CWD \RU{используется здесь для обнуления DX вместо двухбайтной}\EN{is used here 
 for clearing DX instead of the 2-byte} \TT{XOR DX, DX} \RU{или даже трехбайтной}\EN{or even the 3-byte} \TT{MOV DX, 0}.
 

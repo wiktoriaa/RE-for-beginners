@@ -2,10 +2,10 @@
 \chapter{\RU{Работа с числами с плавающей запятой используя SIMD}\EN{Working with floating point numbers using SIMD}}
 
 \label{floating_SIMD}
-\index{IEEE 754}
-\index{SIMD}
-\index{SSE}
-\index{SSE2}
+\myindex{IEEE 754}
+\myindex{SIMD}
+\myindex{SSE}
+\myindex{SSE2}
 \RU{Разумеется, FPU остался в x86-совместимых процессорах в то время, когда ввели расширения \ac{SIMD}}
 \EN{Of course, the \ac{FPU} has remained in x86-compatible processors when the \ac{SIMD} extensions were added}.
 
@@ -14,7 +14,7 @@
 
 \RU{Формат чисел остается тот же}\EN{The number format remains the same} (IEEE 754).
 
-\index{x86-64}
+\myindex{x86-64}
 \RU{Так что современные компиляторы (включая те, что компилируют под x86-64) 
 обычно используют \ac{SIMD}-инструкции вместо FPU-инструкций.}\EN{So, modern compilers (including those generating
 for x86-64) usually use \ac{SIMD} instructions instead of FPU ones.}
@@ -45,7 +45,7 @@ $a$ \RU{передается через}\EN{is passed in} \XMM{0}, $b$\EMDASH{}\
 \EN{The XMM-registers are 128-bit (as we know from the section about \ac{SIMD}: \myref{SIMD_x86}), 
 but the \Tdouble values are 64 bit, so only lower register half is used}.
 
-\index{x86!\Instructions!DIVSD}
+\myindex{x86!\Instructions!DIVSD}
 \TT{DIVSD} \RU{это SSE-инструкция, означает}\EN{is an SSE-instruction that stands for} 
 \q{Divide Scalar Double-Precision Floating-Point Values}, 
 \RU{и просто делит значение типа \Tdouble на другое, лежащие в младших половинах операндов}\EN{it just divides
@@ -53,8 +53,8 @@ one value of type \Tdouble by another, stored in the lower halves of operands}.
 
 \RU{Константы закодированы компилятором в формате IEEE 754}\EN{The constants are encoded by compiler in IEEE 754 format}.
 
-\index{x86!\Instructions!MULSD}
-\index{x86!\Instructions!ADDSD}
+\myindex{x86!\Instructions!MULSD}
+\myindex{x86!\Instructions!ADDSD}
 \TT{MULSD} \AndENRU \TT{ADDSD} \RU{работают так же, только производят умножение и сложение}
 \EN{work just as the same, but do multiplication and addition}.
 
@@ -65,7 +65,7 @@ one value of type \Tdouble by another, stored in the lower halves of operands}.
 
 \lstinputlisting[caption=MSVC 2012 x64]{patterns/205_floating_SIMD/simple_MSVC_2012_x64.asm}
 
-\index{Shadow space}
+\myindex{Shadow space}
 \RU{Чуть более избыточно}\EN{Slightly redundant}. 
 \RU{Входные аргументы сохраняются в}\EN{The input arguments are saved in the} \q{shadow space} (\myref{shadow_space}), 
 \RU{причем, только младшие половины регистров, т.е. только 64-битные значения типа \Tdouble}
@@ -161,8 +161,8 @@ of the} \XMM{0}-\XMM{3}\EN{ registers}.
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/pow_MSVC_2012_x64_Ox.asm}
 
-\index{x86!\Instructions!MOVSD}
-\index{x86!\Instructions!MOVSDX}
+\myindex{x86!\Instructions!MOVSD}
+\myindex{x86!\Instructions!MOVSDX}
 \RU{Инструкции}\EN{There is no} \TT{MOVSDX} \RU{нет в документации от}\EN{instruction in} 
 Intel \cite{Intel} \AndENRU AMD \cite{AMD}\EN{ manuals}, 
 \RU{там она называется просто}\EN{there it is called just} \TT{MOVSD}.
@@ -200,7 +200,7 @@ just as the standard requires} \cite{SysVABI}.
 
 \Optimizing MSVC \RU{генерирует очень понятный код}\EN{generates a code very easy to understand}.
 
-\index{x86!\Instructions!COMISD}
+\myindex{x86!\Instructions!COMISD}
 \RU{Инструкция }\TT{COMISD} \RU{это}\EN{is} \q{Compare Scalar Ordered Double-Precision Floating-Point 
 Values and Set EFLAGS}. \RU{Собственно, это она и делает}\EN{Essentially, that is what it does}.\\
 \\
@@ -209,7 +209,7 @@ but it is still not hard to understand}:
 
 \lstinputlisting[caption=MSVC 2012 x64]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64.asm}
 
-\index{x86!\Instructions!MAXSD}
+\myindex{x86!\Instructions!MAXSD}
 \RU{А вот}\EN{However,} GCC 4.4.6 \RU{дошел в оптимизации дальше и применил инструкцию}
 \EN{did more optimizations and used the} \TT{MAXSD} (\q{Return Maximum Scalar 
 Double-Precision Floating-Point Value})\RU{, которая просто выбирает максимальное значение}\EN{ instruction,
@@ -292,9 +292,9 @@ SIMD развивались не так хаотично как FPU в прош�
 were evolved in a less chaotic way than the FPU ones in the past.}
 \RU{Стековая модель регистров не используется}\EN{The stack register model is not used}.
 
-\index{x86!\Instructions!ADDSS}
-\index{x86!\Instructions!MOVSS}
-\index{x86!\Instructions!COMISS}
+\myindex{x86!\Instructions!ADDSS}
+\myindex{x86!\Instructions!MOVSS}
+\myindex{x86!\Instructions!COMISS}
 % TODO1: do this!
 \RU{Если вы попробуете заменить в этих примерах}\EN{If you would try to replace} \Tdouble \RU{на}\EN{with} \Tfloat
 \RU{, то инструкции будут использоваться те же,

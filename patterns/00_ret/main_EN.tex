@@ -14,7 +14,7 @@ Here's what both the optimizing GCC and MSVC compilers produce on the x86 platfo
 
 \lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/00_ret/1.s}
 
-\index{x86!\Instructions!RET}
+\myindex{x86!\Instructions!RET}
 There are just two instructions: the first places the value 123 into the \EAX register, 
 which is used by convention for storing the return
 value and the second one is \RET, which returns execution to the \gls{caller}.
@@ -35,8 +35,8 @@ The return address is not saved on the local stack in the ARM \ac{ISA}, but rath
 so the \INS{BX LR} instruction causes execution to jump to that address\EMDASH{}effectively returning execution to the \gls{caller}.
 \fi % IncludeARM
 
-\index{ARM!\Instructions!MOV}
-\index{x86!\Instructions!MOV}
+\myindex{ARM!\Instructions!MOV}
+\myindex{x86!\Instructions!MOV}
 It is worth noting that \MOV is a misleading name for the instruction in both x86 and ARM \ac{ISA}s.
 
 The data is not in fact \IT{moved}, but \IT{copied}.
@@ -56,15 +56,15 @@ The GCC assembly output below lists registers by number:
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/00_ret/MIPS_IDA.lst}
 
 The \$2 (or \$V0) register is used to store the function's return value.
-\index{MIPS!\Pseudoinstructions!LI}
+\myindex{MIPS!\Pseudoinstructions!LI}
 \INS{LI} stands for ``Load Immediate'' and is the MIPS equivalent to \MOV.
 
-\index{MIPS!\Instructions!J}
+\myindex{MIPS!\Instructions!J}
 The other instruction is the jump instruction (J or JR) which returns the execution flow to the \gls{caller}, jumping to the address in the \$31 (or \$RA) register.
 
 This is the register analogous to \ac{LR} in ARM.
 
-\index{MIPS!Branch delay slot}
+\myindex{MIPS!Branch delay slot}
 You might be wondering why positions of the the load instruction (LI) and the jump instruction (J or JR) are swapped. This is due to a \ac{RISC} feature called ``branch delay slot''.
 
 The reason this happens is a quirk in the architecture of some RISC \ac{ISA}s and isn't important for our purposes---we just need to remember that in MIPS, the instruction following a jump or branch instruction

@@ -6,7 +6,7 @@ Iniziamo a compilare il nostro esempio in Keil:
 armcc.exe --arm --c90 -O0 1.c 
 \end{lstlisting}
 
-\index{\IntelSyntax}
+\myindex{\IntelSyntax}
 Il compilatore \IT{armcc} produce un listato assembly con sintassi Intel,
 e utilizza macro di alto livello legate al processore ARM
 \footnote{ad esempio, l' ARM mode 'e privo delle istruzioni \PUSH/\POP},
@@ -26,8 +26,8 @@ tuttavia e' piu' importante per noi vedere le istruzioni \q{cosi' come sono}, qu
 Nell'esempio possiamo facilmente vedere che ogni istruzione ha lunghezza pari a 4 byte.
 Difatti abbiamo compilato il codice per la modalita' ARM e non Thumb.
 
-\index{ARM!\Instructions!STMFD}
-\index{ARM!\Instructions!POP}
+\myindex{ARM!\Instructions!STMFD}
+\myindex{ARM!\Instructions!POP}
 La prima istruzione, \TT{STMFD SP!, \{R4,LR\}}\footnote{\ac{STMFD}},
 funzione come l' istruzione \PUSH in x86, scrivendo i valori di due registri (\Reg{4} \ITAph{} \ac{LR}) nello stack.
 Infatti il listato di output prodotto dal compilatore \IT{armcc}, per semplificazione, mostra l'istruzione \INS{PUSH \{r4,lr\}}.
@@ -40,8 +40,8 @@ A proposito, non ha un equivalente in x86.
 Si puo' notare anche che l'istruzione \TT{STMFD} e' una generalizzazione dell'istruzione \PUSH (che estende le sue funzionalita'), poiche' puo' funzionare con qualunque registro, e non solo \ac{SP}.
 In altre parole, \TT{STMFD} puo' essere usata per memorizzare un insieme di registri all'indirizzo di memoria specificato.
 
-\index{\PICcode}
-\index{ARM!\Instructions!ADR}
+\myindex{\PICcode}
+\myindex{ARM!\Instructions!ADR}
 L'istruzione \INS{ADR R0, aHelloWorld}
 aggiunge o sottrae il valore nel registro \ac{PC} all'offset dove e' memorizzata la stringa \TT{hello, world}.
 Ci si potrebbe chiedere, come e' utilizzato qui il registro \TT{PC}?
@@ -53,8 +53,8 @@ L'istruzione \TT{ADR} tiene conto della differenza tra l'indirizzo di questa ist
 Questa differenza (offset) sara' sempre la stessa, a prescindere dall'indirizzo in cui nostro codice sara' caricato dall'\ac{OS}.
 Cio' spiega perche' bisogna soltanto aggiungere l'indirizzo dell'istruzione corrente (from \ac{PC}) per ottenere l'indirizzo assoluto in memoria della nostra stringa C.
 
-\index{ARM!\Registers!Link Register}
-\index{ARM!\Instructions!BL}
+\myindex{ARM!\Registers!Link Register}
+\myindex{ARM!\Instructions!BL}
 L'istruzione \INS{BL \_\_2printf}\footnote{Branch with Link} chiama la funzione \printf. 
 Questa istruzione funziona cosi': 
 \begin{itemize}
@@ -73,13 +73,13 @@ Dunque possono essere collocate solo su indirizzi allineati a 4-byte.
 Cio' implica che gli ultimi 2 bits dell'indirizzo dell'istruzione (che sono sempre zero) possono essere omessi.
 Abbiamo in definitiva 26 bit per la codifica dell'offset (offset encoding). E cio e' sufficiente per codificare $current\_PC \pm{} \approx{}32M$.
 
-\index{ARM!\Instructions!MOV}
+\myindex{ARM!\Instructions!MOV}
 L'istruzione successiva, \INS{MOV R0, \#0}\footnote{\ITAph{} MOVe} scrive soltanto 0 nel registro \Reg{0}.
 Questo succede perche' la nostra funzione C restituisce 0, ed il valore di ritorno deve essere memorizzato nel registro \Reg{0}.
 
-\index{ARM!\Registers!Link Register}
-\index{ARM!\Instructions!LDMFD}
-\index{ARM!\Instructions!POP}
+\myindex{ARM!\Registers!Link Register}
+\myindex{ARM!\Instructions!LDMFD}
+\myindex{ARM!\Instructions!POP}
 L'ultima istruzione \INS{LDMFD SP!, {R4,PC}}\footnote{\ac{LDMFD} e' l'istruzione inversa rispetto a  \ac{STMFD}}.
 Carica i valori dallo stack (o qualunque altra zona di memoria) per salvarli nei registri \Reg{4} e \ac{PC}, e \glslink{increment}{incrementa} lo \gls{stack pointer} \ac{SP}.
 In questo caso funziona come \POP.\\
@@ -95,6 +95,6 @@ o qualcosa del genere.
 
 Tutto cio' consente di omettere l'istruzione \TT{BX LR} alla fine della funzione.
 
-\index{ARM!DCB}
+\myindex{ARM!DCB}
 \TT{DCB} e' una direttiva assembly che definisce un array di byte o una stringa ASCII, analoga alla direttiva DB in linguaggio assembly x86.
 

@@ -80,9 +80,9 @@ void main()
 .text:00000024 CB 18 00 EA   B       __2printf
 \end{lstlisting}
 
-\index{ARM!\Registers!Link Register}
-\index{ARM!\Instructions!B}
-\index{Function epilogue}
+\myindex{ARM!\Registers!Link Register}
+\myindex{ARM!\Instructions!B}
+\myindex{Function epilogue}
 \RU{Это оптимизированная версия (\Othree) для режима ARM, и здесь мы видим последнюю инструкцию 
 \INS{B} вместо привычной нам \INS{BL}}\EN{This is the optimized (\Othree) version for ARM mode and this time we see \INS{B} as the last instruction instead of the familiar \INS{BL}}.
 \RU{Отличия между этой оптимизированной версией и предыдущей, скомпилированной без оптимизации, 
@@ -90,7 +90,7 @@ void main()
 что здесь нет пролога и эпилога функции (инструкций, сохраняющих состояние регистров \Reg{0} и \ac{LR})}%
 \EN{Another difference between this optimized version and the previous one (compiled without optimization)
 is the lack of function prologue and epilogue (instructions preserving the \Reg{0} and \ac{LR} registers values)}.
-\index{x86!\Instructions!JMP}
+\myindex{x86!\Instructions!JMP}
 \RU{Инструкция \INS{B} просто переходит на другой адрес, без манипуляций с регистром \ac{LR}, то есть
 это аналог \JMP в x86}%
 \EN{The \INS{B} instruction just jumps to another address, without any manipulation of the \ac{LR} register,
@@ -126,7 +126,7 @@ after this call we do not to do anything else}!
 
 \lstinputlisting[caption=\NonOptimizing GCC (Linaro) 4.9]{patterns/03_printf/ARM/ARM3_O0.lst.\LANG}
 
-\index{ARM!\Instructions!STP}
+\myindex{ARM!\Instructions!STP}
 \RU{Итак, первая инструкция STP (Store Pair) сохраняет \ac{FP} (X29) и \ac{LR} (X30) в стеке.}
 \EN{The first instruction STP (Store Pair) saves \ac{FP} (X29) and \ac{LR} (X30) in the stack.}
 \RU{Вторая инструкция \INS{ADD X29, SP, 0} формирует стековый фрейм.}
@@ -134,10 +134,10 @@ after this call we do not to do anything else}!
 \RU{Это просто запись значения \ac{SP} в X29.}
 \EN{It is just writing the value of \ac{SP} into X29.}
 
-\index{ARM!\Instructions!ADRP/ADD pair}
+\myindex{ARM!\Instructions!ADRP/ADD pair}
 \RU{Далее уже знакомая пара инструкций \INS{ADRP}/\ADD формирует указатель на строку.}%
 \EN{Next, we see the familiar \INS{ADRP}/\ADD instruction pair, which forms a pointer to the string.}
-\index{ARM64!lo12}
+\myindex{ARM64!lo12}
 \RU{\IT{lo12} означает младшие 12 бит, т.е., линкер запишет младшие 12 бит адреса метки LC1 в опкод инструкции \ADD.}%
 \EN{\IT{lo12} meaning low 12 bits, i.e., linker will write low 12 bits of LC1 address into the opcode of \ADD instruction.}
 

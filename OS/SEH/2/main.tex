@@ -1,6 +1,6 @@
 \subsection{\RU{Теперь вспомним MSVC}\EN{Now let's get back to MSVC}}
 
-\index{\Cpp!\RU{исключения}\EN{exceptions}}
+\myindex{\Cpp!\RU{исключения}\EN{exceptions}}
 \RU{Должно быть, программистам Microsoft были нужны исключения в Си, но не в \Cpp, так что они добавили
 нестандартное расширение Си в MSVC}
 \EN{Supposedly, Microsoft programmers needed exceptions in C, but not in \Cpp, so they added a non-standard C extension
@@ -78,8 +78,8 @@ SEH4 \RU{расширяет}\EN{extends the} \IT{scope table} \RU{добавля
 и решать, какой обработчик исполнять и когда}\EN{function to read the other fields and \IT{scope table}, and decide
 which handler to execute and when}.\\
 \\
-\index{Wine}
-\index{ReactOS}
+\myindex{Wine}
+\myindex{ReactOS}
 \RU{Исходный код функции}\EN{The source code of the} \TT{\_except\_handler3} \RU{закрыт}\EN{function is closed}.
 \RU{Хотя, Sanos OS, имеющая слой совместимости с win32, имеет некоторые функции написанные заново, которые
 в каком-то смысле эквивалентны тем что в Windows}
@@ -128,7 +128,7 @@ sometimes the compiler inserts a call to the} \TT{SEH\_prolog()}\RU{, котор
 \EN{The SEH cleanup code is in the \TT{SEH\_epilog()} function}.\\
 \\
 \RU{Запустим этот пример в}\EN{Let's try to run this example in} \tracer{}:
-\index{tracer}
+\myindex{tracer}
 
 \begin{lstlisting}
 tracer.exe -l:2.exe --dump-seh
@@ -156,7 +156,7 @@ scopetable entry[0]. previous try level=-2, filter=0x771f74d0 (ntdll.dll!___safe
 
 \RU{Мы видим, что цепочка SEH состоит из 4-х обработчиков}\EN{We see that the SEH chain consists of 4 handlers}.\\
 \\
-\index{CRT}
+\myindex{CRT}
 \RU{Первые два расположены в нашем примере}\EN{The first two are located in our example}. \RU{Два}\EN{Two}?
 \RU{Но ведь мы же сделали только один}\EN{But we made only one}?
 \RU{Да, второй был установлен в \ac{CRT}-функции}\EN{Yes, another one was set up in the \ac{CRT} function} 
@@ -221,8 +221,8 @@ scopetable entry[0]. previous try level=-2, filter=0x771f74d0 (ntdll.dll!___safe
 
 \subsubsection{SEH4}
 
-\index{\BufferOverflow}
-\index{Security cookie}
+\myindex{\BufferOverflow}
+\myindex{Security cookie}
 \RU{Во время атаки переполнения буфера}\EN{During a buffer overflow} (\myref{subsec:bufferoverflow})
 \RU{адрес}\EN{attack, the address of the} \IT{scope table} \RU{может быть перезаписан, так что начиная с}
 \EN{can be rewritten, so starting from} MSVC 2005, SEH3 \RU{был дополнен защитой от переполнения буфера, до SEH4}
@@ -267,7 +267,7 @@ $security\_cookie \oplus (CookieXOROffset + address\_of\_saved\_EBP) == stack[ad
 
 \RU{Если}\EN{If} \TT{Cookie Offset} \RU{равно}\EN{is} $-2$, \RU{это значит, что оно не присутствует}\EN{this implies that it is not present}.
 
-\index{tracer}
+\myindex{tracer}
 \RU{Проверка \IT{cookies} также реализована в моем}\EN{\IT{Cookies} checking is also implemented in my} \tracer{},
 \RU{смотрите}\EN{see} \href{http://go.yurichev.com/17061}{GitHub} \RU{для деталей}\EN{for details}.\\
 \\

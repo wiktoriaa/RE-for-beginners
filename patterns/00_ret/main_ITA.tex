@@ -14,7 +14,7 @@ Questo è il risultato prodotto dai compilatori ottimizzanti GCC e MSVC sulla pi
 
 \lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/00_ret/1.s}
 
-\index{x86!\Instructions!RET}
+\myindex{x86!\Instructions!RET}
 Ci sono solo due istruzioni: la prima mette il valore 123 nel registro \EAX, per convenzione usato per la memorizzazione del valore di ritorno, la seconda, \RET, restituisce l'esecuzione alla funzione \glslink{caller}{chiamante}.
 
 La funzione chiamante prenderà il risultato dal registro \EAX.
@@ -32,8 +32,8 @@ Il return address sulla piattaforma ARM \ac{ISA} non viene salvato nello stack l
 così che l'istruzione \INS{BX LR} faccia in modo che l'esecuzione "salti" a quell'indirizzo \EMDASH{} restituendo effettivamente l'esecuzione alla funzione \glslink{caller}{chiamante}.
 \fi % IncludeARM
 
-\index{ARM!\Instructions!MOV}
-\index{x86!\Instructions!MOV}
+\myindex{ARM!\Instructions!MOV}
+\myindex{x86!\Instructions!MOV}
 Vale la pena notare che il nome dell'istruzione \MOV è fuorviante in entrambe le \ac{ISA} x86 e ARM. 
 
 Il dato non viene infatti \IT{spostato}, bensì \IT{copiato}.
@@ -53,15 +53,15 @@ Il seguente output assembly di GCC elenca i registri per numero:
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/00_ret/MIPS_IDA.lst}
 
 Il registro \$2 (o \$V0) è usato per memorizzare il valore di ritorno di una funzione.
-\index{MIPS!\Pseudoinstructions!LI}
+\myindex{MIPS!\Pseudoinstructions!LI}
 \INS{LI} sta per ``Load Immediate'' ed è l'equivalente MIPS di \MOV.
 
-\index{MIPS!\Instructions!J}
+\myindex{MIPS!\Instructions!J}
 L'altra istruzione è quella di jump (salto) (J or JR) che riporta il flusso di esecuzione alla funzione \glslink{caller}{chiamante}, \IT{saltando} all'indirizzo specificato nel registro \$31 (o \$RA).
 
 Questo registro è l'analogo di \ac{LR} in ARM.
 
-\index{MIPS!Branch delay slot}
+\myindex{MIPS!Branch delay slot}
 Ci si potrebbe domandare perchè le posizioni delle istruzioni load (LI) e jump (J or JR) siano invertite. Cio' e' dovuto ad una feature di \ac{RISC} detta ``branch delay slot''.
 
 La ragione per cui ciò avviene è una peculiarità dell'architettura di alcune \ac{ISA}s RISC e non è di importanza rilevante per il nostro scopo - sarà sufficiente semplicemente ricordare che in MIPS l'istruzione che segue un jump o branch viene eseguita \IT{prima} del jump/branch stesso.

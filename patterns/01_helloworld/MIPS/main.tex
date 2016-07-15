@@ -3,7 +3,7 @@
 \subsection{\RU{О \q{глобальном указателе} (\q{global pointer})}\EN{A word about the \q{global pointer}}}
 \label{MIPS_GP}
 
-\index{MIPS!\GlobalPointer}
+\myindex{MIPS!\GlobalPointer}
 \RU{\q{Глобальный указатель} (\q{global pointer})~--- это важная концепция в MIPS.}
 \EN{One important MIPS concept is the \q{global pointer}.}
 \RU{Как мы уже возможно знаем, каждая инструкция в MIPS имеет размер 32 бита, поэтому невозможно
@@ -45,7 +45,7 @@ execution instead of two.}
 \EN{Some old-school programmers may recall the MS-DOS memory model \myref{8086_memory_model} 
 or the MS-DOS memory managers like XMS/EMS where all memory was divided in 64KiB blocks.}
 
-\index{PowerPC}
+\myindex{PowerPC}
 \RU{Эта концепция применяется не только в MIPS. По крайней мере PowerPC также использует эту технику.}
 \EN{This concept is not unique to MIPS. At least PowerPC uses this technique as well.}
 
@@ -62,11 +62,11 @@ or the MS-DOS memory managers like XMS/EMS where all memory was divided in 64KiB
 \EN{The \ac{RA} register is also saved in the local stack.}
 \RU{Здесь также используется \puts вместо \printf.}
 \EN{\puts is also used here instead of \printf.}
-\index{MIPS!\Instructions!LW}
+\myindex{MIPS!\Instructions!LW}
 \RU{Адрес функции \puts загружается в \$25 инструкцией LW (\q{Load Word}).}
 \EN{The address of the \puts function is loaded into \$25 using LW the instruction (\q{Load Word}).}
-\index{MIPS!\Instructions!LUI}
-\index{MIPS!\Instructions!ADDIU}
+\myindex{MIPS!\Instructions!LUI}
+\myindex{MIPS!\Instructions!ADDIU}
 \RU{Затем адрес текстовой строки загружается в \$4 парой инструкций LUI (\q{Load Upper Immediate}) и
 ADDIU (\q{Add Immediate Unsigned Word}).}
 \EN{Then the address of the text string is loaded to \$4 using LUI (\q{Load Upper Immediate}) and 
@@ -82,7 +82,7 @@ the lower 16 bits of the address.}
 \footnote{\RU{Таблица регистров в MIPS доступна в приложении}\EN{The MIPS registers table %
 is available in appendix} \myref{MIPS_registers_ref}}.
 
-\index{MIPS!\Instructions!JALR}
+\myindex{MIPS!\Instructions!JALR}
 \RU{JALR (\q{Jump and Link Register}) делает переход по адресу в регистре \$25 (там адрес \puts) 
 при этом сохраняя адрес следующей инструкции (LW) в \ac{RA}.}
 \EN{JALR (\q{Jump and Link Register}) jumps to the address stored in the \$25 register (address of \puts) 
@@ -104,7 +104,7 @@ instruction next to ADDIU.}
 \EN{LW (\q{Load Word}) at line 20 restores \ac{RA} from the local stack 
 (this instruction is actually part of the function epilogue).}
 
-\index{MIPS!\Pseudoinstructions!MOVE}
+\myindex{MIPS!\Pseudoinstructions!MOVE}
 \RU{MOVE в строке 22 копирует значение из регистра \$0 (\$ZERO) в \$2 (\$V0).}
 \EN{MOVE at line 22 copies the value from the \$0 (\$ZERO) register to \$2 (\$V0).}
 \label{MIPS_zero_register}
@@ -125,7 +125,7 @@ so let's just use the \$0 register every time zero is needed.}
 \RU{Скорее всего, эти псевдоинструкции оптимизируются в \ac{CPU} и \ac{ALU} никогда не используется.}
 \EN{Most likely, the \ac{CPU} optimizes these pseudoinstructions and the \ac{ALU} is never used.}
 
-\index{MIPS!\Instructions!J}
+\myindex{MIPS!\Instructions!J}
 \RU{J в строке 24 делает переход по адресу в \ac{RA}, и это работает как выход из функции.}
 \EN{J at line 24 jumps to the address in \ac{RA}, which is effectively performing a return from the function.}
 \RU{ADDIU после J на самом деле исполняется перед J (помните о \IT{branch delay slots}?) 
@@ -175,7 +175,7 @@ instructions and then, if optimization is turned on, maybe eliminates them.}
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (\IDA),numbers=left]{patterns/01_helloworld/MIPS/hw_O0_IDA.lst.\LANG}
 
-\index{MIPS!\Pseudoinstructions!LA}
+\myindex{MIPS!\Pseudoinstructions!LA}
 \RU{Интересно что \IDA распознала пару инструкций LUI/ADDIU и собрала их в одну псевдоинструкцию 
 LA (\q{Load Address}) в строке 15.}
 \EN{Interestingly, \IDA recognized the LUI/ADDIU instructions pair and coalesced them into one 
@@ -187,8 +187,8 @@ LA (\q{Load Address}) pseudoinstruction at line 15.}
 \EN{This is a pseudoinstruction (or \IT{macro}) because it's not a real MIPS instruction, but rather
 a handy name for an instruction pair.}
 
-\index{MIPS!\Pseudoinstructions!NOP}
-\index{MIPS!\Instructions!OR}
+\myindex{MIPS!\Pseudoinstructions!NOP}
+\myindex{MIPS!\Instructions!OR}
 \RU{Ещё кое что: \IDA не распознала \ac{NOP}-инструкции в строках 22, 26 и 41.}
 \EN{Another thing is that \IDA doesn't recognize \ac{NOP} instructions, so here they are at lines 22, 26 and 41.}
 \RU{Это}\EN{It is} \TT{OR \$AT, \$ZERO}.
@@ -214,5 +214,5 @@ for example:} \myref{MIPS_leaf_function_ex1}.
 
 \subsection{\Optimizing GCC: \RU{загрузим в}\EN{load it into} GDB}
 
-\index{GDB}
+\myindex{GDB}
 \lstinputlisting[caption=\RU{пример сессии в GDB}\EN{sample GDB session}]{patterns/01_helloworld/MIPS/O3_GDB.txt}

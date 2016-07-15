@@ -1,6 +1,6 @@
 \section{\RU{Установка и сброс отдельного бита: пример с \ac{FPU}}\EN{Setting and clearing specific bits: \ac{FPU} example}}
 
-\index{IEEE 754}
+\myindex{IEEE 754}
 \RU{Как мы уже можем знать, вот как биты расположены в значении типа \Tfloat в формате IEEE 754:}
 \EN{Here is how bits are located in the \Tfloat type in IEEE 754 form:}
 
@@ -43,9 +43,9 @@ negate() меняет его на противоположный.}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_x64_Ox.asm}
 
-\index{x86!\Instructions!BTR}
-\index{x86!\Instructions!BTS}
-\index{x86!\Instructions!BTC}
+\myindex{x86!\Instructions!BTR}
+\myindex{x86!\Instructions!BTS}
+\myindex{x86!\Instructions!BTC}
 \RU{Во-первых, входное значение передается в XMM0, затем оно копируется в локальный стек и затем мы видим
 новые для нас инструкции: \BTR, \BTS, \BTC.}
 \EN{The input value is passed in XMM0, then it is copied into the local stack and then we see 
@@ -69,7 +69,7 @@ GCC 4.4.5 \ForENRU MIPS \RU{делает почти то же самое}\EN{doe
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/14_bitfields/35_set_reset_FPU/MIPS_O3_IDA.lst.\LANG}
 
-\index{MIPS!\Instructions!LUI}
+\myindex{MIPS!\Instructions!LUI}
 \RU{Для загрузки константы 0x80000000 в регистр используется только одна инструкция \LUI, потому что \LUI сбрасывает
 младшие 16 бит и это нули в константе, так что одной \LUI без \ORI достаточно.}
 \EN{One single \LUI instruction is used to load 0x80000000 into a register, because 
@@ -85,8 +85,8 @@ GCC 4.4.5 \ForENRU MIPS \RU{делает почти то же самое}\EN{doe
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_ARM_O3.s.\LANG}
 
 \RU{Пока всё понятно}\EN{So far so good}.
-\index{ARM!\Instructions!BIC}
-\index{ARM!\Instructions!EOR}
+\myindex{ARM!\Instructions!BIC}
+\myindex{ARM!\Instructions!EOR}
 \RU{В ARM есть инструкция \BIC для сброса заданных бит.}
 \EN{ARM has the \BIC instruction, which explicitly clears specific bit(s).}
 \RU{\EOR это инструкция в ARM которая делает то же что и \XOR}\EN{\EOR is the ARM instruction name for \XOR} 
@@ -102,8 +102,8 @@ GCC 4.4.5 \ForENRU MIPS \RU{делает почти то же самое}\EN{doe
 MOVS/LSLS instruction pair is used for forming the 0x80000000 constant.}
 \RU{Это работает как выражение}\EN{It works like this}: $1<<31 = 0x80000000$.
 
-\index{ARM!\Instructions!LSLS}
-\index{ARM!\Instructions!LSRS}
+\myindex{ARM!\Instructions!LSLS}
+\myindex{ARM!\Instructions!LSRS}
 \RU{Код my\_abs выглядит странно и работает как выражение}
 \EN{The code of my\_abs is weird and it effectively works like this expression}: $(i<<1)>>1$.
 \RU{Это выражение выглядит бессмысленным}\EN{This statement looks meaningless}.
@@ -125,15 +125,15 @@ but \ac{MSB} is zero, because all \q{new} bits appearing from the shift operatio
 \EN{Let's run Raspberry Pi Linux in QEMU and it emulates an ARM FPU, so S-registers are used here for floating point
 numbers instead of R-registers.}
 
-\index{ARM!\Instructions!FMRS}
+\myindex{ARM!\Instructions!FMRS}
 \RU{Инструкция \FMRS копирует данные из \ac{GPR} в FPU и назад.}
 \EN{The \FMRS instruction copies data from \ac{GPR} to the FPU and back.}
 
 my\_abs() \AndENRU set\_sign() \RU{выглядят предсказуемо, но}\EN{looks as expected, but} negate()?
 \RU{Почему там \ADD вместо \XOR}\EN{Why is there \ADD instead of \XOR}?
 
-\index{ARM!\Instructions!XOR}
-\index{ARM!\Instructions!ADD}
+\myindex{ARM!\Instructions!XOR}
+\myindex{ARM!\Instructions!ADD}
 \RU{Трудно поверить, но инструкция}\EN{It's hard to believe, but the instruction} 
 \INS{ADD register, 0x80000000} \RU{работает так же как и}\EN{works just like} \INS{XOR register, 0x80000000}.
 \RU{Прежде всего, какая наша цель}\EN{First of all, what's our goal}?

@@ -79,10 +79,10 @@ movk	x0, 0x1234, lsl 48
 ret
 \end{lstlisting}
 
-\index{ARM!\Instructions!MOVK}
+\myindex{ARM!\Instructions!MOVK}
 \TT{MOVK} \RU{означает}\EN{stands for} \q{MOV Keep}, \RU{т.е. она записывает 16-битное значение в регистр, не трогая
 при этом остальные биты.}\EN{i.e., it writes a 16-bit value into the register, not touching the rest of the bits.}
-\index{ARM!Optional operators!LSL}
+\myindex{ARM!Optional operators!LSL}
 \EN{The}\RU{Суффикс} \TT{LSL} \RU{сдвигает значение в каждом случае влево на 16, 32 и 48 бит. Сдвиг происходит
 перед загрузкой.}\EN{suffix shifts left the value by 16, 32 and 48 bits at each step. The shifting is done before loading.}
 \RU{Таким образом, нужно 4 инструкции, чтобы записать в регистр 64-битное значение.}
@@ -111,12 +111,12 @@ double a()
 \RU{Число $1.5$ действительно было закодировано в 32-битной инструкции.}
 \EN{The number $1.5$ was indeed encoded in a 32-bit instruction.}
 \RU{Но как}\EN{But how}?
-\index{ARM!\Instructions!FMOV}
+\myindex{ARM!\Instructions!FMOV}
 \RU{В ARM64, инструкцию \TT{FMOV} есть 8 бит для кодирования некоторых чисел с плавающей запятой.}
 \EN{In ARM64, there are 8 bits in the \TT{FMOV} instruction for encoding some floating-point numbers.}
 \RU{В \cite{ARM64ref} алгоритм называется \TT{VFPExpandImm()}.}
 \EN{The algorithm is called \TT{VFPExpandImm()} in \cite{ARM64ref}.}
-\index{minifloat}
+\myindex{minifloat}
 \EN{This is also called}\RU{Это также называется} \IT{minifloat}\footnote{\href{http://go.yurichev.com/17139}{wikipedia}}.
 \RU{Мы можем попробовать разные: $30.0$ и $31.0$ компилятору удается закодировать, а $32.0$ уже нет, для него
 приходится выделять 8 байт в памяти и записать его там в формате IEEE 754:}

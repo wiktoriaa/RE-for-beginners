@@ -14,7 +14,7 @@ Esto es lo que optimiza el GCC  y los compiladores de MSVC los cuales se produce
 
 \lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/00_ret/1.s}
 
-\index{x86!\Instructions!RET}
+\myindex{x86!\Instructions!RET}
 Hay solo dos instrucciones: los primeros lugares el valor 123 en el registro \EAX, que se utiliza por convención para almacenar el valor de retorno y el segundo es \RET, que devuelve la ejecución al llamado.
 
 La persona que llama tomar el resultado del registro \EAX.
@@ -32,8 +32,8 @@ La dirección que retorna no es guardada en la pila local de la ARM \ac{ISA}, si
 entonces la instrucción \INS{BX LR} provoca que la ejecución de un salto a la dirección eficazmente retornando la ejecución a donde fue llamada(caller ``nuestro llamador'').
 \fi % IncludeARM
 
-\index{ARM!\Instructions!MOV}
-\index{x86!\Instructions!MOV}
+\myindex{ARM!\Instructions!MOV}
+\myindex{x86!\Instructions!MOV}
 Vale la pena señalar que \MOV es un nombre engañoso para la instrucción tanto en x86 y ARM \ac{ISA}s.
 
 Los datos de hecho, no se \IT{mueven}, sino que se \IT{copian}.
@@ -53,15 +53,15 @@ El ensamblado de GCC produce una salida en listando los registros por numeros:
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/00_ret/MIPS_IDA.lst}
 
 El \$2 (o \$V0) registro es usado para almacenar el valor devuelto por la función.
-\index{MIPS!\Pseudoinstructions!LI}
+\myindex{MIPS!\Pseudoinstructions!LI}
 \INS{LI} significa ``Load Immediate'' (``carga inmediata'') y es el MIPS equivalente a \MOV.
 
-\index{MIPS!\Instructions!J}
+\myindex{MIPS!\Instructions!J}
 La otra instrucción es el jump (``salto'') que es  (J o JR) el cual retorna la ejecución fluida para el llamado, da un salto a la dirección del registro \$31 (o \$RA).
 
 Este es el registro análoga a \ac{LR} en ARM.
 
-\index{MIPS!Branch delay slot}
+\myindex{MIPS!Branch delay slot}
 Es posible que se pregunte por qué posiciones de la instrucción de la carga (LI) y el salto instrucciones (J y JR) se intercambian.Esto es debido a una característica llamada RISC (``ranura de retardo rama'').
 
 La razón por la que esto sucede es una peculiaridad en la arquitectura RISC de algunas ISA y no es importante para nuestros propósitos --– sólo tenemos que recordar que en MIPS, la instrucción que sigue a un salto o instrucción de salto se ejecuta antes de la instrucción / rama salto en sí.

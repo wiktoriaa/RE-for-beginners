@@ -22,8 +22,8 @@ var_10          = dword ptr -10h
 main            endp
 \end{lstlisting}
 
-\index{Function prologue}
-\index{x86!\Instructions!AND}
+\myindex{Function prologue}
+\myindex{x86!\Instructions!AND}
 Het resultaat is bijna hetzelfde.
 Het adres van de \TT{hello, world} string (opgeslagen in het data segment) wordt eerst ingeladen in het \EAX register en wordt daarna opgeslagen op de stack.
 Daarbovenop vind je in de functie proloog hetvolgende terug: \TT{AND ESP, 0FFFFFFF0h}~---
@@ -31,13 +31,13 @@ deze instructie lijnt de \ESP registerwaarde uit op een 16-byte begrenzing.
 Dit resulteert in het feit dat alle waarden op de stack op dezelfde manier uitgelijnd worden.
 De CPU presteert beter als de waarden die hij moet behandelen gelokaliseerd zijn in het geheugen op adressen die gealigneerd zijn op een 4-byte of 16-byte begrenzing.\footnote{URLWPDA}.
 
-\index{x86!\Instructions!SUB}
+\myindex{x86!\Instructions!SUB}
 \INS{SUB ESP, 10h} reserveert 16 bytes op de stack. Zoals we hierna echter kunnen zijn, zijn er in dit geval slechts 4 nodig.
 
 Dit komt doordat de grootte van de gereserveerde stack ook uitgelijnd is op een 16-byte begrenzing.
 
 % TODO1: rewrite.
-\index{x86!\Instructions!PUSH}
+\myindex{x86!\Instructions!PUSH}
 Het string adres (of een pointer naar de string) wordt dan rechtstreeks op de stack geplaatst zonder gebruik te maken van de \PUSH instructie.
 \IT{var\_10}~---is een lokale variabele en is ook een argument voor \printf{}.
 Lees er hieronder meer over.
@@ -46,7 +46,7 @@ Lees er hieronder meer over.
 
 In tegenstelling tot MSVC, wanneer GCC compileert zonder optimizatie, maakt het gebruik van \TT{MOV EAX, 0} in plaats van kortere opcodes.
 
-\index{x86!\Instructions!LEAVE}
+\myindex{x86!\Instructions!LEAVE}
 De laatste instructie, \LEAVE~---is het equivalent van het \TT{MOV ESP, EBP} en \TT{POP EBP} instructiepaar.
 Met andere woorden, deze instructie zet de \gls{stack pointer} (\ESP) terug, en herstelt het \EBP register
 terug tot zijn oorspronkelijke staat.
@@ -74,8 +74,8 @@ een null-terminated karakter reeks encodeert net als een C-string). Daarna zien 
 
 \lstinputlisting[caption=GCC 4.7.3]{patterns/01_helloworld/GCC_refined.s}
 
-\index{\ATTSyntax}
-\index{\IntelSyntax}
+\myindex{\ATTSyntax}
+\myindex{\IntelSyntax}
 Sommige grote verschillen tussen de Intel en AT\&T syntax zijn:
 
 \begin{itemize}
@@ -87,8 +87,8 @@ In Intel-syntax: <instructie> <doel> <bron>.
 
 In AT\&T syntax: <instructie> <bron> <doel>.
 
-\index{\CStandardLibrary!memcpy()}
-\index{\CStandardLibrary!strcpy()}
+\myindex{\CStandardLibrary!memcpy()}
+\myindex{\CStandardLibrary!strcpy()}
 Een gemakkelijke manier om dit verschil te onthouden is: 
 Wanneer je met Intel-syntax te doen krijgt, kan je je inbeelden dat er een gelijkheidsteken ($=$) staat tussen de operands
 en met AT\&T-syntax beeld je je in dat er een pijl naar rechts staat ($\rightarrow$)
@@ -117,7 +117,7 @@ Met een klein verschil: \TT{0FFFFFFF0h} wordt weergegeven als \TT{\$-16}.
 Dit is hetzelfde: \TT{16} in het decimaalsysteem is \TT{0x10} in hexadecimaal.
 \TT{-0x10} is gelijk aan \TT{0xFFFFFFF0} (voor een 32-bit data type).
 
-\index{x86!\Instructions!MOV}
+\myindex{x86!\Instructions!MOV}
 Nog een ding: de return value wordt best op 0 gezet door gebruik te maken van \MOV, niet van \XOR.
 \MOV laadt gewoon een waarde in het register.
 De naam is een foute noemer (data wordt niet verplaatst, maar eerder gekopieerd). In andere architecturen wordt deze instructie \q{LOAD} of \q{STORE} of iets soortgelijks genoemd.

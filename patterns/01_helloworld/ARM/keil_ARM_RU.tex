@@ -6,7 +6,7 @@
 armcc.exe --arm --c90 -O0 1.c 
 \end{lstlisting}
 
-\index{\IntelSyntax}
+\myindex{\IntelSyntax}
 Компилятор \IT{armcc} генерирует листинг на ассемблере в формате Intel.
 Этот листинг содержит некоторые высокоуровневые макросы, связанные с ARM
 \footnote{например, он показывает инструкции \PUSH/\POP, отсутствующие в режиме ARM},
@@ -26,8 +26,8 @@ armcc.exe --arm --c90 -O0 1.c
 В вышеприведённом примере можно легко увидеть, что каждая инструкция имеет размер 4 байта.
 Действительно, ведь мы же компилировали наш код для режима ARM, а не Thumb.
 
-\index{ARM!\Instructions!STMFD}
-\index{ARM!\Instructions!POP}
+\myindex{ARM!\Instructions!STMFD}
+\myindex{ARM!\Instructions!POP}
 Самая первая инструкция, \INS{STMFD SP!, \{R4,LR\}}\footnote{\ac{STMFD}},
 работает как инструкция \PUSH в x86, записывая значения двух регистров (\Reg{4} и \ac{LR}) в стек.
 Действительно, в выдаваемом листинге на ассемблере компилятор \IT{armcc} для упрощения указывает здесь инструкцию
@@ -44,8 +44,8 @@ armcc.exe --arm --c90 -O0 1.c
 Также следует заметить, что \TT{STMFD}~--- генерализация инструкции \PUSH (то есть расширяет её возможности), потому что может работать с любым регистром, а не только с \ac{SP}.
 Другими словами, \TT{STMFD} можно использовать для записи набора регистров в указанном месте памяти.
 
-\index{\PICcode}
-\index{ARM!\Instructions!ADR}
+\myindex{\PICcode}
+\myindex{ARM!\Instructions!ADR}
 Инструкция \INS{ADR R0, aHelloWorld} прибавляет или отнимает значение регистра \ac{PC} к смещению, где хранится строка
 \TT{hello, world}.
 Причем здесь \ac{PC}, можно спросить? Притом, что это так называемый \q{\PICcode}
@@ -56,8 +56,8 @@ armcc.exe --arm --c90 -O0 1.c
 Эта разница всегда будет постоянной, вне зависимости от того, куда был загружен \ac{OS} наш код.
 Поэтому всё, что нужно~--- это прибавить адрес текущей инструкции (из \ac{PC}), чтобы получить текущий абсолютный адрес нашей Си-строки.
 
-\index{ARM!\Registers!Link Register}
-\index{ARM!\Instructions!BL}
+\myindex{ARM!\Registers!Link Register}
+\myindex{ARM!\Instructions!BL}
 Инструкция \INS{BL \_\_2printf}\footnote{Branch with Link} вызывает функцию \printf.
 Работа этой инструкции состоит из двух фаз:
 
@@ -75,14 +75,14 @@ armcc.exe --arm --c90 -O0 1.c
 Поскольку все инструкции в режиме ARM имеют длину 4 байта (32 бита) и инструкции могут находится только по адресам кратным 4, то последние 2 бита (всегда нулевых) можно не кодировать.
 В итоге имеем 26 бит, при помощи которых можно закодировать $current\_PC \pm{} \approx{}32M$.
 
-\index{ARM!\Instructions!MOV}
+\myindex{ARM!\Instructions!MOV}
 Следующая инструкция \INS{MOV R0, \#0}\footnote{Означает MOVe}
 просто записывает 0 в регистр \Reg{0}.
 Ведь наша Си-функция возвращает 0, а возвращаемое значение всякая функция оставляет в \Reg{0}.
 
-\index{ARM!\Registers!Link Register}
-\index{ARM!\Instructions!LDMFD}
-\index{ARM!\Instructions!POP}
+\myindex{ARM!\Registers!Link Register}
+\myindex{ARM!\Instructions!LDMFD}
+\myindex{ARM!\Instructions!POP}
 Последняя инструкция \INS{LDMFD SP!, {R4,PC}}\footnote{\ac{LDMFD}~--- это инструкция, обратная \ac{STMFD}}.
 Она загружает из стека (или любого другого места в памяти) значения для сохранения их в \Reg{4} и \ac{PC}, увеличивая \glslink{stack pointer}{указатель стека} \ac{SP}.
 Здесь она работает как аналог \POP.\\
@@ -97,6 +97,6 @@ N.B. Самая первая инструкция \TT{STMFD} сохранила 
 
 Всё это позволяет избавиться от инструкции \INS{BX LR} в самом конце функции.
 
-\index{ARM!DCB}
+\myindex{ARM!DCB}
 \TT{DCB}~--- директива ассемблера, описывающая массивы байт или ASCII-строк, аналог директивы DB в x86-ассемблере.
 

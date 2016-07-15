@@ -11,7 +11,7 @@ For MSVC, some of them are located in the \TT{intrin.h} file.}
 
 \newcommand{\URLSTRLEN}{http://go.yurichev.com/17330}
 
-\index{\CStandardLibrary!strlen()}
+\myindex{\CStandardLibrary!strlen()}
 \RU{Имеется возможность реализовать функцию \strlen\footnote{strlen() ~--- стандартная функция Си 
 для подсчета длины строки} при помощи SIMD-инструкций, работающий в 2-2.5 раза быстрее обычной реализации. 
 Эта функция будет загружать в XMM-регистр сразу 16 байт и проверять каждый на ноль}
@@ -55,7 +55,7 @@ if not~---use the slower \MOVDQU.}
 \RU{Однако здесь кроется не сразу заметная проблема, которая проявляется вот в чем:}
 \EN{But here we are may hit another caveat:}
 
-\index{Page (memory)}
+\myindex{Page (memory)}
 \newcommand{\URLPAGE}{\href{http://go.yurichev.com/17136}{wikipedia}}
 
 \RU{В \ac{OS} линии \gls{Windows NT} (и не только), память выделяется страницами по 4 KiB (4096 байт). 
@@ -128,14 +128,14 @@ read from unallocated memory.}
 
 \RU{Вернемся к нашей функции}\EN{Let's get back to our function}.
 
-\index{x86!\Instructions!PXOR}
+\myindex{x86!\Instructions!PXOR}
 \verb|_mm_setzero_si128()|\EMDASH\RU{это макрос, генерирующий \TT{pxor xmm0, xmm0} ~--- инструкция просто обнуляет регистр \XMM{0}.}
 \EN{is a macro generating \TT{pxor xmm0, xmm0}~---it just clears the \XMM{0} register}.
 
 \verb|_mm_load_si128()|\EMDASH\RU{это макрос для \MOVDQA, он просто загружает 16 байт по адресу из указателя в \XMM{1}.}
 \EN{is a macro for \MOVDQA, it just loads 16 bytes from the address into the \XMM{1} register.}
 
-\index{x86!\Instructions!PCMPEQB}
+\myindex{x86!\Instructions!PCMPEQB}
 \verb|_mm_cmpeq_epi8()|\EMDASH\RU{это макрос для \PCMPEQB, это инструкция, которая 
 побайтово сравнивает значения из двух XMM регистров.} 
 \EN{is a macro for \PCMPEQB, an instruction that compares two XMM-registers bytewise.}
@@ -165,7 +165,7 @@ XMM1: ff0000ff0000ffff0000000000000000
 \EN{In our case, this instruction compares each 16-byte block with a block of 16 zero-bytes,
 which was set in the \XMM{0} register by \TT{pxor xmm0, xmm0}.}
 
-\index{x86!\Instructions!PMOVMSKB}
+\myindex{x86!\Instructions!PMOVMSKB}
 \RU{Следующий макрос \TT{\_mm\_movemask\_epi8()} ~--- это инструкция \TT{PMOVMSKB}.}
 \EN{The next macro is \TT{\_mm\_movemask\_epi8()}~---that is the \TT{PMOVMSKB} instruction.}
 
@@ -230,7 +230,7 @@ XMM1: 0000ff00000000000000ff0000000000
 нулевой бит и игнорировать все остальное.}
 \EN{Obviously, our function must take only the first zero bit and ignore the rest.}
 
-\index{x86!\Instructions!BSF}
+\myindex{x86!\Instructions!BSF}
 \label{instruction_BSF}
 \RU{Следующая инструкция \EMDASH}\EN{The next instruction is} \TT{BSF} (\IT{Bit Scan Forward}). 
 \RU{Это инструкция находит самый младший бит во втором операнде и записывает его позицию в первый операнд.}
