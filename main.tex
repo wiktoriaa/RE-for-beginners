@@ -132,38 +132,6 @@
 \renewcommand\lstlistlistingname{Листинг}
 \fi
 
-%\iffalse
-% fancyhdr ********************************************************
-\makeatletter
-    \let\stdchapter\chapter
-    \renewcommand*\chapter{%
-    \@ifstar{\starchapter}{\@dblarg\nostarchapter}}
-    \newcommand*\starchapter[1]{%
-        \stdchapter*{#1}
-        \thispagestyle{fancy}
-        \markboth{\MakeUppercase{#1}}{}
-    }
-    \def\nostarchapter[#1]#2{%
-        \stdchapter[{#1}]{#2}
-        \thispagestyle{fancy}
-    }
-\makeatother
-
-% taken from http://texblog.org/tag/fancyhdr-font-size/
-\newcommand{\changefont}{%
-\ifdefined\ebook
-    \fontsize{6}{7}\selectfont
-\else
-    \fontsize{8}{9.5}\selectfont
-\fi
-}
-\fancyhf{}
-\fancyhead[L,RO]{\changefont \slshape \rightmark} %section
-\fancyhead[R,LO]{\changefont \slshape \leftmark} %chapter
-\fancyfoot[C]{\changefont \thepage} %footer
-% *****************************************************************
-%\fi
-
 \newcommand{\footnoteref}[1]{\textsuperscript{\ref{#1}}}
 
 %\definecolor{lstbgcolor}{rgb}{0.94,0.94,0.94}
@@ -234,13 +202,16 @@
 \bibliography{C_book_en,books,articles,usenet,misc}
 \fi
 
-%\newcommand{\myindex}[1]{\expandafter\index{\expandafter\MakeLowercase{#1}@{#1}}}
-%\def\myindex#1{#1\expandafter\index\expandafter{#1}}
+% see also:
+% http://tex.stackexchange.com/questions/129225/how-can-i-get-get-makeindex-to-ignore-capital-letters
+% http://tex.stackexchange.com/questions/18336/correct-sorting-of-index-entries-containing-macros
 \def\myindex#1{\expandafter\index\expandafter{#1}}
 
 \begin{document}
 
+% fancyhdr
 \pagestyle{fancy}
+\fancyhead[R]{} % suppress chapter name
 
 \VerbatimFootnotes
 
