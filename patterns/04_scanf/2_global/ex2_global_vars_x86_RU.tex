@@ -1,0 +1,91 @@
+\subsection{MSVC: x86}
+
+\lstinputlisting{patterns/04_scanf/2_global/ex2_MSVC.asm}
+
+В целом ничего особенного. Теперь \TT{x} объявлена в сегменте \TT{\_DATA}. 
+Память для неё в стеке более не выделяется.
+Все обращения к ней происходит не через стек, а уже напрямую. 
+Неинициализированные глобальные переменные не занимают места в исполняемом файле
+(и действительно, зачем в исполняемом файле
+нужно выделять место под изначально нулевые переменные?), но тогда, когда к этому месту в памяти
+кто-то обратится, \ac{OS} подставит туда блок, состоящий из нулей\footnote{Так работает \ac{VM}}.
+
+Попробуем изменить объявление этой переменной:
+
+\lstinputlisting{patterns/04_scanf/2_global/default_value.c.\LANG}
+
+Выйдет в итоге:
+
+\begin{lstlisting}
+_DATA	SEGMENT
+_x	DD	0aH
+
+...
+\end{lstlisting}
+
+Здесь уже по месту этой переменной записано \TT{0xA} с типом DD (dword = 32 бита).
+
+Если вы откроете скомпилированный .exe-файл в \IDA, то увидите, что \IT{x} 
+находится в начале сегмента \TT{\_DATA}, после этой переменной будут текстовые строки.
+
+А вот если вы откроете в \IDA .exe скомпилированный в прошлом примере, где значение \IT{x} не определено, то вы увидите:
+
+\begin{lstlisting}
+.data:0040FA80 _x              dd ?                    ; DATA XREF: _main+10
+.data:0040FA80                                         ; _main+22
+.data:0040FA84 dword_40FA84    dd ?                    ; DATA XREF: _memset+1E
+.data:0040FA84                                         ; unknown_libname_1+28
+.data:0040FA88 dword_40FA88    dd ?                    ; DATA XREF: ___sbh_find_block+5
+.data:0040FA88                                         ; ___sbh_free_block+2BC
+.data:0040FA8C ; LPVOID lpMem
+.data:0040FA8C lpMem           dd ?                    ; DATA XREF: ___sbh_find_block+B
+.data:0040FA8C                                         ; ___sbh_free_block+2CA
+.data:0040FA90 dword_40FA90    dd ?                    ; DATA XREF: _V6_HeapAlloc+13
+.data:0040FA90                                         ; __calloc_impl+72
+.data:0040FA94 dword_40FA94    dd ?                    ; DATA XREF: ___sbh_free_block+2FE
+\end{lstlisting}
+
+\TT{\_x} обозначен как \TT{?}, наряду с другими переменными не требующими инициализации. 
+Это означает, что при загрузке .exe в память, место под всё это выделено будет и будет заполнено
+нулевыми байтами \cite[6.7.8p10]{C99TC3}. 
+Но в самом .exe ничего этого нет. Неинициализированные переменные не занимают места в исполняемых файлах. 
+Это удобно для больших массивов, например.
+
+\ifdefined\IncludeOlly
+\input{patterns/04_scanf/2_global/olly.tex}
+\fi
+
+\ifdefined\IncludeGCC
+\subsection{GCC: x86}
+
+\myindex{ELF}
+В Linux всё почти также. За исключением того, что если значение \TT{x} не определено, 
+то эта переменная будет находится в сегменте \TT{\_bss}.
+В \ac{ELF} этот сегмент имеет такие атрибуты:
+
+\begin{lstlisting}
+; Segment type: Uninitialized
+; Segment permissions: Read/Write
+\end{lstlisting}
+
+Ну а если сделать статическое присвоение этой переменной какого-либо
+значения, например, 10, то она будет находится 
+в сегменте \TT{\_data},
+это сегмент с такими атрибутами:
+
+\begin{lstlisting}
+; Segment type: Pure data
+; Segment permissions: Read/Write
+\end{lstlisting}
+\fi
+
+\subsection{MSVC: x64}
+
+\lstinputlisting[caption=MSVC 2012 x64]{patterns/04_scanf/2_global/ex2_MSVC_x64.asm.\LANG}
+
+Почти такой же код как и в x86.
+Обратите внимание что для \TT{scanf()} адрес переменной $x$ передается
+при помощи инструкции \LEA, а во второй \printf передается само значение переменной при помощи \MOV.
+\TT{DWORD PTR} --- это часть языка ассемблера (не имеющая отношения к машинным кодам) показывающая, что тип переменной в памяти именно 32-битный, 
+и инструкция \MOV должна быть здесь закодирована соответственно.
+
