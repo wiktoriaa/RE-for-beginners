@@ -110,7 +110,7 @@ IT:	$(IT_LISTINGS)
 DE:	$(DE_LISTINGS)
 	$(call compile,RE4B-DE)
 
-TH	$(TH_LISTINGS)
+TH:	$(TH_LISTINGS)
 	$(call compile,RE4B-TH)
 
 NL:	$(NL_LISTINGS)

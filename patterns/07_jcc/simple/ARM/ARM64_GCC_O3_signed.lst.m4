@@ -12,7 +12,7 @@ include(`commons.m4')f_signed:
 	adrp	x0, .LC9	; "a>b"
 	add	x0, x0, :lo12:.LC9
 	b	puts
-.L15:	; _EN(`impossible here')_RU(`здесь это невозможно')
+.L15:	; _EN(`impossible to get here')_RU(`попасть сюда невозможно')
 	ret
 .L20:
 	adrp	x0, .LC10	; "a==b"
