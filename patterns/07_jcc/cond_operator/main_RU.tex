@@ -1,0 +1,90 @@
+\section{Тернарный условный оператор}
+\label{chap:cond}
+
+Тернарный условный оператор (ternary conditional operator) в \CCpp это:
+
+\begin{lstlisting}
+expression ? expression : expression
+\end{lstlisting}
+
+И вот пример:
+
+\lstinputlisting{patterns/07_jcc/cond_operator/cond.c}
+
+\subsection{x86}
+
+Старые и неоптимизирующие компиляторы генерируют код так, как если бы выражение \TT{if/else} было использовано
+вместо него:
+
+\lstinputlisting[caption=\NonOptimizing MSVC 2008]{patterns/07_jcc/cond_operator/MSVC2008.asm.\LANG}
+
+\lstinputlisting[caption=\Optimizing MSVC 2008]{patterns/07_jcc/cond_operator/MSVC2008_Ox.asm.\LANG}
+
+Новые компиляторы могут быть более краткими:
+
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/07_jcc/cond_operator/MSVC2012_Ox_x64.asm.\LANG}
+
+\myindex{x86!\Instructions!CMOVcc}
+\Optimizing GCC 4.8 для x86 также использует инструкцию \TT{CMOVcc},
+тогда как неоптимизирующий GCC 4.8 использует условные переходы.
+
+\ifdefined\IncludeARM
+\subsection{ARM}
+
+\myindex{x86!\Instructions!ADRcc}
+\Optimizing Keil для режима ARM также использует инструкцию \INS{ADRcc}, срабатывающую при некотором
+условии:
+
+\lstinputlisting[label=cond_Keil_ARM_O3,caption=\OptimizingKeilVI (\ARMMode)]{patterns/07_jcc/cond_operator/Keil_ARM_O3.s.\LANG}
+
+Без внешнего вмешательства инструкции \TT{ADREQ} и \TT{ADRNE} никогда не исполнятся одновременно.
+\Optimizing Keil для режима Thumb вынужден использовать инструкции условного перехода, потому
+что тут нет инструкции загрузки значения, поддерживающей флаги условия:
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/07_jcc/cond_operator/Keil_thumb_O3.s.\LANG}
+
+\subsection{ARM64}
+
+\Optimizing GCC (Linaro) 4.9 для ARM64 также использует условные переходы:
+
+\lstinputlisting[label=cond_ARM64,caption=\Optimizing GCC (Linaro) 4.9]{patterns/07_jcc/cond_operator/ARM64_GCC_O3.s.\LANG}
+
+Это потому что в ARM64 нет простой инструкции загрузки с флагами условия, как \TT{ADRcc} в 32-битном 
+режиме ARM или \TT{CMOVcc} в x86.
+
+\myindex{ARM!\Instructions!CSEL}
+Но с другой стороны, там есть инструкция \TT{CSEL} (\q{Conditional SELect})
+\cite[p390, C5.5]{ARM64ref},
+но GCC 4.9 наверное, пока не так
+хорош, чтобы генерировать её в таком фрагменте кода
+
+\fi
+
+\ifdefined\IncludeMIPS
+\subsection{MIPS}
+
+GCC 4.4.5 для MIPS тоже не так хорош, к сожалению:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/07_jcc/cond_operator/MIPS_O3.s.\LANG}
+
+\fi
+
+\subsection{Перепишем, используя обычный \TT{if/else}}
+
+\lstinputlisting{patterns/07_jcc/cond_operator/cond2.c}
+
+\myindex{x86!\Instructions!CMOVcc}
+Интересно, оптимизирующий GCC 4.8 для x86 также может генерировать \TT{CMOVcc} в этом случае:
+
+\lstinputlisting[caption=\Optimizing GCC 4.8]{patterns/07_jcc/cond_operator/cond2_GCC_O3.s.\LANG}
+
+\ifdefined\IncludeARM
+\Optimizing Keil в режиме ARM генерирует код идентичный этому: \lstref{cond_Keil_ARM_O3}.
+\fi
+
+Но оптимизирующий MSVC 2012 пока не так хорош.
+
+\subsection{\Conclusion{}}
+
+Почему оптимизирующие компиляторы стараются избавиться от условных переходов? Читайте больше об этом здесь:
+ \myref{branch_predictors}.
