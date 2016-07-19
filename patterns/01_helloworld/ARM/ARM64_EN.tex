@@ -2,7 +2,7 @@
 
 \subsubsection{GCC}
 
-Let's compile the example using GCC 4.8.1 \InENRU ARM64:
+Let's compile the example using GCC 4.8.1 in ARM64:
 
 \lstinputlisting[numbers=left,label=hw_ARM64_GCC,caption=\NonOptimizing GCC 4.8.1 + objdump]{patterns/01_helloworld/ARM/hw.lst}
 
@@ -12,7 +12,7 @@ The Register count is doubled: \myref{ARM64_GPRs}.
 
 \myindex{ARM!\Instructions!STP}
 The \TT{STP} instruction (\IT{Store Pair}) 
-saves two registers in the stack simultaneously: \RegX{29} \InENRU \RegX{30}.
+saves two registers in the stack simultaneously: \RegX{29} in \RegX{30}.
 
 Of course, this instruction is able to save this pair at an arbitrary place in memory, 
 but the \ac{SP} register is specified here, so the pair is saved in the stack.
@@ -22,20 +22,20 @@ ARM64 registers are 64-bit ones, each has a size of 8 bytes, so one needs 16 byt
 The exclamation mark (``!'') after the operand means that 16 is to be subtracted from \ac{SP} first, and only then
 are values from register pair to be written into the stack.
 This is also called \IT{pre-index}.
-About the difference between \IT{post-index} \AndENRU \IT{pre-index} 
+About the difference between \IT{post-index} and \IT{pre-index} 
 read here: \myref{ARM_postindex_vs_preindex}.
 
 Hence, in terms of the more familiar x86, the first instruction is just an analogue to a pair of
-\TT{PUSH X29} \AndENRU \TT{PUSH X30}.
+\TT{PUSH X29} and \TT{PUSH X30}.
 \RegX{29} is used as \ac{FP} in ARM64, and \RegX{30} 
 as \ac{LR}, so that's why they are saved in the function prologue and restored in the function epilogue.
 
-The second instruction copies \ac{SP} \InENRU \RegX{29} (\OrENRU \ac{FP}).
+The second instruction copies \ac{SP} in \RegX{29} (or \ac{FP}).
 This is done to set up the function stack frame.
 
 \label{pointers_ADRP_and_ADD}
 \myindex{ARM!\Instructions!ADRP/ADD pair}
-\TT{ADRP} \AndENRU \ADD instructions are used to fill the 
+\TT{ADRP} and \ADD instructions are used to fill the 
 address of the string \q{Hello!} into the \RegX{0} register, 
 because the first function argument is passed
 in this register.

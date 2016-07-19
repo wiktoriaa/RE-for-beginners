@@ -1,0 +1,142 @@
+﻿\section{Умножение}
+
+\subsection{Умножение при помощи сложения}
+
+Вот простой пример:
+
+\begin{lstlisting}[caption=\Optimizing MSVC 2010]
+unsigned int f(unsigned int a)
+{
+	return a*8;
+};
+\end{lstlisting}
+
+Умножение на 8 заменяется на три инструкции сложения, делающих то же самое.
+Должно быть, оптимизатор в MSVC решил, что этот код может быть быстрее.
+
+
+\begin{lstlisting}
+_TEXT	SEGMENT
+_a$ = 8							; size = 4
+_f	PROC
+; File c:\polygon\c\2.c
+	mov	eax, DWORD PTR _a$[esp-4]
+	add	eax, eax
+	add	eax, eax
+	add	eax, eax
+	ret	0
+_f	ENDP
+_TEXT	ENDS
+END
+\end{lstlisting}
+
+\subsection{Умножение при помощи сдвигов}
+\label{subsec:mult_using_shifts}
+
+Ещё очень часто умножения и деления на числа вида $2^{n}$ заменяются на инструкции сдвигов.
+
+\begin{lstlisting}
+unsigned int f(unsigned int a)
+{
+	return a*4;
+};
+\end{lstlisting}
+
+\begin{lstlisting}[caption=\NonOptimizing MSVC 2010]
+_a$ = 8		; size = 4
+_f	PROC
+	push	ebp
+	mov	ebp, esp
+	mov	eax, DWORD PTR _a$[ebp]
+	shl	eax, 2
+	pop	ebp
+	ret	0
+_f	ENDP
+\end{lstlisting}
+
+Умножить на 4 это просто сдвинуть число на 2 бита влево, 
+вставив 2 нулевых бита справа (как два самых младших бита). 
+Это как умножить 3 на 100~--- нужно просто дописать два нуля справа.
+
+Вот как работает инструкция сдвига влево:
+
+\myindex{x86!\Instructions!SHL}
+\input{shift_left}
+
+Добавленные биты справа~--- всегда нули.
+
+\ifdefined\IncludeARM
+Умножение на 4 в ARM:
+
+\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode)]
+f PROC
+        LSL      r0,r0,#2
+        BX       lr
+        ENDP
+\end{lstlisting}
+\fi
+
+\ifdefined\IncludeMIPS
+Умножение на 4 в MIPS:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/11_arith_optimizations/MIPS_SLL.lst}
+
+\myindex{MIPS!\Instructions!SLL}
+\INS{SLL} это \q{Shift Left Logical}.
+\fi
+
+\subsection{Умножение при помощи сдвигов, сложений и вычитаний}
+\label{multiplication_using_shifts_adds_subs}
+
+Можно избавиться от операции умножения, если вы умножаете на числа вроде 7 или 17,
+и использовать сдвиги.
+
+Здесь используется относительно простая математика.
+
+\subsubsection{32-бита}
+
+\lstinputlisting{patterns/11_arith_optimizations/mult_shifts.c}
+
+\myparagraph{x86}
+
+\lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/11_arith_optimizations/mult_shifts_MSVC_2012_Ox.asm}
+
+\ifdefined\IncludeARM
+\myparagraph{ARM}
+
+Keil, генерируя код для режима ARM, использует модификаторы инструкции, в которых можно задавать
+сдвиг для второго операнда:
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/11_arith_optimizations/mult_shifts_Keil_ARM_O3.s}
+
+Но таких модификаторов в режиме Thumb нет.
+
+И он также не смог оптимизировать функцию \TT{f2()}:
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/11_arith_optimizations/mult_shifts_Keil_thumb_O3.s}
+\fi
+
+\ifdefined\IncludeMIPS
+\myparagraph{MIPS}
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/11_arith_optimizations/mult_shifts_MIPS_O3_IDA.lst}
+\fi
+
+\subsubsection{64-бита}
+
+\lstinputlisting{patterns/11_arith_optimizations/mult_shifts_64.c}
+
+\myparagraph{x64}
+
+\lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_x64_O3.s}
+
+\ifdefined\IncludeARM
+\myparagraph{ARM64}
+
+\ifdefined\IncludeGCC
+GCC 4.9 для ARM64 также очень лаконичен благодаря модификаторам сдвига:
+
+
+\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_ARM64.s}
+\fi
+\fi

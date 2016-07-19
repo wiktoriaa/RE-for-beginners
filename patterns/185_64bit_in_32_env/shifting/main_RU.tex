@@ -1,0 +1,43 @@
+﻿\section{Сдвиг вправо}
+
+\lstinputlisting{patterns/185_64bit_in_32_env/shifting/3.c}
+
+\subsection{x86}
+
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob1]{patterns/185_64bit_in_32_env/shifting/3_MSVC.asm}
+
+\ifdefined\IncludeGCC
+\lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline]{patterns/185_64bit_in_32_env/shifting/3_GCC.asm}
+\fi
+
+\myindex{x86!\Instructions!SHRD}
+Сдвиг происходит также в две операции: в начале сдвигается младшая часть, затем старшая.
+Но младшая часть сдвигается при помощи инструкции \INS{SHRD}, она сдвигает значение в \EDX{} на 7 бит, но подтягивает новые биты из \EAX{}, т.е. из старшей части.
+Старшая часть сдвигается более известной инструкцией \SHR{}: действительно, ведь освободившиеся биты в старшей части нужно
+просто заполнить нулями.
+
+\ifdefined\IncludeARM
+\subsection{ARM}
+
+В ARM нет такой инструкции как \INS{SHRD} в x86, так что компилятору Keil приходится всё это делать,
+используя простые сдвиги и операции \q{ИЛИ}:
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/shifting/Keil_ARM_O3.s}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/185_64bit_in_32_env/shifting/Keil_thumb_O3.s}
+% TODO add explanation
+\fi
+
+\ifdefined\IncludeMIPS
+\subsection{MIPS}
+
+\ifdefined\IncludeGCC
+
+GCC для MIPS реализует тот же алгоритм, что сделал Keil для режима Thumb:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/185_64bit_in_32_env/shifting/MIPS_O3_IDA.lst}
+\fi
+
+% TODO add explanation
+\fi
+

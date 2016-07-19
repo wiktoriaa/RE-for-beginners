@@ -28,7 +28,7 @@ Perhaps, humankind switched to positional notation because it's easier to do bas
 
 Indeed, binary numbers can be added, subtracted and so on in the very same as taught in schools, but only 2 digits are available.
 
-Binary numbers are bulkey when represented in source code and dumps, so that is where hexadecimal numeral system can be used.
+Binary numbers are bulky when represented in source code and dumps, so that is where hexadecimal numeral system can be used.
 Hexadecimal system uses 0..9 numbers and also 6 Latin characters: A..F.
 Each hexadecimal digit takes 4 bits or 4 binary digits, so it's very easy to convert from binary number to hexadecimal and back, even manually, in one's mind.
 
@@ -57,15 +57,18 @@ F	&1111	&15 \\
 \end{longtable}
 \end{center}
 
-How to detect, which system is currently used?
+How to understand, which system is currently used?
 
 Decimal numbers are usually written as is, i.e., 1234. But some assemblers allows to make emphasis on decimal system and this number can be written with "d" suffix: 1234d.
 
 Binary numbers sometimes prepended with "0b" prefix: 0b100110111 (\ac{GCC} has non-standard language extension for this: \url{https://gcc.gnu.org/onlinedocs/gcc/Binary-constants.html}).
+There is also another way: "b" suffix, for example: 100110111b.
+I'll try to use "0b" prefix throughout the book for binary numbers.
 
 Hexadecimal numbers are preprended with "0x" prefix in \CCpp and other \ac{PL}s: 0x1234ABCD.
 Or they are has "h" suffix: 1234ABCDh - this is common way of representing them in assemblers and debuggers.
 If the number is started with A..F digit, 0 should be added before: 0ABCDEFh.
+I'll try to use "0x" prefix throughout the book for hexadecimal numbers.
 
 Should one learn to convert numbers in mind? A table of 1-digit hexadecimal numbers can easily be memorized.
 As of larger numbers, probably, it's not worth to torment yourself.
@@ -101,7 +104,7 @@ So the each bit is mapped to flag: read/write/execute.
 Now the reason why I'm talking about \TT{chmod} here is that the whole number in argument can be represented as octal number.
 Let's take for example, 664.
 When you run \TT{chmod 664 file}, you set read/write permissions for owner, read permissions for group and again, read permissions for everyone else.
-Let's convert 664 octal number to binary, this will be \TT{110100100}, or \TT{110 100 100}.
+Let's convert 664 octal number to binary, this will be \TT{110100100}, or (in groups of 3 bits) \TT{110 100 100}.
 
 Now we see that each triplet describe permissions for owner/group/others: first is \TT{rw-}, second is \TT{r--} and third is \TT{r--}.
 
@@ -124,5 +127,5 @@ Binary number 0b1000101000 is divisible by 0b1000 (8), etc.
 
 This property can be used often to realize quickly if a size of some block in memory is padded to some boundary.
 For example, sections in \ac{PE} files are almost always started at addresses ending with 3 hexadecimal zeroes: 0x41000, 0x10001000, etc.
-The reason behind this is in the fact that almost all \ac{PE} sections are padded to 0x1000 (4096) boundary.
+The reason behind this is in the fact that almost all \ac{PE} sections are padded to boundary of 0x1000 (4096) bytes.
 
