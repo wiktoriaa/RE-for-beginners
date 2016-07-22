@@ -15,7 +15,6 @@ _main
 
 y               DCD 0xA3D70A4           ; DATA XREF: _main+4
 dword_520       DCD 0x3FF8A3D7          ; DATA XREF: _main+8
-; double x
 x               DCD 0xAE147AE1          ; DATA XREF: _main+C
 dword_528       DCD 0x40400147          ; DATA XREF: _main+10
 a32_011_54Lf    DCB "32.01 ^ 1.54 = %lf",0xA,0
