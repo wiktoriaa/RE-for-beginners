@@ -36,7 +36,6 @@ is because the \ac{MSVC} alloca() implementation also has code which reads from 
 physical memory to this \ac{VM} region.
 After the \TT{alloca()} call, \ESP points to the block of 600 bytes and we can use it as memory for the \TT{buf} array.}.
 
-\ifdefined\IncludeGCC
 \subsubsection{GCC + \IntelSyntax}
 
 GCC 4.4.1 does the same without calling external functions:
@@ -54,5 +53,4 @@ The code is the same as in the previous listing.
 
 By the way, \INS{movl \$3, 20(\%esp)} corresponds to \INS{mov DWORD PTR [esp+20], 3} in Intel-syntax.
 In the AT\&T syntax, the register+offset format of addressing memory looks like \TT{offset(\%{register})}.
-\fi
 

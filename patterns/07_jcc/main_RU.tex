@@ -14,16 +14,29 @@
 
 Примерный скелет условных переходов:
 
-\lstinputlisting[caption=x86]{patterns/07_jcc/skel1_RU.lst}
-
-\ifdefined\IncludeARM
+\begin{lstlisting}[caption=x86]
+CMP register, register/value
+Jcc true ; cc=код условия
+false:
+... код, исполняющийся, если сравнение ложно ...
+JMP exit 
+true:
+... код, исполняющийся, если сравнение истинно ...
+exit:
+\end{lstlisting}
 
 \subsection{ARM}
 
-\lstinputlisting[caption=ARM]{patterns/07_jcc/skel2_RU.lst}
-\fi
-
-\ifdefined\IncludeMIPS
+\begin{lstlisting}[caption=ARM]
+CMP register, register/value
+Bcc true ; cc=код условия
+false:
+... код, исполняющийся, если сравнение ложно ...
+JMP exit 
+true:
+... код, исполняющийся, если сравнение истинно ...
+exit:
+\end{lstlisting}
 
 \subsection{MIPS}
 
@@ -58,7 +71,6 @@ SLTU REG1, REG2, REG3
 BEQ REG1, label
 ...
 \end{lstlisting}
-\fi
 
 \subsection{Без инструкций перехода}
 
@@ -69,13 +81,16 @@ BEQ REG1, label
 Если тело условного выражения очень короткое, может быть
 использована инструкция условного копирования: \INS{MOVcc} в ARM (в режиме ARM), \INS{CSEL} в ARM64, \INS{CMOVcc} в x86.
 
-\ifdefined\IncludeARM
 \subsubsection{ARM}
 
 В режиме ARM можно использовать условные суффиксы для некоторых инструкций:
 
-
-\lstinputlisting[caption=ARM (\ARMMode)]{patterns/07_jcc/skel4_RU.lst}
+\begin{lstlisting}[caption=ARM (\ARMMode)]
+CMP register, register/value
+instr1_cc ; инструкция, которая будет исполнена, если условие истинно
+instr2_cc ; еще инструкция, которая будет исполнена, если условие истинно
+... и~т.д....
+\end{lstlisting}
 
 Нет никаких ограничений на количество инструкций с условными суффиксами до тех пор,
 пока флаги CPU не были модифицированы одной из таких инструкций.
@@ -88,13 +103,17 @@ BEQ REG1, label
 
 Читайте больше об этом: \myref{ARM_Thumb_IT}.
 
-\lstinputlisting[caption=ARM (\ThumbMode)]{patterns/07_jcc/skel3_RU.lst}
-\fi
+\begin{lstlisting}[caption=ARM (\ThumbMode)]
+CMP register, register/value
+ITEEE EQ ; выставить такие суффиксы: if-then-else-else-else
+instr1   ; инструкция будет исполнена, если истинно
+instr2   ; инструкция будет исполнена, если ложно
+instr3   ; инструкция будет исполнена, если ложно
+instr4   ; инструкция будет исполнена, если ложно
+\end{lstlisting}
 
-\ifdefined\IncludeExercises
 \section{\Exercise}
 
 (ARM64) Попробуйте переписать код в \lstref{cond_ARM64} 
 убрав все инструкции условного перехода, и используйте инструкцию \INS{CSEL}.
-\fi
 

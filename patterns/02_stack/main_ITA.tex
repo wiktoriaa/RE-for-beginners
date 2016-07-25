@@ -14,7 +14,6 @@ Tecnicamente, e' soltanto un blocco di memoria nella memoria di un processo insi
 Le istruzioni di accesso allo stack piu' usate sono \PUSH e \POP (sia in x86 che in ARM Thumb-mode).
 \PUSH sottrae da \ESP/\RSP/\ac{SP} 4 in modalita' 32-bit (oppur 8 in modalita' 64-bit) e scrive successivamente il contenuto del suo unico operando nell'indirizzo di memoria puntato da \ESP/\RSP/\ac{SP}.
 
-
 \POP e' l'operazione inversa: recupera il dato dalla memoria a cui punta \ac{SP}, lo carica nell'operando dell'istruzione (di solito un registro)
 e successivamente aggiunge 4 (o 8) allo \gls{stack pointer}.
 
@@ -22,8 +21,6 @@ A seguito dell'allocazione dello stack, lo \gls{stack pointer} punta alla base (
 \PUSH decrementa lo \gls{stack pointer} e \POP lo incrementa.
 La base dello stack e' in realta' all'inizio della memoria allocata per il blocco (porzione) dello stack. Sembra strano, ma e' cosi'.
 
-
-\ifdefined\IncludeARM
 ARM supporta stack decrescenti e crescenti.
 
 \myindex{ARM!\Instructions!STMFD}
@@ -37,7 +34,6 @@ ARM supporta stack decrescenti e crescenti.
 
 Ad esempio le istruzioni \ac{STMFD}/\ac{LDMFD}, \ac{STMED}/\ac{LDMED} sono fatte per operare con uno stack decrescente (che cresce verso il basso, inizia con un indirizzo alto e prosegue verso il basso).
 Le istruzioni \ac{STMFA}/\ac{LDMFA}, \ac{STMEA}/\ac{LDMEA} sono fatte per operare con uno stack crescente (che cresce verso l'alto, da un indirizzo basso verso uno piu alto).
-\fi
 
 % It might be worth mentioning that STMED and STMEA write first,
 % and then move the pointer,
