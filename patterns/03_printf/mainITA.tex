@@ -1,0 +1,56 @@
+\chapter{\PrintfSeveralArgumentsSectionName}
+
+Estendiamo l'esempio \IT{\HelloWorldSectionName}~(\myref{sec:helloworld}) modificando la chiamata a  \printf nella funzione \main:
+
+\lstinputlisting[label=hw_c]{patterns/03_printf/1.c}
+
+% sections
+\input{patterns/03_printf/x86/main}
+\ifdefined\IncludeARM
+\input{patterns/03_printf/ARM/main}
+\fi
+\ifdefined\IncludeMIPS
+\input{patterns/03_printf/MIPS/main}
+\fi
+
+\section{\Conclusion{}}
+
+Si riporta di seguito una lista di bozze di chiamate alla call:
+
+\lstinputlisting[caption=x86]{patterns/03_printf/skel1.lst.\LANG}
+
+\lstinputlisting[caption=x64 (MSVC)]{patterns/03_printf/skel2.lst.\LANG}
+
+\ifdefined\IncludeGCC
+\lstinputlisting[caption=x64 (GCC)]{patterns/03_printf/skel3.lst.\LANG}
+\fi
+
+\ifdefined\IncludeARM
+\lstinputlisting[caption=ARM]{patterns/03_printf/skel4.lst.\LANG}
+
+\lstinputlisting[caption=ARM64]{patterns/03_printf/skel5.lst.\LANG}
+\fi
+
+\ifdefined\IncludeMIPS
+\myindex{MIPS!O32}
+\lstinputlisting[caption=MIPS (O32 calling convention)]{patterns/03_printf/skel_MIPS.lst.\LANG}
+\fi
+
+\section{A proposito...}
+
+\myindex{fastcall}
+Le differenze negli approcci utilizzati per il passaggio di argomenti in x86, x64, 
+fastcall, ARM and MIPS e' un'ottima dimostrazione del fatto che la CPU e' inconsapevole di come gli argomenti vengono passati alle funzioni. 
+Sarebbe anche possibile creare un compilatore ipotetico in grado di passare gli argomenti attraverso una struttura speciale, senza usare lo stack.
+
+\ifdefined\IncludeMIPS
+\myindex{MIPS!O32}
+I registri MIPS \$A0 \dots \$A3 sono indicati in questo modo soltanto per convenienza (cioe' nella O32 calling convention).
+I programmatori possono usare qualunque altro registro (tranne \$ZERO) per passare i dati, o utilizzare qualunque altra calling convention. 
+\fi
+
+La \ac{CPU} non e' assolutamente consapevole delle calling conventions.
+
+Possiamo anche ricordare come i programmatori principianti in assembly passano gli argomenti alle altre funzioni: 
+di suolito tramite i registri, senza un ordine esplicitop, o attraverso variabili globali.
+Questi approcci sono ovviamente validi e funzionanti.
