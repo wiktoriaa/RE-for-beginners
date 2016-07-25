@@ -56,7 +56,6 @@ Ecco un esempio reale:
 % TODO translate to Italian
 \lstinputlisting[caption=x86]{patterns/03_printf/x86/add_example_EN.lst}
 
-\ifdefined\IncludeOlly
 \clearpage
 \subsubsection{MSVC and \olly}
 \myindex{\olly}
@@ -95,8 +94,6 @@ Adesso il \ac{PC} punta all'istruzione \INS{CALL printf}.
 \olly, come altri debugger, evidenzia il valore dei registri che sono stati modificati.
 Quindi ogni volta che si preme F8, \EIP cambia ed il suo valore e' mostrato in rosso.
 Anche \ESP cambia, poiche' i valori degli argomenti vengono messi sullo stack.
-\\
-\\
 
 Dove sono i valori messi nello stack?
 Diamo un'occhiata alla finestra del debugger in basso a destra:
@@ -162,9 +159,6 @@ Ovviamente si: non c'e' necessita' di azzerare i valori o effettuare altre simil
 Qualunque cosa si trovi sopra lo stack pointer (\ac{SP}) e' \IT{noise} o \IT{\garbage{}} e non ha alcun significato.
 Pulire i valori non utilizzati nello stack sarebbe una perdita di tempo inutile, e non vi e' alcuna necessita' di farlo.
 
-\fi % IncludeOlly
-
-\ifdefined\IncludeGCC
 \subsubsection{GCC}
 
 Compiliamo adesso lo stesso programma su Linux usando GCC 4.4.1, e diamo un'occhiata al risultato con \IDA:
@@ -196,7 +190,6 @@ main            endp
 Si nota che la differenza tra il codice prodotto da MSVC e GCC risiede soltanto nel modo in cui gli argomenti sono memorizzati sullo stack.
 In questo caso GCC lavora diversamente con lo stack senza l'uso di \PUSH/\POP.
 
-\ifdefined\IncludeGDB
 \subsubsection{GCC e GDB}
 \myindex{GDB}
 
@@ -378,5 +371,3 @@ edi            0x0	0
 eip            0x804844f	0x804844f <main+50>
 ...
 \end{lstlisting}
-\fi
-\fi

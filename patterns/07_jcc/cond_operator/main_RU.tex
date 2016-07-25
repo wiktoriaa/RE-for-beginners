@@ -28,7 +28,6 @@ expression ? expression : expression
 \Optimizing GCC 4.8 для x86 также использует инструкцию \TT{CMOVcc},
 тогда как неоптимизирующий GCC 4.8 использует условные переходы.
 
-\ifdefined\IncludeARM
 \subsection{ARM}
 
 \myindex{x86!\Instructions!ADRcc}
@@ -58,16 +57,11 @@ expression ? expression : expression
 но GCC 4.9 наверное, пока не так
 хорош, чтобы генерировать её в таком фрагменте кода
 
-\fi
-
-\ifdefined\IncludeMIPS
 \subsection{MIPS}
 
 GCC 4.4.5 для MIPS тоже не так хорош, к сожалению:
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/07_jcc/cond_operator/MIPS_O3_RU.s}
-
-\fi
 
 \subsection{Перепишем, используя обычный \TT{if/else}}
 
@@ -78,9 +72,7 @@ GCC 4.4.5 для MIPS тоже не так хорош, к сожалению:
 
 \lstinputlisting[caption=\Optimizing GCC 4.8]{patterns/07_jcc/cond_operator/cond2_GCC_O3_RU.s}
 
-\ifdefined\IncludeARM
 \Optimizing Keil в режиме ARM генерирует код идентичный этому: \lstref{cond_Keil_ARM_O3}.
-\fi
 
 Но оптимизирующий MSVC 2012 пока не так хорош.
 

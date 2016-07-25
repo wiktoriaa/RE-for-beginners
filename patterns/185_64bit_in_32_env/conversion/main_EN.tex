@@ -19,7 +19,6 @@ most significant bit in \EAX{}), and depending of it, sets all 32 bits in \EDX{}
 Its operation is somewhat
 similar to the \MOVSX{} instruction.
 
-\ifdefined\IncludeARM
 \subsection{ARM}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/conversion/Keil_ARM_O3.s}
@@ -30,15 +29,8 @@ So after \q{ASR r1,r0,\#31}, \Reg{1} containing 0xFFFFFFFF if the input value wa
 \Reg{1} contains the high part of the resulting 64-bit value.
 In other words, this code just copies the \ac{MSB} (sign bit) from the input value in \Reg{0} to all bits of the high 32-bit part of the resulting 64-bit value.
 
-\fi
-
-\ifdefined\IncludeMIPS
 \subsection{MIPS}
 
-\ifdefined\IncludeGCC
 GCC for MIPS does the same as Keil did for ARM mode:
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/185_64bit_in_32_env/conversion/MIPS_O3_IDA.lst}
-\fi
-
-\fi

@@ -65,7 +65,6 @@ That's how the shift left instruction works:
 
 The added bits at right are always zeroes.
 
-\ifdefined\IncludeARM
 Multiplication by 4 in ARM:
 
 \begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode)]
@@ -74,16 +73,13 @@ f PROC
         BX       lr
         ENDP
 \end{lstlisting}
-\fi
 
-\ifdefined\IncludeMIPS
 Multiplication by 4 in MIPS:
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/11_arith_optimizations/MIPS_SLL.lst}
 
 \myindex{MIPS!\Instructions!SLL}
 \INS{SLL} is \q{Shift Left Logical}.
-\fi
 
 \subsection{Multiplication using shifting, subtracting, and adding}
 \label{multiplication_using_shifts_adds_subs}
@@ -100,7 +96,6 @@ The mathematics used here is relatively easy.
 
 \lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/11_arith_optimizations/mult_shifts_MSVC_2012_Ox.asm}
 
-\ifdefined\IncludeARM
 \myparagraph{ARM}
 
 Keil for ARM mode takes advantage of the second operand's shift modifiers:
@@ -111,13 +106,10 @@ But there are no such modifiers in Thumb mode.
 It also can't optimize \TT{f2()}:
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/11_arith_optimizations/mult_shifts_Keil_thumb_O3.s}
-\fi
 
-\ifdefined\IncludeMIPS
 \myparagraph{MIPS}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/11_arith_optimizations/mult_shifts_MIPS_O3_IDA.lst}
-\fi
 
 \subsubsection{64-bit}
 
@@ -127,13 +119,8 @@ It also can't optimize \TT{f2()}:
 
 \lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_x64_O3.s}
 
-\ifdefined\IncludeARM
 \myparagraph{ARM64}
-
-\ifdefined\IncludeGCC
 
 GCC 4.9 for ARM64 is also terse, thanks to the shift modifiers:
 
 \lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_ARM64.s}
-\fi
-\fi

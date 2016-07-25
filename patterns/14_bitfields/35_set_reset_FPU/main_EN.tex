@@ -47,7 +47,6 @@ The 31st bit is \ac{MSB}, counting from 0.
 Finally, the result is copied into \TT{XMM0}, because floating point values are returned through \TT{XMM0} in Win64
 environment.
 
-\ifdefined\IncludeMIPS
 \subsection{MIPS}
 
 GCC 4.4.5 for MIPS does mostly the same:
@@ -59,9 +58,6 @@ GCC 4.4.5 for MIPS does mostly the same:
 One single \LUI instruction is used to load 0x80000000 into a register, because 
 \LUI is clearing the low 16 bits and these are zeroes in the constant, so one \LUI without subsequent \ORI is enough.
 
-\fi
-
-\ifdefined\IncludeARM
 \subsection{ARM}
 
 \subsubsection{\OptimizingKeilVI (\ARMMode)}
@@ -128,5 +124,3 @@ because our registers are 32 bit wide, so the result is 0.
 That's why \XOR can be replaced by \ADD here.
 
 It's hard to say why GCC decided to do this, but it works correctly.
-
-\fi

@@ -70,9 +70,7 @@ one value of type \Tdouble by another, stored in the lower halves of operands}.
 \RU{Входные аргументы сохраняются в}\EN{The input arguments are saved in the} \q{shadow space} (\myref{shadow_space}), 
 \RU{причем, только младшие половины регистров, т.е. только 64-битные значения типа \Tdouble}
 \EN{but only their lower register halves, i.e., only 64-bit values of type \Tdouble}.
-\ifdefined\IncludeGCC
 \RU{Результат работы компилятора GCC точно такой же}\EN{GCC produces the same code}.
-\fi
 
 \subsection{x86}
 
@@ -92,7 +90,6 @@ one value of type \Tdouble by another, stored in the lower halves of operands}.
 \EN{the result of the function is returned in \ST{0} --- in order to do so, it's copied
 (through local variable \TT{tv}) from one of the XMM registers to \ST{0}.}
 
-\ifdefined\IncludeOlly
 \clearpage
 \RU{Попробуем соптимизированный пример в}\EN{Let's try the optimized example in} \olly:
 
@@ -149,7 +146,6 @@ are executed right now.}
 как 4 \Tfloat{}-числа или просто как 16 байт.}
 \EN{But of course, it's possible to switch the register format and to see their contents as
 4 \Tfloat{}-numbers or just as 16 bytes.}
-\fi
 
 \clearpage
 \section{\RU{Передача чисел с плавающей запятой в аргументах}\EN{Passing floating point number via arguments}}
@@ -229,7 +225,6 @@ which just choose the maximum value}!
 \RU{берутся из стека, а результат функции оставляется в}\EN{are taken from the stack and the function result 
 is left in} \ST{0}.
 
-\ifdefined\IncludeOlly
 \RU{Если загрузить этот пример в}\EN{If we load this example in} \olly, 
 \RU{увидим, как инструкция}\EN{we can see how the} \TT{COMISD} \RU{сравнивает значения и устанавливает/сбрасывает
 флаги}\EN{instruction compares values and sets/clears the} \CF \AndENRU \PF\EN{ flags}:
@@ -240,7 +235,6 @@ is left in} \ST{0}.
 \caption{\olly: \TT{COMISD} \RU{изменила флаги}\EN{changed} \CF \AndENRU \PF\EN{ flags}}
 \label{fig:FPU_SIMD_d_max_olly}
 \end{figure}
-\fi
 
 \section{\RU{Вычисление машинного эпсилона}\EN{Calculating machine epsilon}: x64 \AndENRU SIMD}
 \label{machine_epsilon_x64_and_SIMD}

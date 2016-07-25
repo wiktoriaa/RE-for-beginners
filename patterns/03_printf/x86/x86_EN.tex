@@ -55,7 +55,6 @@ Here is a real-world example:
 
 \lstinputlisting[caption=x86]{patterns/03_printf/x86/add_example_EN.lst}
 
-\ifdefined\IncludeOlly
 \clearpage
 \subsubsection{MSVC and \olly}
 \myindex{\olly}
@@ -163,9 +162,6 @@ Everything above the stack pointer (\ac{SP})
 is \IT{noise} or \IT{\garbage{}} and has no meaning at all.
 It would be time consuming to clear the unused stack entries anyway, and no one really needs to.
 
-\fi % IncludeOlly
-
-\ifdefined\IncludeGCC
 \subsubsection{GCC}
 
 Now let's compile the same program in Linux using GCC 4.4.1 and take a look at what we have got in \IDA:
@@ -197,7 +193,6 @@ main            endp
 Its noticeable that the difference between the MSVC code and the GCC code is only in the way the arguments are stored on the stack.
 Here the GCC is working directly with the stack without the use of \PUSH/\POP.
 
-\ifdefined\IncludeGDB
 \subsubsection{GCC and GDB}
 \myindex{GDB}
 
@@ -381,6 +376,4 @@ edi            0x0	0
 eip            0x804844f	0x804844f <main+50>
 ...
 \end{lstlisting}
-\fi
-\fi
 

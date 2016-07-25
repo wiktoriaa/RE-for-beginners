@@ -38,7 +38,6 @@ Then we see \TT{TEST EDX, EDX}.
 You can read more about the \TEST instruction in the section about bit fields~(\myref{sec:bitfields}).
 Here this instruction just checks if the value in \EDX equals to 0.
 
-\ifdefined\IncludeGCC
 \subsubsection{\NonOptimizing GCC}
 
 Let's try GCC 4.4.1:
@@ -67,7 +66,6 @@ Here, if \AL doesn't contain zero, \TT{test al, al}
 sets the \ZF flag to 0, but \SETNZ, if \TT{ZF==0} (\IT{NZ} stands for \IT{not zero}) sets \AL to 1.
 Speaking in natural language, \IT{if \AL is not zero, let's jump to loc\_80483F0}. 
 The compiler emits some redundant code, but let's not forget that the optimizations are turned off.
-\fi
 
 \subsubsection{\Optimizing MSVC}
 \label{strlen_MSVC_Ox}
@@ -84,11 +82,8 @@ only in small functions with a few local variables.
 \myindex{x86!\Instructions!DEC}
 \INC/\DEC---are \gls{increment}/\gls{decrement} instructions, in other words: add or substract 1 to/from a variable.
 
-\ifdefined\IncludeOlly
 \input{patterns/10_strings/1_strlen/olly_EN.tex}
-\fi
 
-\ifdefined\IncludeGCC
 \subsubsection{\Optimizing GCC}
 
 Let's check GCC 4.4.1 with optimizations turned on (\Othree key):
@@ -136,4 +131,3 @@ return eax
 
 Why did GCC decide it would be better? Hard to guess. 
 But perhaps the both variants are equivalent in efficiency.
-\fi

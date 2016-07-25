@@ -40,7 +40,6 @@
 Об инструкции \TEST читайте в разделе о битовых полях~(\myref{sec:bitfields}).
 Конкретно здесь эта инструкция просто проверяет состояние регистра \EDX на 0.
 
-\ifdefined\IncludeGCC
 \subsubsection{\NonOptimizing GCC}
 
 Попробуем GCC 4.4.1:
@@ -69,13 +68,10 @@
 \IT{если AL не ноль, выполнить переход на} \TT{loc\_80483F0}.
 Компилятор выдал немного избыточный код, но не будем забывать, что оптимизация выключена.
 
-\fi
-
 \subsubsection{\Optimizing MSVC}
 \label{strlen_MSVC_Ox}
 
-Теперь скомпилируем всё то же самое в MSVC 2012, но с включенной оптимизацией (\Ox)
-:
+Теперь скомпилируем всё то же самое в MSVC 2012, но с включенной оптимизацией (\Ox):
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0]{patterns/10_strings/1_strlen/10_2_RU.asm}
 
@@ -87,11 +83,8 @@
 \INC/\DEC --- это инструкции \glslink{increment}{инкремента}-\glslink{decrement}{декремента}. Попросту говоря~--- 
 увеличить на единицу или уменьшить.
 
-\ifdefined\IncludeOlly
 \input{patterns/10_strings/1_strlen/olly_RU.tex}
-\fi
 
-\ifdefined\IncludeGCC
 \subsubsection{\Optimizing GCC}
 
 Попробуем GCC 4.4.1 с включенной оптимизацией (ключ \Othree):
@@ -137,5 +130,3 @@ return eax
 
 Но почему GCC решил, что так будет лучше? Трудно угадать.
 Но наверное, оба эти варианта работают примерно одинаково в плане эффективности и скорости.
-
-\fi

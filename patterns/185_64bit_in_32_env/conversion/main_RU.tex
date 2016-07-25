@@ -18,7 +18,6 @@
 выставляет все 32 бита в \EDX{} в 0 или в 1.
 Её работа в каком-то смысле напоминает работу инструкции \MOVSX{}.
 
-\ifdefined\IncludeARM
 \subsection{ARM}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/conversion/Keil_ARM_O3.s}
@@ -32,17 +31,9 @@ Keil для ARM работает иначе: он просто сдвигает 
 Другими словами, этот код просто копирует \ac{MSB} (бит знака) из входного значения в \Reg{0} во все
 биты старшей 32-битной части итогового 64-битного значения.
 
-\fi
-
-\ifdefined\IncludeMIPS
 \subsection{MIPS}
-
-\ifdefined\IncludeGCC
 
 GCC для MIPS делает то же, что сделал Keil для режима ARM:
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/185_64bit_in_32_env/conversion/MIPS_O3_IDA.lst}
-\fi
-
-\fi
 

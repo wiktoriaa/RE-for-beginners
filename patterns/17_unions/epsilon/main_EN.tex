@@ -29,7 +29,6 @@ Then it is loaded into the FPU as a 32-bit IEEE 754 number, \INS{FSUBR} does the
 value is stored in \TT{ST0}.
 The last \INS{FSTP}/\INS{FLD} instruction pair is redundant, but the compiler didn't optimize it out.
 
-\ifdefined\IncludeARM
 \subsection{ARM64}
 
 Let's extend our example to 64-bit:
@@ -43,9 +42,7 @@ incremented, copied to FPU register \TT{D1}, and then subtraction occurs.
 \lstinputlisting[caption=\Optimizing GCC 4.9 ARM64]{patterns/17_unions/epsilon/double_GCC49_ARM64_O3.s.\LANG}
 
 See also this example compiled for x64 with SIMD instructions: \myref{machine_epsilon_x64_and_SIMD}.
-\fi
 
-\ifdefined\IncludeMIPS
 \subsection{MIPS}
 
 \myindex{MIPS!\Instructions!MTC1}
@@ -53,8 +50,6 @@ See also this example compiled for x64 with SIMD instructions: \myref{machine_ep
 The new instruction here is \INS{MTC1} (\q{Move To Coprocessor 1}), it just transfers data from \ac{GPR} to the FPU's registers.
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/17_unions/epsilon/MIPS_O3_IDA.lst}
-
-\fi
 
 \subsection{\Conclusion}
 

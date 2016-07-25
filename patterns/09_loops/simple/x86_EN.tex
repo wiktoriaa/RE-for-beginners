@@ -34,14 +34,11 @@ Result (MSVC 2010):
 
 As we see, nothing special.
 
-\ifdefined\IncludeGCC
-
 GCC 4.4.1 emits almost the same code, with one subtle difference:
 
 \lstinputlisting[caption=GCC 4.4.1]{patterns/09_loops/simple/1_GCC_EN.asm}
 
 Now let's see what we get with optimization turned on (\TT{\Ox}):
-\fi
 
 \lstinputlisting[caption=\Optimizing MSVC]{patterns/09_loops/simple/1_MSVC_Ox.asm}
 
@@ -55,8 +52,6 @@ And if the compiler decides to use the \ESI register in \ttf too, its value woul
 at the function's prologue and restored at the function's epilogue,
 almost like in our listing: please note \TT{PUSH ESI/POP ESI}
 at the function start and end.
-
-\ifdefined\IncludeGCC
 
 Let's try GCC 4.4.1 with maximal optimization turned on (\Othree option):
 
@@ -87,9 +82,7 @@ with the exception that the \EBX register is allocated for the $i$ variable.
 GCC is sure this register will not be modified inside of the \ttf function, 
 and if it will, it will be saved at the function prologue and restored at epilogue, 
 just like here in the \main function.
-\fi
 
-\ifdefined\IncludeOlly
 \clearpage
 \subsection{x86: \olly}
 \myindex{\olly}
@@ -185,4 +178,3 @@ register values:
 \myindex{\GrepUsage}
 We can use grep here.
 
-\fi

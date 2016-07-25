@@ -24,5 +24,3 @@ Do not worry to bother me while writing me about any petty mistakes you found, e
 I'm writing for beginners, after all, so beginners' opinions and comments are crucial for my job.
 
 Want to translate this book into some other language? Read [here](https://github.com/dennis714/RE-for-beginners/blob/master/Translation.md).
-
-It's also possible to build your own version of book, see the [HACKING.md](https://github.com/dennis714/RE-for-beginners/blob/master/HACKING.md) file.

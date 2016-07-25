@@ -11,12 +11,8 @@ This is how the code is usually generated:
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/07_jcc/abs/abs_MSVC2012_Ox_x64_EN.asm}
 
-\ifdefined\IncludeGCC
-
 GCC 4.9 does mostly the same.
-\fi
 
-\ifdefined\IncludeARM
 \subsection{\OptimizingKeilVI: \ThumbMode}
 
 \lstinputlisting[caption=\OptimizingKeilVI: \ThumbMode]{patterns/07_jcc/abs/abs_Keil_thumb_O3_EN.s}
@@ -40,9 +36,7 @@ Now there are no conditional jumps and this is good: \myref{branch_predictors}.
 ARM64 has instruction \INS{NEG} for negating:
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64)]{patterns/07_jcc/abs/abs_GCC49_ARM64_O0_EN.s}
-\fi
 
-\ifdefined\IncludeMIPS
 \subsection{MIPS}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/07_jcc/abs/MIPS_O3_IDA_EN.lst}
@@ -54,8 +48,6 @@ Here we see a new instruction: \INS{BLTZ} (\q{Branch if Less Than Zero}).
 
 There is also the \INS{NEGU} pseudoinstruction, which just does subtraction from zero.
 The \q{U} suffix in both \INS{SUBU} and \INS{NEGU} implies that no exception to be raised in case of integer overflow.
-
-\fi
 
 \subsection{Branchless version?}
 
