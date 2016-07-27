@@ -1,0 +1,35 @@
+﻿\section{Fall-through}
+
+Ещё одно популярное использование оператора \TT{switch()} это т.н. \q{fallthrough} (\q{провал}).
+Вот простой пример:
+
+\lstinputlisting[numbers=left]{patterns/08_switch/4_fallthrough/fallthrough.c}
+
+Если $type=1$ (R), $read$ будет выставлен в 1, если $type=2$ (W), $write$ будет выставлен в 1.
+В случае $type=3$ (RW), обе $read$ \AndENRU $write$ будут выставлены в 1.
+
+Фрагмент кода на строке 14 будет исполнен в двух случаях: если $type=RW$ или если $type=W$.
+Там нет \q{break} для \q{case RW}, и это нормально.
+
+\subsection{MSVC x86}
+
+\lstinputlisting[caption=MSVC 2012]{patterns/08_switch/4_fallthrough/fallthrough_MSVC.asm}
+
+Код почти полностью повторяет то, что в исходнике.
+
+Там нет переходов между метками \TT{\$LN4@f} и 
+\TT{\$LN3@f}: так что когда управление (code flow) находится на 
+\TT{\$LN4@f}, $read$ в начале выставляется в 1, затем $write$.
+
+Наверное, поэтому всё это и называется \q{проваливаться}: управление проваливается через
+один фрагмент кода (выставляющий $read$) в другой (выставляющий $write$).
+Если $type=W$, мы оказываемся на \TT{\$LN3@f}, 
+так что код выставляющий $read$ в 1 не исполнится.
+
+\subsection{ARM64}
+
+\lstinputlisting[caption=GCC (Linaro) 4.9]{patterns/08_switch/4_fallthrough/fallthrough_ARM64_RU.s}
+
+Почти то же самое.
+Здесь нет переходов между метками \TT{.L4} и \TT{.L3}.
+

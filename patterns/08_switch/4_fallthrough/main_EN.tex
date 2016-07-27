@@ -1,0 +1,32 @@
+﻿\section{Fall-through}
+
+Another very popular usage of \TT{switch()} is the fall-through.
+Here is a small example:
+
+\lstinputlisting[numbers=left]{patterns/08_switch/4_fallthrough/fallthrough.c}
+
+If $type=1$ (R), $read$ is to be set to 1, if $type=2$ (W), $write$ is to be set to 1.
+In case of $type=3$ (RW), both $read$ and $write$ is to be set to 1.
+
+The code at line 14 is executed in two cases: if $type=RW$ or if $type=W$.
+There is no \q{break} for \q{case RW}x and that's OK.
+
+\subsection{MSVC x86}
+
+\lstinputlisting[caption=MSVC 2012]{patterns/08_switch/4_fallthrough/fallthrough_MSVC.asm}
+
+The code mostly resembles what is in the source.
+There are no jumps between labels \TT{\$LN4@f} and \TT{\$LN3@f}: so when code flow is at 
+\TT{\$LN4@f}, $read$ is first set to 1, then $write$.
+This is why it's called fall-through: code flow falls through one piece of code
+(setting $read$) to another (setting $write$).
+
+If $type=W$, we land at \TT{\$LN3@f}, so no code setting $read$ to 1 is executed.
+
+\subsection{ARM64}
+
+\lstinputlisting[caption=GCC (Linaro) 4.9]{patterns/08_switch/4_fallthrough/fallthrough_ARM64_EN.s}
+
+Merely the same thing.
+There are no jumps between labels \TT{.L4} and \TT{.L3}.
+
