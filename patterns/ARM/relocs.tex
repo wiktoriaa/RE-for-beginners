@@ -1,4 +1,7 @@
-﻿\section{\RU{Релоки}\EN{Relocs} \InENRU ARM64}
+﻿\newcommand{ARMELF}{[\IT{ELF for the ARM 64-bit Architecture (AArch64)}, (2013)]
+\footnote{\AlsoAvailableAs \url{http://go.yurichev.com/17288}}}
+
+\section{\RU{Релоки}\EN{Relocs} \InENRU ARM64}
 \label{ARM64_relocs}
 
 \RU{Как известно, в ARM64 инструкции 4-байтные, так что записать длинное число в регистр одной инструкцией нельзя.}
@@ -102,7 +105,7 @@ Contents of section .rodata:
 \ifdefined\ENGLISH{}
 As an example, let's try to disassemble the BL instruction manually.\\
 \TT{0x97ffffa0} is $10010111111111111111111110100000b$.
-According to \cite[C5.6.26]{ARM64ref}, \IT{imm26} is the last 26 bits: $imm26 = 11111111111111111110100000$.
+According to [\ARMSixFourRef C5.6.26], \IT{imm26} is the last 26 bits: $imm26 = 11111111111111111110100000$.
 It is \TT{0x3FFFFA0}, but the \ac{MSB} is 1, 
 so the number is negative, and we can convert it manually to convenient form for us.
 By the rules of negation (\myref{sec:signednumbers:negation}), just invert all bits: (it is \TT{1011111=0x5F}), and add 1 (\TT{0x5F+1=0x60}).
@@ -112,13 +115,13 @@ Now let's calculate destination address: \TT{0x4005a0} + (\TT{-0x180}) = \TT{0x4
 (please note: we consider the address of the BL instruction, not the current value of \ac{PC}, which may be different!).
 So the destination address is \TT{0x400420}.\\
 \\
-More about ARM64-related relocs: \cite{ARM64_ELF}.
+More about ARM64-related relocs: \ARMELF.
 \fi
 
 \ifdefined\RUSSIAN{}
 В качестве примера, попробуем дизассемблировать инструкцию BL вручную.\\
 \TT{0x97ffffa0} это $10010111111111111111111110100000b$.
-В соответствии с \cite[C5.6.26]{ARM64ref}, \IT{imm26} это последние 26 бит: $imm26 = 11111111111111111110100000$.
+В соответствии с [\ARMSixFourRef C5.6.26], \IT{imm26} это последние 26 бит: $imm26 = 11111111111111111110100000$.
 Это \TT{0x3FFFFA0}, но \ac{MSB} это 1, 
 так что число отрицательное, мы можем вручную его конвертировать в удобный для нас вид.
 По правилам изменения знака (\myref{sec:signednumbers:negation}), просто инвертируем все биты: (\TT{1011111=0x5F}) и прибавляем 1 (\TT{0x5F+1=0x60}).
@@ -128,5 +131,5 @@ More about ARM64-related relocs: \cite{ARM64_ELF}.
 (пожалуйста заметьте: мы берем адрес инструкции BL, а не текущее значение \ac{PC}, которое может быть другим!).
 Так что адрес в итоге \TT{0x400420}.\\
 \\
-Больше о релоках связанных с ARM64: \cite{ARM64_ELF}.
+Больше о релоках связанных с ARM64: \ARMELF.
 \fi
