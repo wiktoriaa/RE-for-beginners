@@ -34,20 +34,19 @@ For more information on other calling conventions see also section~(\myref{sec:c
 It is worth noting that nothing obliges programmers to pass arguments through the stack. It is not a requirement.
 One could implement any other method without using the stack at all.
 
-For example, it is possible to allocate a space for arguments in the \gls{heap}, fill it and pass it to a function via a pointer to this block in the \EAX register. This will work
-\footnote{For example, in the \q{The Art of Computer Programming} book by Donald Knuth, 
-in section 1.4.1 dedicated to subroutines \cite[section 1.4.1]{Knuth:1998:ACP:521463},
-we could read that one way to supply arguments to a subroutine is simply to list them after the \JMP instruction
-passing control to subroutine. Knuth explains that this method was particularly convenient on IBM System/360.}.
-% FIXME:
-% I am unsure about what this comment means.
-% My guess is that the arguments are put in the memory position after
-% the jump instruction, so you could say:
-% "one way to supply arguments to a subroutine is simply to list them in memory
-% after the \JMP instruction that passes control to the subroutine."
-% Right now, "after" also sounds like it refers to the time after
-% the jump happens, which I think is too late.
-However, it is a convenient custom in x86 and ARM to use the stack for this purpose.
+A somewhat popular way among assembly language newbies is to pass arguments via global variables, like:
+
+\lstinputlisting[caption=Assembly code]{patterns/02_stack/global_args.asm}
+
+But this method has obvious drawback: \IT{do\_something()} function cannot call itself recursively (or via another function),
+because it has to zap its own arguments.
+The same story with local variables: if to hold them in global variables, the function couldn't call itself.
+A method to store such information in stack makes this easier---it can hold as many function arguments and/or values,
+as much space it has.
+
+[\TAOCPvolI{}, 189] mentions even weirder schemes particularly convenient on IBM System/360.
+
+So it is a convenient custom in x86 and ARM to use the stack for this purpose.
 
 \par
 By the way, the \gls{callee} function does not have any information about how many arguments were passed.
