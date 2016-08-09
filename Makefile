@@ -76,7 +76,6 @@ define compile
 	rm -f *.bbl
 	rm -f *.aux
 	xelatex $1
-	biber $1
 	makeindex $1
 	makeglossaries $1
 	xelatex $1
