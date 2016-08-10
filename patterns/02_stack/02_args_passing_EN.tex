@@ -41,6 +41,8 @@ A somewhat popular way among assembly language newbies is to pass arguments via 
 But this method has obvious drawback: \IT{do\_something()} function cannot call itself recursively (or via another function),
 because it has to zap its own arguments.
 The same story with local variables: if to hold them in global variables, the function couldn't call itself.
+And this is also not thread-safe
+\footnote{Correctly implemented, each thread would have its own stack with its own arguments/variables.}.
 A method to store such information in stack makes this easier---it can hold as many function arguments and/or values,
 as much space it has.
 
