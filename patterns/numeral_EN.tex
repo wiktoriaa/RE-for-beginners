@@ -4,11 +4,18 @@
 Humans accustomed to decimal numeral system probably because almost all ones has 10 fingers.
 Nevertheless, number 10 has no significant meaning in science and mathematics.
 Natural numeral system in digital electronics is binary: 0 is for absence of current in wire and 1 for presence.
-10 in binary is 2 in decimal, 100 in binary is 4 in decimal and so on.
+10 in binary is 2 in decimal; 100 in binary is 4 in decimal and so on.
 
-How to convert from one system to another?
+If the numeral system has 10 digits, it has \IT{radix} (or \IT{base}) of 10.
+Binary numeral system has \IT{radix} of 2.
 
-Positional notation is used almost everywhere, this means, the digit (number placed in single character) has some weight depending on where it is placed.
+Important things to remember (or recall):
+1) \IT{number} is a number, while \IT{digit} is a term of writing system and is usually one character;
+2) number is not changed when converted to another radix: writing notation is.
+
+How to convert a number from one radix to another?
+
+Positional notation is used almost everywhere, this means, a digit (number placed in single character) has some weight depending on where it is placed.
 If 2 is placed at the rightmost place, it's 2.
 If it is placed at the place one digit before rightmost, it's 20.
 
@@ -30,7 +37,7 @@ Perhaps, humankind switched to positional notation because it's easier to do bas
 Indeed, binary numbers can be added, subtracted and so on in the very same as taught in schools, but only 2 digits are available.
 
 Binary numbers are bulky when represented in source code and dumps, so that is where hexadecimal numeral system can be used.
-Hexadecimal system uses 0..9 numbers and also 6 Latin characters: A..F.
+Hexadecimal radix uses 0..9 numbers and also 6 Latin characters: A..F.
 Each hexadecimal digit takes 4 bits or 4 binary digits, so it's very easy to convert from binary number to hexadecimal and back, even manually, in one's mind.
 
 \begin{center}
@@ -58,9 +65,9 @@ F	&1111	&15 \\
 \end{longtable}
 \end{center}
 
-How to understand, which system is currently used?
+How to understand, which radix is currently used?
 
-Decimal numbers are usually written as is, i.e., 1234. But some assemblers allows to make emphasis on decimal system and this number can be written with "d" suffix: 1234d.
+Decimal numbers are usually written as is, i.e., 1234. But some assemblers allows to make emphasis on decimal radix and this number can be written with "d" suffix: 1234d.
 
 Binary numbers sometimes prepended with "0b" prefix: 0b100110111 (\ac{GCC} has non-standard language extension for this: \url{https://gcc.gnu.org/onlinedocs/gcc/Binary-constants.html}).
 There is also another way: "b" suffix, for example: 100110111b.
@@ -74,7 +81,7 @@ I'll try to use "0x" prefix throughout the book for hexadecimal numbers.
 Should one learn to convert numbers in mind? A table of 1-digit hexadecimal numbers can easily be memorized.
 As of larger numbers, probably, it's not worth to torment yourself.
 
-\subsection{Octal numeral system}
+\subsection{Octal radix}
 
 Another numeral system heavily used in past of computer programming is octal: there are 8 digits (0..7) and each is mapped to 3 bits, so it's easy to convert numbers back and forth.
 It has been superseded by hexadecimal system almost everywhere, but surprisingly, there is *NIX utility used by many people often which takes octal number as argument: \TT{chmod}.
@@ -129,4 +136,15 @@ Binary number 0b1000101000 is divisible by 0b1000 (8), etc.
 This property can be used often to realize quickly if a size of some block in memory is padded to some boundary.
 For example, sections in \ac{PE} files are almost always started at addresses ending with 3 hexadecimal zeroes: 0x41000, 0x10001000, etc.
 The reason behind this is in the fact that almost all \ac{PE} sections are padded to boundary of 0x1000 (4096) bytes.
+
+\subsection{Multi-precision arithmetics and radix}
+
+\index{RSA}
+Multi-precision arithmetics is when a huge number is stored in several bytes.
+For example, RSA keys, both public and private, are spanning up to 4096 bits and maybe even more.
+
+In [\TAOCPvolII, 265] we can find the following idea: when you store multi-precision number in several bytes,
+the whole number can be represented as having a radix of $2^8=256$, and each digit goes to corresponding byte.
+Likewise, if you store multi-precision number in several 32-bit integer values, each digit goes to each 32-bit slot,
+and you may think about this number as stored in radix of $2^{32}$.
 

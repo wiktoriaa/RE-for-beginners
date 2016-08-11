@@ -1,7 +1,7 @@
 	...
 
 	mov	X, 123
-	mov	Y, 123
+	mov	Y, 456
 	call	do_something
 
 	...
