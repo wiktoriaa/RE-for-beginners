@@ -11,6 +11,8 @@ we need to specify all the values as function arguments.}
 \EN{But it's impossible to get the number of arguments in a variadic function in \CCpp, so let's denote 
 the value of $-1$ as a terminator.}
 
+\subsection{\EN{Using va\_arg macro}\RU{Используя макрос va\_arg}}
+
 \RU{Имеется стандартный заголовочный файл stdarg.h, который определяет макросы для работы с такими аргументами.}
 \EN{There is the standard stdarg.h header file which define macros for dealing with such arguments.}
 \RU{Их так же используют функции \printf и \scanf.}
@@ -26,7 +28,7 @@ the value of $-1$ as a terminator.}
 
 \RU{Так что внутри}\EN{So what is inside}?
 
-\subsection{\RU{Соглашение о вызовах \IT{cdecl}}\EN{\IT{cdecl} calling conventions}}
+\subsubsection{\RU{Соглашение о вызовах \IT{cdecl}}\EN{\IT{cdecl} calling conventions}}
 
 \lstinputlisting[caption=\Optimizing MSVC 6.0]{\CURPATH/arith_MSVC60_Ox.asm.\LANG}
 
@@ -61,7 +63,7 @@ into the stack as last.}
 \EN{Because otherwise, it would not be possible to find the first argument, 
 or, for printf-like functions, it would not be possible to find the address of the format-string.}
 
-\subsection{\RU{Соглашения о вызовах на основе регистров}\EN{Register-based calling conventions}}
+\subsubsection{\RU{Соглашения о вызовах на основе регистров}\EN{Register-based calling conventions}}
 \label{variadic_arith_registers}
 
 \RU{Наблюдательный читатель может спросить, что насчет тех соглашений о вызовах, где первые аргументы передаются
@@ -88,3 +90,16 @@ the stack:}
 
 \EN{By the way, a similar usage of the \IT{Shadow Space} is also considered here}
 \RU{Кстати, похожее использование \IT{Shadow Space} разбирается здесь}: \myref{pointer_to_argument}.
+
+\subsection{\RU{Используя указатель на первый аргумент ф-ции}\EN{Using pointer to the first function argument}}
+
+\RU{Пример можно переписать без использования макроса \TT{va\_arg}:}%
+\EN{The example can be rewritten without \TT{va\_arg} macro:}
+
+\lstinputlisting{\CURPATH/arith2.c}
+
+\RU{Иными словами, если набор аргументов -- это массив слов (32-битных или 64-битных), то мы просто перебираем элементы
+этого массива, начиная с первого.}%
+\EN{In other words, if an argument set is array of words (32-bit or 64-bit), we just enumerate array elements starting
+at first one.}
+
