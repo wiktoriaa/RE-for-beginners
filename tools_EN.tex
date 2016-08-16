@@ -1,0 +1,106 @@
+\part{Tools}
+
+\chapter{Disassembler}
+
+\section{IDA}
+
+\label{IDA}
+An older freeware version is available for download
+\footnote{\href{http://go.yurichev.com/17031}{hex-rays.com/products/ida/support/download\_freeware.shtml}}.
+
+\ShortHotKeyCheatsheet: \myref{sec:IDA_cheatsheet}
+
+\chapter{Debugger}
+
+\section{\olly}
+\myindex{\olly}
+
+Very popular user-mode win32 debugger: \href{http://go.yurichev.com/17032}{ollydbg.de}.
+
+\ShortHotKeyCheatsheet: \myref{sec:Olly_cheatsheet}
+
+\section{GDB}
+\myindex{GDB}
+
+Not very popular debugger among reverse engineers, but very comfortable nevertheless.
+
+Some commands: \myref{sec:GDB_cheatsheet}.
+
+\section{tracer}
+
+\myindex{tracer}
+\label{tracer}
+The author often uses
+\IT{tracer}
+\footnote{\href{http://go.yurichev.com/17338}{yurichev.com}}
+instead of a debugger.
+
+The author of these lines stopped using a debugger eventually, since all he needs from it is to spot function arguments while
+executing, or registers state at some point.
+Loading a debugger each time is too much, so a small utility called \IT{tracer} was born.
+It works from command line, allows intercepting function execution,
+setting breakpoints at arbitrary places, reading and changing registers state, etc.
+
+However, for learning purposes it is highly advisable to trace code in a debugger manually, watch how the registers state
+changes (e.g. classic SoftICE, OllyDbg, WinDbg highlight changed registers), flags, data, change them
+manually, watch the reaction, etc.
+
+\chapter{System calls tracing}
+
+\label{strace}
+\myindex{strace}
+\myindex{dtruss}
+\subsection{strace / dtruss}
+
+\myindex{syscall}
+It shows which system calls (syscalls(\myref{syscalls})) are called by a process right now.
+
+For example:
+
+\begin{lstlisting}
+# strace df -h
+
+...
+
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+open("/lib/i386-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\220\232\1\0004\0\0\0"..., 512) = 512
+fstat64(3, {st_mode=S_IFREG|0755, st_size=1770984, ...}) = 0
+mmap2(NULL, 1780508, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb75b3000
+\end{lstlisting}
+
+\myindex{\MacOSX}
+\MacOSX has dtruss for doing the same.
+
+\myindex{Cygwin}
+Cygwin also has strace, but as far as it's known, it works only for .exe-files
+compiled for the cygwin environment itself.
+
+\chapter{Decompilers}
+
+There is only one known, publicly available, high-quality decompiler to C code: Hex-Rays:
+\href{http://go.yurichev.com/17033}{hex-rays.com/products/decompiler/}
+
+% TODO Java, .NET, VB, etc
+
+\chapter{Other tools}
+
+\begin{itemize}
+\item Microsoft Visual Studio Express
+\footnote{\href{http://go.yurichev.com/17034}{visualstudio.com/en-US/products/visual-studio-express-vs}}:
+Stripped-down free version of Visual Studio, convenient for simple experiments.
+
+Some useful options: \myref{sec:MSVC_options}.
+
+\item
+\label{Hiew}
+Hiew\footnote{\href{http://go.yurichev.com/17035}{hiew.ru}}:
+for small modifications of code in binary files.
+	
+\item
+\myindex{binary grep}
+binary grep: 
+a small utility for searching any byte sequence in a big pile of files, 
+including non-executable ones: \BGREPURL.
+\end{itemize}
+
