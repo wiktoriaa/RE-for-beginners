@@ -10,10 +10,11 @@ is to be faster than the usual \strlen{} work + the cost of calling it and retur
 
 \myindex{x86!\Instructions!OR}
 \myindex{\CStandardLibrary!strlen()}
+\label{using_OR_instead_of_MOV}
 \RU{Первая инструкция функции \strlen{} вставленная здесь, это}\EN{The first instruction of 
 the inlined \strlen{} is} \TT{OR RAX, 0xFFFFFFFFFFFFFFFF}. 
-\RU{Трудно сказать, почему MSVC использовала \TT{OR} вместо \TT{MOV RAX, 0xFFFFFFFFFFFFFFFF}, но он делает это часто.}
-\EN{It's hard to say why MSVC uses \TT{OR} instead of \TT{MOV RAX, 0xFFFFFFFFFFFFFFFF}, but it does this often.}
+\RU{MSVC часто использует \TT{OR} вместо \TT{MOV RAX, 0xFFFFFFFFFFFFFFFF}, потому что опкод получается короче.}
+\EN{MSVC often uses \TT{OR} instead of \TT{MOV RAX, 0xFFFFFFFFFFFFFFFF}, because resulting opcode is shorter.}
 \RU{И конечно, это эквивалентно друг другу: все биты просто выставляются, а все выставленные
 биты это -1 в дополнительном коде (two's complement): \myref{sec:signednumbers}.}
 \EN{And of course, it is equivalent: all bits are set, and a number with all bits set is $-1$ 
