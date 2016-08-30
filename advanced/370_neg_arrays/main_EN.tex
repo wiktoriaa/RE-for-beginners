@@ -1,0 +1,54 @@
+\chapter{Negative array indices}
+\label{negative_array_indices}
+
+It's possible to address the space \IT{before} an array by supplying a negative index, e.g., $array[-1]$.
+
+\myindex{FORTRAN}
+It's very hard to say why one should use it, there is probably only one known practical application
+of this technique.
+% TODO: разобраться:
+% another use (which seems to be used more often) can be found in "Transaction processing" by Jim Gray, p. 755
+% basically, it's used in structures that describe pages, and the entries are indexed from the beginning,
+% and the directory entries - from the end with negative indices.
+\CCpp array elements indices start at 0, but some \ac{PL}s have a first index at 1 
+(at least FORTRAN).
+
+Programmers may still have this habit, so using this little trick, it's possible to address the first element
+in \CCpp using index 1:
+
+\lstinputlisting{\CURPATH/neg_array.c}
+
+\lstinputlisting[caption=\NonOptimizing MSVC 2010,label=neg_array_c,numbers=left]{\CURPATH/neg_array_EN.asm}
+
+So we have \TT{array[]} of ten elements, filled with $0 \ldots 9$ bytes.
+
+Then we have the \TT{fakearray[]} pointer, which points one byte before \TT{array[]}.
+
+\TT{fakearray[1]} points exactly to \TT{array[0]}.
+But we are still curious, what is there before \TT{array[]}?
+We have added \TT{random\_value} before \TT{array[]} and set 
+it to \TT{0x11223344}.
+The non-optimizing compiler allocated the variables in the order they were declared, so yes, the 32-bit \TT{random\_value}
+is right before the array.
+
+We ran it, and:
+
+\begin{lstlisting}
+first element 0
+second element 1
+last element 9
+array[-1]=11, array[-2]=22, array[-3]=33, array[-4]=44
+\end{lstlisting}
+
+Here is the stack fragment we will copypaste from \olly's stack window (with comments added by the author):
+
+\lstinputlisting[caption=\NonOptimizing MSVC 2010]{\CURPATH/stack_EN.txt}
+
+The pointer to the \TT{fakearray[]} (\TT{0x001DFBD3}) is indeed 
+the address of \TT{array[]} in the stack (\TT{0x001DFBD4}), 
+but minus 1 byte.
+
+It's still very hackish and dubious trick. Doubtfully anyone should use it in production code,
+but as a demonstration, it fits perfectly here.
+
+

@@ -1,34 +1,3 @@
-.SUFFIXES: .m4 .ru .en .es .ptbr .pl .it .de .th .nl
-.m4.en:
-	m4 --define=lang=en $*.m4 >$*.en
-.m4.ru:
-	m4 --define=lang=ru $*.m4 >$*.ru
-.m4.es:
-	m4 --define=lang=es $*.m4 >$*.es
-.m4.ptbr:
-	m4 --define=lang=ptbr $*.m4 >$*.ptbr
-.m4.pl:
-	m4 --define=lang=es $*.m4 >$*.pl
-.m4.it:
-	m4 --define=lang=it $*.m4 >$*.it
-.m4.de:
-	m4 --define=lang=de $*.m4 >$*.de
-.m4.th:
-	m4 --define=lang=th $*.m4 >$*.th
-.m4.nl:
-	m4 --define=lang=nl $*.m4 >$*.nl
-
-M4SOURCES := $(shell find . $(pwd) -name '*.m4')
-RU_LISTINGS := $(M4SOURCES:%.m4=%.ru)
-EN_LISTINGS := $(M4SOURCES:%.m4=%.en)
-ES_LISTINGS := $(M4SOURCES:%.m4=%.es)
-PL_LISTINGS := $(M4SOURCES:%.m4=%.pl)
-PTBR_LISTINGS := $(M4SOURCES:%.m4=%.ptbr)
-IT_LISTINGS := $(M4SOURCES:%.m4=%.it)
-DE_LISTINGS := $(M4SOURCES:%.m4=%.de)
-TH_LISTINGS := $(M4SOURCES:%.m4=%.th)
-NL_LISTINGS := $(M4SOURCES:%.m4=%.nl)
-
 all:    RU EN RU-A5 EN-A5
 
 clean:
@@ -58,8 +27,6 @@ clean:
 	rm -f *.ist
 	rm -f *.xref
 	rm -f *.torrent
-	rm -f *.en
-	rm -f *.ru
 	rm -f RE_for_beginners-*.log
 	rm -f Reverse_Engineering_for_Beginners-*.log
 	rm -f RE4B-*.log
@@ -82,36 +49,36 @@ define compile
 	xelatex $1
 endef
 
-RU: $(RU_LISTINGS)
+RU:
 	$(call compile,RE4B-RU)
 
-EN: $(EN_LISTINGS)
+EN:
 	$(call compile,RE4B-EN)
 
-RU-A5: $(RU_LISTINGS)
+RU-A5:
 	$(call compile,RE4B-RU-A5)
 
-EN-A5: $(EN_LISTINGS)
+EN-A5:
 	$(call compile,RE4B-EN-A5)
 
-ES:	$(ES_LISTINGS)
+ES:
 	$(call compile,RE4B-ES)
 
-PTBR:	$(PTBR_LISTINGS)
+PTBR:	
 	$(call compile,RE4B-PTBR)
 
-PL:	$(PL_LISTINGS)
+PL:
 	$(call compile,RE4B-PL)
 
-IT:	$(IT_LISTINGS)
+IT:
 	$(call compile,RE4B-IT)
 
-DE:	$(DE_LISTINGS)
+DE:
 	$(call compile,RE4B-DE)
 
-TH:	$(TH_LISTINGS)
+TH:
 	$(call compile,RE4B-TH)
 
-NL:	$(NL_LISTINGS)
+NL:
 	$(call compile,RE4B-NL)
 
