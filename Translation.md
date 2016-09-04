@@ -84,7 +84,6 @@ You may start to translate right now.
 To check your results, just run `make ES`, `make PTBR`, `make PL`, `make ITA`, `make DE`.
 You'll see almost blank pages with only listings and screenshots, without any text.
 Grep for each `\EN{}` macro in .tex file and add your translation.
-Same story with .m4 files, there are `_ES()`, `_PTBR()`, `_PL()`, `_DE()` and `_IT()` macros.
 
 There is also `\ESph{}`, `\PTBRph{}`, `\PLph{}`, `\DEph{}` and `\ITAph{}` placeholder macros in .tex files, where the translated text must be.
 You may start to translate there.
