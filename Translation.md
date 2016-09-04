@@ -46,6 +46,13 @@ Do not be discouraged by the size of the whole project.
 Try to translate some small piece with familiar material to you.
 Start the ball rolling, as they say. Some other translator may continue your work.
 
+How often to submit pieces of translated text?
+----------------------------------------------
+
+The book changes often, like Wikipedia, so it's good idea to send me anything as you have it,
+so other people can use it, fix it, etc.
+Also, other translators will be aware that some piece is already translated, so they will work on another one.
+
 Style
 -----
 
