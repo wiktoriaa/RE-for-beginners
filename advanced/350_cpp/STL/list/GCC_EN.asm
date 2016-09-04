@@ -51,7 +51,7 @@ loc_80002A6: ; CODE XREF: main+86
     call puts
     mov  [esp], ebx
     call _Z14dump_List_nodeP9List_node ; dump_List_node(List_node *)
-    mov  dword ptr [esp], offset aLetSCountFromT ; "* let's count from the begin:"
+    mov  dword ptr [esp], offset aLetSCountFromT ; "* let's count from the beginning:"
     call puts
     mov  esi, [esp+10h]
     mov  eax, [esi+0Ch]

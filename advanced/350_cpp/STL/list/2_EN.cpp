@@ -73,7 +73,7 @@ int main()
     tmp=l.end();
     dump_List_node ((struct List_node *)*(void**)&tmp);
 
-    printf ("* let's count from the begin:\n");
+    printf ("* let's count from the beginning:\n");
     std::list<struct a>::iterator it=l.begin();
     printf ("1st element: %d %d\n", (*it).x, (*it).y);
     it++;
