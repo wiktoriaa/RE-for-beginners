@@ -2,7 +2,6 @@
 
 void f(int *a1, int *a2, size_t cnt)
 {
-	size_t i;
 	size_t idx1=0; idx2=0;
 	size_t last_idx2=cnt*7;
 

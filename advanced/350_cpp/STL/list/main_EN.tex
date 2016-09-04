@@ -81,13 +81,13 @@ ptr=0x0028fe90 _Next=0x000349a0 _Prev=0x00034b40 x=5 y=6
 \end{lstlisting}
 
 The fact that the last element has a pointer to the first and the first element has a pointer 
-to the last one remind us circular list.
+to the last one remind us of circular lists.
 
 This is very helpful here: having a pointer to the first list element,
 i.e., that is in the $l$ variable,
 it is easy to get a pointer to the last one quickly, without the need to traverse the whole list.
 
-Inserting an element at the list end is also quick, thanks to this feature.
+Inserting an element at the end of the list is also quick, thanks to this feature.
 
 \TT{operator--} and \TT{operator++} just set the current iterator's value to the \TT{current\_node->prev} or \TT{current\_node->next}  values.%
 
@@ -110,7 +110,7 @@ cannot be used anymore.
 The GCC implementation (as of 4.8.1) doesn't store the current size of the list: this implies a slow .size() method:
 it has to traverse the whole list to count the elements, because it doesn't have any other way to get the information.
 
-This mean that this operation is $O(n)$, i.e., it gets slower steadily as the list grows.
+This mean that this operation is $O(n)$, i.e., it steadily gets slower as the list grows.
 
 \lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline-small-functions]{\CURPATH/STL/list/GCC_EN.asm}
 
