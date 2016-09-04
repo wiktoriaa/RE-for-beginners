@@ -15,7 +15,7 @@ hash            = dword ptr  0Ch
                 mov     eax, ebx
                 jz      short loc_80484D3
                 nop                     ; §padding§
-                lea     esi, [esi+0]    ; §padding; works as NOP (ESI does not changing here)§
+                lea     esi, [esi+0]    ; §padding; works as NOP (ESI does not change here)§
 
 loc_80484B8:
                 mov     ecx, eax        ; §save previous state of hash to ECX§
