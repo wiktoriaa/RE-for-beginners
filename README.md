@@ -7,7 +7,7 @@ Topics touched: Oracle RDBMS, Itanium, copy-protection dongles, LD_PRELOAD,
 stack overflow, ELF, win32 PE file format, x86-64, critical sections, syscalls, 
 TLS, position-independent code (PIC), profile-guided optimization, C++ STL, OpenMP, win32 SEH.
 
-Compiled versions are found here:
+Compiled versions can found here:
 
 English: 
 [A4 (for browsing/printing)](http://beginners.re/Reverse_Engineering_for_Beginners-en.pdf);
