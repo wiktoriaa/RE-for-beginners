@@ -1,6 +1,8 @@
 "Reverse Engineering for Beginners" free book
 ---------------------------------------------
 
+[![Build Status](https://travis-ci.org/dennis714/RE-for-beginners.svg?branch=master)](https://travis-ci.org/dennis714/RE-for-beginners)
+
 Topics discussed: x86/x64, ARM/ARM64, MIPS, Java/JVM.
 
 Topics touched: Oracle RDBMS, Itanium, copy-protection dongles, LD_PRELOAD,
