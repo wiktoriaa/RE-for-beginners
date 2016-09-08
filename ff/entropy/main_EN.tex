@@ -124,7 +124,25 @@ $\$$ dd bs=1M count=1 if=/dev/urandom | ent
 Entropy = 7.999803 bits per byte.
 \end{lstlisting}
 
-This means, all available space inside of byte is filled with information.
+This means, almost all available space inside of byte is filled with information.
+
+256 bytes in range of 0..255 gives exact value of 8:
+
+\begin{lstlisting}[basicstyle=\ttfamily, mathescape]
+#!/usr/bin/env python
+import sys
+
+for i in range(256):
+    sys.stdout.write(chr(i))
+\end{lstlisting}
+
+\begin{lstlisting}[basicstyle=\ttfamily, mathescape]
+python 1.py | ent
+Entropy = 8.000000 bits per byte.
+\end{lstlisting}
+
+Order of bytes doesn't matter.
+This means, all available space inside of byte is filled.
 
 Entropy of all zero bytes is 0:
 
