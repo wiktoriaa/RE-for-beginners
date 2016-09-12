@@ -1,8 +1,8 @@
-\chapterold{Обфускация}
+\section{Обфускация}
 
 Обфускация это попытка спрятать код (или его значение) от reverse engineer-а.
 
-\sectionold{Текстовые строки}
+\subsection{Текстовые строки}
 
 Как мы увидели в (\myref{sec:digging_strings}) текстовые строки могут быть крайне
 полезны.
@@ -61,9 +61,9 @@ sprintf(buf, "%s%c%s%c%s", "hel",'l',"o w",'o',"rld");
 
 Например: \myref{examples_SCO}.
 
-\sectionold{Исполняемый код}
+\subsection{Исполняемый код}
 
-\subsectionold{Вставка мусора}
+\subsubsection{Вставка мусора}
 
 Обфускация исполняемого кода\EMDASH{}это вставка случайного мусора (между настоящим кодом), который исполняется, но не делает
 ничего полезного.
@@ -81,7 +81,7 @@ mul	ecx
 Впрочем, промежуточные результаты полученные при исполнении настоящего кода вполне могут использоваться
 кодом-мусором для б\'{о}льшей путаницы\EMDASH{}почему нет?
 
-\subsectionold{Замена инструкций на раздутые эквиваленты}
+\subsubsection{Замена инструкций на раздутые эквиваленты}
 
 \begin{itemize}
 \item \TT{MOV op1, op2} может быть заменена на пару \TT{PUSH op2 / POP op1}.
@@ -92,7 +92,7 @@ mul	ecx
 \item \TT{PUSH op} также можно заменить на пару инструкций: \TT{SUB ESP, 4 (или 8) / MOV [ESP], op}.
 \end{itemize}
 
-\subsectionold{Всегда исполняющийся/никогда не исполняющийся код}
+\subsubsection{Всегда исполняющийся/никогда не исполняющийся код}
 
 Если разработчик уверен, что в ESI всегда будет 0 в этом месте:
 
@@ -107,7 +107,7 @@ Reverse engineer-у понадобится какое-то время чтобы
 
 \lstinputlisting{\CURPATH/3_RU.asm}
 
-\subsectionold{Сделать побольше путаницы}
+\subsubsection{Сделать побольше путаницы}
 
 \begin{lstlisting}
 instruction 1
@@ -131,7 +131,7 @@ ins1_label:	instruction 1
 exit:
 \end{lstlisting}
 
-\subsectionold{Использование косвенных указателей}
+\subsubsection{Использование косвенных указателей}
 
 \begin{lstlisting}
 dummy_data1	db	100h dup (0)
@@ -159,7 +159,7 @@ func		endp
 
 К глобальным переменным и даже функциям можно обращаться так же.
 
-\sectionold{Виртуальная машина / псевдо-код}
+\subsection{Виртуальная машина / псевдо-код}
 
 Программист может также создать свой собственный \ac{PL} или \ac{ISA} и интерпретатор для него.
 
@@ -169,7 +169,7 @@ Reverse engineer-у придется потратить какое-то врем
 Ему также возможно придется писать что-то вроде дизассемблера/декомпилятора.
 % TODO about obfuscation VMs
 
-\sectionold{Еще кое-что}
+\subsection{Еще кое-что}
 
 Моя попытка (хотя и слабая) пропатчить компилятор Tiny C чтобы он выдавал обфусцированный код:
 \url{http://go.yurichev.com/17220}.
@@ -178,7 +178,7 @@ Reverse engineer-у придется потратить какое-то врем
 [Stephen Dolan, \IT{mov is Turing-complete}, (2013)]
 \footnote{\AlsoAvailableAs \url{http://www.cl.cam.ac.uk/~sd601/papers/mov.pdf}}. 
 
-\sectionold{\Exercise}
+\subsection{\Exercise}
 
 \begin{itemize}
 	\item \url{http://challenges.re/29}

@@ -1,4 +1,4 @@
-\sectionold{Тернарный условный оператор}
+\subsection{Тернарный условный оператор}
 \label{chap:cond}
 
 Тернарный условный оператор (ternary conditional operator) в \CCpp это:
@@ -11,7 +11,7 @@ expression ? expression : expression
 
 \lstinputlisting{patterns/07_jcc/cond_operator/cond.c}
 
-\subsectionold{x86}
+\subsubsection{x86}
 
 Старые и неоптимизирующие компиляторы генерируют код так, как если бы выражение \TT{if/else} было использовано
 вместо него:
@@ -28,7 +28,7 @@ expression ? expression : expression
 \Optimizing GCC 4.8 для x86 также использует инструкцию \TT{CMOVcc},
 тогда как неоптимизирующий GCC 4.8 использует условные переходы.
 
-\subsectionold{ARM}
+\subsubsection{ARM}
 
 \myindex{x86!\Instructions!ADRcc}
 \Optimizing Keil для режима ARM также использует инструкцию \INS{ADRcc}, срабатывающую при некотором
@@ -42,7 +42,7 @@ expression ? expression : expression
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/07_jcc/cond_operator/Keil_thumb_O3_RU.s}
 
-\subsectionold{ARM64}
+\subsubsection{ARM64}
 
 \Optimizing GCC (Linaro) 4.9 для ARM64 также использует условные переходы:
 
@@ -57,13 +57,13 @@ expression ? expression : expression
 но GCC 4.9 наверное, пока не так
 хорош, чтобы генерировать её в таком фрагменте кода
 
-\subsectionold{MIPS}
+\subsubsection{MIPS}
 
 GCC 4.4.5 для MIPS тоже не так хорош, к сожалению:
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/07_jcc/cond_operator/MIPS_O3_RU.s}
 
-\subsectionold{Перепишем, используя обычный \TT{if/else}}
+\subsubsection{Перепишем, используя обычный \TT{if/else}}
 
 \lstinputlisting{patterns/07_jcc/cond_operator/cond2.c}
 
@@ -76,7 +76,7 @@ GCC 4.4.5 для MIPS тоже не так хорош, к сожалению:
 
 Но оптимизирующий MSVC 2012 пока не так хорош.
 
-\subsectionold{\Conclusion{}}
+\subsubsection{\Conclusion{}}
 
 Почему оптимизирующие компиляторы стараются избавиться от условных переходов? Читайте больше об этом здесь:
  \myref{branch_predictors}.

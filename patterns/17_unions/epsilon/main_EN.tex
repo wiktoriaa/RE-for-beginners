@@ -1,4 +1,4 @@
-﻿\sectionold{Calculating machine epsilon}
+﻿\subsection{Calculating machine epsilon}
 
 The machine epsilon is the smallest possible value the \ac{FPU} can work with.
 The more bits allocated for floating point number, the smaller the machine epsilon.
@@ -17,7 +17,7 @@ The \IT{union} serves here as a way to access IEEE 754 number as a regular integ
 Adding 1 to it in fact adds 1 to the \IT{fraction} part of the number, however, needless to say,
 overflow is possible, which will add another 1 to the exponent part.
 
-\subsectionold{x86}
+\subsubsection{x86}
 
 \lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/17_unions/epsilon/float_MSVC_2010_Ox_EN.asm}
 
@@ -29,7 +29,7 @@ Then it is loaded into the FPU as a 32-bit IEEE 754 number, \INS{FSUBR} does the
 value is stored in \TT{ST0}.
 The last \INS{FSTP}/\INS{FLD} instruction pair is redundant, but the compiler didn't optimize it out.
 
-\subsectionold{ARM64}
+\subsubsection{ARM64}
 
 Let's extend our example to 64-bit:
 
@@ -43,7 +43,7 @@ incremented, copied to FPU register \TT{D1}, and then subtraction occurs.
 
 See also this example compiled for x64 with SIMD instructions: \myref{machine_epsilon_x64_and_SIMD}.
 
-\subsectionold{MIPS}
+\subsubsection{MIPS}
 
 \myindex{MIPS!\Instructions!MTC1}
 
@@ -51,7 +51,7 @@ The new instruction here is \INS{MTC1} (\q{Move To Coprocessor 1}), it just tran
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/17_unions/epsilon/MIPS_O3_IDA.lst}
 
-\subsectionold{\Conclusion}
+\subsubsection{\Conclusion}
 
 It's hard to say whether someone may need this trickery in real-world code, 
 but as was mentioned many times in this book, this example serves well 

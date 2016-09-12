@@ -1,5 +1,5 @@
 % FIXME1 divide this file into separate ones...
-\chapterold{Работа с числами с плавающей запятой используя SIMD}
+\section{Работа с числами с плавающей запятой используя SIMD}
 
 \label{floating_SIMD}
 \myindex{IEEE 754}
@@ -20,11 +20,11 @@
 
 Примеры будем использовать из секции о FPU: \myref{sec:FPU}.
 
-\sectionold{Простой пример}
+\subsection{Простой пример}
 
 \lstinputlisting{patterns/12_FPU/1_simple/simple.c}
 
-\subsectionold{x64}
+\subsubsection{x64}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/simple_MSVC_2012_x64_Ox.asm}
 
@@ -60,7 +60,7 @@ $a$ передается через \XMM{0}, $b$\EMDASH{}через \XMM{1}.
 причем, только младшие половины регистров, т.е. только 64-битные значения типа \Tdouble{}.
 Результат работы компилятора GCC точно такой же.
 
-\subsectionold{x86}
+\subsubsection{x86}
 
 Скомпилируем этот пример также и под x86. MSVC 2012 даже генерируя под x86, использует SSE2-инструкции:
 
@@ -128,7 +128,7 @@ $a$ передается через \XMM{0}, $b$\EMDASH{}через \XMM{1}.
 как 4 \Tfloat{}-числа или просто как 16 байт.
 
 \clearpage
-\sectionold{Передача чисел с плавающей запятой в аргументах}
+\subsection{Передача чисел с плавающей запятой в аргументах}
 
 \lstinputlisting{patterns/12_FPU/2_passing_floats/pow.c}
 
@@ -158,11 +158,11 @@ GCC работает понятнее.
 для \printf записывается 1 --- это значит, что будет передан один аргумент в векторных регистрах, 
 так того требует стандарт \SysVABI.
 
-\sectionold{Пример с сравнением}
+\subsection{Пример с сравнением}
 
 \lstinputlisting{patterns/12_FPU/3_comparison/d_max.c}
 
-\subsectionold{x64}
+\subsubsection{x64}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64_Ox.asm}
 
@@ -183,7 +183,7 @@ Double-Precision Floating-Point Value}), которая просто выбир�
 \lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
 
 \clearpage
-\subsectionold{x86}
+\subsubsection{x86}
 
 Скомпилируем этот пример в MSVC 2012 с включенной оптимизацией:
 
@@ -203,7 +203,7 @@ Double-Precision Floating-Point Value}), которая просто выбир�
 \label{fig:FPU_SIMD_d_max_olly}
 \end{figure}
 
-\sectionold{Вычисление машинного эпсилона: x64 и SIMD}
+\subsection{Вычисление машинного эпсилона: x64 и SIMD}
 \label{machine_epsilon_x64_and_SIMD}
 
 Вернемся к примеру \q{вычисление машинного эпсилона} для \Tdouble \lstref{machine_epsilon_double_c}.
@@ -229,7 +229,7 @@ SUBSD это \q{Subtract Scalar Double-Precision Floating-Point Values},
 
 \input{patterns/205_floating_SIMD/FPU_PRNG/main_RU}
 
-\sectionold{Итог}
+\subsection{Итог}
 
 Во всех приведенных примерах, в XMM-регистрах используется только младшая половина регистра, там
 хранится значение в формате IEEE 754.

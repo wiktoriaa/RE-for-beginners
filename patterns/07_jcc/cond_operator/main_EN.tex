@@ -1,4 +1,4 @@
-\sectionold{Ternary conditional operator}
+\subsection{Ternary conditional operator}
 \label{chap:cond}
 
 The ternary conditional operator in \CCpp has the following syntax:
@@ -11,7 +11,7 @@ Here is an example:
 
 \lstinputlisting{patterns/07_jcc/cond_operator/cond.c}
 
-\subsectionold{x86}
+\subsubsection{x86}
 
 Old and non-optimizing compilers generate assembly code just as if an \TT{if/else} statement was used:
 
@@ -26,7 +26,7 @@ Newer compilers are more concise:
 \myindex{x86!\Instructions!CMOVcc}
 \Optimizing GCC 4.8 for x86 also uses the \TT{CMOVcc} instruction, while the non-optimizing GCC 4.8 uses conditional jumps.
 
-\subsectionold{ARM}
+\subsubsection{ARM}
 
 \myindex{x86!\Instructions!ADRcc}
 \Optimizing Keil for ARM mode also uses the conditional instructions \TT{ADRcc}:
@@ -40,7 +40,7 @@ that support conditional flags:
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/07_jcc/cond_operator/Keil_thumb_O3_EN.s}
 
-\subsectionold{ARM64}
+\subsubsection{ARM64}
 
 \Optimizing GCC (Linaro) 4.9 for ARM64 also uses conditional jumps:
 
@@ -53,13 +53,13 @@ like \TT{ADRcc} in 32-bit ARM mode or \INS{CMOVcc} in x86.
 It has, however, \q{Conditional SELect} instruction (\TT{CSEL})[\ARMSixFourRef p390, C5.5],
 but GCC 4.9 does not seem to be smart enough to use it in such piece of code.
 
-\subsectionold{MIPS}
+\subsubsection{MIPS}
 
 Unfortunately, GCC 4.4.5 for MIPS is not very smart, either:
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/07_jcc/cond_operator/MIPS_O3_EN.s}
 
-\subsectionold{Let's rewrite it in an \TT{if/else} way}
+\subsubsection{Let's rewrite it in an \TT{if/else} way}
 
 \lstinputlisting{patterns/07_jcc/cond_operator/cond2.c}
 
@@ -73,6 +73,6 @@ Interestingly, optimizing GCC 4.8 for x86 was also able to use \TT{CMOVcc} in th
 
 But the optimizing MSVC 2012 is not that good (yet).
 
-\subsectionold{\Conclusion{}}
+\subsubsection{\Conclusion{}}
 
 Why optimizing compilers try to get rid of conditional jumps? Read here about it: \myref{branch_predictors}.

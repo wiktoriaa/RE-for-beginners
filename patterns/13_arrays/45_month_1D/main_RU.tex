@@ -1,11 +1,11 @@
-﻿\sectionold{Массив указателей на строки}
+﻿\subsection{Массив указателей на строки}
 \label{array_of_pointers_to_strings}
 
 Вот пример массива указателей.
 
 \lstinputlisting[caption=Получить имя месяца,label=get_month1]{patterns/13_arrays/45_month_1D/month1_RU.c}
 
-\subsectionold{x64}
+\subsubsection{x64}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/13_arrays/45_month_1D/month1_MSVC_2013_x64_Ox.asm}
 
@@ -53,7 +53,7 @@
 	ret
 \end{lstlisting}
 
-\subsubsectionold{32-bit MSVC}
+\myparagraph{32-bit MSVC}
 
 Скомпилируем также в 32-битном компиляторе MSVC:
 
@@ -64,9 +64,9 @@
 И оно умножается на 4, потому что элементы таблицы имеют ширину 32 бита или 4 байта.
 
 % FIXME1 move to another file
-\subsectionold{32-битный ARM}
+\subsubsection{32-битный ARM}
 
-\subsubsectionold{ARM в режиме ARM}
+\myparagraph{ARM в режиме ARM}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/13_arrays/45_month_1D/month1_Keil_ARM_O3.s}
 
@@ -81,7 +81,7 @@
 
 32-битный элемент таблицы загружается в R0 из таблицы.
 
-\subsubsectionold{ARM в режиме Thumb}
+\myparagraph{ARM в режиме Thumb}
 
 Код почти такой же, только менее плотный, потому что здесь, в инструкции \LDR, нельзя задать суффикс \LSL:
 
@@ -94,7 +94,7 @@ get_month1 PROC
         ENDP
 \end{lstlisting}
 
-\subsectionold{ARM64}
+\subsubsection{ARM64}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 ARM64]{patterns/13_arrays/45_month_1D/month1_GCC49_ARM64_O3.s}
 
@@ -108,11 +108,11 @@ get_month1 PROC
 
 Затем 64-битное значение загружается из таблицы в X0.
 
-\subsectionold{MIPS}
+\subsubsection{MIPS}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/13_arrays/45_month_1D/MIPS_O3_IDA_RU.lst}
 
-\subsectionold{Переполнение массива}
+\subsubsection{Переполнение массива}
 
 Наша функция принимает значения в пределах 0..11, но что будет, если будет передано 12?
 
@@ -144,7 +144,7 @@ get_month1 PROC
 
 И скорее всего упадет, потому что это значение не выглядит как действительный адрес.
 
-\subsubsectionold{Защита от переполнения массива}
+\myparagraph{Защита от переполнения массива}
 
 \epigraph{Если какая-нибудь неприятность может случиться, она случается}{Закон Мерфи}
 

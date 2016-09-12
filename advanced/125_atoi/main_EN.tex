@@ -1,10 +1,10 @@
-\chapterold{String to number conversion (atoi())}
+\section{String to number conversion (atoi())}
 
 \myindex{\CStandardLibrary!atoi()}
 
 Let's try to reimplement the standard atoi() C function.
 
-\sectionold{Simple example}
+\subsection{Simple example}
 
 Here is the simplest possible way to read a number represented in \ac{ASCII} encoding.
 
@@ -32,7 +32,7 @@ In other words, the result is shifted left by one position in decimal form on ea
 
 The last digit is added, but there is no shift.
 
-\subsectionold{\Optimizing MSVC 2013 x64}
+\subsubsection{\Optimizing MSVC 2013 x64}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{\CURPATH/atoi.asm.MSVC2013.x64.Ox_EN}
 
@@ -50,18 +50,18 @@ This is the case.
 It's very hard to say why this is better then SUB.
 But MSVC does this often.
 
-\subsectionold{\Optimizing GCC 4.9.1 x64}
+\subsubsection{\Optimizing GCC 4.9.1 x64}
 
 \Optimizing GCC 4.9.1 is more concise, but there is one redundant RET instruction at the end.
 One would be enough.
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{\CURPATH/atoi.s.GCC491.O3.x64_EN}
 
-\subsectionold{\OptimizingKeilVI (\ARMMode)}
+\subsubsection{\OptimizingKeilVI (\ARMMode)}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{\CURPATH/atoi.s.ARM.O3_EN}
 
-\subsectionold{\OptimizingKeilVI (\ThumbMode)}
+\subsubsection{\OptimizingKeilVI (\ThumbMode)}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{\CURPATH/atoi.s.thumb.O3_EN}
 
@@ -73,20 +73,20 @@ is added to it.
 
 Indeed, the result is the same, but the compiler did some regrouping.
 
-\subsectionold{\Optimizing GCC 4.9.1 ARM64}
+\subsubsection{\Optimizing GCC 4.9.1 ARM64}
 
 The ARM64 compiler can use the pre-increment instruction suffix:
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{\CURPATH/atoi.s.GCC49.ARM64.O3_EN}
 
-\sectionold{A slightly advanced example}
+\subsection{A slightly advanced example}
 
 My new code snippet is more advanced, now it checks for the \q{minus} sign at the first character
 and reports an error if a non-digit was found in the input string:
 
 \lstinputlisting{\CURPATH/atoi2.c}
 
-\subsectionold{\Optimizing GCC 4.9.1 x64}
+\subsubsection{\Optimizing GCC 4.9.1 x64}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{\CURPATH/atoi2.s.GCC491.O3.x64_EN}
 
@@ -127,7 +127,7 @@ Another example of it in this book:
 
 \Optimizing MSVC 2013 x64 does the same tricks.
 
-\subsectionold{\OptimizingKeilVI (\ARMMode)}
+\subsubsection{\OptimizingKeilVI (\ARMMode)}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),numbers=left]{\CURPATH/atoi2.s.ARM.O3_EN}
 
@@ -148,7 +148,7 @@ Thumb mode code is mostly the same.
 \myindex{ARM!\Instructions!NEG}
 GCC 4.9 for ARM64 can use the NEG instruction, which is available in ARM64.
 
-\sectionold{\Exercise{}}
+\subsection{\Exercise{}}
 
 \myindex{Fuzzing}
 Oh, by the way, security researchers deals often with unpredictable behaviour of program while handling of incorrect data.

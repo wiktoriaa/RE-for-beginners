@@ -1,9 +1,9 @@
-﻿\sectionold{Converting 32-bit value into 64-bit one}
+﻿\subsection{Converting 32-bit value into 64-bit one}
 \label{subsec:sign_extending_32_to_64}
 
 \lstinputlisting{patterns/185_64bit_in_32_env/conversion/4.c}
 
-\subsectionold{x86}
+\subsubsection{x86}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/185_64bit_in_32_env/conversion/MSVC2012_Ox.asm}
 
@@ -19,7 +19,7 @@ most significant bit in \EAX{}), and depending of it, sets all 32 bits in \EDX{}
 Its operation is somewhat
 similar to the \MOVSX{} instruction.
 
-\subsectionold{ARM}
+\subsubsection{ARM}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/conversion/Keil_ARM_O3.s}
 
@@ -29,7 +29,7 @@ So after \q{ASR r1,r0,\#31}, \Reg{1} containing 0xFFFFFFFF if the input value wa
 \Reg{1} contains the high part of the resulting 64-bit value.
 In other words, this code just copies the \ac{MSB} (sign bit) from the input value in \Reg{0} to all bits of the high 32-bit part of the resulting 64-bit value.
 
-\subsectionold{MIPS}
+\subsubsection{MIPS}
 
 GCC for MIPS does the same as Keil did for ARM mode:
 

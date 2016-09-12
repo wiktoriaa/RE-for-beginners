@@ -1,8 +1,8 @@
-\subsectionold{std::string}
+\subsubsection{std::string}
 \myindex{\Cpp!STL!std::string}
 \label{std_string}
 
-\subsubsectionold{Internals}
+\myparagraph{Internals}
 
 Many string libraries [\CNotes 2.2] implement a structure that contains a pointer to a string buffer,
 a variable that always contains the current string length 
@@ -22,7 +22,7 @@ So, std::string is a class with \Tchar as its base type.
 
 And std::wstring is a class with \IT{wchar\_t} as its base type.
 
-\myparagraphold{MSVC}
+\mysubparagraph{MSVC}
 
 The MSVC implementation may store the buffer in place instead of using a pointer to a buffer 
 (if the string is shorter than 16 symbols).
@@ -64,7 +64,7 @@ This works because at the moment a pointer to buffer is located at the start of 
 This may stay unnoticed for a long time, until a longer string appears there at some time, 
 then the process will crash.
 
-\myparagraphold{GCC}
+\mysubparagraph{GCC}
 
 GCC's implementation of this structure has one more variable---reference count.
 
@@ -91,7 +91,7 @@ We consider this in our example:
 A trickery has to be used to imitate the mistake we already have seen above because GCC
 has stronger type checking, nevertheless, printf() works here without c\_str() as well.
 
-\subsubsectionold{A more complex example}
+\myparagraph{A more complex example}
 
 \lstinputlisting{\CURPATH/STL/string/3.cpp}
 
@@ -125,7 +125,7 @@ shorter strings right in the structure):
 It can be seen that it's not a pointer to the object that is passed to destructors, but rather an address 12 bytes (or 3 words)
 before, i.e., a pointer to the real start of the structure.
 
-\subsubsectionold{std::string as a global variable}
+\myparagraph{std::string as a global variable}
 \label{sec:std_string_as_global_variable}
 
 Experienced \Cpp programmers knows that global variables of \ac{STL} types can be defined without problems.

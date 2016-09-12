@@ -1,4 +1,4 @@
-\sectionold{Установка и сброс отдельного бита: пример с \ac{FPU}}
+\subsection{Установка и сброс отдельного бита: пример с \ac{FPU}}
 
 \myindex{IEEE 754}
 Как мы уже можем знать, вот как биты расположены в значении типа \Tfloat в формате IEEE 754:
@@ -17,7 +17,7 @@
 
 \XOR может использоваться для смены бита: \myref{XOR_property}.
 
-\subsectionold{x86}
+\subsubsection{x86}
 
 Код прямолинеен:
 
@@ -45,7 +45,7 @@
 И наконец, результат копируется в регистр \TT{XMM0}, потому что значения с плавающей точной возвращаются
 в регистре \TT{XMM0} в среде Win64.
 
-\subsectionold{MIPS}
+\subsubsection{MIPS}
 
 GCC 4.4.5 для MIPS делает почти то же самое:
 
@@ -55,9 +55,9 @@ GCC 4.4.5 для MIPS делает почти то же самое:
 Для загрузки константы 0x80000000 в регистр используется только одна инструкция \LUI, потому что \LUI сбрасывает
 младшие 16 бит и это нули в константе, так что одной \LUI без \ORI достаточно.
 
-\subsectionold{ARM}
+\subsubsection{ARM}
 
-\subsubsectionold{\OptimizingKeilVI (\ARMMode)}
+\myparagraph{\OptimizingKeilVI (\ARMMode)}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_ARM_O3_RU.s}
 
@@ -68,7 +68,7 @@ GCC 4.4.5 для MIPS делает почти то же самое:
 
 \EOR это инструкция в ARM которая делает то же что и \XOR (\q{Exclusive OR}).
 
-\subsubsectionold{\OptimizingKeilVI (\ThumbMode)}
+\myparagraph{\OptimizingKeilVI (\ThumbMode)}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_thumb_O3.s}
 
@@ -86,7 +86,7 @@ GCC 4.4.5 для MIPS делает почти то же самое:
 а \ac{MSB} ноль, потому что все \q{новые} биты появляющиеся во время операций сдвига это всегда нули.
 Таким образом, пара инструкций \LSLS/\LSRS сбрасывают \ac{MSB}.
 
-\subsubsectionold{\Optimizing GCC 4.6.3 (Raspberry Pi, \ARMMode)}
+\myparagraph{\Optimizing GCC 4.6.3 (Raspberry Pi, \ARMMode)}
 
 \lstinputlisting[caption=\Optimizing GCC 4.6.3 для Raspberry Pi (\ARMMode)]{patterns/14_bitfields/35_set_reset_FPU/raspberry_GCC_O3_ARM_mode_RU.lst}
 

@@ -1,4 +1,4 @@
-\sectionold{When there are several \IT{case} statements in one block}
+\subsection{When there are several \IT{case} statements in one block}
 
 Here is a very widespread construction: several \IT{case} statements for a single block:
 
@@ -7,7 +7,7 @@ Here is a very widespread construction: several \IT{case} statements for a singl
 It's too wasteful to generate a block for each possible case,
 so what is usually done is to generate each block plus some kind of dispatcher.
 
-\subsectionold{MSVC}
+\subsubsection{MSVC}
 
 \lstinputlisting[caption=\Optimizing MSVC 2010,numbers=left]{patterns/08_switch/3_several_cases/several_cases_MSVC_2010_Ox_EN.asm}
 
@@ -36,11 +36,11 @@ Why isn't it possible to make it as before
 (\myref{switch_lot_GCC}), just with one table consisting of block pointers?
 The reason is that the elements in index table are 8-bit, hence it's all more compact.
 
-\subsectionold{GCC}
+\subsubsection{GCC}
 
 GCC does the job in the way we already discussed (\myref{switch_lot_GCC}), using just one table of pointers.
 
-\subsectionold{ARM64: \Optimizing GCC 4.9.1}
+\subsubsection{ARM64: \Optimizing GCC 4.9.1}
 
 There is no code to be triggered if the input value is 0, so GCC tries to make the jump table more compact
 and so it starts at 1 as an input value.

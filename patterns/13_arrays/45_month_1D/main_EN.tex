@@ -1,11 +1,11 @@
-﻿\sectionold{Array of pointers to strings}
+﻿\subsection{Array of pointers to strings}
 \label{array_of_pointers_to_strings}
 
 Here is an example for an array of pointers.
 
 \lstinputlisting[caption=Get month name,label=get_month1]{patterns/13_arrays/45_month_1D/month1_EN.c}
 
-\subsectionold{x64}
+\subsubsection{x64}
 
 \lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/13_arrays/45_month_1D/month1_MSVC_2013_x64_Ox.asm}
 
@@ -54,7 +54,7 @@ It's \IT{displacement}, and it's zero here.}:
 	ret
 \end{lstlisting}
 
-\subsubsectionold{32-bit MSVC}
+\myparagraph{32-bit MSVC}
 
 Let's also compile it in the 32-bit MSVC compiler:
 
@@ -65,9 +65,9 @@ The input value does not need to be extended to 64-bit value, so it is used as i
 And it's multiplied by 4, because the table elements are 32-bit (or 4 bytes) wide.
 
 % FIXME1 move to another file
-\subsectionold{32-bit ARM}
+\subsubsection{32-bit ARM}
 
-\subsubsectionold{ARM in ARM mode}
+\myparagraph{ARM in ARM mode}
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/13_arrays/45_month_1D/month1_Keil_ARM_O3.s}
 
@@ -83,7 +83,7 @@ to R1 (where the address of the table is) and then a table element is loaded fro
 
 The 32-bit table element is loaded into R0 from the table.
 
-\subsubsectionold{ARM in Thumb mode}
+\myparagraph{ARM in Thumb mode}
 
 The code is mostly the same, but less dense, because the \LSL suffix cannot be specified in the \LDR instruction here:
 
@@ -96,7 +96,7 @@ get_month1 PROC
         ENDP
 \end{lstlisting}
 
-\subsectionold{ARM64}
+\subsubsection{ARM64}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 ARM64]{patterns/13_arrays/45_month_1D/month1_GCC49_ARM64_O3.s}
 
@@ -109,11 +109,11 @@ Then corresponding element is picked using just one \LDR, which takes W0
 sign-extends it (this is what \q{sxtw} suffix implies) and adds to X0.
 Then the 64-bit value is loaded from the table into X0.
 
-\subsectionold{MIPS}
+\subsubsection{MIPS}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/13_arrays/45_month_1D/MIPS_O3_IDA_EN.lst}
 
-\subsectionold{Array overflow}
+\subsubsection{Array overflow}
 
 Our function accepts values in the range of 0..11, but what if 12 is passed?
 There is no element in table at this place.
@@ -146,7 +146,7 @@ this address, expecting a C-string there.
 
 Most likely it is about to crash, because this value does't look like a valid address.
 
-\subsubsectionold{Array overflow protection}
+\myparagraph{Array overflow protection}
 
 \epigraph{If something can go wrong, it will}{Murphy's Law}
 

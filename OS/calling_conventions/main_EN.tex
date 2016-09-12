@@ -1,7 +1,7 @@
-\chapterold{Arguments passing methods (calling conventions)}
+\section{Arguments passing methods (calling conventions)}
 \label{sec:callingconventions}
 
-\sectionold{cdecl}
+\subsection{cdecl}
 \myindex{cdecl}
 \label{cdecl}
 
@@ -17,7 +17,7 @@ call function
 add esp, 12 ; returns ESP
 \end{lstlisting}
 
-\sectionold{stdcall}
+\subsection{stdcall}
 \label{sec:stdcall}
 \myindex{stdcall}
 
@@ -58,7 +58,7 @@ the number of function arguments can be easily deduced from the \TT{RETN n} inst
 
 \lstinputlisting[caption=MSVC 2010]{OS/calling_conventions/stdcall_ex.asm}
 
-\subsectionold{Functions with variable number of arguments}
+\subsubsection{Functions with variable number of arguments}
 
 \printf-like functions are, probably, the only case of functions with a variable number of arguments in \CCpp,
 but it is easy to illustrate an important difference between \IT{cdecl} and \IT{stdcall} with their help.
@@ -72,7 +72,7 @@ the number of arguments in the format string, this could be a dangerous situatio
 provoke a sudden program crash.
 Thus it is not suitable for such functions to use \IT{stdcall}, \IT{cdecl} is better.
 
-\sectionold{fastcall}
+\subsection{fastcall}
 \label{fastcall}
 \myindex{fastcall}
 
@@ -117,7 +117,7 @@ We see that the \gls{callee} returns \ac{SP} by using the \TT{RETN} instruction 
 
 Which implies that the number of arguments can be deduced easily here as well.
 
-\subsectionold{GCC regparm}
+\subsubsection{GCC regparm}
 
 \newcommand{\URLREGPARMM}{\url{http://go.yurichev.com/17040}}
 
@@ -131,7 +131,7 @@ The \gls{caller} restores the \gls{stack pointer} to its initial state.
 
 For example, see (\myref{regparm}).
 
-\subsectionold{Watcom/OpenWatcom}
+\subsubsection{Watcom/OpenWatcom}
 \myindex{OpenWatcom}
 
 Here it is called \q{register calling convention}.
@@ -141,7 +141,7 @@ All the rest---via the stack.
 These functions has an underscore appended to the function name in order to distinguish them from 
 those having a different calling convention.
 
-\sectionold{thiscall}
+\subsection{thiscall}
 \myindex{thiscall}
 
 This is passing the object's \ITthis pointer to the function-method, in \Cpp.
@@ -153,10 +153,10 @@ Thus it will be very visible that internally: all function-methods have an extra
 
 For an example, see (\myref{thiscall}).
 
-\sectionold{x86-64}
+\subsection{x86-64}
 \myindex{x86-64}
 
-\subsectionold{Windows x64}
+\subsubsection{Windows x64}
 \label{sec:callingconventions_win64}
 
 The method of for passing arguments in Win64 somewhat resembles \TT{fastcall}.
@@ -202,12 +202,12 @@ Also take a look on how MSVC 2012 optimizes the loading of primitive values into
 
 Another example of such thing is: \myref{TaskMgr_LEA}.
 
-\subsubsectionold{Windows x64: Passing \ITthis (\CCpp)}
+\myparagraph{Windows x64: Passing \ITthis (\CCpp)}
 
 The \ITthis pointer is passed in \RCX, the first argument of the method is in \RDX, etc.
 For an example see: \myref{simple_CPP_MSVC_x64}.
  
-\subsectionold{Linux x64}
+\subsubsection{Linux x64}
 
 The way arguments are passed in Linux for x86-64 is almost the same as in Windows, but 6 registers are
 used instead of 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}) and there is no \q{scratch space}, 
@@ -222,7 +222,7 @@ register (RAX).
 This is because each write to the low 32-bit part of a register automatically clears the high 32 bits.
 Supposedly, it was decided in AMD to do so to simplify porting code to x86-64.
 
-\sectionold{Return values of \Tfloat and \Tdouble type}
+\subsection{Return values of \Tfloat and \Tdouble type}
 \myindex{float}
 \myindex{double}
 
@@ -231,7 +231,7 @@ In all conventions except in Win64, the values of type \Tfloat or \Tdouble are r
 In Win64, the values of \Tfloat and \Tdouble types are returned 
 in the low 32 or 64 bits of the \XMM{0} register.
 
-\sectionold{Modifying arguments}
+\subsection{Modifying arguments}
 
 Sometimes, \CCpp{} programmers (not limited to these \ac{PL}s, though),
 may ask, what can happen if they modify the arguments?

@@ -1,5 +1,5 @@
 \newcommand{\comp}{\TT{comp()}\xspace}
-\chapterold{Указатели на функции}
+\section{Указатели на функции}
 \label{sec:pointerstofunctions}
 
 \myindex{\CLanguageElements!\Pointers}
@@ -51,7 +51,7 @@ int (*compare)(const void *, const void *)
 
 \lstinputlisting[numbers=left,label=qsort_c_src]{patterns/18_pointers_to_functions/17_1.c}
 
-\sectionold{MSVC}
+\subsection{MSVC}
 
 Компилируем в MSVC 2010 (некоторые части убраны для краткости) с опцией \TT{\Ox}:
 
@@ -86,7 +86,7 @@ int (*compare)(const void *, const void *)
 
 \input{patterns/18_pointers_to_functions/olly_RU.tex}
 
-\subsectionold{MSVC + tracer}
+\subsubsection{MSVC + tracer}
 \myindex{tracer}
 
 Посмотрим, какие пары сравниваются.
@@ -164,7 +164,7 @@ EAX=0x0000002d ECX=0x00000058
 Следовательно, алгоритму быстрой сортировки нужно 34 операции сравнения для сортировки этих 10-и чисел.
 
 \clearpage
-\subsectionold{MSVC + tracer (code coverage)}
+\subsubsection{MSVC + tracer (code coverage)}
 \myindex{tracer}
 
 Но можно также и воспользоваться возможностью tracer накапливать все возможные состояния регистров и показать их в \IDA.
@@ -194,7 +194,7 @@ tracer.exe -l:17_1.exe bpf=17_1.exe!0x00401000,trace:cc
 действительно, функция \comp никогда не возвращала 0,
 потому что в массиве нет одинаковых элементов.
 
-\sectionold{GCC}
+\subsection{GCC}
 
 Не слишком большая разница:
 
@@ -263,7 +263,7 @@ comp            endp
 ...
 \end{lstlisting}
 
-\subsectionold{GCC + GDB (с исходными кодами)}
+\subsubsection{GCC + GDB (с исходными кодами)}
 \myindex{GDB}
 
 Очевидно, у нас есть исходный код нашего примера на Си (\myref{qsort_c_src}), 
@@ -282,7 +282,7 @@ comp            endp
 
 \lstinputlisting[caption=GDB-сессия]{patterns/18_pointers_to_functions/GDB_source.txt}
 
-\subsectionold{GCC + GDB (без исходных кодов)}
+\subsubsection{GCC + GDB (без исходных кодов)}
 \myindex{GDB}
 
 Но часто никаких исходных кодов нет вообще, так что мы можем дизассемблировать функцию \comp (\TT{disas}), 

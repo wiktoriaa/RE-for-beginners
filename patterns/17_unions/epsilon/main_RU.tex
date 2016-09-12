@@ -1,4 +1,4 @@
-﻿\sectionold{Вычисление машинного эпсилона}
+﻿\subsection{Вычисление машинного эпсилона}
 
 Машинный эпсилон --- это самая маленькая гранула, с которой может работать \ac{FPU} 
 \footnote{В русскоязычной литературе встречается также термин \q{машинный ноль}.}.
@@ -19,7 +19,7 @@
 Прибавление 1 к нему на самом деле прибавляет 1 к \IT{мантиссе} числа, хотя, нужно сказать,
 переполнение также возможно, что приведет к прибавлению единицы к экспоненте.
 
-\subsectionold{x86}
+\subsubsection{x86}
 
 \lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/17_unions/epsilon/float_MSVC_2010_Ox_RU.asm}
 
@@ -31,7 +31,7 @@
 часть работы и результат в \TT{ST0}.
 Последняя пара инструкций \INS{FSTP}/\INS{FLD} избыточна, но компилятор не соптимизировал её.
 
-\subsectionold{ARM64}
+\subsubsection{ARM64}
 
 Расширим этот пример до 64-бит:
 
@@ -45,14 +45,14 @@
 
 Смотрите также этот пример скомпилированный под x64 с SIMD-инструкциями: \myref{machine_epsilon_x64_and_SIMD}.
 
-\subsectionold{MIPS}
+\subsubsection{MIPS}
 
 \myindex{MIPS!\Instructions!MTC1}
 Новая для нас здесь инструкция это \INS{MTC1} (\q{Move To Coprocessor 1}), она просто переносит данные из \ac{GPR} в регистры FPU.
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/17_unions/epsilon/MIPS_O3_IDA.lst}
 
-\subsectionold{\Conclusion}
+\subsubsection{\Conclusion}
 
 Трудно сказать, понадобится ли кому-то такая эквилибристика в реальном коде,
 но как уже было упомянуто много раз в этой книге, этот пример хорошо подходит для объяснения формата
