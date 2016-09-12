@@ -1,4 +1,4 @@
-\section{Win32 PE}
+\sectionold{Win32 PE}
 \label{win32_pe}
 \myindex{Windows!Win32}
 
@@ -21,7 +21,7 @@ Every PE file begins with tiny DOS program that prints a
 message like \q{This program cannot be run in DOS mode.}---if you run this program in DOS or Windows 3.1 (\ac{OS}-es which are not aware of the PE format), 
 this message will be printed.
 
-\subsection{Terminology}
+\subsectionold{Terminology}
 
 \myindex{VA}
 \myindex{Base address}
@@ -58,7 +58,7 @@ It is worth noting that \ac{IDA} (as of 6.1) may allocate a pseudo-section named
 \item \ac{INT}---an array of names of symbols to be imported\footnote{\PietrekPE}.
 \end{itemize}
 
-\subsection{Base address}
+\subsectionold{Base address}
 
 The problem is that several module authors can prepare DLL files for others to use and it is not possible
 to reach an agreement which addresses is to be assigned to whose modules.
@@ -96,7 +96,7 @@ method loads your program and all modules it needs at random base addresses, dif
 \ac{ASLR} support is denoted in a PE file by setting the flag
 \par \TT{IMAGE\_DLL\_CHARACTERISTICS\_DYNAMIC\_BASE} (see: [\Russinovich]).
 
-\subsection{Subsystem}
+\subsectionold{Subsystem}
 
 There is also a \IT{subsystem} field, usually it is:
 
@@ -110,7 +110,7 @@ There is also a \IT{subsystem} field, usually it is:
 \item \ac{GUI} (non-console).
 \end{itemize}
 
-\subsection{OS version}
+\subsectionold{OS version}
 
 A PE file also specifies the minimal Windows version it needs in order to be loadable.
 
@@ -129,7 +129,7 @@ targeting at least Windows Vista.
 However, by changing the compiler's options\footnote{\href{http://go.yurichev.com/17045}{MSDN}},
 it is possible to force it to compile for Windows XP.
 
-\subsection{Sections}
+\subsectionold{Sections}
 
 Division in sections, as it seems, is present in all executable file formats.
 
@@ -204,7 +204,7 @@ typedef struct _IMAGE_SECTION_HEADER {
 A word about terminology: \IT{PointerToRawData} it called \q{Offset} in Hiew
 and \IT{VirtualAddress} is called \q{RVA} there.
 
-\subsection{Relocations (relocs)}
+\subsectionold{Relocations (relocs)}
 \label{subsec:relocs}
 
 \ac{AKA} FIXUP-s (at least in Hiew).
@@ -259,7 +259,7 @@ By the way, relocs are darkened in Hiew, for example: \figref{fig:scanf_ex3_hiew
 \myindex{\olly}
 \olly underlines the places in memory to which relocs are to be applied, for example: \figref{fig:switch_lot_olly3}.
 
-\subsection{Exports and imports}
+\subsectionold{Exports and imports}
 
 \label{PE_exports_imports}
 As we all know, any executable program must use the \ac{OS}'s services and other DLL-libraries somehow.
@@ -295,7 +295,7 @@ in order to determine the function names.
 
 If you don't tell \IDA the path to these DLLs, there will be \IT{mfc80\_123} instead of function names.
 
-\subsubsection{Imports section}
+\subsubsectionold{Imports section}
 
 Often a separate section is allocated for the imports table and everything related to it (with name like \TT{.idata}),
 however, this is not a strict rule.
@@ -416,7 +416,7 @@ started suspiciously fast), it is \q{mapped}, and loaded into memory in parts as
 
 Probably, Microsoft developers decided it will be faster.
 
-\subsection{Resources}
+\subsectionold{Resources}
 
 \label{PEresources}
 
@@ -428,7 +428,7 @@ and it would be simpler to pick text or picture for the language that is current
 As a side effect, they can be edited easily and saved back to the executable file, even if one does not have special knowledge, 
 by using the ResHack editor, for example (\myref{ResHack}).
 
-\subsection{.NET}
+\subsectionold{.NET}
 
 \myindex{.NET}
 
@@ -449,7 +449,7 @@ and run it without executing that \JMP instruction
 \footnote{\href{http://go.yurichev.com/17051}{MSDN}}.
 
 \myindex{TLS}
-\subsection{TLS}
+\subsectionold{TLS}
 
 This section holds initialized data for the \ac{TLS}(\myref{TLS}) (if needed).
 When a new thread start, its \ac{TLS} data is initialized using the data from this section. \\
@@ -463,7 +463,7 @@ If they are present, they are to be called before the control is passed to the m
 
 This is used widely in the PE file packers/encryptors.
 
-\subsection{Tools}
+\subsectionold{Tools}
 
 \myindex{objdump}
 \myindex{Cygwin}
@@ -487,7 +487,7 @@ simple tool for adding symbol(s) to PE executable import table.
 \item PE\_search\_str\_refs\footnote{\href{http://go.yurichev.com/17055}{yurichev.com}}---simple tool for searching for a function in PE executables which use some text string.
 \end{itemize}
 
-\subsection{Further reading}
+\subsectionold{Further reading}
 
 % FIXME: bibliography per chapter or section
 \begin{itemize}

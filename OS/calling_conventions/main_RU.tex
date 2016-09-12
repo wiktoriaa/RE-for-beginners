@@ -1,7 +1,7 @@
-\chapter{Способы передачи аргументов при вызове функций}
+\chapterold{Способы передачи аргументов при вызове функций}
 \label{sec:callingconventions}
 
-\section{cdecl}
+\sectionold{cdecl}
 \myindex{cdecl}
 \label{cdecl}
 
@@ -20,7 +20,7 @@ call function
 add esp, 12 ; returns ESP
 \end{lstlisting}
 
-\section{stdcall}
+\sectionold{stdcall}
 \label{sec:stdcall}
 \myindex{stdcall}
 
@@ -65,7 +65,7 @@ $n$ на 4.
 
 \lstinputlisting[caption=MSVC 2010]{OS/calling_conventions/stdcall_ex.asm}
 
-\subsection{Функции с переменным количеством аргументов}
+\subsectionold{Функции с переменным количеством аргументов}
 
 Функции вроде \printf, должно быть, единственный случай функций в \CCpp с переменным количеством аргументов,
 но с их помощью можно легко проследить очень важную разницу между \IT{cdecl} и \IT{stdcall}.
@@ -80,7 +80,7 @@ $n$ на 4.
 когда одна опечатка программиста могла бы вызывать неожиданные падения программы. 
 Таким образом, для таких функций \IT{stdcall} явно не подходит, а подходит \IT{cdecl}.
 
-\section{fastcall}
+\sectionold{fastcall}
 \label{fastcall}
 \myindex{fastcall}
 
@@ -127,7 +127,7 @@ int __fastcall f3 (int a, int b, int c)
 при помощи инструкции \TT{RETN} с операндом.
 Так что и здесь можно легко вычислять количество аргументов.
 
-\subsection{GCC regparm}
+\subsectionold{GCC regparm}
 
 \newcommand{\URLREGPARMM}{\url{http://go.yurichev.com/17040}}
 
@@ -142,7 +142,7 @@ int __fastcall f3 (int a, int b, int c)
 
 Для примера, см. (\myref{regparm}).
 
-\subsection{Watcom/OpenWatcom}
+\subsectionold{Watcom/OpenWatcom}
 \myindex{OpenWatcom}
 
 Здесь это называется \q{register calling convention}.
@@ -152,7 +152,7 @@ int __fastcall f3 (int a, int b, int c)
 Эти функции имеют символ подчеркивания, добавленный к концу имени функции, для отличия их от тех,
 которые имеют другой способ передачи аргументов.
 
-\section{thiscall}
+\sectionold{thiscall}
 \myindex{thiscall}
 
 В \Cpp, это передача в функцию-метод указателя \ITthis на объект.
@@ -164,10 +164,10 @@ int __fastcall f3 (int a, int b, int c)
 
 Для примера, см. (\myref{thiscall}).
 
-\section{x86-64}
+\sectionold{x86-64}
 \myindex{x86-64}
 
-\subsection{Windows x64}
+\subsectionold{Windows x64}
 \label{sec:callingconventions_win64}
 
 В win64 метод передачи всех параметров немного похож на \TT{fastcall}. 
@@ -210,12 +210,12 @@ int __fastcall f3 (int a, int b, int c)
 
 Еще один пример подобного: \myref{TaskMgr_LEA}.
 
-\subsubsection{Windows x64: Передача \ITthis (\CCpp)}
+\subsubsectionold{Windows x64: Передача \ITthis (\CCpp)}
 
 Указатель \ITthis передается через \RCX, первый аргумент метода через \RDX, итд.
 Для примера, см. также: \myref{simple_CPP_MSVC_x64}.
  
-\subsection{Linux x64}
+\subsectionold{Linux x64}
 
 Метод передачи аргументов в Linux для x86-64 почти такой же, как и в Windows, но 6 регистров
 используется вместо 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}), и здесь нет \q{scratch space}, 
@@ -230,7 +230,7 @@ N.B.: здесь значения записываются в 32-битные ч
 запись в младшую 32-битную часть 64-битного регистра автоматически обнуляет старшие 32 бита.
 Вероятно, это так решили в AMD для упрощения портирования кода под x86-64.
 
-\section{Возвращение переменных типа \Tfloat, \Tdouble}
+\sectionold{Возвращение переменных типа \Tfloat, \Tdouble}
 \myindex{float}
 \myindex{double}
 
@@ -239,7 +239,7 @@ N.B.: здесь значения записываются в 32-битные ч
 В Win64 переменные типа \Tfloat и \Tdouble возвращаются в младших 16-и или 32-х битах 
 регистра \XMM{0}.
 
-\section{Модификация аргументов}
+\sectionold{Модификация аргументов}
 
 Иногда программисты на \CCpp{} (и не только этих \ac{PL}) задаются вопросом,
 что может случиться, если модифицировать аргументы?

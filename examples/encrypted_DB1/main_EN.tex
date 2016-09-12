@@ -1,11 +1,11 @@
 % TODO: OpenSSL tool, URLs, etc
-\chapter{Encrypted database case \#1}
+\chapterold{Encrypted database case \#1}
 \label{encrypted_DB1}
 
 (This part has been first appeared in my blog at 26-Aug-2015.
 Some discussion: \url{https://news.ycombinator.com/item?id=10128684}.)
 
-\section{Base64 and entropy}
+\sectionold{Base64 and entropy}
 
 \myindex{XML}
 I've got the XML file containing some encrypted data.
@@ -111,7 +111,7 @@ In[]:= Entropy[2, "No"] // N
 Out[]= 1.
 \end{lstlisting}
 
-\section{Is it compressed?}
+\sectionold{Is it compressed?}
 
 OK, so our data is compressed and/or encrypted.
 Is it compressed? Almost all data compressors put some header at the start, signature, or something like that.
@@ -131,7 +131,7 @@ The most popular two ways are:
 Open-source data compressions algorithms usually puts some kind of header, and so
 are popular code snippets from the sites like \url{http://www.codeproject.com/}.
 
-\section{Is it encrypted?}
+\sectionold{Is it encrypted?}
 
 All major data encryption algorithms process data in blocks. DES---8 bytes, AES---16 bytes.
 If the input buffer is not divided evenly by block, it's padded, so encrypted data is aligned
@@ -166,7 +166,7 @@ No single block with odd size.
 
 There are, however, stream ciphers which can operate on byte or bit-level.
 
-\section{CryptoPP}
+\sectionold{CryptoPP}
 \myindex{CryptoPP}
 
 The program which can browse this encrypted database is written C\# and the .NET code
@@ -276,7 +276,7 @@ There are too much equal bytes!
 How AES encryption result can be very similar to the encrypted buffer while this is not
 encryption but rather decryption?!
 
-\section{Cipher Feedback mode}
+\sectionold{Cipher Feedback mode}
 
 \myindex{Cipher Feedback mode}
 \myindex{XOR}
@@ -389,7 +389,7 @@ Third, fourth and fifth:
 
 All blocks decrypted seems correctly except of first 16 byte part.
 
-\section{Initializing Vector}
+\sectionold{Initializing Vector}
 
 What can affect first 16 bytes?
 
@@ -444,7 +444,7 @@ so they choose to initialize IV using Order ID.
 
 Now we can proceed to analyzing matter of each byte in the decrypted block.
 
-\section{Structure of the buffer}
+\sectionold{Structure of the buffer}
 
 Let's take first four decrypted blocks:
 
@@ -556,7 +556,7 @@ Seems correct.
 
 This is some kind of OOP serialization, i.e., packing differently typed values into binary buffer for storing and/or transmitting.
 
-\section{Noise at the end}
+\sectionold{Noise at the end}
 
 The only thing is that sometimes, tail is bigger:
 
@@ -622,7 +622,7 @@ This is common mistake.
 \myindex{Heartbleed}
 It even affected OpenSSL (Heartbleed bug).
 
-\section{Conclusion}
+\sectionold{Conclusion}
 
 Summary:
 every practicing reverse engineer should be familiar with major crypto algorithms and
@@ -639,7 +639,7 @@ All files used in this article are here: \url{https://github.com/dennis714/yuric
 Nevertheless, many features like these I've observed in real-world software applications.
 This example is based on them.
 
-\section{Post Scriptum: brute-forcing IV}
+\sectionold{Post Scriptum: brute-forcing IV}
 
 The case you saw is artificially constructed, but based on some real applications I've observed.
 When I've been working on one of such real applications, 

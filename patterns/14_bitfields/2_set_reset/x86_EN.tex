@@ -1,6 +1,6 @@
-\subsection{x86}
+\subsectionold{x86}
 
-\subsubsection{\NonOptimizing MSVC}
+\subsubsectionold{\NonOptimizing MSVC}
 
 We get (MSVC 2010):
 
@@ -18,7 +18,7 @@ just the one do not want to copy is not (which is 0 in the bitmask).
 It is the easier way to memorize the logic.
 
 \clearpage
-\myparagraph{\olly}
+\myparagraphold{\olly}
 
 Let's try this example in \olly.
 
@@ -76,13 +76,13 @@ The value is reloaded again (because the compiler is not in optimizing mode):
 The 10th bit was cleared (or, in other words, all bits were left except the 10th) and the final value now is \\
 \TT{0x12344{\color{red}4}78} (1001000110100010001{\color{red}0}001111000).
 
-\subsubsection{\Optimizing MSVC}
+\subsubsectionold{\Optimizing MSVC}
 
 If we compile it in MSVC with optimization turned on (\Ox), the code is even shorter:
 
 \lstinputlisting[caption=\Optimizing MSVC]{patterns/14_bitfields/2_set_reset/set_reset_msvc_Ox.asm}
 
-\subsubsection{\NonOptimizing GCC}
+\subsubsectionold{\NonOptimizing GCC}
 
 Let's try GCC 4.4.1 without optimization:
 
@@ -92,7 +92,7 @@ There is a redundant code present, however, it is shorter than the MSVC version 
 
 Now let's try GCC with optimization turned on \Othree:
 
-\subsubsection{\Optimizing GCC}
+\subsubsectionold{\Optimizing GCC}
 
 \lstinputlisting[caption=\Optimizing GCC]{patterns/14_bitfields/2_set_reset/set_reset_gcc_O3.asm}
 
@@ -116,7 +116,7 @@ It would be more logical way to emit here \INS{or eax, 04000h}
 but that is 5 bytes, or even 6
 (in case the register in the first operand is not \EAX).
 
-\subsubsection{\Optimizing GCC and regparm}
+\subsubsectionold{\Optimizing GCC and regparm}
 
 It would be even shorter if to turn on the \Othree optimization flag and also set \TT{regparm=3}.
 

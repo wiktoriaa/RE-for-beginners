@@ -1,4 +1,4 @@
-\subsection{ARM + \OptimizingKeilVI (\ARMMode)}
+\subsectionold{ARM + \OptimizingKeilVI (\ARMMode)}
 
 \begin{lstlisting}[caption=\OptimizingKeilVI (\ARMMode)]
 02 0C C0 E3          BIC     R0, R0, #0x200
@@ -16,7 +16,7 @@ I.e., it's analogous to a \NOT+\AND instruction pair.
 
 So far it's easy.
 
-\subsection{ARM + \OptimizingKeilVI (\ThumbMode)}
+\subsectionold{ARM + \OptimizingKeilVI (\ThumbMode)}
 
 \begin{lstlisting}[caption=\OptimizingKeilVI (\ThumbMode)]
 01 21 89 03          MOVS    R1, 0x4000
@@ -36,7 +36,7 @@ for writing \TT{0x200} to an arbitrary register.
 
 So that is why, with the help of \INS{ASRS} (\ASRdesc), this value is calculated as $\TT{0x4000} \gg 5$.
 
-\subsection{ARM + \OptimizingXcodeIV (\ARMMode)}
+\subsectionold{ARM + \OptimizingXcodeIV (\ARMMode)}
 \label{anomaly:LLVM}
 \myindex{\CompilerAnomaly}
 
@@ -64,7 +64,7 @@ You can read more about compiler anomalies here~(\myref{anomaly:Intel}).
 
 \OptimizingXcodeIV for Thumb mode generates the same code.
 
-\subsection{ARM: more about the \INS{BIC} instruction}
+\subsectionold{ARM: more about the \INS{BIC} instruction}
 \myindex{ARM!\Instructions!BIC}
 
 Let's rework the example slightly:
@@ -96,7 +96,7 @@ There are two \INS{BIC} instructions, i.e., bits \TT{0x1234} are cleared in two 
 This is because it's not possible to encode \TT{0x1234} in a \INS{BIC} instruction, 
 but it's possible to encode \TT{0x1000} and \TT{0x234}.
 
-\subsection{ARM64: \Optimizing GCC (Linaro) 4.9}
+\subsectionold{ARM64: \Optimizing GCC (Linaro) 4.9}
 
 \Optimizing GCCcompiling for ARM64 can use the \AND instruction instead of \INS{BIC}:
 
@@ -107,7 +107,7 @@ f:
 	ret
 \end{lstlisting}
 
-\subsection{ARM64: \NonOptimizing GCC (Linaro) 4.9}
+\subsectionold{ARM64: \NonOptimizing GCC (Linaro) 4.9}
 
 \NonOptimizing GCC generates more redundant code, but works just like optimized:
 

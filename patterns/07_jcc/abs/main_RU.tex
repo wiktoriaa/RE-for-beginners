@@ -1,11 +1,11 @@
-\section{Вычисление абсолютной величины}
+\sectionold{Вычисление абсолютной величины}
 \label{sec:abs}
 
 Это простая функция:
 
 \lstinputlisting{abs.c}
 
-\subsection{\Optimizing MSVC}
+\subsectionold{\Optimizing MSVC}
 
 Обычный способ генерации кода:
 
@@ -13,7 +13,7 @@
 
 GCC 4.9 делает почти то же самое.
 
-\subsection{\OptimizingKeilVI: \ThumbMode}
+\subsectionold{\OptimizingKeilVI: \ThumbMode}
 
 \lstinputlisting[caption=\OptimizingKeilVI: \ThumbMode]{patterns/07_jcc/abs/abs_Keil_thumb_O3_RU.s}
 
@@ -21,7 +21,7 @@ GCC 4.9 делает почти то же самое.
 В ARM нет инструкции для изменения знака, так что компилятор Keil использует инструкцию \q{Reverse Subtract},
 которая просто вычитает, но с операндами, переставленными наоборот.
 
-\subsection{\OptimizingKeilVI: \ARMMode}
+\subsectionold{\OptimizingKeilVI: \ARMMode}
 
 В режиме ARM можно добавлять коды условий к некоторым инструкций, что компилятор Keil и сделал:
 
@@ -31,14 +31,14 @@ GCC 4.9 делает почти то же самое.
  
 \myref{branch_predictors}.
 
-\subsection{\NonOptimizing GCC 4.9 (ARM64)}
+\subsectionold{\NonOptimizing GCC 4.9 (ARM64)}
 
 \myindex{ARM!\Instructions!XOR}
 В ARM64 есть инструкция \INS{NEG} для смены знака:
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64)]{patterns/07_jcc/abs/abs_GCC49_ARM64_O0_RU.s}
 
-\subsection{MIPS}
+\subsectionold{MIPS}
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/07_jcc/abs/MIPS_O3_IDA_RU.lst}
 
@@ -50,6 +50,6 @@ GCC 4.9 делает почти то же самое.
 Суффикс \q{U} в обоих инструкциях \INS{SUBU} и \INS{NEGU} означает, что при целочисленном переполнении исключение не
 сработает.
 
-\subsection{Версия без переходов?}
+\subsectionold{Версия без переходов?}
 
 Возможна также версия и без переходов, мы рассмотрим её позже: \myref{chap:branchless_abs}.

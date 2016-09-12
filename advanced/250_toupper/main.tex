@@ -1,4 +1,4 @@
-\chapter{\RU{Функция toupper()}\EN{toupper() function}}
+\chapterold{\RU{Функция toupper()}\EN{toupper() function}}
 \myindex{\CStandardLibrary!toupper()}
 
 \RU{Еще одна очень востребованная функция конвертирует символ из строчного в заглавный, если нужно:}
@@ -30,9 +30,9 @@ and will leave them right in the code.}}.
 \caption{\EN{7-bit \ac{ASCII} table in Emacs}\RU{7-битная таблица \ac{ASCII} в Emacs}}
 \end{figure}
 
-\section{x64}
+\sectionold{x64}
 
-\subsection{\EN{Two comparison operations}\RU{Две операции сравнения}}
+\subsectionold{\EN{Two comparison operations}\RU{Две операции сравнения}}
 
 \EN{\NonOptimizing MSVC is straightforward: the code checks if the input symbol is in [97..122] range 
 (or in [`a'..`z'] range) and subtracts 32 if it's true.}
@@ -59,7 +59,7 @@ and will leave them right in the code.}}.
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.9 (x64)]{\CURPATH/GCC_49_x64_O0.s}
 
-\subsection{\EN{One comparison operation}\RU{Одна операция сравнения}}
+\subsectionold{\EN{One comparison operation}\RU{Одна операция сравнения}}
 \label{toupper_one_comparison}
 
 \Optimizing MSVC \EN{does a better job, it generates only one comparison operation}\RU{работает лучше,
@@ -104,7 +104,7 @@ And then this value (of course incorrect) is dropped.}
 \EN{Advance subtracting is a price the compiler pays for the absence of conditional jumps.}
 \RU{Вычитание с упреждением это цена, которую компилятор платит за отсутствие условных переходов.}
 
-\section{ARM}
+\sectionold{ARM}
 
 \EN{\Optimizing Keil for ARM mode also generates only one comparison:}
 \RU{\Optimizing Keil для режима ARM также генерирует только одну операцию сравнения:}
@@ -134,13 +134,13 @@ that loads the 0xFF constant into a register plus an AND instruction.}
 \RU{Очевидно, Keil для режима Thumb решил что две 2-байтных инструкции это короче чем код, загружающий
 константу 0xFF плюс инструкция AND.}
 
-\subsection{GCC \ForENRU ARM64}
+\subsectionold{GCC \ForENRU ARM64}
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.9 (ARM64)]{\CURPATH/GCC_49_ARM64_O0.s}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64)]{\CURPATH/GCC_49_ARM64_O3.s}
 
-\section{\EN{Summary}\RU{Итог}}
+\sectionold{\EN{Summary}\RU{Итог}}
 
 \EN{All these compiler optimizations are very popular nowadays 
 and a practicing reverse engineer usually sees such code patterns often.}

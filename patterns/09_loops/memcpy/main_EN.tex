@@ -1,4 +1,4 @@
-﻿\section{Memory blocks copying routine}
+﻿\sectionold{Memory blocks copying routine}
 \label{loop_memcpy}
 
 Real-world memory copy routines may copy 4 or 8 bytes at each iteration, use \ac{SIMD}, 
@@ -7,7 +7,7 @@ But for the sake of simplicity, this example is the simplest possible.
 
 \lstinputlisting{memcpy.c}
 
-\subsection{Straight-forward implementation}
+\subsectionold{Straight-forward implementation}
 
 \lstinputlisting[caption=GCC 4.9 x64 optimized for size (-Os)]{patterns/09_loops/memcpy/memcpy_GCC49_x64_Os_EN.s}
 
@@ -15,7 +15,7 @@ But for the sake of simplicity, this example is the simplest possible.
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/09_loops/memcpy/memcpy_Keil_Thumb_O3_EN.s}
 
-\subsection{ARM in ARM mode}
+\subsectionold{ARM in ARM mode}
 
 Keil in ARM mode takes full advantage of conditional suffixes:
 
@@ -23,7 +23,7 @@ Keil in ARM mode takes full advantage of conditional suffixes:
 
 That's why there is only one branch instruction instead of 2.
 
-\subsection{MIPS}
+\subsectionold{MIPS}
 
 \lstinputlisting[caption=GCC 4.4.5 optimized for size (-Os) (IDA)]{patterns/09_loops/memcpy/memcpy_MIPS_Os_IDA_EN.lst}
 
@@ -43,6 +43,6 @@ On the other hand, \INS{LB} (\q{Load Byte}) instruction sign-extends the loaded 
 
 \INS{SB} just writes a byte from lowest 8 bits of register to memory.
 
-\subsection{Vectorization}
+\subsectionold{Vectorization}
 
 \Optimizing GCC can do much more on this example: \myref{vec_memcpy}.

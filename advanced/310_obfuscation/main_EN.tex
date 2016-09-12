@@ -1,8 +1,8 @@
-\chapter{Obfuscation}
+\chapterold{Obfuscation}
 
 The obfuscation is an attempt to hide the code (or its meaning) from reverse engineers.
 
-\section{Text strings}
+\sectionold{Text strings}
 
 As we saw in (\myref{sec:digging_strings}), text strings may be really helpful.
 
@@ -61,9 +61,9 @@ Text strings may also be present in encrypted form,
 then every string usage is to be preceded by a string decrypting routine.
 For example: \myref{examples_SCO}.
 
-\section{Executable code}
+\sectionold{Executable code}
 
-\subsection{Inserting garbage}
+\subsectionold{Inserting garbage}
 
 Executable code obfuscation implies inserting random garbage code between real one,
 which executes but does nothing useful.
@@ -81,7 +81,7 @@ Here the garbage code uses registers which are not used in the real code (\TT{ES
 However, the intermediate results produced by the real code 
 may be used by the garbage instructions for some extra mess\EMDASH{}why not?
 
-\subsection{Replacing instructions with bloated equivalents}
+\subsectionold{Replacing instructions with bloated equivalents}
 
 \begin{itemize}
 \item \TT{MOV op1, op2} can be replaced by the \TT{PUSH op2 / POP op1} pair.
@@ -93,7 +93,7 @@ may be used by the garbage instructions for some extra mess\EMDASH{}why not?
 
 \end{itemize}
 
-\subsection{Always executed/never executed code}
+\subsectionold{Always executed/never executed code}
 
 If the developer is sure that ESI 
 at always 0 at that point:
@@ -109,7 +109,7 @@ Another example (and again, the developer is sure that ESI is always zero):
 
 \lstinputlisting{\CURPATH/3_EN.asm}
 
-\subsection{Making a lot of mess}
+\subsectionold{Making a lot of mess}
 
 \begin{lstlisting}
 instruction 1
@@ -133,7 +133,7 @@ ins1_label:	instruction 1
 exit:
 \end{lstlisting}
 
-\subsection{Using indirect pointers}
+\subsectionold{Using indirect pointers}
 
 \begin{lstlisting}
 dummy_data1	db	100h dup (0)
@@ -162,7 +162,7 @@ but not to the text strings.
 
 Global variables and even functions may be accessed like that.
 
-\section{Virtual machine / pseudo-code}
+\sectionold{Virtual machine / pseudo-code}
 
 A programmer can construct his/her own \ac{PL} or \ac{ISA} and interpreter for it.
 
@@ -173,7 +173,7 @@ and details of all of the \ac{ISA}'s instructions.
 Probably, he/she will also have to write a disassembler/decompiler of some sort.
 % TODO about obfuscation VMs
 
-\section{Other things to mention}
+\sectionold{Other things to mention}
 
 My own (yet weak) attempt to patch the Tiny C compiler to produce obfuscated code: \url{http://go.yurichev.com/17220}.
 
@@ -182,7 +182,7 @@ instruction for really complicated things:
 [Stephen Dolan, \IT{mov is Turing-complete}, (2013)]
 \footnote{\AlsoAvailableAs \url{http://www.cl.cam.ac.uk/~sd601/papers/mov.pdf}}. 
 
-\section{\Exercise}
+\sectionold{\Exercise}
 
 \begin{itemize}
 	\item \url{http://challenges.re/29}

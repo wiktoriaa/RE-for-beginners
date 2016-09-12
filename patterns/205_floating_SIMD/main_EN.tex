@@ -1,5 +1,5 @@
 % FIXME1 divide this file into separate ones...
-\chapter{Working with floating point numbers using SIMD}
+\chapterold{Working with floating point numbers using SIMD}
 
 \label{floating_SIMD}
 \myindex{IEEE 754}
@@ -21,11 +21,11 @@ It can be said that it's good news, because it's easier to work with them.
 
 We are going to reuse the examples from the FPU section here: \myref{sec:FPU}.
 
-\section{Simple example}
+\sectionold{Simple example}
 
 \lstinputlisting{patterns/12_FPU/1_simple/simple.c}
 
-\subsection{x64}
+\subsectionold{x64}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/simple_MSVC_2012_x64_Ox.asm}
 
@@ -62,7 +62,7 @@ The input arguments are saved in the \q{shadow space} (\myref{shadow_space}),
 but only their lower register halves, i.e., only 64-bit values of type \Tdouble.
 GCC produces the same code.
 
-\subsection{x86}
+\subsectionold{x86}
 
 Let's also compile this example for x86. Despite the fact it's generating for x86, MSVC 2012 uses SSE2 instructions:
 
@@ -129,7 +129,7 @@ But of course, it's possible to switch the register format and to see their cont
 4 \Tfloat{}-numbers or just as 16 bytes.
 
 \clearpage
-\section{Passing floating point number via arguments}
+\sectionold{Passing floating point number via arguments}
 
 \lstinputlisting{patterns/12_FPU/2_passing_floats/pow.c}
 
@@ -159,11 +159,11 @@ By the way, here is a case when 1 is written into \EAX
 for \printf ---this implies that one argument will be passed in vector registers,
 just as the standard requires \SysVABI.
 
-\section{Comparison example}
+\sectionold{Comparison example}
 
 \lstinputlisting{patterns/12_FPU/3_comparison/d_max.c}
 
-\subsection{x64}
+\subsectionold{x64}
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64_Ox.asm}
 
@@ -187,7 +187,7 @@ which just choose the maximum value!
 \lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
 
 \clearpage
-\subsection{x86}
+\subsectionold{x86}
 
 Let's compile this example in MSVC 2012 with optimization turned on:
 
@@ -206,7 +206,7 @@ we can see how the \TT{COMISD} instruction compares values and sets/clears the \
 \label{fig:FPU_SIMD_d_max_olly}
 \end{figure}
 
-\section{Calculating machine epsilon: x64 and SIMD}
+\sectionold{Calculating machine epsilon: x64 and SIMD}
 \label{machine_epsilon_x64_and_SIMD}
 
 Let's revisit the \q{calculating machine epsilon} example for \Tdouble \lstref{machine_epsilon_double_c}.
@@ -231,7 +231,7 @@ The result is returned in the XMM0 register.
 
 \input{patterns/205_floating_SIMD/FPU_PRNG/main_EN}
 
-\section{Summary}
+\sectionold{Summary}
 
 Only the lower half of XMM registers is used in all examples here, 
 to store number in IEEE 754 format.
