@@ -137,7 +137,7 @@ select inst_id, banner from x$version
 
 \RU{Таблицы с префиксом X\$ в \oracle\EMDASH{}это также служебные таблицы, они не документированы, не могут изменятся пользователем, и обновляются динамически.}\EN{The tables prefixed with X\$ in the \oracle are service tables too, undocumented, cannot be changed by the user and are refreshed dynamically.}
 
-\RU{Попробуем поискать текст}\EN{If we search for the text} 
+\RU{Попробуем поискать текст}\EN{If we search for the text} \\
 \TT{select  BANNER from GV\$VERSION where inst\_id = USERENV('Instance')} 
 \RU{в файле \TT{kqf.o} и находим ссылку на него в таблице \TT{kqfvip}}
 \EN{in the \TT{kqf.o} file, we find it in the \TT{kqfvip} table}:
@@ -323,11 +323,12 @@ tracer -a:oracle.exe bpf=oracle.exe!_kqvrow,trace:cc
 \begin{center}
 \begin{tabular}{ | l | l | }
 \hline                        
-\RU{Строка}\EN{String} 1	& \RU{Использует глобальные переменные \TT{vsnstr}, \TT{vsnnum}, \TT{vsnban}. Вызывает \TT{sprintf()}.}\EN{Using \TT{vsnstr}, \TT{vsnnum}, \TT{vsnban} global variables. Calling \TT{sprintf()}.} \\
-\RU{Строка}\EN{String} 2	& \RU{Вызывает}\EN{Calling} \TT{kkxvsn()}. \\
-\RU{Строка}\EN{String} 3	& \RU{Вызывает}\EN{Calling} \TT{lmxver()}. \\
-\RU{Строка}\EN{String} 4	& \RU{Вызывает}\EN{Calling} \TT{npinli()}, \TT{nrtnsvrs()}. \\
-\RU{Строка}\EN{String} 5	& \RU{Вызывает}\EN{Calling} \TT{lxvers()}. \\
+\RU{Строка}\EN{String} 1	& \RU{Использует глобальные переменные \TT{vsnstr}, \TT{vsnnum}, \TT{vsnban}.}\EN{Using \TT{vsnstr}, \TT{vsnnum}, \TT{vsnban} global variables.} \\
+                                & \RU{Вызывает \TT{sprintf()}.}\EN{Calls \TT{sprintf()}.} \\
+\RU{Строка}\EN{String} 2	& \RU{Вызывает}\EN{Calls} \TT{kkxvsn()}. \\
+\RU{Строка}\EN{String} 3	& \RU{Вызывает}\EN{Calls} \TT{lmxver()}. \\
+\RU{Строка}\EN{String} 4	& \RU{Вызывает}\EN{Calls} \TT{npinli()}, \TT{nrtnsvrs()}. \\
+\RU{Строка}\EN{String} 5	& \RU{Вызывает}\EN{Calls} \TT{lxvers()}. \\
 \hline  
 \end{tabular}
 \end{center}

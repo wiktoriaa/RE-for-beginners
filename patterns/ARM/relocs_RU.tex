@@ -1,4 +1,4 @@
-﻿\newcommand{\ARMELF}{[\IT{ELF for the ARM 64-bit Architecture (AArch64)}, (2013)]\footnote{\AlsoAvailableAs \url{http://go.yurichev.com/17288}}}
+﻿\newcommand{\ARMELF}{\InSqBrackets{\IT{ELF for the ARM 64-bit Architecture (AArch64)}, (2013)}\footnote{\AlsoAvailableAs \url{http://go.yurichev.com/17288}}}
 
 \subsection{Релоки в ARM64}
 \label{ARM64_relocs}
@@ -89,11 +89,12 @@ Contents of section .rodata:
 \myindex{ARM!\Instructions!BL}
 
 В качестве примера, попробуем дизассемблировать инструкцию BL вручную.\\
-\TT{0x97ffffa0} это $10010111111111111111111110100000b$.
-В соответствии с [\ARMSixFourRef C5.6.26], \IT{imm26} это последние 26 бит: $imm26 = 11111111111111111110100000$.
+\TT{0x97ffffa0} это $0b10010111111111111111111110100000$.
+В соответствии с \InSqBrackets{\ARMSixFourRef C5.6.26}, \IT{imm26} это последние 26 бит:\\
+$imm26 = 0b11111111111111111110100000$.
 Это \TT{0x3FFFFA0}, но \ac{MSB} это 1, 
 так что число отрицательное, мы можем вручную его конвертировать в удобный для нас вид.
-По правилам изменения знака (\myref{sec:signednumbers:negation}), просто инвертируем все биты: (\TT{1011111=0x5F}) и прибавляем 1 (\TT{0x5F+1=0x60}).
+По правилам изменения знака (\myref{sec:signednumbers:negation}), просто инвертируем все биты: (\TT{0b1011111=0x5F}) и прибавляем 1 (\TT{0x5F+1=0x60}).
 Так что число в знаковом виде: \TT{-0x60}.
 Умножим \TT{-0x60} на 4 (потому что адрес записанный в опкоде разделен на 4): это \TT{-0x180}.
 Теперь вычисляем адрес назначения: \TT{0x4005a0} + (\TT{-0x180}) = \TT{0x400420} 

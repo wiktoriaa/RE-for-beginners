@@ -198,9 +198,9 @@ Why AESDEC is still not executed?
 Why the program use AES encryption in order to decrypt database?
 
 OK, it's not a problem to find a function which encrypts block.
-It is called \IT{CryptoPP::Rijndael::Enc::ProcessAndXorBlock}:
+It is called \IT{CryptoPP::Rijndael::Enc::ProcessAndXorBlock}:\\
 \url{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L349},
-and it has references to another function: \IT{Rijndael::Enc::AdvancedProcessBlocks()}
+and it has references to another function: \IT{Rijndael::Enc::AdvancedProcessBlocks()}\\
 \url{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L1179},
 which, in turn, has references to two functions (
 \href{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L1000}{AESNI\_Enc\_Block}
@@ -209,7 +209,8 @@ and
 )
 which has AESENC instructions.
 
-So, judging by CryptoPP internals, \IT{CryptoPP::Rijndael::Enc::ProcessAndXorBlock()} encrypts one 16-byte block.
+So, judging by CryptoPP internals, \\
+\IT{CryptoPP::Rijndael::Enc::ProcessAndXorBlock()} encrypts one 16-byte block.
 Let's set breakpoint on it and see, what happens during decryption.
 I use my simple tracer tool again.
 The software should decrypt first data block now.
@@ -319,8 +320,8 @@ In our case, IV is the block which is encrypted at first stage:
 
 Oh, and we also need to recover encryption key.
 \myindex{x86!\Instructions!AESKEYGENASSIST}
-There is AESKEYGENASSIST is DLL, and it is called, and it is used in the 
-\IT{Rijndael::Base::UncheckedSetKey()} function:
+There is AESKEYGENASSIST is DLL, and it is called, and it is used in the \\
+\IT{Rijndael::Base::UncheckedSetKey()} function:\\
 \url{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L198}
 It's easy to find it in IDA and set breakpoint. Let's see:
 

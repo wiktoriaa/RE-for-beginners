@@ -57,9 +57,11 @@ but something really different (more about this in the second part of this chapt
 \RU{Да, имена действительно говорящие сами за себя.}
 \EN{Yes, the names are really speaking for themselves.}
 
-\RU{Когда мы внимательно изучим каждое место, где вызывается \TT{NtQuerySystemInformation(0, ?, ?, ?)},
+\RU{Когда мы внимательно изучим каждое место, где вызывается\\
+\TT{NtQuerySystemInformation(0, ?, ?, ?)},
 то быстро найдем то что нужно в функции \TT{InitPerfInfo()}:}%
-\EN{When we closely investigate each place where \TT{NtQuerySystemInformation(0, ?, ?, ?)} is called,
+\EN{When we closely investigate each place where\\
+\TT{NtQuerySystemInformation(0, ?, ?, ?)} is called,
 we quickly find what we need in the \TT{InitPerfInfo()} function:}
 
 \lstinputlisting[caption=taskmgr.exe (Windows Vista)]{examples/taskmgr/taskmgr.lst}
@@ -69,7 +71,8 @@ we quickly find what we need in the \TT{InitPerfInfo()} function:}
 IDA according to the \gls{PDB} loaded from Microsoft's symbol server}.
 
 \RU{Байт берется из}\EN{The byte is taken from} \TT{var\_C20}. 
-\RU{И}\EN{And} \TT{var\_C58} \RU{передается в}\EN{is passed to} \TT{NtQuerySystemInformation()} 
+\RU{И}\EN{And} \TT{var\_C58} \RU{передается в}\EN{is passed to}\\
+\TT{NtQuerySystemInformation()} 
 \RU{как указатель на принимающий буфер}\EN{as a pointer to the receiving buffer}.
 \RU{Разница между}\EN{The difference between} 0xC20 \AndENRU 0xC58 \RU{это}\EN{is} 0x38 (56).
 \RU{Посмотрим на формат структуры, который можно найти в MSDN:}

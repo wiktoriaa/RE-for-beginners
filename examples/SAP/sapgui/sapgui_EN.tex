@@ -170,13 +170,15 @@ There are also some MFC string manipulations.
 Lots of other environment variables are checked as well. 
 Here is a list of all variables that are being checked and what SAPGUI would write to its trace log when logging is turned on:
 
+\footnotesize
 \begin{center}
 \begin{tabular}{ | l | l | }
 \hline                        
 DPTRACE                  & ``GUI-OPTION: Trace set to \%d'' \\
 TDW\_HEXDUMP             & ``GUI-OPTION: Hexdump enabled'' \\
 TDW\_WORKDIR             & ``GUI-OPTION: working directory `\%s\''' \\
-TDW\_SPLASHSRCEENOFF     & ``GUI-OPTION: Splash Screen Off'' / ``GUI-OPTION: Splash Screen On'' \\
+TDW\_SPLASHSRCEENOFF     & ``GUI-OPTION: Splash Screen Off''\\
+                         & ``GUI-OPTION: Splash Screen On'' \\
 TDW\_REPLYTIMEOUT        & ``GUI-OPTION: reply timeout \%d milliseconds'' \\
 TDW\_PLAYBACKTIMEOUT     & ``GUI-OPTION: PlaybackTimeout  set to \%d milliseconds'' \\ 
 TDW\_NOCOMPRESS          & ``GUI-OPTION: no compression read'' \\
@@ -197,6 +199,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 \hline  
 \end{tabular}
 \end{center}
+\normalsize
 
 The settings for each variable are written in the array via a pointer in the \EDI register.
 \EDI is set before the function call:
@@ -602,7 +605,8 @@ Here is one of them in the \IT{CDwsGui::SapguiRun} function (again, thanks to th
 .text:64409D80                 call    CConnectionContext__CreateNetwork
 \end{lstlisting}
 
-Let's check our findings. Replace the \TT{setz al} here with the \TT{xor eax, eax / nop} instructions,
+Let's check our findings. \\
+Replace the \TT{setz al} here with the \TT{xor eax, eax / nop} instructions,
 clear the \TDWNC 
 environment variable and run SAPGUI. Wow! There pesky annoying window is no more (just as expected, 
 because the variable is not set) but in Wireshark we can see that the network packets are not compressed anymore! 

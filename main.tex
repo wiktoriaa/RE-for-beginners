@@ -1,8 +1,12 @@
 \newcommand{\myincludegraphics}[1]{\includegraphics[width=\textwidth]{#1}}
+\newcommand{\myincludegraphicsSmall}[1]{\includegraphics[width=0.3\textwidth]{#1}}
+
 \ifdefined\ebook
 \documentclass[a5paper,oneside]{book}
+\newcommand{\myincludegraphicsSmallOrNormalForEbook}{\myincludegraphics}
 \else
 \documentclass[a4paper,oneside]{book}
+\newcommand{\myincludegraphicsSmallOrNormalForEbook}{\myincludegraphicsSmall}
 \fi
 
 \usepackage[table,usenames,dvipsnames]{xcolor}
@@ -123,9 +127,9 @@
 \usepackage{shorttoc}
 \usetikzlibrary{calc,positioning,chains,arrows}
 \ifdefined\ebook
-\usepackage[margin=0.5in,headheight=11pt]{geometry}
+\usepackage[margin=0.5in,headheight=8pt]{geometry}
 \else
-\usepackage[margin=0.5in,headheight=12.5pt]{geometry}
+\usepackage[margin=0.5in,headheight=15.5pt]{geometry}
 \fi
 
 \newcommand{\footnoteref}[1]{\textsuperscript{\ref{#1}}}
@@ -157,7 +161,7 @@
 
 \lstset{
     %backgroundcolor=\color{lstbgcolor},
-    backgroundcolor=\color{light-gray},
+    %backgroundcolor=\color{light-gray}, % FIXME: if you want to enable this, solve problem with annyoing white stripes... http://stackoverflow.com/questions/3374151/stripes-in-background-color-drawn-by-listings-package
     basicstyle=\LstStyle,
     breaklines=true,
     %prebreak=\raisebox{0ex}[0ex][0ex]{->},

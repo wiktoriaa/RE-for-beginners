@@ -167,13 +167,15 @@
 Множество других переменных окружения также проверяются. Здесь список всех переменных проверяемых SAPGUI 
 а также сообщение записываемое им в лог-файл, если переменная включена:
 
+\footnotesize
 \begin{center}
 \begin{tabular}{ | l | l | }
 \hline                        
 DPTRACE                  & ``GUI-OPTION: Trace set to \%d'' \\
 TDW\_HEXDUMP             & ``GUI-OPTION: Hexdump enabled'' \\
 TDW\_WORKDIR             & ``GUI-OPTION: working directory `\%s\''' \\
-TDW\_SPLASHSRCEENOFF     & ``GUI-OPTION: Splash Screen Off'' / ``GUI-OPTION: Splash Screen On'' \\
+TDW\_SPLASHSRCEENOFF     & ``GUI-OPTION: Splash Screen Off''\\
+                         & ``GUI-OPTION: Splash Screen On'' \\
 TDW\_REPLYTIMEOUT        & ``GUI-OPTION: reply timeout \%d milliseconds'' \\
 TDW\_PLAYBACKTIMEOUT     & ``GUI-OPTION: PlaybackTimeout  set to \%d milliseconds'' \\ 
 TDW\_NOCOMPRESS          & ``GUI-OPTION: no compression read'' \\
@@ -194,6 +196,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 \hline  
 \end{tabular}
 \end{center}
+\normalsize
 
 Настройки для каждой переменной записываются в массив через указатель в регистре \EDI.
 \EDI выставляется перед вызовом функции:
@@ -598,7 +601,8 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 .text:64409D80                 call    CConnectionContext__CreateNetwork
 \end{lstlisting}
 
-Проверим нашу идею. Заменяем \TT{setz al} здесь на \TT{xor eax, eax / nop}, убираем переменную окружения 
+Проверим нашу идею.\\
+Заменяем \TT{setz al} здесь на \TT{xor eax, eax / nop}, убираем переменную окружения 
 \TDWNC и запускаем SAPGUI. Ух! Назойливого окна больше нет (как и ожидалось: ведь переменной окружении также
 нет), но в Wireshark мы видим, что сетевые пакеты больше не сжимаются!
 Очевидно, это то самое место где флаг отражающий сжатие пакетов выставляется в объекте \TT{CConnectionContext}.

@@ -1,4 +1,4 @@
-﻿\newcommand{\ARMELF}{[\IT{ELF for the ARM 64-bit Architecture (AArch64)}, (2013)]\footnote{\AlsoAvailableAs \url{http://go.yurichev.com/17288}}}
+﻿\newcommand{\ARMELF}{\InSqBrackets{\IT{ELF for the ARM 64-bit Architecture (AArch64)}, (2013)}\footnote{\AlsoAvailableAs \url{http://go.yurichev.com/17288}}}
 
 \subsection{Relocs in ARM64}
 \label{ARM64_relocs}
@@ -92,11 +92,12 @@ Contents of section .rodata:
 \myindex{ARM!\Instructions!BL}
 
 As an example, let's try to disassemble the BL instruction manually.\\
-\TT{0x97ffffa0} is $10010111111111111111111110100000b$.
-According to [\ARMSixFourRef C5.6.26], \IT{imm26} is the last 26 bits: $imm26 = 11111111111111111110100000$.
+\TT{0x97ffffa0} is $0b10010111111111111111111110100000$.
+According to \InSqBrackets{\ARMSixFourRef C5.6.26}, \IT{imm26} is the last 26 bits:\\
+$imm26 = 0b11111111111111111110100000$.
 It is \TT{0x3FFFFA0}, but the \ac{MSB} is 1, 
 so the number is negative, and we can convert it manually to convenient form for us.
-By the rules of negation (\myref{sec:signednumbers:negation}), just invert all bits: (it is \TT{1011111=0x5F}), and add 1 (\TT{0x5F+1=0x60}).
+By the rules of negation (\myref{sec:signednumbers:negation}), just invert all bits: (it is \TT{0b1011111=0x5F}), and add 1 (\TT{0x5F+1=0x60}).
 So the number in signed form is \TT{-0x60}.
 Let's multiplicate \TT{-0x60} by 4 (because address stored in opcode is divided by 4): it is \TT{-0x180}.
 Now let's calculate destination address: \TT{0x4005a0} + (\TT{-0x180}) = \TT{0x400420} 

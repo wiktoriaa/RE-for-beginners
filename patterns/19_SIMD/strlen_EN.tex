@@ -135,20 +135,7 @@ The other bits in the \EAX register are to be cleared.
 By the way, do not forget about this quirk of our algorithm.
 There might be 16 bytes in the input like:
 
-\begin{center}
-\begin{bytefield}[endianness=big,bitwidth=0.05\linewidth]{16}
-\bitheader{15,14,13,12,11,10,9,3,2,1,0} \\
-\bitbox{1}{\q{h}} & 
-\bitbox{1}{\q{e}} & 
-\bitbox{1}{\q{l}} & 
-\bitbox{1}{\q{l}} & 
-\bitbox{1}{\q{o}} & 
-\bitbox{1}{0} & 
-\bitbox{7}{\garbage{}} & 
-\bitbox{1}{0} &
-\bitbox{2}{\garbage{}} & 
-\end{bytefield}
-\end{center}
+\input{patterns/19_SIMD/strlen_hello_and_garbage}
 
 It is the \TT{'hello'} string, terminating zero, and some random noise in memory.
 
@@ -162,7 +149,7 @@ XMM1: 0000ff00000000000000ff0000000000
 
 This means that the instruction found two zero bytes, and it is not surprising.
  
-\TT{PMOVMSKB} in our case will set \EAX to (in binary representation): \IT{0010000000100000b}.
+\TT{PMOVMSKB} in our case will set \EAX to \IT{0010000000100000b}.
 
 Obviously, our function must take only the first zero bit and ignore the rest.
 
