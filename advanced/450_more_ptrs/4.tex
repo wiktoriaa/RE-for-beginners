@@ -2,11 +2,14 @@
 
 \subsubsection{``Null pointer assignment'' error of MS-DOS era}
 
+\myindex{MS-DOS}
 Some oldschoolers may remember a weird error message of MS-DOS era: ``Null pointer assignment''.
 What does it mean?
 
 It's not possible to write a memory at zero address in *NIX and Windows OSes, but it was possible to do so in MS-DOS due to absence of memory protection whatsoever.
 
+\myindex{Turbo C++}
+\myindex{Borland C++}
 So I've pulled my ancient Turbo C++ 3.0 (later it was renamed to Borland C++) from early 1990s and tried to compile this:
 
 \begin{lstlisting}
@@ -33,7 +36,7 @@ Hard to believe, but it works, with error upon exit, though:
 \caption{Ancient Turbo C 3.0}
 \end{figure}
 
-Let's dig deeper into the source code of CRT (C runtime) of Borland C++ 3.1, file \IT{c0.asm}:
+Let's dig deeper into the source code of \ac{CRT} (C runtime) of Borland C++ 3.1, file \IT{c0.asm}:
 
 \begin{lstlisting}
 ;       _checknull()    check for null pointer zapping copyright message
@@ -95,9 +98,9 @@ ENDIF
 
 The MS-DOS memory model was really weird and probably not worth looking into it unless you're fan of retrocomputing or retrogaming.
 One thing we should know that memory segment (included data segment) in MS-DOS is a memory segment in which code or data is stored,
-but unlike "serious" OSes, it's started at address 0.
+but unlike ``serious'' OSes, it's started at address 0.
 
-And in Borland C++ CRT, the data segment is started with 4 zero bytes and the copyright string ``Borland C++ - Copyright 1991 Borland Intl.''.
+And in Borland C++ \ac{CRT}, the data segment is started with 4 zero bytes and the copyright string ``Borland C++ - Copyright 1991 Borland Intl.''.
 The integrity of the 4 zero bytes and text string is checked upon exit, and if it's corrupted, the error message is displayed.
 
 But why? Writing at null pointer is common mistake in \CCpp, and if you do so in *NIX or Windows, your application will crash.
@@ -252,7 +255,7 @@ reset:
         ret
 \end{lstlisting}
 
-The fact that stack pointer is shifted is not a problem: initialization code in microcontrollers usually completely ignores registers and RAM state and boots from scratch.
+The fact that stack pointer is shifted is not a problem: initialization code in microcontrollers usually completely ignores registers and \ac{RAM} state and boots from scratch.
 
 And of course, this code will crash on *NIX or Windows because of memory protection and even in absence of protection, there are no code at address 0.
 

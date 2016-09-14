@@ -7,6 +7,8 @@ So then it would be possible to pass ID or string to
 \href{https://msdn.microsoft.com/en-us/library/windows/desktop/ms648042%28v=vs.85%29.aspx}{FindResource()} function.
 Which is declared like this:
 
+\myindex{win32!FindResource()}
+
 \begin{lstlisting}
 HRSRC WINAPI FindResource(
   _In_opt_ HMODULE hModule,
@@ -17,6 +19,8 @@ HRSRC WINAPI FindResource(
 
 \IT{lpName} and \IT{lpType} has \IT{char*} or \IT{wchar*} types, and when someone still wants to pass ID, he/she should use
 \href{https://msdn.microsoft.com/en-us/library/windows/desktop/ms648029%28v=vs.85%29.aspx}{MAKEINTRESOURCE} macro, like this:
+
+\myindex{win32!MAKEINTRESOURCE()}
 
 \begin{lstlisting}
 result = FindResource(..., MAKEINTRESOURCE(1234), ...);
@@ -312,4 +316,10 @@ For example:
 \end{lstlisting}
 
 ( \url{https://github.com/torvalds/linux/blob/aa00edc1287a693eadc7bc67a3d73555d969b35d/drivers/net/ethernet/freescale/fman/fman.c#L826} )
+
+\subsubsection{Pointers abuse in UNIX userland}
+
+\myindex{UNIX!mmap()}
+mmap() function returns -1 in case of error (or \TT{MAP\_FAILED}, which equals to -1).
+Some people say, mmap() can map a memory at zeroth address in rare situations, so it can't use 0 as error code.
 
