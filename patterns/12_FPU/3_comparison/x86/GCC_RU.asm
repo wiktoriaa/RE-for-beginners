@@ -11,7 +11,7 @@ b_second_half   = dword ptr  14h
     mov     ebp, esp
     sub     esp, 10h
 
-; §переложим a и b в локальный стек§:
+; переложим a и b в локальный стек:
 
     mov     eax, [ebp+a_first_half]
     mov     dword ptr [ebp+a], eax
@@ -22,23 +22,23 @@ b_second_half   = dword ptr  14h
     mov     eax, [ebp+b_second_half]
     mov     dword ptr [ebp+b+4], eax
 
-; §загружаем a и b в стек FPU§:
+; загружаем a и b в стек FPU:
 
     fld     [ebp+a]
     fld     [ebp+b]
 
-; §текущее состояние стека§: ST(0) - b; ST(1) - a
+; текущее состояние стека: ST(0) - b; ST(1) - a
 
-    fxch    st(1) ; §эта инструкция меняет ST(1) и ST(0) местами§
+    fxch    st(1) ; эта инструкция меняет ST(1) и ST(0) местами
 
-; §текущее состояние стека§: ST(0) - a; ST(1) - b
+; текущее состояние стека: ST(0) - a; ST(1) - b
 
-    fucompp    ; §сравнить a и b и выдернуть из стека два значения, т.е. a и b§
-    fnstsw  ax ; §записать статус FPU в AX§
-    sahf       ; §загрузить состояние флагов SF, ZF, AF, PF, и CF из AH§
-    setnbe  al ; §записать 1 в AL, если CF=0 и ZF=0§
+    fucompp    ; сравнить a и b и выдернуть из стека два значения, т.е. a и b
+    fnstsw  ax ; записать статус FPU в AX
+    sahf       ; загрузить состояние флагов SF, ZF, AF, PF, и CF из AH
+    setnbe  al ; записать 1 в AL, если CF=0 и ZF=0
     test    al, al            ; AL==0 ?
-    jz      short loc_8048453 ; §да§
+    jz      short loc_8048453 ; да
     fld     [ebp+a]
     jmp     short locret_8048456
 

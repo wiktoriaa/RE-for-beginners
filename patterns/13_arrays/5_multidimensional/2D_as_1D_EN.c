@@ -9,16 +9,16 @@ char get_by_coordinates1 (char array[3][4], int a, int b)
 
 char get_by_coordinates2 (char *array, int a, int b)
 {
-	// §treat input array as one-dimensional§
-	// 4 §is array width here§
+	// treat input array as one-dimensional
+	// 4 is array width here
 	return array[a*4+b];
 };
 
 char get_by_coordinates3 (char *array, int a, int b)
 {
-	// §treat input array as pointer§,
-	// §calculate address, get value at it§
-	// 4 §is array width here§
+	// treat input array as pointer,
+	// calculate address, get value at it
+	// 4 is array width here
 	return *(array+a*4+b);
 };
 

@@ -1,2 +1,2 @@
 for (i=0; i<total_entries_to_process; i++)
-    §loop\_body§;
+    loop\_body;

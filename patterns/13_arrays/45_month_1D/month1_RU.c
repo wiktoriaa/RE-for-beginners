@@ -16,7 +16,7 @@ const char* month1[]=
 	"December"
 };
 
-// §в пределах 0..11§
+// в пределах 0..11
 const char* get_month1 (int month)
 {
 	return month1[month];	

@@ -11,7 +11,7 @@ b_second_half   = dword ptr  14h
     mov     ebp, esp
     sub     esp, 10h
 
-; §put a and b to local stack§:
+; put a and b to local stack:
 
     mov     eax, [ebp+a_first_half]
     mov     dword ptr [ebp+a], eax
@@ -22,23 +22,23 @@ b_second_half   = dword ptr  14h
     mov     eax, [ebp+b_second_half]
     mov     dword ptr [ebp+b+4], eax
 
-; §load a and b to FPU stack§:
+; load a and b to FPU stack:
 
     fld     [ebp+a]
     fld     [ebp+b]
 
-; §current stack state§: ST(0) - b; ST(1) - a
+; current stack state: ST(0) - b; ST(1) - a
 
-    fxch    st(1) ; §this instruction swapping ST(1) and ST(0)§
+    fxch    st(1) ; this instruction swapping ST(1) and ST(0)
 
-; §current stack state§: ST(0) - a; ST(1) - b
+; current stack state: ST(0) - a; ST(1) - b
 
-    fucompp    ; §compare a and b and pop two values from stack, i.e., a and b§
-    fnstsw  ax ; §store FPU status to AX§
-    sahf       ; §load SF, ZF, AF, PF, and CF flags state from AH§
-    setnbe  al ; §store 1 to AL, if CF=0 and ZF=0§
+    fucompp    ; compare a and b and pop two values from stack, i.e., a and b
+    fnstsw  ax ; store FPU status to AX
+    sahf       ; load SF, ZF, AF, PF, and CF flags state from AH
+    setnbe  al ; store 1 to AL, if CF=0 and ZF=0
     test    al, al            ; AL==0 ?
-    jz      short loc_8048453 ; §yes§
+    jz      short loc_8048453 ; yes
     fld     [ebp+a]
     jmp     short locret_8048456
 

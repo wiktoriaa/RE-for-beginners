@@ -3,13 +3,13 @@ main proc near
      mov     ebp, esp
      and     esp, 0FFFFFFF0h
      sub     esp, 40h
-     mov     dword ptr [esp], 0 ; §first argument for§ time()
+     mov     dword ptr [esp], 0 ; first argument for time()
      call    time
      mov     [esp+3Ch], eax
-     lea     eax, [esp+3Ch]  ; §take pointer to what time() returned§
-     lea     edx, [esp+10h]  ; §at ESP+10h struct tm will begin§
-     mov     [esp+4], edx    ; §pass pointer to the structure begin§
-     mov     [esp], eax      ; §pass pointer to result of§ time()
+     lea     eax, [esp+3Ch]  ; take pointer to what time() returned
+     lea     edx, [esp+10h]  ; at ESP+10h struct tm will begin
+     mov     [esp+4], edx    ; pass pointer to the structure begin
+     mov     [esp], eax      ; pass pointer to result of time()
      call    localtime_r
      mov     eax, [esp+24h]  ; tm_year
      lea     edx, [eax+76Ch] ; edx=eax+1900

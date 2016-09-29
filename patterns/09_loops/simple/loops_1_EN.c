@@ -1,4 +1,4 @@
-§for (initialization; condition; at each iteration)§
+for (initialization; condition; at each iteration)
 {
-    §loop\_body§;
+    loop\_body;
 }

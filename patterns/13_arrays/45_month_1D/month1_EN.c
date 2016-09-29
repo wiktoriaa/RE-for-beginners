@@ -16,7 +16,7 @@ const char* month1[]=
 	"December"
 };
 
-// §in 0..11 range§
+// in 0..11 range
 const char* get_month1 (int month)
 {
 	return month1[month];	

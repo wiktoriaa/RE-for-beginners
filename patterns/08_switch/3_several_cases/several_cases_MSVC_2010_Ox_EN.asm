@@ -27,13 +27,13 @@ $LN2@f:
 $LN1@f:
 	mov	DWORD PTR _a$[esp-4], OFFSET $SG2806 ; 'default'
 	jmp	DWORD PTR __imp__printf
-	npad	2 ; §align§ $LN11@f §table on 16-byte boundary§
+	npad	2 ; align $LN11@f table on 16-byte boundary
 $LN11@f:
-	DD	$LN5@f ; §print§ '1, 2, 7, 10'
-	DD	$LN4@f ; §print§ '3, 4, 5'
-	DD	$LN3@f ; §print§ '8, 9, 21'
-	DD	$LN2@f ; §print§ '22'
-	DD	$LN1@f ; §print§ 'default'
+	DD	$LN5@f ; print '1, 2, 7, 10'
+	DD	$LN4@f ; print '3, 4, 5'
+	DD	$LN3@f ; print '8, 9, 21'
+	DD	$LN2@f ; print '22'
+	DD	$LN1@f ; print 'default'
 $LN10@f:
 	DB	0 ; a=1
 	DB	0 ; a=2

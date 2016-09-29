@@ -2,7 +2,7 @@ insert:
 ; $a0=x
 ; $a1=y
 ; $a2=z
-; $a3=§value§
+; $a3=value
                 sll     $v0, $a0, 5
 ; $v0 = $a0<<5 = x*32
                 sll     $a0, 3
@@ -24,13 +24,13 @@ insert:
 ; $a0 = $a1+$a0 = y*30+x*600
                 addu    $a0, $a2
 ; $a0 = $a0+$a2 = y*30+x*600+z
-; §load address of table§:
+; load address of table:
                 lw      $v0, (a & 0xFFFF)($gp)
-; §multiply index by 4 to seek array element§:
+; multiply index by 4 to seek array element:
                 sll     $a0, 2
-; §sum up multiplied index and table address§:
+; sum up multiplied index and table address:
                 addu    $a0, $v0, $a0
-; §store value into table and return§:
+; store value into table and return:
                 jr      $ra
                 sw      $a3, 0($a0)
 

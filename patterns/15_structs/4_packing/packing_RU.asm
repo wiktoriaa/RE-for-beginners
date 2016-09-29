@@ -3,13 +3,13 @@ _main    PROC
     push   ebp
     mov    ebp, esp
     sub    esp, 16
-    mov    BYTE PTR _tmp$[ebp], 1     ; §установить поле§ a
-    mov    DWORD PTR _tmp$[ebp+4], 2  ; §установить поле§ b
-    mov    BYTE PTR _tmp$[ebp+8], 3   ; §установить поле§ c
-    mov    DWORD PTR _tmp$[ebp+12], 4 ; §установить поле§ d
-    sub    esp, 16                    ; §выделить место для временной структуры§
+    mov    BYTE PTR _tmp$[ebp], 1     ; установить поле a
+    mov    DWORD PTR _tmp$[ebp+4], 2  ; установить поле b
+    mov    BYTE PTR _tmp$[ebp+8], 3   ; установить поле c
+    mov    DWORD PTR _tmp$[ebp+12], 4 ; установить поле d
+    sub    esp, 16                    ; выделить место для временной структуры
     mov    eax, esp
-    mov    ecx, DWORD PTR _tmp$[ebp]  ; §скопировать нашу структуру во временную§
+    mov    ecx, DWORD PTR _tmp$[ebp]  ; скопировать нашу структуру во временную
     mov    DWORD PTR [eax], ecx
     mov    edx, DWORD PTR _tmp$[ebp+4]
     mov    DWORD PTR [eax+4], edx

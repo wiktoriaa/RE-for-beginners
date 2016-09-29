@@ -15,8 +15,8 @@ $LN3@main:
  cmp    DWORD PTR _i$[ebp], 30 ; 0000001eH
  jge    SHORT $LN1@main
  mov    ecx, DWORD PTR _i$[ebp]  
- mov    edx, DWORD PTR _i$[ebp]      ; §явный промах компилятора. эта инструкция лишняя.§
- mov    DWORD PTR _a$[ebp+ecx*4], edx ; §а здесь в качестве второго операнда подошел бы ECX.§
+ mov    edx, DWORD PTR _i$[ebp]      ; явный промах компилятора. эта инструкция лишняя.
+ mov    DWORD PTR _a$[ebp+ecx*4], edx ; а здесь в качестве второго операнда подошел бы ECX.
  jmp    SHORT $LN2@main
 $LN1@main:
  xor    eax, eax

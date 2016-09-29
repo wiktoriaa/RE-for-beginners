@@ -9,14 +9,14 @@ arg_0  = dword ptr  8
        mov     ebp, esp
        sub     esp, 4
        mov     eax, [ebp+arg_0]
-       or      eax, 80000000h  ; §set minus sign§
+       or      eax, 80000000h  ; set minus sign
        mov     edx, eax
-       and     eax, 807FFFFFh  ; §leave only significand and exponent in EAX§
-       shr     edx, 23         ; §prepare exponent§
-       add     edx, 2          ; §add 2§
-       movzx   edx, dl         ; §clear all bits except 7:0 in EAX§
-       shl     edx, 23         ; §shift new calculated exponent to its place§
-       or      eax, edx        ; §add new exponent and original value without exponent§
+       and     eax, 807FFFFFh  ; leave only significand and exponent in EAX
+       shr     edx, 23         ; prepare exponent
+       add     edx, 2          ; add 2
+       movzx   edx, dl         ; clear all bits except 7:0 in EAX
+       shl     edx, 23         ; shift new calculated exponent to its place
+       or      eax, edx        ; add new exponent and original value without exponent
        mov     [ebp+var_4], eax
        fld     [ebp+var_4]
        leave

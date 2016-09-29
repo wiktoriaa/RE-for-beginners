@@ -1,7 +1,7 @@
 f PROC
-; §compare input value with§ 10
+; compare input value with 10
         CMP      r0,#0xa
-; §jump to§ |L0.8| §if§ EQual 
+; jump to |L0.8| if EQual 
         BEQ      |L0.8|
         ADR      r0,|L0.12| ; "it is not ten"
         BX       lr

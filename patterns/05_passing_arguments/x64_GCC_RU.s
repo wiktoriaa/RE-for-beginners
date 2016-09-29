@@ -1,7 +1,7 @@
 f:
-	; EDI - §первый аргумент§
-	; ESI - §второй аргумент§
-	; EDX - §третий аргумент§
+	; EDI - первый аргумент
+	; ESI - второй аргумент
+	; EDX - третий аргумент
 	push	rbp
 	mov	rbp, rsp
 	mov	DWORD PTR [rbp-4], edi
@@ -23,7 +23,7 @@ main:
 	mov	eax, OFFSET FLAT:.LC0 ; "%d\n"
 	mov	esi, edx
 	mov	rdi, rax
-	mov	eax, 0  ; §количество переданных векторных регистров§
+	mov	eax, 0  ; количество переданных векторных регистров
 	call	printf
 	mov	eax, 0
 	leave

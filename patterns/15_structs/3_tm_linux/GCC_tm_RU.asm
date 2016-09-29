@@ -3,13 +3,13 @@ main proc near
      mov     ebp, esp
      and     esp, 0FFFFFFF0h
      sub     esp, 40h
-     mov     dword ptr [esp], 0 ; §первый аргумент для§ time()
+     mov     dword ptr [esp], 0 ; первый аргумент для time()
      call    time
      mov     [esp+3Ch], eax
-     lea     eax, [esp+3Ch]  ; §берем указатель на то что вернула time()§
-     lea     edx, [esp+10h]  ; §по ESP+10h будет начинаться структура struct tm§
-     mov     [esp+4], edx    ; §передаем указатель на начало структуры§
-     mov     [esp], eax      ; §передаем указатель на результат§ time()
+     lea     eax, [esp+3Ch]  ; берем указатель на то что вернула time()
+     lea     edx, [esp+10h]  ; по ESP+10h будет начинаться структура struct tm
+     mov     [esp+4], edx    ; передаем указатель на начало структуры
+     mov     [esp], eax      ; передаем указатель на результат time()
      call    localtime_r
      mov     eax, [esp+24h]  ; tm_year
      lea     edx, [eax+76Ch] ; edx=eax+1900

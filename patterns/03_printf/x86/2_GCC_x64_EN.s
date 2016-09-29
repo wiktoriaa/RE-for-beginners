@@ -10,13 +10,13 @@ main:
 	mov	edx, 2
 	mov	esi, 1
 	mov	edi, OFFSET FLAT:.LC0
-	xor	eax, eax ; §number of vector registers passed§
+	xor	eax, eax ; number of vector registers passed
 	mov	DWORD PTR [rsp+16], 8
 	mov	DWORD PTR [rsp+8], 7
 	mov	DWORD PTR [rsp], 6
 	call	printf
 
-	; §return§ 0
+	; return 0
 
 	xor	eax, eax
 	add	rsp, 40

@@ -2,7 +2,7 @@ array$ = 8
 a$ = 16
 b$ = 24
 get_by_coordinates3 PROC
-; RCX=§address of array§
+; RCX=address of array
 ; RDX=a
 ; R8=b
 	movsxd	rax, r8d
@@ -10,9 +10,9 @@ get_by_coordinates3 PROC
 	movsxd	r9, edx
 ; R9=a
 	add	rax, rcx
-; RAX=b+§address of array§
+; RAX=b+address of array
 	movzx	eax, BYTE PTR [rax+r9*4]
-; AL=§load byte at address§ RAX+R9*4=b+§address of array§+a*4=§address of array§+a*4+b
+; AL=load byte at address RAX+R9*4=b+address of array+a*4=address of array+a*4+b
 	ret	0
 get_by_coordinates3 ENDP
 

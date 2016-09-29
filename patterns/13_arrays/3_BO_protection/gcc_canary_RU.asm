@@ -13,14 +13,14 @@ f:
 	mov	DWORD PTR [esp+8], OFFSET FLAT:.LC0  ; "hi! %d, %d, %d\n"
 	mov	DWORD PTR [esp+4], 600
 	mov	DWORD PTR [esp], ebx
-	mov	eax, DWORD PTR gs:20                 ; §канарейка§
+	mov	eax, DWORD PTR gs:20       ; канарейка
 	mov	DWORD PTR [ebp-12], eax
 	xor	eax, eax
 	call	_snprintf
 	mov	DWORD PTR [esp], ebx
 	call	puts
 	mov	eax, DWORD PTR [ebp-12]
-	xor	eax, DWORD PTR gs:20                 ; §проверка канарейки§
+	xor	eax, DWORD PTR gs:20       ; проверка канарейки
 	jne	.L5
 	mov	ebx, DWORD PTR [ebp-4]
 	leave

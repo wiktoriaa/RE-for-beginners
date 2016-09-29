@@ -2,8 +2,8 @@ my_abs:
 	sub	sp, sp, #16
 	str	w0, [sp,12]
 	ldr	w0, [sp,12]
-; §compare input value with contents of WZR register§
-; §(which always holds zero)§
+; compare input value with contents of WZR register
+; (which always holds zero)
 	cmp	w0, wzr
 	bge	.L2
 	ldr	w0, [sp,12]

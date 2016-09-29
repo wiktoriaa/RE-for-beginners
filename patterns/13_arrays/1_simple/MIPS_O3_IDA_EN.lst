@@ -7,7 +7,7 @@ var_10          = -0x10
 var_C           = -0xC
 var_8           = -8
 var_4           = -4
-; §function prologue§:
+; function prologue:
                 lui     $gp, (__gnu_local_gp >> 16)
                 addiu   $sp, -0x80
                 la      $gp, (__gnu_local_gp & 0xFFFF)
@@ -20,41 +20,41 @@ var_4           = -4
                 addiu   $s1, $sp, 0x80+var_68
                 move    $v1, $s1
                 move    $v0, $zero
-; §that value will be used as a loop terminator§.
-; §it was precalculated by GCC compiler at compile stage§:
+; that value will be used as a loop terminator.
+; it was precalculated by GCC compiler at compile stage:
                 li      $a0, 0x28  # '('
 
 loc_34:                                  # CODE XREF: main+3C
-; §store value into memory§:
+; store value into memory:
                 sw      $v0, 0($v1)
-; §increase value to be stored by 2 at each iteration§:
+; increase value to be stored by 2 at each iteration:
                 addiu   $v0, 2
-; §loop terminator reached§?
+; loop terminator reached?
                 bne     $v0, $a0, loc_34
-; §add 4 to address anyway§:
+; add 4 to address anyway:
                 addiu   $v1, 4
-; §array filling loop is ended§
-; §second loop begin§
+; array filling loop is ended
+; second loop begin
                 la      $s3, $LC0        # "a[%d]=%d\n"
-; §"i" variable will reside in§ $s0:
+; "i" variable will reside in $s0:
                 move    $s0, $zero
                 li      $s2, 0x14
 
 loc_54:                                  # CODE XREF: main+70
-; §call§ printf():
+; call printf():
                 lw      $t9, (printf & 0xFFFF)($gp)
                 lw      $a2, 0($s1)
                 move    $a1, $s0
                 move    $a0, $s3
                 jalr    $t9
-; §increment§ "i":
+; increment "i":
                 addiu   $s0, 1
                 lw      $gp, 0x80+var_70($sp)
-; §jump to loop body if end is not reached§:
+; jump to loop body if end is not reached:
                 bne     $s0, $s2, loc_54
-; §move memory pointer to the next 32-bit word§:
+; move memory pointer to the next 32-bit word:
                 addiu   $s1, 4
-; §function epilogue§
+; function epilogue
                 lw      $ra, 0x80+var_4($sp)
                 move    $v0, $zero
                 lw      $s3, 0x80+var_8($sp)

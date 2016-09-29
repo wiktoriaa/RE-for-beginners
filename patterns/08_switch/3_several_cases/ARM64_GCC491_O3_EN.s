@@ -1,31 +1,31 @@
 f14:
-; §input value in§ W0
+; input value in W0
 	sub	w0, w0, #1
 	cmp	w0, 21
-; §branch if less or equal (unsigned):§
+; branch if less or equal (unsigned):
 	bls	.L9
 .L2:
-; §print§ "default":
+; print "default":
 	adrp	x0, .LC4
 	add	x0, x0, :lo12:.LC4
 	b	puts
 .L9:
-; §load jumptable address to§ X1:
+; load jumptable address to X1:
 	adrp	x1, .L4
 	add	x1, x1, :lo12:.L4
 ; W0=input_value-1
-; §load byte from the table:§
+; load byte from the table:
 	ldrb	w0, [x1,w0,uxtw]
-; §load address of the Lrtx label:§
+; load address of the Lrtx label:
 	adr	x1, .Lrtx4
-; §multiply table element by 4 (by shifting 2 bits left) and add (or subtract) to the address of Lrtx:§
+; multiply table element by 4 (by shifting 2 bits left) and add (or subtract) to the address of Lrtx:
 	add	x0, x1, w0, sxtb #2
-; §jump to the calculated address§:
+; jump to the calculated address:
 	br	x0
-; §this label is pointing in code (text) segment§:
+; this label is pointing in code (text) segment:
 .Lrtx4:
 	.section	.rodata
-; §everything after ".section" statement is allocated in the read-only data (rodata) segment:§
+; everything after ".section" statement is allocated in the read-only data (rodata) segment:
 .L4:
 	.byte	(.L3 - .Lrtx4) / 4     ; case 1
 	.byte	(.L3 - .Lrtx4) / 4     ; case 2
@@ -50,24 +50,24 @@ f14:
 	.byte	(.L6 - .Lrtx4) / 4     ; case 21
 	.byte	(.L7 - .Lrtx4) / 4     ; case 22
 	.text
-; §everything after ".text" statement is allocated in the code (text) segment:§
+; everything after ".text" statement is allocated in the code (text) segment:
 .L7:
-; §print§ "22"
+; print "22"
 	adrp	x0, .LC3
 	add	x0, x0, :lo12:.LC3
 	b	puts
 .L6:
-; §print§ "8, 9, 21"
+; print "8, 9, 21"
 	adrp	x0, .LC2
 	add	x0, x0, :lo12:.LC2
 	b	puts
 .L5:
-; §print§ "3, 4, 5"
+; print "3, 4, 5"
 	adrp	x0, .LC1
 	add	x0, x0, :lo12:.LC1
 	b	puts
 .L3:
-; §print§ "1, 2, 7, 10"
+; print "1, 2, 7, 10"
 	adrp	x0, .LC0
 	add	x0, x0, :lo12:.LC0
 	b	puts

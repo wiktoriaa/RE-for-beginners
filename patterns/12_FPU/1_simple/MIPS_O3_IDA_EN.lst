@@ -2,26 +2,26 @@ f:
 ; $f12-$f13=A
 ; $f14-$f15=B
                 lui     $v0, (dword_C4 >> 16) ; ?
-; §load low 32-bit part of 3.14 constant to§ $f0:
+; load low 32-bit part of 3.14 constant to $f0:
                 lwc1    $f0, dword_BC
                 or      $at, $zero            ; load delay slot, NOP
-; §load high 32-bit part of 3.14 constant to§ $f1:
+; load high 32-bit part of 3.14 constant to $f1:
                 lwc1    $f1, $LC0
                 lui     $v0, ($LC1 >> 16)     ; ?
-; A §in§ $f12-$f13, §3.14 constant in§ $f0-$f1, §do division§:
+; A in $f12-$f13, 3.14 constant in $f0-$f1, do division:
                 div.d   $f0, $f12, $f0
 ; $f0-$f1=A/3.14
-; §load low 32-bit part of 4.1 to§ $f2:
+; load low 32-bit part of 4.1 to $f2:
                 lwc1    $f2, dword_C4
                 or      $at, $zero            ; load delay slot, NOP
-; §load high 32-bit part of 4.1 to§ $f3:
+; load high 32-bit part of 4.1 to $f3:
                 lwc1    $f3, $LC1
                 or      $at, $zero            ; load delay slot, NOP
-; B §in§ $f14-$f15, §4.1 constant in§ $f2-$f3, §do multiplication§:
+; B in $f14-$f15, 4.1 constant in $f2-$f3, do multiplication:
                 mul.d   $f2, $f14, $f2
 ; $f2-$f3=B*4.1
                 jr      $ra
-; §sum 64-bit parts and leave result in§ $f0-$f1:
+; sum 64-bit parts and leave result in $f0-$f1:
                 add.d   $f0, $f2              ; branch delay slot, NOP
 
 

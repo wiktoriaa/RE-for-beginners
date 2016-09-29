@@ -18,19 +18,19 @@ __in$ = 8  ; size = 4
     add    esp, 12
 
     mov    edx, DWORD PTR _t$[ebp]
-    or     edx, -2147483648 ; 80000000H - §set minus sign§
+    or     edx, -2147483648 ; 80000000H - set minus sign
     mov    DWORD PTR _t$[ebp], edx
 
     mov    eax, DWORD PTR _t$[ebp]
-    shr    eax, 23          ; 00000017H - §drop significand§
-    and    eax, 255         ; 000000ffH - §leave here only exponent§
-    add    eax, 2           ; §add 2 to it§
+    shr    eax, 23          ; 00000017H - drop significand
+    and    eax, 255         ; 000000ffH - leave here only exponent
+    add    eax, 2           ; add 2 to it
     and    eax, 255         ; 000000ffH
-    shl    eax, 23          ; 00000017H - §shift result to place of bits 30:23§
+    shl    eax, 23          ; 00000017H - shift result to place of bits 30:23
     mov    ecx, DWORD PTR _t$[ebp]
-    and    ecx, -2139095041 ; 807fffffH - §drop exponent§
+    and    ecx, -2139095041 ; 807fffffH - drop exponent
 
-; §add original value without exponent with new calculated exponent§
+; add original value without exponent with new calculated exponent
     or     ecx, eax         
     mov    DWORD PTR _t$[ebp], ecx
 

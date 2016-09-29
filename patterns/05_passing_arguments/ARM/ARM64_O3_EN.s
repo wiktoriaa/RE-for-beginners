@@ -3,7 +3,7 @@
 	ret
 
 main:
-; §save FP and LR to stack frame§:
+; save FP and LR to stack frame:
 	stp	x29, x30, [sp, -16]!
 	mov	w2, 3
 	mov	w1, 2
@@ -14,9 +14,9 @@ main:
 	adrp	x0, .LC7
 	add	x0, x0, :lo12:.LC7
 	bl	printf
-; §return§ 0
+; return 0
 	mov	w0, 0
-; §restore FP and LR§
+; restore FP and LR
 	ldp	x29, x30, [sp], 16
 	ret
 

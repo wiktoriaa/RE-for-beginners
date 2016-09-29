@@ -17,7 +17,7 @@ const char month2[12][10]=
 	{ 'D','e','c','e','m','b','e','r',  0,  0 }
 };
 
-// §in 0..11 range§
+// in 0..11 range
 const char* get_month2 (int month)
 {
 	return &month2[month][0];

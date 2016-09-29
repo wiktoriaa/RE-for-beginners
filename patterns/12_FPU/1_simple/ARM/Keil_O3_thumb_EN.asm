@@ -21,9 +21,9 @@ f
                 BL      __aeabi_dadd
                 POP     {R3-R7,PC}
 
-; 4.1 §in IEEE 754 form§:
+; 4.1 in IEEE 754 form:
 dword_364       DCD 0x66666666          ; DATA XREF: f+A
 dword_368       DCD 0x40106666          ; DATA XREF: f+C
-; 3.14 §in IEEE 754 form§:
+; 3.14 in IEEE 754 form:
 dword_36C       DCD 0x51EB851F          ; DATA XREF: f+1A
 dword_370       DCD 0x40091EB8          ; DATA XREF: f+1C

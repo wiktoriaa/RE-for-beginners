@@ -80,7 +80,7 @@ var_10          = -0x10
     ADD      R4, PC
     B        loc_2F1C
 
-; §начало второго цикла§
+; начало второго цикла
 
 loc_2F14                                
     ADDS     R0, R5, #1
@@ -96,7 +96,7 @@ loc_2F1C
     LDR.W    R0, [R8]
     LDR      R1, [SP,#0x64+canary]
     CMP      R0, R1
-    ITTTT EQ            ; §канарейка все еще верна§?
+    ITTTT EQ            ; канарейка все еще верна?
     MOVEQ    R0, #0     
     ADDEQ    SP, SP, #0x54
     LDREQ.W  R8, [SP+0x64+var_64],#4

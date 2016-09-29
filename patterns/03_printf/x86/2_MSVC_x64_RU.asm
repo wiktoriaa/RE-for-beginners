@@ -14,7 +14,7 @@ main	PROC
 	lea	rcx, OFFSET FLAT:$SG2923
 	call	printf
 
-	; §возврат§ 0
+	; возврат 0
 	xor	eax, eax
 
 	add	rsp, 88
