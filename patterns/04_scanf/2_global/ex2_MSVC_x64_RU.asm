@@ -19,7 +19,7 @@ $LN3:
 	lea	rcx, OFFSET FLAT:$SG2926 ; 'You entered %d...'
 	call	printf
 	
-	; §возврат§ 0
+	; возврат 0
 	xor	eax, eax
 
 	add	rsp, 40

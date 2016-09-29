@@ -2,7 +2,7 @@ org 100h
 mov al,13h
 int 10h
 
-; §set palette§
+; set palette
 mov dx, 3c8h
 mov al, 0
 out dx, al
@@ -11,9 +11,9 @@ inc dx
 l00:
 mov al, cl
 shl ax, 2
-out dx, al ; §red§
-out dx, al ; §green§
-out dx, al ; §blue§
+out dx, al ; red
+out dx, al ; green
+out dx, al ; blue
 loop l00
 
 push 0a000h
@@ -58,11 +58,11 @@ stosb
 cmp di, 0FA00h
 jb FillLoop
 
-; §wait for keypress§
+; wait for keypress
 xor ax,ax
 int 16h
-; §set text video mode§
+; set text video mode
 mov ax, 3
 int 10h
-; §exit§
+; exit
 int 20h

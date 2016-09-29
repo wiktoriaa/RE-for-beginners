@@ -15,7 +15,7 @@ _main	PROC
 	push	esi
 	mov	esi, DWORD PTR __imp__printf
 	push	OFFSET $SG4038		; 'Enter temperature in Fahrenheit:'
-	call	esi			; §call§ printf()
+	call	esi			; call printf()
 	lea	eax, DWORD PTR _fahr$[esp+16]
 	push	eax
 	push	OFFSET $SG4040		; '%lf'
@@ -24,7 +24,7 @@ _main	PROC
 	cmp	eax, 1
 	je	SHORT $LN2@main
 	push	OFFSET $SG4041		; 'Error while parsing your input'
-	call	esi			; §call§ printf()
+	call	esi			; call printf()
 	add	esp, 4
 	push	0
 	call	DWORD PTR __imp__exit
@@ -40,7 +40,7 @@ $LN2@main:
 	jne	SHORT $LN1@main
 	push	OFFSET $SG4043		; 'Error: incorrect temperature!'
 	fstp	ST(0)
-	call	esi			; §call§ printf()
+	call	esi			; call printf()
 	add	esp, 4
 	push	0
 	call	DWORD PTR __imp__exit
@@ -50,7 +50,7 @@ $LN1@main:
 	push	OFFSET $SG4044		; 'Celsius: %lf'
 	call	esi
 	add	esp, 12					; 0000000cH
-	; §return 0 - by C99 standard§
+	; return 0 - by C99 standard
 	xor	eax, eax
 	pop	esi
 	add	esp, 8

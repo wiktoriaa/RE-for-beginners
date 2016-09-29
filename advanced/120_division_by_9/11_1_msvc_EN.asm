@@ -3,7 +3,7 @@ _f    PROC
     push   ebp
     mov    ebp, esp
     mov    eax, DWORD PTR _a$[ebp]
-    cdq            ; §sign extend EAX to EDX:EAX§
+    cdq            ; sign extend EAX to EDX:EAX
     mov    ecx, 9
     idiv   ecx
     pop    ebp

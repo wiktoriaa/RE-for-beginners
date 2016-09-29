@@ -2,7 +2,7 @@ org 100h
 mov al,13h
 int 10h
 
-; §установить палитру§
+; установить палитру
 mov dx, 3c8h
 mov al, 0
 out dx, al
@@ -11,9 +11,9 @@ inc dx
 l00:
 mov al, cl
 shl ax, 2
-out dx, al ; §красный§
-out dx, al ; §зеленый§
-out dx, al ; §синий§
+out dx, al ; красный
+out dx, al ; зеленый
+out dx, al ; синий
 loop l00
 
 push 0a000h
@@ -58,11 +58,11 @@ stosb
 cmp di, 0FA00h
 jb FillLoop
 
-; §дождаться нажатия любой клавиши§
+; дождаться нажатия любой клавиши
 xor ax,ax
 int 16h
-; §установить текстовый видеорежим§
+; установить текстовый видеорежим
 mov ax, 3
 int 10h
-; §выход§
+; выход
 int 20h

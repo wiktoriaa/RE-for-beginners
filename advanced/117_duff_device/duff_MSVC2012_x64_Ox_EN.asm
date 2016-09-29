@@ -3,7 +3,7 @@ count$ = 16
 bzero	PROC
 	test	rdx, -8
 	je	SHORT $LN11@bzero
-; §work out 8-byte blocks§
+; work out 8-byte blocks
 	xor	r10d, r10d
 	mov	r9, rdx
 	shr	r9, 3
@@ -19,7 +19,7 @@ $LL19@bzero:
 	cmp	rax, r9
 	jb	SHORT $LL19@bzero
 $LN11@bzero:
-; §work out the tail§
+; work out the tail
 	and	edx, 7
 	dec	rdx
 	cmp	rdx, 6

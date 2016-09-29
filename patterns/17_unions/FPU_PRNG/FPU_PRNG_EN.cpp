@@ -2,12 +2,12 @@
 #include <stdint.h>
 #include <time.h>
 
-// §integer PRNG definitions, data and routines:§
+// integer PRNG definitions, data and routines:
 
-// §constants from the Numerical Recipes book§
+// constants from the Numerical Recipes book
 const uint32_t RNG_a=1664525;
 const uint32_t RNG_c=1013904223;
-uint32_t RNG_state; // §global variable§
+uint32_t RNG_state; // global variable
 
 void my_srand(uint32_t i)
 {
@@ -20,7 +20,7 @@ uint32_t my_rand()
         return RNG_state;
 };
 
-// §FPU PRNG definitions and routines:§
+// FPU PRNG definitions and routines:
 
 union uint32_t_float
 {
@@ -35,11 +35,11 @@ float float_rand()
 	return tmp.f-1;
 };
 
-// §test§
+// test
 
 int main()
 {
-	my_srand(time(NULL)); // §PRNG initialization§
+	my_srand(time(NULL)); // PRNG initialization
 
 	for (int i=0; i<100; i++)
 		printf ("%f\n", float_rand());

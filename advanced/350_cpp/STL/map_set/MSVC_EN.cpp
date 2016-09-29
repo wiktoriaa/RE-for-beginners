@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 
-// §structure is not packed§!
+// structure is not packed!
 struct tree_node
 {
     struct tree_node *Left;
@@ -12,8 +12,8 @@ struct tree_node
     char Color; // 0 - Red, 1 - Black
     char Isnil;
     //std::pair Myval;
-    unsigned int first; // §called§ Myval §in§ std::set
-    const char *second; // §not present in§ std::set
+    unsigned int first; // called Myval in std::set
+    const char *second; // not present in std::set
 };
 
 struct tree_struct

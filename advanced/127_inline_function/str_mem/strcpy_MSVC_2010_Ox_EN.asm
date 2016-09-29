@@ -4,7 +4,7 @@ _strcpy_test PROC
 	mov	eax, DWORD PTR _s1$[esp-4]
 	mov	edx, DWORD PTR _outbuf$[esp-4]
 	sub	edx, eax
-	npad	6 ; §align next label§
+	npad	6 ; align next label
 $LL3@strcpy_tes:
 	mov	cl, BYTE PTR [eax]
 	mov	BYTE PTR [edx+eax], cl

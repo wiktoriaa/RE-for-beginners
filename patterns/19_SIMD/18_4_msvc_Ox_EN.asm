@@ -15,7 +15,7 @@ _str$ = 8                ; size = 4
     cmp      esi, eax
     je       SHORT $LN4@strlen_sse
     lea      edx, DWORD PTR [eax+1]
-    npad     3 ; §align next label§
+    npad     3 ; align next label
 $LL11@strlen_sse:
     mov      cl, BYTE PTR [eax]
     inc      eax

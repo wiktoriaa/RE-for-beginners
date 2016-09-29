@@ -6,9 +6,9 @@ char* str_trim (char *s)
 	char c;
 	size_t str_len;
 	
-	// §work as long as§ \r §or§ \n §is at the end of string§
-	// §stop if some other character there or its an empty string'§
-	// (§at start or due to our operation§)
+	// work as long as \r or \n is at the end of string
+	// stop if some other character there or its an empty string'
+	// (at start or due to our operation)
 	for (str_len=strlen(s); str_len>0 && (c=s[str_len-1]); str_len--)
 	{
 		if (c=='\r' || c=='\n')
@@ -21,12 +21,12 @@ char* str_trim (char *s)
 
 int main()
 {
-	// §test§
+	// test
 
-	// §strdup() is used to copy text string into data segment,§
-	// §because it will crash on Linux otherwise,§
-	// §where text strings are allocated in constant data segment,§
-	// §and not modifiable§.
+	// strdup() is used to copy text string into data segment,
+	// because it will crash on Linux otherwise,
+	// where text strings are allocated in constant data segment,
+	// and not modifiable.
 
 	printf ("[%s]\n", str_trim (strdup("")));
 	printf ("[%s]\n", str_trim (strdup("\n")));

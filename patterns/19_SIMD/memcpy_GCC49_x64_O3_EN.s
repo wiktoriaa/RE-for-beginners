@@ -1,7 +1,7 @@
 my_memcpy:
-; RDI = §destination address§
-; RSI = §source address§
-; RDX = §size of block§
+; RDI = destination address
+; RSI = source address
+; RDX = size of block
 	test	rdx, rdx
 	je	.L41
 	lea	rax, [rdi+16]

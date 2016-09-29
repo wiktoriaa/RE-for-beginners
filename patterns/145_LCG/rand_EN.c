@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-// §constants from the Numerical Recipes book§
+// constants from the Numerical Recipes book
 #define RNG_a 1664525
 #define RNG_c 1013904223
 

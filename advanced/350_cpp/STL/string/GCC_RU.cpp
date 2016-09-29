@@ -10,7 +10,7 @@ struct std_string
 
 void dump_std_string(std::string s)
 {
-    char *p1=*(char**)&s; // §обход проверки типов GCC§
+    char *p1=*(char**)&s; // обход проверки типов GCC
     struct std_string *p2=(struct std_string*)(p1-sizeof(struct std_string));
     printf ("[%s] size:%d capacity:%d\n", p1, p2->length, p2->capacity);
 };
@@ -23,7 +23,7 @@ int main()
     dump_std_string(s1);
     dump_std_string(s2);
 
-    // §обход проверки типов GCC§:
+    // обход проверки типов GCC:
     printf ("%s\n", *(char**)&s1);
     printf ("%s\n", *(char**)&s2);
 };

@@ -10,7 +10,7 @@ struct vector_of_ints
     int *Mylast;
     int *Myend;
 
-    // §структура в GCC такая же, а имена там§: _M_start, _M_finish, _M_end_of_storage
+    // структура в GCC такая же, а имена там: _M_start, _M_finish, _M_end_of_storage
 };
 
 void dump(struct vector_of_ints *in)
@@ -41,6 +41,6 @@ int main()
     dump ((struct vector_of_ints*)(void*)&c);
     c.push_back(6);
     dump ((struct vector_of_ints*)(void*)&c);
-    printf ("%d\n", c.at(5)); // §с проверкой границ§
-    printf ("%d\n", c[8]); // operator[], §без проверки границ§
+    printf ("%d\n", c.at(5)); // с проверкой границ
+    printf ("%d\n", c[8]); // operator[], без проверки границ
 };

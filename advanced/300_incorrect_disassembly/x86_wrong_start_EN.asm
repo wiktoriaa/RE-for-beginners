@@ -16,7 +16,7 @@
  std
  db 0FFh
  db 0FFh
- mov     word ptr [ebp-214h], cs ; <- §disassembler finally found right track here§
+ mov     word ptr [ebp-214h], cs ; <- disassembler finally found right track here
  mov     word ptr [ebp-238h], ds
  mov     word ptr [ebp-23Ch], es
  mov     word ptr [ebp-240h], fs

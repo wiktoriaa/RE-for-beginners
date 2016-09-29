@@ -6,13 +6,13 @@ private:
     int v1;
     int v2;
 public:
-    c() // §default ctor§
+    c() // default ctor
     {
         v1=667;
         v2=999;
     };
 
-    c(int a, int b) // §ctor§
+    c(int a, int b) // ctor
     {
         v1=a;
         v2=b;

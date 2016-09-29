@@ -10,7 +10,7 @@ int arith_mean(int v, ...)
 	while(1)
 	{
 		i=va_arg(args, int);
-		if (i==-1) // §терминатор§
+		if (i==-1) // терминатор
 			break;
 		sum=sum+i;
 		count++;
@@ -22,5 +22,5 @@ int arith_mean(int v, ...)
 
 int main()
 {
-	printf ("%d\n", arith_mean (1, 2, 7, 10, 15, -1 /* §терминатор§ */));
+	printf ("%d\n", arith_mean (1, 2, 7, 10, 15, -1 /* терминатор */));
 };
