@@ -1,4 +1,4 @@
-; §denote§ ip1 §as§ "dd", ip2 §as§ "cc", ip3 §as§ "bb", ip4 §as§ "aa".
+; denote ip1 as "dd", ip2 as "cc", ip3 as "bb", ip4 as "aa".
 _ip1$ = 8	; size = 1
 _ip2$ = 12	; size = 1
 _ip3$ = 16	; size = 1

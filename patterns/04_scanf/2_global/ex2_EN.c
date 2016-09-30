@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// §now x is global variable§
+// now x is global variable
 int x;
 
 int main() 

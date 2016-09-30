@@ -10,13 +10,13 @@
 ; c(int a, int b)
 
 ??0c@@QEAA@HH@Z PROC ; c::c
-    mov    DWORD PTR [rcx], edx   ; §первый аргумент§: a
-    mov    DWORD PTR [rcx+4], r8d ; §второй аргумент§: b
+    mov    DWORD PTR [rcx], edx   ; первый аргумент: a
+    mov    DWORD PTR [rcx+4], r8d ; второй аргумент: b
     mov    rax, rcx
     ret    0
 ??0c@@QEAA@HH@Z ENDP ; c::c
 
-; §конструктор по умолчанию§
+; конструктор по умолчанию
 
 ??0c@@QEAA@XZ PROC ; c::c
     mov    DWORD PTR [rcx], 667

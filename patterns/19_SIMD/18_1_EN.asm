@@ -55,8 +55,8 @@ loc_67: ; CODE XREF: f(int,int *,int *,int *)+59
 
 loc_7F: ; CODE XREF: f(int,int *,int *,int *)+65
        mov     edi, eax        ; edi = ar1
-       and     edi, 0Fh        ; §is ar1 16-byte aligned§?
-       jz      short loc_9A    ; §yes§
+       and     edi, 0Fh        ; is ar1 16-byte aligned?
+       jz      short loc_9A    ; yes
        test    edi, 3
        jnz     loc_162
        neg     edi
@@ -91,15 +91,15 @@ loc_C1: ; CODE XREF: f(int,int *,int *,int *)+CD
 
 loc_D6: ; CODE XREF: f(int,int *,int *,int *)+B2
        mov     esi, [esp+10h+ar2]
-       lea     esi, [esi+edi*4] ; §is §ar2+i*4 §16-byte aligned§?
+       lea     esi, [esi+edi*4] ; is ar2+i*4 16-byte aligned?
        test    esi, 0Fh
-       jz      short loc_109   ; §yes§!
+       jz      short loc_109   ; yes!
        mov     ebx, [esp+10h+ar1]
        mov     esi, [esp+10h+ar2]
 
 loc_ED: ; CODE XREF: f(int,int *,int *,int *)+105
        movdqu  xmm1, xmmword ptr [ebx+edi*4] ; ar1+i*4
-       movdqu  xmm0, xmmword ptr [esi+edi*4] ; ar2+i*4 §is not 16-byte aligned, so load it to§ XMM0
+       movdqu  xmm0, xmmword ptr [esi+edi*4] ; ar2+i*4 is not 16-byte aligned, so load it to XMM0
        paddd   xmm1, xmm0
        movdqa  xmmword ptr [eax+edi*4], xmm1 ; ar3+i*4
        add     edi, 4

@@ -9,7 +9,7 @@ _main    PROC
     push 0
     lea  ecx, DWORD PTR _l$[esp+36]
     mov  DWORD PTR _l$[esp+40], 0
-    ; §allocate first "garbage" element§
+    ; allocate first "garbage" element
     call ?_Buynode0@?$_List_alloc@$0A@U?$_List_base_types@Ua@@V?$allocator@Ua@@@std@@@std@@@std@@QAEPAU?$_List_node@Ua@@PAX@2@PAU32@0@Z ; std::_List_alloc<0,std::_List_base_types<a,std::allocator<a> > >::_Buynode0
     mov  edi, DWORD PTR __imp__printf
     mov  ebx, eax
@@ -26,13 +26,13 @@ _main    PROC
     push DWORD PTR [esi+4]
     lea  ecx, DWORD PTR _l$[esp+36]
     push esi
-    mov  DWORD PTR _t1$[esp+40], 1 ; §data for a new node§
-    mov  DWORD PTR _t1$[esp+44], 2 ; §data for a new node§
+    mov  DWORD PTR _t1$[esp+40], 1 ; data for a new node
+    mov  DWORD PTR _t1$[esp+44], 2 ; data for a new node
     ; allocate new node
     call ??$_Buynode@ABUa@@@?$_List_buy@Ua@@V?$allocator@Ua@@@std@@@std@@QAEPAU?$_List_node@Ua@@PAX@1@PAU21@0ABUa@@@Z ; std::_List_buy<a,std::allocator<a> >::_Buynode<a const &>
     mov  DWORD PTR [esi+4], eax
     mov  ecx, DWORD PTR [eax+4]
-    mov  DWORD PTR _t1$[esp+28], 3 ; §data for a new node§
+    mov  DWORD PTR _t1$[esp+28], 3 ; data for a new node
     mov  DWORD PTR [ecx], eax
     mov  esi, DWORD PTR [ebx]
     lea  eax, DWORD PTR _t1$[esp+28]
@@ -40,19 +40,19 @@ _main    PROC
     push DWORD PTR [esi+4]
     lea  ecx, DWORD PTR _l$[esp+36]
     push esi
-    mov  DWORD PTR _t1$[esp+44], 4 ; §data for a new node§
+    mov  DWORD PTR _t1$[esp+44], 4 ; data for a new node
     ; allocate new node
     call ??$_Buynode@ABUa@@@?$_List_buy@Ua@@V?$allocator@Ua@@@std@@@std@@QAEPAU?$_List_node@Ua@@PAX@1@PAU21@0ABUa@@@Z ; std::_List_buy<a,std::allocator<a> >::_Buynode<a const &>
     mov  DWORD PTR [esi+4], eax
     mov  ecx, DWORD PTR [eax+4]
-    mov  DWORD PTR _t1$[esp+28], 5 ; §data for a new node§
+    mov  DWORD PTR _t1$[esp+28], 5 ; data for a new node
     mov  DWORD PTR [ecx], eax
     lea  eax, DWORD PTR _t1$[esp+28]
     push eax
     push DWORD PTR [ebx+4]
     lea  ecx, DWORD PTR _l$[esp+36]
     push ebx
-    mov  DWORD PTR _t1$[esp+44], 6 ; §data for a new node§
+    mov  DWORD PTR _t1$[esp+44], 6 ; data for a new node
     ; allocate new node
     call ??$_Buynode@ABUa@@@?$_List_buy@Ua@@V?$allocator@Ua@@@std@@@std@@QAEPAU?$_List_node@Ua@@PAX@1@PAU21@0ABUa@@@Z ; std::_List_buy<a,std::allocator<a> >::_Buynode<a const &>
     mov  DWORD PTR [ebx+4], eax
@@ -66,11 +66,11 @@ _main    PROC
     call ?dump_List_val@@YAXPAI@Z ; dump_List_val
     push OFFSET $SG40831 ; 'node at .begin:'
     call edi ; printf
-    push DWORD PTR [ebx] ; §get next field of node $l$ variable points to§
+    push DWORD PTR [ebx] ; get next field of node $l$ variable points to
     call ?dump_List_node@@YAXPAUList_node@@@Z ; dump_List_node
     push OFFSET $SG40835 ; 'node at .end:'
     call edi ; printf
-    push ebx ; pointer to the node $l$ variable points to!
+    push ebx ; pointer to the node "l" variable points to!
     call ?dump_List_node@@YAXPAUList_node@@@Z ; dump_List_node
     push OFFSET $SG40839 ; '* let''s count from the begin:'
     call edi ; printf
@@ -97,7 +97,7 @@ _main    PROC
     call edi ; printf
     push OFFSET $SG40853 ; '* let''s count from the end:'
     call edi ; printf
-    push DWORD PTR [ebx+12] ; §use x and y fields from the node $l$ variable points to§
+    push DWORD PTR [ebx+12] ; use x and y fields from the node "l" variable points to
     push DWORD PTR [ebx+8]
     push OFFSET $SG40860 ; 'element at .end(): %d %d'
     call edi ; printf
@@ -123,8 +123,8 @@ _main    PROC
     add  esp, 4
     
     ; prev=next? 
-    ; §it is the only element, "garbage one"§?
-    ; §if yes, do not delete it§!
+    ; it is the only element, "garbage one"?
+    ; if yes, do not delete it!
     cmp  edx, ebx
     je   SHORT $LN349@main
     mov  ecx, DWORD PTR [edx+4]

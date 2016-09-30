@@ -1,5 +1,5 @@
-; RCX = §pointer to the input string§
-; RAX = §current string length§
+; RCX = pointer to the input string
+; RAX = current string length
         xor     rax, rax
 label:
         cmp     byte ptr [rcx+rax], 0
@@ -7,4 +7,4 @@ label:
         inc     rax
         jmp     label
 exit:
-; RAX = §string length§
+; RAX = string length

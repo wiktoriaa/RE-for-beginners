@@ -2,7 +2,7 @@ f	PROC
 ; RDX=a1
 ; RCX=a2
 ; R8=cnt
-	test	r8, r8        ; cnt==0? §тогда выйти§
+	test	r8, r8        ; cnt==0? тогда выйти
 	je	SHORT $LN1@f
 	npad	11
 $LL3@f:

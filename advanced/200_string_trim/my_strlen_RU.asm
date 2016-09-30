@@ -1,5 +1,5 @@
-; RCX = §указатель на входную строку§
-; RAX = §текущая длина строки§
+; RCX = указатель на входную строку
+; RAX = текущая длина строки
         xor     rax, rax
 label:
         cmp     byte ptr [rcx+rax], 0
@@ -7,4 +7,4 @@ label:
         inc     rax
         jmp     label
 exit:
-; RAX = §длина строки§
+; RAX = длина строки

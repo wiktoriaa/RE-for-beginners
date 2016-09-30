@@ -18,7 +18,7 @@ main:
 	xor	eax, eax
 	call	printf
 
-	; §return§ 0
+	; return 0
 	xor	eax, eax
 	add	rsp, 24
 	ret

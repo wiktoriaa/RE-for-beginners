@@ -1,19 +1,19 @@
 _v$ = 8
 _arith_mean PROC NEAR
-	mov	eax, DWORD PTR _v$[esp-4] ; §загрузить первый аргумент в§ sum
+	mov	eax, DWORD PTR _v$[esp-4] ; загрузить первый аргумент в sum
 	push	esi
 	mov	esi, 1		          ; count=1
-	lea	edx, DWORD PTR _v$[esp]   ; §адрес первого аргумента§
+	lea	edx, DWORD PTR _v$[esp]   ; адрес первого аргумента
 $L838:
-	mov	ecx, DWORD PTR [edx+4]    ; §загрузить следующий аргумент§
-	add	edx, 4                    ; §сдвинуть указатель на следующий аргумент§
-	cmp	ecx, -1                   ; §это§ -1?
-	je	SHORT $L856               ; §выйти, если это так§
-	add	eax, ecx                  ; sum = sum + §загруженный аргумент§
+	mov	ecx, DWORD PTR [edx+4]    ; загрузить следующий аргумент
+	add	edx, 4                    ; сдвинуть указатель на следующий аргумент
+	cmp	ecx, -1                   ; это -1?
+	je	SHORT $L856               ; выйти, если это так
+	add	eax, ecx                  ; sum = sum + загруженный аргумент
 	inc	esi                       ; count++
 	jmp	SHORT $L838
 $L856:
-; §вычислить результат деления§
+; вычислить результат деления
 
 	cdq
 	idiv	esi

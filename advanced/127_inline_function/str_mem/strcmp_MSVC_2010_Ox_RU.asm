@@ -7,7 +7,7 @@ _s$ = 8		; size = 4
 	mov	esi, DWORD PTR _s$[esp]
 	mov	ecx, OFFSET $SG3454 ; 'true'
 	mov	eax, esi
-	npad	4 ; §выровнять следующую метку§
+	npad	4 ; выровнять следующую метку
 $LL6@is_bool:
 	mov	dl, BYTE PTR [eax]
 	cmp	dl, BYTE PTR [ecx]

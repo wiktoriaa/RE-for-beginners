@@ -8,8 +8,8 @@ struct std_string
         char buf[16];
         char* ptr;
     } u;
-    size_t size;     // AKA 'Mysize' §in§ MSVC
-    size_t capacity; // AKA 'Myres' §in§ MSVC
+    size_t size;     // AKA 'Mysize' in MSVC
+    size_t capacity; // AKA 'Myres' in MSVC
 };
 
 void dump_std_string(std::string s)
@@ -26,7 +26,7 @@ int main()
     dump_std_string(s1);
     dump_std_string(s2);
 
-    // §that works without using§ c_str()
+    // that works without using c_str()
     printf ("%s\n", &s1);
     printf ("%s\n", s2);
 };

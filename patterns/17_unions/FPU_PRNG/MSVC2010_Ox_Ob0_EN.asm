@@ -7,18 +7,18 @@ _tmp$ = -4
 ?float_rand@@YAMXZ PROC
 	push	ecx
 	call	?my_rand@@YAIXZ
-; EAX=§pseudorandom value§
+; EAX=pseudorandom value
 	and	eax, 8388607				; 007fffffH
 	or	eax, 1065353216				; 3f800000H
-; EAX=§pseudorandom value§ & 0x007fffff | 0x3f800000
-; §store it into local stack:§
+; EAX=pseudorandom value & 0x007fffff | 0x3f800000
+; store it into local stack:
 	mov	DWORD PTR _tmp$[esp+4], eax
-; §reload it as float point number:§
+; reload it as float point number:
 	fld	DWORD PTR _tmp$[esp+4]
-; §subtract§ 1.0:
+; subtract 1.0:
 	fsub	QWORD PTR __real@3ff0000000000000
-; §store value we got into local stack and reload it:§
-	fstp	DWORD PTR tv130[esp+4] ; \  §these instructions are redundant§
+; store value we got into local stack and reload it:
+	fstp	DWORD PTR tv130[esp+4] ; \  these instructions are redundant
 	fld	DWORD PTR tv130[esp+4] ; /
 	pop	ecx
 	ret	0

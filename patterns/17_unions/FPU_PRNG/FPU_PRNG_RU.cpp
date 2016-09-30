@@ -2,12 +2,12 @@
 #include <stdint.h>
 #include <time.h>
 
-// §определения, данные и ф-ции для целочисленного PRNG§
+// определения, данные и ф-ции для целочисленного PRNG
 
-// §константы из книги Numerical Recipes§
+// константы из книги Numerical Recipes
 const uint32_t RNG_a=1664525;
 const uint32_t RNG_c=1013904223;
-uint32_t RNG_state; // §глобальная переменная§
+uint32_t RNG_state; // глобальная переменная
 
 void my_srand(uint32_t i)
 {
@@ -20,7 +20,7 @@ uint32_t my_rand()
         return RNG_state;
 };
 
-// §определения и ф-ции FPU PRNG:§
+// определения и ф-ции FPU PRNG:
 
 union uint32_t_float
 {
@@ -35,11 +35,11 @@ float float_rand()
 	return tmp.f-1;
 };
 
-// §тест§
+// тест
 
 int main()
 {
-	my_srand(time(NULL)); // §инициализация PRNG§
+	my_srand(time(NULL)); // инициализация PRNG
 
 	for (int i=0; i<100; i++)
 		printf ("%f\n", float_rand());

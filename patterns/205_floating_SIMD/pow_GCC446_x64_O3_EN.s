@@ -5,9 +5,9 @@ main:
 	movsd	xmm1, QWORD PTR .LC0[rip]
 	movsd	xmm0, QWORD PTR .LC1[rip]
 	call	pow
-	; §result is now in§ XMM0
+	; result is now in XMM0
 	mov	edi, OFFSET FLAT:.LC2
-	mov	eax, 1 ; §number of vector registers passed§
+	mov	eax, 1 ; number of vector registers passed
 	call	printf
 	xor	eax, eax
 	add	rsp, 8

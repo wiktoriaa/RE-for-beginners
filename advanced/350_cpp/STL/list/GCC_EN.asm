@@ -15,17 +15,17 @@ main proc near
     lea  esi, [esp+18h]
     mov  [esp+4], esi
     mov  [esp], ebx
-    mov  dword ptr [esp+18h], 1 ; X §for new element§
-    mov  dword ptr [esp+1Ch], 2 ; Y §for new element§
+    mov  dword ptr [esp+18h], 1 ; X for new element
+    mov  dword ptr [esp+1Ch], 2 ; Y for new element
     call _ZNSt4listI1aSaIS0_EE10push_frontERKS0_ ; std::list<a,std::allocator<a>>::push_front(a const&)
     mov  [esp+4], esi
     mov  [esp], ebx
-    mov  dword ptr [esp+18h], 3 ; X §for new element§
-    mov  dword ptr [esp+1Ch], 4 ; Y §for new element§
+    mov  dword ptr [esp+18h], 3 ; X for new element
+    mov  dword ptr [esp+1Ch], 4 ; Y for new element
     call _ZNSt4listI1aSaIS0_EE10push_frontERKS0_ ; std::list<a,std::allocator<a>>::push_front(a const&)
     mov  dword ptr [esp], 10h
-    mov  dword ptr [esp+18h], 5 ; X §for new element§
-    mov  dword ptr [esp+1Ch], 6 ; Y §for new element§
+    mov  dword ptr [esp+18h], 5 ; X for new element
+    mov  dword ptr [esp+1Ch], 6 ; Y for new element
     call _Znwj           ; operator new(uint)
     cmp  eax, 0FFFFFFF8h
     jz   short loc_80002A6

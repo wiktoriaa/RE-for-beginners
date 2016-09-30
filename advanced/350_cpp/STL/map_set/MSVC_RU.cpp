@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 
-// §структура не запакована§!
+// структура не запакована!
 struct tree_node
 {
     struct tree_node *Left;
@@ -12,8 +12,8 @@ struct tree_node
     char Color; // 0 - Red, 1 - Black
     char Isnil;
     //std::pair Myval;
-    unsigned int first; // §называется§ Myval §в§ std::set
-    const char *second; // §отсутствует в§ std::set
+    unsigned int first; // называется Myval в std::set
+    const char *second; // отсутствует в std::set
 };
 
 struct tree_struct

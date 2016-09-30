@@ -25,7 +25,7 @@ _print_as_IP PROC
 	; EAX=ddccbbaa
 	shr	eax, 24
 	; EAX=000000dd
-	and	eax, 255 ; §возможно, избыточная инструкция§
+	and	eax, 255 ; возможно, избыточная инструкция
 	; EAX=000000dd
 	push	eax
 	push	OFFSET $SG2973 ; '%d.%d.%d.%d'

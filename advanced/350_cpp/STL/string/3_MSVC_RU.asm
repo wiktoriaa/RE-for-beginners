@@ -32,7 +32,7 @@ _main PROC
     push eax
     call ??$?HDU?$char_traits@D@std@@V?$allocator@D@1@@std@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@0@ABV10@0@Z ; std::operator+<char,std::char_traits<char>,std::allocator<char> >
 
-    ; §вставленный код метода (inlined) c\_str()§:
+    ; вставленный код метода (inlined) c_str():
     cmp  DWORD PTR _s3$[esp+104], 16
     lea  eax, DWORD PTR _s3$[esp+84]
     cmovae eax, DWORD PTR _s3$[esp+84]

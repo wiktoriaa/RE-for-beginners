@@ -15,7 +15,7 @@ _str$ = 8                ; size = 4
     cmp      esi, eax
     je       SHORT $LN4@strlen_sse
     lea      edx, DWORD PTR [eax+1]
-    npad     3 ; §выровнять следующую метку§
+    npad     3 ; выровнять следующую метку
 $LL11@strlen_sse:
     mov      cl, BYTE PTR [eax]
     inc      eax

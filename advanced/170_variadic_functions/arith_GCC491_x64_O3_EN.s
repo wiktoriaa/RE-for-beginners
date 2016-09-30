@@ -1,6 +1,6 @@
 arith_mean:
 	lea	rax, [rsp+8]
-	; §save 6 input registers in "red zone" in the local stack§
+	; save 6 input registers in "red zone" in the local stack
 	mov	QWORD PTR [rsp-40], rsi
 	mov	QWORD PTR [rsp-32], rdx
 	mov	QWORD PTR [rsp-16], r8
@@ -15,7 +15,7 @@ arith_mean:
 	mov	QWORD PTR [rsp-56], rax
 	jmp	.L5
 .L7:
-	; §work out saved arguments§
+	; work out saved arguments
 	lea	rax, [rsp-48]
 	mov	ecx, esi
 	add	esi, 8
@@ -27,11 +27,11 @@ arith_mean:
 	add	edi, ecx
 	add	r8d, 1
 .L5:
-	; §decide, which part we will work out now.§
-	; §is current argument number less or equal 6?§
+	; decide, which part we will work out now.
+	; is current argument number less or equal 6?
 	cmp	esi, 47 
-	jbe	.L7 		; §no, process saved arguments then§
-	; §work out arguments from stack§
+	jbe	.L7 		; no, process saved arguments then
+	; work out arguments from stack
 	mov	rcx, rdx
 	add	rdx, 8
 	mov	ecx, DWORD PTR [rcx]

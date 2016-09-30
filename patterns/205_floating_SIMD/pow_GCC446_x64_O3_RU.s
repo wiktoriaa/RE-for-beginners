@@ -5,9 +5,9 @@ main:
 	movsd	xmm1, QWORD PTR .LC0[rip]
 	movsd	xmm0, QWORD PTR .LC1[rip]
 	call	pow
-	; §результат сейчас в§ XMM0
+	; результат сейчас в XMM0
 	mov	edi, OFFSET FLAT:.LC2
-	mov	eax, 1 ; §количество переданных векторных регистров§
+	mov	eax, 1 ; количество переданных векторных регистров
 	call	printf
 	xor	eax, eax
 	add	rsp, 8

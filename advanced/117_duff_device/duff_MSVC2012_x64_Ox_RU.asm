@@ -3,7 +3,7 @@ count$ = 16
 bzero	PROC
 	test	rdx, -8
 	je	SHORT $LN11@bzero
-; §обработать 8-байтные блоки§
+; обработать 8-байтные блоки
 	xor	r10d, r10d
 	mov	r9, rdx
 	shr	r9, 3
@@ -19,7 +19,7 @@ $LL19@bzero:
 	cmp	rax, r9
 	jb	SHORT $LL19@bzero
 $LN11@bzero:
-; §обработать хвост§
+; обработать хвост
 	and	edx, 7
 	dec	rdx
 	cmp	rdx, 6

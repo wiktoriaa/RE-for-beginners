@@ -8,7 +8,7 @@ _main PROC
     add  esp, 8
 
     push OFFSET $SG37112 ; 'world!'
-    push eax             ; §result of previous function execution§
+    push eax             ; result of previous function execution
     call ??$?6U?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@PBD@Z ; std::operator<<<std::char_traits<char> >
     add  esp, 8
 

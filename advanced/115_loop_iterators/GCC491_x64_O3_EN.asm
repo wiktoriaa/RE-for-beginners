@@ -2,9 +2,9 @@
 ; RSI=a2
 ; RDX=cnt
 f:
-	test	rdx, rdx  ; cnt==0? §exit then§
+	test	rdx, rdx  ; cnt==0? exit then
 	je	.L1
-; §calculate last element address in "a2" and leave it in RDX§
+; calculate last element address in "a2" and leave it in RDX
 	lea	rax, [0+rdx*4]
 ; RAX=RDX*4=cnt*4
 	sal	rdx, 5

@@ -10,13 +10,13 @@
 ; c(int a, int b)
 
 ??0c@@QEAA@HH@Z PROC ; c::c
-    mov    DWORD PTR [rcx], edx   ; §1st argument§: a
-    mov    DWORD PTR [rcx+4], r8d ; §2nd argument§: b
+    mov    DWORD PTR [rcx], edx   ; 1st argument: a
+    mov    DWORD PTR [rcx+4], r8d ; 2nd argument: b
     mov    rax, rcx
     ret    0
 ??0c@@QEAA@HH@Z ENDP ; c::c
 
-; §default ctor§
+; default ctor
 
 ??0c@@QEAA@XZ PROC ; c::c
     mov    DWORD PTR [rcx], 667

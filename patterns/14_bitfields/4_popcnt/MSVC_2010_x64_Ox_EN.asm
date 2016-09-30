@@ -1,6 +1,6 @@
 a$ = 8
 f	PROC
-; RCX = §input value§
+; RCX = input value
 	xor	eax, eax
 	mov	edx, 1
 	lea	r8d, QWORD PTR [rax+64]
@@ -8,8 +8,8 @@ f	PROC
 	npad	5
 $LL4@f:
 	test	rdx, rcx
-; §there are no such bit in input value§?
-; §skip the next INC instruction then§.
+; there are no such bit in input value?
+; skip the next INC instruction then.
 	je	SHORT $LN3@f	
 	inc	eax	; rt++
 $LN3@f:

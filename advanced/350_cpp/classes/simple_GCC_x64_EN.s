@@ -1,4 +1,4 @@
-; §default ctor§
+; default ctor
 
 _ZN1cC2Ev:
     mov  DWORD PTR [rdi], 667
