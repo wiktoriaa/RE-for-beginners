@@ -50,7 +50,7 @@ Let's try GCC 4.4.1:
 The result is almost the same as in MSVC, but here we see \MOVZX instead of \MOVSX. 
 \MOVZX stands for \IT{MOV with Zero-Extend}. 
 This instruction copies a 8-bit or 16-bit value into a 32-bit register and sets the rest of the bits to 0. 
-In fact, this instruction is convenient only because it enable us to replace this instruction pair: 
+In fact, this instruction is convenient only because it enable us to replace this instruction pair:\\
 \TT{xor eax, eax / mov al, [...]}.
 
 On the other hand, it is obvious that the compiler could produce this code: 
@@ -91,7 +91,8 @@ Let's check GCC 4.4.1 with optimizations turned on (\Othree key):
 \lstinputlisting{patterns/10_strings/1_strlen/10_3_gcc_O3.asm}
  
 Here GCC is almost the same as MSVC, except for the presence of \MOVZX.
-However, here \MOVZX could be replaced with \TT{mov dl, byte ptr [eax]}.
+However, here \MOVZX could be replaced with\\
+\TT{mov dl, byte ptr [eax]}.
 
 Probably it is simpler for GCC's code generator to \IT{remember} 
 the whole 32-bit \EDX register 

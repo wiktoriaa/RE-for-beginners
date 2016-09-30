@@ -158,6 +158,7 @@ FS \InENRU win32 \RU{указывает на}\EN{points to} \ac{TLS}, \RU{а в 
 \label{EFLAGS}
 \ac{AKA} EFLAGS.
 
+\scriptsize
 \begin{center}
 \begin{tabular}{ | l | l | l | }
 \hline
@@ -171,8 +172,8 @@ FS \InENRU win32 \RU{указывает на}\EN{points to} \ac{TLS}, \RU{а в 
 \hline
 2 (4) & PF (Parity) & \RU{Флаг четности }(\myref{parity_flag}). \\
 \hline
-4 (0x10) & AF (Adjust) & \RU{Существует только для работы с числами закодированными в \ac{BCD}}
-			\EN{Exist solely for work with \ac{BCD}-encoded numbers} \\
+4 (0x10) & AF (Adjust) & \RU{Существует только для работы с \ac{BCD}-числами}
+			\EN{Exist solely for work with \ac{BCD}-numbers} \\
 \hline
 6 (0x40) & ZF (Zero) & \RU{Выставляется в}\EN{Setting to} 0 \\
          &           & \RU{если результат последней операции был}\EN{if the last operation's result was} 0. \\
@@ -188,33 +189,34 @@ FS \InENRU win32 \RU{указывает на}\EN{points to} \ac{TLS}, \RU{а в 
 	  &                       & \RU{для установки/сброса этого флага}\EN{for setting/resetting the flag} \\
 \hline
 10 (0x400) & DF (Direction) & \RU{Задается направление для инструкций}\EN{A directions is set for the} \\
-           &                & REP MOVSx, REP CMPSx, REP LODSx, REP SCASx\EN{ instructions}.\\
+           &                & REP MOVSx/CMPSx/LODSx/SCASx\EN{ instructions}.\\
            &                & \RU{Инструкции}\EN{The} CLD/STD \RU{используются}\EN{instructions are used} \\
 	   &                & \RU{для установки/сброса этого флага}\EN{for setting/resetting the flag} \\
 	   &                & \EN{See also}\RU{См.также}: \myref{memmove_and_DF}. \\
 \hline
 11 (0x800) & OF (Overflow) & \RU{Переполнение.} \\
 \hline
-12, 13 (0x3000) & IOPL (I/O privilege level)\textsuperscript{80286} & \\
+12, 13 (0x3000) & IOPL (I/O privilege level)\textsuperscript{i286} & \\
 \hline
-14 (0x4000) & NT (Nested task)\textsuperscript{80286} & \\
+14 (0x4000) & NT (Nested task)\textsuperscript{i286} & \\
 \hline
-16 (0x10000) & RF (Resume)\textsuperscript{80386} & \RU{Применяется при отладке}\EN{Used for debugging}. \\
-             &                  & \RU{Если включить,}\EN{The CPU ignores the hardware breakpoint in DRx} \\
-	     &                  & \RU{CPU проигнорирует хардварную точку останова в DRx}\EN{if the flag is set}. \\
+16 (0x10000) & RF (Resume)\textsuperscript{i386} & \RU{Применяется при отладке}\EN{Used for debugging}. \\
+             &                  & \RU{Если включить,}\EN{The CPU ignores the hardware} \\
+	     &                  & \RU{CPU проигнорирует хардварную точку останова в DRx}\EN{breakpoint in DRx if the flag is set}. \\
 \hline
-17 (0x20000) & VM (Virtual 8086 mode)\textsuperscript{80386} & \\
+17 (0x20000) & VM (Virtual 8086 mode)\textsuperscript{i386} & \\
 \hline
-18 (0x40000) & AC (Alignment check)\textsuperscript{80486} & \\
+18 (0x40000) & AC (Alignment check)\textsuperscript{i486} & \\
 \hline
-19 (0x80000) & VIF (Virtual interrupt)\textsuperscript{Pentium} & \\
+19 (0x80000) & VIF (Virtual interrupt)\textsuperscript{i586} & \\
 \hline
-20 (0x100000) & VIP (Virtual interrupt pending)\textsuperscript{Pentium} & \\
+20 (0x100000) & VIP (Virtual interrupt pending)\textsuperscript{i586} & \\
 \hline
-21 (0x200000) & ID (Identification)\textsuperscript{Pentium} & \\
+21 (0x200000) & ID (Identification)\textsuperscript{i586} & \\
 \hline
 \end{tabular}
 \end{center}
+\normalsize
 
 \RU{Остальные флаги зарезервированы}\EN{All the rest flags are reserved}.
 
@@ -267,6 +269,7 @@ N.B.: \ac{IDA} \RU{называет}\EN{calls} ST(0) \RU{просто}\EN{as jus
 \RU{Регистр, при помощи которого можно задавать поведение}\EN{Register controlling the behaviour of the}
 \ac{FPU}.
 
+\scriptsize
 \begin{center}
 \begin{tabular}{ | l | l | l | }
 \hline
@@ -305,6 +308,7 @@ N.B.: \ac{IDA} \RU{называет}\EN{calls} ST(0) \RU{просто}\EN{as jus
 \hline
 \end{tabular}
 \end{center}
+\normalsize
 
 \RU{Флагами}\EN{The} PM, UM, OM, ZM, DM, IM 
 \RU{задается, генерировать ли исключения в случае соответствующих ошибок}
@@ -315,6 +319,7 @@ N.B.: \ac{IDA} \RU{называет}\EN{calls} ST(0) \RU{просто}\EN{as jus
 \label{FPU_status_word}
 \RU{Регистр только для чтения}\EN{Read-only register}.
 
+\scriptsize
 \begin{center}
 \begin{tabular}{ | l | l | l | }
 \hline
@@ -354,6 +359,7 @@ N.B.: \ac{IDA} \RU{называет}\EN{calls} ST(0) \RU{просто}\EN{as jus
 \hline
 \end{tabular}
 \end{center}
+\normalsize
 
 \RU{Биты}\EN{The} SF, P, U, O, Z, D, I \RU{сигнализируют об исключениях}
 \EN{bits signal about exceptions}.

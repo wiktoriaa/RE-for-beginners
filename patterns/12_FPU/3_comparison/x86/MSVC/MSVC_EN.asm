@@ -8,7 +8,7 @@ _d_max     PROC
     fld    QWORD PTR _b$[ebp]
 
 ; current stack state: ST(0) = _b
-; compare \_b (ST(0)) and \_a, and pop register
+; compare _b (ST(0)) and _a, and pop register
 
     fcomp  QWORD PTR _a$[ebp] 
 

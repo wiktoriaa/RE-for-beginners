@@ -2,4 +2,4 @@
 	push	0
 	push	1
 	call	__vcomp_fork
-	add	esp, 16					; 00000010H
+	add	esp, 16

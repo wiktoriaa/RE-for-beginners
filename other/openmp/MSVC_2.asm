@@ -4,12 +4,12 @@
 ; Line 55
 	push	OFFSET _$vcomp$critsect$
 	call	__vcomp_enter_critsect
-	add	esp, 12					; 0000000cH
+	add	esp, 12
 ; Line 56
 	mov	ecx, DWORD PTR _checked
 	mov	eax, ecx
 	cdq
-	mov	esi, 100000				; 000186a0H
+	mov	esi, 100000	; 000186a0H
 	idiv	esi
 	test	edx, edx
 	jne	SHORT $LN1@check_nonc

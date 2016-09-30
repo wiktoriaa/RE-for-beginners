@@ -8,7 +8,7 @@ __real@4040000000000000 DQ 04040000000000000r	; 32
 __real@4022000000000000 DQ 04022000000000000r	; 9
 __real@4014000000000000 DQ 04014000000000000r	; 5
 
-_fahr$ = -8						; size = 8
+_fahr$ = -8	; size = 8
 _main	PROC
 	sub	esp, 8
 	push	esi
@@ -19,11 +19,11 @@ _main	PROC
 	push	eax
 	push	OFFSET $SG4230		; '%lf'
 	call	DWORD PTR __imp__scanf
-	add	esp, 12					; 0000000cH
+	add	esp, 12
 	cmp	eax, 1
 	je	SHORT $LN2@main
 	push	OFFSET $SG4231		; 'Error while parsing your input'
-	call	esi			; вызвать printf()
+	call	esi		; вызвать printf()
 	add	esp, 4
 	push	0
 	call	DWORD PTR __imp__exit
@@ -37,7 +37,7 @@ $LN2@main:
 	comisd	xmm0, xmm1
 	jbe	SHORT $LN1@main
 	push	OFFSET $SG4233		; 'Error: incorrect temperature!'
-	call	esi			; вызвать printf()
+	call	esi		; вызвать printf()
 	add	esp, 4
 	push	0
 	call	DWORD PTR __imp__exit
@@ -46,8 +46,8 @@ $LN1@main:
 	sub	esp, 8
 	movsd	QWORD PTR [esp], xmm1
 	push	OFFSET $SG4234		; 'Celsius: %lf'
-	call	esi			; вызвать printf()
-	add	esp, 12					; 0000000cH
+	call	esi		; вызвать printf()
+	add	esp, 12
 	; возврат 0 - по стандарту C99
 	xor	eax, eax
 	pop	esi

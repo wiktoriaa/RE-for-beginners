@@ -4,7 +4,7 @@ $SG4231	DB	'Error while parsing your input', 0aH, 00H
 $SG4233	DB	'Error: incorrect temperature!', 0aH, 00H
 $SG4234	DB	'Celsius: %d', 0aH, 00H
 
-_fahr$ = -4						; size = 4
+_fahr$ = -4	; size = 4
 _main	PROC
 	push	ecx
 	push	esi
@@ -15,7 +15,7 @@ _main	PROC
 	push	eax
 	push	OFFSET $SG4230		; '%d'
 	call	DWORD PTR __imp__scanf
-	add	esp, 12					; 0000000cH
+	add	esp, 12
 	cmp	eax, 1
 	je	SHORT $LN2@main
 	push	OFFSET $SG4231		; 'Error while parsing your input'
@@ -26,18 +26,18 @@ _main	PROC
 $LN9@main:
 $LN2@main:
 	mov	eax, DWORD PTR _fahr$[esp+8]
-	add	eax, -32				; ffffffe0H
+	add	eax, -32	; ffffffe0H
 	lea	ecx, DWORD PTR [eax+eax*4]
-	mov	eax, 954437177				; 38e38e39H
+	mov	eax, 954437177	; 38e38e39H
 	imul	ecx
 	sar	edx, 1
 	mov	eax, edx
-	shr	eax, 31					; 0000001fH
+	shr	eax, 31		; 0000001fH
 	add	eax, edx
-	cmp	eax, -273				; fffffeefH
+	cmp	eax, -273	; fffffeefH
 	jge	SHORT $LN1@main
 	push	OFFSET $SG4233		; 'Error: incorrect temperature!'
-	call	esi			; call printf()
+	call	esi	; call printf()
 	add	esp, 4
 	push	0
 	call	DWORD PTR __imp__exit
@@ -45,7 +45,7 @@ $LN10@main:
 $LN1@main:
 	push	eax
 	push	OFFSET $SG4234		; 'Celsius: %d'
-	call	esi			; call printf()
+	call	esi	; call printf()
 	add	esp, 8
 	; return 0 - by C99 standard
 	xor	eax, eax

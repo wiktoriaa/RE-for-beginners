@@ -5,7 +5,8 @@ Sometimes I did some kind of first April prank for my coworkers.
 Let's find, if we could do something with Windows clock?
 Can we force to go clock hands backwards?
 
-First of all, when you click on date/time in status bar, a \IT{C:\textbackslash{}WINDOWS\textbackslash{}SYSTEM32\textbackslash{}TIMEDATE.CPL} is running,
+First of all, when you click on date/time in status bar,\\
+a \IT{C:\textbackslash{}WINDOWS\textbackslash{}SYSTEM32\textbackslash{}TIMEDATE.CPL} module gets executed,
 which is usual executable PE file.
 
 Let's see, how it draw hands?
@@ -62,47 +63,47 @@ We will take for granted the fact that these are signed values, because half of 
 If these values would be unsigned, they would be suspiciously huge.
 
 \begin{lstlisting}
-	In[]:= tbl = BinaryReadList["~/.../tbl", "Integer32"]
+In[]:= tbl = BinaryReadList["~/.../tbl", "Integer32"]
 
-	Out[]= {0, -7999, 836, -7956, 1663, -7825, 2472, -7608, 3253, -7308, 3999, \
-	-6928, 4702, -6472, 5353, -5945, 5945, -5353, 6472, -4702, 6928, \
-	-4000, 7308, -3253, 7608, -2472, 7825, -1663, 7956, -836, 8000, 0, \
-	7956, 836, 7825, 1663, 7608, 2472, 7308, 3253, 6928, 4000, 6472, \
-	4702, 5945, 5353, 5353, 5945, 4702, 6472, 3999, 6928, 3253, 7308, \
-	2472, 7608, 1663, 7825, 836, 7956, 0, 7999, -836, 7956, -1663, 7825, \
-	-2472, 7608, -3253, 7308, -4000, 6928, -4702, 6472, -5353, 5945, \
-	-5945, 5353, -6472, 4702, -6928, 3999, -7308, 3253, -7608, 2472, \
-	-7825, 1663, -7956, 836, -7999, 0, -7956, -836, -7825, -1663, -7608, \
-	-2472, -7308, -3253, -6928, -4000, -6472, -4702, -5945, -5353, -5353, \
-	-5945, -4702, -6472, -3999, -6928, -3253, -7308, -2472, -7608, -1663, \
-	-7825, -836, -7956}
+Out[]= {0, -7999, 836, -7956, 1663, -7825, 2472, -7608, 3253, -7308, 3999, \
+-6928, 4702, -6472, 5353, -5945, 5945, -5353, 6472, -4702, 6928, \
+-4000, 7308, -3253, 7608, -2472, 7825, -1663, 7956, -836, 8000, 0, \
+7956, 836, 7825, 1663, 7608, 2472, 7308, 3253, 6928, 4000, 6472, \
+4702, 5945, 5353, 5353, 5945, 4702, 6472, 3999, 6928, 3253, 7308, \
+2472, 7608, 1663, 7825, 836, 7956, 0, 7999, -836, 7956, -1663, 7825, \
+-2472, 7608, -3253, 7308, -4000, 6928, -4702, 6472, -5353, 5945, \
+-5945, 5353, -6472, 4702, -6928, 3999, -7308, 3253, -7608, 2472, \
+-7825, 1663, -7956, 836, -7999, 0, -7956, -836, -7825, -1663, -7608, \
+-2472, -7308, -3253, -6928, -4000, -6472, -4702, -5945, -5353, -5353, \
+-5945, -4702, -6472, -3999, -6928, -3253, -7308, -2472, -7608, -1663, \
+-7825, -836, -7956}
 
-	In[]:= Length[tbl]
-	Out[]= 120
+In[]:= Length[tbl]
+Out[]= 120
 \end{lstlisting}
 
 Let's treat two consecutive 32-bit values as pair:
 
 \begin{lstlisting}
-	In[]:= pairs = Partition[tbl, 2]
-	Out[]= {{0, -7999}, {836, -7956}, {1663, -7825}, {2472, -7608}, \
-	{3253, -7308}, {3999, -6928}, {4702, -6472}, {5353, -5945}, {5945, \
-	-5353}, {6472, -4702}, {6928, -4000}, {7308, -3253}, {7608, -2472}, \
-	{7825, -1663}, {7956, -836}, {8000, 0}, {7956, 836}, {7825, 
-	1663}, {7608, 2472}, {7308, 3253}, {6928, 4000}, {6472, 
-	4702}, {5945, 5353}, {5353, 5945}, {4702, 6472}, {3999, 
-	6928}, {3253, 7308}, {2472, 7608}, {1663, 7825}, {836, 7956}, {0, 
-	7999}, {-836, 7956}, {-1663, 7825}, {-2472, 7608}, {-3253, 
-	7308}, {-4000, 6928}, {-4702, 6472}, {-5353, 5945}, {-5945, 
-	5353}, {-6472, 4702}, {-6928, 3999}, {-7308, 3253}, {-7608, 
-	2472}, {-7825, 1663}, {-7956, 836}, {-7999, 
-	0}, {-7956, -836}, {-7825, -1663}, {-7608, -2472}, {-7308, -3253}, \
-	{-6928, -4000}, {-6472, -4702}, {-5945, -5353}, {-5353, -5945}, \
-	{-4702, -6472}, {-3999, -6928}, {-3253, -7308}, {-2472, -7608}, \
-	{-1663, -7825}, {-836, -7956}}
+In[]:= pairs = Partition[tbl, 2]
+Out[]= {{0, -7999}, {836, -7956}, {1663, -7825}, {2472, -7608}, \
+{3253, -7308}, {3999, -6928}, {4702, -6472}, {5353, -5945}, {5945, \
+-5353}, {6472, -4702}, {6928, -4000}, {7308, -3253}, {7608, -2472}, \
+{7825, -1663}, {7956, -836}, {8000, 0}, {7956, 836}, {7825, 
+1663}, {7608, 2472}, {7308, 3253}, {6928, 4000}, {6472, 
+4702}, {5945, 5353}, {5353, 5945}, {4702, 6472}, {3999, 
+6928}, {3253, 7308}, {2472, 7608}, {1663, 7825}, {836, 7956}, {0, 
+7999}, {-836, 7956}, {-1663, 7825}, {-2472, 7608}, {-3253, 
+7308}, {-4000, 6928}, {-4702, 6472}, {-5353, 5945}, {-5945, 
+5353}, {-6472, 4702}, {-6928, 3999}, {-7308, 3253}, {-7608, 
+2472}, {-7825, 1663}, {-7956, 836}, {-7999, 
+0}, {-7956, -836}, {-7825, -1663}, {-7608, -2472}, {-7308, -3253}, \
+{-6928, -4000}, {-6472, -4702}, {-5945, -5353}, {-5353, -5945}, \
+{-4702, -6472}, {-3999, -6928}, {-3253, -7308}, {-2472, -7608}, \
+{-1663, -7825}, {-836, -7956}}
 
-	In[]:= Length[pairs]
-	Out[]= 60
+In[]:= Length[pairs]
+Out[]= 60
 \end{lstlisting}
 
 Let's try to treat each pair as X/Y coordinate and draw all 60 pairs, and also first 15 pairs:
@@ -147,58 +148,58 @@ time, but the whole clock face is rotated vertically, like we see it from the in
 \subsubsection{Windows 2000 leaked source code}
 
 So I did the patcher and then Windows 2000 source code has been leaked (I can't force you to trust me, though).
-Let's take a look on source code if that function and table.
+Let's take a look on source code if that function and table.\\
 The file is \IT{win2k/private/shell/cpls/utc/clock.c}:
 
 \begin{lstlisting}
-	//
-	//  Array containing the sine and cosine values for hand positions.
-	//
-	POINT rCircleTable[] =
-	{
-	    { 0,     -7999},
-	    { 836,   -7956},
-	    { 1663,  -7825},
-	    { 2472,  -7608},
-	    { 3253,  -7308},
-	...
-	    { -4702, -6472},
-	    { -3999, -6928},
-	    { -3253, -7308},
-	    { -2472, -7608},
-	    { -1663, -7825},
-	    { -836 , -7956},
-	};
+//
+//  Array containing the sine and cosine values for hand positions.
+//
+POINT rCircleTable[] =
+{
+    { 0,     -7999},
+    { 836,   -7956},
+    { 1663,  -7825},
+    { 2472,  -7608},
+    { 3253,  -7308},
+...
+    { -4702, -6472},
+    { -3999, -6928},
+    { -3253, -7308},
+    { -2472, -7608},
+    { -1663, -7825},
+    { -836 , -7956},
+};
 
-	////////////////////////////////////////////////////////////////////////////
-	//
-	//  DrawHand
-	//
-	//  Draws the hands of the clock.
-	//
-	////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+//
+//  DrawHand
+//
+//  Draws the hands of the clock.
+//
+////////////////////////////////////////////////////////////////////////////
 
-	void DrawHand(
-	    HDC hDC,
-	    int pos,
-	    HPEN hPen,
-	    int scale,
-	    int patMode,
-	    PCLOCKSTR np)
-	{
-	    LPPOINT lppt;
-	    int radius;
+void DrawHand(
+    HDC hDC,
+    int pos,
+    HPEN hPen,
+    int scale,
+    int patMode,
+    PCLOCKSTR np)
+{
+    LPPOINT lppt;
+    int radius;
 
-	    MoveTo(hDC, np->clockCenter.x, np->clockCenter.y);
-	    radius = MulDiv(np->clockRadius, scale, 100);
-	    lppt = rCircleTable + pos;
-	    SetROP2(hDC, patMode);
-	    SelectObject(hDC, hPen);
+    MoveTo(hDC, np->clockCenter.x, np->clockCenter.y);
+    radius = MulDiv(np->clockRadius, scale, 100);
+    lppt = rCircleTable + pos;
+    SetROP2(hDC, patMode);
+    SelectObject(hDC, hPen);
 
-	    LineTo( hDC,
-	            np->clockCenter.x + MulDiv(lppt->x, radius, 8000),
-	            np->clockCenter.y + MulDiv(lppt->y, radius, 8000) );
-	}
+    LineTo( hDC,
+            np->clockCenter.x + MulDiv(lppt->x, radius, 8000),
+            np->clockCenter.y + MulDiv(lppt->y, radius, 8000) );
+}
 \end{lstlisting}
 
 Now it's clear: coordinates has been precalculated as if clock face has height and width of $2 \cdot 8000$,
