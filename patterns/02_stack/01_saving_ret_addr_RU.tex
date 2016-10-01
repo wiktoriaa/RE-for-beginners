@@ -40,30 +40,30 @@ c:\tmp6\ss.cpp(4) : warning C4717: 'f' : recursive on all control paths, functio
 \dots но, тем не менее, создает нужный код:
 
 \begin{lstlisting}
-?f@@YAXXZ PROC						; f
+?f@@YAXXZ PROC			; f
 ; File c:\tmp6\ss.cpp
 ; Line 2
 	push	ebp
 	mov	ebp, esp
 ; Line 3
-	call	?f@@YAXXZ				; f
+	call	?f@@YAXXZ	; f
 ; Line 4
 	pop	ebp
 	ret	0
-?f@@YAXXZ ENDP						; f
+?f@@YAXXZ ENDP			; f
 \end{lstlisting}
 
 \dots причем, если включить оптимизацию (\TT{\Ox}), то будет даже интереснее, без переполнения стека, 
 но работать будет \IT{корректно}\footnote{здесь ирония}:
 
 \begin{lstlisting}
-?f@@YAXXZ PROC						; f
+?f@@YAXXZ PROC			; f
 ; File c:\tmp6\ss.cpp
 ; Line 2
 $LL3@f:
 ; Line 3
 	jmp	SHORT $LL3@f
-?f@@YAXXZ ENDP						; f
+?f@@YAXXZ ENDP			; f
 \end{lstlisting}
 
 GCC 4.4.1 генерирует точно такой же код в обоих случаях, хотя и не предупреждает о проблеме.

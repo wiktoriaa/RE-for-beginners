@@ -1,5 +1,5 @@
-_product$ = -8						; size = 4
-_sum$ = -4						; size = 4
+_product$ = -8		; size = 4
+_sum$ = -4		; size = 4
 _main	PROC
 ; Line 10
 	sub	esp, 8
@@ -8,8 +8,8 @@ _main	PROC
 	push	eax
 	lea	ecx, DWORD PTR _sum$[esp+12]
 	push	ecx
-	push	456					; 000001c8H
-	push	123					; 0000007bH
+	push	456	; 000001c8H
+	push	123	; 0000007bH
 	call	_f1
 ; Line 14
 	mov	edx, DWORD PTR _product$[esp+24]
@@ -20,5 +20,5 @@ _main	PROC
 	call	DWORD PTR __imp__printf
 ; Line 15
 	xor	eax, eax
-	add	esp, 36					; 00000024H
+	add	esp, 36
 	ret	0

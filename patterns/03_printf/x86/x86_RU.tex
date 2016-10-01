@@ -14,7 +14,7 @@ $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 	push	1
 	push	OFFSET $SG3830
 	call	_printf
-	add	esp, 16					; 00000010H
+	add	esp, 16
 \end{lstlisting}
 
 Всё почти то же, за исключением того, что теперь видно, что аргументы для \printf заталкиваются в стек в обратном порядке: самый первый аргумент заталкивается последним.
@@ -166,27 +166,27 @@ add esp, 24
 Скомпилируем то же самое в Linux при помощи GCC 4.4.1 и посмотрим на результат в \IDA:
 
 \begin{lstlisting}
-main            proc near
+main      proc near
 
-var_10          = dword ptr -10h
-var_C           = dword ptr -0Ch
-var_8           = dword ptr -8
-var_4           = dword ptr -4
+var_10    = dword ptr -10h
+var_C     = dword ptr -0Ch
+var_8     = dword ptr -8
+var_4     = dword ptr -4
 
-                push    ebp
-                mov     ebp, esp
-                and     esp, 0FFFFFFF0h
-                sub     esp, 10h
-                mov     eax, offset aADBDCD ; "a=%d; b=%d; c=%d"
-                mov     [esp+10h+var_4], 3
-                mov     [esp+10h+var_8], 2
-                mov     [esp+10h+var_C], 1
-                mov     [esp+10h+var_10], eax
-                call    _printf
-                mov     eax, 0
-                leave
-                retn
-main            endp
+          push    ebp
+          mov     ebp, esp
+          and     esp, 0FFFFFFF0h
+          sub     esp, 10h
+          mov     eax, offset aADBDCD ; "a=%d; b=%d; c=%d"
+          mov     [esp+10h+var_4], 3
+          mov     [esp+10h+var_8], 2
+          mov     [esp+10h+var_C], 1
+          mov     [esp+10h+var_10], eax
+          call    _printf
+          mov     eax, 0
+          leave
+          retn
+main      endp
 \end{lstlisting}
 
 Можно сказать что этот короткий код, созданный GCC, отличается от кода MSVC только способом помещения 

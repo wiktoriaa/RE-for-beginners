@@ -20,7 +20,8 @@ _f  PROC
 
     fld    QWORD PTR _b$[ebp]
 
-; current stack state: ST(0) = _b; ST(1) = result of _a divided by 3.14
+; current stack state: ST(0) = _b;
+; ST(1) = result of _a divided by 3.14
 
     fmul   QWORD PTR __real@4010666666666666
 

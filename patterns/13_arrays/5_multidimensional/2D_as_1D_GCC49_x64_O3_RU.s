@@ -3,7 +3,7 @@
 ; RDX=b
 
 get_by_coordinates1:
-; расширить входные 32-битные значения "a" и "b" до 64-битных
+; расширить входные §32-битные§ значения "a" и "b" до 64-битных
 	movsx	rsi, esi 
 	movsx	rdx, edx
 	lea	rax, [rdi+rsi*4]
@@ -23,7 +23,7 @@ get_by_coordinates2:
 get_by_coordinates3:
 	sal	esi, 2
 ; ESI=a<<2=a*4
-; расширить входные 32-битные значения "a*4" и "b" до 64-битных
+; расширить входные §32-битные§ значения "a*4" и "b" до 64-битных
 	movsx	rdx, edx
 	movsx	rsi, esi
 	add	rdi, rsi

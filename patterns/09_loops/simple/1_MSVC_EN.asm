@@ -10,7 +10,7 @@ $LN2@main:
     add    eax, 1                  ; add 1 to (i) value
     mov    DWORD PTR _i$[ebp], eax
 $LN3@main:
-    cmp    DWORD PTR _i$[ebp], 10  ; this condition is checked *before* each iteration
+    cmp    DWORD PTR _i$[ebp], 10  ; this condition is checked §\IT{before}§ each iteration
     jge    SHORT $LN1@main         ; if (i) is biggest or equals to 10, lets finish loop
     mov    ecx, DWORD PTR _i$[ebp] ; loop body: call printing_function(i)
     push   ecx

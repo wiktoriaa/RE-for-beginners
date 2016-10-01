@@ -18,7 +18,8 @@ arg_8           = qword ptr  10h
                 sahf
                 ja      short loc_8048448
 
-; store ST(0) to ST(0) (idle operation), pop value at top of stack,
+; store ST(0) to ST(0) (idle operation), 
+; pop value at top of stack,
 ; leave _b at top
                 fstp    st
                 jmp     short loc_804844A

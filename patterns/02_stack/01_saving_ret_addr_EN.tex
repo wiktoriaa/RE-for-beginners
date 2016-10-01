@@ -40,30 +40,30 @@ c:\tmp6\ss.cpp(4) : warning C4717: 'f' : recursive on all control paths, functio
 \dots but generates the right code anyway:
 
 \begin{lstlisting}
-?f@@YAXXZ PROC						; f
+?f@@YAXXZ PROC			; f
 ; File c:\tmp6\ss.cpp
 ; Line 2
 	push	ebp
 	mov	ebp, esp
 ; Line 3
-	call	?f@@YAXXZ				; f
+	call	?f@@YAXXZ	; f
 ; Line 4
 	pop	ebp
 	ret	0
-?f@@YAXXZ ENDP						; f
+?f@@YAXXZ ENDP			; f
 \end{lstlisting}
 
 \dots Also if we turn on the compiler optimization (\TT{\Ox} option) the optimized code will not overflow the stack 
 and will work \IT{correctly}\footnote{irony here} instead:
 
 \begin{lstlisting}
-?f@@YAXXZ PROC						; f
+?f@@YAXXZ PROC			; f
 ; File c:\tmp6\ss.cpp
 ; Line 2
 $LL3@f:
 ; Line 3
 	jmp	SHORT $LL3@f
-?f@@YAXXZ ENDP						; f
+?f@@YAXXZ ENDP			; f
 \end{lstlisting}
 
 GCC 4.4.1 generates similar code in both cases without, however,  issuing any warning about the problem.

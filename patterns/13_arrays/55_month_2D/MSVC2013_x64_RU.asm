@@ -2,7 +2,7 @@ month$ = 8
 get_month2 PROC
 	mov	DWORD PTR [rsp+8], ecx
 	movsxd	rax, DWORD PTR month$[rsp]
-; RAX = расширенное до 64-битного входное значение, учитывая знак
+; RAX = расширенное до §64-битного§ входное значение, учитывая знак
 	imul	rax, rax, 10
 ; RAX = RAX*10
 	lea	rcx, OFFSET FLAT:month2
