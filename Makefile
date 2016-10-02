@@ -1,4 +1,5 @@
-all:    RU EN RU-A5 EN-A5
+#all:    RU EN RU-A5 EN-A5
+all:    RU EN
 
 clean:
 	rm -f *.aux
@@ -55,11 +56,11 @@ RU:
 EN:
 	$(call compile,RE4B-EN)
 
-RU-A5:
-	$(call compile,RE4B-RU-A5)
+#RU-A5:
+#	$(call compile,RE4B-RU-A5)
 
-EN-A5:
-	$(call compile,RE4B-EN-A5)
+#EN-A5:
+#	$(call compile,RE4B-EN-A5)
 
 ES:
 	$(call compile,RE4B-ES)
