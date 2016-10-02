@@ -7,7 +7,7 @@ str_trim:
 	test	rax, rax
 	je	.L9
 	lea	rdx, [rax-1]
-; RDX всегда будет содержать значение str_len-1 , но не str_len
+; RDX всегда будет содержать значение str_len-1, но не str_len
 ; так что RDX будет скорее индексом буфера
 	lea	rsi, [rbx+rdx]      ; RSI=s+str_len-1
 	movzx	ecx, BYTE PTR [rsi] ; загрузить символ

@@ -1,4 +1,4 @@
-__real@3f800000 DD 03f800000r			; 1
+__real@3f800000 DD 03f800000r	; 1
 
 tv128 = -4
 _tmp$ = -4
@@ -6,8 +6,8 @@ _tmp$ = -4
 	push	ecx
 	call	?my_rand@@YAIXZ
 ; EAX=pseudorandom value
-	and	eax, 8388607				; 007fffffH
-	or	eax, 1065353216				; 3f800000H
+	and	eax, 8388607	; 007fffffH
+	or	eax, 1065353216	; 3f800000H
 ; EAX=pseudorandom value & 0x007fffff | 0x3f800000
 ; store it into local stack:
 	mov	DWORD PTR _tmp$[esp+4], eax

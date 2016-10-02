@@ -30,7 +30,7 @@ __in$ = 8  ; size = 4
     mov    ecx, DWORD PTR _t$[ebp]
     and    ecx, -2139095041 ; 807fffffH - drop exponent
 
-; add original value without exponent with new calculated exponent
+; add original value without exponent with new calculated exponent:
     or     ecx, eax         
     mov    DWORD PTR _t$[ebp], ecx
 

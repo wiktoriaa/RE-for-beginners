@@ -1,6 +1,7 @@
 arith_mean:
 	lea	rax, [rsp+8]
-	; сохранить 6 входных регистров в "red zone" в локальном стеке
+	; сохранить 6 входных регистров в 
+	; §\IT{red zone}§ в локальном стеке
 	mov	QWORD PTR [rsp-40], rsi
 	mov	QWORD PTR [rsp-32], rdx
 	mov	QWORD PTR [rsp-16], r8
