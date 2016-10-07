@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 
-// структура не запакована!
+// Структура не запакована! Каждое поле занимает 4 байта.
 struct tree_node
 {
     struct tree_node *Left;

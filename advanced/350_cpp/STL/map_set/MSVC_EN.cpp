@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 
-// structure is not packed!
+// Structure is not packed! Each field occupies 4 bytes.
 struct tree_node
 {
     struct tree_node *Left;

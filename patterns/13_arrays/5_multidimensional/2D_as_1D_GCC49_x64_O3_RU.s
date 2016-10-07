@@ -7,7 +7,7 @@ get_by_coordinates1:
 	movsx	rsi, esi 
 	movsx	rdx, edx
 	lea	rax, [rdi+rsi*4]
-; RAX=RDI+RSI*4=адрес массива+a*4
+; RAX=RDI+RSI*4=§адрес§ §массива§+a*4
 	movzx	eax, BYTE PTR [rax+rdx]
 ; AL=§загрузить§ §байт§ §по§ §адресу§ RAX+RDX=§адрес§ §массива§+a*4+b
 	ret
