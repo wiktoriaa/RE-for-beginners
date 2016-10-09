@@ -53,6 +53,12 @@ The book changes often, like Wikipedia, so it's good idea to send me anything as
 so other people can use it, fix it, etc.
 Also, other translators will be aware that some piece is already translated, so they will work on another one.
 
+Length
+------
+
+Do not hesitate to send even small pieces of translated parts.
+This is how Wikipedia gets translated: someone translate one page, someone - another couple of pages, etc.
+
 Style
 -----
 
