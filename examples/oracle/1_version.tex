@@ -88,8 +88,10 @@ The object file is in the main Oracle-library \TT{libserver11.a}.}
 .rodata:0800C55C        dd 0
 \end{lstlisting}
 
-\RU{Кстати, нередко, при изучении внутренностей \oracle, появляется вопрос, почему имена функций и глобальных переменных такие странные}\EN{By the way, often, while analysing \oracle's internals, you may ask yourself, why are the names of the functions and global variable so weird}. \RU{Вероятно, дело в том, что \oracle очень старый продукт сам по себе и писался на Си еще в 1980-х}
-\EN{Probably, because \oracle is a very old product and was developed in C in the 1980s}. \RU{А в те времена стандарт Си гарантировал поддержку имен переменных длиной только до шести символов включительно}
+\RU{Кстати, нередко, при изучении внутренностей \oracle, появляется вопрос, почему имена функций и глобальных переменных такие странные}\EN{By the way, often, while analysing \oracle's internals, you may ask yourself, why are the names of the functions and global variable so weird}.
+\RU{Вероятно, дело в том, что \oracle очень старый продукт сам по себе и писался на Си еще в 1980-х.}
+\EN{Probably, because \oracle is a very old product and was developed in C in the 1980s.}
+\RU{А в те времена стандарт Си гарантировал поддержку имен переменных длиной только до шести символов включительно.}
 \EN{And that was a time when the C standard guaranteed that the function names/variables can support only up to 6 characters inclusive}: <<6 significant initial characters in an external identifier>>\footnote{\href{http://go.yurichev.com/17142}{Draft ANSI C Standard (ANSI X3J11/88-090) (May 13, 1988) (yurichev.com)}}
 
 \RU{Вероятно, таблица \TT{kqfviw} содержащая в себе многие (а может даже и все) view с префиксом V\$, это служебные view (fixed views), присутствующие всегда.}\EN{Probably, the table \TT{kqfviw} contains most (maybe even all) views prefixed with V\$, these are \IT{fixed views}, present all the time.}
@@ -173,7 +175,7 @@ USERENV('Instance')
 \EN{The second field points to another table that contains the table fields for this \IT{fixed view}.}
 \RU{Для \TT{V\$VERSION}, эта таблица только из двух элементов, первый это 6 и второй это строка 
 \TT{BANNER} (число 6 это длина строки) и далее \IT{терминирующий} элемент содержащий 0 и \IT{нулевую} 
-Си-строку:}\EN{As for \TT{V\$VERSION}, this table contains only two elements, the first is 6 and the second is 
+Си-строку:}\EN{As for \TT{V\$VERSION}, this table has only two elements, the first is 6 and the second is 
 the \TT{BANNER} string (the number 6 is this string's length) and after, a \IT{terminating} element that contains 
 0 and a \IT{null} C string:}
 
@@ -207,7 +209,7 @@ kqfvip_element.params:
 \end{lstlisting}
 
 \RU{\IT{Fixed view} \TT{GV\$VERSION} отличается от \TT{V\$VERSION} тем, что содержит еще и поле отражающее идентификатор \IT{instance}.}
-\EN{The \TT{GV\$VERSION} \IT{fixed view} is different from \TT{V\$VERSION} only in that it contains one more field with the identifier \IT{instance}.}
+\EN{The \TT{GV\$VERSION} \IT{fixed view} is different from \TT{V\$VERSION} only in that it has one more field with the identifier \IT{instance}.}
 \RU{Но так или иначе, мы теперь упираемся в таблицу \TT{X\$VERSION}. Как и прочие X\$-таблицы, она не документирована, однако, мы можем оттуда что-то прочитать}
 \EN{Anyway, we are going to stick with the \TT{X\$VERSION} table. Just like any other X\$-table, it is undocumented, however, we can query it}:
 

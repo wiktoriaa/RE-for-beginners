@@ -9,9 +9,8 @@ by a company that disappeared a long time ago.
 
 There is a special dongle driver to be installed in the system, that contains the following text strings:
 \q{Copyright 1989, Rainbow Technologies, Inc., Irvine, CA}
-\AndENRU
+and
 \q{Sentinel Integrated Driver Ver. 3.0 }.
-
 
 After the installation of the driver in SCO OpenServer, these device files appear in the /dev filesystem:
 
@@ -83,20 +82,16 @@ are used for LPT printer port selection.
 selection (that's how Sentinel Pro dongles are differentiated from each other: more than one
 dongle can be connected to a LPT port).
 
-The only non-2-character string passed to the hashing function is\\
-"0123456789".
+The only non-2-character string passed to the hashing function is "0123456789".
 
 Then, the result is compared against the set of valid results.
 
 If it is correct, 0xC or 0xB is to be written into the global variable \TT{ctl\_model}.%
 
-
 Another text string that gets passed is
 "PRESS ANY KEY TO CONTINUE: ", but the result is not checked.
 Hard to say why, probably by mistake
-\footnote{
-What a strange feeling: to find bugs in such ancient software.}.
-
+\footnote{What a strange feeling: to find bugs in such ancient software.}.
 
 Let's see where the value from the global variable \TT{ctl\_mode} is used.
 
@@ -190,10 +185,9 @@ The key is located in the \ESI register, but only one byte part of \ESI is used.
 Hence, a key may be greater than 255, 
 but its value is always to be rounded.
 
-
 As a consequence, we can just try brute-force, trying all possible keys in the 0..255 range.
 We are also going to skip 
-the messages that contain unprintable characters.
+the messages that has unprintable characters.
 
 \lstinputlisting[caption=Python 3.x]{examples/dongles/2/decr2.py}
 
