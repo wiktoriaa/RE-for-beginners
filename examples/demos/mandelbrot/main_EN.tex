@@ -12,10 +12,8 @@ Mandelbrot set is a fractal, which exhibits self-similarity.
 
 When you increase scale, you see that this characteristic pattern repeating infinitely.
 
-Here is a demo\footnote{Download it \href{http://go.yurichev.com/17306}
-{here},} 
-written by \q{Sir\_Lagsalot} \InENRU 2009, 
-that draws 
+Here is a demo\footnote{Download it \href{http://go.yurichev.com/17306} {here},} 
+written by \q{Sir\_Lagsalot} in 2009, that draws 
 the Mandelbrot set, which is just a x86 program with executable file size of only 64 bytes.
 There are only 30 16-bit x86 instructions.
 
@@ -38,7 +36,7 @@ A complex number is a number that consists of two parts\EMDASH{}real (Re) and im
 The complex plane is a two-dimensional plane where any complex number can be placed: the real part is one coordinate
 and the imaginary part is the other.
 
-Some basic rules we need to know:
+Some basic rules we have to keep in mind:
 
 \begin{itemize}
 \item Addition: $(a+bi) + (c+di) = (a+c) + (b+d)i$
@@ -69,9 +67,8 @@ $\operatorname{Im}(square) = 2 \cdot \operatorname{Re}(a) \cdot \operatorname{Im
 
 \myparagraph{How to draw the Mandelbrot set}
 
-
 The Mandelbrot set is a set of points for which the $z_{n+1} = {z_n}^2 + c$ recursive sequence
-(where $z$ \AndENRU $c$ are complex numbers and $c$ 
+(where $z$ and $c$ are complex numbers and $c$ 
 is the starting value)
 does not approach infinity.\\
 \\
@@ -225,8 +222,7 @@ to multiply the coordinates to address a byte in the VGA video buffer.
 
 The author of this demo decided to do it otherwise: enumerate all bytes in the video buffer by using one single loop instead 
 of two, and get the coordinates of the current point using division.
-The resulting coordinates are: X in the range of $-256..63$ \AndENRU Y 
-in the range of $-100..99$.
+The resulting coordinates are: X in the range of $-256..63$ and Y in the range of $-100..99$.
 You can see on 
 the screenshot that the picture is somewhat shifted to the right part of screen.
 
@@ -256,13 +252,12 @@ by not the reloading CX register with another value.
 \myindex{x86!\Instructions!SAR}
      \item 
 \TT{IMUL} is used here instead of \TT{MUL}, because we work with signed values: 
-remember that the 0,0 coordinates has to be somewhere near the center of the screen.
+keep in mind that the 0,0 coordinates has to be somewhere near the center of the screen.
 
 It's the same with \TT{SAR} (arithmetic shift for signed values): it's used instead of \TT{SHR}.
 
      \item Another idea is to simplify the bounds check.
-We need to check a coordinate pair, 
-i.e., two variables.
+We must check a coordinate pair, i.e., two variables.
 What the author does is to checks thrice for overflow: two squaring operations and one addition.
 
 Indeed, we use 16-bit registers, which hold signed values in the range of -32768..32767, 
@@ -284,7 +279,7 @@ video buffer.
 
 The default palette is rough, nevertheless, 0 is black: hence we see black holes in the places where the points are
 in the Mandelbrot set.
-The palette can be initialized at th program's start, but remember, this is only a 64 bytes program!
+The palette can be initialized at the program's start, but keep in mind, this is only a 64 bytes program!
 
 \item The program runs in an infinite loop, 
 because an additional check where to stop, or any user interface will result in additional instructions.

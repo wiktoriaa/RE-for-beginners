@@ -15,7 +15,7 @@ It runs on additional BeagleBone Linux ARM board (small board at bottom of the p
 And the author was once asked, is it possible to hack this utility to see, which frequency can be set and which are not.
 And it is possible to tweak it?
 
-The utility should be run like that: \TT{./cointool-overclock 0 0 900}, where 900 is frequency in MHz.
+The utility must be executed like that: \TT{./cointool-overclock 0 0 900}, where 900 is frequency in MHz.
 If the frequency is too high, utility will print \q{Error with arguments} and exit.
 
 This is a fragment of code around reference to \q{Error with arguments} text string:
@@ -226,13 +226,13 @@ Let's back to this piece of code:
 .text:0000AC90      BGT     errors_with_arguments ; I've patched here to 00 00 00 00
 \end{lstlisting}
 
-We need to disable BGT branch instruction at 0xAC90 somehow. And this is ARM in ARM mode, because, as we see, all addresses are increasing by 4, i.e., each instruction has size of 4 bytes.
+We must disable \INS{BGT} branch instruction at 0xAC90 somehow. And this is ARM in ARM mode, because, as we see, all addresses are increasing by 4, i.e., each instruction has size of 4 bytes.
 \TT{NOP} (no operation) instruction in ARM mode is just four zero bytes: \TT{00 00 00 00}.
 So by writing four zeroes at 0xAC90 address (or physical offset in file 0x2C90) will disable this check.
 
 Not it's possible to set frequencies up to 1050MHz. Even more is possible, but due to the bug, if input value is greater than 1099, raw value in MHz will be passed to the board, which is incorrect.
 
-I didn't go further, but if I need to, I would try to decrease a value which is passed to \TT{write\_power()} function.
+I didn't go further, but if I had to, I would try to decrease a value which is passed to \TT{write\_power()} function.
 
 Now the scary piece of code which I skipped at first:
 

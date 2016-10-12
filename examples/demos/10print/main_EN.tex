@@ -77,8 +77,7 @@ instruction can be used instead, because it sets a flag according to the byte it
 
 Another idea to minimize the code is to use the \TT{INT 29h} DOS syscall, which just prints the character stored in the \TT{AL} register.
 
-That is what Peter Ferrie \AndENRU \HERMIT{} did (11 \AndENRU 
-10 bytes)
+That is what Peter Ferrie and \HERMIT{} did (11 and 10 bytes)
 \footnote{\url{http://go.yurichev.com/17087}}:
 
 \lstinputlisting[caption=\HERMIT: 11 bytes]{examples/demos/10print/herm1t_11_EN.lst}
@@ -105,14 +104,12 @@ It was introduced in the NEC V20 \ac{CPU} and sets \TT{AL} to
 
 So it is possible to get rid of conditional jumps at all.
 The \ac{ASCII} code of backslash (\q{\textbackslash{}}) 
-is \TT{0x5C} \AndENRU \TT{0x2F} for slash (\q{/}).
-So we need to convert one (pseudo-random) bit in the \TT{CF} flag to a value of \TT{0x5C} or \TT{0x2F}.%
+is \TT{0x5C} and \TT{0x2F} for slash (\q{/}).
+So we have to convert one (pseudo-random) bit in the \TT{CF} flag to a value of \TT{0x5C} or \TT{0x2F}.
 
+This is done easily: by \TT{AND}-ing all bits in \TT{AL} (where all 8 bits are set or cleared) with \TT{0x2D} we have just 0 or \TT{0x2D}.
 
-This is done easily: by \TT{AND}-ing all bits in \TT{AL} (where all 8 bits are set or cleared) with \TT{0x2D} we have just 0 or \TT{0x2D}.%
-
-
-By adding \TT{0x2F} to this value, we get \TT{0x5C} or \TT{0x2F}.%
+By adding \TT{0x2F} to this value, we get \TT{0x5C} or \TT{0x2F}.
 
 Then we just output it to the screen.
 

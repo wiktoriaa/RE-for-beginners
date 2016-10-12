@@ -94,7 +94,7 @@ FF byte is also very often occurred in negative displacements like these:
 8D 95 F8 5C FF FF                 lea     edx, [ebp-0A308h]
 \end{lstlisting}
 
-So far so good. Now we need to try various 16-byte keys, decrypt executable section and measure how often 00, FF ad 8B bytes are occurred.
+So far so good. Now we have to try various 16-byte keys, decrypt executable section and measure how often 00, FF ad 8B bytes are occurred.
 Let's also keep in sight how PCBC decryption works:
 
 \begin{figure}[H]
@@ -103,7 +103,7 @@ Let's also keep in sight how PCBC decryption works:
 \caption{Propagating Cipher Block Chaining decryption (image is taken from Wikipedia article)}
 \end{figure}
 
-The good news is that we don't really need to decrypt whole piece of data, but only slice by slice, this is exactly how I did in my previous example: \myref{XOR_mask_2}.
+The good news is that we don't really have to decrypt whole piece of data, but only slice by slice, this is exactly how I did in my previous example: \myref{XOR_mask_2}.
 
 Now I'm trying all possible bytes (0..255) for each byte in key and just pick the byte producing maximal amount of 00/FF/8B bytes in a decrypted slice:
 
