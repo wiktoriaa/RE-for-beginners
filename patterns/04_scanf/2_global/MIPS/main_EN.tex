@@ -4,7 +4,7 @@
 
 So now the $x$ variable is global.
 Let's compile to executable file rather than object file and load it into \IDA.
-IDA displays the $x$ variable in the .sbss ELF section (remember the \q{Global Pointer}? \myref{MIPS_GP}),
+IDA displays the $x$ variable in the \TT{.sbss} ELF section (remember the \q{Global Pointer}? \myref{MIPS_GP}),
 since the variable is not initialized at the start.
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/04_scanf/2_global/MIPS/O3_IDA_EN.lst}
@@ -59,7 +59,7 @@ the \$S0 register, and it is possible to encode the offset in a \INS{LW} (\q{Loa
 to load a value from the variable and pass it to \printf.
 
 Registers holding temporary data are prefixed with T-, but here we also see some prefixed with S-, 
-the contents of which is need to be preserved before use in other functions (i.e., \q{saved}).
+the contents of which must be preserved before use in other functions (i.e., saved somewhere).
 % FIXME:
 % This needs to be clarified a bit, e.g. "the registers need to be preserved if a function is called and it wants to use them
 

@@ -1,4 +1,4 @@
-\section{\RU{Аномалии компиляторов}\EN{Compiler's anomalies}}
+\section{Аномалии компиляторов}
 \label{anomaly:Intel}
 \myindex{\CompilerAnomaly}
 
@@ -8,12 +8,10 @@
 \myindex{\oracle}
 \myindex{x86!\Instructions!JZ}
 
-\RU{Intel C++ 10.1 которым скомпилирован \oracle 11.2 Linux86, может сгенерировать два \JZ идущих подряд, 
-причем на второй \JZ нет ссылки ниоткуда. Второй \JZ таким образом, не имеет никакого смысла.}
-\EN{Intel C++ 10.1, which was used for \oracle 11.2 Linux86 compilation, may emit two \JZ in row,
-and there are no references to the second \JZ. The second \JZ is thus meaningless.}
+Intel C++ 10.1 которым скомпилирован \oracle 11.2 Linux86, может сгенерировать два \JZ идущих подряд, 
+причем на второй \JZ нет ссылки ниоткуда. Второй \JZ таким образом, не имеет никакого смысла.
 
-\begin{lstlisting}[caption=\RU{kdli.o из}\EN{kdli.o from} libserver11.a]
+\begin{lstlisting}[caption=kdli.o из libserver11.a]
 .text:08114CF1                   loc_8114CF1: ; CODE XREF: __PGOSF539_kdlimemSer+89A
 .text:08114CF1                                ; __PGOSF539_kdlimemSer+3994
 .text:08114CF1 8B 45 08              mov     eax, [ebp+arg_0]
@@ -33,7 +31,7 @@ and there are no references to the second \JZ. The second \JZ is thus meaningles
 .text:08114D21 83 C4 08              add     esp, 8
 \end{lstlisting}
 
-\begin{lstlisting}[caption=\RU{оттуда же}\EN{from the same code}]
+\begin{lstlisting}[caption=оттуда же]
 .text:0811A2A5                   loc_811A2A5: ; CODE XREF: kdliSerLengths+11C
 .text:0811A2A5                                ; kdliSerLengths+1C1
 .text:0811A2A5 8B 7D 08              mov     edi, [ebp+arg_0]
@@ -49,25 +47,18 @@ and there are no references to the second \JZ. The second \JZ is thus meaningles
 .text:0811A2C0 E8 5F FE FF FF        call    len2nbytes
 \end{lstlisting}
 
-\RU{Возможно, это ошибка его кодегенератора, не выявленная тестами 
-(ведь результирующий код и так работает нормально).}
-\EN{It is probably a code generator bug that was not found by tests, because 
-resulting code works correctly anyway.}
+Возможно, это ошибка его кодегенератора, не выявленная тестами 
+(ведь результирующий код и так работает нормально).
 
-\EN{\input{other/anomaly2_EN}}
+\subsection{Итог}
 
-\subsection{\EN{Summary}\RU{Итог}}
-
-\RU{Еще подобные аномалии компиляторов в этой книге}
-\EN{Other compiler anomalies here in this book}: 
+Еще подобные аномалии компиляторов в этой книге: 
 \myref{anomaly:LLVM}, \myref{loops_iterators_loop_anomaly}, \myref{Keil_anomaly},
 \myref{MSVC2013_anomaly},
 \myref{MSVC_double_JMP_anomaly},
 \myref{MSVC2012_anomaly}.
 
-\RU{В этой книге здесь приводятся подобные случаи для того, чтобы легче было понимать, 
+В этой книге здесь приводятся подобные случаи для того, чтобы легче было понимать, 
 что подобные ошибки компиляторов 
-все же имеют место быть, и не следует ломать голову над тем, почему он сгенерировал такой странный код.}%
-\EN{Such cases are demonstrated here in this book, to show that such compilers errors are possible and sometimes
-one should not to rack one's brain while thinking why did the compiler generate such strange code.}
+все же имеют место быть, и не следует ломать голову над тем, почему он сгенерировал такой странный код.%
 

@@ -163,7 +163,7 @@ Other popular section names are:
 \item \TT{.idata}---imports section.
 \ac{IDA} may create a pseudo-section named like this: \myref{IDA_idata}.
 \item \TT{.edata}---exports section (rare)
-\item \TT{.pdata}-section containing all information about exceptions in Windows NT for MIPS, \ac{IA64} and x64: \myref{SEH_win64}
+\item \TT{.pdata}---section holding all information about exceptions in Windows NT for MIPS, \ac{IA64} and x64: \myref{SEH_win64}
 \item \TT{.reloc}---relocs section
 \item \TT{.bss}---uninitialized data (\ac{BSS})
 \item \TT{.tls}---thread local storage (\ac{TLS})
@@ -179,7 +179,7 @@ PE file packers/encryptors often garble section names or replace the names with 
 Some compilers and linkers can add a section with debugging symbols and 
 other debugging information (MinGW for instance).
 \myindex{Windows!PDB}
-However it is not so in modern versions of \ac{MSVC} (separate \gls{PDB} files are used there for this purpose).\\
+However it is not so in latest versions of \ac{MSVC} (separate \gls{PDB} files are used there for this purpose).\\
 \\
 That is how a PE section is described in the file:
 
@@ -222,7 +222,7 @@ They must be accessed by address.  One solution is \PICcode{} (\myref{sec:PIC}).
 But it is not always convenient.
 
 That is why a relocations table is present.
-There the addresses of points that need to be corrected are enumerated, 
+There the addresses of points that must be corrected are enumerated, 
 in case of loading at a different base address.
 
 % TODO тут бы пример с HIEW или objdump..
@@ -351,7 +351,7 @@ plus a reloc to it.
 Such points are also called \q{thunks}.
 
 All calls to the imported functions are just \CALL instructions to the corresponding \q{thunk}.
-In this case, additional relocs are not necessary because these CALL-s
+In this case, additional relocs are not necessary because these \CALL{}-s
 have relative addresses and do not need to be corrected.
 \end{itemize}
 
@@ -410,7 +410,7 @@ Therefore, the packer/encryptor does this on its own, with the help of
 
 That is why these two functions are often present in \ac{IAT} in packed files.\\
 \\
-In the standard DLLs from the Windows installation, \ac{IAT} often is located right in the beginning of the PE file.
+In the standard DLLs from the Windows installation, \ac{IAT} often is located right at the beginning of the PE file.
 Supposedly, it is done for optimization.
 
 While loading, the .exe file is not loaded into memory as a whole (recall huge install programs which are

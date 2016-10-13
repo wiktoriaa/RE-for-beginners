@@ -11,7 +11,7 @@ It's interesting, how easy it's to calculate the machine epsilon:
 \lstinputlisting{patterns/17_unions/epsilon/float.c}
 
 What we do here is just treat the fraction part of the IEEE 754 number as integer and add 1 to it.
-The resulting floating number is equal to $starting\_value+machine\_epsilon$, so we just need to subtract
+The resulting floating number is equal to $starting\_value+machine\_epsilon$, so we just have to subtract
 the starting value (using floating point arithmetic) to measure, what difference one bit reflects
 in the single precision (\Tfloat).
 The \IT{union} serves here as a way to access IEEE 754 number as a regular integer.
@@ -22,7 +22,7 @@ overflow is possible, which will add another 1 to the exponent part.
 
 \lstinputlisting[caption=\Optimizing MSVC 2010]{patterns/17_unions/epsilon/float_MSVC_2010_Ox_EN.asm}
 
-The second \INS{FST} instruction is redundant: there is no need to store the input value in the same
+The second \INS{FST} instruction is redundant: there is no necessity to store the input value in the same
 place (the compiler decided to allocate the $v$ variable at the same point in the local stack as the input 
 argument).
 Then it is incremented with \INS{INC}, as it is a normal integer variable.

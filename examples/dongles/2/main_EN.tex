@@ -9,9 +9,8 @@ by a company that disappeared a long time ago.
 
 There is a special dongle driver to be installed in the system, that contains the following text strings:
 \q{Copyright 1989, Rainbow Technologies, Inc., Irvine, CA}
-\AndENRU
+and
 \q{Sentinel Integrated Driver Ver. 3.0 }.
-
 
 After the installation of the driver in SCO OpenServer, these device files appear in the /dev filesystem:
 
@@ -21,18 +20,15 @@ After the installation of the driver in SCO OpenServer, these device files appea
 /dev/rbsl10
 \end{lstlisting}
 
-
 The program reports an error without dongle connected, but the error string cannot be found in the executables.
 
 \myindex{COFF}
 
 Thanks to \ac{IDA}, it is easy to load the COFF executable used in SCO OpenServer.
 
-%
 Let's also try to find \q{rbsl} string and indeed, found it in this code fragment:
 
 \lstinputlisting{examples/dongles/2/1.lst}
-
 
 Yes, indeed, the program needs to communicate with the driver somehow.
 
@@ -42,15 +38,13 @@ function is called is the \gls{thunk function}:
 
 \lstinputlisting{examples/dongles/2/2.lst}
 
-SSQ() 
-is called from at least 2 functions.
+SSQ() can be called from at least 2 functions.
 
 One of these is:
 
 \lstinputlisting{examples/dongles/2/check1.lst}
 
-\q{\TT{3C}} \AndENRU \q{\TT{3E}} 
-sound familiar: there was a Sentinel Pro dongle by Rainbow with no memory,
+\q{\TT{3C}} and \q{\TT{3E}} sound familiar: there was a Sentinel Pro dongle by Rainbow with no memory,
 providing only one crypto-hashing secret function.
 
 You can read a short description
@@ -83,20 +77,16 @@ are used for LPT printer port selection.
 selection (that's how Sentinel Pro dongles are differentiated from each other: more than one
 dongle can be connected to a LPT port).
 
-The only non-2-character string passed to the hashing function is\\
-"0123456789".
+The only non-2-character string passed to the hashing function is "0123456789".
 
 Then, the result is compared against the set of valid results.
 
 If it is correct, 0xC or 0xB is to be written into the global variable \TT{ctl\_model}.%
 
-
 Another text string that gets passed is
 "PRESS ANY KEY TO CONTINUE: ", but the result is not checked.
 Hard to say why, probably by mistake
-\footnote{
-What a strange feeling: to find bugs in such ancient software.}.
-
+\footnote{What a strange feeling: to find bugs in such ancient software.}.
 
 Let's see where the value from the global variable \TT{ctl\_mode} is used.
 
@@ -112,13 +102,12 @@ The error string decryption routine seems a simple \gls{xoring}:
 
 \lstinputlisting{examples/dongles/2/err_warn.lst}
 
-%
 That's why we were unable to find the error messages in the executable files, because they are encrypted
 (which is is popular practice).
 
 Another call to the \TT{SSQ()} hashing function passes the
 \q{offln} string to it and compares the result with
-\TT{0xFE81} \AndENRU \TT{0x12A9}.
+\TT{0xFE81} and \TT{0x12A9}.
 
 If they don't match, it works with some \TT{timer()} 
 function (maybe waiting for a poorly
@@ -128,15 +117,12 @@ connected dongle to be reconnected and check again?) and then decrypts another e
 
 Bypassing the dongle is pretty straightforward: just patch all jumps after the relevant \CMP instructions.
 
-
 Another option is to write our own SCO OpenServer driver, containing a table of questions and answers, all of those which present in the program.
 
 \subsubsection{Decrypting error messages}
 
-By the way, we can also 
-try to decrypt all error messages.
-The algorithm that is located in the \TT{err\_warn()} 
-function is very simple, indeed:
+By the way, we can also try to decrypt all error messages.
+The algorithm that is located in the \TT{err\_warn()} function is very simple, indeed:
 
 \lstinputlisting[caption=Decryption function]{examples/dongles/2/decrypting_EN.lst}
 
@@ -167,8 +153,7 @@ not just string is supplied to the decryption function, but also the key:
 .text:0000D9C9                 call    err_warn
 \end{lstlisting}
 
-The algorithm is a simple \gls{xoring}: 
-each 
+The algorithm is a simple \gls{xoring}: each 
 byte is xored with a key, but the key is increased by 3 after the processing of each byte.
 
 We can write a simple Python script to check our hypothesis:
@@ -190,10 +175,9 @@ The key is located in the \ESI register, but only one byte part of \ESI is used.
 Hence, a key may be greater than 255, 
 but its value is always to be rounded.
 
-
 As a consequence, we can just try brute-force, trying all possible keys in the 0..255 range.
 We are also going to skip 
-the messages that contain unprintable characters.
+the messages that has unprintable characters.
 
 \lstinputlisting[caption=Python 3.x]{examples/dongles/2/decr2.py}
 

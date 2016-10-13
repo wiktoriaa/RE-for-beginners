@@ -29,10 +29,10 @@ The \TT{R7} register (as it is standardized in \IOSABI) is a frame pointer. More
 The \TT{MOVT R0, \#0} (MOVe Top) instruction writes 0 into higher 16 bits of the register.
 The issue here is that the generic \MOV instruction in ARM mode may write only the lower 16 bits of the register.
 
-Remember, all instruction opcodes in ARM mode are limited in size to 32 bits. Of course, this limitation is not related to moving data between registers.
+Keep in mind, all instruction opcodes in ARM mode are limited in size to 32 bits. Of course, this limitation is not related to moving data between registers.
 That's why an additional instruction \TT{MOVT} exists for writing into the higher bits (from 16 to 31 inclusive).
 Its usage here, however, is redundant because the \TT{MOV R0, \#0x1686} instruction above cleared the higher part of the register.
-This is probably a shortcoming of the compiler.
+This is supposedly a shortcoming of the compiler.
 % TODO:
 % I think, more specifically, the string is not put in the text section,
 % ie. the compiler is actually not using position-independent code,
@@ -60,7 +60,7 @@ In case it does, the effect of these two functions would be different
 \footnote{It has also to be noted the \puts does not require a `\textbackslash{}n' new line symbol 
 at the end of a string, so we do not see it here.}.
 
-Why did the compiler replace the \printf with \puts? Probably because \puts is faster
+Why did the compiler replace the \printf with \puts? Presumably because \puts is faster
 \footnote{\href{http://go.yurichev.com/17063}{ciselant.de/projects/gcc\_printf/gcc\_printf.html}}. 
 
 Because it just passes characters to \gls{stdout} without comparing every one of them with the \IT{\%} symbol.

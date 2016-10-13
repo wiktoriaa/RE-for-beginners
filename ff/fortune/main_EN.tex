@@ -25,7 +25,7 @@ A tall, dark stranger will have more fun than you.
 
 So it is just phrases, sometimes multiline ones, divided by percent sign.
 The task of \IT{fortune} program is to find random phrase and to print it.
-In order to achieve this, it should scan the whole text file, count phrases, choose random and print it.
+In order to achieve this, it must scan the whole text file, count phrases, choose random and print it.
 But the text file can get bigger, and even on modern computers, this naive algorithm is a bit uneconomical to computer resources.
 The straightforward way is to keep binary index file containing offset of each phrase in text file.
 With index file, \IT{fortune} program can work much faster: just to choose random index element, take offset from there, set offset in text file and read phrase from it.
@@ -36,7 +36,7 @@ This program is open-source of course, but intentionally, I will not peek into i
 \lstinputlisting{ff/fortune/1.lst}
 
 Without any special aid we could see that there are four 4-byte elements on each 16-byte line.
-It's probably our index array.
+Perhaps, it's our index array.
 I'm trying to load the whole file in Wolfram Mathematica as 32-bit integer array:
 
 \begin{lstlisting}
@@ -56,7 +56,7 @@ Out[]= {33554432, 2936078336, 3137339392, 251658240, 0, 37, 0, \
 
 Nope, something wrong. Numbers are suspiciously big.
 But let's back to \IT{od} output: each common 4-byte element has two zero bytes and two non-zero bytes, so the offsets (at least at the beginning of the file) are 16-bit at maximum.
-Probably different endiannes is used in file?
+Probably different endiannes is used in the file?
 Default endiannes in Mathematica is little-endian, as used in Intel CPUs.
 Now I'm changing it to big-endian:
 
@@ -143,18 +143,18 @@ But I'm sure that this is big-endian array, because the very last 32-bit element
 
 Perhaps, \IT{fortune} program developer had big-endian computer or maybe it was ported from something like it.
 
-OK, so the array is big-endian, and, judging by common sense, the very first phrase in the text file should be started at zeroth offset. So zero value should be present in the array somewhere at the very beginning.
+OK, so the array is big-endian, and, judging by common sense, the very first phrase in the text file must be started at zeroth offset. So zero value should be present in the array somewhere at the very beginning.
 We've got couple of zero elements at the beginning. But the second is most appealing: 43 is going right after it and 43 is valid offset to valid English phrase in the text file.
 
 The last array element is 0x5FC4, and there are no such byte at this offset in the text file.
 So the last array element is pointing behind the end of file.
-It's probably done because phrase length is calculated as difference between offset to the current phrase
+It's supposedly done because phrase length is calculated as difference between offset to the current phrase
 and offset to the next phrase. 
 This can be faster than traversing phrase string for percent character.
 But this wouldn't work for the last element.
 So the \IT{dummy} element is also added at the end of array.
 
-So the first 6 32-bit integer values are probably some kind of header.
+So the first 6 32-bit integer values are supposedly some kind of header.
 
 Oh, I forgot to count phrases in text file:
 
@@ -165,7 +165,7 @@ In case of very simple index files, number of elements can be easily deduced fro
 Anyway, there are 432 phrases in the text file.
 And we see something very familiar at the second element (value 431).
 I've checked other files (literature.dat and riddles.dat in Ubuntu Linux) and yes, the second 32-bit element is indeed number of phrases minus 1.
-Why \IT{minus 1}? Probably, this is not number of phrases, but rather index of the last phrase (starting at zero)?
+Why \IT{minus 1}? Perhaps, this is not number of phrases, but rather index of the last phrase (starting at zero)?
 
 And there are some other elements in the header.
 In Mathematica, I'm loading each of three available files and I'm taking a look on the header:
@@ -194,7 +194,7 @@ On the other hand, text file and index file timestamps can gone out of sync afte
 
 But there are no timestamp, in my opinion. The most compact way of representing date and time is UNIX time value, which is big 32-bit number. We don't see any of such here. Other ways are even less compact.
 
-So here is algorithm, how \IT{fortune} probably works:
+So here is algorithm, how \IT{fortune} supposedly works:
 
 \begin{itemize}
 \item take number of last phrase from the second element;
@@ -240,9 +240,9 @@ Hmmm. Let's leave only one element in array (0) without terminating one:
 
 Fortune program always shows only first phrase.
 
-From this experiment we got to know that percent sign is parsed inside of fortune file and the size is not calculated as I deduced,
-perhaps, even terminal array element is not used.
-However, it's still possible use it. And probably it was in past?
+From this experiment we got to know that percent sign is parsed inside of fortune file and the size is not calculated as
+I deduced before, perhaps, even terminal array element is not used.
+However, it still can be used. And probably it was used in past?
 
 % TODO second phrase!
 
@@ -253,7 +253,7 @@ If you want to try to understand meaning of other values in index file header, y
 Files I took from Ubuntu Linux 14.04 are here: \url{http://beginners.re/examples/fortune/}, hacked files are also here.
 
 Oh, and I took the files from x64 version of Ubuntu, but array elements are still has size of 32 bit.
-It is because \IT{fortune} text files are probably never exceeds 4GB size.
+It is because \IT{fortune} text files are probably never exceeds 4\ac{GiB} size.
 But if it will, all elements must have size of 64 bit so to be able to store offset to the text file larger than 4GB.
 
 For impatient readers, the source code of \IT{fortune} is \href{https://launchpad.net/ubuntu/+source/fortune-mod/1:1.99.1-3.1ubuntu4}{here}.

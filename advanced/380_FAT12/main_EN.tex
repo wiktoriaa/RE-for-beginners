@@ -116,7 +116,7 @@ Let's first start at the function getting values from the array, because it's si
 The method of finding triplet's number is just division input index by 2, but we can do it just by shifting right by 1 bit.
 This is a very common way of dividing/multiplication by numbers in form of $2^n$.
 
-I can demonstrate how it works. Let's say, you need to divide 123 by 10.
+I can demonstrate how it works. Let's say, you want to divide 123 by 10.
 Just drop last digit (3, which is remainder of division) and 12 is left.
 Division by 2 is just dropping least significant bit. Dropping can be done by shifting right.
 
@@ -152,12 +152,12 @@ where it's located between two odd numbers (-1 and 1).
 
 For math geeks, I could also say that even or odd sign is also remainder of division by 2.
 Division of a number by 2 is merely dropping the last bit, which is remainder of division.
-Well, we do not need to do shifts here, just isolate lowest bit.
+Well, we do not have to do shifts here, just isolate lowest bit.
 
 If the element is odd, we take middle and right bytes (\IT{array[array\_idx+1]} and \IT{array[array\_idx+2]}).
 Lowest 4 bits of the middle byte is isolated.
 Right byte is taken as a whole.
-Now we need to combine these parts into 12-bit value.
+Now we have to combine these parts into 12-bit value.
 To do so, shift 4 bits from the middle byte by 8 bits left, so these 4 bits will be allocated right behind highest 8th bit of byte.
 Then, using OR operation, we just add these parts.
 
@@ -195,7 +195,7 @@ swapped instructions performing better.
 
 All addresses in Linux x64 are 64-bit ones, so during pointer arithmetic, all values should also be 64-bit.
 The code calculating offsets inside of array operates on 32-bit values (input \IT{idx} argument has type of \IT{int}, which has width of 32 bits),
-and so these values should be converted to 64-bit addresses before actual memory load/store.
+and so these values must be converted to 64-bit addresses before actual memory load/store.
 So there are a lot of sign-extending instructions (like \INS{CDQE}, \INS{MOVSX}) used for conversion.
 Why to extend sign? By C/C++ standards, pointer arithmetic can operate on negative values 
 (it's possible to access array using negative index like \IT{array[-123]}, see: \myref{negative_array_indices}).
@@ -343,6 +343,6 @@ ARM64 has new instructions \INS{UBFM}, \INS{UFBIZ} to move specific bits from on
 
 \subsection{Conclusion}
 
-FAT12 is hardly used somewhere nowadays, but if you have space constraints and you need to store values limited to 12 bits,
+FAT12 is hardly used somewhere nowadays, but if you have space constraints and you have to store values limited to 12 bits,
 you may consider tightly-packed array in the manner it's done in FAT12 table.
 
