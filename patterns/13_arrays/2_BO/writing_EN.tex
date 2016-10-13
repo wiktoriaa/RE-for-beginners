@@ -33,7 +33,7 @@ Trace until the function end:
 \centering
 \myincludegraphics{patterns/13_arrays/2_BO/olly_w2.png}
 \caption{\olly: 
-EIP was restored, but \olly can't disassemble at 0x15}
+\TT{EIP} has been restored, but \olly can't disassemble at 0x15}
 \label{fig:array_BO_olly_w2}
 \end{figure}
 
@@ -46,7 +46,7 @@ It is also interesting that the \EBP register contain 0x14,
 
 Let's study stack layout a bit more.
 
-After the control flow was passed to \TT{\main}, the value in the \EBP register was saved on the stack.
+After the control flow has been passed to \TT{\main}, the value in the \EBP register was saved on the stack.
 Then, 84 bytes were allocated for the array and the $i$ variable.
 That's \TT{(20+1)*sizeof(int)}.
 \ESP now points to the \TT{\_i} variable in the local stack and after the execution of 
@@ -73,14 +73,14 @@ That's the stack layout while the control is in \main:
 \TT{a[20]=something} statement writes \IT{something} to the place where the value of \EBP is saved.
 
 Please take a look at the register state at the moment of the crash. In our case,
-20 was written in the 20th element. 
+20 has been written in the 20th element. 
 At the function end, the function epilogue restores the original \EBP value.
 (20 in decimal is \TT{0x14} in hexadecimal).
 Then \RET gets executed, which is effectively equivalent to \TT{POP EIP} instruction.
 
 The \RET instruction takes the return address from the stack (that is the address in \ac{CRT}),
-which was called \main),
-and 21 iss stored there (\TT{0x15} in hexadecimal).
+which has called \main),
+and 21 is stored there (\TT{0x15} in hexadecimal).
 The CPU traps at address \TT{0x15},
 but there is no executable code there, so exception gets raised.
 

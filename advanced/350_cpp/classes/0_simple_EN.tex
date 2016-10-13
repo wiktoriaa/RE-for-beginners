@@ -6,7 +6,7 @@ Let's try an example with two variables, two constructors and one method:
 
 \lstinputlisting{\CURPATH/classes/simple_EN.cpp}
 
-\myparagraph{MSVC\EMDASH{}x86}
+\myparagraph{MSVC: x86}
 
 Here is how the \main function looks like, translated 
 into assembly language:
@@ -25,7 +25,7 @@ For \IT{c2} another constructor \TT{??0c@@QAE@HH@Z} is called and two numbers ar
 \myindex{x86!\Registers!ECX}
 
 A pointer to the object (\ITthis in \Cpp terminology) is passed in the \ECX register.
-This is called thiscall~(\myref{thiscall})\EMDASH{}the method for passing a pointer to the object.
+This is called thiscall~(\myref{thiscall})---the method for passing a pointer to the object.
 
 MSVC does it using the \ECX register. Needless to say, it is not a standardized method, other compilers can do it
 differently, e.g., via the first function argument (like GCC).
@@ -38,7 +38,7 @@ Why do these functions have such odd names?
 That's \gls{name mangling}.
 
 A \Cpp class may contain several methods sharing the same name but having different 
-arguments\EMDASH{}that is polymorphism.
+arguments---that is polymorphism.
 And of course, different classes may have their own methods with the same name.
 
 \myindex{Linker}
@@ -74,8 +74,8 @@ The code is much shorter if compiled with optimizations (\Ox):
 
 \myindex{x86!\Instructions!RET}
 
-That's all. The other thing we must note is that the \gls{stack pointer} was not corrected
-with \TT{add esp, X} after the constructor was called. 
+That's all. The other thing we must note is that the \gls{stack pointer} hasn't been corrected
+with \TT{add esp, X} after the constructor has been called. 
 At the same time, the constructor has \TT{ret 8} instead of \RET at the end.
 
 \myindex{thiscall}
@@ -88,13 +88,13 @@ The \TT{ret x} instruction adds \TT{X} to the value in \ESP, then passes the con
 See also the section about calling conventions~(\myref{sec:callingconventions}).
 
 It also has to be noted that the compiler decides when to call the constructor and 
-destructor\EMDASH{}but we already know that from the \Cpp language basics.
+destructor---but we already know that from the \Cpp language basics.
 
-\myparagraph{MSVC\EMDASH{}x86-64}
+\myparagraph{MSVC: x86-64}
 \label{simple_CPP_MSVC_x64}
 
 As we already know, the first 4 function arguments in x86-64 are passed in \RCX, \RDX, \Reg{8} and 
-\Reg{9} registers, all the rest\EMDASH{}via the stack.
+\Reg{9} registers, all the rest---via the stack.
 
 Nevertheless, the \ITthis pointer to the object is passed in \RCX, the first argument of the method in \RDX, etc.
 We can see this in the 
@@ -109,7 +109,7 @@ so that is why 32-bit register parts are used here.
 We also see \TT{JMP printf} instead of \RET in the \TT{dump()} method, that \IT{hack} we already saw
 earlier: \myref{JMP_instead_of_RET}.
 
-\myparagraph{GCC\EMDASH{}x86}
+\myparagraph{GCC: x86}
 
 It is almost the same story in GCC 4.4.1, with a few exceptions.
 
@@ -119,7 +119,7 @@ Here we see another \IT{name mangling} style, specific to GNU
 \footnote{There is a good document about the various name mangling conventions in different compilers:\\
 \InSqBrackets{\AgnerFogCC}.}
 It can also be noted that the pointer to the object is passed as the first function 
-argument\EMDASH{}invisible to programmer, of course.
+argument---invisible to programmer, of course.
 
 First constructor:
 
@@ -220,7 +220,7 @@ Thus, if we base our judgment on these simple examples, the difference between M
 is the style of the encoding of function names (\IT{name mangling}) and the method for passing a pointer to the object
 (via the \ECX register or via the first argument).
 
-\myparagraph{GCC\EMDASH{}x86-64}
+\myparagraph{GCC: x86-64}
 
 The first 6 arguments, as we already know, are passed in the \RDI, \RSI, \RDX, \RCX, \Reg{8} and 
 \Reg{9} (\SysVABI) registers,
