@@ -193,11 +193,11 @@ swapped instructions performing better.
 
 \subsubsection{Other comments}
 
-All addresses in Linux x64 are 64-bit ones, so during pointer arithmetics, all values should also be 64-bit.
+All addresses in Linux x64 are 64-bit ones, so during pointer arithmetic, all values should also be 64-bit.
 The code calculating offsets inside of array operates on 32-bit values (input \IT{idx} argument has type of \IT{int}, which has width of 32 bits),
 and so these values should be converted to 64-bit addresses before actual memory load/store.
 So there are a lot of sign-extending instructions (like \INS{CDQE}, \INS{MOVSX}) used for conversion.
-Why to extend sign? By C/C++ standards, pointer arithmetics can operate on negative values 
+Why to extend sign? By C/C++ standards, pointer arithmetic can operate on negative values 
 (it's possible to access array using negative index like \IT{array[-123]}, see: \myref{negative_array_indices}).
 Since GCC compiler cannot be sure if all indices are always positive, it adds sign-extending instructions.
 
