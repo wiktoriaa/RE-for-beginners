@@ -30,7 +30,7 @@ But the text file can get bigger, and even on modern computers, this naive algor
 The straightforward way is to keep binary index file containing offset of each phrase in text file.
 With index file, \IT{fortune} program can work much faster: just to choose random index element, take offset from there, set offset in text file and read phrase from it.
 This is actually done in \IT{fortune} file.
-Let's inspect what is in its index file inside (these are .dat files in the same directory) in hexdecimal editor.
+Let's inspect what is in its index file inside (these are .dat files in the same directory) in hexadecimal editor.
 This program is open-source of course, but intentionally, I will not peek into its source code.
 
 \lstinputlisting{ff/fortune/1.lst}
@@ -128,7 +128,7 @@ Out[]= {429, -244, -172, -15, 620756992, -620756992, 43, 53, 47, \
 As we can see, except of the very first 6 values (which is probably belongs to index file header), all numbers are in fact length of all text phrases (offset of the next phrase minus offset of the current phrase is in fact length of the current phrase).
 
 It's very important to keep in mind that bit-endiannes can be confused with incorrect array start.
-Indeed, from \IT{od} output we see that each element started with two zeroes.
+Indeed, from \IT{od} output we see that each element started with two zeros.
 But when shifted by two bytes in either side, we can interpret this array as little-endian:
 
 \lstinputlisting{ff/fortune/3.lst}

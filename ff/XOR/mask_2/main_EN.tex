@@ -47,7 +47,7 @@ Out[]:={{{248,128,88,63,58,175,159,154,232,226,161,50,97,127,3,217,80},1},
 
 No luck, each 17-byte block is unique withing the file and occurred only once.
 Perhaps, there are no 17-byte zero (or space) lacunas.
-It is possible indeed: such long space indentation and padding may be absent in tightly typesetted text.
+It is possible indeed: such long space indentation and padding may be absent in tightly typeset text.
 
 The first idea is to try all possible 17-byte keys and find those, which will result in printable plain text after decryption.
 Bruteforce is not an option, because there are $256^{17}$ possible keys ($\tilde{}10^{40}$), that's too much.
@@ -177,7 +177,7 @@ In[]:= Length[input]/1285884 // N
 Out[]= 4.34712
 \end{lstlisting}
 
-There are 1285884 spaces in the whole file, and the frequence of space occurrence is 1 space per ~4.3 characters.
+There are 1285884 spaces in the whole file, and the frequency of space occurrence is 1 space per ~4.3 characters.
 
 Now here is \href{http://www.gutenberg.org/ebooks/11}{Alice's Adventures in Wonderland, by Lewis Carroll} from the same library:
 
@@ -208,9 +208,9 @@ Out[]= 5.99049
 
 The result is different probably because of different formatting of these texts (maybe indentation and/or padding).
 
-OK, so let's assume the average frequence of space in English language is 1 space per 4..7 characters.
+OK, so let's assume the average frequency of space in English language is 1 space per 4..7 characters.
 
-Now the good news again: we can measure frequence of spaces while decrypting our file gradually.
+Now the good news again: we can measure frequency of spaces while decrypting our file gradually.
 Now I count spaces in each \IT{slice} and throw away 1-byte keys which produce buffers with too small number of spaces (or too large, but this is almost impossible given so short key):
 
 \begin{lstlisting}[caption=Python script]

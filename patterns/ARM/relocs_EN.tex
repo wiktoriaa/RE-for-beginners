@@ -60,7 +60,7 @@ The second one puts the 12 bits of the address relative to the page start into t
 The last, 26-bit one, is applied to the instruction at address \TT{0x10} where the 
 jump to the \printf function is.
 
-All ARM64 (and in ARM in ARM mode) instruction addresses have zeroes in the two lowest bits
+All ARM64 (and in ARM in ARM mode) instruction addresses have zeros in the two lowest bits
 (because all instructions have a size of 4 bytes),
 so one have to encode only the highest 26 bits of 28-bit address space ($\pm 128$MB).
 
@@ -99,7 +99,7 @@ It is \TT{0x3FFFFA0}, but the \ac{MSB} is 1,
 so the number is negative, and we can convert it manually to convenient form for us.
 By the rules of negation (\myref{sec:signednumbers:negation}), just invert all bits: (it is \TT{0b1011111=0x5F}), and add 1 (\TT{0x5F+1=0x60}).
 So the number in signed form is \TT{-0x60}.
-Let's multiplicate \TT{-0x60} by 4 (because address stored in opcode is divided by 4): it is \TT{-0x180}.
+Let's multiply \TT{-0x60} by 4 (because address stored in opcode is divided by 4): it is \TT{-0x180}.
 Now let's calculate destination address: \TT{0x4005a0} + (\TT{-0x180}) = \TT{0x400420} 
 (please note: we consider the address of the BL instruction, not the current value of \ac{PC}, which may be different!).
 So the destination address is \TT{0x400420}.\\

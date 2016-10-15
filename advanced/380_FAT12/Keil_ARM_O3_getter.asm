@@ -6,7 +6,7 @@ get_from_array PROC
         TST      r0,#1
         ADD      r2,r1,r1,LSL #1
 ; R2 = R1+R1<<1 = R1+R1*2 = R1*3
-; thatnks to shifting suffix, a single instruction in ARM mode can multiplicate by 3
+; thanks to shifting suffix, a single instruction in ARM mode can multiplicate by 3
         LDR      r1,|array|
 ; R1 = address of array
         LSR      r0,r0,#1
