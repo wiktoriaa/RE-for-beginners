@@ -26,7 +26,9 @@ So these code snippets usually have this form:
 %
 Division by $2^{n}$ is usually done by simply shifting to the right.
 
-If $n<32$, then the low part of the \gls{product} is shifted (in \EAX or \RAX).
+If $n<32$, then the low 32-bit part of the \gls{product} (in \EAX) is shifted.
+If $n\geq{}32$, then the lower 32-bit part of the \gls{product} is simply ignored, and higher 32-bit
+part (in \EDX) is shifted by $n-32$ bits right.
 
 $n$ is chosen in order to minimize the error.
 
