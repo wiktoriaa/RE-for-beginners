@@ -38,18 +38,18 @@ In diesem Fall besteht die Datei aus zwei Segmenten: \TT{CONST} (für konstante 
 \myindex{\CLanguageElements!const}
 \label{string_is_const_char}
 Die Zeichenkette \TT{hello, world} hat in \CCpp den Typ \TT{const char[]}\InSqBrackets{\TCPPPL p176, 7.3.2}, aber keinen eigenen Bezeichner.
-Da der Compiler jedoch irgendwie auf diese Zeichenkette zugreifen muss, definiert er den internten Namen \TT{\$SG3830}.
+Da der Compiler jedoch irgendwie auf diese Zeichenkette zugreifen muss, definiert er den internen Namen \TT{\$SG3830}.
 
 Aus diesem Grund kann das Beispiel auch wie folgt geschrieben werden:
 
 \lstinputlisting{patterns/01_helloworld/hw_2.c}
 
 Nochmal zurück zum Assembler-Listing: wie man sehen kann ist die Zeichenkette gemäß dem \CCpp-Standard mit einem 0-Byte abgeschlossen.
-Mehr über \CCpp-Zeichenketten ist im Abschnitt \myref{C_strings}.
+Mehr über \CCpp-Zeichenketten ist im Abschnitt \myref{C_strings} zu finden.
 
 % Not sure what the technically precise translation of prologue and epilogue is
 In dem Code-Segment \TT{\_TEXT} ist lediglich eine Funktion: \main{}.
-Diese startet mit einem Prolog-Teil und endet mit einem Epilog-Teil (wie fast alle Funktionen).
+Diese startet mit einem Prolog-Teil und endet mit einem Epilog-Teil (wie fast alle Funktionen)
 \footnote{Mehr darüber in dem Abschnitt über Funktions-Prologe und -Epiloge ~(\myref{sec:prologepilog}).}.
 
 \myindex{x86!\Instructions!CALL}
@@ -60,7 +60,7 @@ Vor dem Aufruf wird die Adresse der Zeichenkette (oder ein Zeiger darauf) mit de
 auf dem Stack gespeichert. Dies geschieht durch die \PUSH-Anweisung.
 
 Wenn \printf die Ausführung wieder an \main übergibt, befindet sich die Adresse der Zeichenkette (oder ein Zeiger darauf) immer noch auf dem Stack.
-Da diese jedoch nicht mehr benötigt wird, muss der \gls{Stack-Pointer} (das \ESP-Register) korrigiert werden.
+Da diese jedoch nicht mehr benötigt wird, muss der \gls{stack pointer} (das \ESP-Register) korrigiert werden.
 
 \myindex{x86!\Instructions!ADD}
 \INS{ADD ESP, 4} bedeutet, dass der Wert 4 zu dem \ESP-Rregister-Wert addiert wird.
@@ -75,7 +75,7 @@ Warum 4? Da dies ein 32-Bit-Programm ist, werden exakt 4 Byte benötigt um Adres
 Aus dem gleichen Grund generieren einige Compiler (wie der Intel C++-Compiler) die Anweisung \TT{POP ECX}
 anstatt \ADD (dieses Muster kann zum Beispiel im \oracle{}-Code gefunden werden, da dieser mit dem Intel-Compiler erstellt wurde).
 Diese Anweisung hat nahezu den gleichen Effekt, nur dass die Inhalte des \ECX-Registers überschrieben werden.
-Der Intel C++-compiler nutzt \TT{POP ECX} vermutlich, da der OpCode für diese Anweisung kürzer ist als \TT{ADD ESP, x} (1 Byte für \TT{POP} und 3 Byte für \TT{ADD}),
+Der Intel C++-Compiler nutzt \TT{POP ECX} vermutlich, da der OpCode für diese Anweisung kürzer ist als \TT{ADD ESP, x} (1 Byte für \TT{POP} und 3 Byte für \TT{ADD}),
 
 Nachfolgend ein Beispiel unter der Verwendung von \POP anstatt \ADD aus \oracle{}:
 
@@ -99,9 +99,9 @@ XOR ist lediglich ein \q{exklusives Oder}\footnote{\href{http://go.yurichev.com/
 \INS{MOV EAX, 0}---auch hier wieder aufgrund des leicht kürzeren OpCodes (2 Byte für \XOR und 5 Byte für \MOV).
 
 \myindex{x86!\Instructions!SUB}
-Einige Compiler erzeugen \INS{SUB EAX, EAX}, was \IT{Subtrahiere der Wert in} \EAX \IT{vom Wert in} \EAX bedeutet.
+Einige Compiler erzeugen \INS{SUB EAX, EAX}, was \IT{Subtrahiere den Wert in} \EAX \IT{vom Wert in} \EAX bedeutet.
 In jedem Fall erzeugt dies einen Wert von Null.
 
 \myindex{x86!\Instructions!RET}
-Die letzte Anweisung \RET gibt die Ausführungs-Kontrolle wieder an die aufrufende Funktion \gls{caller}.
+Die letzte Anweisung \RET gibt die Ausführungskontrolle wieder an die aufrufende Funktion \gls{caller}.
 Üblicherweise ist dies \CCpp \ac{CRT}-Code welcher wiederum die Kontrolle an das Betriebssystem (\ac{OS}) übergibt.
