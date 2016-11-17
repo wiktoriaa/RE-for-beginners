@@ -35,9 +35,8 @@ Italian: `\ITA{}`
 German: `\DE{}`
 Thai: `\THA{}`
 Dutch: `\NL{}`
-Deutsch: `\DE{}`
 
-There is also `\ESph{}`, `\PTBRph{}`, `\PLph{}`, `\DEph{}` and `\ITAph{}` placeholder macros in `*.tex` files, where the translated text must be.
+There are also `\ESph{}`, `\PTBRph{}`, `\PLph{}`, `\DEph{}` and `\ITAph{}` placeholder macros in `*.tex` files, where the translated text must be.
 
 ## Compiling
 
