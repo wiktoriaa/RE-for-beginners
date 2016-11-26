@@ -9,7 +9,7 @@ x       = -4
 SUB     SP, SP, #0x10
 MOV     R9, 0xFC2 ; a
 ADD     R9, PC
-LDR.W   R9, [R9]
+LDR.W   R9, [R9] ; получить указатель на массив
 STR     R0, [SP,#0x10+x]
 STR     R1, [SP,#0x10+y]
 STR     R2, [SP,#0x10+z]
