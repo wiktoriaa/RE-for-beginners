@@ -25,7 +25,7 @@ arg_8           = qword ptr  10h
                 jmp     short loc_804844A
 
 loc_8048448:
-; store _a to ST(0), pop value at top of stack, leave _a at top
+; store _a to ST(1), pop value at top of stack, leave _a at top
                 fstp    st(1)
 
 loc_804844A:
