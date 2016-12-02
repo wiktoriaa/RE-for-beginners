@@ -54,8 +54,8 @@ loc_67: ; CODE XREF: f(int,int *,int *,int *)+59
        jb      loc_143
 
 loc_7F: ; CODE XREF: f(int,int *,int *,int *)+65
-       mov     edi, eax        ; edi = ar1
-       and     edi, 0Fh        ; is ar1 16-byte aligned?
+       mov     edi, eax        ; edi = ar3
+       and     edi, 0Fh        ; is ar3 16-byte aligned?
        jz      short loc_9A    ; yes
        test    edi, 3
        jnz     loc_162
