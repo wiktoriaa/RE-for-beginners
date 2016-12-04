@@ -1,6 +1,6 @@
 f	PROC
-; RDX=a1
-; RCX=a2
+; RCX=a1
+; RDX=a2
 ; R8=cnt
 	test	r8, r8        ; cnt==0? exit then
 	je	SHORT $LN1@f
