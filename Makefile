@@ -83,3 +83,6 @@ TH:
 NL:
 	$(call compile,RE4B-NL)
 
+FR:
+	$(call compile,RE4B-FR)
+
