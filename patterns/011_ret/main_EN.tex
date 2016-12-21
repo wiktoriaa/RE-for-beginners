@@ -1,12 +1,12 @@
-\section{The simplest function}
+\section{Returning value}
 
-The simplest possible function is arguably one that simply returns a constant value:
+Another somple function is the one that simply returns a constant value:
 
 Here it is:
 
 \lstinputlisting[caption=\EN{\CCpp Code}]{patterns/011_ret/1.c}
 
-Lets compile it!
+Lets compile it.
 
 \subsection{x86}
 
@@ -29,10 +29,6 @@ There are a few differences on the ARM platform:
 
 ARM uses the register \Reg{0} for returning the results of functions, so 123 is copied into \Reg{0}.
 
-%Maybe explain what a link register is, or if it is just a normal register, say so?
-The return address is not saved on the local stack in the ARM \ac{ISA}, but rather in the link register, 
-so the \INS{BX LR} instruction causes execution to jump to that address---effectively returning execution to the \gls{caller}.
-
 \myindex{ARM!\Instructions!MOV}
 \myindex{x86!\Instructions!MOV}
 It is worth noting that \MOV is a misleading name for the instruction in both x86 and ARM \ac{ISA}s.
@@ -42,7 +38,6 @@ The data is not in fact \IT{moved}, but \IT{copied}.
 \subsection{MIPS}
 
 \label{MIPS_leaf_function_ex1}
-There are two naming conventions used in the world of MIPS when naming registers: by number (from \$0 to \$31) or by pseudo name (\$V0, \$A0, etc.).
 
 The GCC assembly output below lists registers by number:
 
@@ -57,9 +52,7 @@ The \$2 (or \$V0) register is used to store the function's return value.
 \INS{LI} stands for ``Load Immediate'' and is the MIPS equivalent to \MOV.
 
 \myindex{MIPS!\Instructions!J}
-The other instruction is the jump instruction (J or JR) which returns the execution flow to the \gls{caller}, jumping to the address in the \$31 (or \$RA) register.
-
-This is the register analogous to \ac{LR} in ARM.
+The other instruction is the jump instruction (J or JR) which returns the execution flow to the \gls{caller}.
 
 \myindex{MIPS!Branch delay slot}
 You might be wondering why positions of the load instruction (LI) and the jump instruction (J or JR) are swapped. This is due to a \ac{RISC} feature called ``branch delay slot''.
@@ -70,10 +63,4 @@ is executed \IT{before} the jump/branch instruction itself.
 As a consequence, branch instructions always swap places with the instruction which must be executed beforehand.
 % A footnote/link to http://en.wikipedia.org/wiki/Delay_slot#Branch_delay_slots or
 % something similar might be useful for the people more interested in it.
-
-\subsubsection{A note about MIPS instruction/register names}
-
-Register and instruction names in the world of MIPS are traditionally written in lowercase.
-However, for the sake of consistency, we'll stick to using uppercase letters,
-as it is the convention followed by all other \ac{ISA}s featured this book.
 
