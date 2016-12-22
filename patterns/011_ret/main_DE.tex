@@ -1,10 +1,11 @@
+% TODO to be resynced with EN version
 \section{Die einfachste Funktion}
 
 Die einfachste, mögliche Funktion ist vermutlich eine, die lediglich einen konstanten Wert zurückgibt.
 
 Hier ist sie:
 
-\lstinputlisting[caption=\DE{\CCpp Code}]{patterns/00_ret/1.c}
+\lstinputlisting[caption=\DE{\CCpp Code}]{patterns/011_ret/1.c}
 
 Und nun in kompilierter Version!
 
@@ -12,7 +13,7 @@ Und nun in kompilierter Version!
 
 Nachfolgend das, was sowohl der optimierende GCC- als auch MSVC-Compiler auf einer x86-Plattform erzeugt:
 
-\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/00_ret/1.s}
+\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/011_ret/1.s}
 
 \myindex{x86!\Instructions!RET}
 Es gibt zwei Anweisungen: die erste platziert den Wert 123 in das \EAX-Register, welches per Konvention
@@ -25,7 +26,7 @@ Diese wird das Ergebnis vom \EAX-Register übernehmen.
 
 Auf der ARM-Plattform gibt es einige kleine Unterschiede:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) Assembler-Ausgabe]{patterns/00_ret/1_Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) Assembler-Ausgabe]{patterns/011_ret/1_Keil_ARM_O3.s}
 
 ARM nutzt das Register \Reg{0} für das Speichern des Rückgabewerts der Funktion. Also wird in diesem Beispiel
 der Wert 123 dorthin kopiert.
@@ -48,11 +49,11 @@ mit einer Nummer (von \$0 bis \$31) oder mit einem Pseudonamen (\$V0, \$A0, usw.
 
 GCC benamt in der Ausgabe die Register mit Nummern:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/00_ret/MIPS.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/011_ret/MIPS.s}
 
 \dots während \IDA Pseudonamen verwendet:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/00_ret/MIPS_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/011_ret/MIPS_IDA.lst}
 
 Das \$2 (oder \$V0)-Register wird zum Speichern des Rückgabewerts genutzt.
 \myindex{MIPS!\Pseudoinstructions!LI}

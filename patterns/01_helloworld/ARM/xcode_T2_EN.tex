@@ -136,3 +136,21 @@ there is even a tool, THUNK.EXE, called a “thunk compiler”.
 % TODO FIXME move to bibliography and quote properly above the quote
 ( \href{http://go.yurichev.com/17362}{The Jargon File} )
 
+\myindex{LAPACK}
+\myindex{FORTRAN}
+Another example we can find in LAPACK library---a ``Linear Algebra PACKage'' written in FORTRAN.
+\CCpp developers also want to use LAPACK, but it's insane to rewrite it to \CCpp and then maintain several versions.
+So there are short C functions callable from \CCpp environment, which are, in turn, call FORTRAN functions,
+and do almost anything else:
+
+\begin{lstlisting}
+double Blas_Dot_Prod(const LaVectorDouble &dx, const LaVectorDouble &dy)
+{
+    assert(dx.size()==dy.size());
+    integer n = dx.size();
+    integer incx = dx.inc(), incy = dy.inc();
+
+    return F77NAME(ddot)(&n, &dx(0), &incx, &dy(0), &incy);
+}
+\end{lstlisting}
+

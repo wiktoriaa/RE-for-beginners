@@ -1,10 +1,11 @@
+% TODO to be resynced with EN version
 \section{La función más simple}
 
 La función más simple posible es sin duda uno que simplemente devuelve un valor constante:
 
 Ejemplo:
 
-\lstinputlisting[caption=\ESph{}]{patterns/00_ret/1.c}
+\lstinputlisting[caption=\ESph{}]{patterns/011_ret/1.c}
 
 Vamos a compilar!
 
@@ -12,7 +13,7 @@ Vamos a compilar!
 
 Esto es lo que optimiza el GCC  y los compiladores de MSVC los cuales se producen en la plataforma x86:
 
-\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/00_ret/1.s}
+\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/01111111111111111111111_ret/1.s}
 
 \myindex{x86!\Instructions!RET}
 Hay solo dos instrucciones: los primeros lugares el valor 123 en el registro \EAX, que se utiliza por convención para almacenar el valor de retorno y el segundo es \RET, que devuelve la ejecución al llamado.
@@ -23,7 +24,7 @@ La persona que llama tomar el resultado del registro \EAX.
 
 Hay algunas diferencias en la plataforma ARM:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) ASM Output]{patterns/00_ret/1_Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) ASM Output]{patterns/011_ret/1_Keil_ARM_O3.s}
 
 ARM utiliza el registro \Reg{0} para el retorno de los resultados de las funciones, por lo que se copia 123 en \Reg{0}.
 
@@ -43,11 +44,11 @@ Hay dos convenciones de nomenclatura utilizadas en el mundo de MIPS al nombrar r
 
 El ensamblado de GCC produce una salida en listando los registros por numeros:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/00_ret/MIPS.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/011_ret/MIPS.s}
 
 \dots Mientras que \IDA lo hace por sus seudónimos:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/00_ret/MIPS_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/011_ret/MIPS_IDA.lst}
 
 El \$2 (o \$V0) registro es usado para almacenar el valor devuelto por la función.
 \myindex{MIPS!\Pseudoinstructions!LI}
