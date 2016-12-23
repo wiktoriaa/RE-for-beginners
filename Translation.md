@@ -10,6 +10,8 @@ Or if you familiar with git and github, add your file to source tree and create 
 How to find directories with `*_EN.tex` files?
 [Look here](https://github.com/dennis714/RE-for-beginners/search?utf8=%E2%9C%93&q=input+EN&type=Code).
 
+Please submit your work as early as possible: other translators will be aware of the piece of work already done.
+
 Korean, Chinese and Persian languages are reserved by publishers.
 
 ## Style
