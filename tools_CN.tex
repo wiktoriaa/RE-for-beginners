@@ -7,6 +7,9 @@
 
 \begin{document}
 
+%daveti: translated on Dec 24, 2016
+%NOTE: above is needed for MacTex.
+
 \chapter{工具库 Tools}
 
 \epigraph{
@@ -66,31 +69,30 @@ Sysinternals提供另一个版本\footnote{\url{https://technet.microsoft.com/en
 
 \item (免费, 开源) \IT{objdump}: 显示和反汇编二进制文件的小命令行工具。
 
-\item (Free, open-source) \IT{readelf}\footnote{\url{https://sourceware.org/binutils/docs/binutils/readelf.html}}:
-dump information about ELF file.
+\item (免费, 开源) \IT{readelf}\footnote{\url{https://sourceware.org/binutils/docs/binutils/readelf.html}}:
+显示ELF文件信息。
 \end{itemize}
 
-\subsection{Decompilers}
+\subsection{反编译器 Decompilers}
 
-There is only one known, publicly available, high-quality decompiler to C code: \IT{Hex-Rays}:\\
+事实上，只有一个众所周知，可以下载到的高质量C代码反编译器: \IT{Hex-Rays}:\\
 \href{http://go.yurichev.com/17033}{hex-rays.com/products/decompiler/}
 
-\subsection{Patch comparison/diffing}
+\subsection{补丁比较工具 Patch comparison/diffing}
 
-You may want to use it when you compare original version of some executable and patched one, in order to find
-what has been patched and why.
+为了弄明白补丁都干了些什么或者为什么这个补丁修补了某个漏洞，你可能需要用补丁比较工具来比较原执行文件和打过补丁文件的区别。
 
 \begin{itemize}
-\item (Free) \IT{zynamics BinDiff}\footnote{\url{https://www.zynamics.com/software.html}}
+\item (免费) \IT{zynamics BinDiff}\footnote{\url{https://www.zynamics.com/software.html}}
 
-\item (Free, open-source) \IT{Diaphora}\footnote{\url{https://github.com/joxeankoret/diaphora}}
+\item (免费, 开源) \IT{Diaphora}\footnote{\url{https://github.com/joxeankoret/diaphora}}
 \end{itemize}
 
-\section{Live analysis}
+\section{现场分析 Live analysis}
 
-Tools you use on a live system or during running of a process.
+用来对一个运行系统或者进程的分析工具。
 
-\subsection{Debuggers}
+\subsection{调试器 Debuggers}
 
 \myindex{\olly}
 \myindex{Radare}
@@ -100,43 +102,41 @@ Tools you use on a live system or during running of a process.
 \myindex{WinDbg}
 
 \begin{itemize}
-\item (Free) \IT{OllyDbg}.
-Very popular user-mode win32 debugger\footnote{\href{http://go.yurichev.com/17032}{ollydbg.de}}.
+\item (免费) \IT{OllyDbg}.
+非常流行的win32用户模式调试器\footnote{\href{http://go.yurichev.com/17032}{ollydbg.de}}.
 \ShortHotKeyCheatsheet: \myref{sec:Olly_cheatsheet}
 
-\item (Free, open-source) \IT{GDB}.
-Not quite popular debugger among reverse engineers, because it's intended mostly for programmers.
-Some commands: \myref{sec:GDB_cheatsheet}.
-There is a visual interface for GDB, ``GDB dashboard''\footnote{\url{https://github.com/cyrus-and/gdb-dashboard}}.
+\item (免费, 开源) \IT{GDB}.
+因为主要是给程序员开发使用的工具，所以在逆向工程师中不是太流行。
+部分命令: \myref{sec:GDB_cheatsheet}.
+GDB也有一个图形界面接口, ``GDB dashboard''\footnote{\url{https://github.com/cyrus-and/gdb-dashboard}}.
 
-\item (Free, open-source) \IT{LLDB}\footnote{\url{http://lldb.llvm.org/}}.
+\item (免费, 开源) \IT{LLDB}\footnote{\url{http://lldb.llvm.org/}}.
 
 \item \IT{WinDbg}\footnote{\url{https://developer.microsoft.com/en-us/windows/hardware/windows-driver-kit}}:
-kernel debugger for Windows.
+Windows内核调试器。
 
-\item (Free, open-source) \IT{Radare} \ac{AKA} rada.re \ac{AKA} r2\footnote{\url{http://rada.re/r/}}.
-A GUI also exists: \IT{ragui}\footnote{\url{http://radare.org/ragui/}}.
+\item (免费, 开源) \IT{Radare} \ac{AKA} rada.re \ac{AKA} r2\footnote{\url{http://rada.re/r/}}.
+也有图形界面程序: \IT{ragui}\footnote{\url{http://radare.org/ragui/}}.
 
-\item (Free, open-source) \IT{tracer}.
+\item (免费, 开源) \IT{tracer}.
 \label{tracer}
-The author often uses \IT{tracer}
+本文作者通常使用 \IT{tracer}
 \footnote{\href{http://go.yurichev.com/17338}{yurichev.com}}
-instead of a debugger.
+而不是调试器。
 
-The author of these lines stopped using a debugger eventually, since all he needs from it is to spot function arguments while
-executing, or registers state at some point.
-Loading a debugger each time is too much, so a small utility called \IT{tracer} was born.
-It works from command line, allows intercepting function execution,
-setting breakpoints at arbitrary places, reading and changing registers state, etc.
+本文作者事实上已经不再使用调试器，因为用调试器的主要目的是查看函数运行中的传参，或者是某个时刻的寄存器状态。
+每次启动运行调试器太费时，所以一个小工具 \IT{tracer} 由此而生。
+这是个命令行工具，支持截断函数运行，在任意位置设置断点，读取和改变寄存器状态等。
 
-N.B.: the \IT{tracer} isn't evolving, because it was developed as a demonstration tool for this book, not as everyday tool.
+注意: 没有对 \IT{tracer} 长期维护的计划，因为这个工具是为了用来展示书中例子而开发的，而不是一个每天必备的工具。
 \end{itemize}
 
-\subsection{Library calls tracing}
+\subsection{库函数跟踪 Library calls tracing}
 
 \IT{ltrace}\footnote{\url{http://www.ltrace.org/}}.
 
-\subsection{System calls tracing}
+\subsection{系统调用跟踪 System calls tracing}
 
 \label{strace}
 \myindex{strace}
@@ -144,9 +144,9 @@ N.B.: the \IT{tracer} isn't evolving, because it was developed as a demonstratio
 \subsubsection{strace / dtruss}
 
 \myindex{syscall}
-It shows which system calls (syscalls(\myref{syscalls})) are called by a process right now.
+显示进程在运行中调用的系统调用 (syscalls(\myref{syscalls}))。
 
-For example:
+例如:
 
 \begin{lstlisting}
 # strace df -h
@@ -161,56 +161,55 @@ mmap2(NULL, 1780508, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb
 \end{lstlisting}
 
 \myindex{\MacOSX}
-\MacOSX has dtruss for doing the same.
+\MacOSX 中的``strace''是dtruss。
 
 \myindex{Cygwin}
-Cygwin also has strace, but as far as it's known, it works only for .exe-files
-compiled for the cygwin environment itself.
+Cygwin也提供strace，但是只能用于在cygwin环境编译下的可执行文件。
 
-\subsection{Network sniffing}
+\subsection{网络嗅探 Network sniffing}
 
-\IT{Sniffing} is intercepting some information you may be interested in.
+\IT{嗅探 Sniffing} 是截断和跟踪你感兴趣的信息。
 
-(Free, open-source) \IT{Wireshark}\footnote{\url{https://www.wireshark.org/}} for network sniffing.
-It has also capability for USB sniffing\footnote{\url{https://wiki.wireshark.org/CaptureSetup/USB}}.
+(免费, 开源) \IT{Wireshark}\footnote{\url{https://www.wireshark.org/}} 用于网络嗅探。
+该工具也支持USB嗅探\footnote{\url{https://wiki.wireshark.org/CaptureSetup/USB}}。
 
-Wireshark has a younger (or older) brother \IT{tcpdump}\footnote{\url{http://www.tcpdump.org/}}, simpler command-line tool.
+Wireshark还有一个古老的兄弟工具 \IT{tcpdump}\footnote{\url{http://www.tcpdump.org/}}, 一个简单的命令行工具。
 
 \subsection{Sysinternals}
 
 \myindex{Sysinternals}
-(Free) Sysinternals (developed by Mark Russinovich)
-\footnote{\url{https://technet.microsoft.com/en-us/sysinternals/bb842062}}.
-At least these tools are important and worth studying: Process Explorer, Handle, VMMap, TCPView, Process Monitor.
+(免费) Sysinternals (由Mark Russinovich开发)
+\footnote{\url{https://technet.microsoft.com/en-us/sysinternals/bb842062}}。
+至少以下重要工具值得学习和研究: Process Explorer, Handle, VMMap, TCPView, Process Monitor。
 
 \subsection{Valgrind}
 
-(Free, open-source) a powerful tool for detecting memory leaks: \url{http://valgrind.org/}.
-Due to its powerful \ac{JIT} mechanism, Valgrind is used as a framework for other tools.
+(免费, 开源) 寻找内存泄漏的强大工具: \url{http://valgrind.org/}。
+因为其强大的 \ac{JIT} 机制, Valgrind也是其他各种工具的运行框架。
 
 % TODO network fuzzing
 
-\subsection{Emulators}
+\subsection{模拟器 Emulators}
 
 \begin{itemize}
-\item (Free, open-source) \IT{QEMU}\footnote{\url{http://qemu.org}}: emulator for various CPUs and architectures.
+\item (免费, 开源) \IT{QEMU}\footnote{\url{http://qemu.org}}: 模拟各种CPU架构。
 
-\item (Free, open-source) \IT{DosBox}\footnote{\url{https://www.dosbox.com/}}: MS-DOS emulator, mostly used for retrogaming.
+\item (免费, 开源) \IT{DosBox}\footnote{\url{https://www.dosbox.com/}}: MS-DOS模拟器，主要用来运行老游戏。 
 
-\item (Free, open-source) \IT{SimH}\footnote{\url{http://simh.trailing-edge.com/}}: emulator of ancient computers, mainframes, etc.
+\item (免费, 开源) \IT{SimH}\footnote{\url{http://simh.trailing-edge.com/}}: 恐龙机，大型机等模拟器。
 \end{itemize}
 
-\section{Other tools}
+\section{其他 Other tools}
 
 \IT{Microsoft Visual Studio Express}
 \footnote{\href{http://go.yurichev.com/17034}{visualstudio.com/en-US/products/visual-studio-express-vs}}:
-Stripped-down free version of Visual Studio, convenient for simple experiments.
+Visual Studio的简化免费版本，对于一些简单的实验，已经足够。
 
-Some useful options: \myref{sec:MSVC_options}.
+一些有用的选项配置: \myref{sec:MSVC_options}。
 
-\section{Something missing here?}
+\section{遗漏 Something missing here?}
 
-If you know a great tool not listed here, please drop me a note:\\
+如果你知道还有什么其他有用的工具，和我说一声:\\
 \TT{\EMAIL}.
 
 \end{document}
