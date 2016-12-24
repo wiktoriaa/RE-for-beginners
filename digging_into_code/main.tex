@@ -98,6 +98,35 @@ Immediately he tried to google its name and he quickly found the function was us
 \EN{A reverse engineer should try to be in programmer's shoes as often as possible. 
 To take his/her viewpoint and ask himself, how would one solve some task the specific case.}
 
+\subsection{\RU{Порядок функций в бинарном коде}\EN{Order of functions in binary code}}
+
+\RU{Все функции расположеные в одном .c или .cpp файле компилируются в соответствующий объектный (.o) файл.
+Линкер впоследствии складывает все нужные объектные файлы вместе, не меняя порядок ф-ций в них.
+Как следствие, если вы видите в коде две или более идущих подряд ф-ций, то это означает, что и в исходном коде они 
+были расположены в одном и том же файле (если только вы не на границе двух объектных файлов, конечно).
+Это может означать, что эти ф-ции имеют что-то общее между собой, что они из одного слоя \ac{API}, из одной библиотеки, итд.}%
+\EN{All functions located in a single .c or .cpp-file are compiled into corresponding object (.o) file.
+Later, linker puts all object files it needs together, not changing order or functions in them.
+As a consequence, if you see two or more consecutive functions, it means, that they were placed together
+in a single source code file (unless you're on border of two object files, of course.)
+This means these functions have something in common, that they are from the same \ac{API} level, from same library, etc.}
+
+\subsection{\EN{Tiny functions}\RU{Крохотные функции}}
+
+\EN{Tiny functions like empty functions (\myref{empty_func})
+or function which returns just ``true'' (1) or ``false'' (0) (\myref{ret_val_func}) are very common,
+and almost all decent compiler tends put only one such function into resulting executable code even if there was several
+similar functions in source code.
+So, whenever you see a tiny function consisting just of \TT{mov eax, 1 / ret}
+which is referenced (and can be called) from many places,
+which are seems unconnected to each other, this may be a result of such optimization.}%
+\RU{Крохотные ф-ции, такие как пустые ф-ции (\myref{empty_func})
+или ф-ции возвращающие только ``true'' (1) или ``false'' (0) (\myref{ret_val_func}) очень часто встречаются,
+и почти все современные компиляторы, как правило, помещают только одну такую ф-цию в исполняемый код,
+даже если в исходном их было много одинаковых.
+Так что если вы видите ф-цию состояющую только из \TT{mov eax, 1 / ret}, которая может вызываться из разных мест,
+которые, судя по всему, друг с другом никак не связаны, это может быть результат подобной оптимизации.}
+
 \subsection{\Cpp}
 
 \ac{RTTI}~(\myref{RTTI})-\RU{информация также может быть полезна для идентификации 
