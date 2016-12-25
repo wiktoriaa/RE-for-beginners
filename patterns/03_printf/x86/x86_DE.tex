@@ -79,8 +79,9 @@ Jetzt muss die \main-Funktion gefunden werden, die sich ganz oben im Code befind
 \label{fig:printf3_olly_1}
 \end{figure}
 
-%Click on the \INS{PUSH EBP} instruction, press F2 (set breakpoint) and press F9 (run).
-%We have to perform these actions in order to skip \ac{CRT}-code, because we aren't really interested in it yet.
+Um den \ac{CRT}-Code zu überspringen (der hier nicht von Interesse ist) müssen
+folgende Schritte ausgeführt werden: Klicken auf die \INS{PUSH EBP}-Anweisung,
+Drücken von F2 (Breakpoint setzen) und Drücken von F9 (Starten
 
 \clearpage
 Sechsmaliges Drücken von F8 (\stepover) überspringt sechs Anweisungen:
@@ -92,10 +93,10 @@ Sechsmaliges Drücken von F8 (\stepover) überspringt sechs Anweisungen:
 \label{fig:printf3_olly_2}
 \end{figure}
 
-%Now the \ac{PC} points to the \INS{CALL printf} instruction.
-%\olly, like other debuggers, highlights the value of the registers which were changed.
-%So each time you press F8, \EIP changes and its value is displayed in red.
-%\ESP changes as well, because the arguments values are pushed into the stack.\\
+Jetzt zeigt der \ac{PC} auf die \INS{CALL printf}-Anweisung.
+\olly hebt, wie andere Debugger auch, den Wert des Registers hervor, welches sich geändert hat.
+Bei jedem Drücken von F8 ändert sich also \EIP und der Wert wird in rot angezeigt.
+\ESP ändert sich ebenfalls, weil die Werte der Argumente auf dem Stack gesichert werden.\\
 \\
 Wo befinden sich die Werte auf dem Stack? Ein Blick auf das untere, rechte Fenster
 des Debuggers liefert die Antwort:
@@ -106,23 +107,24 @@ des Debuggers liefert die Antwort:
 \caption{\olly: Stack nachdem der Wert des Arguments gesichert wurde (Das rote Rechteck wurde vom Autor hinzugefügt)}
 \end{figure}
 
-%We can see 3 columns there: address in the stack, value in the stack and some additional \olly comments. 
-%\olly understands \printf{}-like strings, so it reports the string here and the 3 values \IT{attached} to it.
+Es sind hier drei Spalten sichtbar: Die Adresse im Stack, der Wert im Stack und einige weitere \olly-Kommentare.
+\olly versteht \printf{}-ähnliche Zeichenketten und zeigt sie zusammen mit den drei \IT{angehangenen} Werten an.
 
-%It is possible to right-click on the format string, click on \q{Follow in dump},
-%and the format string will appear in the debugger left-bottom window, which always displays some part of the memory.
-%These memory values can be edited.
-%It is possible to change the format string, in which case the result of our example would be different.
-%It is not very useful in this particular case, but it could be good as an exercise so you start building a feel of how everything works here.
+Es ist möglich einen Rechtsklick auf den Formatstring und anschließend auf \q{Follow in dump} zu klicken.
+Der Formatstring wird in dem linken-unterem Debugger erscheinen, welches immer einen Teil des Speichers zeigt.
+Diese Speicherwerte können editiert werden.
+Es ist möglich den Formatstring zu verändern, was die Ausgabe dieses Beispiels ebenfalls verändern würde.
+In diesem Fall ist das nicht sehr nützlich, aber es könnte eine gute Übung sein um ein Gefühl dafür zu
+bekommen wie hier alles funktioniert.
 
 \clearpage
-%Press F8 (\stepover).
+Drücken von F8 (\stepover).
 
-%We see the following output in the console:
+Es erscheint die folgende Ausgabe auf der Konsole:
 
-%\lstinputlisting{patterns/03_printf/x86/console.txt}
+\lstinputlisting{patterns/03_printf/x86/console.txt}
 
-%Let's see how the registers and stack state have changed: 
+Nachfolgend die Änderungen in den Registern und der Status des Stacks:
 
 \begin{figure}[H]
 \centering
@@ -131,17 +133,17 @@ des Debuggers liefert die Antwort:
 \label{fig:printf3_olly_3}
 \end{figure}
 
-%Register \EAX now contains \GTT{0xD} (13).
-%That is correct, since \printf returns the number of characters printed. 
-%The value of \EIP has changed: indeed, now it contains the address of the instruction coming after 
-%\INS{CALL printf}.
-%\ECX and \EDX values have changed as well.
-%Apparently, the \printf function's hidden machinery used them for its own needs.
+Das Register \EAX enthält nun \GTT{0xD} (13).
+Dies ist auch richtig, weil \printf die Anzahl der ausgegeben Zeichen zurück gibt.
+Der Wert von \EIP hat sich verändert: er enthält nun die Adresse der Anweisung, die
+nach \INS{CALL printf} kommt.
+Die Werte von \ECX und \EDX haben sich ebenfalls geändert.
+Offensichtlich nutzt die \printf-Funktion diese für interne Zwecke.
 
-%A very important fact is that neither the \ESP value, nor the stack state have been changed!
-%We clearly see that the format string and corresponding 3 values are still there.
-%This is indeed the \IT{cdecl} calling convention behavior: \gls{callee} does not return \ESP back to its previous value.
-%The \gls{caller} is responsible to do so.
+Ein wichtiger Punkt ist, dass weder der \ESP-Wert, noch der Status des Stacks sich geändert haben!
+Es ist klar erkennbar, dass der Formatstring und die drei entsprechenden Werte immer noch da sind.
+Dies ist das Verhalten der \IT{cdecl}-Aufrufkonvention: \gls{callee} setzt \ESP nicht auf den vorherigen
+Wert zurück. Dies ist die Aufgabe der \gls{caller}.
 
 \clearpage
 Durch erneutes Drücken von F8 wird die Anweisung \INS{ADD ESP, 10} ausgeführt:
@@ -153,15 +155,14 @@ Durch erneutes Drücken von F8 wird die Anweisung \INS{ADD ESP, 10} ausgeführt:
 \label{fig:printf3_olly_4}
 \end{figure}
 
-%\ESP has changed, but the values are still in the stack!
-%Yes, of course; no one needs to set these values to zeros or something like that.
-%Everything above the stack pointer (\ac{SP}) 
-%is \IT{noise} or \IT{\garbage{}} and has no meaning at all.
-%It would be time consuming to clear the unused stack entries anyway, and no one really needs to.
+\ESP hat sich geändert, aber die Werte sind immer noch auf dem Stack!
+Das liegt natürlich daran, dass es keine Notwendigkeit gibt diese Werte auf Null zu setzen oder Ähnliches.
+Alle oberhalb des Stack-Pointers (\ac{SP}) ist \IT{Rauschen} oder \IT{\garbage{}} und hat keine Bedeutung.
+Es wäre zeitintensiv und unnötig die ungenutzten Stack-Einträge zurück zu setzen.
 
 \myparagraph{GCC}
 
-%Now let's compile the same program in Linux using GCC 4.4.1 and take a look at what we have got in \IDA:
+Nun wird das gleiche Programm unter Linux mit GCC 4.4.1 kompiliert und in \IDA untersucht:
 
 \begin{lstlisting}
 main            proc near
@@ -222,7 +223,7 @@ Breakpoint 1 at 0x80482f0
 \end{lstlisting}
 
 Ausführen.
-%We don't have the \printf function source code here, so \ac{GDB} can't show it, but may do so.
+Im Quellcode ist keine \printf-Funktion, also kann \ac{GDB} sie nicht anzeigen.
 
 \begin{lstlisting}
 (gdb) run
@@ -232,7 +233,7 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
 29	printf.c: No such file or directory.
 \end{lstlisting}
 
-%Print 10 stack elements. The most left column contains addresses on the stack.
+Ausgeben von 10 Stack-Einträgen. Die Spalte ganz links enthält die Adressen auf dem Stack.
 
 \begin{lstlisting}
 (gdb) x/10w $esp
@@ -241,8 +242,8 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
 0xbffff13c:	0xb7e29905	0x00000001
 \end{lstlisting}
 
-%The very first element is the \ac{RA} (\GTT{0x0804844a}).
-%We can verify this by disassembling the memory at this address:
+Das allererste Element ist \ac{RA} (\GTT{0x0804844a}).
+Dies kann durch das Disassemblieren des Speichers an dieser Stelle überprüft werden:
 
 \begin{lstlisting}[label=NOP_as_XCHG_example]
 (gdb) x/5i 0x0804844a
@@ -253,23 +254,23 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
    0x8048453:	xchg   %ax,%ax
 \end{lstlisting}
 
-%The two \INS{XCHG} instructions are idle instructions, analogous to \ac{NOP}s.
+Die beiden \INS{XCHG}-Anweisungen sind Idle-Anweisungen, analog zu \ac{NOP}.
 
-%The second element (\GTT{0x080484f0}) is the format string address:
+Das zweite Element (\GTT{0x080484f0}) ist die Adresse des Formatstrings:
 
 \begin{lstlisting}
 (gdb) x/s 0x080484f0
 0x80484f0:	"a=%d; b=%d; c=%d"
 \end{lstlisting}
 
-%Next 3 elements (1, 2, 3) are the \printf arguments.
-%The rest of the elements could be just \q{garbage} on the stack, 
-%but could also be values from other functions, their local variables, etc.
-%We can ignore them for now.
+Die nächsten drei Elemente (1, 2, 3) sind die \printf-Argumente.
+Der Rest der Elemente kann lediglich \q{garbage} auf dem Stack sein,
+oder auch Werte von anderen Funktionen, deren lokale Variablen usw.
+An dieser Stelle können sie ignoriert werden.
 
-%Run \q{finish}. 
-%The command instructs GDB to \q{execute all instructions until the end of the function}.
-%In this case: execute till the end of \printf.
+Ausführen von \q{finish}.
+Dieses Kommando führt dazu, dass GDB \q{alle Anweisungen bis zum Ende der Funktion ausführt}.
+In diesem Fall: Ausführen bis zum Ende von \printf.
 
 \begin{lstlisting}
 (gdb) finish
@@ -279,19 +280,18 @@ main () at 1.c:6
 Value returned is $2 = 13
 \end{lstlisting}
 
-%\ac{GDB} shows what \printf returned in \EAX (13).
-%This is the number of characters printed out, just like in the \olly example.
+\ac{GDB} zeigt was \printf in \EAX zurück gibt (13).
+Die ist die Anzahl der ausgegebenen Zeichen, genau wie im \olly-Beispiel.
 
-%We also see \q{return 0;} and the information that this expression is in the \GTT{1.c} file at the line 6.
-%Indeed, the \GTT{1.c} file is located in the current directory, and \ac{GDB} finds the string there.
-%How does \ac{GDB} know which C-code line is being currently executed?
-%This is due to the fact that the compiler,
-%while generating debugging information, also saves a table of relations between source code line
-%numbers and instruction addresses.
-%GDB is a source-level debugger, after all.
+Sichtbar ist auch \q{return 0;} und die Information das dieser Ausdruck in der Datei \GTT{1.c} in Zeile 6 ist.
+\GTT{1.c} befindet sich in aktuellen Verzeichnis und \ac{GDB} kann die Zeichenkette dort finden.
+Wie erkennt \ac{GDB} welche C-Zeile gerade ausgeführt wird?
+Dies kommt von der Tatsache, dass der Compiler beim Generieren der Debugging-Informationen auch eine
+Tabelle mit Verweisen zwischen dem Quellcode-Zeilen und den Anweisungsadressen anlegt.
+GDB ist also ein Debugger auf Quellcode-Ebene.
 
-%Let's examine the registers.
-%13 in \EAX:
+Schauen wir uns die Register an.
+13 in \EAX:
 
 \begin{lstlisting}
 (gdb) info registers
@@ -307,8 +307,8 @@ eip            0x804844a	0x804844a <main+45>
 ...
 \end{lstlisting}
 
-%Let's disassemble the current instructions.
-%The arrow points to the instruction to be executed next.
+Nachfolgend das Disassemblieren der aktuellen Anweisung.
+Der Pfeil zeigt auf die nächste Anweisung die ausgeführt wird.
 
 \begin{lstlisting}
 (gdb) disas
@@ -328,8 +328,8 @@ Dump of assembler code for function main:
 End of assembler dump.
 \end{lstlisting}
 
-%\ac{GDB} uses AT\&T syntax by default.
-%But it is possible to switch to Intel syntax:
+\ac{GDB} nutzt standardmäßig den AT\&T-Syntax.
+Es ist aber möglich auf den Intel-Syntax zu wechseln:
 
 \begin{lstlisting}
 (gdb) set disassembly-flavor intel
