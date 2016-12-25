@@ -1,83 +1,43 @@
 ﻿\subsection{How it works}
 
-That's how division can be replaced by multiplication and division with $2^{n}$ numbers:
+From school-level mathematics, we can remember that division by 9 can be replaced by multiplication by $\frac{1}{9}$.
+In fact, sometimes compilers do so for floating-point arithmetics, for example, \INS{FDIV} instruction in x86 code
+can be replaced by \INS{FMUL}.
+At least MSVC 6.0 will replace division by 9 by multiplication by $0.111111...$ and sometimes it's hard to be sure,
+what operation was in original source code.
 
-\[
-	result = 
-	\frac{input}{divisor} = 
-	\frac{input \cdot \frac{2^{n}}{divisor}}{2^{n}} = 
-	\frac{input \cdot M}{2^{n}}
-\]
+But when we operate over integer values and integer CPU registers, we can't use fractions.
+However, we can rework fraction like that:
 
-Where $M$ is a \IT{magic} coefficient.
+\begin{center}
+{\large $result = \frac{x}{9} = x \cdot \frac{1}{9} = x \cdot \frac{1 \cdot MagicNumber}{9 \cdot MagicNumber}$}
+\end{center}
 
-This is how $M$ can be computed:
+Given the fact that division by $2^n$ is very fast (using shifts), we now should find that $MagicNumber$,
+for which the following
+equation will be true: $2^n = 9 \cdot MagicNumber$.
 
-\[
-	M = \frac{2^{n}}{divisor}
-\]
+Division by $2^{32}$ is somewhat hidden: lower 32-bit of product in EAX is not used (dropped), only higher 32-bit of
+product (in EDX) is used and then shifted by additional 1 bit.
 
-So these code snippets usually have this form:
+In other words, the assembly code we have just seen multiplicates by {\Large $\frac{954437177}{2^{32+1}}$},
+or divides by {\Large $\frac{2^{32+1}}{954437177}$}.
+To find divisor we just have to divide numerator by denominator.
+Using Wolfram Alpha, we can get 8.99999999.... as result (which is close to 9).
 
-\[
-	result = \frac{input \cdot M}{2^{n}}
-\]
-
-%
-Division by $2^{n}$ is usually done by simply shifting to the right.
-
-If $n<32$, then the low 32-bit part of the \gls{product} (in \EAX) is shifted.
-If $n\geq{}32$, then the lower 32-bit part of the \gls{product} is simply ignored, and higher 32-bit
-part (in \EDX) is shifted by $n-32$ bits right.
-
-$n$ is chosen in order to minimize the error.
-
-When doing signed division, the sign of the multiplication result is also added to the output result.
-
-Take a look at the difference:
-
-\begin{lstlisting}
-int f3_32_signed(int a)
-{
-	return a/3;
-};
-
-unsigned int f3_32_unsigned(unsigned int a)
-{
-	return a/3;
-};
-\end{lstlisting}
-
-In the unsigned version of the function, the \IT{magic} coefficient is \TT{0xAAAAAAAB} 
-and the multiplication result is divided by $2^{33}$.
-
-In the signed version of the function, the \IT{magic} coefficient is \TT{0x55555556} 
-and the multiplication result is divided by $2^{32}$.
-There are no division instruction though: the result is just taken from \EDX. 
-
-The sign is also taken from the multiplication result: the high 32 bits of the result are shifted by 31
-(leaving the sign in the least significant bit of \EAX).
-1 is added to the final result if the sign is negative, for result correction.
-
-\lstinputlisting[caption=\Optimizing MSVC 2012]{\CURPATH/2_EN.asm}
-
-\subsubsection{More theory}
-
-It works, because that is how it's possible to replace division by multiplication:
-
-\[
-	\frac{x}{c} = x\frac{1}{c}
-\]
-
-$\frac{1}{c}$ is called \IT{multiplicative inverse} and can be precomputed by compiler during compilation
-time.
-
-But this is for real numbers
-What about integers?
-It's possible to find \IT{multiplicative inverse} for integer in the environment of modular arithmetic
-\footnote{\href{http://go.yurichev.com/17359}{Wikipedia}}.
-\ac{CPU} registers fits nicely: each is limited by 32 or 64 bits, so almost any arithmetic operation on registers are in fact
-operations on modulo $2^{32}$ or $2^{64}$.
+% TODO ref to https://yurichev.com/blog/signed_division_using_shifts/
 
 Read more about it in \InSqBrackets{\HenryWarren 10-3}.
+
+Couple of words about better understanding.
+Many people miss ``hidden'' division by $2^{32}$ or $2^{64}$,
+when lower 32-bit part (or 64-bit part) of product is not used.
+Also, there is misconception that modulo inverse is used here. This is close, but not the same thing.
+Extended Euclidean algorithm is usually used to find \textit{magic coefficient}, but in fact,
+this algorithm is rather used to solve the equation. You can solve it using any other method.
+For example, the author used Z3 SMT solver to find \textit{coefficient}\footnote{\url{https://yurichev.com/tmp/SAT_SMT_DRAFT.pdf}}.
+This is overkill, but it was used it for demonstration.
+Anyway, Extended Euclidean algorithm is probably the most efficient way to solve it.
+Also, needless to mention, the equation is unsolvable for some divisors, because this is diophantine equation
+(i.e., equation allowing result to be only integer), since we work on integer CPU registers, after all.
 
