@@ -86,8 +86,13 @@ It's interesting to know that 0.0 in IEEE 754 is represented as 32 zero bits (fo
 So in order to set a floating point variable to 0.0 in register or memory, one can use \MOV or \TT{XOR reg, reg} instruction.
 \myindex{\CStandardLibrary!memset()}
 This is suitable for structures where many variables present of various data types.
-With usual memset() function one can set all integer variables to 0, all boolean variables to \IT{false},
-and all floating point variables (of any precision) to 0.0.
+With usual memset() function one can set all integer variables to 0, all boolean variables to \IT{false}, all pointers
+to NULL, and all floating point variables (of any precision) to 0.0.
+
+\subsection{Copying}
+
+One may think inertially that \INS{FLD}/\INS{FST} instructions must be used to load and store (and hence, copy) IEEE 754 values.
+Nevertheless, same can be achieved easier by usual \INS{MOV} instruction, which, of course, copies values bitwisely.
 
 \subsection{Stack, calculators and reverse Polish notation}
 
