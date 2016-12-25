@@ -262,7 +262,29 @@ N.B.: здесь значения записываются в 32-битные ч
 Теоретически, после возврата из \gls{callee},
 функция-\gls{caller} могла бы получить модифицированный аргумент и использовать его как-то.
 Может быть, если бы она была написана на языке ассемблера.
-Но стандарты языков \CCpp не предлагают никакого способа доступиться к ним.
+
+Например, такой код генерирует обычный компилятор \CCpp:
+
+\begin{lstlisting}
+	push	456	; will be b
+	push	123	; will be a
+	call	f	; f() modifies its first argument
+	add	esp, 2*4
+\end{lstlisting}
+
+Мы можем переписать так:
+
+\begin{lstlisting}
+	push	456	; will be b
+	push	123	; will be a
+	call	f	; f() modifies its first argument
+	pop	eax
+	add	esp, 4
+	; EAX=1st argument of f() modified in f()
+\end{lstlisting}
+
+Трудно представить, кому может это понадобиться, но на практике это возможно.
+Так или иначе, стандарты языков \CCpp не предлагают никакого способа это сделать.
 
 % sections
 \input{OS/calling_conventions/ptr_to_argument/main_RU}
