@@ -9,7 +9,7 @@
 
 Он не защищен от ошибок: символ отличный от цифры приведет к неверному результату.
 
-\lstinputlisting{\CURPATH/atoi.c}
+\lstinputlisting[style=customc]{\CURPATH/atoi.c}
 
 То, что делает алгоритм это просто считывает цифры слева направо.
 
@@ -33,7 +33,7 @@
 
 \subsubsection{\Optimizing MSVC 2013 x64}
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{\CURPATH/atoi.asm.MSVC2013.x64.Ox_RU}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{\CURPATH/atoi.asm.MSVC2013.x64.Ox_RU}
 
 Символы загружаются в двух местах: первый символ и все последующие символы.
 
@@ -56,15 +56,15 @@ MSVC иногда использует инструкцию ADD с отрица�
 
 Одной было бы достаточно.
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{\CURPATH/atoi.s.GCC491.O3.x64_RU}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasm]{\CURPATH/atoi.s.GCC491.O3.x64_RU}
 
 \subsubsection{\OptimizingKeilVI (\ARMMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{\CURPATH/atoi.s.ARM.O3_RU}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{\CURPATH/atoi.s.ARM.O3_RU}
 
 \subsubsection{\OptimizingKeilVI (\ThumbMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{\CURPATH/atoi.s.thumb.O3_RU}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{\CURPATH/atoi.s.thumb.O3_RU}
 
 Интересно, из школьного курса математики мы можем помнить, что порядок операций сложения и вычитания
 не играет роли.
@@ -78,18 +78,18 @@ MSVC иногда использует инструкцию ADD с отрица�
 
 Компилятор для ARM64 может использовать суффикс инструкции, задающий пре-инкремент:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{\CURPATH/atoi.s.GCC49.ARM64.O3_RU}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64,style=customasm]{\CURPATH/atoi.s.GCC49.ARM64.O3_RU}
 
 \subsection{Немного расширенный пример}
 
 Новый пример более расширенный, теперь здесь есть проверка знака \q{минус} в самом начале,
 и еще он может сообщать об ошибке если не-цифра была найдена во входной строке:
 
-\lstinputlisting{\CURPATH/atoi2.c}
+\lstinputlisting[style=customc]{\CURPATH/atoi2.c}
 
 \subsubsection{\Optimizing GCC 4.9.1 x64}
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{\CURPATH/atoi2.s.GCC491.O3.x64_RU}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasm]{\CURPATH/atoi2.s.GCC491.O3.x64_RU}
 
 \myindex{x86!\Instructions!NEG}
 Если знак \q{минус} был найден в начале строки, инструкция NEG будет исполнена в конце.
@@ -130,7 +130,7 @@ $46-48=-2$ если считать результат за знаковое чи
 
 \subsubsection{\OptimizingKeilVI (\ARMMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),numbers=left]{\CURPATH/atoi2.s.ARM.O3_RU}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),numbers=left,style=customasm]{\CURPATH/atoi2.s.ARM.O3_RU}
 
 В 32-битном ARM нет инструкции NEG, так что вместо этого используется операция \q{Reverse Subtraction}
 (строка 31).

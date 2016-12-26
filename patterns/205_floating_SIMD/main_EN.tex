@@ -23,11 +23,11 @@ We are going to reuse the examples from the FPU section here: \myref{sec:FPU}.
 
 \subsection{Simple example}
 
-\lstinputlisting{patterns/12_FPU/1_simple/simple.c}
+\lstinputlisting[style=customc]{patterns/12_FPU/1_simple/simple.c}
 
 \subsubsection{x64}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/simple_MSVC_2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/simple_MSVC_2012_x64_Ox.asm}
 
 The input floating point values are passed in the \XMM{0}-\XMM{3} registers,
 all the rest---via the stack
@@ -54,7 +54,7 @@ The result of the function's execution in type \Tdouble is left in the in \XMM{0
 \\
 That is how non-optimizing MSVC works:
 
-\lstinputlisting[caption=MSVC 2012 x64]{patterns/205_floating_SIMD/simple_MSVC_2012_x64.asm}
+\lstinputlisting[caption=MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/simple_MSVC_2012_x64.asm}
 
 \myindex{Shadow space}
 Slightly redundant. 
@@ -66,9 +66,9 @@ GCC produces the same code.
 
 Let's also compile this example for x86. Despite the fact it's generating for x86, MSVC 2012 uses SSE2 instructions:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2012 x86]{patterns/205_floating_SIMD/simple_MSVC_2012_x86.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2012 x86,style=customasm]{patterns/205_floating_SIMD/simple_MSVC_2012_x86.asm}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x86]{patterns/205_floating_SIMD/simple_MSVC_2012_x86_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x86,style=customasm]{patterns/205_floating_SIMD/simple_MSVC_2012_x86_Ox.asm}
 
 It's almost the same code, however, there are some differences related to calling conventions:
 1) the arguments are passed not in XMM registers, but in the stack, like in the FPU examples (\myref{sec:FPU});
@@ -131,12 +131,12 @@ But of course, it's possible to switch the register format and to see their cont
 \clearpage
 \subsection{Passing floating point number via arguments}
 
-\lstinputlisting{patterns/12_FPU/2_passing_floats/pow.c}
+\lstinputlisting[style=customc]{patterns/12_FPU/2_passing_floats/pow.c}
 
 They are passed in the lower halves
 of the \XMM{0}-\XMM{3} registers.
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/pow_MSVC_2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/pow_MSVC_2012_x64_Ox.asm}
 
 \myindex{x86!\Instructions!MOVSD}
 \myindex{x86!\Instructions!MOVSDX}
@@ -151,7 +151,7 @@ Why?
 Maybe because 
 \printf{}---is a variable arguments function?
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/205_floating_SIMD/pow_GCC446_x64_O3_EN.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasm]{patterns/205_floating_SIMD/pow_GCC446_x64_O3_EN.s}
 
 GCC generates clearer output. 
 The value for \printf is passed in \XMM{0}. 
@@ -161,11 +161,11 @@ just as the standard requires \SysVABI.
 
 \subsection{Comparison example}
 
-\lstinputlisting{patterns/12_FPU/3_comparison/d_max.c}
+\lstinputlisting[style=customc]{patterns/12_FPU/3_comparison/d_max.c}
 
 \subsubsection{x64}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64_Ox.asm}
 
 \Optimizing MSVC generates a code very easy to understand.
 
@@ -176,7 +176,7 @@ Values and Set EFLAGS}. Essentially, that is what it does.\\
 \NonOptimizing MSVC generates more redundant code,
 but it is still not hard to understand:
 
-\lstinputlisting[caption=MSVC 2012 x64]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64.asm}
+\lstinputlisting[caption=MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64.asm}
 
 \myindex{x86!\Instructions!MAXSD}
 However, GCC 4.4.6 
@@ -184,14 +184,14 @@ did more optimizations and used the \TT{MAXSD} (\q{Return Maximum Scalar
 Double-Precision Floating-Point Value}) instruction,
 which just choose the maximum value!
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasm]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
 
 \clearpage
 \subsubsection{x86}
 
 Let's compile this example in MSVC 2012 with optimization turned on:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x86]{patterns/205_floating_SIMD/d_max_MSVC_2012_x86_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x86,style=customasm]{patterns/205_floating_SIMD/d_max_MSVC_2012_x86_Ox.asm}
 
 Almost the same, but the values of $a$ and $b$ are taken from the stack and the function result 
 is left in \ST{0}.
@@ -213,7 +213,7 @@ Let's revisit the \q{calculating machine epsilon} example for \Tdouble \lstref{m
 
 Now we compile it for x64:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/205_floating_SIMD/epsilon_double_MSVC_2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/epsilon_double_MSVC_2012_x64_Ox.asm}
 
 There is no way to add 1 to a value in 128-bit XMM register, so it must be placed into memory.
 

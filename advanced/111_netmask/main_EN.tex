@@ -57,14 +57,14 @@ This notation just defines the number of bits the mask has, starting at the \ac{
 
 Here is a small example, which calculates the network address by applying the network mask to the host address.
 
-\lstinputlisting{\CURPATH/netmask.c}
+\lstinputlisting[style=customc]{\CURPATH/netmask.c}
 
 \subsection{calc\_network\_address()}
 
 \TT{calc\_network\_address()} function is simplest one: 
 it just ANDs the host address with the network mask, resulting in the network address.
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,numbers=left]{\CURPATH/calc_network_address_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,numbers=left,style=customasm]{\CURPATH/calc_network_address_MSVC_2012_Ox.asm}
 
 At line 22 we see the most important \AND---here the network address is calculated.
 
@@ -102,13 +102,13 @@ a value like \TT{0xddccbbaa}.
 
 And this is how it's done by non-optimizing MSVC 2012:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2012]{\CURPATH/form_IP_MSVC_2012_EN.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2012,style=customasm]{\CURPATH/form_IP_MSVC_2012_EN.asm}
 
 Well, the order is different, but, of course, the order of the operations doesn't matter.
 
 \Optimizing MSVC 2012 does essentially the same, but in a different way:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0]{\CURPATH/form_IP_MSVC_2012_Ox_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,style=customasm]{\CURPATH/form_IP_MSVC_2012_Ox_EN.asm}
 
 We could say that each byte is written to the lowest 8 bits of the return value, 
 and then the return value is shifted left by one byte at each step.
@@ -130,11 +130,11 @@ It's all usually done by bit shifting and ORing.
 Slicing works somewhat simpler: just shift input value by 24, 16, 8 or 0 bits, take the 
 bits from zeroth to seventh (lowest byte), and that's it:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2012]{\CURPATH/print_as_IP_MSVC_2012_EN.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2012,style=customasm]{\CURPATH/print_as_IP_MSVC_2012_EN.asm}
 
 \Optimizing MSVC 2012 does almost the same, but without unnecessary reloading of the input value:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0]{\CURPATH/print_as_IP_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,style=customasm]{\CURPATH/print_as_IP_MSVC_2012_Ox.asm}
 
 \subsection{form\_netmask() and set\_bit()}
 
@@ -146,7 +146,7 @@ We will also write a separate function \TT{set\_bit()}.
 It's a not very good idea to create a function
 for such primitive operation, but it would be easy to understand how it all works.
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0]{\CURPATH/form_netmask_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,style=customasm]{\CURPATH/form_netmask_MSVC_2012_Ox.asm}
 
 \TT{set\_bit()} is primitive: it just shift left 1 to number of bits we need and then 
 ORs it with the \q{input} value.

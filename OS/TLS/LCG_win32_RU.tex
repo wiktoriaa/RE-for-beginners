@@ -5,12 +5,12 @@
 Одно из решений --- это добавить модификатор \TT{\_\_declspec( thread )} к глобальной переменной, 
 и теперь она будет выделена в \ac{TLS} (строка 9):
 
-\lstinputlisting[numbers=left]{OS/TLS/win32/rand_uninit.c}
+\lstinputlisting[numbers=left,style=customc]{OS/TLS/win32/rand_uninit.c}
 
 Hiew показывает что в исполняемом файле теперь есть новая PE-секция: \TT{.tls}.
 % TODO1 hiew screenshot?
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x86]{OS/TLS/win32/rand_x86_uninit.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x86,style=customasm]{OS/TLS/win32/rand_x86_uninit.asm}
 
 \TT{rand\_state} теперь в \ac{TLS}-сегменте и у каждого потока есть своя версия этой переменной.
 
@@ -27,7 +27,7 @@ Hiew показывает что в исполняемом файле тепер
 \myindex{x86!\Registers!GS}
 В Win64 используется селектор \TT{GS:} и адрес \ac{TLS} теперь 0x58:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{OS/TLS/win32/rand_x64_uninit.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{OS/TLS/win32/rand_x64_uninit.asm}
 
 \myparagraph{Инициализированные данные в \ac{TLS}}
 
@@ -35,7 +35,7 @@ Hiew показывает что в исполняемом файле тепер
 и если программист забудет инициализировать генератор, то \TT{rand\_state} все же будет инициализирована какой-то
 константой (строка 9):
 
-\lstinputlisting[numbers=left]{OS/TLS/win32/rand_init.c}
+\lstinputlisting[numbers=left,style=customc]{OS/TLS/win32/rand_init.c}
 
 Код ничем не отличается от того, что мы уже видели, но вот что мы видим в IDA:
 
@@ -74,7 +74,7 @@ Hiew показывает что в исполняемом файле тепер
 
 Функция будет инициализировать \ac{PRNG} значением возвращенным функцией \TT{GetTickCount()}.
 
-\lstinputlisting{OS/TLS/win32/rand_TLS_callback.c}
+\lstinputlisting[style=customc]{OS/TLS/win32/rand_TLS_callback.c}
 
 Посмотрим в IDA:
 

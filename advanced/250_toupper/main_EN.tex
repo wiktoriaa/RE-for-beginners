@@ -3,7 +3,7 @@
 
 Another very popular function transforms a symbol from lower case to upper case, if needed:
 
-\lstinputlisting{\CURPATH/toupper.c}
+\lstinputlisting[style=customc]{\CURPATH/toupper.c}
 
 The \TT{'a'+'A'} expression is left in the source code for better readability, it will be 
 optimized by compiler, of course
@@ -31,7 +31,7 @@ For better understanding, the reader may take a look at the 7-bit standard \ac{A
 
 There are also some minor compiler artifact:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2013 (x64),numbers=left]{\CURPATH/MSVC_2013_x64.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2013 (x64),numbers=left,style=customasm]{\CURPATH/MSVC_2013_x64.asm}
 
 It's important to notice that the input byte is loaded into a 64-bit local stack slot at line 3.
 
@@ -45,14 +45,14 @@ The last \TT{MOVZX} instruction at line 15 takes the byte from the local stack s
 
 \NonOptimizing GCC does mostly the same:
 
-\lstinputlisting[caption=\NonOptimizing GCC 4.9 (x64)]{\CURPATH/GCC_49_x64_O0.s}
+\lstinputlisting[caption=\NonOptimizing GCC 4.9 (x64),style=customasm]{\CURPATH/GCC_49_x64_O0.s}
 
 \subsubsection{One comparison operation}
 \label{toupper_one_comparison}
 
 \Optimizing MSVC does a better job, it generates only one comparison operation:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 (x64)]{\CURPATH/MSVC_2013_Ox_x64.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 (x64),style=customasm]{\CURPATH/MSVC_2013_Ox_x64.asm}
 
 It was explained earlier how to replace the two comparison operations with a single one: \myref{one_comparison_instead_of_two}.
 
@@ -76,7 +76,7 @@ In contrast the original algorithm uses two comparison operations plus one subtr
 \Optimizing GCC is even better, it gets rid of the jumps (which is good: \myref{branch_predictors}) 
 by using the CMOVcc instruction:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 (x64),numbers=left]{\CURPATH/GCC_49_x64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 (x64),numbers=left,style=customasm]{\CURPATH/GCC_49_x64_O3.s}
 
 At line 3 the code prepares the subtracted value in advance, as if the conversion will always happen.
 
@@ -89,7 +89,7 @@ Advance subtracting is a price the compiler pays for the absence of conditional 
 
 \Optimizing Keil for ARM mode also generates only one comparison:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{\CURPATH/Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{\CURPATH/Keil_ARM_O3.s}
 
 \myindex{ARM!\Instructions!SUBcc}
 \myindex{ARM!\Instructions!ANDcc}
@@ -98,7 +98,7 @@ They also do the actual conversion.
 
 \Optimizing Keil for Thumb mode generates only one comparison operation as well:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{\CURPATH/Keil_thumb_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{\CURPATH/Keil_thumb_O3.s}
 
 \myindex{ARM!\Instructions!LSLS}
 \myindex{ARM!\Instructions!LSLR}
@@ -110,9 +110,9 @@ that loads the 0xFF constant into a register plus an AND instruction.
 
 \subsubsection{GCC for ARM64}
 
-\lstinputlisting[caption=\NonOptimizing GCC 4.9 (ARM64)]{\CURPATH/GCC_49_ARM64_O0.s}
+\lstinputlisting[caption=\NonOptimizing GCC 4.9 (ARM64),style=customasm]{\CURPATH/GCC_49_ARM64_O0.s}
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64)]{\CURPATH/GCC_49_ARM64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64),style=customasm]{\CURPATH/GCC_49_ARM64_O3.s}
 
 \subsection{Summary}
 

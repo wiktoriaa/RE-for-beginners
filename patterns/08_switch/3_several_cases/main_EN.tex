@@ -2,14 +2,14 @@
 
 Here is a very widespread construction: several \IT{case} statements for a single block:
 
-\lstinputlisting{patterns/08_switch/3_several_cases/several_cases.c}
+\lstinputlisting[style=customc]{patterns/08_switch/3_several_cases/several_cases.c}
 
 It's too wasteful to generate a block for each possible case,
 so what is usually done is to generate each block plus some kind of dispatcher.
 
 \subsubsection{MSVC}
 
-\lstinputlisting[caption=\Optimizing MSVC 2010,numbers=left]{patterns/08_switch/3_several_cases/several_cases_MSVC_2010_Ox_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010,numbers=left,style=customasm]{patterns/08_switch/3_several_cases/several_cases_MSVC_2010_Ox_EN.asm}
 
 We see two tables here: the first table (\TT{\$LN10@f}) is an index table, and the second one (\TT{\$LN11@f}) is an array of pointers to blocks.
 
@@ -53,7 +53,7 @@ Let's recall that all ARM64 instructions have a size of 4 bytes.
 GCC is uses the fact that all offsets in my tiny example are in close proximity to each other.
 So the jump table consisting of single bytes.
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{patterns/08_switch/3_several_cases/ARM64_GCC491_O3_EN.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64,style=customasm]{patterns/08_switch/3_several_cases/ARM64_GCC491_O3_EN.s}
 
 Let's compile this example to object file and open it in \IDA. Here is the jump table:
 

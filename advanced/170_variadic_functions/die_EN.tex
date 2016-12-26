@@ -14,14 +14,14 @@ That's why there are functions with \q{v} in name.
 
 One of them is \IT{vprintf()}: it takes a format-string and a pointer to a variable of type \TT{va\_list}:
 
-\lstinputlisting{\CURPATH/die.c}
+\lstinputlisting[style=customc]{\CURPATH/die.c}
 
 By closer examination, we can see that \TT{va\_list} is a pointer to an array.
 Let's compile:
 
-\lstinputlisting[caption=\Optimizing MSVC 2010]{\CURPATH/die_MSVC2010_Ox_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010,style=customasm]{\CURPATH/die_MSVC2010_Ox_EN.asm}
 
 We see that all our function does is just taking a pointer to the arguments and
 passing it to \IT{vprintf()}, and that function is treating it like an infinite array of arguments!
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{\CURPATH/die_MSVC2012_x64_Ox_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{\CURPATH/die_MSVC2012_x64_Ox_EN.asm}

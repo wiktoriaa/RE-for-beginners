@@ -9,7 +9,7 @@ Here is how bits are located in the \Tfloat type in IEEE 754 form:
 The sign of number is in the \ac{MSB}. 
 Will it be possible to change the sign of a floating point number without any FPU instructions?
 
-\lstinputlisting{patterns/14_bitfields/35_set_reset_FPU/abs.c}
+\lstinputlisting[style=customc]{patterns/14_bitfields/35_set_reset_FPU/abs.c}
 
 We need this trickery in \CCpp to copy to/from \Tfloat value without actual conversion.
 So there are three functions: my\_abs() resets \ac{MSB}; \TT{set\_sign()} sets \ac{MSB} and negate() flips it.
@@ -20,7 +20,7 @@ So there are three functions: my\_abs() resets \ac{MSB}; \TT{set\_sign()} sets \
 
 The code is pretty straightforward:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_Ox.asm}
 
 An input value of type \Tfloat is taken from the stack, but treated as an integer value.
 
@@ -31,7 +31,7 @@ Finally, the modified value is loaded into \TT{ST0}, because floating-point numb
 
 Now let's try optimizing MSVC 2012 for x64:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_x64_Ox.asm}
 
 \myindex{x86!\Instructions!BTR}
 \myindex{x86!\Instructions!BTS}
@@ -62,7 +62,7 @@ One single \LUI instruction is used to load 0x80000000 into a register, because
 
 \myparagraph{\OptimizingKeilVI (\ARMMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_ARM_O3_EN.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_ARM_O3_EN.s}
 
 So far so good.
 \myindex{ARM!\Instructions!BIC}
@@ -74,7 +74,7 @@ ARM has the \BIC instruction, which explicitly clears specific bit(s).
 
 \myparagraph{\OptimizingKeilVI (\ThumbMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_thumb_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_thumb_O3.s}
 
 Thumb mode in ARM offers 16-bit instructions and not much data can be encoded in them, so here a 
 \INS{MOVS}/\INS{LSLS} instruction pair is used for forming the 0x80000000 constant.

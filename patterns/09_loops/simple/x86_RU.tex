@@ -14,26 +14,26 @@
 Это выражение описывает инициализацию, условие, операцию после каждой итерации\\
 (\glslink{increment}{инкремент}/\glslink{decrement}{декремент}) и тело цикла.
 
-\lstinputlisting{patterns/09_loops/simple/loops_1_RU.c}
+\lstinputlisting[style=customc]{patterns/09_loops/simple/loops_1_RU.c}
 
 Примерно так же, генерируемый код и будет состоять из этих четырех частей.
 Возьмем пример:
 
-\lstinputlisting[label=loops_src]{patterns/09_loops/simple/loops_2.c}
+\lstinputlisting[label=loops_src,style=customc]{patterns/09_loops/simple/loops_2.c}
 
 Имеем в итоге (MSVC 2010):
 
-\lstinputlisting[caption=MSVC 2010]{patterns/09_loops/simple/1_MSVC_RU.asm}
+\lstinputlisting[caption=MSVC 2010,style=customasm]{patterns/09_loops/simple/1_MSVC_RU.asm}
 
 В принципе, ничего необычного.
 
 GCC 4.4.1 выдает примерно такой же код, с небольшой разницей:
 
-\lstinputlisting[caption=GCC 4.4.1]{patterns/09_loops/simple/1_GCC_RU.asm}
+\lstinputlisting[caption=GCC 4.4.1,style=customasm]{patterns/09_loops/simple/1_GCC_RU.asm}
 
 Интересно становится, если скомпилируем этот же код при помощи MSVC 2010 с включенной оптимизацией (\TT{\Ox}):
 
-\lstinputlisting[caption=\Optimizing MSVC]{patterns/09_loops/simple/1_MSVC_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC,style=customasm]{patterns/09_loops/simple/1_MSVC_Ox.asm}
 
 Здесь происходит следующее: переменную $i$ компилятор не выделяет в локальном стеке, 
 а выделяет целый регистр под нее: \ESI. 
@@ -47,7 +47,7 @@ GCC 4.4.1 выдает примерно такой же код, с неболь�
 
 Попробуем GCC 4.4.1 с максимальной оптимизацией (\Othree):
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.1]{patterns/09_loops/simple/1_GCC_O3.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.4.1,style=customasm]{patterns/09_loops/simple/1_GCC_O3.asm}
 
 \myindex{Loop unwinding}
 Однако GCC просто \IT{развернул} цикл\footnote{\gls{loop unwinding} в англоязычной литературе}.
@@ -64,7 +64,7 @@ GCC 4.4.1 выдает примерно такой же код, с неболь�
 
 Увеличим максимальное значение $i$ в цикле до 100 и попробуем снова. GCC выдает:
 
-\lstinputlisting[caption=GCC]{patterns/09_loops/simple/2_GCC_RU.asm}
+\lstinputlisting[caption=GCC,style=customasm]{patterns/09_loops/simple/2_GCC_RU.asm}
 
 Это уже похоже на то, что сделал MSVC 2010 в режиме оптимизации (\TT{\Ox}).
 За исключением того, что под переменную $i$ будет выделен регистр \EBX.

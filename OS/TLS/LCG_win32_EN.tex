@@ -5,12 +5,12 @@
 One solution is to add \TT{\_\_declspec( thread )} modifier to the global variable, 
 then it will be allocated in the \ac{TLS} (line 9):
 
-\lstinputlisting[numbers=left]{OS/TLS/win32/rand_uninit.c}
+\lstinputlisting[numbers=left,style=customc]{OS/TLS/win32/rand_uninit.c}
 
 Hiew shows us that there is a new PE section in the executable file: \TT{.tls}.
 % TODO1 hiew screenshot?
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x86]{OS/TLS/win32/rand_x86_uninit.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x86,style=customasm]{OS/TLS/win32/rand_x86_uninit.asm}
 
 \TT{rand\_state} is now in the \ac{TLS} segment, and each thread has its own version of this variable.
 
@@ -28,14 +28,14 @@ so it would be fast to load the thread-specific data.
 
 The \TT{GS:} selector is used in Win64 and the address of the \ac{TLS} is 0x58:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{OS/TLS/win32/rand_x64_uninit.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{OS/TLS/win32/rand_x64_uninit.asm}
 
 \myparagraph{Initialized \ac{TLS} data}
 
 Let's say, we want to set some fixed value to \TT{rand\_state}, so in case the programmer forgets to,
 the \TT{rand\_state} variable would be initialized to some constant anyway (line 9):
 
-\lstinputlisting[numbers=left]{OS/TLS/win32/rand_init.c}
+\lstinputlisting[numbers=left,style=customc]{OS/TLS/win32/rand_init.c}
 
 The code is no differ from what we already saw, but in IDA we see:
 
@@ -73,7 +73,7 @@ the process and/or thread start.
 
 The function initializes the \ac{PRNG} with the value returned by \TT{GetTickCount()} function.
 
-\lstinputlisting{OS/TLS/win32/rand_TLS_callback.c}
+\lstinputlisting[style=customc]{OS/TLS/win32/rand_TLS_callback.c}
 
 Let's see it in IDA:
 

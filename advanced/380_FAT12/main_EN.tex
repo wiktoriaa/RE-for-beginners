@@ -66,7 +66,7 @@ Pushing values is almost the same, but be careful not to overwrite some \IT{othe
 
 \subsection{The C/C++ code}
 
-\lstinputlisting{advanced/380_FAT12/FAT12.c}
+\lstinputlisting[style=customc]{advanced/380_FAT12/FAT12.c}
 
 During test, all 12-bit elements are filled with values in 0..0xFFF range.
 And here is a dump of all triplets, each line has 3 bytes:
@@ -185,11 +185,11 @@ swapped instructions performing better.
 
 \subsubsection{Getter}
 
-\lstinputlisting{advanced/380_FAT12/GCC_getter.asm}
+\lstinputlisting[style=customasm]{advanced/380_FAT12/GCC_getter.asm}
 
 \subsubsection{Setter}
 
-\lstinputlisting{advanced/380_FAT12/GCC_setter.asm}
+\lstinputlisting[style=customasm]{advanced/380_FAT12/GCC_setter.asm}
 
 \subsubsection{Other comments}
 
@@ -208,7 +208,7 @@ Since GCC compiler cannot be sure if all indices are always positive, it adds si
 The following code has final OR operation in the function epilogue.
 Indeed, it executes at the end of both branches, so it's possible to save some space.
 
-\lstinputlisting{advanced/380_FAT12/Keil_thumb_O3_getter.asm}
+\lstinputlisting[style=customasm]{advanced/380_FAT12/Keil_thumb_O3_getter.asm}
 
 There are at least of redundancy: \IT{idx*1.5} is calculated twice.
 As an exercise, reader may try to rework assembly function to make it shorter. Do not forget about testing!
@@ -223,7 +223,7 @@ so Keil generates the code which shifts input \IT{idx} by 31 bits left and then 
 The first half of setter code is very similar to getter, address of triplet is calculated first,
 then the jump is occurred in order to dispatch to the right handler's code.
 
-\lstinputlisting{advanced/380_FAT12/Keil_thumb_O3_setter.asm}
+\lstinputlisting[style=customasm]{advanced/380_FAT12/Keil_thumb_O3_setter.asm}
 
 \subsection{Optimizing Keil 5.05 (ARM mode)}
 
@@ -236,11 +236,11 @@ so the instruction will be only executed if the corresponding flag(s) are set.
 Many arithmetical instructions in ARM mode can have shifting suffix like \INS{LSL \#1}
 (it means, the last operand is shifted left by 1 bit).
 
-\lstinputlisting{advanced/380_FAT12/Keil_ARM_O3_getter.asm}
+\lstinputlisting[style=customasm]{advanced/380_FAT12/Keil_ARM_O3_getter.asm}
 
 \subsubsection{Setter}
 
-\lstinputlisting{advanced/380_FAT12/Keil_ARM_O3_setter.asm}
+\lstinputlisting[style=customasm]{advanced/380_FAT12/Keil_ARM_O3_setter.asm}
 
 Value of \IT{idx*1.5} is calculated twice, this is redundancy Keil compiler produced can be eliminated.
 You can rework assembly function as well to make it shorter. Do not forget about tests!
@@ -277,11 +277,11 @@ There is also GP (Global Pointer) set up code in the function prologue, which ca
 
 \subsubsection{Getter}
 
-\lstinputlisting{advanced/380_FAT12/MIPS_getter.asm}
+\lstinputlisting[style=customasm]{advanced/380_FAT12/MIPS_getter.asm}
 
 \subsubsection{Setter}
 
-\lstinputlisting{advanced/380_FAT12/MIPS_setter.asm}
+\lstinputlisting[style=customasm]{advanced/380_FAT12/MIPS_setter.asm}
 
 \subsection{Difference from the real FAT12}
 

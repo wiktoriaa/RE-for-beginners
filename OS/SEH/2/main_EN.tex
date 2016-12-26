@@ -39,13 +39,13 @@ If your code is too big and cannot fit into one expression, a separate filter fu
 There are a lot of such constructs in the Windows kernel.
 Here are a couple of examples from there (\ac{WRK}):
 
-\lstinputlisting[caption=WRK-v1.2/base/ntos/ob/obwait.c]{OS/SEH/2/wrk_ex1.c}
+\lstinputlisting[caption=WRK-v1.2/base/ntos/ob/obwait.c,style=customc]{OS/SEH/2/wrk_ex1.c}
 
-\lstinputlisting[caption=WRK-v1.2/base/ntos/cache/cachesub.c]{OS/SEH/2/wrk_ex2.c}
+\lstinputlisting[caption=WRK-v1.2/base/ntos/cache/cachesub.c,style=customc]{OS/SEH/2/wrk_ex2.c}
 
 Here is also a filter code example:
 
-\lstinputlisting[caption=WRK-v1.2/base/ntos/cache/copysup.c]{OS/SEH/2/wrk_ex3.c}
+\lstinputlisting[caption=WRK-v1.2/base/ntos/cache/copysup.c,style=customc]{OS/SEH/2/wrk_ex3.c}
 
 Internally, SEH is an extension of the OS-supported exceptions.
 But the handler function is \TT{\_except\_handler3} (for SEH3) or \TT{\_except\_handler4} (for SEH4).
@@ -91,9 +91,9 @@ in order to know which \IT{scope table} entry to use.
 
 \myparagraph{SEH3: one try/except block example}
 
-\lstinputlisting{OS/SEH/2/2.c}
+\lstinputlisting[style=customc]{OS/SEH/2/2.c}
 
-\lstinputlisting[caption=MSVC 2003]{OS/SEH/2/2_SEH3.asm}
+\lstinputlisting[caption=MSVC 2003,style=customasm]{OS/SEH/2/2_SEH3.asm}
 
 Here we see how the SEH frame is constructed in the stack.
 The \IT{scope table} is located in the \TT{CONST} segment---indeed, these fields are not to be changed.
@@ -156,13 +156,13 @@ one is not related to MSVC at all (the last one) and two MSVC-related: SEH3 and 
 
 \myparagraph{SEH3: two try/except blocks example}
 
-\lstinputlisting{OS/SEH/2/3.c}
+\lstinputlisting[style=customc]{OS/SEH/2/3.c}
 
 Now there are two \TT{try} blocks.
 So the \IT{scope table} now has two entries, one for each block.
 \IT{Previous try level} changes as execution flow enters or exits the \TT{try} block.
 
-\lstinputlisting[caption=MSVC 2003]{OS/SEH/2/3_SEH3.asm}
+\lstinputlisting[caption=MSVC 2003,style=customasm]{OS/SEH/2/3_SEH3.asm}
 
 If we set a breakpoint on the \printf{} function, which is called from the handler, 
 we can also see how yet another SEH handler is added.
@@ -218,9 +218,9 @@ The initial \IT{previous try level} is $-2$ in SEH4 instead of $-1$.
 
 Here are both examples compiled in MSVC 2012 with SEH4:
 
-\lstinputlisting[caption=MSVC 2012: one try block example]{OS/SEH/2/2_SEH4.asm}
+\lstinputlisting[caption=MSVC 2012: one try block example,style=customasm]{OS/SEH/2/2_SEH4.asm}
 
-\lstinputlisting[caption=MSVC 2012: two try blocks example]{OS/SEH/2/3_SEH4.asm}
+\lstinputlisting[caption=MSVC 2012: two try blocks example,style=customasm]{OS/SEH/2/3_SEH4.asm}
 
 Here is the meaning of the \IT{cookies}: \TT{Cookie Offset} 
 is the difference between the address of the saved EBP value in the stack

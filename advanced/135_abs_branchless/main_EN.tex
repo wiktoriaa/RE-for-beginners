@@ -4,7 +4,7 @@
 Let's revisit an example we considered earlier \myref{sec:abs} and ask ourselves, is it possible
 to make a branchless version of the function in x86 code?
 
-\lstinputlisting{abs.c}
+\lstinputlisting[style=customc]{abs.c}
 
 And the answer is yes.
 
@@ -12,7 +12,7 @@ And the answer is yes.
 
 We could see it if we compile it using optimizing GCC 4.9:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 x64]{\CURPATH/abs_GCC491_x64_O3_EN.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.9 x64,style=customasm]{\CURPATH/abs_GCC491_x64_O3_EN.asm}
 
 This is how it works:
 
@@ -51,4 +51,4 @@ GCC 4.9 for ARM64 generates mostly the same, just decides to use the full 64-bit
 There are less instructions, because the input value can be shifted using a suffixed instruction (\q{asr})
 instead of using a separate instruction.
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64]{\CURPATH/abs_GCC49_ARM64_O3_EN.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64,style=customasm]{\CURPATH/abs_GCC49_ARM64_O3_EN.s}

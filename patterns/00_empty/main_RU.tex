@@ -3,7 +3,7 @@
 
 Простейшая функция из всех возможных, это функция, которая ничего не делает:
 
-\lstinputlisting[caption=\EN{\CCpp Code}]{patterns/00_empty/1.c}
+\lstinputlisting[caption=Код на \CCpp,style=customc]{patterns/00_empty/1.c}
 
 Скомпилируем!
 
@@ -11,14 +11,14 @@
 
 Для x86 и MSVC и GCC делает одинаковый код:
 
-\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/00_empty/1.s}
+\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput),style=customasm]{patterns/00_empty/1.s}
 
 \myindex{x86!\Instructions!RET}
 Тут только одна инструкция: \RET, которая возвращает управление в \glslink{caller}{вызывающую ф-цию}.
 
 \subsection{ARM}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) ASM Output]{patterns/00_empty/1_Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) ASM Output,style=customasm]{patterns/00_empty/1_Keil_ARM_O3.s}
 
 Адрес возврата (\ac{RA}) в ARM не сохраняется в локальном стеке, а в регистре \ac{LR}.
 Так что инструкция \INS{BX LR} делает переход по этому адресу, и это то же самое что и вернуть управление
@@ -30,7 +30,7 @@
 
 Вывод на ассемблере в GCC показывает регистры по номерам:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/00_empty/MIPS.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),style=customasm]{patterns/00_empty/MIPS.s}
 
 \dots а \IDA --- по псевдоименам:
 
@@ -57,7 +57,7 @@
 
 Во-первых, популярны функции выводящие информацию в отладочный лог, например:
 
-\lstinputlisting[caption=\EN{\CCpp Code}]{patterns/00_empty/dbg_print.c}
+\lstinputlisting[caption=Код на \CCpp,style=customc]{patterns/00_empty/dbg_print.c}
 
 В не-отладочной сборке (например, ``release''), \TT{\_DEBUG} не определен, так что функция \TT{dbg\_print()},
 не смотря на то, что будет продолжать вызываться в процессе исполнения, будет пустой.
@@ -66,7 +66,7 @@
 второй --- демонстрационный.
 Демонстрационная сборка может не иметь каких-то важных функций, например:
 
-\lstinputlisting[caption=\EN{\CCpp Code}]{patterns/00_empty/demo.c}
+\lstinputlisting[caption=Код на \CCpp,style=customc]{patterns/00_empty/demo.c}
 
 Функция \TT{save\_file()} может быть вызвана, когда пользователь кликает меню \TT{File->Save}.
 Демо-версия может поставляться с отключенным пунктом меню, но даже если кракер разрешит этот пункт,

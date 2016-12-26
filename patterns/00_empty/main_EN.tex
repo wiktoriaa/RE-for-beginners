@@ -3,7 +3,7 @@
 
 The simplest possible function is arguably one that does nothing:
 
-\lstinputlisting[caption=\EN{\CCpp Code}]{patterns/00_empty/1.c}
+\lstinputlisting[caption=\EN{\CCpp Code},style=customc]{patterns/00_empty/1.c}
 
 Lets compile it!
 
@@ -11,14 +11,14 @@ Lets compile it!
 
 Here's what both the optimizing GCC and MSVC compilers produce on the x86 platform:
 
-\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/00_empty/1.s}
+\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput),style=customasm]{patterns/00_empty/1.s}
 
 \myindex{x86!\Instructions!RET}
 There is just one instruction: \RET, which returns execution to the \gls{caller}.
 
 \subsection{ARM}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) ASM Output]{patterns/00_empty/1_Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) \assemblyOutput,style=customasm]{patterns/00_empty/1_Keil_ARM_O3.s}
 
 The return address is not saved on the local stack in the ARM \ac{ISA}, but rather in the link register, 
 so the \INS{BX LR} instruction causes execution to jump to that address---effectively returning execution
@@ -31,7 +31,7 @@ by number (from \$0 to \$31) or by pseudo name (\$V0, \$A0, etc.).
 
 The GCC assembly output below lists registers by number:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/00_empty/MIPS.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),style=customasm]{patterns/00_empty/MIPS.s}
 
 \dots while \IDA does it---by their pseudo names:
 
@@ -58,7 +58,7 @@ Despite the fact empty functions are useless, they are quite frequent in low-lev
 
 First of all, debugging functions are quite popular, like this one:
 
-\lstinputlisting[caption=\EN{\CCpp Code}]{patterns/00_empty/dbg_print.c}
+\lstinputlisting[caption=\EN{\CCpp Code},style=customc]{patterns/00_empty/dbg_print.c}
 
 In non-debug build (e.g., ``release''), \TT{\_DEBUG} is not defined,
 so \TT{dbg\_print()} function, despite still being called during execution,
@@ -67,7 +67,7 @@ will be empty.
 Another popular way of software protection is make several builds: one for legal customers, and a demo build.
 Demo build can lack some important functions, like this:
 
-\lstinputlisting[caption=\EN{\CCpp Code}]{patterns/00_empty/demo.c}
+\lstinputlisting[caption=\EN{\CCpp Code},style=customc]{patterns/00_empty/demo.c}
 
 \TT{save\_file()} function can be called when user click \TT{File->Save} menu.
 Demo version may be delivered with this menu item disabled, but even if software cracker will enable it,

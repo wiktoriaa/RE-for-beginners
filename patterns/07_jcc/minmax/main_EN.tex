@@ -2,9 +2,9 @@
 
 \subsubsection{32-bit}
 
-\lstinputlisting{patterns/07_jcc/minmax/minmax.c}
+\lstinputlisting[style=customc]{patterns/07_jcc/minmax/minmax.c}
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2013]{patterns/07_jcc/minmax/minmax_MSVC_2013_EN.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2013,style=customasm]{patterns/07_jcc/minmax/minmax_MSVC_2013_EN.asm}
 
 \myindex{x86!\Instructions!Jcc}
 
@@ -21,7 +21,7 @@ There is one unneeded \JMP instruction in each function, which MSVC presumably l
 
 ARM for Thumb mode reminds us of x86 code:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/07_jcc/minmax/minmax_Keil_Thumb_O3_EN.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{patterns/07_jcc/minmax/minmax_Keil_Thumb_O3_EN.s}
 
 \myindex{ARM!\Instructions!Bcc}
 
@@ -31,26 +31,26 @@ It's possible to use conditional suffixes in ARM mode, so the code is shorter.
 \myindex{ARM!\Instructions!MOVcc}
 \INS{MOVcc} is to be executed only if the condition is met:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/07_jcc/minmax/minmax_Keil_ARM_O3_EN.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/07_jcc/minmax/minmax_Keil_ARM_O3_EN.s}
 
 \myindex{x86!\Instructions!CMOVcc}
 \Optimizing GCC 4.8.1 and optimizing MSVC 2013 can use \INS{CMOVcc} instruction, which is analogous to \INS{MOVcc} in ARM:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013]{patterns/07_jcc/minmax/minmax_GCC481_O3_EN.s}
+\lstinputlisting[caption=\Optimizing MSVC 2013,style=customasm]{patterns/07_jcc/minmax/minmax_GCC481_O3_EN.s}
 
 \subsubsection{64-bit}
 
-\lstinputlisting{patterns/07_jcc/minmax/minmax64.c}
+\lstinputlisting[style=customc]{patterns/07_jcc/minmax/minmax64.c}
 
 There is some unneeded value shuffling, but the code is comprehensible:
 
-\lstinputlisting[caption=\NonOptimizing GCC 4.9.1 ARM64]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O0.s}
+\lstinputlisting[caption=\NonOptimizing GCC 4.9.1 ARM64,style=customasm]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O0.s}
 
 \myparagraph{Branchless}
 
 No need to load function arguments from the stack, as they are already in the registers:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64]{patterns/07_jcc/minmax/minmax64_GCC_49_x64_O3_EN.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasm]{patterns/07_jcc/minmax/minmax64_GCC_49_x64_O3_EN.s}
 
 MSVC 2013 does almost the same.
 
@@ -59,7 +59,7 @@ MSVC 2013 does almost the same.
 ARM64 has the \INS{CSEL} instruction, which works just as \INS{MOVcc} in ARM or \INS{CMOVcc} in x86, just the name is different:
 \q{Conditional SELect}.
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O3_EN.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64,style=customasm]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O3_EN.s}
 
 \subsubsection{MIPS}
 

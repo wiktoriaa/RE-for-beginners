@@ -1,11 +1,11 @@
 ﻿\subsection{Converting 32-bit value into 64-bit one}
 \label{subsec:sign_extending_32_to_64}
 
-\lstinputlisting{patterns/185_64bit_in_32_env/conversion/4.c}
+\lstinputlisting[style=customc]{patterns/185_64bit_in_32_env/conversion/4.c}
 
 \subsubsection{x86}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012]{patterns/185_64bit_in_32_env/conversion/MSVC2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasm]{patterns/185_64bit_in_32_env/conversion/MSVC2012_Ox.asm}
 
 Here we also run into necessity to extend a 32-bit signed value into a 64-bit signed one.
 Unsigned values are converted straightforwardly: all bits in the higher part must be set to 0.
@@ -21,7 +21,7 @@ similar to the \MOVSX{} instruction.
 
 \subsubsection{ARM}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/conversion/Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/185_64bit_in_32_env/conversion/Keil_ARM_O3.s}
 
 Keil for ARM is different: it just arithmetically shifts right the input value by 31 bits.
 As we know, the sign bit is \ac{MSB}, and the arithmetical shift copies the sign bit into the \q{emerged} bits.

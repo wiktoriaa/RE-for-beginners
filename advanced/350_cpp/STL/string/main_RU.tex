@@ -30,7 +30,7 @@
 байт для 32-битной среды либо $16 + 8 + 8 = 32$ 
 байта в 64-битной, а если строка длиннее 16-и символов, то прибавьте еще длину самой строки.
 
-\lstinputlisting[caption=пример для MSVC]{\CURPATH/STL/string/MSVC_RU.cpp}
+\lstinputlisting[caption=пример для MSVC,style=customc]{\CURPATH/STL/string/MSVC_RU.cpp}
 
 Собственно, из этого исходника почти всё ясно.
 
@@ -78,16 +78,16 @@
 
 В нашем примере мы учитываем это:
 
-\lstinputlisting[caption=пример для GCC]{\CURPATH/STL/string/GCC_RU.cpp}
+\lstinputlisting[caption=пример для GCC,style=customc]{\CURPATH/STL/string/GCC_RU.cpp}
 
 Нужны еще небольшие хаки чтобы сымитировать типичную ошибку, которую мы уже видели выше, из-за
 более ужесточенной проверки типов в GCC, тем не менее, printf() работает и здесь без c\_str().
 
 \myparagraph{Чуть более сложный пример}
 
-\lstinputlisting{\CURPATH/STL/string/3.cpp}
+\lstinputlisting[style=customc]{\CURPATH/STL/string/3.cpp}
 
-\lstinputlisting[caption=MSVC 2012]{\CURPATH/STL/string/3_MSVC_RU.asm}
+\lstinputlisting[caption=MSVC 2012,style=customasm]{\CURPATH/STL/string/3_MSVC_RU.asm}
 
 Собственно, компилятор не конструирует строки статически: да в общем-то и как
 это возможно, если буфер с ней нужно хранить в \glslink{heap}{куче}?
@@ -113,7 +113,7 @@
 строку прямо в структуре):
 
 % TODO1 comment each function meaning
-\lstinputlisting[caption=GCC 4.8.1]{\CURPATH/STL/string/3_GCC_RU.s}
+\lstinputlisting[caption=GCC 4.8.1,style=customasm]{\CURPATH/STL/string/3_GCC_RU.s}
 
 Можно заметить, что в деструкторы передается не указатель на объект,
 а указатель на место за 12 байт (или 3 слова) перед ним, то есть, на настоящее начало структуры.
@@ -125,19 +125,17 @@
 
 Да, действительно:
 
-\lstinputlisting{\CURPATH/STL/string/5.cpp}
+\lstinputlisting[style=customc]{\CURPATH/STL/string/5.cpp}
 
 Но как и где будет вызываться конструктор \TT{std::string}?
 
 На самом деле, эта переменная будет инициализирована даже перед началом \main.
 
-\lstinputlisting[caption=MSVC 2012: здесь конструируется глобальная переменная{,} а также регистрируется её деструктор]{\CURPATH/STL/string/5_MSVC_p2.asm}
+\lstinputlisting[caption=MSVC 2012: здесь конструируется глобальная переменная{,} а также регистрируется её деструктор,style=customasm]{\CURPATH/STL/string/5_MSVC_p2.asm}
 
-\lstinputlisting[caption=MSVC 2012: 
-здесь глобальная переменная используется в \main]{\CURPATH/STL/string/5_MSVC_p1.asm}
+\lstinputlisting[caption=MSVC 2012: здесь глобальная переменная используется в \main,style=customasm]{\CURPATH/STL/string/5_MSVC_p1.asm}
 
-\lstinputlisting[caption=MSVC 2012: эта функция-деструктор вызывается перед выходом
-]{\CURPATH/STL/string/5_MSVC_p3.asm}
+\lstinputlisting[caption=MSVC 2012: эта функция-деструктор вызывается перед выходом,style=customasm]{\CURPATH/STL/string/5_MSVC_p3.asm}
 
 \myindex{\CStandardLibrary!atexit()}
 В реальности, из \ac{CRT}, еще до вызова main(), вызывается специальная функция,
@@ -147,7 +145,7 @@
 
 GCC работает похожим образом:
 
-\lstinputlisting[caption=GCC 4.8.1]{\CURPATH/STL/string/5_GCC.s}
+\lstinputlisting[caption=GCC 4.8.1,style=customasm]{\CURPATH/STL/string/5_GCC.s}
 
 Но он не выделяет отдельной функции в которой будут собраны деструкторы: 
 каждый деструктор передается в atexit() по одному.

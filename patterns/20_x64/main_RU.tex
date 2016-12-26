@@ -70,18 +70,18 @@ fastcall, использует 6 регистров
 она обрабатывает сразу 32/64/128/256 значений, в зависимости от типа \GTT{DES\_type} (uint32, uint64, SSE2 или AVX), 
 методом bitslice DES (больше об этом методе читайте здесь~(\myref{bitslicedes})):
 
-\lstinputlisting{patterns/20_x64/19_1.c}
+\lstinputlisting[style=customc]{patterns/20_x64/19_1.c}
 
 Здесь много локальных переменных. Конечно, далеко не все они будут в локальном стеке. 
 Компилируем обычным MSVC 2008 с опцией \GTT{/Ox}:
 
-\lstinputlisting[caption=\Optimizing MSVC 2008]{patterns/20_x64/19_2_msvc_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008,style=customasm]{patterns/20_x64/19_2_msvc_Ox.asm}
 
 5 переменных компилятору пришлось разместить в локальном стеке.
 
 Теперь попробуем то же самое только в 64-битной версии MSVC 2008:
 
-\lstinputlisting[caption=\Optimizing MSVC 2008]{patterns/20_x64/19_3_msvc_x64.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008,style=customasm]{patterns/20_x64/19_3_msvc_x64.asm}
 
 Компилятор ничего не выделил в локальном стеке, а \GTT{x36} это синоним для \GTT{a5}.
 

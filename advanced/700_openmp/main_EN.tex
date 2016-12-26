@@ -29,7 +29,7 @@ Let's limit our brute-force to the interval in
 
 The algorithm is pretty straightforward:
 
-\lstinputlisting{advanced/700_openmp/openmp_example.c}
+\lstinputlisting[style=customc]{advanced/700_openmp/openmp_example.c}
 
 The \TT{check\_nonce()} function just adds a number to the string, 
 hashes it with the SHA512 algorithm and checks for 3 zero bytes in the result.
@@ -72,7 +72,7 @@ gcc -fopenmp 2.c sha512.c -S -masm=intel
 
 Now this is how MSVC 2012 generates the main loop:
 
-\lstinputlisting[caption=MSVC 2012]{advanced/700_openmp/MSVC_loop.asm}
+\lstinputlisting[caption=MSVC 2012,style=customasm]{advanced/700_openmp/MSVC_loop.asm}
 
 All functions prefixed by \TT{vcomp} 
 are OpenMP-related and are stored in the 
@@ -81,7 +81,7 @@ So here a group of threads is started.
 
 Let's take a look on \TT{\_main\$omp\$1}:
 
-\lstinputlisting[caption=MSVC 2012]{advanced/700_openmp/MSVC_1.asm}
+\lstinputlisting[caption=MSVC 2012,style=customasm]{advanced/700_openmp/MSVC_1.asm}
 
 This function is to be started $n$ 
 times in parallel, where $n$ is the number of \ac{CPU} cores.\\
@@ -151,7 +151,7 @@ Let's see how this code is compiled:
 		printf ("checked=%d\n", checked);
 \end{lstlisting}
 
-\lstinputlisting[caption=MSVC 2012]{advanced/700_openmp/MSVC_2.asm}
+\lstinputlisting[caption=MSVC 2012,style=customasm]{advanced/700_openmp/MSVC_2.asm}
 
 As it turns out, the \TT{vcomp\_atomic\_add\_i4()} 
 function in the vcomp*.dll 
@@ -185,7 +185,7 @@ and run the fourth in the current thread. So there are 4 threads instead of the 
 
 Here is the \TT{main.\_omp\_fn.0} function:
  
-\lstinputlisting[caption=GCC 4.8.1]{advanced/700_openmp/GCC_1.asm}
+\lstinputlisting[caption=GCC 4.8.1,style=customasm]{advanced/700_openmp/GCC_1.asm}
 
 Here we see the division clearly: by calling 
 \TT{omp\_get\_num\_threads()} and \TT{omp\_get\_thread\_num()}
@@ -197,7 +197,7 @@ GCC also inserted the \TT{LOCK ADD}
 
 instruction right in the code, unlike MSVC, which generated a call to a separate DLL function:
 
-\lstinputlisting[caption=GCC 4.8.1]{advanced/700_openmp/GCC_2.asm}
+\lstinputlisting[caption=GCC 4.8.1,style=customasm]{advanced/700_openmp/GCC_2.asm}
 
 The functions prefixed with GOMP are from GNU OpenMP library.
 Unlike vcomp*.dll, its source code is freely available: 

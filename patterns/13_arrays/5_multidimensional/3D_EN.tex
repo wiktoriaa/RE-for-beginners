@@ -6,20 +6,20 @@ Now we are going to work with an array of type \Tint: each element requires 4 by
 
 Let's see:
 
-\lstinputlisting[caption=simple example]{patterns/13_arrays/5_multidimensional/multi.c}
+\lstinputlisting[caption=simple example,style=customc]{patterns/13_arrays/5_multidimensional/multi.c}
 
 \myparagraph{x86}
 
 We get (MSVC 2010):
 
-\lstinputlisting[caption=MSVC 2010]{patterns/13_arrays/5_multidimensional/multi_msvc_EN.asm}
+\lstinputlisting[caption=MSVC 2010,style=customasm]{patterns/13_arrays/5_multidimensional/multi_msvc_EN.asm}
 
 Nothing special. For index calculation, three input arguments are used 
 in the formula $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$, to represent the array as multidimensional.
 Do not forget that the \Tint type is 32-bit (4 bytes),
 so all coefficients must be multiplied by 4.
 
-\lstinputlisting[caption=GCC 4.4.1]{patterns/13_arrays/5_multidimensional/multi_gcc_EN.asm}
+\lstinputlisting[caption=GCC 4.4.1,style=customasm]{patterns/13_arrays/5_multidimensional/multi_gcc_EN.asm}
 
 The GCC compiler does it differently.
 
@@ -32,7 +32,7 @@ This works faster.
 
 \myparagraph{ARM + \NonOptimizingXcodeIV (\ThumbMode)}
 
-\lstinputlisting[caption=\NonOptimizingXcodeIV (\ThumbMode)]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O0_EN.asm}
+\lstinputlisting[caption=\NonOptimizingXcodeIV (\ThumbMode),style=customasm]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O0_EN.asm}
 
 \NonOptimizing LLVM saves all variables in local stack, which is redundant.
 
@@ -40,7 +40,7 @@ The address of the array element is calculated by the formula we already saw.
 
 \myparagraph{ARM + \OptimizingXcodeIV (\ThumbMode)}
 
-\lstinputlisting[caption=\OptimizingXcodeIV (\ThumbMode)]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O3_EN.asm}
+\lstinputlisting[caption=\OptimizingXcodeIV (\ThumbMode),style=customasm]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O3_EN.asm}
 
 The tricks for replacing multiplication by shift, addition and subtraction which we already saw
 are also present here.

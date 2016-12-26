@@ -8,7 +8,7 @@ It's not in favour nowadays\footnote{Mersenne twister is better}, but it's so si
 (just one multiplication, one addition and one AND operation), 
 we can use it as an example.
 
-\lstinputlisting{patterns/145_LCG/rand_EN.c}
+\lstinputlisting[style=customc]{patterns/145_LCG/rand_EN.c}
 
 There are two functions: the first one is used to initialize the internal state, and the second one is called
 to generate pseudorandom numbers.
@@ -34,7 +34,7 @@ If you want to get 32-bit pseudorandom values, just omit the last AND operation.
 
 \subsection{x86}
 
-\lstinputlisting[caption=\Optimizing MSVC 2013]{patterns/145_LCG/rand_MSVC_2013_x86_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013,style=customasm]{patterns/145_LCG/rand_MSVC_2013_x86_Ox.asm}
 
 Here we see it: both constants are embedded into the code.
 There is no memory allocated for them.
@@ -46,7 +46,7 @@ The \TT{my\_srand()} function just copies its input value into the internal\\
 
 The non-optimized version is more verbose:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2013]{patterns/145_LCG/rand_MSVC_2013_x86.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2013,style=customasm]{patterns/145_LCG/rand_MSVC_2013_x86.asm}
 
 \subsection{x64}
 
@@ -55,13 +55,13 @@ The x64 version is mostly the same and uses 32-bit registers instead of 64-bit o
 
 But \TT{my\_srand()} takes its input argument from the \ECX register rather than from stack:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/145_LCG/rand_MSVC_2013_x64_Ox_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{patterns/145_LCG/rand_MSVC_2013_x64_Ox_EN.asm}
 
 GCC compiler generates mostly the same code.
 
 \subsection{32-bit ARM}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/145_LCG/rand.s_Keil_ARM_O3_EN.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/145_LCG/rand.s_Keil_ARM_O3_EN.s}
 
 It's not possible to embed 32-bit constants into ARM instructions, so Keil has to place them externally and load them additionally.
 One interesting thing is that it's not possible to embed the 0x7FFF constant as well.

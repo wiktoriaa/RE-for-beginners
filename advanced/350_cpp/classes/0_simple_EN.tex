@@ -4,14 +4,14 @@ Internally, the representation of \Cpp classes is almost the same as the structu
 
 Let's try an example with two variables, two constructors and one method:
 
-\lstinputlisting{\CURPATH/classes/simple_EN.cpp}
+\lstinputlisting[style=customc]{\CURPATH/classes/simple_EN.cpp}
 
 \myparagraph{MSVC: x86}
 
 Here is how the \main function looks like, translated 
 into assembly language:
 
-\lstinputlisting[caption=MSVC]{\CURPATH/classes/simple_1_msvc.asm}
+\lstinputlisting[caption=MSVC,style=customasm]{\CURPATH/classes/simple_1_msvc.asm}
 
 Here's what's going on.
 For each object (instance of class $c$) 8 bytes are allocated,
@@ -52,7 +52,7 @@ The \TT{dump()} function is called two times.
 
 Now let's see the constructors' code:
 
-\lstinputlisting[caption=MSVC]{\CURPATH/classes/simple_2_msvc.asm}
+\lstinputlisting[caption=MSVC,style=customasm]{\CURPATH/classes/simple_2_msvc.asm}
 
 The constructors are just functions, they use a pointer to the structure in \ECX,
 copying the pointer into their own local variable, however, it is not necessary.
@@ -63,14 +63,14 @@ In fact, internally, the constructors return a pointer to the newly created obje
 
 Now the \TT{dump()} method:
 
-\lstinputlisting[caption=MSVC]{\CURPATH/classes/simple_3_msvc.asm}
+\lstinputlisting[caption=MSVC,style=customasm]{\CURPATH/classes/simple_3_msvc.asm}
 
 Simple enough: \TT{dump()} takes a pointer to the structure that contains the two \Tint's from \ECX,
 takes both values from it and passes them to \printf.
 
 The code is much shorter if compiled with optimizations (\Ox):
 
-\lstinputlisting[caption=MSVC]{\CURPATH/classes/simple_4_msvc_Ox.asm}
+\lstinputlisting[caption=MSVC,style=customasm]{\CURPATH/classes/simple_4_msvc_Ox.asm}
 
 \myindex{x86!\Instructions!RET}
 
@@ -100,7 +100,7 @@ Nevertheless, the \ITthis pointer to the object is passed in \RCX, the first arg
 We can see this in the 
 \TT{c(int a, int b)} method internals:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64]{\CURPATH/classes/simple_MSVC_x64_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{\CURPATH/classes/simple_MSVC_x64_EN.asm}
 
 The \Tint data type is still 32-bit in x64
 \footnote{Apparently, for easier porting of 32-bit \CCpp code to x64}, 
@@ -113,7 +113,7 @@ earlier: \myref{JMP_instead_of_RET}.
 
 It is almost the same story in GCC 4.4.1, with a few exceptions.
 
-\lstinputlisting[caption=GCC 4.4.1]{\CURPATH/classes/simple_GCC.asm}
+\lstinputlisting[caption=GCC 4.4.1,style=customasm]{\CURPATH/classes/simple_GCC.asm}
 
 Here we see another \IT{name mangling} style, specific to GNU
 \footnote{There is a good document about the various name mangling conventions in different compilers:\\
@@ -229,5 +229,5 @@ The \Tint data type is also 32-bit here.
 
 The \JMP instead of \RET \IT{hack} is also used here.
 
-\lstinputlisting[caption=GCC 4.4.6 x64]{\CURPATH/classes/simple_GCC_x64_EN.s}
+\lstinputlisting[caption=GCC 4.4.6 x64,style=customasm]{\CURPATH/classes/simple_GCC_x64_EN.s}
 

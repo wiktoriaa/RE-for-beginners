@@ -3,11 +3,11 @@
 
 Вот пример массива указателей.
 
-\lstinputlisting[caption=Получить имя месяца,label=get_month1]{patterns/13_arrays/45_month_1D/month1_RU.c}
+\lstinputlisting[caption=Получить имя месяца,label=get_month1,style=customc]{patterns/13_arrays/45_month_1D/month1_RU.c}
 
 \subsubsection{x64}
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/13_arrays/45_month_1D/month1_MSVC_2013_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{patterns/13_arrays/45_month_1D/month1_MSVC_2013_x64_Ox.asm}
 
 Код очень простой:
 
@@ -57,7 +57,7 @@
 
 Скомпилируем также в 32-битном компиляторе MSVC:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x86]{patterns/13_arrays/45_month_1D/month1_MSVC_2013_x86_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x86,style=customasm]{patterns/13_arrays/45_month_1D/month1_MSVC_2013_x86_Ox.asm}
 
 Входное значение не нужно расширять до 64-битного значения, так что оно используется как есть.
 
@@ -68,7 +68,7 @@
 
 \myparagraph{ARM в режиме ARM}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/13_arrays/45_month_1D/month1_Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/13_arrays/45_month_1D/month1_Keil_ARM_O3.s}
 
 % TODO Fix R1s
 Адрес таблицы загружается в R1.
@@ -96,7 +96,7 @@ get_month1 PROC
 
 \subsubsection{ARM64}
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64]{patterns/13_arrays/45_month_1D/month1_GCC49_ARM64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64,style=customasm]{patterns/13_arrays/45_month_1D/month1_GCC49_ARM64_O3.s}
 
 \myindex{ARM!\Instructions!ADRP/ADD pair}
 Адрес таблицы загружается в X1 используя пару \ADRP/\ADD.
@@ -159,11 +159,11 @@ get_month1 PROC
 
 Мы можем немного изменить нашу программу, чтобы она падала при передаче неверного значения:
 
-\lstinputlisting[caption=assert() добавлен]{patterns/13_arrays/45_month_1D/month1_assert.c}
+\lstinputlisting[caption=assert() добавлен,style=customc]{patterns/13_arrays/45_month_1D/month1_assert.c}
 
 Макрос будет проверять на верные значения во время каждого старта функции и падать если выражение возвращает false.
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64]{patterns/13_arrays/45_month_1D/MSVC2013_x64_Ox_checked.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{patterns/13_arrays/45_month_1D/MSVC2013_x64_Ox_checked.asm}
 
 На самом деле, assert() это не функция, а макрос. Он проверяет условие и передает также номер строки и название
 файла в другую функцию, которая покажет эту информацию пользователю.
@@ -176,7 +176,7 @@ get_month1 PROC
 
 Вот что делает GCC:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 x64]{patterns/13_arrays/45_month_1D/GCC491_x64_O3_checked.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 x64,style=customasm]{patterns/13_arrays/45_month_1D/GCC491_x64_O3_checked.s}
 
 Так что макрос в GCC также передает и имя функции, для удобства.
 

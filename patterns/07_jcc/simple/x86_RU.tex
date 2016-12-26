@@ -4,7 +4,7 @@
 
 Имеем в итоге функцию \TT{f\_signed()}:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2010]{patterns/07_jcc/simple/signed_MSVC.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2010,style=customasm]{patterns/07_jcc/simple/signed_MSVC.asm}
 
 \myindex{x86!\Instructions!JLE}
 Первая инструкция \JLE значит \IT{Jump if Less or Equal}. 
@@ -26,7 +26,7 @@
 Функция \TT{f\_unsigned()} точно такая же, за тем исключением, что используются инструкции 
 \JBE и \JAE вместо \JLE и \JGE:
 
-\lstinputlisting[caption=GCC]{patterns/07_jcc/simple/unsigned_MSVC.asm}
+\lstinputlisting[caption=GCC,style=customasm]{patterns/07_jcc/simple/unsigned_MSVC.asm}
 
 \myindex{x86!\Instructions!JBE}
 \myindex{x86!\Instructions!JAE}
@@ -48,7 +48,7 @@
 
 Далее функция \main, где ничего нового для нас нет:
 
-\lstinputlisting[caption=\main]{patterns/07_jcc/simple/main_MSVC.asm}
+\lstinputlisting[caption=\main,style=customasm]{patterns/07_jcc/simple/main_MSVC.asm}
 
 \input{patterns/07_jcc/simple/olly_RU.tex}
 
@@ -118,7 +118,7 @@
 если флаги всегда одни и те же?
 По видимому, оптимизирующий MSVC не может этого делать, но GCC 4.8.1 делает больше оптимизаций:
 
-\lstinputlisting[caption=GCC 4.8.1 f\_signed()]{patterns/07_jcc/simple/GCC_O3_signed.asm}
+\lstinputlisting[caption=GCC 4.8.1 f\_signed(),style=customasm]{patterns/07_jcc/simple/GCC_O3_signed.asm}
 
 % should be here instead of 'switch' section?
 Мы здесь также видим \TT{JMP puts} вместо \TT{CALL puts / RETN}.
@@ -133,7 +133,7 @@ MSVC 2012, как видно, не может генерировать подо�
 
 Функция \TT{f\_unsigned()} получилась не настолько эстетически короткой:
 
-\lstinputlisting[caption=GCC 4.8.1 f\_unsigned()]{patterns/07_jcc/simple/GCC_O3_unsigned_RU.asm}
+\lstinputlisting[caption=GCC 4.8.1 f\_unsigned(),style=customasm]{patterns/07_jcc/simple/GCC_O3_unsigned_RU.asm}
 
 Тем не менее, здесь 2 инструкции \TT{CMP} вместо трех.
 

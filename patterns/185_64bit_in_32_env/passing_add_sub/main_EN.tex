@@ -1,10 +1,10 @@
 ﻿\subsection{Arguments passing, addition, subtraction}
 
-\lstinputlisting{patterns/185_64bit_in_32_env/passing_add_sub/1.c}
+\lstinputlisting[style=customc]{patterns/185_64bit_in_32_env/passing_add_sub/1.c}
 
 \subsubsection{x86}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob1]{patterns/185_64bit_in_32_env/passing_add_sub/1_MSVC.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob1,style=customasm]{patterns/185_64bit_in_32_env/passing_add_sub/1_MSVC.asm}
 
 We can see in the \GTT{f\_add\_test()} function that each 64-bit value is passed using two 32-bit values,
 high part first, then low part. 
@@ -24,13 +24,13 @@ if the carry flag is on, then 1 is also to be subtracted from the result.
 
 It is easy to see how the \GTT{f\_add()} function result is then passed to \printf{}.
 
-\lstinputlisting[caption=GCC 4.8.1 -O1 -fno-inline]{patterns/185_64bit_in_32_env/passing_add_sub/1_GCC.asm}
+\lstinputlisting[caption=GCC 4.8.1 -O1 -fno-inline,style=customasm]{patterns/185_64bit_in_32_env/passing_add_sub/1_GCC.asm}
 
 GCC code is the same.
 
 \subsubsection{ARM}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/passing_add_sub/Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/185_64bit_in_32_env/passing_add_sub/Keil_ARM_O3.s}
 
 \myindex{ARM!\Instructions!ADDS}
 \myindex{ARM!\Instructions!SUBS}

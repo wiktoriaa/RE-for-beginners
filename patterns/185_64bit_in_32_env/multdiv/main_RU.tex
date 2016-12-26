@@ -1,17 +1,17 @@
 ﻿\subsection{Умножение, деление}
 
-\lstinputlisting{patterns/185_64bit_in_32_env/multdiv/2.c}
+\lstinputlisting[style=customc]{patterns/185_64bit_in_32_env/multdiv/2.c}
 
 \subsubsection{x86}
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 /Ob1]{patterns/185_64bit_in_32_env/multdiv/2_MSVC_RU.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 /Ob1,style=customasm]{patterns/185_64bit_in_32_env/multdiv/2_MSVC_RU.asm}
 
 Умножение и деление --- это более сложная операция, так что обычно, компилятор встраивает вызовы библиотечных функций,
 делающих это.
 
 Значение этих библиотечных функций, здесь: \myref{sec:MSVC_library_func}.
 
-\lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline]{patterns/185_64bit_in_32_env/multdiv/2_GCC_RU.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.8.1 -fno-inline,style=customasm]{patterns/185_64bit_in_32_env/multdiv/2_GCC_RU.asm}
 
 GCC делает почти то же самое, тем не менее,
 встраивает код умножения прямо в функцию, посчитав что так будет эффективнее.
@@ -21,12 +21,12 @@ GCC делает почти то же самое, тем не менее,
 
 Keil для режима Thumb вставляет вызовы библиотечных функций:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode)]{patterns/185_64bit_in_32_env/multdiv/Keil_thumb_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{patterns/185_64bit_in_32_env/multdiv/Keil_thumb_O3.s}
 
 Keil для режима ARM, тем не менее, может сгенерировать код для умножения 64-битных чисел:
 
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode)]{patterns/185_64bit_in_32_env/multdiv/Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/185_64bit_in_32_env/multdiv/Keil_ARM_O3.s}
 % TODO add explanation
 
 \subsubsection{MIPS}

@@ -63,7 +63,7 @@ int __stdcall f2 (int a, int b, int c)
 Как следствие, количество аргументов функции легко узнать из инструкции \TT{RETN n} просто разделите
 $n$ на 4.
 
-\lstinputlisting[caption=MSVC 2010]{OS/calling_conventions/stdcall_ex.asm}
+\lstinputlisting[caption=MSVC 2010,style=customasm]{OS/calling_conventions/stdcall_ex.asm}
 
 \subsubsection{Функции с переменным количеством аргументов}
 
@@ -120,7 +120,7 @@ int __fastcall f3 (int a, int b, int c)
 
 Вот как он будет скомпилирован:
 
-\lstinputlisting[caption=\Optimizing MSVC 2010 /Ob0]{OS/calling_conventions/fastcall_ex.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010 /Ob0,style=customasm]{OS/calling_conventions/fastcall_ex.asm}
 
 Видно, что \glslink{callee}{вызываемая функция} сама возвращает
  \ac{SP} 
@@ -185,9 +185,9 @@ int __fastcall f3 (int a, int b, int c)
 
 Пример:
 
-\lstinputlisting{OS/calling_conventions/x64.c}
+\lstinputlisting[style=customc]{OS/calling_conventions/x64.c}
 
-\lstinputlisting[caption=MSVC 2012 /0b]{OS/calling_conventions/x64_MSVC_Ob.asm}
+\lstinputlisting[caption=MSVC 2012 /0b,style=customasm]{OS/calling_conventions/x64_MSVC_Ob.asm}
 
 \myindex{Scratch space}
 Здесь мы легко видим, как 7 аргументов передаются: 4 через регистры и остальные 3 через стек.
@@ -197,7 +197,7 @@ int __fastcall f3 (int a, int b, int c)
 для работы исключая эти 4, которые иначе будут заняты аргументами до конца исполнения функции.
 Выделение \q{scratch space} в стеке лежит на ответственности вызывающей функции.
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 /0b]{OS/calling_conventions/x64_MSVC_Ox_Ob.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /0b,style=customasm]{OS/calling_conventions/x64_MSVC_Ox_Ob.asm}
 
 Если компилировать этот пример с оптимизацией, то выйдет почти то же самое, 
 только \q{scratch space} не используется, потому что незачем.
@@ -221,7 +221,7 @@ int __fastcall f3 (int a, int b, int c)
 используется вместо 4 (\RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}), и здесь нет \q{scratch space}, 
 но \gls{callee} может сохранять значения регистров в стеке, если ему это нужно.
 
-\lstinputlisting[caption=\Optimizing GCC 4.7.3]{OS/calling_conventions/x64_linux_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.7.3,style=customasm]{OS/calling_conventions/x64_linux_O3.s}
 
 \myindex{AMD}
 N.B.: здесь значения записываются в 32-битные части регистров (например EAX) а не в весь 64-битный
@@ -248,9 +248,9 @@ N.B.: здесь значения записываются в 32-битные ч
 
 А вызывающие функции не использует их после вызова функции (автор этих строк никогда не видел в своей практике обратного случая).
 
-\lstinputlisting{OS/calling_conventions/change_arguments.c}
+\lstinputlisting[style=customc]{OS/calling_conventions/change_arguments.c}
 
-\lstinputlisting[caption=MSVC 2012]{OS/calling_conventions/change_arguments.asm}
+\lstinputlisting[caption=MSVC 2012,style=customasm]{OS/calling_conventions/change_arguments.asm}
 
 % TODO (OllyDbg) пример как в стеке меняется $a$
 

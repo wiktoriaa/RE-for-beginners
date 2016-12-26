@@ -5,20 +5,20 @@
 
 Попробуем:
 
-\lstinputlisting[caption=простой пример]{patterns/13_arrays/5_multidimensional/multi.c}
+\lstinputlisting[caption=простой пример,style=customc]{patterns/13_arrays/5_multidimensional/multi.c}
 
 \myparagraph{x86}
 
 В итоге (MSVC 2010):
 
-\lstinputlisting[caption=MSVC 2010]{patterns/13_arrays/5_multidimensional/multi_msvc_RU.asm}
+\lstinputlisting[caption=MSVC 2010,style=customasm]{patterns/13_arrays/5_multidimensional/multi_msvc_RU.asm}
 
 В принципе, ничего удивительного. В \TT{insert()} для вычисления адреса нужного элемента массива 
 три входных аргумента перемножаются по формуле $address=600 \cdot 4 \cdot x + 30 \cdot 4 \cdot y + 4z$, 
 чтобы представить массив трехмерным.
 Не забывайте также, что тип \Tint 32-битный (4 байта), поэтому все коэффициенты нужно умножить на 4.
 
-\lstinputlisting[caption=GCC 4.4.1]{patterns/13_arrays/5_multidimensional/multi_gcc_RU.asm}
+\lstinputlisting[caption=GCC 4.4.1,style=customasm]{patterns/13_arrays/5_multidimensional/multi_gcc_RU.asm}
 
 Компилятор GCC решил всё сделать немного иначе.
 Для вычисления одной из операций ($30y$), GCC создал код, где нет самой операции умножения.
@@ -31,7 +31,7 @@ $(y+y) \ll 4 - (y+y) = (2y) \ll 4 - 2y = 2 \cdot 16 \cdot y - 2y = 32y - 2y = 30
 
 \myparagraph{ARM + \NonOptimizingXcodeIV (\ThumbMode)}
 
-\lstinputlisting[caption=\NonOptimizingXcodeIV (\ThumbMode)]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O0_RU.asm}
+\lstinputlisting[caption=\NonOptimizingXcodeIV (\ThumbMode),style=customasm]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O0_RU.asm}
 
 \NonOptimizing LLVM сохраняет все переменные в локальном стеке, хотя это и избыточно.
 
@@ -39,7 +39,7 @@ $(y+y) \ll 4 - (y+y) = (2y) \ll 4 - 2y = 2 \cdot 16 \cdot y - 2y = 32y - 2y = 30
 
 \myparagraph{ARM + \OptimizingXcodeIV (\ThumbMode)}
 
-\lstinputlisting[caption=\OptimizingXcodeIV (\ThumbMode)]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O3_RU.asm}
+\lstinputlisting[caption=\OptimizingXcodeIV (\ThumbMode),style=customasm]{patterns/13_arrays/5_multidimensional/multi_Xcode_thumb_O3_RU.asm}
 
 Тут используются уже описанные трюки для замены умножения на операции сдвига, сложения и вычитания.
 
