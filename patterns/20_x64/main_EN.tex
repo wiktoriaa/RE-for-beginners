@@ -53,10 +53,6 @@ The \CCpp \Tint type is still 32-bit for compatibility.
 \item
 All pointers are 64-bit now.
 
-This provokes irritation sometimes: now one needs twice as much memory for storing pointers,
-including cache memory, despite the fact that x64 \ac{CPU}s can address only 48 bits of external 
-\ac{RAM}.
-
 \end{itemize}
 
 \myindex{Register allocation}
@@ -104,3 +100,18 @@ By the way, there are CPUs with much more \ac{GPR}'s, e.g. Itanium (128 register
 \subsection{Float point numbers}
 
 How floating point numbers are processed in x86-64 is explained here: \myref{floating_SIMD}.
+
+\subsection{64-bit architecture criticism}
+
+Some people has irritation sometimes: now one needs twice as much memory for storing pointers,
+including cache memory, despite the fact that x64 \ac{CPU}s can address only 48 bits of external 
+\ac{RAM}.
+
+Some people made their own memory allocators.
+\myindex{CryptoMiniSat}
+It's interesting to know about CryptoMiniSat\footnote{\url{https://github.com/msoos/cryptominisat/}} case.
+This program rarely uses more than 4GiB of \ac{RAM}, but it uses pointers heavily.
+So it requires less memory on 32-bit architecture than on 64-bit one.
+To mitigate this problem, author made his own allocator (in \IT{clauseallocator.(h|cpp)} files),
+which allows to have access to allocated memory using 32-bit identifiers instead of 64-bit pointers.
+

@@ -91,6 +91,33 @@ Hello, world!
 
 14 is the number of characters printed.
 
+\myindex{Hex-Rays}
+By the way, when we decompile C++ in Hex-Rays, we can often encounter a function which terminated with destructor of
+some class:
+мы разбираем C++ код, нередко можно наткнуться на ф-цию, которая заканчивается
+
+\begin{lstlisting}
+...
+
+call    ??1CString@@QAE@XZ ; CString::~CString(void)
+mov     ecx, [esp+30h+var_C]
+pop     edi
+pop     ebx
+mov     large fs:0, ecx
+add     esp, 28h
+retn
+\end{lstlisting}
+
+By C++ standard, destructor doesn't return anything, but when Hex-Rays don't know about it, and thinks that both
+destructor and this function returns \Tint, we can see something like that in output:
+
+\begin{lstlisting}
+...
+
+	return CString::~CString(&Str);
+}
+\begin{lstlisting}
+
 \subsection{What if we do not use the function result?}
 
 \printf returns the count of characters successfully output, but the result of this function 
