@@ -87,6 +87,32 @@ Hello, world!
 
 14 это как раз количество выведенных символов.
 
+\myindex{Hex-Rays}
+Кстати, когда в Hex-Rays мы разбираем C++ код, нередко можно наткнуться на ф-цию, которая заканчивается
+деструктором какого-либо класса:
+
+\begin{lstlisting}
+...
+
+call    ??1CString@@QAE@XZ ; CString::~CString(void)
+mov     ecx, [esp+30h+var_C]
+pop     edi
+pop     ebx
+mov     large fs:0, ecx
+add     esp, 28h
+retn
+\end{lstlisting}
+
+По стандарту С++, деструкторы ничего не возвращают, но когда Hex-Rays об не знает, и думает что и десктрутор,
+и эта ф-ция по умолчанию возвращает \Tint, то на выходе получается такой код:
+
+\begin{lstlisting}
+...
+
+	return CString::~CString(&Str);
+}
+\begin{lstlisting}
+
 \subsection{Что если не использовать результат функции?}
 
 \printf возвращает количество успешно выведенных символов, но результат работы этой функции 
