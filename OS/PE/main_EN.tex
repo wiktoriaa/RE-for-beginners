@@ -206,6 +206,36 @@ typedef struct _IMAGE_SECTION_HEADER {
 A word about terminology: \IT{PointerToRawData} it called \q{Offset} in Hiew
 and \IT{VirtualAddress} is called \q{RVA} there.
 
+\subsubsection{Data section}
+
+Data section in file can be smaller than in memory.
+For example, some variables can be initialized, some are not.
+Compiler and linker will collect them all into one section, but the first part of it is initialized and allocated in file,
+while another is absent in file (of course, to make it smaller).
+\IT{VirtualSize} will be equal to the size of section in memory, and \IT{SizeOfRawData} --- to
+size of section in file.
+
+IDA can show the border between initialized and not initialized parts like that:
+
+\begin{lstlisting}
+...
+
+.data:10017FFA                 db    0
+.data:10017FFB                 db    0
+.data:10017FFC                 db    0
+.data:10017FFD                 db    0
+.data:10017FFE                 db    0
+.data:10017FFF                 db    0
+.data:10018000                 db    ? ;
+.data:10018001                 db    ? ;
+.data:10018002                 db    ? ;
+.data:10018003                 db    ? ;
+.data:10018004                 db    ? ;
+.data:10018005                 db    ? ;
+
+...
+\end{lstlisting}
+
 \subsubsection{Relocations (relocs)}
 \label{subsec:relocs}
 

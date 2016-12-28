@@ -1,35 +1,17 @@
 ﻿\subsection{Fall-through}
 
 Ещё одно популярное использование оператора \TT{switch()} это т.н. \q{fallthrough} (\q{провал}).
-Вот простой пример:
+Вот простой пример\footnote{Взято отсюда: \url{https://github.com/azonalon/prgraas/blob/master/prog1lib/lecture_examples/is_whitespace.c}}:
 
-\lstinputlisting[numbers=left,style=customc]{patterns/08_switch/4_fallthrough/fallthrough.c}
+\lstinputlisting[numbers=left,style=customc]{patterns/08_switch/4_fallthrough/fallthrough1.c}
 
-Если $type=1$ (R), $read$ будет выставлен в 1, если $type=2$ (W), $write$ будет выставлен в 1.
-В случае $type=3$ (RW), обе $read$ и $write$ будут выставлены в 1.
+Немного сложнее, из ядра Linux\footnote{\url{https://github.com/torvalds/linux/blob/master/drivers/media/dvb-frontends/lgdt3306a.c}}:
 
-Фрагмент кода на строке 14 будет исполнен в двух случаях: если $type=RW$ или если $type=W$.
-Там нет \q{break} для \q{case RW}, и это нормально.
+\lstinputlisting[numbers=left,style=customc]{patterns/08_switch/4_fallthrough/fallthrough2.c}
 
-\subsubsection{MSVC x86}
+\lstinputlisting[caption=Оптимизирующий GCC 5.4.0 x86,numbers=left,style=customc]{patterns/08_switch/4_fallthrough/fallthrough2.s}
 
-\lstinputlisting[caption=MSVC 2012,style=customasm]{patterns/08_switch/4_fallthrough/fallthrough_MSVC.asm}
-
-Код почти полностью повторяет то, что в исходнике.
-
-Там нет переходов между метками \TT{\$LN4@f} и 
-\TT{\$LN3@f}: так что когда управление (code flow) находится на 
-\TT{\$LN4@f}, $read$ в начале выставляется в 1, затем $write$.
-
-Наверное, поэтому всё это и называется \q{проваливаться}: управление проваливается через
-один фрагмент кода (выставляющий $read$) в другой (выставляющий $write$).
-Если $type=W$, мы оказываемся на \TT{\$LN3@f}, 
-так что код выставляющий $read$ в 1 не исполнится.
-
-\subsubsection{ARM64}
-
-\lstinputlisting[caption=GCC (Linaro) 4.9,style=customasm]{patterns/08_switch/4_fallthrough/fallthrough_ARM64_RU.s}
-
-Почти то же самое.
-Здесь нет переходов между метками \TT{.L4} и \TT{.L3}.
+На метку \TT{.L5} управление может перейти если на входе ф-ции число 3250.
+Но на эту метку можно попасть и с другой стороны:
+мы видим что между вызовом \printf и меткой \TT{.L5} нет никаких пероходов.
 

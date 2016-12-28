@@ -1,32 +1,17 @@
 ﻿\subsection{Fall-through}
 
-Another very popular usage of \TT{switch()} is the fall-through.
-Here is a small example:
+Another popular usage of \TT{switch()} operator is so-called \q{fallthrough}.
+Here is simple example\footnote{Copypasted from \url{https://github.com/azonalon/prgraas/blob/master/prog1lib/lecture_examples/is_whitespace.c}}:
 
-\lstinputlisting[numbers=left,style=customc]{patterns/08_switch/4_fallthrough/fallthrough.c}
+\lstinputlisting[numbers=left,style=customc]{patterns/08_switch/4_fallthrough/fallthrough1.c}
 
-If $type=1$ (R), $read$ is to be set to 1, if $type=2$ (W), $write$ is to be set to 1.
-In case of $type=3$ (RW), both $read$ and $write$ is to be set to 1.
+Slightly harder, from Linux kernel\footnote{Copypasted from \url{https://github.com/torvalds/linux/blob/master/drivers/media/dvb-frontends/lgdt3306a.c}}:
 
-The code at line 14 is executed in two cases: if $type=RW$ or if $type=W$.
-There is no \q{break} for \q{case RW}x and that's OK.
+\lstinputlisting[numbers=left,style=customc]{patterns/08_switch/4_fallthrough/fallthrough2.c}
 
-\subsubsection{MSVC x86}
+\lstinputlisting[caption=Optimizing GCC 5.4.0 x86,numbers=left,style=customasm]{patterns/08_switch/4_fallthrough/fallthrough2.s}
 
-\lstinputlisting[caption=MSVC 2012,style=customasm]{patterns/08_switch/4_fallthrough/fallthrough_MSVC.asm}
-
-The code mostly resembles what is in the source.
-There are no jumps between labels \TT{\$LN4@f} and \TT{\$LN3@f}: so when code flow is at 
-\TT{\$LN4@f}, $read$ is first set to 1, then $write$.
-This is why it's called fall-through: code flow falls through one piece of code
-(setting $read$) to another (setting $write$).
-
-If $type=W$, we land at \TT{\$LN3@f}, so no code setting $read$ to 1 is executed.
-
-\subsubsection{ARM64}
-
-\lstinputlisting[caption=GCC (Linaro) 4.9,style=customasm]{patterns/08_switch/4_fallthrough/fallthrough_ARM64_EN.s}
-
-Merely the same thing.
-There are no jumps between labels \TT{.L4} and \TT{.L3}.
+We can get to \TT{.L5} label if there is number 3250 at function's input.
+But we can get to this label from the other side:
+we see that there are no jumps between \printf call and \TT{.L5} label.
 
