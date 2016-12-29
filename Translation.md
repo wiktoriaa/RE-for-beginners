@@ -14,6 +14,13 @@ Please submit your work as early as possible: other translators will be aware of
 
 Korean, Chinese and Persian languages are reserved by publishers.
 
+## Content over everything else
+
+Do not focus on typography, fonts, nice-looking visual candy and other fancy TeX features.
+The most important thing here is a text, so this is first priority.
+
+Also, you may ignore all TeX errors, I'll fix them later.
+
 ## Style
 
 I deeply convinced that technical literature should should be terse and formal.
@@ -37,6 +44,7 @@ Italian: `\ITA{}`
 German: `\DE{}`
 Thai: `\THA{}`
 Dutch: `\NL{}`
+German: `\DE{}`
 
 There are also `\ESph{}`, `\PTBRph{}`, `\PLph{}`, `\DEph{}` and `\ITAph{}` placeholder macros in `*.tex` files, where the translated text must be.
 
