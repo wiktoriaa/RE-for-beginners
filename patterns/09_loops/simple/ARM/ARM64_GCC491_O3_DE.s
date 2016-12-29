@@ -14,12 +14,17 @@ main:
 	add	x29, sp, 0
 ; Inhalt des X19 Registers auf dem Stack ablegen
 	str	x19, [sp,16]
+<<<<<<< HEAD
 ; wir verwenden das W19 Register als Zähler.
+=======
+; wir verwenden das W19 Register als ZÃ¤hler.
+>>>>>>> 33058039def6268466867db95246998137625356
 ; weise diesem den Startwert 2 zu:
 	mov	w19, 2
 .L3:
 ; erstes Argument von printing_function() vorbereiten:
 	mov	w0, w19
+<<<<<<< HEAD
 ; Zählerregister inkrementieren.
 	add	w19, w19, 1
 ; W0 enthält hier immer noch den Wert des Zählers vor dem Inkrement.
@@ -27,6 +32,15 @@ main:
 ; am Ende?
 	cmp	w19, 10
 ; nein, dann springe zum Anfang des Schleifenkörpers:
+=======
+; ZÃ¤hlerregister inkrementieren.
+	add	w19, w19, 1
+; W0 enthÃ¤lt hier immer noch den Wert des ZÃ¤hlers vor dem Inkrement.
+	bl	printing_function
+; am Ende?
+	cmp	w19, 10
+; nein, dann springe zum Anfang des SchleifenkÃ¶rpers:
+>>>>>>> 33058039def6268466867db95246998137625356
 	bne	.L3
 ; return 0
 	mov	w0, 0

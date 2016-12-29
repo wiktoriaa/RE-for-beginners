@@ -1,9 +1,15 @@
 my_memcpy:
 ; X0 = Zieladresse
 ; X1 = Quelladresse
+<<<<<<< HEAD
 ; X2 = Blockgröße
 
 ; initialisiere Zähler (i) mit 0
+=======
+; X2 = BlockgrÃ¶ÃŸe
+
+; initialisiere ZÃ¤hler (i) mit 0
+>>>>>>> 33058039def6268466867db95246998137625356
 	mov	x3, 0
 .L2:
 ; alles kopiert? dann verlassen:
