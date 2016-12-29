@@ -117,4 +117,18 @@ $0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4
 \newcommand{\FnFP}{\footnote{LISP, Python, Lua, etc.}}
 \myindex{\Recursion!Tail recursion}
 Кстати, поэтому некоторые компиляторы функциональных \ac{PL}\FnFP{} (где рекурсия активно применяется) используют \glslink{tail call}{хвостовую рекурсию}.
+Хвостовая рекурсия, это когда ф-ция имеет только один вызов самой себя, в самом конце, например:
+
+\begin[caption=Scheme, пример взят из Wikipedia]{lstlisting}
+;; factorial : number -> number
+;; to calculate the product of all positive
+;; integers less than or equal to n.
+(define (factorial n)
+ (if (= n 1)
+      1
+      (* n (factorial (- n 1)))))
+\end{lstlisting}
+
+Хвостовая рекурсия важна, потому что компилятор может легко переработать такой код в итеративный, чтобы избавиться
+от рекурсии.
 

@@ -119,3 +119,17 @@ implementation.
 \myindex{\Recursion!Tail recursion}
 
 By the way, that is the reason that some functional \ac{PL}\FnFP{} compilers (where recursion is used heavily) use \gls{tail call}.
+We talk about tail call when a function has only one single call to itself located at the end of it, like:
+
+\begin[caption=Scheme, example is copypasted from Wikipedia]{lstlisting}
+;; factorial : number -> number
+;; to calculate the product of all positive
+;; integers less than or equal to n.
+(define (factorial n)
+ (if (= n 1)
+     1
+	 (* n (factorial (- n 1)))))
+\end{lstlisting}
+
+Tail call is important because compiler can rework this code easily into iterative one, to get rid of recursion.
+
