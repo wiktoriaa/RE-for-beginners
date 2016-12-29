@@ -11,3 +11,4 @@ $LL2@strlen:
 	dec	eax                         ; dekrementiere EAX
 	ret	0
 _strlen ENDP
+

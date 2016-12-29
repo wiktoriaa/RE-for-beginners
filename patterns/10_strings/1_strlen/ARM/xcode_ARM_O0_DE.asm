@@ -3,7 +3,7 @@ _strlen
 eos  = -8
 str  = -4
 
-     SUB    SP, SP, #8 ; reserviere 8 Bytes für lokale Variablen
+     SUB    SP, SP, #8 ; reserviere 8 Bytes fÃ¼r lokale Variablen
      STR    R0, [SP,#8+str]
      LDR    R0, [SP,#8+str]
      STR    R0, [SP,#8+eos]
