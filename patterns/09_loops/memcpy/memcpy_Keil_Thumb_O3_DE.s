@@ -1,12 +1,12 @@
 my_memcpy PROC
 ; R0 = Zieladresse
 ; R1 = Quelladresse
-; R2 = Blockgröße
+; R2 = BlockgrÃ¶ÃŸe
 
         PUSH     {r4,lr}
-; initialisiere Zähler (i) mit 0
+; initialisiere ZÃ¤hler (i) mit 0
         MOVS     r3,#0
-; Bedingung wird am Ende der Schleife geprüft, daher springe dorthin:
+; Bedingung wird am Ende der Schleife geprÃ¼ft, daher springe dorthin:
         B        |L0.12|
 |L0.6|
 ; lade Byte von R1+i:

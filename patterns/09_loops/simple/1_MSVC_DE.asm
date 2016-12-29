@@ -12,9 +12,9 @@ $LN2@main:
     mov    DWORD PTR _i$[ebp], eax
 $LN3@main:
     cmp    DWORD PTR _i$[ebp], 10  ; diese Bedingung wird vor jedem Durchlauf
-    geprüft. jge    SHORT $LN1@main         ; wenn (i) größer oder gleich
+    geprÃ¼ft. jge    SHORT $LN1@main         ; wenn (i) grÃ¶ÃŸer oder gleich
     10 ist, beende Schleife loop mov    ecx, DWORD PTR _i$[ebp] ;
-    Schleifenkörper:
+    SchleifenkÃ¶rper:
     call printing_function(i) push   ecx
     call   _printing_function
     add    esp, 4

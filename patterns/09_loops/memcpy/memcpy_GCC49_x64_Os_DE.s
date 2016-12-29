@@ -1,9 +1,9 @@
 my_memcpy:
 ; RDI = Zieladresse
 ; RSI = Quelladresse
-; RDX = Blockgröße
+; RDX = BlockgrÃ¶ÃŸe
 
-; initialisiere Zähler (i) mit 0
+; initialisiere ZÃ¤hler (i) mit 0
 	xor	eax, eax
 .L2:
 ; alles kopiert? dann verlassen:
