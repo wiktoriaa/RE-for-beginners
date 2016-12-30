@@ -9,7 +9,7 @@ fastcall~(\myref{fastcall}) или win64~(\myref{sec:callingconventions_win64}).
 
 \mysubparagraph{\NonOptimizingKeilVI (\ARMMode)}
 
-\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode)]
+\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode),style=customasm]
 .text:00000000 main
 .text:00000000 10 40 2D E9   STMFD   SP!, {R4,LR}
 .text:00000004 03 30 A0 E3   MOV     R3, #3
@@ -31,7 +31,7 @@ fastcall~(\myref{fastcall}) или win64~(\myref{sec:callingconventions_win64}).
 
 \mysubparagraph{\OptimizingKeilVI (\ThumbMode)}
 
-\begin{lstlisting}[caption=\OptimizingKeilVI (\ThumbMode)]
+\begin{lstlisting}[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]
 .text:00000000 main
 .text:00000000 10 B5        PUSH    {R4,LR}
 .text:00000002 03 23        MOVS    R3, #3
@@ -49,7 +49,7 @@ fastcall~(\myref{fastcall}) или win64~(\myref{sec:callingconventions_win64}).
 
 Немного переделаем пример, убрав \IT{return 0}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 
 void main()
@@ -60,7 +60,7 @@ void main()
 
 Результат получится необычным:
 
-\begin{lstlisting}[caption=\OptimizingKeilVI (\ARMMode)]
+\begin{lstlisting}[caption=\OptimizingKeilVI (\ARMMode),style=customasm]
 .text:00000014 main
 .text:00000014 03 30 A0 E3   MOV     R3, #3
 .text:00000018 02 20 A0 E3   MOV     R2, #2
@@ -99,7 +99,7 @@ void main()
 
 \mysubparagraph{\NonOptimizing GCC (Linaro) 4.9}
 
-\lstinputlisting[caption=\NonOptimizing GCC (Linaro) 4.9]{patterns/03_printf/ARM/ARM3_O0_RU.lst}
+\lstinputlisting[caption=\NonOptimizing GCC (Linaro) 4.9,style=customasm]{patterns/03_printf/ARM/ARM3_O0_RU.lst}
 
 \myindex{ARM!\Instructions!STP}
 Итак, первая инструкция \INS{STP} (\IT{Store Pair}) сохраняет \ac{FP} (X29) и \ac{LR} (X30) в стеке.

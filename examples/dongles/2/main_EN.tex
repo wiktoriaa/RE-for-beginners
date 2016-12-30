@@ -28,7 +28,7 @@ Thanks to \ac{IDA}, it is easy to load the COFF executable used in SCO OpenServe
 
 Let's also try to find \q{rbsl} string and indeed, found it in this code fragment:
 
-\lstinputlisting{examples/dongles/2/1.lst}
+\lstinputlisting[style=customasm]{examples/dongles/2/1.lst}
 
 Yes, indeed, the program needs to communicate with the driver somehow.
 
@@ -36,13 +36,13 @@ Yes, indeed, the program needs to communicate with the driver somehow.
 The only place where the \TT{SSQC()}
 function is called is the \gls{thunk function}:
 
-\lstinputlisting{examples/dongles/2/2.lst}
+\lstinputlisting[style=customasm]{examples/dongles/2/2.lst}
 
 SSQ() can be called from at least 2 functions.
 
 One of these is:
 
-\lstinputlisting{examples/dongles/2/check1.lst}
+\lstinputlisting[style=customasm]{examples/dongles/2/check1.lst}
 
 \q{\TT{3C}} and \q{\TT{3E}} sound familiar: there was a Sentinel Pro dongle by Rainbow with no memory,
 providing only one crypto-hashing secret function.
@@ -91,7 +91,7 @@ Let's see where the value from the global variable \TT{ctl\_mode} is used.
 
 One such place is:
 
-\lstinputlisting{examples/dongles/2/4.lst}
+\lstinputlisting[style=customasm]{examples/dongles/2/4.lst}
 
 If it is 0, an encrypted error message is passed to a decryption routine and printed.
 
@@ -99,7 +99,7 @@ If it is 0, an encrypted error message is passed to a decryption routine and pri
 
 The error string decryption routine seems a simple \gls{xoring}:
 
-\lstinputlisting{examples/dongles/2/err_warn.lst}
+\lstinputlisting[style=customasm]{examples/dongles/2/err_warn.lst}
 
 That's why we were unable to find the error messages in the executable files, because they are encrypted
 (which is is popular practice).
@@ -112,7 +112,7 @@ If they don't match, it works with some \TT{timer()}
 function (maybe waiting for a poorly
 connected dongle to be reconnected and check again?) and then decrypts another error message to dump.
 
-\lstinputlisting{examples/dongles/2/check2.lst}
+\lstinputlisting[style=customasm]{examples/dongles/2/check2.lst}
 
 Bypassing the dongle is pretty straightforward: just patch all jumps after the relevant \CMP instructions.
 
@@ -123,7 +123,7 @@ Another option is to write our own SCO OpenServer driver, containing a table of 
 By the way, we can also try to decrypt all error messages.
 The algorithm that is located in the \TT{err\_warn()} function is very simple, indeed:
 
-\lstinputlisting[caption=Decryption function]{examples/dongles/2/decrypting_EN.lst}
+\lstinputlisting[caption=Decryption function,style=customasm]{examples/dongles/2/decrypting_EN.lst}
 
 As we can see, 
 not just string is supplied to the decryption function, but also the key:

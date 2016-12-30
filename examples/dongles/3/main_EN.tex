@@ -27,13 +27,13 @@ Given that, the MS-DOS program which works with a dongle has to access the LPT p
 
 So we can just search for such instructions. And yes, here they are:
 
-\lstinputlisting{examples/dongles/3/1.lst}
+\lstinputlisting[style=customasm]{examples/dongles/3/1.lst}
 
 (All label names in this example were given by me).
 
 \TT{out\_port()} is referenced only in one function:
 
-\lstinputlisting{examples/dongles/3/2.lst}
+\lstinputlisting[style=customasm]{examples/dongles/3/2.lst}
 
 This is again a Sentinel Pro \q{hashing} dongle as in the previous example.
 It is noticeably because text strings are passed here, too, and 16 bit values are returned and compared with others.
@@ -67,7 +67,7 @@ But generally speaking, it is not necessary to know: it is easy to solve our tas
 
 Here is the dongle checking routine:
 
-\lstinputlisting{examples/dongles/3/3.lst}
+\lstinputlisting[style=customasm]{examples/dongles/3/3.lst}
 
 Since the routine can be called very frequently, e.g., before the execution of each important software feature, 
 and accessing the dongle is generally slow (because of the slow printer port and also slow
@@ -78,7 +78,7 @@ by checking the current time in the \TT{biostime()} function.
 The \TT{get\_rand()} 
 function uses the standard C function:
 
-\lstinputlisting{examples/dongles/3/4.lst}
+\lstinputlisting[style=customasm]{examples/dongles/3/4.lst}
 
 So the text string is selected randomly, passed into the dongle, and then the result of the hashing 
 is compared with the correct value.
@@ -87,7 +87,7 @@ The text strings seem to be constructed randomly as well, during software develo
 
 And this is how the main dongle checking function is called:
 
-\lstinputlisting{examples/dongles/3/5.lst}
+\lstinputlisting[style=customasm]{examples/dongles/3/5.lst}
 
 Bypassing the dongle is easy, just force the \TT{check\_dongle()} function to always return 0.
 
