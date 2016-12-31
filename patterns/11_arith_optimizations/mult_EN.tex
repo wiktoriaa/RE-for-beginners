@@ -4,7 +4,7 @@
 
 Here is a simple example:
 
-\begin{lstlisting}[caption=\Optimizing MSVC 2010]
+\begin{lstlisting}[style=customc]
 unsigned int f(unsigned int a)
 {
 	return a*8;
@@ -14,7 +14,7 @@ unsigned int f(unsigned int a)
 Multiplication by 8 is replaced by 3 addition instructions, which do the same.
 Apparently, MSVC's optimizer decided that this code can be faster.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=\Optimizing MSVC 2010,style=customasmx86]
 _TEXT	SEGMENT
 _a$ = 8		; size = 4
 _f	PROC
@@ -34,14 +34,14 @@ END
 
 Multiplication and division instructions by a numbers that's a power of 2 are often replaced by shift instructions.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 unsigned int f(unsigned int a)
 {
 	return a*4;
 };
 \end{lstlisting}
 
-\begin{lstlisting}[caption=\NonOptimizing MSVC 2010]
+\begin{lstlisting}[caption=\NonOptimizing MSVC 2010,style=customasmx86]
 _a$ = 8		; size = 4
 _f	PROC
 	push	ebp
@@ -67,7 +67,7 @@ The added bits at right are always zeros.
 
 Multiplication by 4 in ARM:
 
-\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode)]
+\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode),style=customasmARM]
 f PROC
         LSL      r0,r0,#2
         BX       lr

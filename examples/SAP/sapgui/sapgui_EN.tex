@@ -38,7 +38,7 @@ Yes, it is present and there is only one reference to it.
 We see the following fragment of code 
 (all file offsets are valid for SAPGUI 720 win32, SAPguilib.dll file version 7200,1,0,9009):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:6440D51B                 lea     eax, [ebp+2108h+var_211C]
 .text:6440D51E                 push    eax             ; int
 .text:6440D51F                 push    offset aTdw_nocompress ; "TDW_NOCOMPRESS"
@@ -73,7 +73,7 @@ After that, the numerical value is stored in \TT{edi+15h}.
 
 Also take a look at the \TT{chk\_env()} function (we gave this name to it manually):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64413F20 ; int __cdecl chk_env(char *VarName, int)
 .text:64413F20 chk_env         proc near
 .text:64413F20
@@ -204,7 +204,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 The settings for each variable are written in the array via a pointer in the \EDI register.
 \EDI is set before the function call:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:6440EE00                 lea     edi, [ebp+2884h+var_2884] ; options here like +0x15...
 .text:6440EE03                 lea     ecx, [esi+24h]
 .text:6440EE06                 call    load_command_line
@@ -225,7 +225,7 @@ Yes, and the only reference is in
 
 How do we get know the class/method names? There are a lot of special debugging calls that write to the log files, like:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64405160                 push    dword ptr [esi+2854h]
 .text:64405166                 push    offset aCdwsguiPrepare ; "\nCDwsGui::PrepareInfoWindow: sapgui env"...
 .text:6440516B                 push    dword ptr [esi+2848h]
@@ -235,7 +235,7 @@ How do we get know the class/method names? There are a lot of special debugging 
 
 \dots or:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:6440237A                 push    eax
 .text:6440237B                 push    offset aCclientStart_6 ; "CClient::Start: set shortcut user to '\%"...
 .text:64402380                 push    dword ptr [edi+4]
@@ -247,7 +247,7 @@ It is \IT{very} useful.
 
 So let's see the contents of this pesky annoying pop-up window's function:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64404F4F CDwsGui__PrepareInfoWindow proc near
 .text:64404F4F
 .text:64404F4F pvParam         = byte ptr -3Ch
@@ -498,7 +498,7 @@ Depending on the option turned on in the object, a specific message part is to b
 
 If the value at address \TT{this+0x3D} is not zero, the compression is off:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64405007 loc_64405007:
 .text:64405007                 cmp     byte ptr [esi+3Dh], 0
 .text:6440500B                 jz      short bypass
@@ -532,7 +532,7 @@ Are we sure the value is the same?
 We are starting to search for all occurrences of the \TT{0x15} value in code. 
 For a small programs like SAPGUI, it sometimes works. Here is the first occurrence we've got:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64404C19 sub_64404C19    proc near
 .text:64404C19
 .text:64404C19 arg_0           = dword ptr  4
@@ -567,7 +567,7 @@ The function has been called from the function named \IT{CDwsGui::CopyOptions}! 
 
 But the real answer is in \IT{CDwsGui::Init()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:6440B0BF loc_6440B0BF:
 .text:6440B0BF                 mov     eax, [ebp+arg_0]
 .text:6440B0C2                 push    [ebp+arg_4]
@@ -583,7 +583,7 @@ but at address \TT{this+0x28}. 0x15 + 0x28 is exactly 0x3D. OK, we found the poi
 Let's also find the rest of the places where the 0x3D offset is used. 
 Here is one of them in the \IT{CDwsGui::SapguiRun} function (again, thanks to the debugging calls):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64409D58                 cmp     [esi+3Dh], bl   ; ESI is pointer to CDwsGui object
 .text:64409D5B                 lea     ecx, [esi+2B8h]
 .text:64409D61                 setz    al
@@ -615,7 +615,7 @@ Obviously, this is the point where the compression flag is to be set in the \IT{
 So, the compression flag is passed in the 5th argument of \IT{CConnectionContext::CreateNetwork}. 
 Inside the function, another one is called:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 ...
 .text:64403476                 push    [ebp+compression]
 .text:64403479                 push    [ebp+arg_C]
@@ -630,7 +630,7 @@ The compression flag is passed here in the 5th argument to the \IT{CNetwork::CNe
 And here is how the \IT{CNetwork} constructor sets the flag in the \IT{CNetwork} object according to its 5th argument \IT{and}
 another variable which probably could also affect network packets compression.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64411DF1                 cmp     [ebp+compression], esi
 .text:64411DF7                 jz      short set_EAX_to_0
 .text:64411DF9                 mov     al, [ebx+78h]   ; another value may affect compression?
@@ -657,7 +657,7 @@ At this point we know the compression flag is stored in the \IT{CNetwork} class 
 Now let's dig through SAPguilib.dll for the \TT{0x3A4} value. And here is the second occurrence in 
 \IT{CDwsGui::OnClientMessageWrite} (endless thanks for the debugging information):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64406F76 loc_64406F76:
 .text:64406F76                 mov     ecx, [ebp+7728h+var_7794]
 .text:64406F79                 cmp     dword ptr [ecx+3A4h], 1
@@ -700,7 +700,7 @@ Let's take a look in \IT{sub\_644055C5}. In it we can only see the call to memcp
 
 And, let's take a look inside \IT{sub\_64417440}. What we see is:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:6441747C                 push    offset aErrorCsrcompre ; "\nERROR: CsRCompress: invalid handle"
 .text:64417481                 call    eax ; dword_644F94C8
 .text:64417483                 add     esp, 4
@@ -715,7 +715,7 @@ So it is available in source form.
 
 Doing the last check here:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64406F79                 cmp     dword ptr [ecx+3A4h], 1
 .text:64406F80                 jnz     compression_flag_is_zero
 \end{lstlisting}

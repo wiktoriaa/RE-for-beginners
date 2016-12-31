@@ -177,7 +177,7 @@ PE-файле также задает минимальный номер верс
 \\
 Вот как PE-секция описывается в файле:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 typedef struct _IMAGE_SECTION_HEADER {
   BYTE  Name[IMAGE_SIZEOF_SHORT_NAME];
   union {
@@ -209,7 +209,7 @@ typedef struct _IMAGE_SECTION_HEADER {
 
 IDA будет показывать границу между инициализированной и неинициализированной частями так:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 ...
 
 .data:10017FFA                 db    0
@@ -251,7 +251,7 @@ IDA будет показывать границу между инициализ
 % TODO тут бы пример с HIEW или objdump..
 Например, по \TT{0x410000} лежит некая глобальная переменная, и вот как обеспечивается её чтение:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 A1 00 00 41 00         mov         eax,[000410000]
 \end{lstlisting}
 
@@ -381,7 +381,7 @@ PE\_add\_import\footnote{\href{http://go.yurichev.com/17049}{yurichev.com}}
 Раньше, в прошлых версиях утилиты, на месте функции, вместо которой вы хотите подставить вызов в другую DLL,
 моя утилита вписывала такой код:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 MOV EAX, [yourdll.dll!function]
 JMP EAX
 \end{lstlisting}
@@ -445,7 +445,7 @@ Matt Pietrek в \PietrekPEURL, предлагает делать binding сра�
 Собственно, в .exe-файлы байткод вместо обычного кода, однако, точка входа (\ac{OEP}) 
 указывает на крохотный фрагмент x86-кода:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 jmp         mscoree.dll!_CorExeMain
 \end{lstlisting}
 

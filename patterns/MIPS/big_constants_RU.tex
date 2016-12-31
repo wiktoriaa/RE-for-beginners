@@ -1,7 +1,7 @@
 ﻿\subsection{Загрузка 32-битной константы в регистр}
 \label{MIPS_big_constants}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 unsigned int f()
 {
 	return 0x12345678;
@@ -17,7 +17,7 @@ unsigned int f()
 первая загружает старшую часть 32-битного числа и вторая применяет операцию \q{ИЛИ},
 эффект от которой в том, что она просто выставляет младшие 16 бит целевого регистра:
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput),style=customasmMIPS]
         li      $2,305397760  # 0x12340000
         j       $31
         ori     $2,$2,0x5678 ; branch delay slot
@@ -29,7 +29,7 @@ unsigned int f()
 
 \myindex{MIPS!\Instructions!LUI}
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA),style=customasmMIPS]
          lui     $v0, 0x1234
          jr      $ra
          li      $v0, 0x12345678 ; branch delay slot
@@ -40,7 +40,7 @@ unsigned int f()
 
 Посмотрим в выводе \IT{objdump}:
 
-\begin{lstlisting}[caption=objdump]
+\begin{lstlisting}[caption=objdump,style=customasmMIPS]
 00000000 <f>:
    0:   3c021234        lui     v0,0x1234
    4:   03e00008        jr      ra
@@ -49,7 +49,7 @@ unsigned int f()
 
 \subsubsection{Загрузка 32-битной глобальной переменной в регистр}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 unsigned int global_var=0x12345678;
 
 unsigned int f2()
@@ -63,7 +63,7 @@ unsigned int f2()
 Тут немного иначе: \INS{LUI} загружает старшие 16 бит из \IT{global\_var} в \$2 (или \$V0) и затем \INS{LW} загружает младшие
 16 бит суммируя их с содержимым \$2:
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput),style=customasmMIPS]
 f2:
         lui     $2,%hi(global_var)
         lw      $2,%lo(global_var)($2)
@@ -78,7 +78,7 @@ global_var:
 
 \IDA знает о часто применяемой паре инструкций \INS{LUI}/\INS{LW}, так что она объединяет их в одну инструкцию \INS{LW}:
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA),style=customasmMIPS]
 _f2:
                 lw      $v0, global_var
                 jr      $ra
@@ -94,7 +94,7 @@ global_var:     .word 0x12345678         # DATA XREF: _f2
 Вывод \IT{objdump} почти такой же, как ассемблерный вывод GCC.
 Посмотрим также релоки в объектном файле:
 
-\begin{lstlisting}[caption=objdump]
+\begin{lstlisting}[caption=objdump,style=customasmMIPS]
 objdump -D filename.o
 
 ...

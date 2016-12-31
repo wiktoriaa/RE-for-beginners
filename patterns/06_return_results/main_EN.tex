@@ -15,7 +15,7 @@ In ARM, the result is usually returned in the \Reg{0} register.
 So, what if the \main function return value was declared of type \Tvoid and not \Tint?
 The so-called startup-code is calling \main roughly as follows:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 push envp
 push argv
 push argc
@@ -26,7 +26,7 @@ call exit
 
 In other words:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 exit(main(argc,argv,envp));
 \end{lstlisting}
 
@@ -38,7 +38,7 @@ Most likely, there will be a random value, left from your function execution, so
 We can illustrate this fact. 
 Please note that here the \main function has a \Tvoid return type:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 
 void main()
@@ -57,7 +57,7 @@ Please notice that \EAX is not zeroed before \main's end.
 
 This implies that the value of \EAX at the end of \main contains what \puts has left there.
 
-\begin{lstlisting}[caption=GCC 4.8.1]
+\begin{lstlisting}[caption=GCC 4.8.1,style=customasmx86]
 .LC0:
 	.string	"Hello, world!"
 main:
@@ -96,7 +96,7 @@ By the way, when we decompile C++ in Hex-Rays, we can often encounter a function
 some class:
 мы разбираем C++ код, нередко можно наткнуться на ф-цию, которая заканчивается
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 ...
 
 call    ??1CString@@QAE@XZ ; CString::~CString(void)
@@ -111,7 +111,7 @@ retn
 By C++ standard, destructor doesn't return anything, but when Hex-Rays don't know about it, and thinks that both
 destructor and this function returns \Tint, we can see something like that in output:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 ...
 
 	return CString::~CString(&Str);
@@ -125,7 +125,7 @@ is rarely used in practice.
 
 It is also possible to call a function whose essence is in returning a value, and not use it:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 int f()
 {
     // skip first 3 random values:

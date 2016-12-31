@@ -37,7 +37,7 @@
 Мы увидим такой фрагмент кода
 (все смещения верны для версии SAPGUI 720 win32, SAPguilib.dll версия файла 7200,1,0,9009):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:6440D51B                 lea     eax, [ebp+2108h+var_211C]
 .text:6440D51E                 push    eax             ; int
 .text:6440D51F                 push    offset aTdw_nocompress ; "TDW_NOCOMPRESS"
@@ -71,7 +71,7 @@
 
 Обратите также внимание на функцию \TT{chk\_env} (это мы так назвали её вручную):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64413F20 ; int __cdecl chk_env(char *VarName, int)
 .text:64413F20 chk_env         proc near
 .text:64413F20
@@ -201,7 +201,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 Настройки для каждой переменной записываются в массив через указатель в регистре \EDI.
 \EDI выставляется перед вызовом функции:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:6440EE00                 lea     edi, [ebp+2884h+var_2884] ; options here like +0x15...
 .text:6440EE03                 lea     ecx, [esi+24h]
 .text:6440EE06                 call    load_command_line
@@ -221,7 +221,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 \par \TT{CDwsGui::PrepareInfoWindow()}.
 Откуда мы узнали имена классов/методов? Здесь много специальных отладочных вызовов, пишущих в лог-файл вроде:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64405160                 push    dword ptr [esi+2854h]
 .text:64405166                 push    offset aCdwsguiPrepare ; "\nCDwsGui::PrepareInfoWindow: sapgui env"...
 .text:6440516B                 push    dword ptr [esi+2848h]
@@ -231,7 +231,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 
 \dots или:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:6440237A                 push    eax
 .text:6440237B                 push    offset aCclientStart_6 ; "CClient::Start: set shortcut user to '\%"...
 .text:64402380                 push    dword ptr [edi+4]
@@ -243,7 +243,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 
 Посмотрим содержимое функции \q{назойливого всплывающего окна}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64404F4F CDwsGui__PrepareInfoWindow proc near
 .text:64404F4F
 .text:64404F4F pvParam         = byte ptr -3Ch
@@ -495,7 +495,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 
 Если переменная по адресу \TT{this+0x3D} не ноль, компрессия сетевых пакетов будет выключена:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64405007 loc_64405007:
 .text:64405007                 cmp     byte ptr [esi+3Dh], 0
 .text:6440500B                 jz      short bypass
@@ -528,7 +528,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 Начинаем искать все места где в коде используется константа \TT{0x15}.
 Для таких небольших программ как SAPGUI, это иногда срабатывает. Вот первое что находим:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64404C19 sub_64404C19    proc near
 .text:64404C19
 .text:64404C19 arg_0           = dword ptr  4
@@ -563,7 +563,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 
 Но настоящий ответ находится в функции \IT{CDwsGui::Init()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:6440B0BF loc_6440B0BF:
 .text:6440B0BF                 mov     eax, [ebp+arg_0]
 .text:6440B0C2                 push    [ebp+arg_4]
@@ -579,7 +579,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 Посмотрим также и другие места, где используется смещение 0x3D.
 Одно из таких мест находится в функции \IT{CDwsGui::SapguiRun} (и снова спасибо отладочным вызовам):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64409D58                 cmp     [esi+3Dh], bl   ; ESI is pointer to CDwsGui object
 .text:64409D5B                 lea     ecx, [esi+2B8h]
 .text:64409D61                 setz    al
@@ -610,7 +610,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 Так что, флаг сжатия передается в пятом аргументе функции \IT{CConnectionContext::CreateNetwork}. 
 Внутри этой функции, вызывается еще одна:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 ...
 .text:64403476                 push    [ebp+compression]
 .text:64403479                 push    [ebp+arg_C]
@@ -625,7 +625,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 И вот как конструктор \IT{CNetwork} выставляет некоторые флаги в объекте \IT{CNetwork} в соответствии с пятым аргументом \IT{и}
 еще какую-то переменную, возможно, также отвечающую за сжатие сетевых пакетов.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64411DF1                 cmp     [ebp+compression], esi
 .text:64411DF7                 jz      short set_EAX_to_0
 .text:64411DF9                 mov     al, [ebx+78h]   ; another value may affect compression?
@@ -652,7 +652,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 Поищем теперь значение \TT{0x3A4} в SAPguilib.dll. Находим второе упоминание этого значения в функции
 \IT{CDwsGui::OnClientMessageWrite} (бесконечная благодарность отладочной информации):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64406F76 loc_64406F76:
 .text:64406F76                 mov     ecx, [ebp+7728h+var_7794]
 .text:64406F79                 cmp     dword ptr [ecx+3A4h], 1
@@ -695,7 +695,7 @@ SAPGUI\_INPLACE          & ``GUI-OPTION: environment variable SAPGUI\_INPLACE is
 
 И теперь заглянем в \IT{sub\_64417440}. Увидим там:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:6441747C                 push    offset aErrorCsrcompre ; "\nERROR: CsRCompress: invalid handle"
 .text:64417481                 call    eax ; dword_644F94C8
 .text:64417483                 add     esp, 4
@@ -709,7 +709,7 @@ Voilà! Мы находим функцию которая собственно �
 
 Последняя проверка:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:64406F79                 cmp     dword ptr [ecx+3A4h], 1
 .text:64406F80                 jnz     compression_flag_is_zero
 \end{lstlisting}

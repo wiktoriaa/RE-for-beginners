@@ -21,7 +21,7 @@ Now let's assume that this piece of text is encrypted by simple XOR-ing with 17-
 
 I tried to find some repeating 17-byte blocks in Mathematica, like I did before in my previous example (\myref{XOR_mask_1}):
 
-\begin{lstlisting}[caption=Mathematica]
+\begin{lstlisting}[caption=Mathematica,style=custommath]
 In[]:=input = BinaryReadList["/home/dennis/tmp/cipher.txt"];
 
 In[]:=blocks = Partition[input, 17];
@@ -65,7 +65,7 @@ Now the algorithm is:
 
 I wrote with the following Python script to check this idea:
 
-\begin{lstlisting}[caption=Python script]
+\begin{lstlisting}[caption=Python script,style=custompy]
 each_Nth_byte=[""]*KEY_LEN
 
 content=read_file(sys.argv[1])
@@ -134,7 +134,7 @@ So there are 2 or 3 possible bytes for each byte of 17-byte key.
 This is much better than 256 possible bytes for each byte, but still too much.
 There are up to 1 million of possible keys:
 
-\begin{lstlisting}[caption=Mathematica]
+\begin{lstlisting}[caption=Mathematica,style=custommath]
 In[]:= 3*2*3*3*2*2*2*2*3*2*2*3*2*2*2*2*2
 Out[]= 995328
 \end{lstlisting}
@@ -149,7 +149,7 @@ Let's just count spaces in some well-known English language texts using Mathemat
 
 Here is \href{http://www.gutenberg.org/cache/epub/100/pg100.txt}{\q{The Complete Works of William Shakespeare}} text file from Gutenberg Library:
 
-\begin{lstlisting}[caption=Mathematica]
+\begin{lstlisting}[caption=Mathematica,style=custommath]
 In[]:= input = BinaryReadList["/home/dennis/tmp/pg100.txt"];
 
 In[]:= Tally[input]
@@ -181,7 +181,7 @@ There are 1285884 spaces in the whole file, and the frequency of space occurrenc
 
 Now here is \href{http://www.gutenberg.org/ebooks/11}{Alice's Adventures in Wonderland, by Lewis Carroll} from the same library:
 
-\begin{lstlisting}[caption=Mathematica]
+\begin{lstlisting}[caption=Mathematica,style=custommath]
 In[]:= input = BinaryReadList["/home/dennis/tmp/pg11.txt"];
 
 In[]:= Tally[input]
@@ -213,7 +213,7 @@ OK, so let's assume the average frequency of space in English language is 1 spac
 Now the good news again: we can measure frequency of spaces while decrypting our file gradually.
 Now I count spaces in each \IT{slice} and throw away 1-byte keys which produce buffers with too small number of spaces (or too large, but this is almost impossible given so short key):
 
-\begin{lstlisting}[caption=Python script]
+\begin{lstlisting}[caption=Python script,style=custompy]
 each_Nth_byte=[""]*KEY_LEN
 
 content=read_file(sys.argv[1])
@@ -289,7 +289,7 @@ N= 16
 
 Let's check this key in Mathematica:
 
-\begin{lstlisting}[caption=Mathematica]
+\begin{lstlisting}[caption=Mathematica,style=custommath]
 In[]:= input = BinaryReadList["/home/dennis/tmp/cipher.txt"];
 
 In[]:= blocks = Partition[input, 17];

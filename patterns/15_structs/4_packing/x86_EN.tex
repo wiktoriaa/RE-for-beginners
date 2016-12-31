@@ -60,19 +60,19 @@ How does our compiler know to pack them on 1-byte alignment boundary?
 
 \TT{WinNT.h} file has this:
 
-\begin{lstlisting}[caption=WinNT.h]
+\begin{lstlisting}[caption=WinNT.h,style=customc]
 #include "pshpack1.h"
 \end{lstlisting}
 
 And this:
 
-\begin{lstlisting}[caption=WinNT.h]
+\begin{lstlisting}[caption=WinNT.h,style=customc]
 #include "pshpack4.h"                   // 4 byte packing is the default
 \end{lstlisting}
 
 The file PshPack1.h looks like:
 
-\begin{lstlisting}[caption=PshPack1.h]
+\begin{lstlisting}[caption=PshPack1.h,style=customc]
 #if ! (defined(lint) || defined(RC_INVOKED))
 #if ( _MSC_VER >= 800 && !defined(_M_I86)) || defined(_PUSHPOP_SUPPORTED)
 #pragma warning(disable:4103)

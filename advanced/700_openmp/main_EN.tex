@@ -36,7 +36,7 @@ hashes it with the SHA512 algorithm and checks for 3 zero bytes in the result.
 
 A very important part of the code is:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 	#pragma omp parallel for
 	for (i=0; i<INT32_MAX; i++)
 		check_nonce (i);
@@ -142,7 +142,7 @@ There are also pragmas for
 
 Let's see how this code is compiled:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 	#pragma omp atomic
 	checked++;
 
@@ -172,7 +172,7 @@ produces a program which shows exactly the same statistics table,
 
 so, GCC's implementation divides the loop in parts in the same fashion.
 
-\begin{lstlisting}[caption=GCC 4.8.1]
+\begin{lstlisting}[caption=GCC 4.8.1,style=customasm]
 	mov	edi, OFFSET FLAT:main._omp_fn.0
 	call	GOMP_parallel_start
 	mov	edi, 0

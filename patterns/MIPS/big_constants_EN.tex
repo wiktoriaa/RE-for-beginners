@@ -1,7 +1,7 @@
 ﻿\subsection{Loading a 32-bit constant into register}
 \label{MIPS_big_constants}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 unsigned int f()
 {
 	return 0x12345678;
@@ -17,7 +17,7 @@ So one have to use at least two instructions:
 the first loads the high part of the 32-bit number and the second
 one applies an OR operation, which effectively sets the low 16-bit part of the target register:
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput),style=customasmMIPS]
         li      $2,305397760  # 0x12340000
         j       $31
         ori     $2,$2,0x5678 ; branch delay slot
@@ -29,7 +29,7 @@ which allegedly loads a full 32-bit number into the \$V0 register.
 
 \myindex{MIPS!\Instructions!LUI}
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA),style=customasmMIPS]
          lui     $v0, 0x1234
          jr      $ra
          li      $v0, 0x12345678 ; branch delay slot
@@ -40,7 +40,7 @@ which stores a 16-bit value into the high part of the register.
 
 Let's see in \IT{objdump} output:
 
-\begin{lstlisting}[caption=objdump]
+\begin{lstlisting}[caption=objdump,style=customasmMIPS]
 00000000 <f>:
    0:   3c021234        lui     v0,0x1234
    4:   03e00008        jr      ra
@@ -49,7 +49,7 @@ Let's see in \IT{objdump} output:
 
 \subsubsection{Loading a 32-bit global variable into register}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 unsigned int global_var=0x12345678;
 
 unsigned int f2()
@@ -62,7 +62,7 @@ unsigned int f2()
 
 This is slightly different: \INS{LUI} loads upper 16-bit from \IT{global\_var} into \$2 (or \$V0) and then \INS{LW} loads lower 16-bits summing it with the contents of \$2:
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput),style=customasmMIPS]
 f2:
         lui     $2,%hi(global_var)
         lw      $2,%lo(global_var)($2)
@@ -77,7 +77,7 @@ global_var:
 
 \IDA is fully aware of often used \INS{LUI}/\INS{LW} instruction pair, so it coalesces both into a single \INS{LW} instruction:
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA),style=customasmMIPS]
 _f2:
                 lw      $v0, global_var
                 jr      $ra
@@ -93,7 +93,7 @@ global_var:     .word 0x12345678         # DATA XREF: _f2
 \IT{objdump}'s output is the same as GCC's assembly output.
 Let's also dump relocs of the object file:
 
-\begin{lstlisting}[caption=objdump]
+\begin{lstlisting}[caption=objdump,style=customasmMIPS]
 objdump -D filename.o
 
 ...

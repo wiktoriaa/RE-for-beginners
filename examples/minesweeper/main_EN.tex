@@ -18,7 +18,7 @@ executable and shows all names.
 
 So here it is, the only call to \TT{rand()} is this function:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:01003940 ; __stdcall Rnd(x)
 .text:01003940 _Rnd@4          proc near               ; CODE XREF: StartGame()+53
 .text:01003940                                         ; StartGame()+61
@@ -37,7 +37,7 @@ So here it is, the only call to \TT{rand()} is this function:
 
 The function is very simple:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 int Rnd(int limit)
 {
     return rand() % limit;
@@ -54,7 +54,7 @@ a function called \TT{StartGame()},
 and as it seems, this is exactly 
 the code which place the mines:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:010036C7                 push    _xBoxMac
 .text:010036CD                 call    _Rnd@4          ; Rnd(x)
 .text:010036D2                 push    _yBoxMac
@@ -95,7 +95,7 @@ between the \TT{rgBlk}
 label in the data segment and the next known one. 
 It is 0x360 (864):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .data:01005340 _rgBlk          db 360h dup(?)          ; DATA XREF: MainWndProc(x,x,x,x)+574
 .data:01005340                                         ; DisplayBlk(x,x)+23
 .data:010056A0 _Preferences    dd ?                    ; DATA XREF: FixMenus()+2

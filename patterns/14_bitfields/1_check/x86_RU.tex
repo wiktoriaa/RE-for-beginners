@@ -3,7 +3,7 @@
 
 Например в Win32 API:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 	HANDLE fh;
 
 	fh=CreateFile ("file", GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -11,7 +11,7 @@
 
 Получаем (MSVC 2010):
 
-\begin{lstlisting}[caption=MSVC 2010]
+\begin{lstlisting}[caption=MSVC 2010,style=customasmx86]
 	push	0
 	push	128		; 00000080H
 	push	4
@@ -25,7 +25,7 @@
 
 Заглянем в файл WinNT.h:
 
-\begin{lstlisting}[caption=WinNT.h]
+\begin{lstlisting}[caption=WinNT.h,style=customc]
 #define GENERIC_READ                     (0x80000000L)
 #define GENERIC_WRITE                    (0x40000000L)
 #define GENERIC_EXECUTE                  (0x20000000L)
@@ -43,7 +43,7 @@ GENERIC\_READ | GENERIC\_WRITE = 0x80000000 | 0x40000000 = 0xC0000000,
 Заглянем в KERNEL32.DLL от Windows XP SP3 x86 и найдем в функции \TT{CreateFileW()} в том числе и 
 такой фрагмент кода:
 
-\begin{lstlisting}[caption=KERNEL32.DLL (Windows XP SP3 x86)]
+\begin{lstlisting}[caption=KERNEL32.DLL (Windows XP SP3 x86),style=customasmx86]
 .text:7C83D429      test    byte ptr [ebp+dwDesiredAccess+3], 40h
 .text:7C83D42D      mov     [ebp+var_8], 1
 .text:7C83D434      jz      short loc_7C83D417
@@ -61,7 +61,7 @@ GENERIC\_READ | GENERIC\_WRITE = 0x80000000 | 0x40000000 = 0xC0000000,
 
 Логика данного фрагмента кода примерно такая:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 if ((dwDesiredAccess&0x40000000) == 0) goto loc_7C83D417
 \end{lstlisting}
 
@@ -74,7 +74,7 @@ if ((dwDesiredAccess&0x40000000) == 0) goto loc_7C83D417
 
 Попробуем GCC 4.4.1 и Linux:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -88,14 +88,14 @@ void main()
 
 Получим:
 
-\lstinputlisting[caption=GCC 4.4.1,style=customasm]{patterns/14_bitfields/1_check/check.asm}
+\lstinputlisting[caption=GCC 4.4.1,style=customasmx86]{patterns/14_bitfields/1_check/check.asm}
 
 \myindex{Linux!libc.so.6}
 \myindex{syscall}
 Заглянем в реализацию функции \TT{open()} в библиотеке \TT{libc.so.6}, но обнаружим что там 
 только системный вызов:
 
-\begin{lstlisting}[caption=open() (libc.so.6)]
+\begin{lstlisting}[caption=open() (libc.so.6),style=customasmx86]
 .text:000BE69B      mov     edx, [esp+4+mode] ; mode
 .text:000BE69F      mov     ecx, [esp+4+flags] ; flags
 .text:000BE6A3      mov     ebx, [esp+4+filename] ; filename

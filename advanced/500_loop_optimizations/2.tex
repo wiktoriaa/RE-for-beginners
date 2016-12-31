@@ -3,7 +3,7 @@
 If you process all elements of some array which happens to be located in global memory, compiler can optimize it.
 For example, let's calculate a sum of all elements of array of 128 \IT{int}'s:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 
 int a[128];
@@ -31,7 +31,7 @@ int main()
 
 Optimizing GCC 5.3.1 (x86) can produce this (\IDA):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:080484B0 sum_of_a        proc near
 .text:080484B0                 mov     edx, offset a
 .text:080484B5                 xor     eax, eax
@@ -71,7 +71,7 @@ What the heck is \TT{\_\_libc\_start\_main@@GLIBC\_2\_0} at \TT{0x080484C5}?
 This is a label just after end of \TT{a[]} array.
 The function can be rewritten like this:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 int sum_of_a_v2()
 {
 	int *tmp=a;
@@ -96,7 +96,7 @@ Sometimes code like this is confusing, and this is very popular optimizing trick
 
 My second version is very close to what GCC did, and when I compile it, the code is almost the same as in first version, but two first instructions are swapped:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:080484D0                 public sum_of_a_v2
 .text:080484D0 sum_of_a_v2     proc near
 .text:080484D0                 xor     eax, eax

@@ -22,11 +22,11 @@
 
 \lstinputlisting[caption=\CCpp,style=customc]{patterns/14_bitfields/c_snippet0.c}
 
-\lstinputlisting[caption=x86,style=customasm]{patterns/14_bitfields/TEST_JNZ_RU.lst}
+\lstinputlisting[caption=x86,style=customasmx86]{patterns/14_bitfields/TEST_JNZ_RU.lst}
 
-\lstinputlisting[caption=x86,style=customasm]{patterns/14_bitfields/TEST_JZ_RU.lst}
+\lstinputlisting[caption=x86,style=customasmx86]{patterns/14_bitfields/TEST_JZ_RU.lst}
 
-\lstinputlisting[caption=ARM (\ARMMode),style=customasm]{patterns/14_bitfields/TST_BNE_RU.lst}
+\lstinputlisting[caption=ARM (\ARMMode),style=customasmARM]{patterns/14_bitfields/TST_BNE_RU.lst}
 
 \myindex{x86!\Instructions!AND}
 \myindex{x86!\Instructions!TEST}
@@ -41,7 +41,7 @@
 
 Это обычно реализуется в x86-коде так:
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 ; REG=input_value
 ; CL=n
 SHR REG, CL
@@ -54,7 +54,7 @@ AND REG, 1
 
 Это обычно так реализуется в x86-коде:
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 ; CL=n
 MOV REG, 1
 SHL REG, CL
@@ -63,15 +63,15 @@ AND input_value, REG
 
 \subsubsection{Установка определенного бита (известного во время компиляции)}
 
-\begin{lstlisting}[caption=\CCpp]
+\begin{lstlisting}[caption=\CCpp,style=customc]
 value=value|0x40;
 \end{lstlisting}
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 OR REG, 40h
 \end{lstlisting}
 
-\begin{lstlisting}[caption=ARM (\ARMMode) и ARM64]
+\begin{lstlisting}[caption=ARM (\ARMMode) и ARM64,style=customasmARM]
 ORR R0, R0, #0x40
 \end{lstlisting}
 
@@ -81,7 +81,7 @@ ORR R0, R0, #0x40
 
 Это обычно так реализуется в x86-коде:
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 ; CL=n
 MOV REG, 1
 SHL REG, CL
@@ -92,15 +92,15 @@ OR input_value, REG
 
 Просто исполните операцию логического \q{И} (\AND) с инвертированным значением:
 
-\begin{lstlisting}[caption=\CCpp]
+\begin{lstlisting}[caption=\CCpp,style=customc]
 value=value&(~0x40);
 \end{lstlisting}
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 AND REG, 0FFFFFFBFh
 \end{lstlisting}
 
-\begin{lstlisting}[caption=x64]
+\begin{lstlisting}[caption=x64,style=customasmx86]
 AND REG, 0FFFFFFFFFFFFFFBFh
 \end{lstlisting}
 
@@ -109,7 +109,7 @@ AND REG, 0FFFFFFFFFFFFFFBFh
 \myindex{ARM!\Instructions!BIC}
 В ARM в режиме ARM есть инструкция \BIC, работающая как две инструкции \NOT+\AND:
 
-\begin{lstlisting}[caption=ARM (\ARMMode)]
+\begin{lstlisting}[caption=ARM (\ARMMode),style=customasmARM]
 BIC R0, R0, #0x40
 \end{lstlisting}
 
@@ -117,7 +117,7 @@ BIC R0, R0, #0x40
 
 \lstinputlisting[caption=\CCpp,style=customc]{patterns/14_bitfields/c_snippet4.c}
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 ; CL=n
 MOV REG, 1
 SHL REG, CL

@@ -17,7 +17,7 @@
 
 И вот оно, только один вызов \TT{rand()} в этой функции:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:01003940 ; __stdcall Rnd(x)
 .text:01003940 _Rnd@4          proc near               ; CODE XREF: StartGame()+53
 .text:01003940                                         ; StartGame()+61
@@ -36,7 +36,7 @@
 
 Функция очень простая:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 int Rnd(int limit)
 {
     return rand() % limit;
@@ -50,7 +50,7 @@ int Rnd(int limit)
 \TT{Rnd()} вызывается только из одного места, это функция с названием \TT{StartGame()}, 
 и как видно, это именно тот код, что расставляет мины:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:010036C7                 push    _xBoxMac
 .text:010036CD                 call    _Rnd@4          ; Rnd(x)
 .text:010036D2                 push    _yBoxMac
@@ -89,7 +89,7 @@ int Rnd(int limit)
 в сегменте данных и следующей известной меткой. 
 Это 0x360 (864):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .data:01005340 _rgBlk          db 360h dup(?)          ; DATA XREF: MainWndProc(x,x,x,x)+574
 .data:01005340                                         ; DisplayBlk(x,x)+23
 .data:010056A0 _Preferences    dd ?                    ; DATA XREF: FixMenus()+2

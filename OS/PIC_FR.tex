@@ -6,7 +6,7 @@
 Lorsque l'on analyse des bibliothèques partagées sous Linux (.so), on rencontre souvent
 ce genre de code:
 
-\begin{lstlisting}[caption=libc-2.17.so x86]
+\begin{lstlisting}[caption=libc-2.17.so x86,style=customasmx86]
 .text:0012D5E3 __x86_get_pc_thunk_bx proc near         ; CODE XREF: sub_17350+3
 .text:0012D5E3                                         ; sub_173CC+4 ...
 .text:0012D5E3                 mov     ebx, [esp+0]
@@ -57,7 +57,7 @@ c'est pourquoi elles doivent fonctionner correctement sans aucune adresse absolu
 
 Faisons un petit essai:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 
 int global_variable=123;
@@ -76,7 +76,7 @@ Compilons le avec GCC 4.7.3 et examinons le fichier .so généré dans \IDA:
 gcc -fPIC -shared -O3 -o 1.so 1.c
 \end{lstlisting}
 
-\begin{lstlisting}[caption=GCC 4.7.3]
+\begin{lstlisting}[caption=GCC 4.7.3,style=customasmx86]
 .text:00000440                 public __x86_get_pc_thunk_bx
 .text:00000440 __x86_get_pc_thunk_bx proc near         ; CODE XREF: _init_proc+4
 .text:00000440                                         ; deregister_tm_clones+4 ...
@@ -127,7 +127,7 @@ La constante \TT{0x1A84} est relative à la différence entre le début de cette
 \IT{Global Offset Table Procedure Linkage Table} (GOT PLT), la section juste après la \IT{Global Offset Table} (GOT), où se trouve le pointeur sur \globvar{}.
 \IDA montre ces offsets sous leur forme calculée pour rendre les choses plus facile à comprendre, mais en fait, le code est:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00000577                 call    __x86_get_pc_thunk_bx
 .text:0000057C                 add     ebx, 1A84h
 .text:00000582                 mov     [esp+1Ch+var_4], esi
@@ -152,7 +152,7 @@ Compilons le même code C en utilisant la même version de GCC, mais pour x64.
 \IDA simplifierait le code en supprimant les détails de l'adressage relatif à RIP,
 donc utilisons \IT{objdump} à la place d'\IDA pour tout voir:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 0000000000000720 <f1>:
  720:	48 8b 05 b9 08 20 00 	mov    rax,QWORD PTR [rip+0x2008b9]        # 200fe0 <_DYNAMIC+0x1d0>
  727:	53                   	push   rbx

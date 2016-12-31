@@ -5,7 +5,7 @@
 
 While analyzing Linux shared (.so) libraries, one may frequently spot this code pattern:
 
-\begin{lstlisting}[caption=libc-2.17.so x86]
+\begin{lstlisting}[caption=libc-2.17.so x86,style=customasmx86]
 .text:0012D5E3 __x86_get_pc_thunk_bx proc near         ; CODE XREF: sub_17350+3
 .text:0012D5E3                                         ; sub_173CC+4 ...
 .text:0012D5E3                 mov     ebx, [esp+0]
@@ -56,7 +56,7 @@ a shared library has to work correctly without using any absolute addresses.
 
 Let's do a simple experiment:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 
 int global_variable=123;
@@ -75,7 +75,7 @@ Let's compile it in GCC 4.7.3 and see the resulting .so file in \IDA:
 gcc -fPIC -shared -O3 -o 1.so 1.c
 \end{lstlisting}
 
-\begin{lstlisting}[caption=GCC 4.7.3]
+\begin{lstlisting}[caption=GCC 4.7.3,style=customasmx86]
 .text:00000440                 public __x86_get_pc_thunk_bx
 .text:00000440 __x86_get_pc_thunk_bx proc near         ; CODE XREF: _init_proc+4
 .text:00000440                                         ; deregister_tm_clones+4 ...
@@ -126,7 +126,7 @@ The \TT{0x1A84} constant is related to the difference between this function's st
 \IT{Global Offset Table Procedure Linkage Table} (GOT PLT), the section right after the \IT{Global Offset Table} (GOT), where the pointer to \globvar{} is.
 \IDA shows these offsets in their processed form to make them easier to understand, but in fact the code is:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00000577                 call    __x86_get_pc_thunk_bx
 .text:0000057C                 add     ebx, 1A84h
 .text:00000582                 mov     [esp+1Ch+var_4], esi
@@ -151,7 +151,7 @@ Let's compile the same C code using the same GCC version, but for x64.
 \IDA would simplify the resulting code but would suppress the RIP-relative addressing details, 
 so we are going to use \IT{objdump} instead of IDA to see everything:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 0000000000000720 <f1>:
  720:	48 8b 05 b9 08 20 00 	mov    rax,QWORD PTR [rip+0x2008b9]        # 200fe0 <_DYNAMIC+0x1d0>
  727:	53                   	push   rbx

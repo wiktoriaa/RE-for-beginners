@@ -1,7 +1,6 @@
 \section{
 \q{QR9}: Rubik's cube inspired amateur crypto-algorithm}
 
-
 Sometimes amateur cryptosystems appear to be pretty bizarre.
 
 The author of this book was once asked to reverse engineer an amateur cryptoalgorithm of some data encryption utility, 
@@ -15,7 +14,7 @@ All function and label names were given by me during the analysis.
 
 Let's start from the top. Here is a function that takes two file names and password.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541320 ; int __cdecl crypt_file(int Str, char *Filename, int password)
 .text:00541320 crypt_file      proc near
 .text:00541320
@@ -27,7 +26,7 @@ Let's start from the top. Here is a function that takes two file names and passw
 
 Open the file and report if an error occurs:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541320                 mov     eax, [esp+Str]
 .text:00541324                 push    ebp
 .text:00541325                 push    offset Mode     ; "rb"
@@ -50,7 +49,7 @@ Open the file and report if an error occurs:
 \myindex{\CStandardLibrary!ftell()}
 Get the file size via \TT{fseek()}/\TT{ftell()}:
 
-\lstinputlisting{examples/qr9/1_EN}
+\lstinputlisting[style=customasm]{examples/qr9/1_EN}
 
 This fragment of code calculates the file size aligned on a 64-byte boundary. 
 This is because this cryptographic algorithm works with only 64-byte blocks. 
@@ -59,11 +58,11 @@ then multiply by 64.
 The following code removes the remainder as if the value has already been divided by 64 and adds 64. 
 It is almost the same.
 
-\lstinputlisting{examples/qr9/2_EN}
+\lstinputlisting[style=customasm]{examples/qr9/2_EN}
 
 Allocate buffer with aligned size:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541373                 push    esi             ; Size
 .text:00541374                 call    _malloc
 \end{lstlisting}
@@ -72,11 +71,11 @@ Allocate buffer with aligned size:
 Call memset(), e.g., clear the allocated buffer\footnote{malloc() + memset() could 
 be replaced by calloc()}.
 
-\lstinputlisting{examples/qr9/3_EN}
+\lstinputlisting[style=customasm]{examples/qr9/3_EN}
 
 Read file via the standard C function \TT{fread()}.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541392                 mov     eax, [esp+38h+Str]
 .text:00541396                 push    eax             ; ElementSize
 .text:00541397                 push    ebx             ; DstBuf
@@ -87,7 +86,7 @@ Read file via the standard C function \TT{fread()}.
 
 Call \TT{crypt()}. This function takes a buffer, buffer size (aligned) and a password string.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005413A3                 mov     ecx, [esp+44h+password]
 .text:005413A7                 push    ecx             ; password
 .text:005413A8                 push    esi             ; aligned size
@@ -98,7 +97,7 @@ Call \TT{crypt()}. This function takes a buffer, buffer size (aligned) and a pas
 Create the output file. By the way, the developer forgot to check if it has been created correctly! 
 The file opening result is being checked, though.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005413AF                 mov     edx, [esp+50h+Filename]
 .text:005413B3                 add     esp, 40h
 .text:005413B6                 push    offset aWb      ; "wb"
@@ -109,7 +108,7 @@ The file opening result is being checked, though.
 
 The newly created file handle is in the \EDI register now. Write signature \q{QR9}.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005413C3                 push    edi             ; File
 .text:005413C4                 push    1               ; Count
 .text:005413C6                 push    3               ; Size
@@ -119,7 +118,7 @@ The newly created file handle is in the \EDI register now. Write signature \q{QR
 
 Write the actual file size (not aligned):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005413D2                 push    edi             ; File
 .text:005413D3                 push    1               ; Count
 .text:005413D5                 lea     eax, [esp+30h+Str]
@@ -130,7 +129,7 @@ Write the actual file size (not aligned):
 
 Write the encrypted buffer:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005413E1                 push    edi             ; File
 .text:005413E2                 push    1               ; Count
 .text:005413E4                 push    esi             ; Size
@@ -140,7 +139,7 @@ Write the encrypted buffer:
 
 Close the file and free the allocated buffer:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005413EB                 push    edi             ; File
 .text:005413EC                 call    _fclose
 .text:005413F1                 push    ebx             ; Memory
@@ -156,7 +155,7 @@ Close the file and free the allocated buffer:
 
 Here is the reconstructed C code:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void crypt_file(char *fin, char* fout, char *pw)
 {
 	FILE *f;
@@ -200,7 +199,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 
 The decryption procedure is almost the same:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541400 ; int __cdecl decrypt_file(char *Filename, int, void *Src)
 .text:00541400 decrypt_file    proc near
 .text:00541400
@@ -255,7 +254,7 @@ The decryption procedure is almost the same:
 
 Check signature (first 3 bytes):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541462                 add     esp, 34h
 .text:00541465                 mov     ecx, 3
 .text:0054146A                 mov     edi, offset aQr9_0 ; "QR9"
@@ -267,7 +266,7 @@ Check signature (first 3 bytes):
 
 Report an error if the signature is absent:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541477                 push    offset aFileIsNotCrypt ; "File is not encrypted!\n"
 .text:0054147C                 call    _printf
 .text:00541481                 add     esp, 4
@@ -282,7 +281,7 @@ Report an error if the signature is absent:
 
 Call \TT{decrypt()}.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541489                 mov     eax, [esp+10h+Src]
 .text:0054148D                 mov     edi, [ebx+3]
 .text:00541490                 add     ebp, 0FFFFFFF9h
@@ -316,7 +315,7 @@ Call \TT{decrypt()}.
 
 Here is the reconstructed C code:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void decrypt_file(char *fin, char* fout, char *pw)
 {
 	FILE *f;
@@ -365,7 +364,7 @@ OK, now let's go deeper.
 
 Function \TT{crypt()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541260 crypt           proc near
 .text:00541260
 .text:00541260 arg_0           = dword ptr  4
@@ -387,7 +386,7 @@ This fragment of code copies a part of the input buffer to an internal array we 
 The size is in the \ECX register. \TT{MOVSD} stands for \IT{move 32-bit dword}, so, 
 16 32-bit dwords are exactly 64 bytes.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:0054126A                 mov     eax, [esp+10h+arg_8]
 .text:0054126E                 mov     ecx, 10h
 .text:00541273                 mov     esi, ebx   ; EBX is pointer within input buffer
@@ -399,13 +398,13 @@ The size is in the \ECX register. \TT{MOVSD} stands for \IT{move 32-bit dword}, 
 
 Call \TT{rotate\_all\_with\_password()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:0054127F                 call    rotate_all_with_password
 \end{lstlisting}
 
 Copy encrypted contents back from \q{cube64} to buffer:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541284                 mov     eax, [esp+18h+arg_4]
 .text:00541288                 mov     edi, ebx
 .text:0054128A                 add     ebp, 40h
@@ -419,7 +418,7 @@ Copy encrypted contents back from \q{cube64} to buffer:
 
 If \EBP is not bigger that the size input argument, then continue to the next block.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005412A1                 jl      short loc_54126A
 .text:005412A3                 pop     edi
 .text:005412A4                 pop     esi
@@ -431,7 +430,7 @@ If \EBP is not bigger that the size input argument, then continue to the next bl
 
 Reconstructed \TT{crypt()} function:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void crypt (BYTE *buf, int sz, char *pw)
 {
 	int i=0;
@@ -453,7 +452,7 @@ It takes two arguments: password string and a number.
 In \TT{crypt()}, the number 1 is used, and in the \TT{decrypt()} function (where \TT{rotate\_all\_with\_password()} function 
 is called too), the number is 3.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005411B0 rotate_all_with_password proc near
 .text:005411B0
 .text:005411B0 arg_0           = dword ptr  4
@@ -466,7 +465,7 @@ is called too), the number is 3.
 
 Check the current character in the password. If it is zero, exit:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005411B7                 cmp     byte ptr [eax], 0
 .text:005411BA                 jz      exit
 .text:005411C0                 push    ebx
@@ -480,7 +479,7 @@ Check the current character in the password. If it is zero, exit:
 \myindex{\CStandardLibrary!tolower()}
 Call \TT{tolower()}, a standard C function.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005411C7                 movsx   eax, byte ptr [ebp+0]
 .text:005411CB                 push    eax             ; C
 .text:005411CC                 call    _tolower
@@ -491,7 +490,7 @@ Hmm, if the password has non-Latin character, it is skipped!
 Indeed, when we run the encryption utility and try non-Latin characters in the password, 
 they seem to be ignored.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005411D4                 cmp     al, 'a'
 .text:005411D6                 jl      short next_character_in_password
 .text:005411D8                 cmp     al, 'z'
@@ -501,13 +500,13 @@ they seem to be ignored.
 
 Subtract the value of \q{a} (97) from the character.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005411DF                 sub     ecx, 'a'  ; 97
 \end{lstlisting}
 
 After subtracting, we'll get 0 for \q{a} here, 1 for \q{b}, etc. And 25 for \q{z}.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005411E2                 cmp     ecx, 24
 .text:005411E5                 jle     short skip_subtracting
 .text:005411E7                 sub     ecx, 24
@@ -517,7 +516,7 @@ It seems, \q{y} and \q{z} are exceptional characters too.
 After that fragment of code, \q{y} becomes 0 and \q{z}~---1. 
 This implies that the 26 Latin alphabet symbols become values in the range of 0..23, (24 in total).
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005411EA
 .text:005411EA skip_subtracting:                       ; CODE XREF: rotate_all_with_password+35
 \end{lstlisting}
@@ -527,7 +526,7 @@ You can read more about it in the \q{\DivisionByMultSectionName} section~(\myref
 
 The code actually divides the password character's value by 3.
 % TODO1: add Mathematica calculations
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:005411EA                 mov     eax, 55555556h
 .text:005411EF                 imul    ecx
 .text:005411F1                 mov     eax, edx
@@ -542,7 +541,7 @@ The code actually divides the password character's value by 3.
 
 \EDX is the remainder of the division.
 
-\lstinputlisting{examples/qr9/4_EN}
+\lstinputlisting[style=customasm]{examples/qr9/4_EN}
 
 If the remainder is 2, call \TT{rotate3()}. 
 \EDI is the second argument of the \TT{rotate\_all\_with\_password()} function.
@@ -550,7 +549,7 @@ As we already noted, 1 is for the encryption operations and 3 is for the decrypt
 So, here is a loop. When encrypting, rotate1/2/3 are to be called the same number of times as 
 given in the first argument.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541215 call_rotate3:
 .text:00541215                 push    esi
 .text:00541216                 call    rotate3
@@ -588,14 +587,14 @@ given in the first argument.
 
 Fetch the next character from the password string.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541249 next_character_in_password:
 .text:00541249                 mov     al, [ebp+1]
 \end{lstlisting}
 
 \Gls{increment} the character pointer in the password string:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:0054124C                 inc     ebp
 .text:0054124D                 test    al, al
 .text:0054124F                 jnz     loop_begin
@@ -611,7 +610,7 @@ Fetch the next character from the password string.
 
 Here is the reconstructed C code:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void rotate_all (char *pwd, int v)
 {
 	char *p=pwd;
@@ -651,7 +650,7 @@ We eventually will name them \TT{set\_bit()} and \TT{get\_bit()}.
 
 Let's start with \TT{get\_bit()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541050 get_bit         proc near
 .text:00541050
 .text:00541050 arg_0           = dword ptr  4
@@ -675,7 +674,7 @@ Isolate the lowest bit and return it.
 
 Let's see another function, \TT{set\_bit()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541000 set_bit         proc near
 .text:00541000
 .text:00541000 arg_0           = dword ptr  4
@@ -697,20 +696,20 @@ The value in the \TT{DL} is 1 here. It gets shifted left by arg\_8.
 For example, if arg\_8 is 4, the value in the \TT{DL} register is to be 
 0x10 or 1000b in binary form.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541017                 shl     dl, cl
 .text:00541019                 mov     cl, cube64[eax+esi*8]
 \end{lstlisting}
 
 Get a bit from array and explicitly set it. % TODO1: rewrite
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541020                 or      cl, dl
 \end{lstlisting}
 
 Store it back: % TODO1: rewrite
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541022                 mov     cube64[eax+esi*8], cl
 .text:00541029                 pop     esi
 .text:0054102A                 retn
@@ -721,7 +720,7 @@ Store it back: % TODO1: rewrite
 
 If arg\_C is not zero\dots
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:0054102D                 mov     cl, cube64[eax+esi*8]
 \end{lstlisting}
 
@@ -730,7 +729,7 @@ If arg\_C is not zero\dots
 \dots invert DL. For example, if DL's state after the shift is 0x10 or 0b1000, 
 there is 0xEF to be after the \NOT instruction (or 0b11101111b).
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541034                 not     dl
 \end{lstlisting}
 
@@ -739,13 +738,13 @@ This instruction clears the bit, in other words, it saves all bits in \TT{CL} wh
 This implies that if \TT{DL} is 11101111b in binary form,
 all bits are to be saved except the 5th (counting from lowest bit).
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541036                 and     cl, dl
 \end{lstlisting}
 
 Store it back:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541038                 mov     cube64[eax+esi*8], cl
 .text:0054103F                 pop     esi
 .text:00541040                 retn
@@ -760,7 +759,7 @@ could be seen as 2D coordinates. Then the array is to be an 8*8 matrix.
 
 Here is a C representation of what we know up to now:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #define IS_SET(flag, bit)       ((flag) & (bit))
 #define SET_BIT(var, bit)       ((var) |= (bit))
 #define REMOVE_BIT(var, bit)    ((var) &= ~(bit))
@@ -785,14 +784,14 @@ bool get_bit (int x, int y, int shift)
 
 Now let's get back to the rotate1/2/3 functions.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541070 rotate1         proc near
 .text:00541070
 \end{lstlisting}
 
 Internal array allocation in the local stack, with size of 64 bytes:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:00541070 internal_array_64= byte ptr -40h
 .text:00541070 arg_0           = dword ptr  4
 .text:00541070
@@ -807,14 +806,14 @@ Internal array allocation in the local stack, with size of 64 bytes:
 
 \EBX is a pointer to the internal array:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 .text:0054107D                 lea     ebx, [esp+50h+internal_array_64]
 .text:00541081
 \end{lstlisting}
 
 Here we have two nested loops:
 
-\lstinputlisting{examples/qr9/5_EN}
+\lstinputlisting[style=customasm]{examples/qr9/5_EN}
 
 \dots we see that both loops' counters are in the range of 0..7. 
 Also they are used as the first and second argument for the \TT{get\_bit()} function.
@@ -823,7 +822,7 @@ The return value from \TT{get\_bit()} is placed in the internal array.
 
 Prepare a pointer to the internal array again:
 
-\lstinputlisting{examples/qr9/6_EN}
+\lstinputlisting[style=customasm]{examples/qr9/6_EN}
 
 \dots this code is placing the contents of the internal array to the cube global array via the \TT{set\_bit()} function, 
 \IT{but} in a different order!
@@ -831,7 +830,7 @@ Now the counter of the first loop is in the range of 7 to 0, \glslink{decrement}
 
 The C code representation looks like:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void rotate1 (int v)
 {
 	bool tmp[8][8]; // internal array
@@ -849,12 +848,12 @@ void rotate1 (int v)
 
 Not very understandable, but if we take a look at \TT{rotate2()} function:
 
-\lstinputlisting{examples/qr9/7_EN}
+\lstinputlisting[style=customasm]{examples/qr9/7_EN}
 
 It is \IT{almost} the same, except the order of the arguments of the \TT{get\_bit()} and \TT{set\_bit()} is different. 
 Let's rewrite it in C-like code:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void rotate2 (int v)
 {
 	bool tmp[8][8]; // internal array
@@ -872,7 +871,7 @@ void rotate2 (int v)
 
 Let's also rewrite the \TT{rotate3()} function:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void rotate3 (int v)
 {
 	bool tmp[8][8];
@@ -901,7 +900,7 @@ Yes, indeed.
 
 Let's look closer into the \TT{decrypt()} function, here is its rewritten version:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void decrypt (BYTE *buf, int sz, char *pw)
 {
 	char *p=strdup (pw);
@@ -938,7 +937,7 @@ rotate it once in counter-clockwise direction, or thrice in clockwise direction.
 
 Let's get back to the core of the \TT{rotate\_all()} function:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 q=c-'a';
 if (q>24)
 	q-=24;

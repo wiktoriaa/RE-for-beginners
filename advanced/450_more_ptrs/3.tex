@@ -9,7 +9,7 @@ Which is declared like this:
 
 \myindex{win32!FindResource()}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 HRSRC WINAPI FindResource(
   _In_opt_ HMODULE hModule,
   _In_     LPCTSTR lpName,
@@ -23,7 +23,7 @@ he/she have to use
 
 \myindex{win32!MAKEINTRESOURCE()}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 result = FindResource(..., MAKEINTRESOURCE(1234), ...);
 \end{lstlisting}
 
@@ -31,7 +31,7 @@ It's interesting fact that MAKEINTRESOURCE is merely casting integer to pointer.
 In MSVC 2013, in the file\\
 \IT{Microsoft SDKs\textbackslash{}Windows\textbackslash{}v7.1A\textbackslash{}Include\textbackslash{}Ks.h} we can find this:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 ...
 
 #if (!defined( MAKEINTRESOURCE )) 
@@ -44,7 +44,7 @@ In MSVC 2013, in the file\\
 Sounds insane. Let's peek into ancient leaked Windows NT4 source code.
 In \IT{private/windows/base/client/module.c} we can find \IT{FindResource()} source code:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 HRSRC
 FindResourceA(
     HMODULE hModule,
@@ -73,7 +73,7 @@ FindResourceA(
 
 Let's proceed to \IT{BaseDllMapResourceIdA()} in the same source file:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 ULONG
 BaseDllMapResourceIdA(
     LPCSTR lpId
@@ -132,7 +132,7 @@ BaseDllMapResourceIdA(
 
 \IT{lpId} is ANDed with \IT{LDR\_RESOURCE\_ID\_NAME\_MASK}. Which we can find in \IT{public/sdk/inc/ntldr.h}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 ...
 
 #define LDR_RESOURCE_ID_NAME_MASK 0xFFFF0000
@@ -146,7 +146,7 @@ Otherwise - second half (\IT{lpId} is treated as 16-bit value).
 
 Still, this code can be found in Windows 7 kernel32.dll file:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasm]
 ....
 
 .text:0000000078D24510 ; __int64 __fastcall BaseDllMapResourceIdA(PCSZ SourceString)
@@ -225,7 +225,7 @@ but older code must also be supported? I'm not sure, but that's possible.
 
 Now here is my short distilled example:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 #include <stdint.h>
 
@@ -252,7 +252,7 @@ As it has been noted in \href{https://news.ycombinator.com/item?id=11823647}{com
 
 For example, this function can return both error code and pointer:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 struct kernfs_node *kernfs_create_link(struct kernfs_node *parent,
 				       const char *name,
 				       struct kernfs_node *target)
@@ -282,7 +282,7 @@ struct kernfs_node *kernfs_create_link(struct kernfs_node *parent,
 
 \IT{ERR\_PTR} is a macro to cast integer to pointer:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 static inline void * __must_check ERR_PTR(long error)
 {
 	return (void *) error;
@@ -293,7 +293,7 @@ static inline void * __must_check ERR_PTR(long error)
 
 This header file also has a macro helper to distinguish error code from pointer:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #define IS_ERR_VALUE(x) unlikely((x) >= (unsigned long)-MAX_ERRNO)
 \end{lstlisting}
 
@@ -307,7 +307,7 @@ must always be checked with \IT{IS\_ERR\_VALUE} before dereferencing.
 
 For example:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 	fman->cam_offset = fman_muram_alloc(fman->muram, fman->cam_size);
 	if (IS_ERR_VALUE(fman->cam_offset)) {
 		dev_err(fman->dev, "%s: MURAM alloc for DMA CAM failed\n",
