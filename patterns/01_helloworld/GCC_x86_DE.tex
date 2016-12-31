@@ -4,7 +4,7 @@ Als nächstes wird der gleiche \CCpp-Code mit GCC 4.4.1 unter Linux kompiliert: 
 Mithilfe des \IDA-Disassemblers wird untersucht, wie die \main-Funktion erzeugt wurde.
 \IDA nutzt, genau wie MSVX den Intel-Syntax\footnote{GCC kann Assembler-Ausgaben im Intel-Syntax erzeugen mit der Options \TT{-S -masm=intel}.}.
 
-\begin{lstlisting}[caption=Code in \IDA]
+\begin{lstlisting}[caption=Code in \IDA,style=customasmx86]
 main            proc near
 
 var_10          = dword ptr -10h
@@ -63,7 +63,7 @@ gcc -S 1_1.c
 
 Das Ergebnis ist wie folgt:
 
-\lstinputlisting[caption=GCC 4.7.3,style=customasm]{patterns/01_helloworld/GCC.s}
+\lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/01_helloworld/GCC.s}
 
 Der Quellcode beinhaltet Makros (beginnend mit einem Punkt), die hier aber nicht von Belang sind.
 
@@ -73,7 +73,7 @@ ignoriert. Letzeres kodiert eine Null-terminierte Zeichenkette, die einem C-Stri
 Die resultierende Ausgabe ist diese
 \footnote{Um die \q{unnötigen} Makros zu unterdrücen kann die GCC-Option \IT{-fno-asynchronous-unwind-tables} genutzt werden}:
 
-\lstinputlisting[caption=GCC 4.7.3,style=customasm]{patterns/01_helloworld/GCC_refined.s}
+\lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/01_helloworld/GCC_refined.s}
 
 \myindex{\ATTSyntax}
 \myindex{\IntelSyntax}

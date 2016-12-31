@@ -4,7 +4,7 @@
 
 Вот простой пример:
 
-\begin{lstlisting}[caption=\Optimizing MSVC 2010]
+\begin{lstlisting}[style=customc]
 unsigned int f(unsigned int a)
 {
 	return a*8;
@@ -14,7 +14,7 @@ unsigned int f(unsigned int a)
 Умножение на 8 заменяется на три инструкции сложения, делающих то же самое.
 Должно быть, оптимизатор в MSVC решил, что этот код может быть быстрее.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=\Optimizing MSVC 2010,style=customasmx86]
 _TEXT	SEGMENT
 _a$ = 8		; size = 4
 _f	PROC
@@ -34,14 +34,14 @@ END
 
 Ещё очень часто умножения и деления на числа вида $2^{n}$ заменяются на инструкции сдвигов.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 unsigned int f(unsigned int a)
 {
 	return a*4;
 };
 \end{lstlisting}
 
-\begin{lstlisting}[caption=\NonOptimizing MSVC 2010]
+\begin{lstlisting}[caption=\NonOptimizing MSVC 2010,style=customasmx86]
 _a$ = 8		; size = 4
 _f	PROC
 	push	ebp
@@ -66,7 +66,7 @@ _f	ENDP
 
 Умножение на 4 в ARM:
 
-\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode)]
+\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode),style=customasmARM]
 f PROC
         LSL      r0,r0,#2
         BX       lr
@@ -75,7 +75,7 @@ f PROC
 
 Умножение на 4 в MIPS:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/11_arith_optimizations/MIPS_SLL.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/11_arith_optimizations/MIPS_SLL.lst}
 
 \myindex{MIPS!\Instructions!SLL}
 \INS{SLL} это \q{Shift Left Logical}.
@@ -94,24 +94,24 @@ f PROC
 
 \mysubparagraph{x86}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasm]{patterns/11_arith_optimizations/mult_shifts_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasmx86]{patterns/11_arith_optimizations/mult_shifts_MSVC_2012_Ox.asm}
 
 \mysubparagraph{ARM}
 
 Keil, генерируя код для режима ARM, использует модификаторы инструкции, в которых можно задавать
 сдвиг для второго операнда:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/11_arith_optimizations/mult_shifts_Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/11_arith_optimizations/mult_shifts_Keil_ARM_O3.s}
 
 Но таких модификаторов в режиме Thumb нет.
 
 И он также не смог оптимизировать функцию \TT{f2()}:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{patterns/11_arith_optimizations/mult_shifts_Keil_thumb_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmARM]{patterns/11_arith_optimizations/mult_shifts_Keil_thumb_O3.s}
 
 \mysubparagraph{MIPS}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/11_arith_optimizations/mult_shifts_MIPS_O3_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/11_arith_optimizations/mult_shifts_MIPS_O3_IDA.lst}
 
 \myparagraph{64-бита}
 
@@ -119,13 +119,13 @@ Keil, генерируя код для режима ARM, использует м
 
 \mysubparagraph{x64}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasm]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_x64_O3.s}
+\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasmx86]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_x64_O3.s}
 
 \mysubparagraph{ARM64}
 
 GCC 4.9 для ARM64 также очень лаконичен благодаря модификаторам сдвига:
 
-\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64,style=customasm]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_ARM64.s}
+\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64,style=customasmARM]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_ARM64.s}
 
 \myparagraph{Алгоритм умножения Бута}
 

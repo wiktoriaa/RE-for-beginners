@@ -24,11 +24,11 @@ Test if the 0b1000000 bit (0x40) is present in the register's value:
 
 \lstinputlisting[caption=\CCpp,style=customc]{patterns/14_bitfields/c_snippet0.c}
 
-\lstinputlisting[caption=x86]{patterns/14_bitfields/TEST_JNZ_EN.lst}
+\lstinputlisting[caption=x86,style=customasmx86]{patterns/14_bitfields/TEST_JNZ_EN.lst}
 
-\lstinputlisting[caption=x86]{patterns/14_bitfields/TEST_JZ_EN.lst}
+\lstinputlisting[caption=x86,style=customasmx86]{patterns/14_bitfields/TEST_JZ_EN.lst}
 
-\lstinputlisting[caption=ARM (\ARMMode)]{patterns/14_bitfields/TST_BNE_EN.lst}
+\lstinputlisting[caption=ARM (\ARMMode),style=customasmARM]{patterns/14_bitfields/TST_BNE_EN.lst}
 
 \myindex{x86!\Instructions!AND}
 \myindex{x86!\Instructions!TEST}
@@ -43,7 +43,7 @@ This is usually done by this \CCpp code snippet (shift value by $n$ bits right, 
 
 This is usually implemented in x86 code as:
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 ; REG=input_value
 ; CL=n
 SHR REG, CL
@@ -56,7 +56,7 @@ Or (shift 1 bit $n$ times left, isolate this bit in input value and check if it'
 
 This is usually implemented in x86 code as:
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 ; CL=n
 MOV REG, 1
 SHL REG, CL
@@ -69,11 +69,11 @@ AND input_value, REG
 value=value|0x40;
 \end{lstlisting}
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 OR REG, 40h
 \end{lstlisting}
 
-\begin{lstlisting}[caption=ARM (\ARMMode) and ARM64]
+\begin{lstlisting}[caption=ARM (\ARMMode) and ARM64,style=customasmARM]
 ORR R0, R0, #0x40
 \end{lstlisting}
 
@@ -83,7 +83,7 @@ ORR R0, R0, #0x40
 
 This is usually implemented in x86 code as:
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 ; CL=n
 MOV REG, 1
 SHL REG, CL
@@ -94,15 +94,15 @@ OR input_value, REG
 
 Just apply \AND operation with the inverted value:
 
-\begin{lstlisting}[caption=\CCpp]
+\begin{lstlisting}[caption=\CCpp,style=customc]
 value=value&(~0x40);
 \end{lstlisting}
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 AND REG, 0FFFFFFBFh
 \end{lstlisting}
 
-\begin{lstlisting}[caption=x64]
+\begin{lstlisting}[caption=x64,style=customasmx86]
 AND REG, 0FFFFFFFFFFFFFFBFh
 \end{lstlisting}
 
@@ -112,7 +112,7 @@ This is actually leaving all bits set except one.
 
 ARM in ARM mode has \BIC instruction, which works like the \NOT+\AND instruction pair:
 
-\begin{lstlisting}[caption=ARM (\ARMMode)]
+\begin{lstlisting}[caption=ARM (\ARMMode),style=customasmARM]
 BIC R0, R0, #0x40
 \end{lstlisting}
 
@@ -121,7 +121,7 @@ Clear specific bit (specified at runtime)}
 
 \lstinputlisting[caption=\CCpp,style=customc]{patterns/14_bitfields/c_snippet4.c}
 
-\begin{lstlisting}[caption=x86]
+\begin{lstlisting}[caption=x86,style=customasmx86]
 ; CL=n
 MOV REG, 1
 SHL REG, CL

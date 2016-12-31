@@ -13,7 +13,7 @@ Data type information is absent in a compiled code (and this is one of the main 
 
 This is what sane C/C++ programmer can write:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 #include <stdint.h>
 
@@ -33,7 +33,7 @@ int main()
 
 This is what I can write ("Do not try this at home" ("MythBusters")):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 #include <stdint.h>
 
@@ -61,7 +61,7 @@ What is interesting is that GCC 4.8.4 produces identical assembly output for bot
 gcc 1.c -S -masm=intel -O3 -fno-inline
 \end{lstlisting}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .LC0:
 	.string	"(address: 0x%llx)\n"
 print_string:
@@ -92,7 +92,7 @@ I also tried UNIX \IT{diff} utility and it shows no differences at all.
 Let's continue to abuse C/C++ programming traditions heavily.
 Someone may write this:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 #include <stdint.h>
 
@@ -125,7 +125,7 @@ int main()
 
 It can be rewritten like this:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 #include <stdint.h>
 
@@ -162,7 +162,7 @@ Both source codes resulting in the same assembly output:
 gcc 1.c -S -masm=intel -O3 -fno-inline
 \end{lstlisting}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 load_byte_at_address:
 	movzx	eax, BYTE PTR [rdi]
 	ret

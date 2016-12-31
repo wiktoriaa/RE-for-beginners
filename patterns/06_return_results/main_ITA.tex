@@ -16,7 +16,7 @@ In ARM, il risultato e' solitamente restituito nel registro \Reg{0}.
 Che succederebbe se la funzione main dichiarasse il valore di ritorno di tipo \Tvoid invece di \Tint?
 Il cosiddetto startup-code chiama \main piu' o meno cosi':
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 push envp
 push argv
 push argc
@@ -27,7 +27,7 @@ call exit
 
 In altre parole:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 exit(main(argc,argv,envp));
 \end{lstlisting}
 
@@ -39,7 +39,7 @@ e' pseudorandom.
 Illustriamo meglio questo fatto. 
 La funzione \main ha ora un valore di ritorno di tipo \Tvoid:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 
 void main()
@@ -57,7 +57,7 @@ Notiamo che \EAX non viene azzerato prima della fine di \main.
 
 Cio' implica che il valore di \EAX alla fine di \main conterra' il valore lasciato li' da \puts.
 
-\begin{lstlisting}[caption=GCC 4.8.1]
+\begin{lstlisting}[caption=GCC 4.8.1,style=customasmx86]
 .LC0:
 	.string	"Hello, world!"
 main:
@@ -98,7 +98,7 @@ e' usato molto raramente in pratica.
 
 E' possibile anche chiamare una funzione la cui essenza risiede nel restituire un valore e non usarlo del tutto:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 int f()
 {
     // skip first 3 random values:
@@ -133,7 +133,7 @@ Un piccolo esempio:
 
 \dots otteniamo (MSVC 2010 \Ox):
 
-\lstinputlisting[style=customasm]{patterns/06_return_results/6_1.asm}
+\lstinputlisting[style=customasmx86]{patterns/06_return_results/6_1.asm}
 
 Il nome della macro per il passaggio interno del puntatore alla struttura e' in questo caso \GTT{\$T3853}.
 
@@ -142,7 +142,7 @@ Questo stesso esempio puo' essere riscritto utilizzando l'estensione del linguag
 
 \lstinputlisting[style=customc]{patterns/06_return_results/6_1_C99.c}
 
-\lstinputlisting[caption=GCC 4.8.1,style=customasm]{patterns/06_return_results/6_1_C99.asm}
+\lstinputlisting[caption=GCC 4.8.1,style=customasmx86]{patterns/06_return_results/6_1_C99.asm}
 
 Come possiamo vedere, la funzione chiamata non fa altro che riempire i campi della struttura allocata dalla funzione chiamante,
 come se un puntatore alla struttura fosse stato passato.

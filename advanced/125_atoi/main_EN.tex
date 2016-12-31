@@ -34,7 +34,7 @@ The last digit is added, but there is no shift.
 
 \subsubsection{\Optimizing MSVC 2013 x64}
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{\CURPATH/atoi.asm.MSVC2013.x64.Ox_EN}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasmx86]{\CURPATH/atoi.asm.MSVC2013.x64.Ox_EN}
 
 A character can be loaded in two places: the first character and all subsequent characters.
 This is arranged so for loop regrouping.
@@ -55,15 +55,15 @@ But MSVC does this often.
 \Optimizing GCC 4.9.1 is more concise, but there is one redundant RET instruction at the end.
 One would be enough.
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasm]{\CURPATH/atoi.s.GCC491.O3.x64_EN}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasmx86]{\CURPATH/atoi.s.GCC491.O3.x64_EN}
 
 \subsubsection{\OptimizingKeilVI (\ARMMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{\CURPATH/atoi.s.ARM.O3_EN}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{\CURPATH/atoi.s.ARM.O3_EN}
 
 \subsubsection{\OptimizingKeilVI (\ThumbMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{\CURPATH/atoi.s.thumb.O3_EN}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmARM]{\CURPATH/atoi.s.thumb.O3_EN}
 
 Interestingly, from school mathematics we may recall that the order of addition and 
 subtraction operations doesn't matter.
@@ -77,7 +77,7 @@ Indeed, the result is the same, but the compiler did some regrouping.
 
 The ARM64 compiler can use the pre-increment instruction suffix:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64,style=customasm]{\CURPATH/atoi.s.GCC49.ARM64.O3_EN}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64,style=customasmARM]{\CURPATH/atoi.s.GCC49.ARM64.O3_EN}
 
 \subsection{A slightly advanced example}
 
@@ -88,7 +88,7 @@ and reports an error if a non-digit has been found in the input string:
 
 \subsubsection{\Optimizing GCC 4.9.1 x64}
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasm]{\CURPATH/atoi2.s.GCC491.O3.x64_EN}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasmx86]{\CURPATH/atoi2.s.GCC491.O3.x64_EN}
 
 \myindex{x86!\Instructions!NEG}
 
@@ -101,7 +101,7 @@ There is one more thing that needs mentioning.
 How would a common programmer check if the character is not a digit?
 Just how we have it in the source code:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 if (*s<'0' || *s>'9')
     ...
 \end{lstlisting}
@@ -129,7 +129,7 @@ Another example of it in this book:
 
 \subsubsection{\OptimizingKeilVI (\ARMMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),numbers=left,style=customasm]{\CURPATH/atoi2.s.ARM.O3_EN}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),numbers=left,style=customasmARM]{\CURPATH/atoi2.s.ARM.O3_EN}
 
 There is no NEG instruction in 32-bit ARM, so the \q{Reverse Subtraction} operation (line 31) 
 is used here.

@@ -4,7 +4,7 @@ Nu zullen we dezelfde \CCpp code compileren in de GCC 4.4.1 compiler in Linux: \
 Vervolgens, met de assistentie van de \IDA disassembler, zullen we kijken hoe de \main functie gemaakt is.
 \IDA, maakt net als MSVC gebruik van de Intel-syntax\footnote{We hadden GCC ook assembly listings kunnen laten gereren in Intel-syntax door gebruik te maken van de opties \TT{-S -masm=intel}.}.
 
-\begin{lstlisting}[caption=code in \IDA]
+\begin{lstlisting}[caption=code in \IDA,style=customasmx86]
 main            proc near
 
 var_10          = dword ptr -10h
@@ -64,7 +64,7 @@ gcc -S 1_1.c
 
 We krijgen dit resultaat:
 
-\lstinputlisting[caption=GCC 4.7.3,style=customasm]{patterns/01_helloworld/GCC.s}
+\lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/01_helloworld/GCC.s}
 
 De lijst bevat vele macros (die beginnen met een punt). Maar deze zijn niet interessant voor ons momenteel.
 
@@ -72,7 +72,7 @@ Voorlopig, om het simpel te houden, kunnen we deze negeren (buiten de \IT{.strin
 een null-terminated karakter reeks encodeert net als een C-string). Daarna zien we dit
 \footnote{Deze GCC optie kan gebruikt worden om alle \q{onnodige} macros te elimineren: \IT{-fno-asynchronous-unwind-tables}}:
 
-\lstinputlisting[caption=GCC 4.7.3,style=customasm]{patterns/01_helloworld/GCC_refined.s}
+\lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/01_helloworld/GCC_refined.s}
 
 \myindex{\ATTSyntax}
 \myindex{\IntelSyntax}

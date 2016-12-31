@@ -14,7 +14,7 @@
 Кстати, что будет, если возвращаемое значение в функции \main объявлять не как \Tint, а как \Tvoid?
 Т.н. startup-код вызывает \main примерно так:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 push envp
 push argv
 push argc
@@ -25,7 +25,7 @@ call exit
 
 Иными словами:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 exit(main(argc,argv,envp));
 \end{lstlisting}
 
@@ -35,7 +35,7 @@ exit(main(argc,argv,envp));
 Мы можем это проиллюстрировать.
 Заметьте, что у функции \main тип возвращаемого значения именно \Tvoid{}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 
 void main()
@@ -54,7 +54,7 @@ GCC 4.8.1 заменила \printf на \puts
 Это значит что \EAX перед выходом из \main содержит то, что \puts оставляет там.
 
 
-\begin{lstlisting}[caption=GCC 4.8.1]
+\begin{lstlisting}[caption=GCC 4.8.1,style=customasmx86]
 .LC0:
 	.string	"Hello, world!"
 main:
@@ -106,7 +106,7 @@ retn
 По стандарту С++, деструкторы ничего не возвращают, но когда Hex-Rays об не знает, и думает что и десктрутор,
 и эта ф-ция по умолчанию возвращает \Tint, то на выходе получается такой код:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 ...
 
 	return CString::~CString(&Str);
@@ -120,7 +120,7 @@ retn
 
 Можно даже явно вызывать функции, чей смысл именно в возвращаемых значениях, но явно не использовать их:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 int f()
 {
     // пропускаем первые 3 случайных значения:
@@ -156,7 +156,7 @@ int f()
 
 \dots получим (MSVC 2010 \Ox):
 
-\lstinputlisting[style=customasm]{patterns/06_return_results/6_1.asm}
+\lstinputlisting[style=customasmx86]{patterns/06_return_results/6_1.asm}
 
 \GTT{\$T3853} это имя внутреннего макроса для передачи указателя на структуру.
 
@@ -165,7 +165,7 @@ int f()
 
 \lstinputlisting[style=customc]{patterns/06_return_results/6_1_C99.c}
 
-\lstinputlisting[caption=GCC 4.8.1,style=customasm]{patterns/06_return_results/6_1_C99.asm}
+\lstinputlisting[caption=GCC 4.8.1,style=customasmx86]{patterns/06_return_results/6_1_C99.asm}
 
 Как видно, функция просто заполняет поля в структуре, выделенной вызывающей функцией. 
 Как если бы передавался просто указатель на структуру.

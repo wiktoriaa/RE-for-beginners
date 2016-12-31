@@ -13,7 +13,7 @@
 
 Вот как строка может быть сконструирована:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 mov     byte ptr [ebx], 'h'
 mov     byte ptr [ebx+1], 'e'
 mov     byte ptr [ebx+2], 'l'
@@ -29,7 +29,7 @@ mov     byte ptr [ebx+10], 'd'
 
 Строка также может сравниваться с другой:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 mov	ebx, offset username
 cmp	byte ptr [ebx], 'j'
 jnz	fail
@@ -50,7 +50,7 @@ jz	it_is_john
 
 Еще метод с использованием функции \TT{sprintf()} для конструирования:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 sprintf(buf, "%s%c%s%c%s", "hel",'l',"o w",'o',"rld");
 \end{lstlisting}
 
@@ -70,12 +70,12 @@ sprintf(buf, "%s%c%s%c%s", "hel",'l',"o w",'o',"rld");
 
 Просто пример:
 
-\begin{lstlisting}[caption=оригинальный код]
+\begin{lstlisting}[caption=оригинальный код,style=customasmx86]
 add	eax, ebx
 mul	ecx
 \end{lstlisting}
 
-\lstinputlisting[caption=obfuscated code,style=customasm]{\CURPATH/1_RU.asm}
+\lstinputlisting[caption=obfuscated code,style=customasmx86]{\CURPATH/1_RU.asm}
 
 Здесь код-мусор использует регистры, которые не используются в настоящем коде (\TT{ESI} и \TT{EDX}).
 Впрочем, промежуточные результаты полученные при исполнении настоящего кода вполне могут использоваться
@@ -96,7 +96,7 @@ mul	ecx
 
 Если разработчик уверен, что в ESI всегда будет 0 в этом месте:
 
-\lstinputlisting[style=customasm]{\CURPATH/2_RU.asm}
+\lstinputlisting[style=customasmx86]{\CURPATH/2_RU.asm}
 
 Reverse engineer-у понадобится какое-то время чтобы с этим разобраться.
 
@@ -105,7 +105,7 @@ Reverse engineer-у понадобится какое-то время чтобы
 
 Еще один пример (и снова разработчик уверен, что \TT{ESI} --- всегда ноль):
 
-\lstinputlisting[style=customasm]{\CURPATH/3_RU.asm}
+\lstinputlisting[style=customasmx86]{\CURPATH/3_RU.asm}
 
 \subsubsection{Сделать побольше путаницы}
 
@@ -117,7 +117,7 @@ instruction 3
 
 Можно заменить на:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 begin:		jmp	ins1_label
 
 ins2_label:	instruction 2
@@ -133,7 +133,7 @@ exit:
 
 \subsubsection{Использование косвенных указателей}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 dummy_data1	db	100h dup (0)
 message1	db	'hello world',0
 

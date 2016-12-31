@@ -183,7 +183,7 @@ However it is not so in latest versions of \ac{MSVC} (separate \gls{PDB} files a
 \\
 That is how a PE section is described in the file:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 typedef struct _IMAGE_SECTION_HEADER {
   BYTE  Name[IMAGE_SIZEOF_SHORT_NAME];
   union {
@@ -217,7 +217,7 @@ size of section in file.
 
 IDA can show the border between initialized and not initialized parts like that:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 ...
 
 .data:10017FFA                 db    0
@@ -258,7 +258,7 @@ in case of loading at a different base address.
 % TODO тут бы пример с HIEW или objdump..
 For example, there is a global variable at address \TT{0x410000} and this is how it is accessed:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 A1 00 00 41 00         mov         eax,[000410000]
 \end{lstlisting}
 
@@ -398,7 +398,7 @@ Some time earlier, in the previous versions of the utility,
 at the place of the function you want to substitute with a call to another DLL,
 my utility wrote the following code:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 MOV EAX, [yourdll.dll!function]
 JMP EAX
 \end{lstlisting}
@@ -469,7 +469,7 @@ by using the ResHack editor, for example (\myref{ResHack}).
 Strictly speaking, there is bytecode instead of the usual x86 code
 in the .exe file, however, the entry point (\ac{OEP}) points to this tiny fragment of x86 code:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 jmp         mscoree.dll!_CorExeMain
 \end{lstlisting}
 

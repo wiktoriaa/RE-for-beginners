@@ -9,7 +9,7 @@ fastcall~(\myref{fastcall}) o win64~(\myref{sec:callingconventions_win64}).
 
 \mysubparagraph{\NonOptimizingKeilVI (\ARMMode)}
 
-\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode)]
+\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode),style=customasmARM]
 .text:00000000 main
 .text:00000000 10 40 2D E9   STMFD   SP!, {R4,LR}
 .text:00000004 03 30 A0 E3   MOV     R3, #3
@@ -31,7 +31,7 @@ Niente di insolito fino a qui.
 
 \mysubparagraph{\OptimizingKeilVI (\ThumbMode)}
 
-\begin{lstlisting}[caption=\OptimizingKeilVI (\ThumbMode)]
+\begin{lstlisting}[caption=\OptimizingKeilVI (\ThumbMode),style=customasmARM]
 .text:00000000 main
 .text:00000000 10 B5        PUSH    {R4,LR}
 .text:00000002 03 23        MOVS    R3, #3
@@ -50,7 +50,7 @@ Non c'e' nessuna differenza significativa nel codice non ottimizzato per modo AR
 
 Modifichiamo leggermente l'esempio rimuovendo \IT{return 0}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 
 void main()
@@ -61,7 +61,7 @@ void main()
 
 Il risultato e' alquanto insolito:
 
-\begin{lstlisting}[caption=\OptimizingKeilVI (\ARMMode)]
+\begin{lstlisting}[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]
 .text:00000014 main
 .text:00000014 03 30 A0 E3   MOV     R3, #3
 .text:00000018 02 20 A0 E3   MOV     R2, #2
@@ -99,7 +99,7 @@ Un esempio simile e' fornito di seguito:
 \mysubparagraph{\NonOptimizing GCC (Linaro) 4.9}
 
 % TODO translate to Italian:
-\lstinputlisting[caption=\NonOptimizing GCC (Linaro) 4.9]{patterns/03_printf/ARM/ARM3_O0_EN.lst}
+\lstinputlisting[caption=\NonOptimizing GCC (Linaro) 4.9,style=customasmARM]{patterns/03_printf/ARM/ARM3_O0_EN.lst}
 
 \myindex{ARM!\Instructions!STP}
 

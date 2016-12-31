@@ -14,7 +14,7 @@ supercomputer line from 1988 when he played with its \q{lite} version Cray Y-MP 
 % FIXME! add assembly listing!
 For example:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 for (i = 0; i < 1024; i++)
 {
     C[i] = A[i]*B[i];
@@ -45,7 +45,7 @@ e.g., Intel C++\footnote{More about Intel C++ automatic vectorization: \URLINTEL
 
 Here is tiny function:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 int f (int sz, int *ar1, int *ar2, int *ar3)
 {
 	for (int i=0; i<sz; i++)
@@ -65,7 +65,7 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 
 We got (in \IDA):
 
-\lstinputlisting[style=customasm]{patterns/19_SIMD/18_1_EN.asm}
+\lstinputlisting[style=customasmx86]{patterns/19_SIMD/18_1_EN.asm}
 
 The SSE2-related instructions are:
 \myindex{x86!\Instructions!MOVDQA}
@@ -98,7 +98,7 @@ and the pointer \TT{ar3} is aligned on a 16-byte boundary.
 Also, if \TT{ar2} is aligned on a 16-byte boundary as well, 
 this fragment of code is to be executed:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 movdqu  xmm0, xmmword ptr [ebx+edi*4] ; ar1+i*4
 paddd   xmm0, xmmword ptr [esi+edi*4] ; ar2+i*4
 movdqa  xmmword ptr [eax+edi*4], xmm0 ; ar3+i*4
@@ -107,7 +107,7 @@ movdqa  xmmword ptr [eax+edi*4], xmm0 ; ar3+i*4
 Otherwise, the value from \TT{ar2} is to be loaded into \XMM{0} using \MOVDQU,
 which does not require aligned pointer, but may work slower:
 
-\lstinputlisting[style=customasm]{patterns/19_SIMD/18_1_excerpt_EN.asm}
+\lstinputlisting[style=customasmx86]{patterns/19_SIMD/18_1_excerpt_EN.asm}
 
 In all other cases, non-SSE2 code is to be executed.
 
@@ -120,7 +120,7 @@ if the \Othree option is used and SSE2 support is turned on: \TT{-msse2}.
 
 What we get (GCC 4.4.1):
 
-\lstinputlisting[style=customasm]{patterns/19_SIMD/18_2_gcc_O3.asm}
+\lstinputlisting[style=customasmx86]{patterns/19_SIMD/18_2_gcc_O3.asm}
 
 Almost the same, however, not as meticulously as Intel C++.
 
@@ -134,4 +134,4 @@ Let's revisit the simple memcpy() example
 
 And that's what optimizations GCC 4.9.1 did:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasm]{patterns/19_SIMD/memcpy_GCC49_x64_O3_EN.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasmx86]{patterns/19_SIMD/memcpy_GCC49_x64_O3_EN.s}

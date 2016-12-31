@@ -20,7 +20,7 @@ overflow is possible, which will add another 1 to the exponent part.
 
 \subsubsection{x86}
 
-\lstinputlisting[caption=\Optimizing MSVC 2010,style=customasm]{patterns/17_unions/epsilon/float_MSVC_2010_Ox_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010,style=customasmx86]{patterns/17_unions/epsilon/float_MSVC_2010_Ox_EN.asm}
 
 The second \INS{FST} instruction is redundant: there is no necessity to store the input value in the same
 place (the compiler decided to allocate the $v$ variable at the same point in the local stack as the input 
@@ -40,7 +40,7 @@ ARM64 has no instruction that can add a number to a FPU D-register,
 so the input value (that came in \TT{D0}) is first copied into \ac{GPR},
 incremented, copied to FPU register \TT{D1}, and then subtraction occurs.
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64,style=customasm]{patterns/17_unions/epsilon/double_GCC49_ARM64_O3_EN.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64,style=customasmARM]{patterns/17_unions/epsilon/double_GCC49_ARM64_O3_EN.s}
 
 See also this example compiled for x64 with SIMD instructions: \myref{machine_epsilon_x64_and_SIMD}.
 
@@ -50,7 +50,7 @@ See also this example compiled for x64 with SIMD instructions: \myref{machine_ep
 
 The new instruction here is \INS{MTC1} (\q{Move To Coprocessor 1}), it just transfers data from \ac{GPR} to the FPU's registers.
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/17_unions/epsilon/MIPS_O3_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/17_unions/epsilon/MIPS_O3_IDA.lst}
 
 \subsubsection{\Conclusion}
 

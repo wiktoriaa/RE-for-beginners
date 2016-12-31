@@ -5,7 +5,7 @@
 
 Во время анализа динамических библиотек (.so) в Linux, часто можно заметить такой шаблонный код:
 
-\begin{lstlisting}[caption=libc-2.17.so x86]
+\begin{lstlisting}[caption=libc-2.17.so x86,style=customasmx86]
 .text:0012D5E3 __x86_get_pc_thunk_bx proc near         ; CODE XREF: sub_17350+3
 .text:0012D5E3                                         ; sub_173CC+4 ...
 .text:0012D5E3                 mov     ebx, [esp+0]
@@ -49,7 +49,7 @@
 
 Простой эксперимент:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #include <stdio.h>
 
 int global_variable=123;
@@ -68,7 +68,7 @@ int f1(int var)
 gcc -fPIC -shared -O3 -o 1.so 1.c
 \end{lstlisting}
 
-\begin{lstlisting}[caption=GCC 4.7.3]
+\begin{lstlisting}[caption=GCC 4.7.3,style=customasmx86]
 .text:00000440                 public __x86_get_pc_thunk_bx
 .text:00000440 __x86_get_pc_thunk_bx proc near         ; CODE XREF: _init_proc+4
 .text:00000440                                         ; deregister_tm_clones+4 ...
@@ -119,7 +119,7 @@ gcc -fPIC -shared -O3 -o 1.so 1.c
 \IT{Global Offset Table Procedure Linkage Table} (GOT PLT), секцией, сразу же за \IT{Global Offset Table} (GOT), где находится указатель на \globvar{}.
 \IDA показывает смещения уже обработанными, чтобы их было проще понимать, но на самом деле код такой:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00000577                 call    __x86_get_pc_thunk_bx
 .text:0000057C                 add     ebx, 1A84h
 .text:00000582                 mov     [esp+1Ch+var_4], esi
@@ -140,7 +140,7 @@ gcc -fPIC -shared -O3 -o 1.so 1.c
 \myindex{objdump}
 \IDA упростит код на выходе убирая упоминания RIP, так что будем использовать \IT{objdump} вместо нее:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 0000000000000720 <f1>:
  720:	48 8b 05 b9 08 20 00 	mov    rax,QWORD PTR [rip+0x2008b9]        # 200fe0 <_DYNAMIC+0x1d0>
  727:	53                   	push   rbx

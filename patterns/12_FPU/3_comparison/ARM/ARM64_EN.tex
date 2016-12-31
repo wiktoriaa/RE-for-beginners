@@ -2,7 +2,7 @@
 
 \myparagraph{\Optimizing GCC (Linaro) 4.9}
 
-\lstinputlisting{patterns/12_FPU/3_comparison/ARM/ARM64_GCC_O3_EN.lst}
+\lstinputlisting[style=customasmARM]{patterns/12_FPU/3_comparison/ARM/ARM64_GCC_O3_EN.lst}
 
 The ARM64 \ac{ISA} has FPU-instructions 
 which set \ac{APSR} the CPU flags instead of \ac{FPSCR} for convenience.
@@ -24,7 +24,7 @@ is copied into \RegD{0}.
 
 \myparagraph{\NonOptimizing GCC (Linaro) 4.9}
 
-\lstinputlisting{patterns/12_FPU/3_comparison/ARM/ARM64_GCC_EN.lst}
+\lstinputlisting[style=customasmARM]{patterns/12_FPU/3_comparison/ARM/ARM64_GCC_EN.lst}
 
 Non-optimizing GCC is more verbose.
 
@@ -55,7 +55,7 @@ manually by removing redundant instructions and not introducing new ones (includ
 
 Let's also rewrite this example to use \Tfloat instead of \Tdouble.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 float f_max (float a, float b)
 {
 	if (a>b)
@@ -65,7 +65,7 @@ float f_max (float a, float b)
 };
 \end{lstlisting}
 
-\lstinputlisting{patterns/12_FPU/3_comparison/ARM/ARM64_GCC_O3_float_EN.lst}
+\lstinputlisting[style=customasmARM]{patterns/12_FPU/3_comparison/ARM/ARM64_GCC_O3_float_EN.lst}
 
 It is the same code, but the S-registers are used instead of D- ones.
 It's because numbers of type \Tfloat are passed in 32-bit S-registers (which are in fact the lower parts of the 64-bit D-registers).

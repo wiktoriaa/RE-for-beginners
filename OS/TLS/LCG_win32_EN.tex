@@ -10,7 +10,7 @@ then it will be allocated in the \ac{TLS} (line 9):
 Hiew shows us that there is a new PE section in the executable file: \TT{.tls}.
 % TODO1 hiew screenshot?
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x86,style=customasm]{OS/TLS/win32/rand_x86_uninit.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x86,style=customasmx86]{OS/TLS/win32/rand_x86_uninit.asm}
 
 \TT{rand\_state} is now in the \ac{TLS} segment, and each thread has its own version of this variable.
 
@@ -28,7 +28,7 @@ so it would be fast to load the thread-specific data.
 
 The \TT{GS:} selector is used in Win64 and the address of the \ac{TLS} is 0x58:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{OS/TLS/win32/rand_x64_uninit.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasmx86]{OS/TLS/win32/rand_x64_uninit.asm}
 
 \myparagraph{Initialized \ac{TLS} data}
 
@@ -39,7 +39,7 @@ the \TT{rand\_state} variable would be initialized to some constant anyway (line
 
 The code is no differ from what we already saw, but in IDA we see:
 
-\lstinputlisting{OS/TLS/win32/rand_init_IDA.lst}
+\lstinputlisting[style=customasmx86]{OS/TLS/win32/rand_init_IDA.lst}
 
 1234 is there and every time a new thread starts, a new \ac{TLS} is allocated for it, 
 and all this data, including 1234, will be copied there.
@@ -77,7 +77,7 @@ The function initializes the \ac{PRNG} with the value returned by \TT{GetTickCou
 
 Let's see it in IDA:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013]{OS/TLS/win32/rand_TLS_callback.lst}
+\lstinputlisting[caption=\Optimizing MSVC 2013,style=customasmx86]{OS/TLS/win32/rand_TLS_callback.lst}
 
 TLS callback functions are sometimes used in unpacking routines to obscure their processing.
 

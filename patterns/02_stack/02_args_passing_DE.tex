@@ -2,7 +2,7 @@
 
 Der übliche weg Argumente in x86 zu übergeben ist die \q{cdecl} Methode:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 push arg3
 push arg2
 push arg1
@@ -53,7 +53,7 @@ Das ist auch der Grund warum es nicht wichtig ist wie die \main Funktion definie
 
 Tatsächlich ruf der \ac{CRT}-Code die \main Funktion um Grunde so auf:
 	
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 push envp
 push argv
 push argc
@@ -91,12 +91,12 @@ so viel Speicher wie der Computer hat.
 Auf MS-DOS gab es einen Weg Funktion Argumente über Register zu übergeben, zum Beispiel dies 
 ist ein Stück Code einer veralteten 16-Bit MS-DOS ``Hallo, Welt!'' Funktion:
 
-\begin{lstlisting}
-mov  dx, msg      ; Adresse der Naricht % address of message 
-mov  ah, 9        ; 9 bedeutet ``print string'' % 9 mean "print string" function
+\begin{lstlisting}[style=customasmx86]
+mov  dx, msg      ; Adresse der Naricht
+mov  ah, 9        ; 9 bedeutet ``print string''
 int  21h          ; DOS "syscall"
 
-mov  ah, 4ch      ; ``Terminiere Programm'' Funktion %"terminate program" function
+mov  ah, 4ch      ; ``Terminiere Programm'' Funktion
 int  21h          ; DOS "syscall"
 
 msg  db 'Hello, World!\$' 
@@ -111,7 +111,7 @@ Wenn eine MS-DOS Funktion einen Bool'schen Wert zurück gibt (z.B., Single Bit b
 
 Zum Beispiel:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 mov ah, 3ch       ; create file
 lea dx, filename
 mov cl, 1
@@ -131,7 +131,7 @@ Im Windows Reseearch Kernel source Code (der sehr ähnlich zum Windows 2003 Kern
 finden (file \IT{base/ntos/ke/i386/cpu.asm}):
 
 % muss noch die kommentare geändert werden
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
         public  Get386Stepping
 Get386Stepping  proc
 

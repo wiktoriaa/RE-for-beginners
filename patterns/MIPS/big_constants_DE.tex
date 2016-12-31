@@ -1,7 +1,7 @@
 ﻿\subsection{Laden einer 32-Bit-Konstante in ein Register}
 \label{MIPS_big_constants}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 unsigned int f()
 {
 	return 0x12345678;
@@ -17,7 +17,7 @@ Dementsprechen müssen mindestens zwei Anweisungen genutzt werden:
 die erste läd den höherwertigen Teil der 32-Bit-Zahl und die zweite führt eine
 ODER-Anweisung aus, welche den niederwertigen 16-Bit-Teil des Zielregisters setzt:rget register:
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput),style=customasmMIPS]
         li      $2,305397760  # 0x12340000
         j       $31
         ori     $2,$2,0x5678 ; branch delay slot
@@ -29,7 +29,7 @@ welche vermeintlich eine komplette 32-Bit-Zahl in das \$V0-Register läd.
 
 \myindex{MIPS!\Instructions!LUI}
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA),style=customasmMIPS]
          lui     $v0, 0x1234
          jr      $ra
          li      $v0, 0x12345678 ; branch delay slot
@@ -41,7 +41,7 @@ im höherwertigen Teil des Registers sichert.
 
 Nachfolgend die \IT{objdump}-Ausgabe:
 
-\begin{lstlisting}[caption=objdump]
+\begin{lstlisting}[caption=objdump,style=customasmMIPS]
 00000000 <f>:
    0:   3c021234        lui     v0,0x1234
    4:   03e00008        jr      ra
@@ -50,7 +50,7 @@ Nachfolgend die \IT{objdump}-Ausgabe:
 
 \subsubsection{Laden einer globalen 32-Bit-Variable in ein Register}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 unsigned int global_var=0x12345678;
 
 unsigned int f2()
@@ -65,7 +65,7 @@ Dies ist leicht unterschiedlich: \INS{LUI} läd die oberen 16 Bit von \IT{global
 in \$2 (or \$V0). Anschließend läd \INS{LW} die unteren 16 Bit und addiert sie mit
 dem Inhalt von \$2:
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (\assemblyOutput),style=customasmMIPS]
 f2:
         lui     $2,%hi(global_var)
         lw      $2,%lo(global_var)($2)
@@ -81,7 +81,7 @@ global_var:
 \IDA kennt auch das oft genutzte Anweisungspaar \INS{LUI}/\INS{LW} und fasst beide
 in der einzelten Anweisung \INS{LW} zusammen:
 
-\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA)]
+\begin{lstlisting}[caption=GCC 4.4.5 -O3 (IDA),style=customasmMIPS]
 _f2:
                 lw      $v0, global_var
                 jr      $ra
@@ -97,7 +97,7 @@ global_var:     .word 0x12345678         # DATA XREF: _f2
 Die Ausgabe von \IT{objdump} ist die selbe wie die Assembler-Ausgabe von GCC.
 Nachfolgend die Speicherauszüge der Objektdateien:
 
-\begin{lstlisting}[caption=objdump]
+\begin{lstlisting}[caption=objdump,style=customasmMIPS]
 objdump -D filename.o
 
 ...

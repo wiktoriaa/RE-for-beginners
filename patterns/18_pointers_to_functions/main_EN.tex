@@ -52,7 +52,7 @@ Let's use the following example:
 
 Let's compile it in MSVC 2010 (some parts were omitted for the sake of brevity) with \TT{\Ox} option:
 
-\lstinputlisting[caption=\Optimizing MSVC 2010: /GS- /MD,style=customasm]{patterns/18_pointers_to_functions/17_2_msvc_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2010: /GS- /MD,style=customasmx86]{patterns/18_pointers_to_functions/17_2_msvc_Ox.asm}
 
 Nothing surprising so far.
 As a fourth argument, the address of label \TT{\_comp} is passed, which is just a place
@@ -65,7 +65,7 @@ How does \qsort call it?
 
 Let's take a look at this function, located in MSVCR80.DLL (a MSVC DLL module with C standard library functions):
 
-\lstinputlisting[caption=MSVCR80.DLL]{patterns/18_pointers_to_functions/17_3_MSVCR.lst}
+\lstinputlisting[caption=MSVCR80.DLL,style=customasmx86]{patterns/18_pointers_to_functions/17_3_MSVCR.lst}
 
 \TT{comp}---is the fourth function argument.
 Here the control gets passed to the address in the \TT{comp} argument.
@@ -193,7 +193,7 @@ indeed, \comp has never returned 0, because there no equal elements in the array
 
 Not a big difference:
 
-\begin{lstlisting}[caption=GCC]
+\begin{lstlisting}[caption=GCC,style=customasmx86]
                 lea     eax, [esp+40h+var_28]
                 mov     [esp+40h+var_40], eax
                 mov     [esp+40h+var_28], 764h
@@ -214,7 +214,7 @@ Not a big difference:
 
 \comp function:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
                 public comp
 comp            proc near
 
@@ -247,8 +247,8 @@ The implementation of \qsort is located in \TT{libc.so.6} and it is in fact just
 
 In turn, it is calling \TT{quicksort()}, where our defined function is called via a passed pointer:
 
-\begin{lstlisting}[caption=(file libc.so.6{,} glibc version---2.10.1)]
-
+\begin{lstlisting}[caption=(file libc.so.6{,} glibc version---2.10.1),style=customasmx86]
+...
 .text:0002DDF6                 mov     edx, [ebp+arg_10]
 .text:0002DDF9                 mov     [esp+4], esi
 .text:0002DDFD                 mov     [esp], edi

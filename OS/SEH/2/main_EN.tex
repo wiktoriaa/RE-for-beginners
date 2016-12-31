@@ -7,7 +7,7 @@ to MSVC\footnote{\href{http://go.yurichev.com/17057}{MSDN}}.
 It is not related to C++ \ac{PL} exceptions.
 
 % FIXME russian listing:
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 __try
 {
     ...
@@ -20,7 +20,7 @@ __except(filter code)
 
 \q{Finally} block may be instead of handler code:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 __try
 {
     ...
@@ -93,7 +93,7 @@ in order to know which \IT{scope table} entry to use.
 
 \lstinputlisting[style=customc]{OS/SEH/2/2.c}
 
-\lstinputlisting[caption=MSVC 2003,style=customasm]{OS/SEH/2/2_SEH3.asm}
+\lstinputlisting[caption=MSVC 2003,style=customasmx86]{OS/SEH/2/2_SEH3.asm}
 
 Here we see how the SEH frame is constructed in the stack.
 The \IT{scope table} is located in the \TT{CONST} segment---indeed, these fields are not to be changed.
@@ -162,7 +162,7 @@ Now there are two \TT{try} blocks.
 So the \IT{scope table} now has two entries, one for each block.
 \IT{Previous try level} changes as execution flow enters or exits the \TT{try} block.
 
-\lstinputlisting[caption=MSVC 2003,style=customasm]{OS/SEH/2/3_SEH3.asm}
+\lstinputlisting[caption=MSVC 2003,style=customasmx86]{OS/SEH/2/3_SEH3.asm}
 
 If we set a breakpoint on the \printf{} function, which is called from the handler, 
 we can also see how yet another SEH handler is added.
@@ -218,9 +218,9 @@ The initial \IT{previous try level} is $-2$ in SEH4 instead of $-1$.
 
 Here are both examples compiled in MSVC 2012 with SEH4:
 
-\lstinputlisting[caption=MSVC 2012: one try block example,style=customasm]{OS/SEH/2/2_SEH4.asm}
+\lstinputlisting[caption=MSVC 2012: one try block example,style=customasmx86]{OS/SEH/2/2_SEH4.asm}
 
-\lstinputlisting[caption=MSVC 2012: two try blocks example,style=customasm]{OS/SEH/2/3_SEH4.asm}
+\lstinputlisting[caption=MSVC 2012: two try blocks example,style=customasmx86]{OS/SEH/2/3_SEH4.asm}
 
 Here is the meaning of the \IT{cookies}: \TT{Cookie Offset} 
 is the difference between the address of the saved EBP value in the stack

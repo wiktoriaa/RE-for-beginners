@@ -11,13 +11,13 @@
 Действительно, типы аргументов это 32-битные \IT{int}'ы.
 Результат возвращается в \TT{W0}.
 
-\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9,style=customasm]{patterns/05_passing_arguments/ARM/ARM64_O3_RU.s}
+\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9,style=customasmARM]{patterns/05_passing_arguments/ARM/ARM64_O3_RU.s}
 
 Также расширим все типы данных до 64-битных \TT{uint64\_t} и попробуем:
 
 \lstinputlisting[style=customc]{patterns/05_passing_arguments/ex64.c}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmARM]
 f:
 	madd	x0, x0, x1, x2
 	ret
@@ -46,7 +46,7 @@ main:
 
 Неоптимизирующий компилятор выдает немного лишнего кода:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmARM]
 f:
 	sub	sp, sp, #16
 	str	w0, [sp,12]

@@ -9,7 +9,7 @@ sono passati tramite i registri. La funzione chiamata (\gls{callee}) legge quind
 
 \Optimizing MSVC:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/05_passing_arguments/x64_MSVC_Ox_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{patterns/05_passing_arguments/x64_MSVC_Ox_EN.asm}
 
 Come possiamo vedere, la piccola funzione \ttf prende tutti i suoi argomenti dai registri.
 
@@ -21,7 +21,7 @@ Il compilatore deve aver deciso che questo approccio e' piu' veloce del modo tra
 
 Diamo un'occhiata all'output di MSVC senza ottimizzazioni:
 
-\lstinputlisting[caption=MSVC 2012 x64,style=customasm]{patterns/05_passing_arguments/x64_MSVC_IDA_EN.asm}
+\lstinputlisting[caption=MSVC 2012 x64,style=customasmx86]{patterns/05_passing_arguments/x64_MSVC_IDA_EN.asm}
 
 L'output puo' lasciarci un po' perplessi in quanto tutti i 3 argomenti nei registri sono anche salvati nello stack per qualche motivo. 
 \myindex{Shadow space}
@@ -43,11 +43,11 @@ Allorace spazio nello \q{shadow space} e' responsabilita' del chiamante (\gls{ca
 
 \Optimizing GCC genera codice piu' o meno comprensibile:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasm]{patterns/05_passing_arguments/x64_GCC_O3_EN.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasmx86]{patterns/05_passing_arguments/x64_GCC_O3_EN.s}
 
 \NonOptimizing GCC:
 
-\lstinputlisting[caption=GCC 4.4.6 x64,style=customasm]{patterns/05_passing_arguments/x64_GCC_EN.s}
+\lstinputlisting[caption=GCC 4.4.6 x64,style=customasmx86]{patterns/05_passing_arguments/x64_GCC_EN.s}
 
 \myindex{Shadow space}
 
@@ -62,6 +62,6 @@ Puo' essere leggermente modificato per utilizzare valori a 64-bit:
 
 \lstinputlisting[style=customc]{patterns/05_passing_arguments/ex64.c}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasm]{patterns/05_passing_arguments/ex64_GCC_O3_IDA_EN.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasmx86]{patterns/05_passing_arguments/ex64_GCC_O3_IDA_EN.asm}
 
 Il codice e' lo stesso, ma in questo caso vengono usati i registri \IT{completi} (con prefisso \TT{R-}).

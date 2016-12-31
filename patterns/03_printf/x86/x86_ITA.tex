@@ -4,7 +4,7 @@
 
 Quando compiliamo l'esempio con MSVC 2010 Express otteniamo:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 
 ...
@@ -36,7 +36,7 @@ Si veda anche la sezione sulle calling conventions ~(\myref{sec:callingconventio
 In certi casi in qui diverse funzioni ritornano una dopo l'altra, il compilatore potrebbe accorpare piu' istruzioni \q{ADD ESP, X} 
 dopo l'ultima chiamata, emettendo una sola istruzione:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 push a1
 push a2
 call ...
@@ -54,7 +54,7 @@ add esp, 24
 Ecco un esempio reale:
 
 % TODO translate to Italian
-\lstinputlisting[caption=x86]{patterns/03_printf/x86/add_example_EN.lst}
+\lstinputlisting[caption=x86,style=customasmx86]{patterns/03_printf/x86/add_example_EN.lst}
 
 \clearpage
 \myparagraph{MSVC and \olly}
@@ -159,7 +159,7 @@ Pulire i valori non utilizzati nello stack sarebbe una perdita di tempo inutile,
 
 Compiliamo adesso lo stesso programma su Linux usando GCC 4.4.1, e diamo un'occhiata al risultato con \IDA:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 main            proc near
 
 var_10          = dword ptr -10h
@@ -200,14 +200,7 @@ $ gcc 1.c -g -o 1
 \begin{lstlisting}
 $ gdb 1
 GNU gdb (GDB) 7.6.1-ubuntu
-Copyright (C) 2013 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-and "show warranty" for details.
-This GDB was configured as "i686-linux-gnu".
-For bug reporting instructions, please see:
-<http://www.gnu.org/software/gdb/bugs/>...
+...
 Reading symbols from /home/dennis/polygon/1...done.
 \end{lstlisting}
 
@@ -239,7 +232,7 @@ Stampiamo 10 elementi dello stack elements. La colonna piu' a sinistra contiene 
 Il primo elemento e' il \ac{RA} (\GTT{0x0804844a}).
 Possiamo verificarlo disassemblando la memoria a questo indirizzo:
 
-\begin{lstlisting}[label=NOP_as_XCHG_example]
+\begin{lstlisting}[label=NOP_as_XCHG_example,style=customasmx86]
 (gdb) x/5i 0x0804844a
    0x804844a <main+45>:	mov    $0x0,%eax
    0x804844f <main+50>:	leave  
@@ -303,7 +296,7 @@ eip            0x804844a	0x804844a <main+45>
 Disassembliamo le istruzioni correnti.
 La freccia punta all'a prossima istruzione da eseguire.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 (gdb) disas
 Dump of assembler code for function main:
    0x0804841d <+0>:	push   %ebp
@@ -324,7 +317,7 @@ End of assembler dump.
 \ac{GDB} usa la sintassi AT\&T di default.
 Ma e' anche possibile passare alla sintassi Intel:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 (gdb) set disassembly-flavor intel
 (gdb) disas
 Dump of assembler code for function main:

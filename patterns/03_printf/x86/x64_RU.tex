@@ -15,7 +15,7 @@
 Здесь мы это и видим.
 Впрочем, инструкция \PUSH не используется, вместо неё при помощи \MOV значения сразу записываются в стек.
 
-\lstinputlisting[caption=MSVC 2012 x64,style=customasm]{patterns/03_printf/x86/2_MSVC_x64_RU.asm}
+\lstinputlisting[caption=MSVC 2012 x64,style=customasmx86]{patterns/03_printf/x86/2_MSVC_x64_RU.asm}
 
 Наблюдательный читатель может спросить, почему для значений типа \Tint отводится 8 байт, ведь нужно только 4?
 Да, это нужно запомнить: для значений всех типов более коротких чем 64-бита, отводится 8 байт.
@@ -35,7 +35,7 @@ GCC генерирует код, записывающий указатель н�
 
 Почему перед вызовом \printf очищается регистр \EAX мы уже рассмотрели ранее \myref{SysVABI_input_EAX}.
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasm]{patterns/03_printf/x86/2_GCC_x64_RU.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasmx86]{patterns/03_printf/x86/2_GCC_x64_RU.s}
 
 \myparagraph{GCC + GDB}
 \myindex{GDB}
@@ -49,14 +49,7 @@ $ gcc -g 2.c -o 2
 \begin{lstlisting}
 $ gdb 2
 GNU gdb (GDB) 7.6.1-ubuntu
-Copyright (C) 2013 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-and "show warranty" for details.
-This GDB was configured as "x86_64-linux-gnu".
-For bug reporting instructions, please see:
-<http://www.gnu.org/software/gdb/bugs/>...
+...
 Reading symbols from /home/dennis/polygon/2...done.
 \end{lstlisting}
 
@@ -120,7 +113,7 @@ rip            0x7ffff7a65f60	0x7ffff7a65f60 <__printf>
 
 \ac{GDB} показывает всю функцию \main, если попытаться посмотреть, куда вернется управление после исполнения \printf{}.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 (gdb) set disassembly-flavor intel
 (gdb) disas 0x0000000000400576
 Dump of assembler code for function main:

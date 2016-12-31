@@ -49,17 +49,17 @@ I'll split input file by 81-byte blocks and then I'll use
 function which just calculates, how many times some item has been occurred in the input list.
 Tally's output is not sorted, so I also add \IT{Sort[]} function to sort it by number of occurrences in descending order.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=custommath]
 input = BinaryReadList["/home/dennis/.../castle.dbf"];
 
 blocks = Partition[input, 81];
 
 stat = Sort[Tally[blocks], #1[[2]] > #2[[2]] &]
-_PRE_END
+\end{lstlisting}
 
-<p>And here is output:</p>
+And here is output:
 
-_PRE_BEGIN
+\begin{lstlisting}[style=custommath]
 {{{80, 103, 2, 116, 113, 102, 118, 25, 99, 8, 19, 23, 116, 125, 107, 
    25, 99, 109, 114, 102, 14, 121, 115, 31, 9, 117, 113, 111, 5, 4, 
    127, 28, 122, 101, 8, 110, 14, 18, 124, 106, 16, 20, 104, 119, 8, 
@@ -118,7 +118,7 @@ Indeed: if bytes in two input arrays are identical, XOR result is 0. If they are
 
 Let's compare first block (occurred 1739 times) and the second (occurred 1422 times):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=custommath]
 In[]:= BitXor[stat[[1]][[1]], stat[[2]][[1]]]
 Out[]= {0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
@@ -130,7 +130,7 @@ They are differ only in the second byte.
 
 Let's compare second (occurred 1422 times) and third (occurred 1012 times):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=custommath]
 In[]:= BitXor[stat[[2]][[1]], stat[[3]][[1]]]
 Out[]= {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
@@ -142,7 +142,7 @@ They are also differ only in the second byte.
 
 Anyway, let's try to use the most occurred block as a XOR key and try to decrypt four first 81-byte blocks in the file:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=custommath]
 In[]:= key = stat[[1]][[1]]
 Out[]= {80, 103, 2, 116, 113, 102, 118, 25, 99, 8, 19, 23, 116, \
 125, 107, 25, 99, 109, 114, 102, 14, 121, 115, 31, 9, 117, 113, 111, \
@@ -199,7 +199,7 @@ This means that the most occurred 81-block in the file can be found at places of
 
 Let's try to decrypt the whole file:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=custommath]
 DecryptBlock[blk_] := BitXor[key, blk]
 
 decrypted = Map[DecryptBlock[#] &, blocks];
@@ -224,7 +224,7 @@ Is it possible that our decryption key has wrong byte at this place?
 
 Let's look again at the second block in the file, at key and at decryption result:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=custommath]
 In[]:= blocks[[2]]
 Out[]= {80, 2, 74, 49, 113, 49, 51, 92, 39, 8, 92, 81, 116, 62, \
 57, 80, 46, 40, 114, 36, 75, 56, 33, 76, 9, 55, 56, 59, 81, 65, 45, \
@@ -253,7 +253,7 @@ Encrypted byte is 2, byte from key is 103, $2 \oplus 103=101$ and 101 is ASCII c
 What byte a key must be equal to, so the resulting ASCII code will be 116 (for \q{t} character)?
 $2 \oplus 116=118$, let's put 118 in key at the second byte...
 
-\begin{lstlisting}
+\begin{lstlisting}[style=custommath]
 key = {80, 118, 2, 116, 113, 102, 118, 25, 99, 8, 19, 23, 116, 125, 
   107, 25, 99, 109, 114, 102, 14, 121, 115, 31, 9, 117, 113, 111, 5, 
   4, 127, 28, 122, 101, 8, 110, 14, 18, 124, 106, 16, 20, 104, 119, 8,
@@ -286,7 +286,7 @@ Indeed, one can switch case just by XOR-ing ASCII character code with 32.
 It is possible that the empty lacunas in the file are not zero bytes, but rather spaces?
 Let's modify XOR key one more time (I'll XOR each byte of key by 32):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=custommath]
 (* "32" is scalar and "key" is vector, but that's OK *)
 
 In[]:= key3 = BitXor[32, key]

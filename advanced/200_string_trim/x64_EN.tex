@@ -1,6 +1,6 @@
 ﻿\subsection{x64: \Optimizing MSVC 2013}
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{\CURPATH/MSVC2013_x64_Ox_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasmx86]{\CURPATH/MSVC2013_x64_Ox_EN.asm}
 
 First, MSVC inlined the \strlen{} function code, because it concluded this 
 is to be faster than the usual \strlen{} work + the cost of calling it and returning from it.
@@ -21,12 +21,12 @@ Why would the $-1$ number be used in \strlen{}, one might ask.
 Due to optimizations, of course.
 Here is the code that MSVC generated:
 
-\lstinputlisting[caption=Inlined \strlen{} by MSVC 2013 x64,style=customasm]{\CURPATH/strlen_MSVC_EN.asm}
+\lstinputlisting[caption=Inlined \strlen{} by MSVC 2013 x64,style=customasmx86]{\CURPATH/strlen_MSVC_EN.asm}
 
 Try to write shorter if you want to initialize the counter at 0!
 OK, let' try:
 
-\lstinputlisting[caption=Our version of \strlen{},style=customasm]{\CURPATH/my_strlen_EN.asm}
+\lstinputlisting[caption=Our version of \strlen{},style=customasmx86]{\CURPATH/my_strlen_EN.asm}
 
 We failed. We have to use additional \INS{JMP} instruction!
 
@@ -40,7 +40,7 @@ The rest in this function seems easy to understand.
 
 \subsection{x64: \NonOptimizing GCC 4.9.1}
 
-\lstinputlisting[style=customasm]{\CURPATH/GCC491_x64_O0_EN.asm}
+\lstinputlisting[style=customasmx86]{\CURPATH/GCC491_x64_O0_EN.asm}
 
 Comments are added by the author of the book.
 
@@ -66,7 +66,7 @@ for() second part: check first clause, then second. goto loop body begin or exit
 \subsection{x64: \Optimizing GCC 4.9.1}
 \label{string_trim_GCC_x64_O3}
 
-\lstinputlisting[style=customasm]{\CURPATH/GCC491_x64_O3_EN.asm}
+\lstinputlisting[style=customasmx86]{\CURPATH/GCC491_x64_O3_EN.asm}
 
 Now this is more complex.
 

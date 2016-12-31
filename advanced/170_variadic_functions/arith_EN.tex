@@ -23,7 +23,7 @@ So what is inside?
 
 \myparagraph{\IT{cdecl} calling conventions}
 
-\lstinputlisting[caption=\Optimizing MSVC 6.0,style=customasm]{\CURPATH/arith_MSVC60_Ox_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 6.0,style=customasmx86]{\CURPATH/arith_MSVC60_Ox_EN.asm}
 
 The arguments, as we may see, are passed to \main one-by-one.
 
@@ -53,7 +53,7 @@ or, for printf-like functions, it would not be possible to find the address of t
 The observant reader may ask, what about calling conventions where the first few arguments are passed in registers?
 Let's see:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{\CURPATH/arith_MSVC_2012_Ox_x64_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{\CURPATH/arith_MSVC_2012_Ox_x64_EN.asm}
 
 We see that the first 4 arguments are passed in the registers and two more---in the stack.
 
@@ -64,7 +64,7 @@ What about GCC? Things are slightly clumsier here, because now the function is d
 the first part saves the registers into the \q{red zone}, processes that space, and the second part of the function processes 
 the stack:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasm]{\CURPATH/arith_GCC491_x64_O3_EN.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasmx86]{\CURPATH/arith_GCC491_x64_O3_EN.s}
 
 By the way, a similar usage of the \IT{Shadow Space} is also considered here: \myref{pointer_to_argument}.
 

@@ -7,7 +7,7 @@ setjmp/longjmp is a mechanism in C which is very similar to throw/catch mechanis
 \myindex{zlib}
 Here is an example from zlib:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 ...
 
     /* return if bits() or decode() tries to read past available input */
@@ -56,7 +56,7 @@ Error 1234
 
 Let's see how setjmp() implemented in MSVC 2013 x64:
 
-\lstinputlisting[style=customasm]{advanced/625_setjmp/setjmp_VC2013_x64.asm}
+\lstinputlisting[style=customasmx86]{advanced/625_setjmp/setjmp_VC2013_x64.asm}
 
 It just populates jmp\_buf structure with current values of almost all registers.
 Also, current value of \ac{RA} is taken from the stack and saved in jmp\_buf:
@@ -64,7 +64,7 @@ it will be used as new value of \ac{PC} in future.
 
 Now longjmp():
 
-\lstinputlisting[style=customasm]{advanced/625_setjmp/longjmp_VC2013_x64.asm}
+\lstinputlisting[style=customasmx86]{advanced/625_setjmp/longjmp_VC2013_x64.asm}
 
 It just restores (almost) all registers, takes \ac{RA} from structure and jumps there.
 This effectively works as if setjmp() returned in past.

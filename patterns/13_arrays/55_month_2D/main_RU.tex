@@ -12,7 +12,7 @@
 
 Вот что получаем:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{patterns/13_arrays/55_month_2D/MSVC2013_x64_Ox_RU.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasmx86]{patterns/13_arrays/55_month_2D/MSVC2013_x64_Ox_RU.asm}
 
 Здесь нет обращений к памяти вообще.
 Эта функция только вычисляет место, где находится первый символ названия месяца:
@@ -30,7 +30,7 @@ $pointer\_to\_the\_table + month * 10$.
 
 \Optimizing GCC 4.9 может ещё короче:
 
-\begin{lstlisting}[caption=\Optimizing GCC 4.9 x64]
+\begin{lstlisting}[caption=\Optimizing GCC 4.9 x64,style=customasmx86]
 	movsx	rdi, edi
 	lea	rax, [rdi+rdi*4]
 	lea	rax, month2[rax+rax]
@@ -41,12 +41,12 @@ $pointer\_to\_the\_table + month * 10$.
 
 Неоптимизирующие компиляторы делают умножение по-разному.
 
-\lstinputlisting[caption=\NonOptimizing GCC 4.9 x64,style=customasm]{patterns/13_arrays/55_month_2D/x64_GCC49_O0_RU.asm}
+\lstinputlisting[caption=\NonOptimizing GCC 4.9 x64,style=customasmx86]{patterns/13_arrays/55_month_2D/x64_GCC49_O0_RU.asm}
 
 \NonOptimizing MSVC просто использует инструкцию \IMUL:
 \myindex{x86!\Instructions!IMUL}
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2013 x64,style=customasm]{patterns/13_arrays/55_month_2D/MSVC2013_x64_RU.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2013 x64,style=customasmx86]{patterns/13_arrays/55_month_2D/MSVC2013_x64_RU.asm}
 
 \myindex{\CompilerAnomaly}
 \label{MSVC2013_anomaly}
@@ -62,15 +62,15 @@ $pointer\_to\_the\_table + month * 10$.
 
 \Optimizing Keil для режима Thumb использует инструкцию умножения \INS{MULS}:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{patterns/13_arrays/55_month_2D/Keil_O3_thumb_RU.asm}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmARM]{patterns/13_arrays/55_month_2D/Keil_O3_thumb_RU.asm}
 
 \Optimizing Keil для режима ARM использует операции сложения и сдвига:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/13_arrays/55_month_2D/Keil_O3_ARM_RU.asm}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/13_arrays/55_month_2D/Keil_O3_ARM_RU.asm}
 
 \subsubsection{ARM64}
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64,style=customasm]{patterns/13_arrays/55_month_2D/GCC49_ARM64_RU.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64,style=customasmARM]{patterns/13_arrays/55_month_2D/GCC49_ARM64_RU.asm}
 
 \myindex{ARM!\Instructions!SXTW}
 \myindex{ARM!\Instructions!ADRP/ADD pair}
@@ -82,7 +82,7 @@ $pointer\_to\_the\_table + month * 10$.
 У инструкции \ADD также есть суффикс \LSL, что помогает с умножением.
 
 \subsubsection{MIPS}
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/13_arrays/55_month_2D/MIPS_O3_IDA_RU.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/13_arrays/55_month_2D/MIPS_O3_IDA_RU.lst}
 
 \subsubsection{\Conclusion{}}
 

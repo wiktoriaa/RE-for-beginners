@@ -4,7 +4,7 @@
 
 Let's compile:
 
-\lstinputlisting[style=customasm]{patterns/10_strings/1_strlen/10_1_msvc_EN.asm}
+\lstinputlisting[style=customasmx86]{patterns/10_strings/1_strlen/10_1_msvc_EN.asm}
 
 \myindex{x86!\Instructions!MOVSX}
 \myindex{x86!\Instructions!TEST}
@@ -42,7 +42,7 @@ Here this instruction just checks if the value in \EDX equals to 0.
 
 Let's try GCC 4.4.1:
 
-\lstinputlisting[style=customasm]{patterns/10_strings/1_strlen/10_3_gcc.asm}
+\lstinputlisting[style=customasmx86]{patterns/10_strings/1_strlen/10_3_gcc.asm}
 
 \label{movzx}
 \myindex{x86!\Instructions!MOVZX}
@@ -72,7 +72,7 @@ The compiler emits some redundant code, but let's not forget that the optimizati
 
 Now let's compile all this in MSVC 2012, with optimizations turned on (\Ox):
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,style=customasm]{patterns/10_strings/1_strlen/10_2_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,style=customasmx86]{patterns/10_strings/1_strlen/10_2_EN.asm}
 
 Now it is all simpler.
 Needless to say, the compiler could use registers with such efficiency
@@ -88,7 +88,7 @@ only in small functions with a few local variables.
 
 Let's check GCC 4.4.1 with optimizations turned on (\Othree key):
 
-\lstinputlisting[style=customasm]{patterns/10_strings/1_strlen/10_3_gcc_O3.asm}
+\lstinputlisting[style=customasmx86]{patterns/10_strings/1_strlen/10_3_gcc_O3.asm}
  
 Here GCC is almost the same as MSVC, except for the presence of \MOVZX.
 However, here \MOVZX could be replaced with\\
@@ -112,7 +112,7 @@ See also: \q{\SignedNumbersSectionName}~(\myref{sec:signednumbers}).
  
 In other words, at the end of the function just after loop body, these operations are executed:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 ecx=str;
 eax=eos;
 ecx=(-ecx)-1; 
@@ -122,7 +122,7 @@ return eax
 
 \dots~and this is effectively equivalent to:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 ecx=str;
 eax=eos;
 eax=eax-ecx;

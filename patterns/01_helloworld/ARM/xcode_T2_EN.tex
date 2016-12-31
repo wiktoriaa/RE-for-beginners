@@ -2,7 +2,7 @@
 
 By default Xcode 4.6.3 generates code for Thumb-2 in this manner:
 
-\begin{lstlisting}[caption=\OptimizingXcodeIV (\ThumbTwoMode)]
+\begin{lstlisting}[caption=\OptimizingXcodeIV (\ThumbTwoMode),style=customasmARM]
 __text:00002B6C                   _hello_world
 __text:00002B6C 80 B5          PUSH            {R7,LR}
 __text:00002B6E 41 F2 D8 30    MOVW            R0, #0x13D8
@@ -65,7 +65,7 @@ to the \puts function, the processor is also switching from Thumb/Thumb-2 mode t
 
 This instruction is placed here since the instruction to which control is passed looks like (it is encoded in ARM mode):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmARM]
 __symbolstub1:00003FEC _puts           ; CODE XREF: _hello_world+E
 __symbolstub1:00003FEC 44 F0 9F E5     LDR  PC, =__imp__puts
 \end{lstlisting}
@@ -143,7 +143,7 @@ Another example we can find in LAPACK library---a ``Linear Algebra PACKage'' wri
 So there are short C functions callable from \CCpp environment, which are, in turn, call FORTRAN functions,
 and do almost anything else:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 double Blas_Dot_Prod(const LaVectorDouble &dx, const LaVectorDouble &dy)
 {
     assert(dx.size()==dy.size());
@@ -153,4 +153,6 @@ double Blas_Dot_Prod(const LaVectorDouble &dx, const LaVectorDouble &dy)
     return F77NAME(ddot)(&n, &dx(0), &incx, &dy(0), &incy);
 }
 \end{lstlisting}
+
+Also, functions like that are called ``wrappers''.
 

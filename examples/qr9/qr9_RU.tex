@@ -9,14 +9,14 @@
 Вот листинг этой утилиты для шифрования, полученный при помощи \IDA:
 
 % TODO translate:
-\lstinputlisting{examples/qr9/qr9_original.lst}
+\lstinputlisting[style=customasmx86]{examples/qr9/qr9_original.lst}
 
 Все имена функций и меток даны мною в процессе анализа.
 
 Начнем с самого верха. Вот функция, берущая на вход два имени файла и пароль.
 
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541320 ; int __cdecl crypt_file(int Str, char *Filename, int password)
 .text:00541320 crypt_file      proc near
 .text:00541320
@@ -28,7 +28,7 @@
 
 Открыть файл и сообщить об ошибке в случае ошибки:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541320                 mov     eax, [esp+Str]
 .text:00541324                 push    ebp
 .text:00541325                 push    offset Mode     ; "rb"
@@ -51,7 +51,7 @@
 \myindex{\CStandardLibrary!ftell()}
 Узнать размер файла используя \TT{fseek()}/\TT{ftell()}:
 
-\lstinputlisting{examples/qr9/1_RU}
+\lstinputlisting[style=customasmx86]{examples/qr9/1_RU}
 
 Этот фрагмент кода вычисляет длину файла, выровненную по 64-байтной границе.
 Это потому что этот алгоритм шифрования работает только с блоками размерами 64 байта.
@@ -60,11 +60,11 @@
 Следующий код удаляет остаток от деления, как если бы это значение уже было разделено 
 на 64 и добавляет 64. Это почти то же самое.
 
-\lstinputlisting{examples/qr9/2_RU}
+\lstinputlisting[style=customasmx86]{examples/qr9/2_RU}
 
 Выделить буфер с выровненным размером:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541373                 push    esi             ; Size
 .text:00541374                 call    _malloc
 \end{lstlisting}
@@ -73,11 +73,11 @@
 Вызвать memset(), т.е. очистить выделенный буфер\footnote{malloc() + memset() можно было бы 
 заменить на calloc()}.
 
-\lstinputlisting{examples/qr9/3_RU}
+\lstinputlisting[style=customasmx86]{examples/qr9/3_RU}
 
 Чтение файла используя стандартную функцию Си \TT{fread()}.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541392                 mov     eax, [esp+38h+Str]
 .text:00541396                 push    eax             ; ElementSize
 .text:00541397                 push    ebx             ; DstBuf
@@ -88,7 +88,7 @@
 
 Вызов \TT{crypt()}. Эта функция берет на вход буфер, длину буфера (выровненную) и строку пароля.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005413A3                 mov     ecx, [esp+44h+password]
 .text:005413A7                 push    ecx             ; password
 .text:005413A8                 push    esi             ; aligned size
@@ -99,7 +99,7 @@
 Создать выходной файл. Кстати, разработчик забыл вставить проверку, создался ли файл успешно!
 Результат открытия файла, впрочем, проверяется.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005413AF                 mov     edx, [esp+50h+Filename]
 .text:005413B3                 add     esp, 40h
 .text:005413B6                 push    offset aWb      ; "wb"
@@ -110,7 +110,7 @@
 
 Теперь хэндл созданного файла в регистре \EDI. Записываем сигнатуру \q{QR9}.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005413C3                 push    edi             ; File
 .text:005413C4                 push    1               ; Count
 .text:005413C6                 push    3               ; Size
@@ -120,7 +120,7 @@
 
 Записываем настоящую длину файла (не выровненную):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005413D2                 push    edi             ; File
 .text:005413D3                 push    1               ; Count
 .text:005413D5                 lea     eax, [esp+30h+Str]
@@ -131,7 +131,7 @@
 
 Записываем шифрованный буфер:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005413E1                 push    edi             ; File
 .text:005413E2                 push    1               ; Count
 .text:005413E4                 push    esi             ; Size
@@ -141,7 +141,7 @@
 
 Закрыть файл и освободить выделенный буфер:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005413EB                 push    edi             ; File
 .text:005413EC                 call    _fclose
 .text:005413F1                 push    ebx             ; Memory
@@ -157,7 +157,7 @@
 
 Переписанный на Си код:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void crypt_file(char *fin, char* fout, char *pw)
 {
 	FILE *f;
@@ -201,7 +201,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 
 Процедура дешифрования почти такая же:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541400 ; int __cdecl decrypt_file(char *Filename, int, void *Src)
 .text:00541400 decrypt_file    proc near
 .text:00541400
@@ -256,7 +256,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 
 Проверяем сигнатуру (первые 3 байта):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541462                 add     esp, 34h
 .text:00541465                 mov     ecx, 3
 .text:0054146A                 mov     edi, offset aQr9_0 ; "QR9"
@@ -268,7 +268,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 
 Сообщить об ошибке если сигнатура отсутствует:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541477                 push    offset aFileIsNotCrypt ; "File is not encrypted!\n"
 .text:0054147C                 call    _printf
 .text:00541481                 add     esp, 4
@@ -283,7 +283,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 
 Вызвать \TT{decrypt()}.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541489                 mov     eax, [esp+10h+Src]
 .text:0054148D                 mov     edi, [ebx+3]
 .text:00541490                 add     ebp, 0FFFFFFF9h
@@ -317,7 +317,7 @@ void crypt_file(char *fin, char* fout, char *pw)
 
 Переписанный на Си код:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void decrypt_file(char *fin, char* fout, char *pw)
 {
 	FILE *f;
@@ -366,7 +366,7 @@ OK, посмотрим глубже.
 
 Функция \TT{crypt()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541260 crypt           proc near
 .text:00541260
 .text:00541260 arg_0           = dword ptr  4
@@ -389,7 +389,7 @@ OK, посмотрим глубже.
 Длина в регистре \ECX. \TT{MOVSD} означает \IT{скопировать 32-битное слово}, так что, 16 32-битных слов
 это как раз 64 байта.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:0054126A                 mov     eax, [esp+10h+arg_8]
 .text:0054126E                 mov     ecx, 10h
 .text:00541273                 mov     esi, ebx   ; EBX is pointer within input buffer
@@ -401,13 +401,13 @@ OK, посмотрим глубже.
 
 Вызвать \TT{rotate\_all\_with\_password()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:0054127F                 call    rotate_all_with_password
 \end{lstlisting}
 
 Скопировать зашифрованное содержимое из \q{cube64} назад в буфер:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541284                 mov     eax, [esp+18h+arg_4]
 .text:00541288                 mov     edi, ebx
 .text:0054128A                 add     ebp, 40h
@@ -421,7 +421,7 @@ OK, посмотрим глубже.
 
 Если \EBP не больше чем длина во входном аргументе, тогда переходим к следующему блоку.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005412A1                 jl      short loc_54126A
 .text:005412A3                 pop     edi
 .text:005412A4                 pop     esi
@@ -433,7 +433,7 @@ OK, посмотрим глубже.
 
 Реконструированная функция \TT{crypt()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void crypt (BYTE *buf, int sz, char *pw)
 {
 	int i=0;
@@ -454,7 +454,7 @@ OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. О�
 В функции \TT{crypt()}, число 1 используется и в \TT{decrypt()} \\
 (где \TT{rotate\_all\_with\_password()} функция вызывается также), число 3.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005411B0 rotate_all_with_password proc near
 .text:005411B0
 .text:005411B0 arg_0           = dword ptr  4
@@ -467,7 +467,7 @@ OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. О�
 
 Проверяем символы в пароле. Если это ноль, выходим:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005411B7                 cmp     byte ptr [eax], 0
 .text:005411BA                 jz      exit
 .text:005411C0                 push    ebx
@@ -481,7 +481,7 @@ OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. О�
 \myindex{\CStandardLibrary!tolower()}
 Вызываем \TT{tolower()}, стандартную функцию Си.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005411C7                 movsx   eax, byte ptr [ebp+0]
 .text:005411CB                 push    eax             ; C
 .text:005411CC                 call    _tolower
@@ -492,7 +492,7 @@ OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. О�
 Действительно, если мы запускаем утилиту для шифрования используя символы не латинского алфавита, 
 похоже, они просто игнорируются.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005411D4                 cmp     al, 'a'
 .text:005411D6                 jl      short next_character_in_password
 .text:005411D8                 cmp     al, 'z'
@@ -502,13 +502,13 @@ OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. О�
 
 Отнимем значение \q{a} (97) от символа.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005411DF                 sub     ecx, 'a'  ; 97
 \end{lstlisting}
 
 После вычитания, тут будет 0 для \q{a}, 1 для \q{b}, и так далее. И 25 для \q{z}.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005411E2                 cmp     ecx, 24
 .text:005411E5                 jle     short skip_subtracting
 .text:005411E7                 sub     ecx, 24
@@ -518,7 +518,7 @@ OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. О�
 После этого фрагмента кода, \q{y} становится 0, а \q{z} ~--- 1.
 Это значит, что 26 латинских букв становятся значениями в интервале 0..23, (всего 24).
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005411EA
 .text:005411EA skip_subtracting:                       ; CODE XREF: rotate_all_with_password+35
 \end{lstlisting}
@@ -529,7 +529,7 @@ OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. О�
 Это код, на самом деле, делит значение символа пароля на 3.
 
 % TODO1: add Mathematica calculations
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:005411EA                 mov     eax, 55555556h
 .text:005411EF                 imul    ecx
 .text:005411F1                 mov     eax, edx
@@ -544,7 +544,7 @@ OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. О�
 
 \EDX --- остаток от деления.
 
-\lstinputlisting{examples/qr9/4_RU}
+\lstinputlisting[style=customasmx86]{examples/qr9/4_RU}
 
 Если остаток 2, вызываем \TT{rotate3()}. 
 \EDX это второй аргумент функции \TT{rotate\_all\_with\_password()}. 
@@ -552,7 +552,7 @@ OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. О�
 Так что здесь цикл, функции rotate1/2/3 будут вызываться столько же раз, сколько значение переменной
 в первом аргументе.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541215 call_rotate3:
 .text:00541215                 push    esi
 .text:00541216                 call    rotate3
@@ -590,14 +590,14 @@ OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. О�
 
 Достать следующий символ из строки пароля.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541249 next_character_in_password:
 .text:00541249                 mov     al, [ebp+1]
 \end{lstlisting}
 
 \glslink{increment}{Инкремент} указателя на символ в строке пароля:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:0054124C                 inc     ebp
 .text:0054124D                 test    al, al
 .text:0054124F                 jnz     loop_begin
@@ -613,7 +613,7 @@ OK, углубимся в функцию \TT{rotate\_all\_with\_password()}. О�
 
 Реконструированный код на Си:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void rotate_all (char *pwd, int v)
 {
 	char *p=pwd;
@@ -653,7 +653,7 @@ void rotate_all (char *pwd, int v)
 
 Начнем с \TT{get\_bit()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541050 get_bit         proc near
 .text:00541050
 .text:00541050 arg_0           = dword ptr  4
@@ -676,7 +676,7 @@ void rotate_all (char *pwd, int v)
 
 Посмотрим другую функцию, \TT{set\_bit()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541000 set_bit         proc near
 .text:00541000
 .text:00541000 arg_0           = dword ptr  4
@@ -697,20 +697,20 @@ void rotate_all (char *pwd, int v)
 \TT{DL} тут равно 1. Сдвигаем эту единицу на количество, указанное в arg\_8. Например, если в arg\_8 число 4,
 тогда значение в \TT{DL} станет 0x10 или 1000b в двоичной системе счисления.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541017                 shl     dl, cl
 .text:00541019                 mov     cl, cube64[eax+esi*8]
 \end{lstlisting}
 
 Вытащить бит из массива и явно выставить его. % TODO1: rewrite
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541020                 or      cl, dl
 \end{lstlisting}
 
 Сохранить его назад: % TODO1: rewrite
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541022                 mov     cube64[eax+esi*8], cl
 .text:00541029                 pop     esi
 .text:0054102A                 retn
@@ -721,7 +721,7 @@ void rotate_all (char *pwd, int v)
 
 Если arg\_C не ноль\dots
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:0054102D                 mov     cl, cube64[eax+esi*8]
 \end{lstlisting}
 
@@ -729,7 +729,7 @@ void rotate_all (char *pwd, int v)
 \dots инвертировать DL. Например, если состояние DL после сдвига 0x10 или 1000b в двоичной системе,
 здесь будет 0xEF после инструкции \NOT или 11101111b в двоичной системе.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541034                 not     dl
 \end{lstlisting}
 
@@ -737,13 +737,13 @@ void rotate_all (char *pwd, int v)
 выставлены в \TT{DL} кроме тех в \TT{DL}, что были сброшены. Это значит, что если в \TT{DL}, например,
 11101111b в двоичной системе, все биты будут сохранены кроме пятого (считая с младшего бита).
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541036                 and     cl, dl
 \end{lstlisting}
 
 Сохранить его назад
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541038                 mov     cube64[eax+esi*8], cl
 .text:0054103F                 pop     esi
 .text:00541040                 retn
@@ -758,7 +758,7 @@ void rotate_all (char *pwd, int v)
 
 Представление на Си всего того, что мы уже знаем:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 #define IS_SET(flag, bit)       ((flag) & (bit))
 #define SET_BIT(var, bit)       ((var) |= (bit))
 #define REMOVE_BIT(var, bit)    ((var) &= ~(bit))
@@ -783,14 +783,14 @@ bool get_bit (int x, int y, int shift)
 
 Теперь вернемся к функциям rotate1/2/3.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541070 rotate1         proc near
 .text:00541070
 \end{lstlisting}
 
 Выделение внутреннего массива размером 64 байта в локальном стеке:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:00541070 internal_array_64= byte ptr -40h
 .text:00541070 arg_0           = dword ptr  4
 .text:00541070
@@ -805,14 +805,14 @@ bool get_bit (int x, int y, int shift)
 
 \EBX указывает на внутренний массив
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 .text:0054107D                 lea     ebx, [esp+50h+internal_array_64]
 .text:00541081
 \end{lstlisting}
 
 Здесь два вложенных цикла:
 
-\lstinputlisting{examples/qr9/5_RU}
+\lstinputlisting[style=customasmx86]{examples/qr9/5_RU}
 
 Мы видим, что оба счетчика циклов в интервале 0..7. 
 Также, они используются как первый и второй аргумент \TT{get\_bit()}.
@@ -821,7 +821,7 @@ bool get_bit (int x, int y, int shift)
 
 Снова приготовить указатель на внутренний массив:
 
-\lstinputlisting{examples/qr9/6_RU}
+\lstinputlisting[style=customasmx86]{examples/qr9/6_RU}
 
 \dots этот код помещает содержимое из внутреннего массива в глобальный массив cube используя функцию 
 \TT{set\_bit()}, \IT{но}, в обратном порядке!
@@ -829,7 +829,7 @@ bool get_bit (int x, int y, int shift)
 
 Представление кода на Си выглядит так:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void rotate1 (int v)
 {
 	bool tmp[8][8]; // internal array
@@ -847,12 +847,12 @@ void rotate1 (int v)
 
 Не очень понятно, но если мы посмотрим в функцию \TT{rotate2()}:
 
-\lstinputlisting{examples/qr9/7_RU}
+\lstinputlisting[style=customasmx86]{examples/qr9/7_RU}
 
 \IT{Почти} то же самое, за исключением иного порядка аргументов в \TT{get\_bit()} и \TT{set\_bit()}.
 Перепишем это на Си-подобный код:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void rotate2 (int v)
 {
 	bool tmp[8][8]; // internal array
@@ -870,7 +870,7 @@ void rotate2 (int v)
 
 Перепишем так же функцию \TT{rotate3()}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 void rotate3 (int v)
 {
 	bool tmp[8][8];
@@ -900,7 +900,7 @@ void rotate3 (int v)
 
 Рассмотрим функцию \TT{decrypt()}, вот её переписанная версия:%
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void decrypt (BYTE *buf, int sz, char *pw)
 {
 	char *p=strdup (pw);
@@ -937,7 +937,7 @@ strrev() \footnote{\href{http://go.yurichev.com/17249}{MSDN}}
 
 Вернемся к ядру функции \TT{rotate\_all()}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 q=c-'a';
 if (q>24)
 	q-=24;

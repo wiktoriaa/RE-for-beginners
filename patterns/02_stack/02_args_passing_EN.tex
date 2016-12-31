@@ -2,7 +2,7 @@
 
 The most popular way to pass parameters in x86 is called \q{cdecl}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 push arg3
 push arg2
 push arg1
@@ -50,7 +50,7 @@ That's why it is not very important how we declare the \main function: as \main,
 
 In fact, the \ac{CRT}-code is calling \main roughly as:
 	
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 push envp
 push argv
 push argc
@@ -70,7 +70,7 @@ One could implement any other method without using the stack at all.
 
 A somewhat popular way among assembly language newbies is to pass arguments via global variables, like:
 
-\lstinputlisting[caption=Assembly code,style=customasm]{patterns/02_stack/global_args.asm}
+\lstinputlisting[caption=Assembly code,style=customasmx86]{patterns/02_stack/global_args.asm}
 
 But this method has obvious drawback: \IT{do\_something()} function cannot call itself recursively (or via another function),
 because it has to zap its own arguments.
@@ -88,7 +88,7 @@ as much space it has.
 MS-DOS had a way of passing all function arguments via registers, for example, this is piece of
 code for ancient 16-bit MS-DOS prints ``Hello, world!'':
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 mov  dx, msg      ; address of message
 mov  ah, 9        ; 9 means "print string" function
 int  21h          ; DOS "syscall"
@@ -109,7 +109,7 @@ If a MS-DOS function is going to return a boolean value (i.e., single bit, usual
 
 For example:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 mov ah, 3ch       ; create file
 lea dx, filename
 mov cl, 1
@@ -127,7 +127,7 @@ This method is still used by assembly language programmers.
 In Windows Research Kernel source code (which is quite similar to Windows 2003) we can find something like this
 (file \IT{base/ntos/ke/i386/cpu.asm}):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
         public  Get386Stepping
 Get386Stepping  proc
 

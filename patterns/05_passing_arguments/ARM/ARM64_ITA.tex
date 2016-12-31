@@ -10,13 +10,13 @@ Tutti i 3 argomenti sono passati tramite le parti a 32-bit dei registri X-.
 Infatti gli argomenti sono tutti di tipo \IT{int} a 32-bit.
 Il risultato e' restituito in \TT{W0}.
 
-\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9,style=customasm]{patterns/05_passing_arguments/ARM/ARM64_O3_EN.s}
+\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9,style=customasmARM]{patterns/05_passing_arguments/ARM/ARM64_O3_EN.s}
 
 Estendiamo anche questo esempio usando il tipo \TT{uint64\_t} a 64-bit e vediamo che succede:
 
 \lstinputlisting[style=customc]{patterns/05_passing_arguments/ex64.c}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmARM]
 f:
 	madd	x0, x0, x1, x2
 	ret
@@ -45,7 +45,7 @@ I valori grandi a 64-bit sono caricati nei registri per parti, come descritto an
 
 L'output del compilatore non ottimizzante e' piu' ridondante:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmARM]
 f:
 	sub	sp, sp, #16
 	str	w0, [sp,12]

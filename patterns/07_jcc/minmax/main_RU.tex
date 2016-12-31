@@ -4,7 +4,7 @@
 
 \lstinputlisting[style=customc]{patterns/07_jcc/minmax/minmax.c}
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2013,style=customasm]{patterns/07_jcc/minmax/minmax_MSVC_2013_RU.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2013,style=customasmx86]{patterns/07_jcc/minmax/minmax_MSVC_2013_RU.asm}
 
 \myindex{x86!\Instructions!Jcc}
 Эти две функции отличаются друг от друга только инструкцией условного перехода:
@@ -19,7 +19,7 @@
 
 ARM в режиме Thumb напоминает нам x86-код:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{patterns/07_jcc/minmax/minmax_Keil_Thumb_O3_RU.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmARM]{patterns/07_jcc/minmax/minmax_Keil_Thumb_O3_RU.s}
 
 \myindex{ARM!\Instructions!Bcc}
 Функции отличаются только инструкцией перехода: \INS{BGT} и \INS{BLT}.
@@ -28,13 +28,13 @@ ARM в режиме Thumb напоминает нам x86-код:
 
 \myindex{ARM!\Instructions!MOVcc}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/07_jcc/minmax/minmax_Keil_ARM_O3_RU.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/07_jcc/minmax/minmax_Keil_ARM_O3_RU.s}
 
 \myindex{x86!\Instructions!CMOVcc}
 \Optimizing GCC 4.8.1 и оптимизирующий MSVC 2013 
 могут использовать инструкцию \INS{CMOVcc}, которая аналогична \INS{MOVcc} в ARM:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013,style=customasm]{patterns/07_jcc/minmax/minmax_GCC481_O3_RU.s}
+\lstinputlisting[caption=\Optimizing MSVC 2013,style=customasmx86]{patterns/07_jcc/minmax/minmax_GCC481_O3_RU.s}
 
 \subsubsection{64-bit}
 
@@ -42,13 +42,13 @@ ARM в режиме Thumb напоминает нам x86-код:
 
 Тут есть ненужные перетасовки значений, но код в целом понятен:
 
-\lstinputlisting[caption=\NonOptimizing GCC 4.9.1 ARM64,style=customasm]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O0.s}
+\lstinputlisting[caption=\NonOptimizing GCC 4.9.1 ARM64,style=customasmARM]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O0.s}
 
 \myparagraph{Без переходов}
 
 Нет нужды загружать аргументы функции из стека, они уже в регистрах:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasm]{patterns/07_jcc/minmax/minmax64_GCC_49_x64_O3_RU.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasmx86]{patterns/07_jcc/minmax/minmax64_GCC_49_x64_O3_RU.s}
 
 MSVC 2013 делает то же самое.
 
@@ -56,13 +56,13 @@ MSVC 2013 делает то же самое.
 В ARM64 есть инструкция \INS{CSEL}, которая работает точно также, как и \INS{MOVcc} в ARM и \INS{CMOVcc} в x86,
 но название другое: \q{Conditional SELect}.
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64,style=customasm]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O3_RU.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64,style=customasmARM]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O3_RU.s}
 
 \subsubsection{MIPS}
 
 А GCC 4.4.5 для MIPS не так хорош, к сожалению:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/07_jcc/minmax/minmax_MIPS_O3_IDA_RU.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/07_jcc/minmax/minmax_MIPS_O3_IDA_RU.lst}
 
 Не забывайте о \IT{branch delay slots}: первая \INS{MOVE} исполняется \IT{перед} \INS{BEQZ},
 вторая \INS{MOVE} исполняется только если переход не произошел.

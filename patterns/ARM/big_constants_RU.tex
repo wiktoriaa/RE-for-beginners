@@ -11,14 +11,14 @@
 
 Попробуем:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 unsigned int f()
 {
 	return 0x12345678;
 };
 \end{lstlisting}
 
-\begin{lstlisting}[caption=GCC 4.6.3 -O3 \ARMMode]
+\begin{lstlisting}[caption=GCC 4.6.3 -O3 \ARMMode,style=customasmARM]
 f:
         ldr     r0, .L2
         bx      lr
@@ -30,7 +30,7 @@ f:
 
 Но можно обойтись и без дополнительного обращения к памяти.
 
-\begin{lstlisting}[caption=GCC 4.6.3 -O3 -march{=}armv7-a (\ARMMode)]
+\begin{lstlisting}[caption=GCC 4.6.3 -O3 -march{=}armv7-a (\ARMMode),style=customasmARM]
 movw    r0, #22136      ; 0x5678
 movt    r0, #4660       ; 0x1234
 bx      lr
@@ -50,21 +50,21 @@ bx      lr
 
 А \IDA легко распознает подобные паттерны в коде и дизассемблирует эту функцию как:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmARM]
 MOV    R0, 0x12345678
 BX     LR
 \end{lstlisting}
 
 \subsubsection{ARM64}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 uint64_t f()
 {
 	return 0x12345678ABCDEF01;
 };
 \end{lstlisting}
 
-\begin{lstlisting}[caption=GCC 4.9.1 -O3]
+\begin{lstlisting}[caption=GCC 4.9.1 -O3,style=customasmARM]
 mov	x0, 61185   ; 0xef01
 movk	x0, 0xabcd, lsl 16
 movk	x0, 0x5678, lsl 32
@@ -86,14 +86,14 @@ ret
 
 Например:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 double a()
 {
 	return 1.5;
 };
 \end{lstlisting}
 
-\begin{lstlisting}[caption=GCC 4.9.1 -O3 + objdump]
+\begin{lstlisting}[caption=GCC 4.9.1 -O3 + objdump,style=customasmARM]
 0000000000000000 <a>:
    0:   1e6f1000        fmov    d0, #1.500000000000000000e+000
    4:   d65f03c0        ret
@@ -112,14 +112,14 @@ double a()
 Мы можем попробовать разные: $30.0$ и $31.0$ компилятору удается закодировать, а $32.0$ уже нет, для него
 приходится выделять 8 байт в памяти и записать его там в формате IEEE 754:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 double a()
 {
 	return 32;
 };
 \end{lstlisting}
 
-\begin{lstlisting}[caption=GCC 4.9.1 -O3]
+\begin{lstlisting}[caption=GCC 4.9.1 -O3,style=customasmARM]
 a:
 	ldr	d0, .LC0
 	ret

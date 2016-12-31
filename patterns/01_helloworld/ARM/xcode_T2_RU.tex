@@ -2,7 +2,7 @@
 
 По умолчанию Xcode 4.6.3 генерирует код для режима Thumb-2 примерно в такой манере:
 
-\begin{lstlisting}[caption=\OptimizingXcodeIV (\ThumbTwoMode)]
+\begin{lstlisting}[caption=\OptimizingXcodeIV (\ThumbTwoMode),style=customasmARM]
 __text:00002B6C                   _hello_world
 __text:00002B6C 80 B5          PUSH            {R7,LR}
 __text:00002B6E 41 F2 D8 30    MOVW            R0, #0x13D8
@@ -61,7 +61,7 @@ __cstring:00003E70 48 65 6C 6C 6F 20+aHelloWorld  DCB "Hello world!",0xA,0
 в функцию \puts, происходит смена режима процессора с Thumb/Thumb-2 на режим ARM (либо назад).
 Здесь это нужно потому, что инструкция, куда ведет переход, выглядит так (она закодирована в режиме ARM):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmARM]
 __symbolstub1:00003FEC _puts           ; CODE XREF: _hello_world+E
 __symbolstub1:00003FEC 44 F0 9F E5     LDR  PC, =__imp__puts
 \end{lstlisting}
@@ -134,7 +134,7 @@ there is even a tool, THUNK.EXE, called a “thunk compiler”.
 Так что имеются короткие функции на Си вызываемые из \CCpp{}-среды, которые, в свою очередь, вызывают функции на FORTRAN,
 и почти ничего больше не делают:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 double Blas_Dot_Prod(const LaVectorDouble &dx, const LaVectorDouble &dy)
 {
     assert(dx.size()==dy.size());
@@ -144,4 +144,6 @@ double Blas_Dot_Prod(const LaVectorDouble &dx, const LaVectorDouble &dy)
     return F77NAME(ddot)(&n, &dx(0), &incx, &dy(0), &incy);
 }
 \end{lstlisting}
+
+Такие ф-ции еще называют ``wrappers'' (т.е., ``обертка'').
 

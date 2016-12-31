@@ -5,7 +5,7 @@
 
 \subsubsection{x86}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasm]{patterns/185_64bit_in_32_env/conversion/MSVC2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasmx86]{patterns/185_64bit_in_32_env/conversion/MSVC2012_Ox.asm}
 
 Here we also run into necessity to extend a 32-bit signed value into a 64-bit signed one.
 Unsigned values are converted straightforwardly: all bits in the higher part must be set to 0.
@@ -21,7 +21,7 @@ similar to the \MOVSX{} instruction.
 
 \subsubsection{ARM}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/185_64bit_in_32_env/conversion/Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/185_64bit_in_32_env/conversion/Keil_ARM_O3.s}
 
 Keil for ARM is different: it just arithmetically shifts right the input value by 31 bits.
 As we know, the sign bit is \ac{MSB}, and the arithmetical shift copies the sign bit into the \q{emerged} bits.
@@ -33,4 +33,4 @@ In other words, this code just copies the \ac{MSB} (sign bit) from the input val
 
 GCC for MIPS does the same as Keil did for ARM mode:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/185_64bit_in_32_env/conversion/MIPS_O3_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/185_64bit_in_32_env/conversion/MIPS_O3_IDA.lst}

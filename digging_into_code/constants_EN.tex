@@ -35,7 +35,7 @@ If you find these four constants used in the code in a row, it is highly probabl
 \par Another example are the CRC16/CRC32 algorithms, 
 whose calculation algorithms often use precomputed tables like this one:
 
-\begin{lstlisting}[caption=linux/lib/crc16.c]
+\begin{lstlisting}[caption=linux/lib/crc16.c,style=customc]
 /** CRC table for the CRC-16. The poly is 0x8005 (x^16 + x^15 + x^2 + 1) */
 u16 const crc16_table[256] = {
 	0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
@@ -68,7 +68,7 @@ it's very likely that it must check the file for validity by checking at least t
 This could be done like this:
 (\IT{buf} points to the beginning of the loaded file in memory)
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 cmp [buf], 0x6468544D ; "MThd"
 jnz _error_not_a_MIDI_file
 \end{lstlisting}
@@ -104,7 +104,7 @@ that the malware is connected to Israel
 Also, numbers like those are very popular in amateur-grade cryptography, for example, excerpt from the \IT{secret function} internals from HASP3 dongle
 \footnote{\url{https://web.archive.org/web/20160311231616/http://www.woodmann.com/fravia/bayu3.htm}}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 void xor_pwd(void) 
 { 
 	int i; 
@@ -146,14 +146,14 @@ And we can find it, twice:
 it seems that the constant is used in two functions with descriptive names\\
 \TT{DhcpExtractOptionsForValidation()} and \TT{DhcpExtractFullOptions()}:
 
-\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64)]
+\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasmx86]
 .rdata:000007FF6483CBE8 dword_7FF6483CBE8 dd 63538263h          ; DATA XREF: DhcpExtractOptionsForValidation+79
 .rdata:000007FF6483CBEC dword_7FF6483CBEC dd 63538263h          ; DATA XREF: DhcpExtractFullOptions+97
 \end{lstlisting}
 
 And here are the places where these constants are accessed:
 
-\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64)]
+\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasmx86]
 .text:000007FF6480875F  mov     eax, [rsi]
 .text:000007FF64808761  cmp     eax, cs:dword_7FF6483CBE8
 .text:000007FF64808767  jnz     loc_7FF64817179
@@ -161,7 +161,7 @@ And here are the places where these constants are accessed:
 
 And:
 
-\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64)]
+\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasmx86]
 .text:000007FF648082C7  mov     eax, [r12]
 .text:000007FF648082CB  cmp     eax, cs:dword_7FF6483CBEC
 .text:000007FF648082D1  jnz     loc_7FF648173AF

@@ -7,7 +7,7 @@
 
 Она объявлена так:
 
-\begin{lstlisting}[caption=WinBase.h]
+\begin{lstlisting}[caption=WinBase.h,style=customc]
 typedef struct _SYSTEMTIME {
   WORD wYear;
   WORD wMonth;
@@ -26,7 +26,7 @@ typedef struct _SYSTEMTIME {
 
 Что в итоге (MSVC 2010):
 
-\lstinputlisting[caption=MSVC 2010 /GS-,style=customasm]{patterns/15_structs/1_systemtime/systemtime.asm}
+\lstinputlisting[caption=MSVC 2010 /GS-,style=customasmx86]{patterns/15_structs/1_systemtime/systemtime.asm}
 
 Под структуру в стеке выделено 16 байт ~--- именно столько будет \TT{sizeof(WORD)*8}
 (в структуре 8 переменных с типом WORD).
@@ -58,7 +58,7 @@ systemtime2.c(7) : warning C4133: 'function' : incompatible types - from 'WORD [
 
 Тем не менее, выдает такой код:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2010,style=customasm]{patterns/15_structs/1_systemtime/systemtime2.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2010,style=customasmx86]{patterns/15_structs/1_systemtime/systemtime2.asm}
 
 И это работает так же!
 

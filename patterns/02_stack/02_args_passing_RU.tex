@@ -2,7 +2,7 @@
 
 Самый распространенный способ передачи параметров в x86 называется \q{cdecl}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 push arg3
 push arg2
 push arg1
@@ -50,7 +50,7 @@ printf("%d %d %d", 1234);
 
 В реальности, \ac{CRT}-код вызывает \main примерно так:
 	
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 push envp
 push argv
 push argc
@@ -71,7 +71,7 @@ call main
 В каком-то смысле, популярный метод среди начинающих использовать язык ассемблера,
 это передавать аргументы в глобальных переменных, например:
 
-\lstinputlisting[caption=Код на ассемблере,style=customasm]{patterns/02_stack/global_args.asm}
+\lstinputlisting[caption=Код на ассемблере,style=customasmx86]{patterns/02_stack/global_args.asm}
 
 Но у этого метода есть очевидный недостаток: ф-ция \IT{do\_something()} не сможет вызвать саму себя рекурсивно (либо, через
 какую-то стороннюю ф-цию),
@@ -92,7 +92,7 @@ call main
 В MS-DOS был метод передачи аргументов через регистры, например, этот фрагмент кода для древней 16-битной MS-DOS
 выводит ``Hello, world!'':
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 mov  dx, msg      ; адрес сообщения
 mov  ah, 9        ; §9 означает ф-цию "вывод строки"§
 int  21h          ; DOS "syscall"
@@ -113,7 +113,7 @@ msg  db 'Hello, World!\$'
 
 Например:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
 mov ah, 3ch       ; создать файл
 lea dx, filename
 mov cl, 1
@@ -132,7 +132,7 @@ error:
 В исходных кодах Windows Research Kernel (который очень похож на Windows 2003) мы можем найти такое\\
 (файл \IT{base/ntos/ke/i386/cpu.asm}):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customasmx86]
         public  Get386Stepping
 Get386Stepping  proc
 

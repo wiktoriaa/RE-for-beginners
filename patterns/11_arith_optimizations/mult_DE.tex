@@ -4,7 +4,7 @@
 
 Hier ist ein einfaches Beispiel:
 
-\begin{lstlisting}[caption=\Optimizing MSVC 2010]
+\begin{lstlisting}[style=customc]
 unsigned int f(unsigned int a)
 {
 	return a*8;
@@ -15,7 +15,7 @@ Die Multiplikation mit 8 wird durch 3 Additionsbefehle ersetzt, welche das
 gleiche Ergebnis erzielen. Offenbar hat der MSVC Optimierer entschieden, dass
 der Code so schneller sein kann.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=\Optimizing MSVC 2010,style=customasmx86]
 _TEXT	SEGMENT
 _a$ = 8		; size = 4
 _f	PROC
@@ -35,14 +35,14 @@ END
 Multiplikation mit und Divisionen durch Zahlen, die Potenzen von 2 sind, werden
 oft durch Schiebebefehle (oft auch Shifting genannt) ersetzt.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=customc]
 unsigned int f(unsigned int a)
 {
 	return a*4;
 };
 \end{lstlisting}
 
-\begin{lstlisting}[caption=\NonOptimizing MSVC 2010]
+\begin{lstlisting}[caption=\NonOptimizing MSVC 2010,style=customasmx86]
 _a$ = 8		; size = 4
 _f	PROC
 	push	ebp
@@ -68,7 +68,7 @@ Die beiden rechts angefügten Bits sind stets Nullen.
 
 Multiplikation mit 4 in ARM:
 
-\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode)]
+\begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode),style=customasmARM]
 f PROC
         LSL      r0,r0,#2
         BX       lr
@@ -77,7 +77,7 @@ f PROC
 
 Multiplikation mit 4 in MIPS:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/11_arith_optimizations/MIPS_SLL.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/11_arith_optimizations/MIPS_SLL.lst}
 
 \myindex{MIPS!\Instructions!SLL}
 \INS{SLL} bedeutet \q{Shift Left Logical}.
@@ -94,22 +94,22 @@ Die zugrundeliegende Mathematik ist relativ einfach.
 
 \mysubparagraph{x86}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasm]{patterns/11_arith_optimizations/mult_shifts_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasmx86]{patterns/11_arith_optimizations/mult_shifts_MSVC_2012_Ox.asm}
 
 \mysubparagraph{ARM}
 
 Keil im ARM mode benutzt den Umwandler zur Verschiebung im zweiten Operanden:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/11_arith_optimizations/mult_shifts_Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/11_arith_optimizations/mult_shifts_Keil_ARM_O3.s}
 
 Da es im Thumb mode keine solchen Umwandler gibt, kann folglich \TT{f2()} nicht
 optimiert werden:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{patterns/11_arith_optimizations/mult_shifts_Keil_thumb_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmARM]{patterns/11_arith_optimizations/mult_shifts_Keil_thumb_O3.s}
 
 \mysubparagraph{MIPS}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA)]{patterns/11_arith_optimizations/mult_shifts_MIPS_O3_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/11_arith_optimizations/mult_shifts_MIPS_O3_IDA.lst}
 
 \myparagraph{64-bit}
 
@@ -117,13 +117,13 @@ optimiert werden:
 
 \mysubparagraph{x64}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasm]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_x64_O3.s}
+\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasmx86]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_x64_O3.s}
 
 \mysubparagraph{ARM64}
 
 GCC 4.9 für ARM64 fasst sich dank der Verschiebe-Umwandler ebenfalls kurz:
 
-\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64,style=customasm]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_ARM64.s}
+\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64,style=customasmARM]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_ARM64.s}
 
 \myparagraph{Booths Multiplikationsalgorithmus}
 

@@ -36,7 +36,7 @@ The object file is in the main Oracle-library \TT{libserver11.a}.
 
 A reference to this text string can find in the \TT{kqfviw} table stored in the same file, \TT{kqf.o}:
 
-\begin{lstlisting}[caption=kqf.o]
+\begin{lstlisting}[caption=kqf.o,style=customasmx86]
 .rodata:0800C4A0 kqfviw dd 0Bh    ; DATA XREF: kqfchk:loc_8003A6D
 .rodata:0800C4A0                  ; kqfgbn+34
 .rodata:0800C4A4        dd offset _2__STRING_10102_0 ; "GV$WAITSTAT"
@@ -144,7 +144,7 @@ USERENV('Instance')
 ... 
 in the \TT{kqf.o} file, we find it in the \TT{kqfvip} table:
 
-\begin{lstlisting}[caption=kqf.o]
+\begin{lstlisting}[caption=kqf.o,style=customasmx86]
 .rodata:080185A0 kqfvip dd offset _2__STRING_11126_0 ; DATA XREF: kqfgvcn+18
 .rodata:080185A0                                ; kqfgvt+F
 .rodata:080185A0                                ; "select inst_id,decode(indx,1,'data bloc"...
@@ -174,7 +174,7 @@ As for \TT{V\$VERSION}, this table has only two elements, the first is 6 and the
 the \TT{BANNER} string (the number 6 is this string's length) and after, a \IT{terminating} element that contains 
 0 and a \IT{null} C string:
 
-\begin{lstlisting}[caption=kqf.o]
+\begin{lstlisting}[caption=kqf.o,style=customasmx86]
 .rodata:080BBAC4 kqfv133_c_0 dd 6     ; DATA XREF: .rodata:08019574
 .rodata:080BBAC8             dd offset _2__STRING_5017_0 ; "BANNER"
 .rodata:080BBACC             dd 0
@@ -224,7 +224,7 @@ This table has some additional fields, like \TT{ADDR} and \TT{INDX}.
 
 While scrolling \TT{kqf.o} in \IDA we can spot another table that contains a pointer to the \TT{X\$VERSION} string, this is \TT{kqftab}:
 
-\begin{lstlisting}[caption=kqf.o]
+\begin{lstlisting}[caption=kqf.o,style=customasmx86]
 .rodata:0803CAC0      dd 9                    ; element number 0x1f6
 .rodata:0803CAC4      dd offset _2__STRING_13113_0 ; "X$VERSION"
 .rodata:0803CAC8      dd 4
@@ -308,7 +308,7 @@ Let's run \tracer in \TT{cc} mode (it comments each executed instruction):
 tracer -a:oracle.exe bpf=oracle.exe!_kqvrow,trace:cc
 \end{lstlisting}
 
-\lstinputlisting[style=customasm]{examples/oracle/VERSION_kqvrow.asm}
+\lstinputlisting[style=customasmx86]{examples/oracle/VERSION_kqvrow.asm}
 
 Now it is easy to see that the row number is passed from outside. The function returns the string, constructing it as follows:
 
