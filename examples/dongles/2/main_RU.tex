@@ -24,7 +24,7 @@
 
 Попробуем также поискать строку \q{rbsl}, и действительно, её можно найти в таком фрагменте кода:
 
-\lstinputlisting[style=customasm]{examples/dongles/2/1.lst}
+\lstinputlisting[style=customasmx86]{examples/dongles/2/1.lst}
 
 Действительно, должна же как-то программа обмениваться информацией с драйвером.
 
@@ -32,13 +32,13 @@
 Единственное место где вызывается функция \TT{SSQC()}
 это \gls{thunk function}:
 
-\lstinputlisting[style=customasm]{examples/dongles/2/2.lst}
+\lstinputlisting[style=customasmx86]{examples/dongles/2/2.lst}
 
 А вот SSQ() может вызываться по крайней мере из двух разных функций.
 
 Одна из них:
 
-\lstinputlisting[style=customasm]{examples/dongles/2/check1.lst}
+\lstinputlisting[style=customasmx86]{examples/dongles/2/check1.lst}
 
 \q{\TT{3C}} и \q{\TT{3E}} --- это звучит знакомо: когда-то была донгла
  Sentinel Pro от Rainbow без памяти,
@@ -81,7 +81,7 @@
 
 Одно из таких мест:
 
-\lstinputlisting[style=customasm]{examples/dongles/2/4.lst}
+\lstinputlisting[style=customasmx86]{examples/dongles/2/4.lst}
 
 Если оно 0, шифрованное сообщение об ошибке будет передано в функцию дешифрования, и оно будет 
 показано.
@@ -89,7 +89,7 @@
 \myindex{x86!\Instructions!XOR}
 Функция дешифровки сообщений об ошибке похоже применяет простой \gls{xoring}:
 
-\lstinputlisting[style=customasm]{examples/dongles/2/err_warn.lst}
+\lstinputlisting[style=customasmx86]{examples/dongles/2/err_warn.lst}
 
 Вот почему не получилось найти сообщение об ошибке в исполняемых файлах, потому что оно было
 зашифровано, это очень популярная практика.
@@ -101,7 +101,7 @@
 (может быть для ожидания плохо подключенной донглы и нового запроса?), затем дешифрует
 еще одно сообщение об ошибке и выводит его.
 
-\lstinputlisting[style=customasm]{examples/dongles/2/check2.lst}
+\lstinputlisting[style=customasmx86]{examples/dongles/2/check2.lst}
 
 Заставить работать программу без донглы довольно просто: просто пропатчить все места после инструкций
 \CMP где происходят соответствующие сравнения.
@@ -114,7 +114,7 @@
 Алгоритм, находящийся в функции \TT{err\_warn()} 
 действительно, крайне прост:
 
-\lstinputlisting[caption=Функция дешифровки,style=customasm]{examples/dongles/2/decrypting_RU.lst}
+\lstinputlisting[caption=Функция дешифровки,style=customasmx86]{examples/dongles/2/decrypting_RU.lst}
 
 Как видно, не только сама строка поступает на вход, но также и ключ для дешифровки:
 

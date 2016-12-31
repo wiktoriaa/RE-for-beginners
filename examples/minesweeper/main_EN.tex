@@ -18,7 +18,7 @@ executable and shows all names.
 
 So here it is, the only call to \TT{rand()} is this function:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 .text:01003940 ; __stdcall Rnd(x)
 .text:01003940 _Rnd@4          proc near               ; CODE XREF: StartGame()+53
 .text:01003940                                         ; StartGame()+61
@@ -54,7 +54,7 @@ a function called \TT{StartGame()},
 and as it seems, this is exactly 
 the code which place the mines:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 .text:010036C7                 push    _xBoxMac
 .text:010036CD                 call    _Rnd@4          ; Rnd(x)
 .text:010036D2                 push    _yBoxMac
@@ -95,7 +95,7 @@ between the \TT{rgBlk}
 label in the data segment and the next known one. 
 It is 0x360 (864):
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 .data:01005340 _rgBlk          db 360h dup(?)          ; DATA XREF: MainWndProc(x,x,x,x)+574
 .data:01005340                                         ; DisplayBlk(x,x)+23
 .data:010056A0 _Preferences    dd ?                    ; DATA XREF: FixMenus()+2
@@ -116,7 +116,7 @@ They may differ for other service packs.}.
 
 So we got this memory dump of the array:
 
-\lstinputlisting[style=customasm]{examples/minesweeper/1.lst}
+\lstinputlisting[style=customasmx86]{examples/minesweeper/1.lst}
 
 \olly, like any other hexadecimal editor, shows 16 bytes per line.
 So each 32-byte array row occupies exactly 2 lines here.
@@ -140,11 +140,11 @@ By comparing the mine places and the dump, we can conclude that 0x10 stands for 
 
 Now we'll add comments and also enclose all 0x8F bytes into square brackets:
 
-\lstinputlisting[style=customasm]{examples/minesweeper/2.lst}
+\lstinputlisting[style=customasmx86]{examples/minesweeper/2.lst}
 
 Now we'll remove all \IT{border bytes} (0x10) and what's beyond those:
 
-\lstinputlisting[style=customasm]{examples/minesweeper/3.lst}
+\lstinputlisting[style=customasmx86]{examples/minesweeper/3.lst}
 
 Yes, these are mines, now it can be clearly seen and compared with the screenshot.
 

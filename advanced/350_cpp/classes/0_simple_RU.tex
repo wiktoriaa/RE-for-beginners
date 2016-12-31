@@ -10,7 +10,7 @@
 
 Вот как выглядит \main на ассемблере:
 
-\lstinputlisting[caption=MSVC,style=customasm]{\CURPATH/classes/simple_1_msvc.asm}
+\lstinputlisting[caption=MSVC,style=customasmx86]{\CURPATH/classes/simple_1_msvc.asm}
 
 Вот что происходит. 
 Под каждый экземпляр класса $c$ выделяется по 8 байт, столько же, сколько нужно 
@@ -48,7 +48,7 @@
 
 Теперь смотрим на код в конструкторах:
 
-\lstinputlisting[caption=MSVC,style=customasm]{\CURPATH/classes/simple_2_msvc.asm}
+\lstinputlisting[caption=MSVC,style=customasmx86]{\CURPATH/classes/simple_2_msvc.asm}
 
 Конструкторы --- это просто функции, они используют указатель на структуру в \ECX, 
 копируют его себе в локальную переменную, хотя это и не обязательно.
@@ -59,14 +59,14 @@
 
 И еще метод \TT{dump()}:
 
-\lstinputlisting[caption=MSVC,style=customasm]{\CURPATH/classes/simple_3_msvc.asm}
+\lstinputlisting[caption=MSVC,style=customasmx86]{\CURPATH/classes/simple_3_msvc.asm}
 
 Все очень просто, \TT{dump()} берет указатель на структуру состоящую из двух \Tint через \ECX, 
 выдергивает оттуда две переменные и передает их в \printf.
 
 А если скомпилировать с оптимизацией (\Ox), то кода будет намного меньше:
 
-\lstinputlisting[caption=MSVC,style=customasm]{\CURPATH/classes/simple_4_msvc_Ox.asm}
+\lstinputlisting[caption=MSVC,style=customasmx86]{\CURPATH/classes/simple_4_msvc_Ox.asm}
 
 \myindex{x86!\Instructions!RET}
 Вот и все. Единственное о чем еще нужно сказать, это о том, что в функции \main, 
@@ -93,7 +93,7 @@
 Здесь это видно во внутренностях метода 
 \TT{c(int a, int b)}:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{\CURPATH/classes/simple_MSVC_x64_RU.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{\CURPATH/classes/simple_MSVC_x64_RU.asm}
 
 Тип \Tint в x64 остается 32-битным
 \footnote{Видимо, так решили для упрощения портирования \CCpp{}-кода на x64}, 
@@ -105,7 +105,7 @@
 
 В GCC 4.4.1 всё почти так же, за исключением некоторых различий.
 
-\lstinputlisting[caption=GCC 4.4.1,style=customasm]{\CURPATH/classes/simple_GCC.asm}
+\lstinputlisting[caption=GCC 4.4.1,style=customasmx86]{\CURPATH/classes/simple_GCC.asm}
 
 Здесь мы видим, что применяется иной \IT{name mangling} характерный для стандартов GNU
 \footnote{Еще о name mangling разных компиляторов:\\
@@ -114,7 +114,7 @@
 
 Это первый конструктор:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
                 public _ZN1cC1Ev ; weak
 _ZN1cC1Ev       proc near               ; CODE XREF: main+10
 
@@ -135,7 +135,7 @@ _ZN1cC1Ev       endp
 
 Второй конструктор:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
                 public _ZN1cC1Eii
 _ZN1cC1Eii      proc near
 
@@ -170,7 +170,7 @@ void ZN1cC1Eii (int *obj, int a, int b)
 
 И функция \TT{dump()}:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
                 public _ZN1c4dumpEv
 _ZN1c4dumpEv    proc near
 
@@ -218,5 +218,5 @@ void ZN1c4dumpEv (int *obj)
 Тип \Tint 32-битный и здесь.
 \IT{Хак} с \JMP вместо \RET используется и здесь.
 
-\lstinputlisting[caption=GCC 4.4.6 x64,style=customasm]{\CURPATH/classes/simple_GCC_x64_RU.s}
+\lstinputlisting[caption=GCC 4.4.6 x64,style=customasmx86]{\CURPATH/classes/simple_GCC_x64_RU.s}
 

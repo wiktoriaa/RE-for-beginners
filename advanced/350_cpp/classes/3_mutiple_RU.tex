@@ -11,11 +11,11 @@
 \TT{solid\_object::dump()} и \TT{solid\_box::dump()}:
 
 
-\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasm]{\CURPATH/classes/classes3_1.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasmx86]{\CURPATH/classes/classes3_1.asm}
 
-\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasm]{\CURPATH/classes/classes3_2.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasmx86]{\CURPATH/classes/classes3_2.asm}
 
-\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasm]{\CURPATH/classes/classes3_3.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasmx86]{\CURPATH/classes/classes3_3.asm}
 
 Выходит, имеем такую разметку в памяти для всех трех классов:
 
@@ -72,14 +72,14 @@
 Код методов \TT{box::get\_volume()} и \TT{solid\_object::get\_density()} тривиален:
 
 
-\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasm]{\CURPATH/classes/classes3_4.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasmx86]{\CURPATH/classes/classes3_4.asm}
 
-\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasm]{\CURPATH/classes/classes3_5.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasmx86]{\CURPATH/classes/classes3_5.asm}
 
 А вот код метода \TT{solid\_box::get\_weight()} куда интереснее:
 
 
-\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasm]{\CURPATH/classes/classes3_6.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2008 /Ob0,style=customasmx86]{\CURPATH/classes/classes3_6.asm}
 
 \TT{get\_weight()} просто вызывает два метода, но для \TT{get\_volume()} он передает просто указатель на \TT{this}, а для \TT{get\_density()}, он передает указатель на \TT{this} сдвинутый на 12 байт (либо \TT{0xC} байт), а там, 
 в разметке класса \TT{solid\_box}, как раз начинаются поля класса \TT{solid\_object}.

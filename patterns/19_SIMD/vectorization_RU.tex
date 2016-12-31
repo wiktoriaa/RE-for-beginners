@@ -66,7 +66,7 @@ icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
 
 Имеем такое (в \IDA):
 
-\lstinputlisting[style=customasm]{patterns/19_SIMD/18_1_RU.asm}
+\lstinputlisting[style=customasmx86]{patterns/19_SIMD/18_1_RU.asm}
 
 Инструкции, имеющие отношение к SSE2 это:
 \myindex{x86!\Instructions!MOVDQA}
@@ -107,7 +107,7 @@ movdqa  xmmword ptr [eax+edi*4], xmm0 ; ar3+i*4
 А иначе, значение из \TT{ar2} загрузится в \XMM{0} используя инструкцию \MOVDQU, 
 которая не требует выровненного указателя, зато может работать чуть медленнее:
 
-\lstinputlisting[style=customasm]{patterns/19_SIMD/18_1_excerpt_RU.asm}
+\lstinputlisting[style=customasmx86]{patterns/19_SIMD/18_1_excerpt_RU.asm}
 
 А во всех остальных случаях, будет исполняться код, который был бы, как если бы не была 
 включена поддержка SSE2.
@@ -121,7 +121,7 @@ movdqa  xmmword ptr [eax+edi*4], xmm0 ; ar3+i*4
 
 Вот что вышло (GCC 4.4.1):
 
-\lstinputlisting[style=customasm]{patterns/19_SIMD/18_2_gcc_O3.asm}
+\lstinputlisting[style=customasmx86]{patterns/19_SIMD/18_2_gcc_O3.asm}
 
 Почти то же самое, хотя и не так дотошно, как Intel C++.
 
@@ -134,4 +134,4 @@ movdqa  xmmword ptr [eax+edi*4], xmm0 ; ar3+i*4
 
 И вот что делает оптимизирующий GCC 4.9.1:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasm]{patterns/19_SIMD/memcpy_GCC49_x64_O3_RU.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasmx86]{patterns/19_SIMD/memcpy_GCC49_x64_O3_RU.s}

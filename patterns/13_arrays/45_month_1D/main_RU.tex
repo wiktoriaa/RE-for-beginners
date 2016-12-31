@@ -7,7 +7,7 @@
 
 \subsubsection{x64}
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{patterns/13_arrays/45_month_1D/month1_MSVC_2013_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasmx86]{patterns/13_arrays/45_month_1D/month1_MSVC_2013_x64_Ox.asm}
 
 Код очень простой:
 
@@ -57,7 +57,7 @@
 
 Скомпилируем также в 32-битном компиляторе MSVC:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x86,style=customasm]{patterns/13_arrays/45_month_1D/month1_MSVC_2013_x86_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x86,style=customasmx86]{patterns/13_arrays/45_month_1D/month1_MSVC_2013_x86_Ox.asm}
 
 Входное значение не нужно расширять до 64-битного значения, так что оно используется как есть.
 
@@ -68,7 +68,7 @@
 
 \myparagraph{ARM в режиме ARM}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/13_arrays/45_month_1D/month1_Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/13_arrays/45_month_1D/month1_Keil_ARM_O3.s}
 
 % TODO Fix R1s
 Адрес таблицы загружается в R1.
@@ -96,7 +96,7 @@ get_month1 PROC
 
 \subsubsection{ARM64}
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64,style=customasm]{patterns/13_arrays/45_month_1D/month1_GCC49_ARM64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64,style=customasmARM]{patterns/13_arrays/45_month_1D/month1_GCC49_ARM64_O3.s}
 
 \myindex{ARM!\Instructions!ADRP/ADD pair}
 Адрес таблицы загружается в X1 используя пару \ADRP/\ADD.
@@ -110,7 +110,7 @@ get_month1 PROC
 
 \subsubsection{MIPS}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasm]{patterns/13_arrays/45_month_1D/MIPS_O3_IDA_RU.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/13_arrays/45_month_1D/MIPS_O3_IDA_RU.lst}
 
 \subsubsection{Переполнение массива}
 
@@ -124,7 +124,7 @@ get_month1 PROC
 Скомпилируем этот пример в MSVC для win64 и откроем его в \IDA чтобы посмотреть, что линкер расположил
 после таблицы:
 
-\lstinputlisting[caption=Исполняемый файл в IDA,style=customasm]{patterns/13_arrays/45_month_1D/MSVC2012_win64_1.lst}
+\lstinputlisting[caption=Исполняемый файл в IDA,style=customasmx86]{patterns/13_arrays/45_month_1D/MSVC2012_win64_1.lst}
 
 Имена месяцев идут сразу после.
 Наша программа все-таки крошечная,
@@ -136,7 +136,7 @@ get_month1 PROC
 Вернется 13-й элемент таблицы.
 Посмотрим, как CPU обходится с байтами как с 64-битным значением:
 
-\lstinputlisting[caption=Исполняемый файл в IDA,style=customasm]{patterns/13_arrays/45_month_1D/MSVC2012_win64_2.lst}
+\lstinputlisting[caption=Исполняемый файл в IDA,style=customasmx86]{patterns/13_arrays/45_month_1D/MSVC2012_win64_2.lst}
 
 И это 0x797261756E614A.
 После этого, какая-то другая функция (вероятно, работающая со строками) попытается загружать байты
@@ -163,7 +163,7 @@ get_month1 PROC
 
 Макрос будет проверять на верные значения во время каждого старта функции и падать если выражение возвращает false.
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{patterns/13_arrays/45_month_1D/MSVC2013_x64_Ox_checked.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasmx86]{patterns/13_arrays/45_month_1D/MSVC2013_x64_Ox_checked.asm}
 
 На самом деле, assert() это не функция, а макрос. Он проверяет условие и передает также номер строки и название
 файла в другую функцию, которая покажет эту информацию пользователю.
@@ -176,7 +176,7 @@ get_month1 PROC
 
 Вот что делает GCC:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 x64,style=customasm]{patterns/13_arrays/45_month_1D/GCC491_x64_O3_checked.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 x64,style=customasmx86]{patterns/13_arrays/45_month_1D/GCC491_x64_O3_checked.s}
 
 Так что макрос в GCC также передает и имя функции, для удобства.
 

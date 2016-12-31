@@ -4,7 +4,7 @@
 Затем при помощи \IDA посмотрим как скомпилировалась функция \main.
 \IDA, как и MSVC, показывает код в синтаксисе Intel\footnote{Мы также можем заставить GCC генерировать листинги в этом формате при помощи ключей \TT{-S -masm=intel}.}.
 
-\begin{lstlisting}[caption=код в \IDA,style=customasm]
+\begin{lstlisting}[caption=код в \IDA,style=customasmx86]
 main            proc near
 
 var_10          = dword ptr -10h
@@ -62,7 +62,7 @@ gcc -S 1_1.c
 
 Получим такой файл:
 
-\lstinputlisting[caption=GCC 4.7.3,style=customasm]{patterns/01_helloworld/GCC.s}
+\lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/01_helloworld/GCC.s}
 
 Здесь много макросов (начинающихся с точки). Они нам пока не интересны.
 
@@ -71,7 +71,7 @@ gcc -S 1_1.c
 оканчивающихся нулем~--- такие же строки как в Си). И тогда получится следующее
 \footnote{Кстати, для уменьшения генерации \q{лишних} макросов, можно использовать такой ключ GCC: \IT{-fno-asynchronous-unwind-tables}}:
 
-\lstinputlisting[caption=GCC 4.7.3,style=customasm]{patterns/01_helloworld/GCC_refined.s}
+\lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/01_helloworld/GCC_refined.s}
 
 \myindex{\ATTSyntax}
 \myindex{\IntelSyntax}

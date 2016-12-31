@@ -85,7 +85,7 @@ Wine\footnote{\href{http://go.yurichev.com/17059}{GitHub}}
 
 \lstinputlisting[style=customc]{OS/SEH/2/2.c}
 
-\lstinputlisting[caption=MSVC 2003,style=customasm]{OS/SEH/2/2_SEH3.asm}
+\lstinputlisting[caption=MSVC 2003,style=customasmx86]{OS/SEH/2/2_SEH3.asm}
 
 Здесь мы видим, как структура SEH конструируется в стеке.
 \IT{Scope table} расположена в сегменте \TT{CONST} --- действительно, эти поля не будут меняться.
@@ -149,7 +149,7 @@ scopetable entry[0]. previous try level=-2, filter=0x771f74d0 (ntdll.dll!___safe
 Так что \IT{scope table} теперь содержит два элемента, один элемент на каждый блок.
 \IT{Previous try level} меняется вместе с тем, как исполнение доходит до очередного \TT{try}-блока, либо выходит из него.
 
-\lstinputlisting[caption=MSVC 2003,style=customasm]{OS/SEH/2/3_SEH3.asm}
+\lstinputlisting[caption=MSVC 2003,style=customasmx86]{OS/SEH/2/3_SEH3.asm}
 
 Если установить точку останова на функцию \printf{} вызываемую из обработчика,
 мы можем увидеть, что добавился еще один SEH-обработчик.
@@ -204,9 +204,9 @@ scopetable entry[0]. previous try level=-2, filter=0x771f74d0 (ntdll.dll!___safe
 
 Оба примера скомпилированные в MSVC 2012 с SEH4:
 
-\lstinputlisting[caption=MSVC 2012: one try block example,style=customasm]{OS/SEH/2/2_SEH4.asm}
+\lstinputlisting[caption=MSVC 2012: one try block example,style=customasmx86]{OS/SEH/2/2_SEH4.asm}
 
-\lstinputlisting[caption=MSVC 2012: two try blocks example,style=customasm]{OS/SEH/2/3_SEH4.asm}
+\lstinputlisting[caption=MSVC 2012: two try blocks example,style=customasmx86]{OS/SEH/2/3_SEH4.asm}
 
 Вот значение \IT{cookies}: \TT{Cookie Offset} 
 это разница между адресом записанного в стеке значения EBP и значения $EBP \oplus security\_cookie$ в стеке.

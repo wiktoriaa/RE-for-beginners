@@ -68,7 +68,7 @@
 она просто умножает (логически, используя \AND) адрес хоста на сетевую маску, в итоге давая адрес
 сети.
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,numbers=left,style=customasm]{\CURPATH/calc_network_address_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,numbers=left,style=customasmx86]{\CURPATH/calc_network_address_MSVC_2012_Ox.asm}
 
 На строке 22 мы видим самую важную инструкцию \AND --- так вычисляется адрес сети.
 
@@ -109,13 +109,13 @@
 
 И вот как работает неоптимизирующий MSVC 2012:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2012,style=customasm]{\CURPATH/form_IP_MSVC_2012_RU.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2012,style=customasmx86]{\CURPATH/form_IP_MSVC_2012_RU.asm}
 
 Хотя, порядок операций другой, но, конечно, порядок роли не играет.
 
 \Optimizing MSVC 2012 делает то же самое, но немного иначе:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,style=customasm]{\CURPATH/form_IP_MSVC_2012_Ox_RU.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,style=customasmx86]{\CURPATH/form_IP_MSVC_2012_Ox_RU.asm}
 
 Можно сказать, что каждый байт записывается в младшие 8 бит возвращаемого значения,
 и затем возвращаемое значение сдвигается на один байт влево на каждом шаге.
@@ -135,11 +135,11 @@
 Расщепление работает немного проще: просто сдвигайте входное значение на 24, 16, 8 или 0 бит,
 берите биты с нулевого по седьмой (младший байт), вот и всё:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2012,style=customasm]{\CURPATH/print_as_IP_MSVC_2012_RU.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2012,style=customasmx86]{\CURPATH/print_as_IP_MSVC_2012_RU.asm}
 
 \Optimizing MSVC 2012 делает почти всё то же самое, только без ненужных перезагрузок входного значения:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,style=customasm]{\CURPATH/print_as_IP_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,style=customasmx86]{\CURPATH/print_as_IP_MSVC_2012_Ox.asm}
 
 \subsection{form\_netmask() и set\_bit()}
 
@@ -152,7 +152,7 @@
 Не очень хорошая идея выделять отдельную функцию для такой примитивной операции, но так будет проще понять,
 как это всё работает.
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,style=customasm]{\CURPATH/form_netmask_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 /Ob0,style=customasmx86]{\CURPATH/form_netmask_MSVC_2012_Ox.asm}
 
 \TT{set\_bit()} примитивна: просто сдвигает единицу на нужное количество бит, затем складывает (логически) с
 входным значением \q{input}.

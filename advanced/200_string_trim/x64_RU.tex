@@ -1,6 +1,6 @@
 ﻿\subsection{x64: \Optimizing MSVC 2013}
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{\CURPATH/MSVC2013_x64_Ox_RU.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasmx86]{\CURPATH/MSVC2013_x64_Ox_RU.asm}
 
 В начале, MSVC вставил тело функции \strlen{} прямо в код, потому что решил, что так будет
 быстрее чем обычная работа \strlen{} + время на вызов её и возврат из нее.
@@ -22,13 +22,13 @@ MSVC часто использует \TT{OR} вместо \TT{MOV RAX, 0xFFFFFFF
 Вследствие оптимизации, конечно.
 Вот что сделал MSVC:
 
-\lstinputlisting[caption=Вставленная \strlen{} сгенерированная MSVC 2013 x64,style=customasm]{\CURPATH/strlen_MSVC_RU.asm}
+\lstinputlisting[caption=Вставленная \strlen{} сгенерированная MSVC 2013 x64,style=customasmx86]{\CURPATH/strlen_MSVC_RU.asm}
 
 Попробуйте написать короче, если хотите инициализировать счетчик нулем!
 
 Ну, например:
 
-\lstinputlisting[caption=Наша версия \strlen{},style=customasm]{\CURPATH/my_strlen_RU.asm}
+\lstinputlisting[caption=Наша версия \strlen{},style=customasmx86]{\CURPATH/my_strlen_RU.asm}
 
 Не получилось. Нам придется вводить дополнительную инструкцию JMP!
 
@@ -41,7 +41,7 @@ MSVC часто использует \TT{OR} вместо \TT{MOV RAX, 0xFFFFFFF
 
 \subsection{x64: \NonOptimizing GCC 4.9.1}
 
-\lstinputlisting[style=customasm]{\CURPATH/GCC491_x64_O0_RU.asm}
+\lstinputlisting[style=customasmx86]{\CURPATH/GCC491_x64_O0_RU.asm}
 
 Комментарии автора.
 После исполнения \strlen{}, управление передается на метку L2,
@@ -67,7 +67,7 @@ MSVC часто использует \TT{OR} вместо \TT{MOV RAX, 0xFFFFFFF
 \subsection{x64: \Optimizing GCC 4.9.1}
 \label{string_trim_GCC_x64_O3}
 
-\lstinputlisting[style=customasm]{\CURPATH/GCC491_x64_O3_RU.asm}
+\lstinputlisting[style=customasmx86]{\CURPATH/GCC491_x64_O3_RU.asm}
 
 Тут более сложный результат.
 Код перед циклом исполняется только один раз, но также содержит проверку символов \CRLF{}!

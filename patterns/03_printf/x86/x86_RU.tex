@@ -4,7 +4,7 @@
 
 Компилируем при помощи MSVC 2010 Express, и в итоге получим:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 
 ...
@@ -36,7 +36,7 @@ $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 
 Иногда бывает так, что подряд идут несколько вызовов разных функций, но стек корректируется только один раз, после последнего вызова:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 push a1
 push a2
 call ...
@@ -53,7 +53,7 @@ add esp, 24
 
 Вот пример из реальной жизни:
 
-\lstinputlisting[caption=x86,style=customasm]{patterns/03_printf/x86/add_example_RU.lst}
+\lstinputlisting[caption=x86,style=customasmx86]{patterns/03_printf/x86/add_example_RU.lst}
 
 \clearpage
 \myparagraph{MSVC и \olly}
@@ -165,7 +165,7 @@ add esp, 24
 
 Скомпилируем то же самое в Linux при помощи GCC 4.4.1 и посмотрим на результат в \IDA:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 main      proc near
 
 var_10    = dword ptr -10h
@@ -239,7 +239,7 @@ Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
 Самый первый элемент это \ac{RA} (\GTT{0x0804844a}).
 Мы можем удостовериться в этом, дизассемблируя память по этому адресу:
 
-\begin{lstlisting}[label=NOP_as_XCHG_example,style=customasm]
+\begin{lstlisting}[label=NOP_as_XCHG_example,style=customasmx86]
 (gdb) x/5i 0x0804844a
    0x804844a <main+45>:	mov    $0x0,%eax
    0x804844f <main+50>:	leave  
@@ -303,7 +303,7 @@ eip            0x804844a	0x804844a <main+45>
 Попробуем дизассемблировать текущие инструкции.
 Стрелка указывает на инструкцию, которая будет исполнена следующей.
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 (gdb) disas
 Dump of assembler code for function main:
    0x0804841d <+0>:	push   %ebp
@@ -324,7 +324,7 @@ End of assembler dump.
 По умолчанию \ac{GDB} показывает дизассемблированный листинг в формате AT\&T.
 Но можно также переключиться в формат Intel:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 (gdb) set disassembly-flavor intel
 (gdb) disas
 Dump of assembler code for function main:

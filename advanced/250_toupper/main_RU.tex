@@ -32,7 +32,7 @@
 
 Имеется также небольшой артефакт компилятора:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2013 (x64),numbers=left,style=customasm]{\CURPATH/MSVC_2013_x64.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2013 (x64),numbers=left,style=customasmx86]{\CURPATH/MSVC_2013_x64.asm}
 
 Важно отметить что (на строке 3) входной байт загружается в 64-битный слот локального стека.
 
@@ -46,14 +46,14 @@
 
 \NonOptimizing GCC делает почти то же самое:
 
-\lstinputlisting[caption=\NonOptimizing GCC 4.9 (x64),style=customasm]{\CURPATH/GCC_49_x64_O0.s}
+\lstinputlisting[caption=\NonOptimizing GCC 4.9 (x64),style=customasmx86]{\CURPATH/GCC_49_x64_O0.s}
 
 \subsubsection{Одна операция сравнения}
 \label{toupper_one_comparison}
 
 \Optimizing MSVC работает лучше, он генерирует только одну операцию сравнения:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 (x64),style=customasm]{\CURPATH/MSVC_2013_Ox_x64.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 (x64),style=customasmx86]{\CURPATH/MSVC_2013_Ox_x64.asm}
 
 Уже было описано, как можно заменить две операции сравнения на одну: \myref{one_comparison_instead_of_two}.
 
@@ -77,7 +77,7 @@ else
 \Optimizing GCC 
 даже лучше, он избавился от переходов (а это хорошо: \myref{branch_predictors}) используя инструкцию CMOVcc:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 (x64),numbers=left,style=customasm]{\CURPATH/GCC_49_x64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 (x64),numbers=left,style=customasmx86]{\CURPATH/GCC_49_x64_O3.s}
 
 На строке 3 код готовит уже сконвертированное значение заранее, как если бы конверсия всегда происходила.
 
@@ -90,7 +90,7 @@ else
 
 \Optimizing Keil для режима ARM также генерирует только одну операцию сравнения:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{\CURPATH/Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{\CURPATH/Keil_ARM_O3.s}
 
 \myindex{ARM!\Instructions!SUBcc}
 \myindex{ARM!\Instructions!ANDcc}
@@ -100,7 +100,7 @@ else
 
 \Optimizing Keil для режима Thumb также генерирует только одну операцию сравнения:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{\CURPATH/Keil_thumb_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmARM]{\CURPATH/Keil_thumb_O3.s}
 
 \myindex{ARM!\Instructions!LSLS}
 \myindex{ARM!\Instructions!LSLR}
@@ -113,9 +113,9 @@ else
 
 \subsubsection{GCC для ARM64}
 
-\lstinputlisting[caption=\NonOptimizing GCC 4.9 (ARM64),style=customasm]{\CURPATH/GCC_49_ARM64_O0.s}
+\lstinputlisting[caption=\NonOptimizing GCC 4.9 (ARM64),style=customasmARM]{\CURPATH/GCC_49_ARM64_O0.s}
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64),style=customasm]{\CURPATH/GCC_49_ARM64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64),style=customasmARM]{\CURPATH/GCC_49_ARM64_O3.s}
 
 \subsection{Итог}
 

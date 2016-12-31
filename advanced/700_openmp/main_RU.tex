@@ -69,14 +69,14 @@ gcc -fopenmp 2.c sha512.c -S -masm=intel
 
 Вот как MSVC 2012 генерирует главный цикл:
 
-\lstinputlisting[caption=MSVC 2012,style=customasm]{advanced/700_openmp/MSVC_loop.asm}
+\lstinputlisting[caption=MSVC 2012,style=customasmx86]{advanced/700_openmp/MSVC_loop.asm}
 
 Функции с префиксом \TT{vcomp} связаны с OpenMP и находятся в файле vcomp*.dll.
 Так что тут запускается группа тредов.
 
 Посмотрим на \TT{\_main\$omp\$1}:
 
-\lstinputlisting[caption=MSVC 2012,style=customasm]{advanced/700_openmp/MSVC_1.asm}
+\lstinputlisting[caption=MSVC 2012,style=customasmx86]{advanced/700_openmp/MSVC_1.asm}
 
 Эта функция будет запущена $n$ раз параллельно, где $n$ это число ядер \ac{CPU}.\\
 \TT{vcomp\_for\_static\_simple\_init()} вычисляет интервал для конструкта
@@ -138,7 +138,7 @@ df6e3fe6019f5764fc9975e505a7395fed780fee50eb38dd4c0279cb114672e2 *test
 		printf ("checked=%d\n", checked);
 \end{lstlisting}
 
-\lstinputlisting[caption=MSVC 2012,style=customasm]{advanced/700_openmp/MSVC_2.asm}
+\lstinputlisting[caption=MSVC 2012,style=customasmx86]{advanced/700_openmp/MSVC_2.asm}
 
 Как выясняется, функция \TT{vcomp\_atomic\_add\_i4()} 
 в vcomp*.dll это просто крохотная функция имеющая инструкцию
@@ -153,7 +153,7 @@ df6e3fe6019f5764fc9975e505a7395fed780fee50eb38dd4c0279cb114672e2 *test
 GCC 4.8.1 выдает программу показывающую точно такую же таблицу со статистикой, 
 так что, реализация GCC делит цикл на части точно так же.
 
-\begin{lstlisting}[caption=GCC 4.8.1,style=customasm]
+\begin{lstlisting}[caption=GCC 4.8.1,style=customasmx86]
 	mov	edi, OFFSET FLAT:main._omp_fn.0
 	call	GOMP_parallel_start
 	mov	edi, 0
@@ -167,7 +167,7 @@ GCC 4.8.1 выдает программу показывающую точно т
 
 Вот функция \TT{main.\_omp\_fn.0}:
  
-\lstinputlisting[caption=GCC 4.8.1,style=customasm]{advanced/700_openmp/GCC_1.asm}
+\lstinputlisting[caption=GCC 4.8.1,style=customasmx86]{advanced/700_openmp/GCC_1.asm}
 
 Здесь мы видим это деление явно: вызывая 
 \TT{omp\_get\_num\_threads()} и \TT{omp\_get\_thread\_num()}
@@ -177,7 +177,7 @@ GCC 4.8.1 выдает программу показывающую точно т
 GCC также вставляет инструкцию \TT{LOCK ADD} 
 прямо в том месте кода, где MSVC сгенерировал вызов отдельной функции в DLL:
 
-\lstinputlisting[caption=GCC 4.8.1,style=customasm]{advanced/700_openmp/GCC_2.asm}
+\lstinputlisting[caption=GCC 4.8.1,style=customasmx86]{advanced/700_openmp/GCC_2.asm}
 
 Функции с префиксом GOMP это часть библиотеки 
 GNU OpenMP.

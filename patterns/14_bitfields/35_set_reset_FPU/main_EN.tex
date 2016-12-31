@@ -20,7 +20,7 @@ So there are three functions: my\_abs() resets \ac{MSB}; \TT{set\_sign()} sets \
 
 The code is pretty straightforward:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasmx86]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_Ox.asm}
 
 An input value of type \Tfloat is taken from the stack, but treated as an integer value.
 
@@ -31,7 +31,7 @@ Finally, the modified value is loaded into \TT{ST0}, because floating-point numb
 
 Now let's try optimizing MSVC 2012 for x64:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_x64_Ox.asm}
 
 \myindex{x86!\Instructions!BTR}
 \myindex{x86!\Instructions!BTS}
@@ -51,7 +51,7 @@ environment.
 
 GCC 4.4.5 for MIPS does mostly the same:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasm]{patterns/14_bitfields/35_set_reset_FPU/MIPS_O3_IDA_EN.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/14_bitfields/35_set_reset_FPU/MIPS_O3_IDA_EN.lst}
 
 \myindex{MIPS!\Instructions!LUI}
 
@@ -62,7 +62,7 @@ One single \LUI instruction is used to load 0x80000000 into a register, because
 
 \myparagraph{\OptimizingKeilVI (\ARMMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_ARM_O3_EN.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_ARM_O3_EN.s}
 
 So far so good.
 \myindex{ARM!\Instructions!BIC}
@@ -74,7 +74,7 @@ ARM has the \BIC instruction, which explicitly clears specific bit(s).
 
 \myparagraph{\OptimizingKeilVI (\ThumbMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_thumb_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmx86]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_thumb_O3.s}
 
 Thumb mode in ARM offers 16-bit instructions and not much data can be encoded in them, so here a 
 \INS{MOVS}/\INS{LSLS} instruction pair is used for forming the 0x80000000 constant.
@@ -92,7 +92,7 @@ That is how the \LSLS/\LSRS instruction pair clears \ac{MSB}.
 
 \myparagraph{\Optimizing GCC 4.6.3 (Raspberry Pi, \ARMMode)}
 
-\lstinputlisting[caption=\Optimizing GCC 4.6.3 for Raspberry Pi (\ARMMode),style=customasm]{patterns/14_bitfields/35_set_reset_FPU/raspberry_GCC_O3_ARM_mode_EN.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.6.3 for Raspberry Pi (\ARMMode),style=customasmARM]{patterns/14_bitfields/35_set_reset_FPU/raspberry_GCC_O3_ARM_mode_EN.lst}
 
 Let's run Raspberry Pi Linux in QEMU and it emulates an ARM FPU, so S-registers are used here for floating point
 numbers instead of R-registers.

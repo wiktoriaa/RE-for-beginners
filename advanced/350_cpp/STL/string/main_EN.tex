@@ -94,7 +94,7 @@ has stronger type checking, nevertheless, printf() works here without c\_str() a
 
 \lstinputlisting[style=customc]{\CURPATH/STL/string/3.cpp}
 
-\lstinputlisting[caption=MSVC 2012,style=customasm]{\CURPATH/STL/string/3_MSVC_EN.asm}
+\lstinputlisting[caption=MSVC 2012,style=customasmx86]{\CURPATH/STL/string/3_MSVC_EN.asm}
 
 The compiler does not construct strings statically: it would not be possible anyway if the buffer needs to be located
 in the \gls{heap}.
@@ -119,7 +119,7 @@ GCC code is even simpler (because the GCC way, as we saw above, is to not store
 shorter strings right in the structure):
 
 % TODO1 comment each function meaning
-\lstinputlisting[caption=GCC 4.8.1,style=customasm]{\CURPATH/STL/string/3_GCC_EN.s}
+\lstinputlisting[caption=GCC 4.8.1,style=customasmx86]{\CURPATH/STL/string/3_GCC_EN.s}
 
 It can be seen that it's not a pointer to the object that is passed to destructors, but rather an address 12 bytes (or 3 words)
 before, i.e., a pointer to the real start of the structure.
@@ -137,11 +137,11 @@ But how and where \TT{std::string} constructor will be called?
 
 In fact, this variable is to be initialized even before \main start.
 
-\lstinputlisting[caption=MSVC 2012: here is how a global variable is constructed and also its destructor is registered,style=customasm]{\CURPATH/STL/string/5_MSVC_p2.asm}
+\lstinputlisting[caption=MSVC 2012: here is how a global variable is constructed and also its destructor is registered,style=customasmx86]{\CURPATH/STL/string/5_MSVC_p2.asm}
 
-\lstinputlisting[caption=MSVC 2012: here a global variable is used in \main,style=customasm]{\CURPATH/STL/string/5_MSVC_p1.asm}
+\lstinputlisting[caption=MSVC 2012: here a global variable is used in \main,style=customasmx86]{\CURPATH/STL/string/5_MSVC_p1.asm}
 
-\lstinputlisting[caption=MSVC 2012: this destructor function is called before exit,style=customasm]{\CURPATH/STL/string/5_MSVC_p3.asm}
+\lstinputlisting[caption=MSVC 2012: this destructor function is called before exit,style=customasmx86]{\CURPATH/STL/string/5_MSVC_p3.asm}
 
 \myindex{\CStandardLibrary!atexit()}
 
@@ -153,7 +153,7 @@ which contain calls to all destructors of such global variables.
 
 GCC works likewise:
 
-\lstinputlisting[caption=GCC 4.8.1,style=customasm]{\CURPATH/STL/string/5_GCC.s}
+\lstinputlisting[caption=GCC 4.8.1,style=customasmx86]{\CURPATH/STL/string/5_GCC.s}
 
 But it does not create a separate function for this, 
 each destructor is passed to atexit(), one by one.

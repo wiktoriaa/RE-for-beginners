@@ -12,7 +12,7 @@ Here is the simplest method.
 
 This is how the string can be constructed:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 mov     byte ptr [ebx], 'h'
 mov     byte ptr [ebx+1], 'e'
 mov     byte ptr [ebx+2], 'l'
@@ -28,7 +28,7 @@ mov     byte ptr [ebx+10], 'd'
 
 The string can also be compared with another one like this:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 mov	ebx, offset username
 cmp	byte ptr [ebx], 'j'
 jnz	fail
@@ -70,12 +70,12 @@ which executes but does nothing useful.
 
 A simple example:
 
-\begin{lstlisting}[caption=original code,style=customasm]
+\begin{lstlisting}[caption=original code,style=customasmx86]
 add	eax, ebx
 mul	ecx
 \end{lstlisting}
 
-\lstinputlisting[caption=obfuscated code,style=customasm]{\CURPATH/1_EN.asm}
+\lstinputlisting[caption=obfuscated code,style=customasmx86]{\CURPATH/1_EN.asm}
 
 Here the garbage code uses registers which are not used in the real code (\TT{ESI} and \TT{EDX}).
 However, the intermediate results produced by the real code 
@@ -99,7 +99,7 @@ may be used by the garbage instructions for some extra mess---why not?
 If the developer is sure that ESI 
 at always 0 at that point:
 
-\lstinputlisting[style=customasm]{\CURPATH/2_EN.asm}
+\lstinputlisting[style=customasmx86]{\CURPATH/2_EN.asm}
 
 The reverse engineer needs some time to get into it.
 
@@ -108,7 +108,7 @@ This is also called an \IT{opaque predicate}.
 
 Another example (and again, the developer is sure that ESI is always zero):
 
-\lstinputlisting[style=customasm]{\CURPATH/3_EN.asm}
+\lstinputlisting[style=customasmx86]{\CURPATH/3_EN.asm}
 
 \subsubsection{Making a lot of mess}
 
@@ -120,7 +120,7 @@ instruction 3
 
 Can be replaced with:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 begin:		jmp	ins1_label
 
 ins2_label:	instruction 2
@@ -136,7 +136,7 @@ exit:
 
 \subsubsection{Using indirect pointers}
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 dummy_data1	db	100h dup (0)
 message1	db	'hello world',0
 

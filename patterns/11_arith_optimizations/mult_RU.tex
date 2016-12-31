@@ -4,7 +4,7 @@
 
 Вот простой пример:
 
-\begin{lstlisting[style=customc]
+\begin{lstlisting}[style=customc]
 unsigned int f(unsigned int a)
 {
 	return a*8;
@@ -75,7 +75,7 @@ f PROC
 
 Умножение на 4 в MIPS:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasm]{patterns/11_arith_optimizations/MIPS_SLL.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/11_arith_optimizations/MIPS_SLL.lst}
 
 \myindex{MIPS!\Instructions!SLL}
 \INS{SLL} это \q{Shift Left Logical}.
@@ -94,24 +94,24 @@ f PROC
 
 \mysubparagraph{x86}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasm]{patterns/11_arith_optimizations/mult_shifts_MSVC_2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasmx86]{patterns/11_arith_optimizations/mult_shifts_MSVC_2012_Ox.asm}
 
 \mysubparagraph{ARM}
 
 Keil, генерируя код для режима ARM, использует модификаторы инструкции, в которых можно задавать
 сдвиг для второго операнда:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/11_arith_optimizations/mult_shifts_Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/11_arith_optimizations/mult_shifts_Keil_ARM_O3.s}
 
 Но таких модификаторов в режиме Thumb нет.
 
 И он также не смог оптимизировать функцию \TT{f2()}:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{patterns/11_arith_optimizations/mult_shifts_Keil_thumb_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmARM]{patterns/11_arith_optimizations/mult_shifts_Keil_thumb_O3.s}
 
 \mysubparagraph{MIPS}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasm]{patterns/11_arith_optimizations/mult_shifts_MIPS_O3_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/11_arith_optimizations/mult_shifts_MIPS_O3_IDA.lst}
 
 \myparagraph{64-бита}
 
@@ -119,13 +119,13 @@ Keil, генерируя код для режима ARM, использует м
 
 \mysubparagraph{x64}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasm]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_x64_O3.s}
+\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasmx86]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_x64_O3.s}
 
 \mysubparagraph{ARM64}
 
 GCC 4.9 для ARM64 также очень лаконичен благодаря модификаторам сдвига:
 
-\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64,style=customasm]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_ARM64.s}
+\lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9 ARM64,style=customasmARM]{patterns/11_arith_optimizations/mult_shifts_64_GCC49_ARM64.s}
 
 \myparagraph{Алгоритм умножения Бута}
 

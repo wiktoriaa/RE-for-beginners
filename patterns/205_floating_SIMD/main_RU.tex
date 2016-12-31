@@ -26,7 +26,7 @@
 
 \subsubsection{x64}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/simple_MSVC_2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{patterns/205_floating_SIMD/simple_MSVC_2012_x64_Ox.asm}
 
 Собственно, входные значения с плавающей запятой передаются через регистры \XMM{0}-\XMM{3}, 
 а остальные --- через стек
@@ -52,7 +52,7 @@ $a$ передается через \XMM{0}, $b$ --- через \XMM{1}.
 \\
 Как работает неоптимизирующий MSVC:
 
-\lstinputlisting[caption=MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/simple_MSVC_2012_x64.asm}
+\lstinputlisting[caption=MSVC 2012 x64,style=customasmx86]{patterns/205_floating_SIMD/simple_MSVC_2012_x64.asm}
 
 \myindex{Shadow space}
 Чуть более избыточно. 
@@ -64,9 +64,9 @@ $a$ передается через \XMM{0}, $b$ --- через \XMM{1}.
 
 Скомпилируем этот пример также и под x86. MSVC 2012 даже генерируя под x86, использует SSE2-инструкции:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2012 x86,style=customasm]{patterns/205_floating_SIMD/simple_MSVC_2012_x86.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2012 x86,style=customasmx86]{patterns/205_floating_SIMD/simple_MSVC_2012_x86.asm}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x86,style=customasm]{patterns/205_floating_SIMD/simple_MSVC_2012_x86_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x86,style=customasmx86]{patterns/205_floating_SIMD/simple_MSVC_2012_x86_Ox.asm}
 
 Код почти такой же, правда есть пара отличий связанных с соглашениями о вызовах:
 
@@ -134,7 +134,7 @@ $a$ передается через \XMM{0}, $b$ --- через \XMM{1}.
 
 Они передаются в младших половинах регистров \XMM{0}-\XMM{3}.
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/pow_MSVC_2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{patterns/205_floating_SIMD/pow_MSVC_2012_x64_Ox.asm}
 
 \myindex{x86!\Instructions!MOVSD}
 \myindex{x86!\Instructions!MOVSDX}
@@ -150,7 +150,7 @@ $a$ передается через \XMM{0}, $b$ --- через \XMM{1}.
 Может быть, это потому что 
 \printf --- функция с переменным количеством аргументов?
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasm]{patterns/205_floating_SIMD/pow_GCC446_x64_O3_RU.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasmx86]{patterns/205_floating_SIMD/pow_GCC446_x64_O3_RU.s}
 
 GCC работает понятнее. 
 Значение для \printf передается в \XMM{0}. 
@@ -164,7 +164,7 @@ GCC работает понятнее.
 
 \subsubsection{x64}
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64_Ox.asm}
 
 \Optimizing MSVC генерирует очень понятный код.
 
@@ -174,20 +174,20 @@ Values and Set EFLAGS}. Собственно, это она и делает.\\
 \\
 \NonOptimizing MSVC генерирует более избыточно, но тоже всё понятно:
 
-\lstinputlisting[caption=MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64.asm}
+\lstinputlisting[caption=MSVC 2012 x64,style=customasmx86]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64.asm}
 
 \myindex{x86!\Instructions!MAXSD}
 А вот GCC 4.4.6 дошел в оптимизации дальше и применил инструкцию \TT{MAXSD} (\q{Return Maximum Scalar 
 Double-Precision Floating-Point Value}), которая просто выбирает максимальное значение!
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasm]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasmx86]{patterns/205_floating_SIMD/d_max_GCC446_x64_O3.s}
 
 \clearpage
 \subsubsection{x86}
 
 Скомпилируем этот пример в MSVC 2012 с включенной оптимизацией:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x86,style=customasm]{patterns/205_floating_SIMD/d_max_MSVC_2012_x86_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x86,style=customasmx86]{patterns/205_floating_SIMD/d_max_MSVC_2012_x86_Ox.asm}
 
 Всё то же самое, только значения $a$ и $b$ 
 берутся из стека, а результат функции оставляется в \ST{0}.
@@ -210,7 +210,7 @@ Double-Precision Floating-Point Value}), которая просто выбир�
 
 Теперь скомпилируем его для x64:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/205_floating_SIMD/epsilon_double_MSVC_2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{patterns/205_floating_SIMD/epsilon_double_MSVC_2012_x64_Ox.asm}
 
 Нет способа прибавить 1 к значению в 128-битном XMM-регистре, так что его нужно в начале поместить в память.
 

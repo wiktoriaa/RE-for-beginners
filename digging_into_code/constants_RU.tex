@@ -64,7 +64,7 @@ u16 const crc16_table[256] = {
 Это можно сделать при помощи:
 (\IT{buf} указывает на начало загруженного в память файла)
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 cmp [buf], 0x6468544D ; "MThd"
 jnz _error_not_a_MIDI_file
 \end{lstlisting}
@@ -139,14 +139,14 @@ void emulate_func2(unsigned short seed)
 И находим, два раза: оказывается, эта константа используется в функциях с красноречивыми названиями \\
 \TT{DhcpExtractOptionsForValidation()} и \TT{DhcpExtractFullOptions()}:
 
-\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasm]
+\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasmx86]
 .rdata:000007FF6483CBE8 dword_7FF6483CBE8 dd 63538263h          ; DATA XREF: DhcpExtractOptionsForValidation+79
 .rdata:000007FF6483CBEC dword_7FF6483CBEC dd 63538263h          ; DATA XREF: DhcpExtractFullOptions+97
 \end{lstlisting}
 
 А вот те места в функциях где происходит обращение к константам:
 
-\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasm]
+\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasmx86]
 .text:000007FF6480875F  mov     eax, [rsi]
 .text:000007FF64808761  cmp     eax, cs:dword_7FF6483CBE8
 .text:000007FF64808767  jnz     loc_7FF64817179
@@ -154,7 +154,7 @@ void emulate_func2(unsigned short seed)
 
 И:
 
-\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasm]
+\begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasmx86]
 .text:000007FF648082C7  mov     eax, [r12]
 .text:000007FF648082CB  cmp     eax, cs:dword_7FF6483CBEC
 .text:000007FF648082D1  jnz     loc_7FF648173AF

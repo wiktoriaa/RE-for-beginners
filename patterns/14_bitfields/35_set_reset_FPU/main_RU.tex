@@ -21,7 +21,7 @@
 
 Код прямолинеен:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012,style=customasmx86]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_Ox.asm}
 
 Входное значение типа \Tfloat берется из стека, но мы обходимся с ним как с целочисленным значением.
 
@@ -32,7 +32,7 @@
 
 Попробуем оптимизирующий MSVC 2012 для x64:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_x64_Ox.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{patterns/14_bitfields/35_set_reset_FPU/abs_MSVC2012_x64_Ox.asm}
 
 \myindex{x86!\Instructions!BTR}
 \myindex{x86!\Instructions!BTS}
@@ -49,7 +49,7 @@
 
 GCC 4.4.5 для MIPS делает почти то же самое:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasm]{patterns/14_bitfields/35_set_reset_FPU/MIPS_O3_IDA_RU.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/14_bitfields/35_set_reset_FPU/MIPS_O3_IDA_RU.lst}
 
 \myindex{MIPS!\Instructions!LUI}
 Для загрузки константы 0x80000000 в регистр используется только одна инструкция \LUI, потому что \LUI сбрасывает
@@ -59,7 +59,7 @@ GCC 4.4.5 для MIPS делает почти то же самое:
 
 \myparagraph{\OptimizingKeilVI (\ARMMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_ARM_O3_RU.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_ARM_O3_RU.s}
 
 Пока всё понятно.
 \myindex{ARM!\Instructions!BIC}
@@ -70,7 +70,7 @@ GCC 4.4.5 для MIPS делает почти то же самое:
 
 \myparagraph{\OptimizingKeilVI (\ThumbMode)}
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_thumb_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmx86]{patterns/14_bitfields/35_set_reset_FPU/abs_Keil_thumb_O3.s}
 
 В режиме Thumb 16-битные инструкции, в которых нельзя задать много данных, поэтому здесь
 применяется пара инструкций \MOVS/\LSLS для формирования константы 0x80000000.
@@ -88,7 +88,7 @@ GCC 4.4.5 для MIPS делает почти то же самое:
 
 \myparagraph{\Optimizing GCC 4.6.3 (Raspberry Pi, \ARMMode)}
 
-\lstinputlisting[caption=\Optimizing GCC 4.6.3 для Raspberry Pi (\ARMMode),style=customasm]{patterns/14_bitfields/35_set_reset_FPU/raspberry_GCC_O3_ARM_mode_RU.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.6.3 для Raspberry Pi (\ARMMode),style=customasmARM]{patterns/14_bitfields/35_set_reset_FPU/raspberry_GCC_O3_ARM_mode_RU.lst}
 
 Запустим Raspberry Pi Linux в QEMU и он эмулирует FPU в ARM, так что здесь используются S-регистры
 для передачи значений с плавающей точкой вместо R-регистров.

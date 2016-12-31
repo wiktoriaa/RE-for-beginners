@@ -13,7 +13,7 @@ Compileren maar!
 
 Hier zie je wat zowel de optimaliserende GCC als MSVC compilers produceren op een x86 platform:
 
-\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput),style=customasm]{patterns/011_ret/1.s}
+\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput),style=customasmx86]{patterns/011_ret/1.s}
 
 \myindex{x86!\Instructions!RET}
 Er zijn slechts twee instructies: de eerste plaatst de waarde 123 in het \EAX register, hetwelk volgens de conventies gebruikt wordt om de return value op te slaan en de tweede is \RET, wat de programma-uitvoering terug geeft aan de \gls{caller}.
@@ -24,7 +24,7 @@ De caller zal dan het resultaat uit het \EAX register halen.
 
 Er zijn een aantal verschillen met het ARM platform:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) ASM Output,style=customasm]{patterns/011_ret/1_Keil_ARM_O3.s}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) ASM Output,style=customasmARM]{patterns/011_ret/1_Keil_ARM_O3.s}
 
 ARM gebruikt het register \Reg{0} om de resultaten van functies te returnen. 123 wordt dus gekopieerd in \Reg{0}.
 
@@ -44,11 +44,11 @@ genummerd (van \$0 tot \$31) of per pseudoniem (\$V0, \$A0, etc.).
 
 De GCC assembly output hieronder lijst de registers genummerd op:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),style=customasm]{patterns/011_ret/MIPS.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),style=customasmMIPS]{patterns/011_ret/MIPS.s}
 
 \dots terwijl \IDA dit doet per pseudoniem:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasm]{patterns/011_ret/MIPS_IDA.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/011_ret/MIPS_IDA.lst}
 
 Het \$2 (of \$V0) register wordt gebruikt om de return value van de functie in op te slaan.
 \myindex{MIPS!\Pseudoinstructions!LI}

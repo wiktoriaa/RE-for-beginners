@@ -4,7 +4,7 @@
 
 Here is how the \TT{f\_signed()} function looks like:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2010,style=customasm]{patterns/07_jcc/simple/signed_MSVC.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2010,style=customasmx86]{patterns/07_jcc/simple/signed_MSVC.asm}
 
 \myindex{x86!\Instructions!JLE}
 
@@ -25,7 +25,7 @@ Now let's take a look at the \TT{f\_unsigned()} function.
 The \TT{f\_unsigned()} function is the same as \TT{f\_signed()}, with the exception that the \JBE and \JAE instructions
 are used instead of \JLE and \JGE, as follows:
 
-\lstinputlisting[caption=GCC,style=customasm]{patterns/07_jcc/simple/unsigned_MSVC.asm}
+\lstinputlisting[caption=GCC,style=customasmx86]{patterns/07_jcc/simple/unsigned_MSVC.asm}
 
 \myindex{x86!\Instructions!JBE}
 \myindex{x86!\Instructions!JAE}
@@ -45,7 +45,7 @@ That is why if we see \JG/\JL in use instead of \JA/\JB or vice-versa,
 we can be almost sure that the variables are signed or unsigned, respectively.
 Here is also the \main function, where there is nothing much new to us:
 
-\lstinputlisting[caption=\main,style=customasm]{patterns/07_jcc/simple/main_MSVC.asm}
+\lstinputlisting[caption=\main,style=customasmx86]{patterns/07_jcc/simple/main_MSVC.asm}
 
 \input{patterns/07_jcc/simple/olly_EN.tex}
 
@@ -117,7 +117,7 @@ if the flags has the same values after each execution?
 
 Perhaps optimizing MSVC cannot do this, but optimizing GCC 4.8.1 can go deeper:
 
-\lstinputlisting[caption=GCC 4.8.1 f\_signed(),style=customasm]{patterns/07_jcc/simple/GCC_O3_signed.asm}
+\lstinputlisting[caption=GCC 4.8.1 f\_signed(),style=customasmx86]{patterns/07_jcc/simple/GCC_O3_signed.asm}
 
 % should be here instead of 'switch' section?
 We also see \TT{JMP puts} here instead of \TT{CALL puts / RETN}.
@@ -135,7 +135,7 @@ So if you see such stacking somewhere, it is highly probable that the code was h
 The \TT{f\_unsigned()} function is not that 
 \ae{}sthetically short:
 
-\lstinputlisting[caption=GCC 4.8.1 f\_unsigned(),style=customasm]{patterns/07_jcc/simple/GCC_O3_unsigned_EN.asm}
+\lstinputlisting[caption=GCC 4.8.1 f\_unsigned(),style=customasmx86]{patterns/07_jcc/simple/GCC_O3_unsigned_EN.asm}
 
 Nevertheless, there are two \TT{CMP} instructions instead of three.
 

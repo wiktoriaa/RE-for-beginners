@@ -4,7 +4,7 @@
 
 Beim Kompilieren mit MSVC 2010 Express wird folgende Ausgabe erzeugt:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 $SG3830	DB	'a=%d; b=%d; c=%d', 00H
 
 ...
@@ -38,7 +38,7 @@ Natürlich ist dies eine Eigenheit der \IT{cdecl}-Aufrufkonvention und nur für 
 In bestimmten Fällen in denen mehrere Funktionen direkt hintereinander beendet werden, kann
 der Compiler mehrere \q{ADD ESP, X}-Anweisungen in einer zusammenfassen:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 push a1
 push a2
 call ...
@@ -55,7 +55,7 @@ add esp, 24
 
 Hier ist ein Beispiel aus einer realen Applikation:
 
-\lstinputlisting[caption=x86,style=customasm]{patterns/03_printf/x86/add_example_DE.lst}
+\lstinputlisting[caption=x86,style=customasmx86]{patterns/03_printf/x86/add_example_DE.lst}
 
 \clearpage
 \myparagraph{MSVC und \olly}
@@ -164,7 +164,7 @@ Es wäre zeitintensiv und unnötig die ungenutzten Stack-Einträge zurück zu se
 
 Nun wird das gleiche Programm unter Linux mit GCC 4.4.1 kompiliert und in \IDA untersucht:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 main            proc near
 
 var_10          = dword ptr -10h
@@ -238,7 +238,7 @@ Ausgeben von 10 Stack-Einträgen. Die Spalte ganz links enthält die Adressen au
 Das allererste Element ist \ac{RA} (\GTT{0x0804844a}).
 Dies kann durch das Disassemblieren des Speichers an dieser Stelle überprüft werden:
 
-\begin{lstlisting}[label=NOP_as_XCHG_example,style=customasm]
+\begin{lstlisting}[label=NOP_as_XCHG_example,style=customasmx86]
 (gdb) x/5i 0x0804844a
    0x804844a <main+45>:	mov    $0x0,%eax
    0x804844f <main+50>:	leave  
@@ -303,7 +303,7 @@ eip            0x804844a	0x804844a <main+45>
 Nachfolgend das Disassemblieren der aktuellen Anweisung.
 Der Pfeil zeigt auf die nächste Anweisung die ausgeführt wird.
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 (gdb) disas
 Dump of assembler code for function main:
    0x0804841d <+0>:	push   %ebp
@@ -324,7 +324,7 @@ End of assembler dump.
 \ac{GDB} nutzt standardmäßig den AT\&T-Syntax.
 Es ist aber möglich auf den Intel-Syntax zu wechseln:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 (gdb) set disassembly-flavor intel
 (gdb) disas
 Dump of assembler code for function main:

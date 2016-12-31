@@ -13,7 +13,7 @@ As it was mentioned earlier, the first 4 arguments has to be passed through the 
 That is exactly what we see here.
 However, the \MOV instruction, instead of \PUSH, is used for preparing the stack, so the values are stored to the stack in a straightforward manner.
 
-\lstinputlisting[caption=MSVC 2012 x64,style=customasm]{patterns/03_printf/x86/2_MSVC_x64_EN.asm}
+\lstinputlisting[caption=MSVC 2012 x64,style=customasmx86]{patterns/03_printf/x86/2_MSVC_x64_EN.asm}
 
 The observant reader may ask why are 8 bytes allocated for \Tint values, when 4 is enough?
 Yes, one has to recall: 8 bytes are allocated for any data type shorter than 64 bits.
@@ -33,7 +33,7 @@ GCC generates the code storing the string pointer into \EDI instead of \RDI{}---
 
 We also noted earlier that the \EAX register has been cleared before a \printf call: \myref{SysVABI_input_EAX}.
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasm]{patterns/03_printf/x86/2_GCC_x64_EN.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasmx86]{patterns/03_printf/x86/2_GCC_x64_EN.s}
 
 \myparagraph{GCC + GDB}
 \myindex{GDB}
@@ -111,7 +111,7 @@ So, the high register or stack element part may contain \q{random garbage}.
 If you take a look at where the control will return after the \printf execution,
 \ac{GDB} will show the entire \main function:
 
-\begin{lstlisting}[style=customasm]
+\begin{lstlisting}[style=customasmx86]
 (gdb) set disassembly-flavor intel
 (gdb) disas 0x0000000000400576
 Dump of assembler code for function main:

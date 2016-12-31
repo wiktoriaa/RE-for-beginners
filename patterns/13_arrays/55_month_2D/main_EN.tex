@@ -13,7 +13,7 @@ In fact yes, if you represent the list of strings as a two-dimensional array:
 
 Here is what we've get:
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasm]{patterns/13_arrays/55_month_2D/MSVC2013_x64_Ox_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasmx86]{patterns/13_arrays/55_month_2D/MSVC2013_x64_Ox_EN.asm}
 
 There are no memory accesses at all.
 
@@ -44,12 +44,12 @@ calculated easily.
 
 Non-optimizing compilers do multiplication differently.
 
-\lstinputlisting[caption=\NonOptimizing GCC 4.9 x64,style=customasm]{patterns/13_arrays/55_month_2D/x64_GCC49_O0_EN.asm}
+\lstinputlisting[caption=\NonOptimizing GCC 4.9 x64,style=customasmx86]{patterns/13_arrays/55_month_2D/x64_GCC49_O0_EN.asm}
 
 \NonOptimizing MSVC just uses \IMUL instruction:
 \myindex{x86!\Instructions!IMUL}
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2013 x64,style=customasm]{patterns/13_arrays/55_month_2D/MSVC2013_x64_EN.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2013 x64,style=customasmx86]{patterns/13_arrays/55_month_2D/MSVC2013_x64_EN.asm}
 
 \myindex{\CompilerAnomaly}
 \label{MSVC2013_anomaly}
@@ -68,15 +68,15 @@ that sometimes one shouldn't puzzle over such compiler artifacts.
 \Optimizing Keil 
 for Thumb mode uses the multiplication instruction \INS{MULS}:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasm]{patterns/13_arrays/55_month_2D/Keil_O3_thumb_EN.asm}
+\lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmARM]{patterns/13_arrays/55_month_2D/Keil_O3_thumb_EN.asm}
 
 \Optimizing Keil for ARM mode uses add and shift operations:
 
-\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasm]{patterns/13_arrays/55_month_2D/Keil_O3_ARM_EN.asm}
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/13_arrays/55_month_2D/Keil_O3_ARM_EN.asm}
 
 \subsubsection{ARM64}
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64,style=customasm]{patterns/13_arrays/55_month_2D/GCC49_ARM64_EN.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.9 ARM64,style=customasmARM]{patterns/13_arrays/55_month_2D/GCC49_ARM64_EN.asm}
 
 \myindex{ARM!\Instructions!SXTW}
 \myindex{ARM!\Instructions!ADRP/ADD pair}
@@ -88,7 +88,7 @@ for Thumb mode uses the multiplication instruction \INS{MULS}:
 The \ADD instructions also has a \LSL suffix, which helps with multiplications.
 
 \subsubsection{MIPS}
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasm]{patterns/13_arrays/55_month_2D/MIPS_O3_IDA_EN.lst}
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/13_arrays/55_month_2D/MIPS_O3_IDA_EN.lst}
 
 \subsubsection{\Conclusion{}}
 
