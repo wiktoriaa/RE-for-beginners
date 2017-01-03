@@ -1,82 +1,64 @@
-% !TEX program = XeLaTeX
-% !TEX encoding = UTF-8
-\documentclass[UTF8,nofonts]{ctexart}
-\setCJKmainfont[BoldFont=STHeiti,ItalicFont=STKaiti]{STSong}
-\setCJKsansfont[BoldFont=STHeiti]{STXihei}
-\setCJKmonofont{STFangsong}
+\subsection{对CPU的简单介绍}
 
-\begin{document}
+程序由机器码组成，而\ac{CPU}正是执行这些机器码的硬件。
 
-%daveti: translated on Dec 30, 2016
-%NOTE: above is needed for MacTex.
-
-\subsection{CPU简介}
-
-\ac{CPU}是执行构成程序的机器代码的设备。
-
-\textbf{简单汇总:}
+\textbf{A short glossary:}
 
 \begin{description}
-\item[指令 Instruction]: 一个基本的\ac{CPU}命令。
-简单的例子包括在寄存器之间移动数据，读写内存，基本的算术运算。
-每个\ac{CPU}通常都有自己的指令集(\ac{ISA})。
+\item[Instruction]: A primitive \ac{CPU} command.
+The simplest examples include: moving data between registers, working with memory, primitive arithmetic operations.
+As a rule, each \ac{CPU} has its own instruction set architecture (\ac{ISA}).
 
-\item[机器代码 Machine code]: \ac{CPU}可以直接识别处理的代码。
-一个指令一般含有几个字节的机器代码。 
-\item[汇编语言 Assembly language]: 机器语言的助记符和宏等扩展，主要用来帮助程序员摆脱机器代码的困扰。
-\item[寄存器 CPU register]: 每个\ac{CPU}都有一组数量固定的通用寄存器(\ac{GPR})。
-x86有$\approx 8$个, x86-64有$\approx 16$个, ARM有$\approx 16$个。
-理解寄存器的最简单方式是把它们当成没有类型的临时变量。
+\item[Machine code]: Code that the \ac{CPU} directly processes.
+Each instruction is usually encoded by several bytes.
+\item[Assembly language]: Mnemonic code and some extensions like macros that are intended to make a programmer's life easier.
+\item[CPU register]: Each \ac{CPU} has a fixed set of general purpose registers (\ac{GPR}).
+$\approx 8$ in x86, $\approx 16$ in x86-64, $\approx 16$ in ARM.
 The easiest way to understand a register is to think of it as an untyped temporary variable.
-假设你是用某种高级语言\ac{PL}而且只能使用8个32位或者64位的变量。
-事实就是即便只是使用这几个寄存器，也已经足够了。
+Imagine if you were working with a high-level \ac{PL} and could only use eight 32-bit (or 64-bit) variables.
+Yet a lot can be done using just these!
 \end{description}
 
-% TODO1 add about linker: "ÐºÐŸÐŒÐ¿ÐŸÐœÐŸÐ²ÑÐžÐº" Ðž "ÑÐµÐŽÐ°ÐºÑÐŸÑ ÑÐ²ÑÐ·ÐµÐ¹" Ð² ÑÑÑÑÐºÐŸÑÐ·ÑÑÐœÐŸÐ¹ Ð»ÐžÑ-ÑÐµ
+% TODO1 add about linker: "компоновщик" и "редактор связей" в русскоязычной лит-ре
 
 % A note on the experiments in this area (like the LISP machines http://en.wikipedia.org/wiki/Lisp_machine
 % might be useful
-你可能会好奇为什么要创造出高级编程语言\ac{PL}而不是使用机器语言。答案的关键在于人并不是\ac{CPU}---%
-对人来说，高级语言像\ac{PL} like \CCpp, Java, Python等更自然，而对\ac{CPU}来说，简单的机器语言更符合其运行效率。
-或者发明一个可以直接运行高级语言\ac{PL}代码的\ac{CPU}并不是不肯能，但是相对于目前的\ac{CPU}架构，这个\ac{CPU}一定会更复杂。
-同样，因为汇编语言的底层操作和面向\ac{CPU}，汇编编程通常是写几行就要调试几行，因为太容易出错，所以对程序员来说，汇编语言还是不方便。
-把高级语言\ac{PL}代码转换成汇编语言的程序叫做编译器\IT{compiler}。
-\footnote{传统俄语文献又叫做翻译器\q{translator}。}。
+One might wonder why there needs to be a difference between machine code and a \ac{PL}.  The answer lies in the fact that humans and \ac{CPU}s are not alike---%
+it is much easier for humans to use a high-level \ac{PL} like \CCpp, Java, Python, etc., but it is easier for a \ac{CPU} to use a much lower level of abstraction.
+Perhaps it would be possible to invent a \ac{CPU} that can execute high-level \ac{PL} code, but it would be many times more complex than the \ac{CPU}s we know of today.
+In a similar fashion, it is very inconvenient for humans to write in assembly language, due to it being so low-level and difficult to write in without making a huge number of annoying mistakes.
+The program that converts the high-level \ac{PL} code into assembly is called a \IT{compiler}.
+\footnote{Old-school Russian literature also use term \q{translator}.}.
 
 \myindex{ARM!\ARMMode}%
 \myindex{ARM!\ThumbMode}%
 \myindex{ARM!\ThumbTwoMode}%
 
-\subsubsection{关于不同的指令集架构 \ac{ISA}s}
-x86指令集\ac{ISA}中，指令长度是变长的，所以当加入x64扩展事，指令集本身没有太大变化。
-事实上，x86指令姐\ac{ISA}依然含有大量的16位8086 CPU的指令。
-ARM是精简指令集架构\ac{RISC}的\ac{CPU}指令集，指令长度是固定的。
-在最初版本中，所有的ARM指令都是4个字节。
+\subsubsection{A couple of words about different \ac{ISA}s}
+The x86 \ac{ISA} has always been one with variable-length instructions, so when the 64-bit era came, the x64 extensions did not impact the \ac{ISA} very significantly. In fact, the x86 \ac{ISA} still contains a lot of instructions that first appeared in 16-bit 8086 CPU, yet are still found in the CPUs of today.
+ARM is a \ac{RISC} \ac{CPU} designed with constant-length instructions in mind, which had some advantages in the past.
+In the very beginning, all ARM instructions were encoded in 4 bytes%
 \footnote{
-顺便提一句，固定长度指令之所以方便是因为在译码时CPU可以快速找到下条指令的位置。
-这个特性将在switch()操作符~(\myref{sec:SwitchARMLot})单元进一步讨论。
+By the way, fixed-length instructions are handy because one can calculate the next (or previous)
+instruction address without effort. This feature will be discussed in the switch() operator~(\myref{sec:SwitchARMLot}) section.
 }.
-传统ARM指令集又被称作\q{ARM mode}。
-然后人们意识到定长指令并不是想象中那么有优势。
-实际上，实际应用程序使用的大部分的\ac{CPU}指令\footnote{包括MOV/PUSH/CALL/Jcc}都可以用更少的字节来编码。
-由此，Thumb指令集\ac{ISA}由此而生，每个指令的长度只是2个字节。
-这种指令集又被称作\q{Thumb mode}。
-但是并不是所有的ARM指令都能用2个字节来表示，所以Thumb指令集是ARM指令集的一个子集。
-值得注意的是ARM模式的代码和Thumb模式的代码可能共存于同一个程序的编译代码中。
-ARM觉得Thumb可以扩展，所以在ARMv7架构中提出了Thumb-2。
-Thumb-2的指令依然是2个字节长，但是加入了某些4个字节长的指令。
-有种观点认为Thumb-2是ARM和Thumb的混合指令集，这是错的。
-Thumb-2应该是Thumb的扩展，来支持所有的处理器功能，和取代传统ARM模式---
-这个目标已经基本实现，因为大部分设备的应用程序都使用Thumb-2指令集（很大原因是Xcode的默认编译模式就是Thumb-2）。
-然后64位ARM诞生了。
-该指令集都是4字节指令，因此不需要支持Thumb模式。
-所以，因为64位的影响，我们现在有3个ARM指令集，ARM模式，Thumb模式和ARM64。
-这些指令集有部分交叉，但是基本上是不同的指令集，而是不是同一个的变种。
-所以，在本书中，我们将尝试罗列不同指令集下的编译代码。
+This is now referred to as \q{ARM mode}.
+Then they thought it wasn't as frugal as they first imagined.
+In fact, most used \ac{CPU} instructions\footnote{These are MOV/PUSH/CALL/Jcc} in real world applications can be encoded using less information.
+They therefore added another \ac{ISA}, called Thumb, where each instruction was encoded in just 2 bytes.
+This is now referred as \q{Thumb mode}.
+However, not \IT{all} ARM instructions can be encoded in just 2 bytes, so the Thumb instruction set is somewhat limited.
+It is worth noting that code compiled for ARM mode and Thumb mode may of course coexist within one single program.
+The ARM creators thought Thumb could be extended, giving rise to Thumb-2, which appeared in ARMv7.
+Thumb-2 still uses 2-byte instructions, but has some new instructions which have the size of 4 bytes.
+There is a common misconception that Thumb-2 is a mix of ARM and Thumb. This is incorrect.
+Rather, Thumb-2 was extended to fully support all processor features so it could
+compete with ARM mode---a goal that was clearly achieved, as the majority of applications for \idevices are compiled for the Thumb-2 instruction set (admittedly, largely due to the fact that Xcode does this by default).
+Later the 64-bit ARM came out. This \ac{ISA} has 4-byte instructions, and lacked the need of any additional Thumb mode.
+However, the 64-bit requirements affected the \ac{ISA}, resulting in us now having three ARM instruction sets: ARM mode, Thumb mode (including Thumb-2) and ARM64.
+These \ac{ISA}s intersect partially, but it can be said that they are different \ac{ISA}s, rather than variations of the same one.
+Therefore, we would try to add fragments of code in all three ARM \ac{ISA}s in this book.
 \myindex{PowerPC}%
 \myindex{MIPS}%
 \myindex{Alpha AXP}%
-顺便一提，还有其他各种精简指令集架构\ac{RISC}的指令集\ac{ISA}s是使用定长4字节的指令，例如MIPS, PowerPC和Alpha AXP。
-
-
-\end{document}
+There are, by the way, many other \ac{RISC} \ac{ISA}s with fixed length 32-bit instructions, such as MIPS, PowerPC and Alpha AXP.
