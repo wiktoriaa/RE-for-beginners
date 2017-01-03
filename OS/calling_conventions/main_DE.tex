@@ -104,32 +104,36 @@ genutzt werden.
 Sowohl MSVC als auch GCC übergeben das erste und zweite Argument über \ECX und \EDX und den Rest
 der Arguments mittels des Stacks.
 
-%The \gls{stack pointer} must be restored to its initial state by the \gls{callee} (like in \IT{stdcall}).
-%
-%\begin{lstlisting}[caption=fastcall]
-%push arg3
-%mov edx, arg2
-%mov ecx, arg1
-%call function
-%
-%function:
-%.. do something ..
-%ret 4
-%\end{lstlisting}
-%
-%For example, we may take the function from \myref{src:passing_arguments_ex} and change it slightly by adding a \TT{\_\_fastcall} modifier:
-%
-%\begin{lstlisting}
-%int __fastcall f3 (int a, int b, int c)
-%{
-%	return a*b+c;
-%};
-%\end{lstlisting}
-%
-%Here is how it is to be compiled:
-%
+Der \gls{stack pointer} muss vom \gls{callee} auf den ursprünglichen Wert gesetzt werden,
+wie in \IT{stdcall} auch.
+
+\begin{lstlisting}[caption=fastcall]
+push Argument3
+mov edx, Argument2
+mov ecx, Argument1
+call Funktion
+
+Funktion:
+.. tue etwas ..
+ret 4
+\end{lstlisting}
+
+Beispielsweise kann die Funktion von \myref{src:passing_arguments_ex} genommen werden und durch
+Hinzufügen des \TT{\_\_fastcall}-Modifizierers leicht verändert werden:
+
+\begin{lstlisting}
+int __fastcall f3 (int a, int b, int c)
+{
+	return a*b+c;
+};
+\end{lstlisting}
+
+Nachfolgend das Kompilat:
+
+%TODO Compilation of german version fails with style=customasm
 %\lstinputlisting[caption=\Optimizing MSVC 2010 /Ob0,style=customasm]{OS/calling_conventions/fastcall_ex.asm}
-%
+\lstinputlisting[caption=\Optimizing MSVC 2010 /Ob0]{OS/calling_conventions/fastcall_ex.asm}
+
 %We see that the \gls{callee} returns \ac{SP} by using the \TT{RETN} instruction with an operand.
 %
 %Which implies that the number of arguments can be deduced easily here as well.
