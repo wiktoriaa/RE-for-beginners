@@ -1,92 +1,109 @@
 \section{Methoden zur Argumentenübergabe (Aufrufkonventionen)}
-%\label{sec:callingconventions}
-%
-%\subsection{cdecl}
-%\myindex{cdecl}
-%\label{cdecl}
-%
-%This is the most popular method for passing arguments to functions in the \CCpp languages.
-%
-%The gls{caller} also must return the value of the \gls{stack pointer} (\ESP) to its initial state after the \gls{callee} function exits.
-%
-%\begin{lstlisting}[caption=cdecl]
-%push arg3
-%push arg2
-%push arg1
-%call function
-%add esp, 12 ; returns ESP
-%\end{lstlisting}
-%
-%\subsection{stdcall}
-%\label{sec:stdcall}
-%\myindex{stdcall}
-%
-%\newcommand{\SIZEOFINT}{The size of an \Tint type variable is 4 in x86 systems and 8 in x64 systems}
-%
-%It's almost the same as \IT{cdecl}, with the exception that the \gls{callee} must set \ESP to the initial state by executing the \TT{RET x} instruction instead of \RET, \\
-%where \TT{x = arguments number * sizeof(int)\footnote{\SIZEOFINT}}.
-%The \gls{caller} is not adjusting the \gls{stack pointer}, 
-%there are no \TT{add esp, x} instruction.
-%
-%\begin{lstlisting}[caption=stdcall]
-%push arg3
-%push arg2
-%push arg1
-%call function
-%
-%function:
-%... do something ...
-%ret 12
-%\end{lstlisting}
-%
-%The method is ubiquitous in win32 standard libraries, but not in win64 (see below about win64).
-%
-%\par For example, we can take the function from \myref{src:passing_arguments_ex} and change it slightly by adding the \TT{\_\_stdcall} modifier:
-%
-%\begin{lstlisting}
-%int __stdcall f2 (int a, int b, int c)
-%{
-%	return a*b+c;
-%};
-%\end{lstlisting}
-%
-%It is to be compiled in almost the same way as \myref{src:passing_arguments_ex_MSVC_cdecl}, but you will see \TT{RET 12} instead of \TT{RET}.
-%\ac{SP} is not update in the \gls{caller}.
-%
-%As a consequence, 
-%the number of function arguments can be easily deduced from the \TT{RETN n} instruction: just divide $n$ by 4.
-%
+\label{sec:callingconventions}
+
+\subsection{cdecl}
+\myindex{cdecl}
+\label{cdecl}
+
+Hierbei handelt es sich um die am weitesten verbreitete Methode um in \CCpp-Sprachen
+Argumente an Funktionen zu übergeben.
+
+Der \gls{caller} muss den Wert des \gls{stack pointer} (\ESP) auf den ursprünglichen Stand
+bringen, nachdem \gls{callee}-Funktion beendet wurde.
+
+\begin{lstlisting}[caption=cdecl]
+push Argument3
+push Argument2
+push Argument1
+call Funktion
+add esp, 12 ; gibt ESP zurueck
+\end{lstlisting}
+
+\subsection{stdcall}
+\label{sec:stdcall}
+\myindex{stdcall}
+
+\newcommand{\SIZEOFINT}{Die Größe einer Variablen vom Datentyp \Tint ist 4 in x86-Systemen und 8 in x64-Systemen}
+
+Dies ist fast gleich zu der \IT{cdecl}-Aufrufkonvention, mit Ausnahme, dass die
+\gls{callee} den Wert von \ESP auf den ursprünglichen Wert setzen muss. Dies geschieht
+durch die \TT{RET x} anstatt \RET, wobei gilt \TT{x = Nummer des Arguments * sizeof(int)\footnote{\SIZEOFINT}}.
+
+Der \gls{caller} passt den \gls{stack pointer} nicht an, es sind also keine \TT{add esp, x}-Anweisungen vorhanden.
+
+\begin{lstlisting}[caption=stdcall]
+push Argument3
+push Argument2
+push Argument1
+call Funktion
+
+Funktion:
+... tue etwas ...
+ret 12
+\end{lstlisting}
+
+Diese Methode ist in Win32-Standard-Bibliotheken allgegenwärtig, fehlt jedoch in Win64 (siehe unten).
+
+\par Beispielsweise kann die Funktion von \myref{src:passing_arguments_ex} genommen werden und durch
+Hinzufügen des \TT{\_\_stdcall}-Modifizierers leicht verändert werden:
+
+\begin{lstlisting}
+int __stdcall f2 (int a, int b, int c)
+{
+	return a*b+c;
+};
+\end{lstlisting}
+
+Das Kompilat ist fast das gleiche wie bei \myref{src:passing_arguments_ex_MSVC_cdecl},
+jedoch wird \TT{RET 12} anstatt \TT{RET} genutzt. Der \ac{SP} wird im \gls{caller} nicht
+aktualisiert.
+
+Als Konsequenz daraus kann die Anzahl der Funktionsargumente einfach von der \TT{RETN n}-Anweisung
+abgeleitet werden, indem $n$ durch 4 geteilt wird
+
+%TODO Compilation of german version fails with style=customasm
 %\lstinputlisting[caption=MSVC 2010,style=customasm]{OS/calling_conventions/stdcall_ex.asm}
-%
-%\subsubsection{Functions with variable number of arguments}
-%
-%\printf-like functions are, probably, the only case of functions with a variable number of arguments in \CCpp,
-%but it is easy to illustrate an important difference between \IT{cdecl} and \IT{stdcall} with their help.
-%Let's start with the idea that the compiler knows the argument count of each \printf function call.
-%
-%However, the called \printf, which is already compiled and located in MSVCRT.DLL (if we talk about Windows),
-%does not have any information about how much arguments were passed, however it can determine it from the format string.
-%
-%Thus, if \printf would be a \IT{stdcall} function and restored \gls{stack pointer} to its initial state by counting
-%the number of arguments in the format string, this could be a dangerous situation, when one programmer's typo can
-%provoke a sudden program crash.
-%Thus it is not suitable for such functions to use \IT{stdcall}, \IT{cdecl} is better.
-%
-%\subsection{fastcall}
-%\label{fastcall}
-%\myindex{fastcall}
-%
-%That's the general naming for the method of passing some arguments via registers and the 
-%rest via the stack. It worked faster than \IT{cdecl}/\IT{stdcall} on older CPUs 
-%(because of smaller stack pressure).
-%It may not help to gain any significant performance on latest (much more complex) \ac{CPU}s, however.
-%
-%It is not standardized, so the various compilers can do it differently.
-%It's a well known caveat: if you have two DLLs and the one uses another one, and they are built by different compilers with 
-%different \IT{fastcall} calling conventions, you can expect problems.
-%
-%Both MSVC and GCC pass the first and second arguments via \ECX and \EDX and the rest of the arguments via the stack.
-%
+\lstinputlisting[caption=MSVC 2010]{OS/calling_conventions/stdcall_ex.asm}
+
+\subsubsection{Funktionen mit einer variablen Anzahl von Argumenten}
+
+\printf-ähnliche Funktionen sind vielleicht die einzigen Funktionen in \CCpp mit einer Variablen
+Anzahl von Argumenten, aber mit ihnen kann ein wichtiger Unterschied zwischen \IT{cdecl} und
+\IT{stdcall} veranschaulicht werden.
+Beginnen wir mit der Vorstellung, dass der Compiler die Anzahl der Argumente für jeden Aufruf
+von \printf kennt.
+
+Die aufgerufene und bereits kompilierte \printf-Funktion befindet sich in der Datei MSVCRT.DLL
+(wenn über Windows geredet wird) und hat aber keinerlei Informationen darüber wie viele Argumente
+übergeben wurden; dies kann jedoch über den Formatstring herausgefunden werden.
+
+%TODO: The following sentence is much too long.
+Wenn \printf eine \IT{stdcall}-Funktion wäre und den \gls{stack pointer} durch Zählen der Zahl
+der Argumente im Formatstring auf den ursprünglichen Wert setzen würde, kann eine gefährliche
+Situation entstehen, da ein Schreibfehler des Programmierers zu einem plötzliche Programmabsturz
+führen könnte.
+Aus diesem Grund ist für diese Art von Funktionen \IT{stdcall} ungeeignet und \IT{cdecl} ist
+zu bevorzugen.
+
+\subsection{fastcall}
+\label{fastcall}
+\myindex{fastcall}
+
+Dies ist der allgemeine Name für eine Methode, in der einige Argumente mittels Registern und
+der Rest über den Stack übergeben werden. Für ältere CPUs ist \IT{fastcall} schneller als
+\IT{cdecl} und \IT{stdcall} wegen der geringeren Stack-Nutzung.
+Auf neueren \ac{CPU}s wird dieser Ansatz vermutlich keine signifikante Geschwindigkeitserhöhung
+nach sich ziehen.
+
+\IT{fastcall} ist nicht standardisiert, so das verschiedene Compiler eine unterschiedliche
+Umsetzung machen können.
+Dies kann zu Problemen führen, wenn zwei DLLs genutzt werden, von denen eine die andere nutzt
+und durch das Nutzen verschiedener Compiler unterschiedliche \IT{fastcall}-Aufrufkonventionen
+genutzt werden.
+
+Sowohl MSVC als auch GCC übergeben das erste und zweite Argument über \ECX und \EDX und den Rest
+der Arguments mittels des Stacks.
+
 %The \gls{stack pointer} must be restored to its initial state by the \gls{callee} (like in \IT{stdcall}).
 %
 %\begin{lstlisting}[caption=fastcall]
