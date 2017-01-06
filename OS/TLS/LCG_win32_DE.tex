@@ -1,84 +1,90 @@
 \subsubsection{Win32}
 
-\myparagraph{Unitizialisierte \ac{TLS}-Daten}
+\myparagraph{Uninitialisierte \ac{TLS}-Daten}
 
-%One solution is to add \TT{\_\_declspec( thread )} modifier to the global variable, 
-%then it will be allocated in the \ac{TLS} (line 9):
-%
-%\lstinputlisting[numbers=left,style=customc]{OS/TLS/win32/rand_uninit.c}
-%
-%Hiew shows us that there is a new PE section in the executable file: \TT{.tls}.
-%% TODO1 hiew screenshot?
-%
-%\lstinputlisting[caption=\Optimizing MSVC 2013 x86,style=customasmx86]{OS/TLS/win32/rand_x86_uninit.asm}
-%
-%\TT{rand\_state} is now in the \ac{TLS} segment, and each thread has its own version of this variable.
-%
-%Here is how it's accessed: load the address of the \ac{TIB} from FS:2Ch, then add an additional index (if needed),
-%then calculate the address of the \ac{TLS} segment.
-%
-%Then it's possible to access the \TT{rand\_state} variable through the ECX register, which points to an unique area in each thread.
-%
-%\myindex{x86!\Registers!FS}
-%
-%The \TT{FS:} selector is familiar to every reverse engineer, it is specially used to always point to \ac{TIB},
-%so it would be fast to load the thread-specific data.
-%
-%\myindex{x86!\Registers!GS}
-%
-%The \TT{GS:} selector is used in Win64 and the address of the \ac{TLS} is 0x58:
-%
-%\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasmx86]{OS/TLS/win32/rand_x64_uninit.asm}
-%
-%\myparagraph{Initialized \ac{TLS} data}
-%
-%Let's say, we want to set some fixed value to \TT{rand\_state}, so in case the programmer forgets to,
-%the \TT{rand\_state} variable would be initialized to some constant anyway (line 9):
-%
-%\lstinputlisting[numbers=left,style=customc]{OS/TLS/win32/rand_init.c}
-%
-%The code is no differ from what we already saw, but in IDA we see:
-%
-%\lstinputlisting[style=customasmx86]{OS/TLS/win32/rand_init_IDA.lst}
-%
-%1234 is there and every time a new thread starts, a new \ac{TLS} is allocated for it, 
-%and all this data, including 1234, will be copied there.
-%
-%This is a typical scenario:
-%
-%\begin{itemize}
-%\item Thread A is started. A \ac{TLS} is created for it, 1234 is copied to \TT{rand\_state}.
-%
-%\item The \TT{my\_rand()} function is called several times in thread A.\\
-%\TT{rand\_state} is different from 1234.
-%
-%\item Thread B is started. A \ac{TLS} is created for it, 1234 is copied to \TT{rand\_state}, 
-%while thread A has a different value in the same variable.
-%\end{itemize}
-%
-%\myparagraph{\ac{TLS} callbacks}
-%\myindex{TLS!Callbacks}
-%
-%But what if the variables in the \ac{TLS} have to be filled with some data that must be prepared in some unusual way?
-%
-%Let's say, we've got the following task:
-%the programmer can forget to call the \TT{my\_srand()} function to initialize the \ac{PRNG}, but the generator has to be 
-%initialized at start with something truly random, instead of 1234.
-%This is a case in which \ac{TLS} callbacks can be used.
-%
-%The following code is not very portable due to the hack, but nevertheless, you get the idea.
-%
-%What we do here is define a function (\TT{tls\_callback()}) which is to be called \IT{before} 
-%the process and/or thread start.
-%
-%The function initializes the \ac{PRNG} with the value returned by \TT{GetTickCount()} function.
-%
-%\lstinputlisting[style=customc]{OS/TLS/win32/rand_TLS_callback.c}
-%
-%Let's see it in IDA:
-%
-%\lstinputlisting[caption=\Optimizing MSVC 2013,style=customasmx86]{OS/TLS/win32/rand_TLS_callback.lst}
-%
-%TLS callback functions are sometimes used in unpacking routines to obscure their processing.
-%
-%Some people may be confused and be in the dark that some code executed right before the \ac{OEP}.
+Eine mögliche Lösung ist es den \TT{\_\_declspec( thread )}-Modifizierer zu der
+globalen Variable hinzuzufügen, so dass diese im \ac{TLS} alloziert wird (Zeile 9):
+
+\lstinputlisting[numbers=left,style=customc]{OS/TLS/win32/rand_uninit.c}
+
+Hiew zeigt, dass eine neue PE-Sektion in der ausführbaren Datei existiert: \TT{.tls}.
+% TODO1 hiew screenshot?
+
+\lstinputlisting[caption=\Optimizing MSVC 2013 x86,style=customasmx86]{OS/TLS/win32/rand_x86_uninit.asm}
+
+\TT{rand\_state} befindet sich nun im \ac{TLS}-Segment und jeder Thread hat seine eigene Kopie dieser Variable.
+
+Auf diese Variable wird wie folgt zugegriffen: lade die Adresse von \ac{TIB} von FS:2Ch,
+anschließend addiere einen zusätzlichen Index (falls notwendig),
+zuletzt berechne die Adresse des \ac{TLS}-Segments.
+
+Nun ist es möglich auf die \TT{rand\_state}-Variable über des ECX-Register zuzugreifen,
+welches auf eine spezifische Stelle in jedem Thread zeigt.
+
+\myindex{x86!\Registers!FS}
+
+Der \TT{FS:}-Selektor ist bei jedem Reverse Engineer gut bekannt und zeigt immer auf \ac{TIB},
+so dass es schnell möglich ist thread-spezifische Daten zu laden.
+
+\myindex{x86!\Registers!GS}
+
+Der \TT{GS:}-Selektor wird unter Win64 genutzt, die Adresse von \ac{TLS} ist 0x58:
+
+\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasmx86]{OS/TLS/win32/rand_x64_uninit.asm}
+
+\myparagraph{Initialisierte \ac{TLS}-Daten}
+
+Angenommen es soll ein fester Wert für \TT{rand\_state} gesetzt werden und der Programmierer vergisst dies,
+wird dies automatisch in Zeile 9 gemacht:
+
+\lstinputlisting[numbers=left,style=customc]{OS/TLS/win32/rand_init.c}
+
+Der Code ist nicht anders als zuvor, aber in IDA sieht man folgendes:
+
+\lstinputlisting[style=customasmx86]{OS/TLS/win32/rand_init_IDA.lst}
+
+Jedes mal wenn ein neuer Thread gestartet wird, wird ein neuer \ac{TLS} alloziert
+und alle Daten, inklusive der 1234 dorthin kopiert.
+
+Dies ist eine typische Situation:
+
+\begin{itemize}
+\item Thread A wird gestartet und ein \ac{TLS} wird dafür erstellt.
+1234 wird in \TT{rand\_state} kopiert.
+
+\item Die Funktion \TT{my\_rand()} wird einige Male in Thread A aufgerufen.\\
+\TT{rand\_state} unterscheidet sich 1234.
+
+\item Thread B wird gestartet und ein \ac{TLS} wird dafür erstellt.
+1234 wird in \TT{rand\_state} kopiert, während Thread A einen anderen Wert
+in der gleichen Variable hat.
+\end{itemize}
+
+\myparagraph{\ac{TLS}-Callback-Funktionen}
+\myindex{TLS!Callbacks}
+
+Was passiert wenn die Variablen in \ac{TLS} mit Daten gefüllt werden, die in einer
+bestimmten Weise verändert werden sollen?
+
+Angenommen es existiert folgende Aufgabe:
+Der Programmierer hat vergessen die \TT{my\_srand()}-Funktion aufzurufen um den \ac{PRNG} zu initialisieren,
+dieser muss jedoch initialisiert werden um \q{echte} Zufallszahlen anstatt den Wert 1234 zu erzeugen.
+In diesem Fall kann die \ac{TLS}-Callback-Funktion genutzt werden.
+
+Der folgende Code ist nicht sehr portabl, nichtsdestotrotz ist die Idee dahinter erkennbar.
+
+Was hier passiert ist eine Funktion zu definieren (\TT{tls\_callback()}) welche \IT{vor}
+dem Starten eines Prozesses oder Threads aufgerufen wird.
+
+Die Funktion initialisiert den \ac{PRNG} mit dem Wert der von \TT{GetTickCount()} zurückgegeben wird.
+
+\lstinputlisting[style=customc]{OS/TLS/win32/rand_TLS_callback.c}
+
+Nachfolgend das Ergebnis in IDA:
+
+\lstinputlisting[caption=\Optimizing MSVC 2013,style=customasmx86]{OS/TLS/win32/rand_TLS_callback.lst}
+
+%TODO Not very elegant translation.
+TLS-Callback-Funktionen werden manchmal genutzt um Routinen zu entpacken und deren Funktion zu verschleiern.
+
+Manche Menschen sind verwirrt darüber, dass einiger Code genau vor dem \ac{OEP} ausgeführt wird.
