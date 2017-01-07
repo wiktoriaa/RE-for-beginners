@@ -10,12 +10,13 @@ Si le système de numération a 10 chiffres, il est en \IT{base} 10. % \IT{radix
 Le système binaire est en \IT{base} 2.
 
 Rappels importants :
-1) Un \IT{nombre} est un nombre, tandis qu'un \IT{chiffre} est un moyen d'écriture et est généralement un caractère;
-2) Un nombre ne change pas lorsqu'on le convertit dans une autre base : sa notation change.
+1) Un \IT{nombre} est un nombre, tandis qu'un \IT{chiffre} est un élément d'un système d'écriture et est généralement un caractère;
+2) Un nombre ne change pas lorsqu'on le convertit dans une autre base : sa représentation change.
 
 Comment convertir un nombre d'un base à une autre ?
 
-La notation positionnelle est utilisée quasiment partout, cela signifie qu'un chiffre (nombre contenu dans un seul caractère) a un certain poids dépendant de sa position.
+La notation positionnelle est utilisée quasiment partout, cela signifie qu'un chiffre (nombre contenu dans un seul caractère) a
+ un poids dépendant de sa position dans la représentation du nombre.
 Si 2 se situe le plus à droite, c'est 2.
 S'il est placé un chiffre avant celui le plus à droite, c'est 20.
 
@@ -30,14 +31,14 @@ Que représente 0b101011 ?
 $2^5 \cdot 1 + 2^4 \cdot 0 + 2^3 \cdot 1 + 2^2 \cdot 0 + 2^1 \cdot 1 + 2^0 \cdot 1 = 43$ ou
 $32 \cdot 1 + 16 \cdot 0 + 8 \cdot 1 + 4 \cdot 0 + 2 \cdot 1 + 1 = 43$
 
-On peut opposer la notation positionnelle avec la notation non-positionnelle comme la numération romaine
+On peut opposer la notation positionnelle avec la notation non-positionnelle comme la numération romaine.
 \footnote{A propos de l'évolution du système de numération, voir \InSqBrackets{\TAOCPvolII{}, 195--213.}}.
-Peut-être que l'Humanité a choisi le système de numération positionnelle parce qu'il était plus simple pour les opérations basiques (addition, multiplication, etc.) à la main sur papier.
+Peut-être que l'humanité a choisi le système de numération positionnelle parce qu'il était plus simple pour les opérations basiques (addition, multiplication, etc.) à la main sur papier.
 
 En effet, les nombres binaires peuvent être ajoutés, soustraits et ainsi de suite de la même manière que c'est enseigné à l'école, mais seulement 2 chiffres sont disponibles.
 
 Les nombres binaires sont volumineux pour représenter le code source et les dumps, c'est pourquoi le système hexadécimal peut etre utilisé.
-Les nombres en base hexadécimal utilisent les nombres 0..9 et aussi 6 caractères latins : A..F.
+La base hexadécimale utilise les nombres 0..9 et aussi 6 caractères latins : A..F.
 Chaque chiffre hexadécimal prend 4 bits ou 4 chiffres binaires, donc c'est très simple de convertir un nombre binaire vers l'hexadécimal et inversement, même manuellement.
 
 \begin{center}
@@ -67,14 +68,14 @@ F	&1111	&15 \\
 
 Comment savoir quelle est la base actuellement utilisée ?
 
-Les nombres décimaux sont d'ordinaire écrits tels quels, i.e, 1234. Mais certains assembleurs autorisent d'accentuer la base décimale d'un nombre et ce nombre peut s'écrire avec un "d" en suffixe : 1234d.
+Les nombres décimaux sont d'ordinaire écrits tels quels, i.e, 1234. Mais certains assembleurs permettent d'accentuer la base décimale, et les nombres peuvent alors s'écrire avec le suffixe "d" : 1234d.
 
-Les nombres binaires sont parfois écrits avec le préfixe "0b" : 0b100110111 (\ac{GCC} a une extension de langage non-standard pour ca \footnote{\url{https://gcc.gnu.org/onlinedocs/gcc/Binary-constants.html})}.
+Les nombres binaires sont parfois préfixés avec "0b" : 0b100110111 (\ac{GCC} a une extension de langage non-standard pour ca \footnote{\url{https://gcc.gnu.org/onlinedocs/gcc/Binary-constants.html})}.
 Il y a aussi un autre moyen : le suffixe "b", par exemple : 100110111b.
 J'essaierai de garder le préfixe "0b" tout le long du livre pour les nombres binaires.
 
-Les nombres hexadécimaux sont écrits avec le préfixe "0x" en \CCpp et autres \ac{PL}s : 0x1234ABCD.
-Ou il y a le suffixe "h" : 1234ABCDh - c'est une manière commune de les représenter dans les assembleurs et les débuggeurs.
+Les nombres hexadécimaux sont préfixés avec "0x" en \CCpp et autres \ac{PL}s : 0x1234ABCD.
+Ou ils ont le suffixe "h" : 1234ABCDh - c'est une manière commune de les représenter dans les assembleurs et les débuggeurs.
 Si le nombre commence par un A..F, un 0 est ajouté au début : 0ABCDEFh.
 J'essaierai de garder le préfixe "0x" tout le long du livre pour les nombres hexadécimaux.
 
@@ -87,7 +88,7 @@ Il est maintenant remplacé par le système hexadécimal quasiment partout mais,
 
 \myindex{UNIX!chmod}
 Comme beaucoup d'utilisateur *NIX le savent, l'argument de \TT{chmod} peut être un nombre à 3 chiffres. Le premier correspond aux droits du propriétaire du fichier, le scond correspond aux droits pour le groupe (auquel le fichier appartient), le troisième est pour tous les autres.
-Et chaque caratère peut être représenté en binaire:
+Et chaque chiffre peut être représenté en binaire:
 
 \begin{center}
 \begin{longtable}{ | l | l | l | }
@@ -107,11 +108,11 @@ Et chaque caratère peut être représenté en binaire:
 \end{longtable}
 \end{center}
 
-Ainsi chaque bit correspond à un flag: lecture (r) / écriture (w) / exécution (x).
+Ainsi chaque bit correspond à un droit: lecture (r) / écriture (w) / exécution (x).
 
-La raison pour laquelle je parle de \TT{chmod} ici est que le nombre passé en argument peut être écrit comme un nombre octal.
+La raison pour laquelle je parle de \TT{chmod} ici est que l'argument peut être écrit comme un nombre octal.
 Prenons par exemple, 644.
-Quand vous tapez \TT{chmod 644 file}, vous définissez les permissions de lecture/écriture pour le propriétaire, les permissions de lecture pour le groupe et encore les permissions de lecture pour les autres.
+Quand vous tapez \TT{chmod 644 file}, vous définissez les droits de lecture/écriture pour le propriétaire, les droits de lecture pour le groupe et encore les droits de lecture pour les autres.
 Convertissons le nombre 644 en octal vers le binaire, ce sera \TT{110100100}, ou (par groupe de 3 bits) \TT{110 100 100}.
 
 Maintenant que nous savons que chaque triplet sert a décrire les permissions pour le propriétaire/groupe/autres : le premier est \TT{rw-}, le second est \TT{r--} et le troisième est \TT{r--}.
@@ -123,29 +124,32 @@ Le système de numération octal est supporté par tous les compilateurs \CCpp s
 C'est parfois une source de confusion parce que les nombres octaux sont notés avec un zéro au début. Par exemple, 0377 est 255.
 Et parfois, vous faites une faute de frappe et écrivez "09" au lieu de 9, et le compilateur ne vous l'autorise pas.
 GCC peut renvoyer quelque chose comme ca:\\
-\TT{error: invalid digit "9" in octal constant}. % TODO : translate this too ?
+\TT{erreur: chiffre  9  invalide dans la constante en base 8}.
 
 \subsubsection{Divisibilité}
 
-Quand vous voyez un nombre décimal comme 120, vous pouvez rapidement déduire qu'il est divisible par 10, parce que le dernier chiffre est zéro.
+Quand vous voyez un nombre décimal comme 120, vous en déduisez immédiatement qu'il est divisible par 10, parce que le dernier chiffre est zéro.
 Egalement, 123400 est divisible par 100 parce que les deux derniers chiffres sont zéros.
 
 De la même façon, un nombre hexadécimal 0x1230 est divisible par 0x10 (ou 16), 0x123000 est disible par 0x1000 (ou 4096), etc.
 
 Un nombre binaire 0b1000101000 est divisible par 0b1000 (8), etc.
 
-Cette propriété peut être souvent utilisée pour déterminer rapidement si la taille d'un bloc mémoire correspond à la limite.
+Cette propriété peut être souvent utilisée pour déterminer rapidement si la taille d'un bloc mémoire correspond à la limite. % TODO clarify original
 Par exemple, les sections dans les fichiers \ac{PE} commencent quasiment toujours à une adresse finissant par 3 zéros hexadécimaux: 0x41000, 0x10001000, etc.
-La raison derrière ce fait est que la plupart des sections \ac{PE} sont remplies à la limite de 0x1000 (4096) octets.
+La raison sous-jacente est que la plupart des sections \ac{PE} sont alignées sur une limite de 0x1000 (4096) octets.
 
 \subsubsection{Arithmétique multiprécision et base}
 
 \index{RSA}
-L'arithmétique multiprécision utilise des nombres très grands et peuvent chacun être enregistré sur plusieurs octets.
-Par exemple, les clés RSA utilisent jusqu'à 4096 bits et parfois plus encore.
+L'arithmétique multiprécision utilise des nombres très grands et chacun peut être stocké sur plusieurs octets.
+Par exemple, les clés RSA, tant publique que privée, utilisent jusqu'à 4096 bits et parfois plus encore.
 
-Dans \InSqBrackets{\TAOCPvolII, 265} vous pouvez trouver l'idée suivante: quand vous enregistrez un nombre multiprécision dans plusieurs octets. Tout le nombre peut être représenté avec une base de $2^8=256$, et chaque chiffre est associé à l'octet correspondant.
-De la même manière, si vous sauvegardez un nombre multiprécision sur plusieurs entiers de 32 bits, chaque chiffre est associé à l'emplacement de 32 bits et vous pouvez penser que ce nombre est stocké dans une base $2^{32}$.
+Dans \InSqBrackets{\TAOCPvolII, 265} vous pouvez trouver l'idée suivante: quand vous stockez un nombre multiprécision
+dans plusieurs octets.
+Le nombre complet peut être représenté dans une base de $2^8=256$, et chacun des chiffres correspond à un octet.
+De la même manière, si vous sauvegardez un nombre multiprécision sur plusieurs entiers de 32 bits, chaque chiffre est associé
+ à l'emplacement de 32 bits et vous pouvez penser à ce nombre comme étant stocker dans une base $2^{32}$.
 
 \subsubsection{Prononciation}
 
