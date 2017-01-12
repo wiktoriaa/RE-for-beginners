@@ -56,33 +56,36 @@ Früher wurde dieser Handler Dr. Watson
 \footnote{\href{http://go.yurichev.com/17046}{Wikipedia}}
 genannt.
 
-%By the way, some developers make their own handler that sends information about the program crash to themselves.
-%\myindex{Windows!Win32!SetUnhandledExceptionFilter()}
-%It is registered with the help of \TT{SetUnhandledExceptionFilter()} 
-%and to be called if the \ac{OS} does not have any other way to handle the exception.
-%\myindex{\oracle}
-%An example is \oracle---it saves huge dumps reporting all possible information about the \ac{CPU} and memory state.
-%
-%Let's write our own primitive exception handler.
-%This example is based on the example from \PietrekSEH.
-%It must be compiled with the SAFESEH option: \TT{cl seh1.cpp /link /safeseh:no}.
-%More about SAFESEH here: \href{http://go.yurichev.com/17252}{MSDN}.
-%
-%\lstinputlisting[style=customc]{OS/SEH/1/1.cpp}
-%
-%The FS: segment register is pointing to the \ac{TIB} in win32.
-%
-%The very first element in the \ac{TIB} is a pointer to the last handler in the chain.
-%We save it in the stack and store the address of our handler there.
-%The structure is named \TT{\_EXCEPTION\_REGISTRATION}, it is a simple singly-linked list and its elements are stored right in the stack.
-%
-%\begin{lstlisting}[caption=MSVC/VC/crt/src/exsup.inc,style=customasmx86]
-%\_EXCEPTION\_REGISTRATION struc
-%     prev    dd      ?
-%     handler dd      ?
-%\_EXCEPTION\_REGISTRATION ends
-%\end{lstlisting}
-%
+Einige Entwickler erstellen ihren eigenen Handler, der Informationen über den Absturz
+des Programms zu ihnen selbst schickt.
+\myindex{Windows!Win32!SetUnhandledExceptionFilter()}
+Dieser wird mit der Funktion \TT{SetUnhandledExceptionFilter()} registriert und aufgerufen,
+wenn das \ac{OS} keine andere Möglichkeit hat die Ausnahme zu behandeln.
+\myindex{\oracle}
+Ein Beispiel ist \oracle die eine riesige Menge an möglichen Informationen über die \ac{CPU}
+und den Zustand des Speichers sammelt.
+
+Nachfolgend wird ein eigener, einfacher Ausnahme-Handler erstellt.
+Dieses Beispiel basiert auf dem Beispiel von \PietrekSEH und muss mit der SAFESEH-Option
+kompiliert werden: \TT{cl seh1.cpp /link /safeseh:no}.
+Mehr über SAFESEH befindet sich hier: \href{http://go.yurichev.com/17252}{MSDN}.
+
+\lstinputlisting[style=customc]{OS/SEH/1/1.cpp}
+
+Das FS:Segment-Register zeigt unter Win32 auf die \ac{TIB}.
+
+Das erste Element der \ac{TIB} ist ein Zeiger auf den letzten Handler der Kette.
+Wir sichern den Stack und speichern hier die Adresse unseres Handlers.
+Die Struktur heißt \TT{\_EXCEPTION\_REGISTRATION}. Dabei handelt es sich um eine
+einfach-verkette Liste, deren Elemente direkt auf dem Stack gesichert werden.
+
+\begin{lstlisting}[caption=MSVC/VC/crt/src/exsup.inc,style=customasmx86]
+\_EXCEPTION\_REGISTRATION struc
+     prev    dd      ?
+     handler dd      ?
+\_EXCEPTION\_REGISTRATION ends
+\end{lstlisting}
+
 %So each \q{handler} field points to a handler and an each \q{prev} field points to the previous record in the stack.
 %The last record has \TT{0xFFFFFFFF} (-1) in the \q{prev} field.
 %
