@@ -51,13 +51,13 @@ Contrairement à MSVC, lorsque GCC compile sans optimisation, il génère \TT{MO
 
 \myindex{x86!\Instructions!LEAVE}
 La dernière instruction, \LEAVE~---est équivalente à la paire d'instruction \TT{MOV ESP, EBP} et \TT{POP EBP}~---en d'autres mots,
-cette instruction déplace le \gls{pointeur de pile} (\ESP) et remet le registre \EBP dans son état initial.
+cette instruction déplace le pointeur de pile (\gls{stack pointer}) (\ESP) et remet le registre \EBP dans son état initial.
 Cela est nécessaire puisque nous avons modifié les valeurs de ces registres (\ESP et \EBP) au début de la fonction (en exécutant \INS{MOV EBP, ESP} / \INS{AND ESP, \ldots}).
 
 \subsubsection{GCC: \ATTSyntax}
 \label{ATT_syntax}
 
-Voyons comment cela peut-être représenté en langage d'assemblage avec la syntax AT\&T.
+Voyons comment cela peut-être représenté en langage d'assemblage avec la syntaxe AT\&T.
 Cette syntaxe est bien plus populaire dans le monde UNIX.
 
 \begin{lstlisting}[caption=compilons avec GCC 4.7.3]
@@ -84,11 +84,11 @@ Quelques-une des différences majeures entre la syntax Intel et AT\&T sont:
 \begin{itemize}
 
 \item
-Opérandes source et destination sont écrites dnas l'ordre inverse.
+Opérandes source et destination sont écrites dans l'ordre inverse.
 
-En syntax Intel: <instruction> <destination operand> <source operand>.
+En syntaxe Intel: <instruction> <opérande de destination> <opérande source>.
 
-En syntaxe AT\&T: <instruction> <source operand> <destination operand>.
+En syntaxe AT\&T: <instruction> <opérande source> <opérande de destination>.
 
 \myindex{\CStandardLibrary!memcpy()}
 \myindex{\CStandardLibrary!strcpy()}
