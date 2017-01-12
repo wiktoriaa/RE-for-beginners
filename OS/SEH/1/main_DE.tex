@@ -1,57 +1,61 @@
-%\subsubsection{Let's forget about MSVC}
-%
-%In Windows, the \ac{SEH} is intended for exceptions handling, nevertheless, it is language-agnostic,
-%not related to \Cpp or \ac{OOP} in any way.
-%
-%Here we are going to take a look at \ac{SEH} in its isolated (from C++ and MSVC extensions) form.
-%
-%\myindex{Windows!TIB}
-%\myindex{Windows!Win32!RaiseException()}
-%
-%Each running process has a chain of \ac{SEH} handlers, \ac{TIB} has the address of the last handler.
-%
-%When an exception occurs (division by zero, incorrect address access, user exception triggered by
-%calling the \TT{RaiseException()} function), the \ac{OS} finds the last handler in the \ac{TIB} and calls it,
-%passing all information about the \ac{CPU} state (register values, etc.) at the moment of the exception.
-%
-%The exception handler considering the exception, does it see something familiar?
-%If so, it handles the exception.
-%
-%If not, it signals to the \ac{OS} that it
-%cannot handle it and the \ac{OS} calls the next handler in the chain,
-%until a handler which is able to handle the exception is be found.
-%
-%At the very end of the chain there a standard handler that shows the well-known dialog box, informing the user about a
-%process crash, some technical information about the \ac{CPU} state at the time of the crash,
-%and offering to collect all information and send it to developers in Microsoft. 
-%
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_xp1.png}
-%\caption{Windows XP}
-%\end{figure}
-%
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_xp2.png}
-%\caption{Windows XP}
-%\end{figure}
-%
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_win7.png}
-%\caption{Windows 7}
-%\end{figure}
-%
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_win81.png}
-%\caption{Windows 8.1}
-%\end{figure}
-%
-%Earlier, this handler was called Dr. Watson
-%\footnote{\href{http://go.yurichev.com/17046}{wikipedia}}.
-%
+\subsubsection{Vergessen wir MSVC}
+
+Unter Windows ist der Zweck von \ac{SEH} die Ausnahmebehandlung. Nichtsdestotrotz
+ist es sprachunabhängig und nicht in irgendeiner Weise an \Cpp oder \ac{OOP} gebunden.
+
+Wir betrachten \ac{SEH} hier in einer isolierten Form und nicht im Zusammenhang mit
+C++ oder MSVC-Erweiterungen.
+
+\myindex{Windows!TIB}
+\myindex{Windows!Win32!RaiseException()}
+
+Jeder laufende Prozess hat eine Kette von \ac{SEH}-Handles, \ac{TIB} beinhaltet die Adresse
+des letzten Handlers.
+
+Wenn eine Ausnahme auftritt (Division durch Null, Zugriff auf fehlerhafte Adresse,
+Benutzer-Ausnahme durch Aufruf \TT{RaiseException()}-Funktion), findet das \ac{OS} 
+den letzten Handler in der \ac{TIB} und ruft ihn auf. Dabei werden alle Informationen
+über den Zustand der \ac{CPU} (Register-Werte usw.) im Moment der Ausnahme übergeben.
+
+Wenn der Ausnahme-Handler eine bekannte Ausnahme sieht wird sie von ihm behandelt.
+
+Ist dies nicht der Fall, wird das \ac{OS} darüber informiert, dass keine Ausnahmebehandlung
+stattfand und das \ac{OS} ruft den nächsten Handler in der Kette, bis ein Handler
+gefunden wird, der die Ausnahme behandeln kann.
+
+Am Ende der Kette ist ein Standard-Handler, der den wohlbekannten Dialog anzeigt,
+welcher den Benutzer über den Prozessabsturz informiert. Zusätzlich werden einige
+technische Informationen wie der \ac{CPU}-Status beim Zeitpunkt des Absturzes
+und die Möglichkeit zum Senden der Infos an Microsoft-Entwickler angezeigt.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_xp1.png}
+\caption{Windows XP}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_xp2.png}
+\caption{Windows XP}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_win7.png}
+\caption{Windows 7}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_win81.png}
+\caption{Windows 8.1}
+\end{figure}
+
+Früher wurde dieser Handler Dr. Watson
+\footnote{\href{http://go.yurichev.com/17046}{Wikipedia}}
+genannt.
+
 %By the way, some developers make their own handler that sends information about the program crash to themselves.
 %\myindex{Windows!Win32!SetUnhandledExceptionFilter()}
 %It is registered with the help of \TT{SetUnhandledExceptionFilter()} 
