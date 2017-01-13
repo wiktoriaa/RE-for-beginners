@@ -11,12 +11,12 @@ Compilons le!
 
 \subsection{x86}
 
-Voici ce que les compilateurs optimisés GCC et MSVC produisent sur une plateforme x86:
+Voici ce que les compilateurs GCC et MSVC produisent sur une plateforme x86:
 
 \lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput),style=customasmx86]{patterns/011_ret/1.s}
 
 \myindex{x86!\Instructions!RET}
-Il y a juste deux instructions: la premiére place la valeur 123 dans le registre \EAX, qui est par convention le registre utilisé pour stocker la valeur retourné d'une fonction et la seconde est \RET, qui retourne l'exécution vers le \gls{caller}.
+Il y a juste deux instructions: la premiére place la valeur 123 dans le registre \EAX, qui est par convention le registre utilisé pour stocker la valeur retournée d'une fonction et la seconde est \RET, qui retourne l'exécution vers le \gls{caller}.
 
 Le caller prendra le resultat de cette fonction dans le registre \EAX.
 
@@ -26,14 +26,14 @@ Il y a quelques différences sur la platforme ARM:
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) ASM Output,style=customasmARM]{patterns/011_ret/1_Keil_ARM_O3.s}
 
-ARM utilise le registre \Reg{0} pour retourner le résultat d'une fonctions, donc 123 eest copié dans \Reg{0}.
+ARM utilise le registre \Reg{0} pour retourner le résultat d'une fonctions, donc 123 est copié dans \Reg{0}.
 
 \myindex{ARM!\Instructions!MOV}
 \myindex{x86!\Instructions!MOV}
 
 Il est à noter que l'instruction \MOV est trompeuse pour les plateformes x86 et ARM \ac{ISA}s.
 
-La donnée n'est pas en réalité \IT{moved} (déplacé) mais \IT{copied} (copié).
+La donnée n'est en réalité pas \IT{moved} (déplacée) mais \IT{copied} (copiée).
 
 \subsection{MIPS}
 
@@ -57,15 +57,15 @@ L'autre instruction est l'instruction de saut (J ou JR) qui retourne le flux d'e
 
 \myindex{MIPS!Branch delay slot}
 
-Vous pouvez vous demander pourquoi la position de l'instruction d'affectation de valeur immédiate (LI) et l'instruction de saut (J ou JR) son échangé. Ceci est du à une fontionnalité du \ac{RISC} appelé ``branch delay slot''.
+Vous pouvez vous demander pourquoi la position de l'instruction d'affectation de valeur immédiate (LI) et l'instruction de saut (J ou JR) sont échangées. Ceci est dû à une fontionnalité du \ac{RISC} appelée ``branch delay slot''.
 
-La raison de cela est du à une bizarrerie dans l'architecture de certain RISC \ac{ISA}s est n'est pas important pour nous. Nous gardons juste en tête qu'en MIPS, l'instruction qui suit une instruction de saut ou de branchement est exécuté \IT{avant} l'instruction de saut ou de branchement elle même.
+La raison de cela est du à une bizarrerie dans l'architecture de certains RISC \ac{ISA}s et n'est pas importante pour nous. Nous gardons juste en tête qu'en MIPS, l'instruction qui suit une instruction de saut ou de branchement est exécutée \IT{avant} l'instruction de saut ou de branchement elle même.
 
-Par conséquent, les instructions de branchement échangent toujours de place avec l'instruction qui doit être exécuté avant.
+Par conséquent, les instructions de branchement échangent toujours de place avec l'instruction qui doit être exécutée avant.
 
 % A footnote/link to http://en.wikipedia.org/wiki/Delay_slot#Branch_delay_slots or
 % something similar might be useful for the people more interested in it.
 
 \subsection{En pratique}
 
-Les fonctions qui retournent simplement 1 (\IT{true}) or 0 (\IT{false}) sont vraiment fréquentes en pratique.
+Les fonctions qui retournent simplement 1 (\IT{true}) ou 0 (\IT{false}) sont vraiment fréquentes en pratique.
