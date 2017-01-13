@@ -3,7 +3,7 @@
 \myindex{Function epilogue}
 \myindex{Function prologue}
 
-Un prologue de fonction est une séquence particuliaire d'instructions situé au début d'une fonction. Il ressemble souvent à ce morceau de code:
+Un prologue de fonction est une séquence particulière d'instructions située au début d'une fonction. Il ressemble souvent à ce morceau de code:
 
 \begin{lstlisting}[style=customasmx86]
     push    ebp
@@ -11,13 +11,15 @@ Un prologue de fonction est une séquence particuliaire d'instructions situé au
     sub     esp, X
 \end{lstlisting}
 
-Ce que ces instructions font: sauve la valeur du registre \EBP dans la stack (push ebp), sauve la valeur actuel du registre \ESP dans le registre \EBP (mov ebp, esp) et enfin alloue de la mémoire dans la stack pour les variables locales de la fonction (sub esp, X).
+Ce que ces instructions font: sauvent la valeur du registre \EBP dans la pile (push ebp), sauvent la valeur actuelle du registre \ESP dans le
+ registre \EBP (mov ebp, esp) et enfin allouent de la mémoire dans la pile pour les variables locales de la fonction (sub esp, X).
 
-La valeur du registre \EBP réste la même durant la période où la fonction s'execute et est utilisé pour accéder au variable local et au arguments de la fonction.
+La valeur du registre \EBP reste la même durant la période où la fonction s'exécute et est utilisée pour accéder aux variables locales et aux arguments de la fonction.
 
-Le registre \ESP peut aussi être utilisé pour accéder au variable local et au arguments de la fonction, cependant cette approche n'est pas pratique car sa valeur est susceptible de changer au cours de l'execution de cette fonction.
+Le registre \ESP peut aussi être utilisé pour accéder aux variables locales et aux arguments de la fonction, cependant cette approche n'est
+ pas pratique car sa valeur est susceptible de changer au cours de l'exécution de cette fonction.
 
-L'épilogue de fonction libère la mémoire alloué dans la stack (mov esp, ebp), restaure l'ancienne valeur de \EBP précédement sauvegarder dans la stack (pop ebp) puis rend l'execution au \gls{caller} (ret 0).
+L'épilogue de fonction libère la mémoire allouée dans la pile (mov esp, ebp), restaure l'ancienne valeur de \EBP précédement sauvegardée dans la pile (pop ebp) puis rend l'exécution au \gls{caller} (ret 0).
 
 \begin{lstlisting}[style=customasmx86]
     mov    esp, ebp
@@ -26,11 +28,11 @@ L'épilogue de fonction libère la mémoire alloué dans la stack (mov esp, ebp)
 \end{lstlisting}
 
 % what about calling convention?
-Les prologues et épilogues de fonction sont généralement détecté par les désassembleurs pour déterminer où une fonction commence et où elle se termine. 
+Les prologues et épilogues de fonction sont généralement détectés par les désassembleurs pour déterminer où une fonction commence et où elle se termine.
 
 \subsection{\Recursion}
 
 \myindex{\Recursion}
-Les prologues et épilogues de fonction peuvent affécter négativement les performances de récursion.
+Les prologues et épilogues de fonction peuvent affecter négativement les performances de récursion.
 
 Plus d'information sur la récursivité dans ce livre: \myref{Recursion_and_tail_call}.
