@@ -50,23 +50,24 @@ Hier ist ein Filter-Code-Beispiel:
 Intern ist SEH eine Erweiterung der vom \ac{OS}-unterstützten Ausnahmen,
 aber die Handler-Funktion ist \TT{\_except\_handler3} (für SEH3) oder \TT{\_except\_handler4} (für SEH4).
 
-%The code of this handler is MSVC-related, it is located in its libraries, or in msvcr*.dll.
-%It is very important to know that SEH is a MSVC thing.
-%
-%Other win32-compilers may offer something completely different.
-%
-%\myparagraph{SEH3}
-%
-%SEH3 has \TT{\_except\_handler3} 
-%as a handler function, and extends the \TT{\_EXCEPTION\_REGISTRATION} table, adding
-%a pointer to the \IT{scope table} and \IT{previous try level} variable.
-%SEH4 extends the \IT{scope table} 
-%by 4 values for buffer overflow protection.\\
-%\\
-%The \IT{scope table} is a table that consists of pointers to the filter and handler code blocks, for each nested level of \IT{try/except}.
-%
-%\input{OS/SEH/2/tikz}
-%
+Der Code dieses Handlers ist MSVC-spezifisch und befindet sich in dessen Bibliotheken
+oder in der msvcr*.dll.
+Es ist wichtig zu wissen, dass SEH eine MSVC-spezifische Sache ist.
+
+Andere Win32-Compiler bieten möglicherweise etwas völlig anderes an.
+
+\myparagraph{SEH3}
+
+SEH3 hat \TT{\_except\_handler3} als Handler-Funktion und erweitert die
+\TT{\_EXCEPTION\_REGISTRATION}-Tabelle indem ein Zeiger zur \IT{Scope-Tabelle} und
+der \IT{previous try level}-Variablen hinzugefügt wird.
+SEH4 erweitert die \IT{Scope-Tabelle} um vier Werte für Schutz vor Speicherüberläufen.
+
+Die \IT{Scope-Tabelle} ist eine Tabelle die aus Zeigern auf Filter und Handler-Code-Blöcken
+für jede verschachtelte Ebene für \IT{try/except} besteht.
+
+\input{OS/SEH/2/tikz}
+
 %Again, it is very important to understand that the \ac{OS} takes care only of the \IT{prev/handle} fields, and nothing more.\\
 %It is the job of the \TT{\_except\_handler3} function to read the other fields and \IT{scope table}, and decide
 %which handler to execute and when.\\
@@ -244,4 +245,3 @@ aber die Handler-Funktion ist \TT{\_except\_handler3} (für SEH3) oder \TT{\_exc
 %It is still possible to fall back to SEH3 in the compilers after 
 %(and including) MSVC 2005 by setting the \TT{/GS-} option,
 %however, the \ac{CRT} code use SEH4 anyway.
-%
