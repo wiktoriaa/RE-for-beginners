@@ -1,55 +1,55 @@
-%\subsubsection{Now let's get back to MSVC}
-%
-%\myindex{\Cpp!exceptions}
-%
-%Supposedly, Microsoft programmers needed exceptions in C, but not in \Cpp, so they added a non-standard C extension
-%to MSVC\footnote{\href{http://go.yurichev.com/17057}{MSDN}}.
-%It is not related to C++ \ac{PL} exceptions.
-%
-%% FIXME russian listing:
-%\begin{lstlisting}[style=customc]
-%__try
-%{
-%    ...
-%}
-%__except(filter code)
-%{
-%    handler code
-%}
-%\end{lstlisting}
-%
-%\q{Finally} block may be instead of handler code:
-%
-%\begin{lstlisting}[style=customc]
-%__try
-%{
-%    ...
-%}
-%__finally
-%{
-%    ...
-%}
-%\end{lstlisting}
-%
-%
-%The filter code is an expression, telling whether this handler code corresponds to the exception raised.
-%
-%If your code is too big and cannot fit into one expression, a separate filter function can be defined.\\
-%\\
-%There are a lot of such constructs in the Windows kernel.
-%Here are a couple of examples from there (\ac{WRK}):
-%
-%\lstinputlisting[caption=WRK-v1.2/base/ntos/ob/obwait.c,style=customc]{OS/SEH/2/wrk_ex1.c}
-%
-%\lstinputlisting[caption=WRK-v1.2/base/ntos/cache/cachesub.c,style=customc]{OS/SEH/2/wrk_ex2.c}
-%
-%Here is also a filter code example:
-%
-%\lstinputlisting[caption=WRK-v1.2/base/ntos/cache/copysup.c,style=customc]{OS/SEH/2/wrk_ex3.c}
-%
-%Internally, SEH is an extension of the OS-supported exceptions.
-%But the handler function is \TT{\_except\_handler3} (for SEH3) or \TT{\_except\_handler4} (for SEH4).
-%
+\subsubsection{Zurück zu MSVC}
+
+\myindex{\Cpp!exceptions}
+Offensichtlich benötigten die Microsoft-Entwickler Ausnahmen in C aber nicht in
+\Cpp und führten eine nicht-standardisierte C-Erweiterung ein \footnote{\href{http://go.yurichev.com/17057}{MSDN}}.
+Diese hat aber keinen Zusammenhang zu  C++ \ac{PL}-Ausnahmen.
+
+% FIXME russian listing:
+\begin{lstlisting}[style=customc]
+__try
+{
+    ...
+}
+__except(filter code)
+{
+    handler code
+}
+\end{lstlisting}
+
+Der \q{Finally}-Block kann anstelle des Handler-Codes stehen:
+
+\begin{lstlisting}[style=customc]
+__try
+{
+    ...
+}
+__finally
+{
+    ...
+}
+\end{lstlisting}
+
+Der Filter-Code ist ein Ausdruck, der anzeigt, ob dieser Handler-Code zu der
+geworfenen Ausnahme passt.
+
+If der Code zu groß ist und nicht in einen Ausdruck passt, kann eine separate
+Filter-Funktion definiert werden.
+
+Im Windows-Kernel existieren eine Reihe solcher Konstrukte.
+Nachfolgend einige Beispiel von dort (\ac{WRK}):
+
+\lstinputlisting[caption=WRK-v1.2/base/ntos/ob/obwait.c,style=customc]{OS/SEH/2/wrk_ex1.c}
+
+\lstinputlisting[caption=WRK-v1.2/base/ntos/cache/cachesub.c,style=customc]{OS/SEH/2/wrk_ex2.c}
+
+Hier ist ein Filter-Code-Beispiel:
+
+\lstinputlisting[caption=WRK-v1.2/base/ntos/cache/copysup.c,style=customc]{OS/SEH/2/wrk_ex3.c}
+
+Intern ist SEH eine Erweiterung der vom \ac{OS}-unterstützten Ausnahmen,
+aber die Handler-Funktion ist \TT{\_except\_handler3} (für SEH3) oder \TT{\_except\_handler4} (für SEH4).
+
 %The code of this handler is MSVC-related, it is located in its libraries, or in msvcr*.dll.
 %It is very important to know that SEH is a MSVC thing.
 %
