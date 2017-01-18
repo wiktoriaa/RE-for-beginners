@@ -1,24 +1,24 @@
-%\subsubsection{Windows x64}
-%
-%\label{SEH_win64}
-%
-%As you might think, it is not very fast to set up the SEH frame at each function prologue.
-%Another performance problem is changing the 
-%\IT{previous try level} value many times during the function's execution.
-%
-%So things are changed completely in x64: now all pointers to \TT{try} blocks, filter and handler functions are stored
-%in another PE segment \TT{.pdata}, 
-%and from there the \ac{OS}'s exception handler takes all the information.
-%
-%Here are the two examples from the previous section compiled for x64:
-%
-%\lstinputlisting[caption=MSVC 2012,style=customasmx86]{OS/SEH/3/2_x64.asm}
-%
-%\lstinputlisting[caption=MSVC 2012,style=customasmx86]{OS/SEH/3/3_x64.asm}
-%
-%Read \IgorSkochinsky for more detailed information about this.
-%
-%Aside from exception information, \TT{.pdata}
-%is a section that contains the addresses of almost all function starts and ends,
-%hence it may be useful for a tools targeted at automated analysis.
-%
+\subsubsection{Windows x64}
+
+\label{SEH_win64}
+
+Wie man sich vielleicht denken kann, ist es nicht sehr schnell bei jedem Funktionsprolog
+einen SEH-Frame aufzubauen.
+Ein weiteres Geschwindigkeitsproblem ist das häufige Ändern des \IT{previous try level}-Werts
+während der Ausführung einer Funktion.
+
+Also haben sich die Dinge in x64 komplett geändert: alle Zeiger auf einen \TT{try}-Block,
+Filter und Handler-Funktionen sind im einem PE-Segment \TT{.pdata} gesichert.
+Von hier nimmt die \ac{OS}-Ausnahmebehandlung alle Informationen.
+
+Hier sind zwei Beispiele aus dem letzten Abschnitt, für x64 kompiliert:
+
+\lstinputlisting[caption=MSVC 2012,style=customasmx86]{OS/SEH/3/2_x64.asm}
+
+\lstinputlisting[caption=MSVC 2012,style=customasmx86]{OS/SEH/3/3_x64.asm}
+
+In \IgorSkochinsky gibt es eine Reihe weiterer, detaillierte Information über dieses Thema.
+
+Neben den Ausnahme-Informationen, beinhaltet \TT{.pdata} die Adressen von fast allen
+Funktionsbeginn- und enden, da dies für Tools die für automatische Analysen nützlich
+sein kann.
