@@ -144,43 +144,45 @@ Dies bedeutet, dass die Anzahl der Argumente ebenfalls einfach abgeleitet werden
 \newcommand{\URLREGPARMM}{\url{http://go.yurichev.com/17040}}
 
 Dies ist in gewisser Weise die Weiterentwicklung von \IT{fastcall}\footnote{\URLREGPARMM}.
-%With the \TT{-mregparm} option it is possible to set how many arguments are to be passed via registers (3 is the maximum).
-%Thus, the \EAX, \EDX and \ECX registers are to be used.
-%
-%Of course, if the number the of arguments is less than 3, not all 3 registers are to be used.
-%
-%The \gls{caller} restores the \gls{stack pointer} to its initial state.
-%
-%For example, see (\myref{regparm}).
-%
-%\subsubsection{Watcom/OpenWatcom}
-%\myindex{OpenWatcom}
-%
-%Here it is called \q{register calling convention}.
-%The first 4 arguments are passed via the \EAX, \EDX, \EBX and \ECX registers.
-%All the rest---via the stack.
-%
-%These functions has an underscore appended to the function name in order to distinguish them from 
-%those having a different calling convention.
-%
-%\subsection{thiscall}
-%\myindex{thiscall}
-%
-%This is passing the object's \ITthis pointer to the function-method, in \Cpp.
-%
-%In MSVC, \ITthis is usually passed in the \ECX register.
-%
-%In GCC, the \ITthis pointer is passed as the first function-method argument.
-%Thus it will be very visible that internally: all function-methods have an extra argument.
-%
-%For an example, see (\myref{thiscall}).
-%
-%\subsection{x86-64}
-%\myindex{x86-64}
-%
-%\subsubsection{Windows x64}
-%\label{sec:callingconventions_win64}
-%
+Mit der \TT{-mregparm}-Option ist es möglich festzulegen, wieviele Argumente per Register
+übergeben werden (maximal 3).
+Aus diesem Grund werden die Register \EAX, \EDX und \ECX genutzt.
+
+Natürlich werden, wenn die Anzahl der Argumente kleiner als drei ist, nicht alle drei
+Register genutzt.
+
+Der \gls{caller} setzt den \gls{stack pointer} auf den initialen Zustand.
+
+Als Beispiel siehe (\myref{regparm}).
+
+\subsubsection{Watcom/OpenWatcom}
+\myindex{OpenWatcom}
+
+Hier erfolgt der Aufruf mit der \q{Register-Aufruf-Konvention}.
+Die ersten vier Argumente werden in den Registern \EAX, \EDX, \EBX und \ECX übergeben,
+der Rest auf dem Stack.
+
+Diese Funktionen haben einen Unterstrich an den Funktionsnamen angehängt, um sie von
+den anderen Aufrufkonventionen unterscheiden zu können.
+
+\subsection{thiscall}
+\myindex{thiscall}
+
+Hier wird der \ITthis-Zeiger des Objekts an die Methode in \Cpp übergeben.
+
+In MSVC wird \ITthis üblicherweise im \ECX-Register übergeben.
+
+In GCC wird der \ITthis-Zeiger im ersten Argument der Methode übergeben.
+Es ist sehr offensichtlich dass intern alle Methoden ein zusätzliches Argument haben.
+
+Als Beispiel siehe (\myref{thiscall}).
+
+\subsection{x86-64}
+\myindex{x86-64}
+
+\subsubsection{Windows x64}
+\label{sec:callingconventions_win64}
+
 %The method of for passing arguments in Win64 somewhat resembles \TT{fastcall}.
 %The first 4 arguments are passed via \RCX, \RDX, \Reg{8} and \Reg{9}, the rest---via the stack.
 %The \gls{caller} also must prepare space for 32 bytes or 4 64-bit values,
