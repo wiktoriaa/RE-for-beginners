@@ -68,44 +68,46 @@ für jede verschachtelte Ebene für \IT{try/except} besteht.
 
 \input{OS/SEH/2/tikz}
 
-%Again, it is very important to understand that the \ac{OS} takes care only of the \IT{prev/handle} fields, and nothing more.\\
-%It is the job of the \TT{\_except\_handler3} function to read the other fields and \IT{scope table}, and decide
-%which handler to execute and when.\\
-%\\
-%\myindex{Wine}
-%\myindex{ReactOS}
-%The source code of the \TT{\_except\_handler3} function is closed.
-%
-%However, Sanos OS, which has a win32 compatibility layer, has the same
-%functions reimplemented, which are somewhat equivalent to those in Windows
-%\footnote{\url{http://go.yurichev.com/17058}}.
-%Another reimplementation is present in 
-%Wine\footnote{\href{http://go.yurichev.com/17059}{GitHub}}
-%and ReactOS\footnote{\url{http://go.yurichev.com/17060}}.\\
-%\\
-%If the \IT{filter} pointer is NULL, the \IT{handler} 
-%pointer is the pointer to the \IT{finally} code block.\\
-%\\
-%During execution, the \IT{previous try level} value in the stack changes, so
-%\TT{\_except\_handler3} can get information about the current level of nestedness, 
-%in order to know which \IT{scope table} entry to use.
-%
-%\myparagraph{SEH3: one try/except block example}
-%
-%\lstinputlisting[style=customc]{OS/SEH/2/2.c}
-%
-%\lstinputlisting[caption=MSVC 2003,style=customasmx86]{OS/SEH/2/2_SEH3.asm}
-%
-%Here we see how the SEH frame is constructed in the stack.
-%The \IT{scope table} is located in the \TT{CONST} segment---indeed, these fields are not to be changed.
-%An interesting thing is how the \IT{previous try level} variable has changed.
-%The initial value is \TT{0xFFFFFFFF} ($-1$).
-%The moment when the body of the \TT{try} 
-%statement is opened is marked with an instruction that writes 0 to the variable.
-%The moment when the body of the \TT{try} statement is closed, $-1$ 
-%is written back to it.
-%We also see the addresses of filter and handler code.
-%
+Auch hier ist es wieder sehr wichtig zu verstehen, dass das \ac{OS} sich lediglich
+um die \IT{prev/handle}-Felder kümmert und sonst nichts.
+
+Es ist Aufgaben der \TT{\_except\_handler3}-Funktion die anderen Felder und die
+\IT{Scope-Tabelle} zu lesen und zu entscheiden, welcher Handler wann aufgerufen
+werden muss.
+
+\myindex{Wine}
+\myindex{ReactOS}
+Der Quellcode der \TT{\_except\_handler3}-Funktion ist nicht offen.
+
+Sanos OS, welches einen Win32-Kompatibilitäts-Layer hat, hat die gleiche Funktion
+implementiert, welche ähnlich ist zu der unter Windows\footnote{\url{http://go.yurichev.com/17058}}.
+Eine weitere Implementierung existiert in Wine\footnote{\href{http://go.yurichev.com/17059}{GitHub}}
+und ReactOS\footnote{\url{http://go.yurichev.com/17060}}.
+
+Wenn der \IT{Filter}-Zeiger NULL ist, ist der \IT{Handler}-Zeiger ein Zeiger auf
+den \IT{finally}-Code-Block.
+
+Während der Ausführung verändert sich der Wert des \IT{previous try level}, so dass
+der \TT{\_except\_handler3} Information über den aktuellen Verschachtelungslevel
+hat, um zu wissen welcher Eintrag der \IT{Scope-Tabelle} zu nutzen ist.
+
+\myparagraph{SEH3: one try/except block example}
+
+\lstinputlisting[style=customc]{OS/SEH/2/2.c}
+
+\lstinputlisting[caption=MSVC 2003,style=customasmx86]{OS/SEH/2/2_SEH3.asm}
+
+Hier ist zu sehen wie der SEH-Frame auf dem Stack aufgebaut ist.
+Die \IT{Scope-Tabelle} befindet sich im \TT{CONST}-Segment, diese Felder werden
+nicht verändert.
+Eine interessante Sache ist es, wie die \IT{previous try level}-Variable sich geändert hat.
+Der Wert zu Beginn ist \TT{0xFFFFFFFF} ($-1$).
+Der Moment, in dem der Body der \TT{try}-Anweisung betreten wird, ist mit einer Anweisung
+gekennzeichnet, die 0 in die Variable schreibt.
+In dem Moment in dem der Body der \TT{try}-Anweisung geschlossen wird, wird der Wert $-1$
+dorthin zurückgeschrieben.
+Es sind ebenso die Adressen der Filter- und Handler-Codes zu sehen.
+
 %Thus we can easily see the structure of the \IT{try/except} constructs in the function.\\
 %\\
 %Since the SEH setup code in the function prologue may be shared between many functions,
