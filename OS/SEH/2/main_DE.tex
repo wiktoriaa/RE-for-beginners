@@ -68,180 +68,187 @@ für jede verschachtelte Ebene für \IT{try/except} besteht.
 
 \input{OS/SEH/2/tikz}
 
-%Again, it is very important to understand that the \ac{OS} takes care only of the \IT{prev/handle} fields, and nothing more.\\
-%It is the job of the \TT{\_except\_handler3} function to read the other fields and \IT{scope table}, and decide
-%which handler to execute and when.\\
-%\\
-%\myindex{Wine}
-%\myindex{ReactOS}
-%The source code of the \TT{\_except\_handler3} function is closed.
-%
-%However, Sanos OS, which has a win32 compatibility layer, has the same
-%functions reimplemented, which are somewhat equivalent to those in Windows
-%\footnote{\url{http://go.yurichev.com/17058}}.
-%Another reimplementation is present in 
-%Wine\footnote{\href{http://go.yurichev.com/17059}{GitHub}}
-%and ReactOS\footnote{\url{http://go.yurichev.com/17060}}.\\
-%\\
-%If the \IT{filter} pointer is NULL, the \IT{handler} 
-%pointer is the pointer to the \IT{finally} code block.\\
-%\\
-%During execution, the \IT{previous try level} value in the stack changes, so
-%\TT{\_except\_handler3} can get information about the current level of nestedness, 
-%in order to know which \IT{scope table} entry to use.
-%
-%\myparagraph{SEH3: one try/except block example}
-%
-%\lstinputlisting[style=customc]{OS/SEH/2/2.c}
-%
-%\lstinputlisting[caption=MSVC 2003,style=customasmx86]{OS/SEH/2/2_SEH3.asm}
-%
-%Here we see how the SEH frame is constructed in the stack.
-%The \IT{scope table} is located in the \TT{CONST} segment---indeed, these fields are not to be changed.
-%An interesting thing is how the \IT{previous try level} variable has changed.
-%The initial value is \TT{0xFFFFFFFF} ($-1$).
-%The moment when the body of the \TT{try} 
-%statement is opened is marked with an instruction that writes 0 to the variable.
-%The moment when the body of the \TT{try} statement is closed, $-1$ 
-%is written back to it.
-%We also see the addresses of filter and handler code.
-%
-%Thus we can easily see the structure of the \IT{try/except} constructs in the function.\\
-%\\
-%Since the SEH setup code in the function prologue may be shared between many functions,
-%sometimes the compiler inserts a call to the \TT{SEH\_prolog()} function in the prologue, which does just that.
-%
-%The SEH cleanup code is in the \TT{SEH\_epilog()} function.\\
-%\\
-%Let's try to run this example in \tracer{}:
-%\myindex{tracer}
-%
-%\begin{lstlisting}
-%tracer.exe -l:2.exe --dump-seh
-%\end{lstlisting}
-%
-%\begin{lstlisting}[caption=tracer.exe output]
-%EXCEPTION_ACCESS_VIOLATION at 2.exe!main+0x44 (0x401054) ExceptionInformation[0]=1
-%EAX=0x00000000 EBX=0x7efde000 ECX=0x0040cbc8 EDX=0x0008e3c8
-%ESI=0x00001db1 EDI=0x00000000 EBP=0x0018feac ESP=0x0018fe80
-%EIP=0x00401054
-%FLAGS=AF IF RF
-%* SEH frame at 0x18fe9c prev=0x18ff78 handler=0x401204 (2.exe!_except_handler3)
-%SEH3 frame. previous trylevel=0
-%scopetable entry[0]. previous try level=-1, filter=0x401070 (2.exe!main+0x60) handler=0x401088 (2.exe!main+0x78)
-%* SEH frame at 0x18ff78 prev=0x18ffc4 handler=0x401204 (2.exe!_except_handler3)
-%SEH3 frame. previous trylevel=0
-%scopetable entry[0]. previous try level=-1, filter=0x401531 (2.exe!mainCRTStartup+0x18d) handler=0x401545 (2.exe!mainCRTStartup+0x1a1)
-%* SEH frame at 0x18ffc4 prev=0x18ffe4 handler=0x771f71f5 (ntdll.dll!__except_handler4)
-%SEH4 frame. previous trylevel=0
-%SEH4 header:	GSCookieOffset=0xfffffffe GSCookieXOROffset=0x0
-%		EHCookieOffset=0xffffffcc EHCookieXOROffset=0x0
-%scopetable entry[0]. previous try level=-2, filter=0x771f74d0 (ntdll.dll!___safe_se_handler_table+0x20) handler=0x771f90eb (ntdll.dll!_TppTerminateProcess@4+0x43)
-%* SEH frame at 0x18ffe4 prev=0xffffffff handler=0x77247428 (ntdll.dll!_FinalExceptionHandler@16)
-%\end{lstlisting}
-%
-%We see that the SEH chain consists of 4 handlers.\\
-%\\
-%\myindex{CRT}
-%The first two are located in our example. Two?
-%But we made only one?
-%Yes, another one has been set up in the \ac{CRT} function \TT{\_mainCRTStartup()}, and as it seems that it handles at least \ac{FPU} exceptions.
-%Its source code can found in the MSVC installation: \TT{crt/src/winxfltr.c}.\\
-%\\
-%The third is the SEH4 one in ntdll.dll, 
-%and the fourth handler is not MSVC-related and is located in ntdll.dll, and has a self-describing function name.\\
-%\\
-%As you can see, there are 3 types of handlers in one chain:
-%
-%one is not related to MSVC at all (the last one) and two MSVC-related: SEH3 and SEH4.
-%
-%\myparagraph{SEH3: two try/except blocks example}
-%
-%\lstinputlisting[style=customc]{OS/SEH/2/3.c}
-%
-%Now there are two \TT{try} blocks.
-%So the \IT{scope table} now has two entries, one for each block.
-%\IT{Previous try level} changes as execution flow enters or exits the \TT{try} block.
-%
-%\lstinputlisting[caption=MSVC 2003,style=customasmx86]{OS/SEH/2/3_SEH3.asm}
-%
-%If we set a breakpoint on the \printf{} function, which is called from the handler, 
-%we can also see how yet another SEH handler is added.
-%
-%Perhaps it's another machinery inside the SEH handling process.
-%Here we also see our \IT{scope table} consisting of 2 entries.
-%
-%\begin{lstlisting}
-%tracer.exe -l:3.exe bpx=3.exe!printf --dump-seh
-%\end{lstlisting}
-%
-%\begin{lstlisting}[caption=tracer.exe output]
-%(0) 3.exe!printf
-%EAX=0x0000001b EBX=0x00000000 ECX=0x0040cc58 EDX=0x0008e3c8
-%ESI=0x00000000 EDI=0x00000000 EBP=0x0018f840 ESP=0x0018f838
-%EIP=0x004011b6
-%FLAGS=PF ZF IF
-%* SEH frame at 0x18f88c prev=0x18fe9c handler=0x771db4ad (ntdll.dll!ExecuteHandler2@20+0x3a)
-%* SEH frame at 0x18fe9c prev=0x18ff78 handler=0x4012e0 (3.exe!_except_handler3)
-%SEH3 frame. previous trylevel=1
-%scopetable entry[0]. previous try level=-1, filter=0x401120 (3.exe!main+0xb0) handler=0x40113b (3.exe!main+0xcb)
-%scopetable entry[1]. previous try level=0, filter=0x4010e8 (3.exe!main+0x78) handler=0x401100 (3.exe!main+0x90)
-%* SEH frame at 0x18ff78 prev=0x18ffc4 handler=0x4012e0 (3.exe!_except_handler3)
-%SEH3 frame. previous trylevel=0
-%scopetable entry[0]. previous try level=-1, filter=0x40160d (3.exe!mainCRTStartup+0x18d) handler=0x401621 (3.exe!mainCRTStartup+0x1a1)
-%* SEH frame at 0x18ffc4 prev=0x18ffe4 handler=0x771f71f5 (ntdll.dll!__except_handler4)
-%SEH4 frame. previous trylevel=0
-%SEH4 header:	GSCookieOffset=0xfffffffe GSCookieXOROffset=0x0
-%		EHCookieOffset=0xffffffcc EHCookieXOROffset=0x0
-%scopetable entry[0]. previous try level=-2, filter=0x771f74d0 (ntdll.dll!___safe_se_handler_table+0x20) handler=0x771f90eb (ntdll.dll!_TppTerminateProcess@4+0x43)
-%* SEH frame at 0x18ffe4 prev=0xffffffff handler=0x77247428 (ntdll.dll!_FinalExceptionHandler@16)
-%\end{lstlisting}
-%
-%\myparagraph{SEH4}
-%
-%\myindex{\BufferOverflow}
-%\myindex{Security cookie}
-%During a buffer overflow (\myref{subsec:bufferoverflow}) attack, the address of the \IT{scope table} 
-%can be rewritten, so starting from MSVC 2005, SEH3 was upgraded to SEH4 in order to have buffer overflow protection.
-%The pointer to the \IT{scope table} is now \glslink{xoring}{xored} with a \gls{security cookie}.
-%The \IT{scope table} was extended to have a header consisting of two pointers to \IT{security cookies}.
-%
-%Each element has an offset inside the stack of another value: 
-%the address of the \gls{stack frame} (\EBP) \glslink{xoring}{xored} with the \TT{security\_cookie} , placed in the stack.
-%
-%This value will be read during exception handling and checked for correctness.
-%The \IT{security cookie} in the stack is random each time, so hopefully a remote attacker can't predict it. \\
-%\\
-%The initial \IT{previous try level} is $-2$ in SEH4 instead of $-1$.
-%
-%\def\SEHfour{1}
-%\input{OS/SEH/2/tikz}
-%
-%Here are both examples compiled in MSVC 2012 with SEH4:
-%
-%\lstinputlisting[caption=MSVC 2012: one try block example,style=customasmx86]{OS/SEH/2/2_SEH4.asm}
-%
-%\lstinputlisting[caption=MSVC 2012: two try blocks example,style=customasmx86]{OS/SEH/2/3_SEH4.asm}
-%
-%Here is the meaning of the \IT{cookies}: \TT{Cookie Offset} 
-%is the difference between the address of the saved EBP value in the stack
-%and the $EBP \oplus security\_cookie$ value in the stack.
-%\TT{Cookie XOR Offset} is an additional difference between the 
-%$EBP \oplus security\_cookie$ value and what is
-%stored in the stack.
-%
-%If this equation is not true, the process is to halt due to stack corruption:
-%
-%\begin{center}
-%$security\_cookie \oplus (CookieXOROffset + address\_of\_saved\_EBP) == stack[address\_of\_saved\_EBP + CookieOffset]$
-%\end{center}
-%
-%If \TT{Cookie Offset} is $-2$, this implies that it is not present.
-%
-%\myindex{tracer}
-%\IT{Cookies} checking is also implemented in my \tracer{},
-%see \href{http://go.yurichev.com/17061}{GitHub} for details.\\
-%\\
-%It is still possible to fall back to SEH3 in the compilers after 
-%(and including) MSVC 2005 by setting the \TT{/GS-} option,
-%however, the \ac{CRT} code use SEH4 anyway.
+Auch hier ist es wieder sehr wichtig zu verstehen, dass das \ac{OS} sich lediglich
+um die \IT{prev/handle}-Felder kümmert und sonst nichts.
+
+Es ist Aufgaben der \TT{\_except\_handler3}-Funktion die anderen Felder und die
+\IT{Scope-Tabelle} zu lesen und zu entscheiden, welcher Handler wann aufgerufen
+werden muss.
+
+\myindex{Wine}
+\myindex{ReactOS}
+Der Quellcode der \TT{\_except\_handler3}-Funktion ist nicht offen.
+
+Sanos OS, welches einen Win32-Kompatibilitäts-Layer hat, hat die gleiche Funktion
+implementiert, welche ähnlich ist zu der unter Windows\footnote{\url{http://go.yurichev.com/17058}}.
+Eine weitere Implementierung existiert in Wine\footnote{\href{http://go.yurichev.com/17059}{GitHub}}
+und ReactOS\footnote{\url{http://go.yurichev.com/17060}}.
+
+Wenn der \IT{Filter}-Zeiger NULL ist, ist der \IT{Handler}-Zeiger ein Zeiger auf
+den \IT{finally}-Code-Block.
+
+Während der Ausführung verändert sich der Wert des \IT{previous try level}, so dass
+der \TT{\_except\_handler3} Information über den aktuellen Verschachtelungslevel
+hat, um zu wissen welcher Eintrag der \IT{Scope-Tabelle} zu nutzen ist.
+
+\myparagraph{SEH3: one try/except block example}
+
+\lstinputlisting[style=customc]{OS/SEH/2/2.c}
+
+\lstinputlisting[caption=MSVC 2003,style=customasmx86]{OS/SEH/2/2_SEH3.asm}
+
+Hier ist zu sehen wie der SEH-Frame auf dem Stack aufgebaut ist.
+Die \IT{Scope-Tabelle} befindet sich im \TT{CONST}-Segment, diese Felder werden
+nicht verändert.
+Eine interessante Sache ist es, wie die \IT{previous try level}-Variable sich geändert hat.
+Der Wert zu Beginn ist \TT{0xFFFFFFFF} ($-1$).
+Der Moment, in dem der Body der \TT{try}-Anweisung betreten wird, ist mit einer Anweisung
+gekennzeichnet, die 0 in die Variable schreibt.
+In dem Moment in dem der Body der \TT{try}-Anweisung geschlossen wird, wird der Wert $-1$
+dorthin zurückgeschrieben.
+Es sind ebenso die Adressen der Filter- und Handler-Codes zu sehen.
+
+Wir können sehr einfach die Struktur des \IT{try/except}-Konstrukts in der Funktion erkennen.
+
+Da der SEH-Setup-Code im Funktionsprolog von mehreren Funktionen geteilt werden kann,
+fügt der Compiler manchmal einen Aufruf zur \TT{SEH\_prolog()}-Funktion in den Prolog ein,
+welcher genau dieses tut.
+
+Der SEH-Aufräumcode ist in der \TT{SEH\_epilog()}-Funktion.
+
+Versuchen wir dieses Beispiel in \tracer{} laufen zu lassen:
+\myindex{tracer}
+
+\begin{lstlisting}
+tracer.exe -l:2.exe --dump-seh
+\end{lstlisting}
+
+\begin{lstlisting}[caption=tracer.exe output]
+EXCEPTION_ACCESS_VIOLATION at 2.exe!main+0x44 (0x401054) ExceptionInformation[0]=1
+EAX=0x00000000 EBX=0x7efde000 ECX=0x0040cbc8 EDX=0x0008e3c8
+ESI=0x00001db1 EDI=0x00000000 EBP=0x0018feac ESP=0x0018fe80
+EIP=0x00401054
+FLAGS=AF IF RF
+* SEH frame at 0x18fe9c prev=0x18ff78 handler=0x401204 (2.exe!_except_handler3)
+SEH3 frame. previous trylevel=0
+scopetable entry[0]. previous try level=-1, filter=0x401070 (2.exe!main+0x60) handler=0x401088 (2.exe!main+0x78)
+* SEH frame at 0x18ff78 prev=0x18ffc4 handler=0x401204 (2.exe!_except_handler3)
+SEH3 frame. previous trylevel=0
+scopetable entry[0]. previous try level=-1, filter=0x401531 (2.exe!mainCRTStartup+0x18d) handler=0x401545 (2.exe!mainCRTStartup+0x1a1)
+* SEH frame at 0x18ffc4 prev=0x18ffe4 handler=0x771f71f5 (ntdll.dll!__except_handler4)
+SEH4 frame. previous trylevel=0
+SEH4 header:	GSCookieOffset=0xfffffffe GSCookieXOROffset=0x0
+		EHCookieOffset=0xffffffcc EHCookieXOROffset=0x0
+scopetable entry[0]. previous try level=-2, filter=0x771f74d0 (ntdll.dll!___safe_se_handler_table+0x20) handler=0x771f90eb ntdll.dll!_TppTerminateProcess@4+0x43)
+* SEH frame at 0x18ffe4 prev=0xffffffff handler=0x77247428 (ntdll.dll!_FinalExceptionHandler@16)
+\end{lstlisting}
+
+Es ist zu erkennen, dass die SEH-Kette aus vier Handlern besteht.
+
+\myindex{CRT}
+Die ersten zwei sind in unserem Beispiel zu finden. Zwei?
+Es wurde doch nur einer erstellt?!
+Das stimmt, jedoch wurde ein weiterer in der \ac{CRT}-Funktion \TT{\_mainCRTStartup()}
+erstellt und es scheint so, dass hier zumindest \ac{FPU}-Ausnahmen behandelt.
+Der Quellcode kann in der MSVC-Installation gefunden werden: \TT{crt/src/winxfltr.c}.
+
+Der dritte ist SEH4 in ntdll.dll und der vierte Handler ist nicht MSVC-spezifisch,
+befindet sich in der ntdll.ll und hat einen selbsterklärenden Funktionsnamen.
+
+Es ist zu erkennen, dass es drei Arten von Handlern in einer Kette gibt:
+
+Einer ist in keiner Weise in Verbindung zu MVSC (der letzte) und zwei sind MSVC-spezifisch:
+SEH3 und SEH4.
+
+\myparagraph{SEH3: two try/except blocks example}
+
+\lstinputlisting[style=customc]{OS/SEH/2/3.c}
+
+Es existieren jetzt zwei \TT{try}-Blöcke.
+Die \IT{Scope-Tabelle} hat jetzt zwei Einträge, einen für jeden Block.
+\IT{Previous try level} verändert sich wenn die Ausführung einen \TT{try}-Block
+betritt oder verlässt.
+
+\lstinputlisting[caption=MSVC 2003,style=customasmx86]{OS/SEH/2/3_SEH3.asm}
+
+Wenn ein Breakpoint auf die \printf{}-Funktion gesetzt wird, die vom Handler
+aufgerufen wird, ist auch sichtbar, wie ein neuer SEH-Handler hinzugefügt wird.
+
+Möglicherweise ist innerhalb des SEH Handling-Prozesses noch eine andere Funktion.
+Es sind hier in der \IT{Scope-Tabelle} zwei Einträge zu sehen.
+
+\begin{lstlisting}
+tracer.exe -l:3.exe bpx=3.exe!printf --dump-seh
+\end{lstlisting}
+
+\begin{lstlisting}[caption=tracer.exe output]
+(0) 3.exe!printf
+EAX=0x0000001b EBX=0x00000000 ECX=0x0040cc58 EDX=0x0008e3c8
+ESI=0x00000000 EDI=0x00000000 EBP=0x0018f840 ESP=0x0018f838
+EIP=0x004011b6
+FLAGS=PF ZF IF
+* SEH frame at 0x18f88c prev=0x18fe9c handler=0x771db4ad (ntdll.dll!ExecuteHandler2@20+0x3a)
+* SEH frame at 0x18fe9c prev=0x18ff78 handler=0x4012e0 (3.exe!_except_handler3)
+SEH3 frame. previous trylevel=1
+scopetable entry[0]. previous try level=-1, filter=0x401120 (3.exe!main+0xb0) handler=0x40113b (3.exe!main+0xcb)
+scopetable entry[1]. previous try level=0, filter=0x4010e8 (3.exe!main+0x78) handler=0x401100 (3.exe!main+0x90)
+* SEH frame at 0x18ff78 prev=0x18ffc4 handler=0x4012e0 (3.exe!_except_handler3)
+SEH3 frame. previous trylevel=0
+scopetable entry[0]. previous try level=-1, filter=0x40160d (3.exe!mainCRTStartup+0x18d) handler=0x401621 (3.exe!mainCRTStartup+0x1a1)
+* SEH frame at 0x18ffc4 prev=0x18ffe4 handler=0x771f71f5 (ntdll.dll!__except_handler4)
+SEH4 frame. previous trylevel=0
+SEH4 header:	GSCookieOffset=0xfffffffe GSCookieXOROffset=0x0
+		EHCookieOffset=0xffffffcc EHCookieXOROffset=0x0
+scopetable entry[0]. previous try level=-2, filter=0x771f74d0 (ntdll.dll!___safe_se_handler_table+0x20) handler=0x771f90eb ntdll.dll!_TppTerminateProcess@4+0x43)
+* SEH frame at 0x18ffe4 prev=0xffffffff handler=0x77247428 (ntdll.dll!_FinalExceptionHandler@16)
+\end{lstlisting}
+
+\myparagraph{SEH4}
+
+\myindex{\BufferOverflow}
+\myindex{Security cookie}
+Bei einer Pufferüberlauf-Attacke (\myref{subsec:bufferoverflow}), kann die Adresse der \IT{Scope-Tabelle}
+überschrieben werden. Aus diesem Grund wird seit MSVC 2005 SEH3 auf SEH4 aktualiiert um einen Schutz gegen
+diese Attacken zu haben.
+Der Zeiger auf die \IT{Scope-Tabelle} wird jetzt mit einem Security-Cookie \glslink{xoring}{xored}.
+
+Jedes Element hat einen Offset innerhalb des Stacks mit einem anderen Wert:
+die Adresse des \gls{stack frame} (\EBP) \glslink{xoring}{xored} mit dem Security-Cookie im Stack.
+
+Dieser Wert wird während der Ausführung der Ausnahmebehandlung ausgelesen und auf
+Korrektheit überprüft.
+Das \IT{Security-Cookie} im Stack ist jedes Mal zufällig, so dass ein Angreifer den
+Wert hoffentlich nicht voraussehen kann.
+
+Der initiale \IT{previous try level} ist $-2$ in SEH4 anstatt $-1$.
+
+\def\SEHfour{1}
+\input{OS/SEH/2/tikz}
+
+Hier sind beide Beispiele mit MSVC 2012 und SEH4 kompiliert:
+
+\lstinputlisting[caption=MSVC 2012: one try block example,style=customasmx86]{OS/SEH/2/2_SEH4.asm}
+
+\lstinputlisting[caption=MSVC 2012: two try blocks example,style=customasmx86]{OS/SEH/2/3_SEH4.asm}
+
+Die Bedeutung des \IT{Cookies} ist wie folgt:
+Der \TT{Cookie Offset} ist die Differenz zwischen der Adresse des gespeicherten EBP-Wertes
+auf dem Stack und des $EBP \oplus security\_cookie$-Werts auf dem Stack.
+Der  \TT{Cookie XOR Offset} ist eine zusätzliche Differenz zwischen dem $EBP \oplus security\_cookie$-Wert
+und was auf dem Stack gespeichert ist.
+
+Wenn diese Gleichung nicht richtig ist, wird der Prozess aufgrund eines korrupten Stack angehalte.
+
+\begin{center}
+$security\_cookie \oplus (CookieXOROffset + address\_of\_saved\_EBP) == stack[address\_of\_saved\_EBP + CookieOffset]$
+\end{center}
+
+Wenn der \TT{Cookie Offset} gleich $-2$ ist, impliziert dies, dass er nicht vorhanden ist.
+
+\myindex{tracer}
+\IT{Cookie}-Überprüfung ist auch in dem \tracer{} implementiert.
+Siehe \href{http://go.yurichev.com/17061}{GitHub} für Details.
+
+Es ist immer noch möglich, SEH3 im Compiler zu nutzen wenn eine neuere Version als MSVC 2005
+genutzt wird, durch setzen der \TT{/GS-}-Option.
+Der \ac{CRT}-Code nutzt SEH4 auf jeden Fall.
