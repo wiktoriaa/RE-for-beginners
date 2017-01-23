@@ -42,7 +42,7 @@ If we write something like:
 printf("%d %d %d", 1234);
 \end{lstlisting}
 
-\printf will print 1234, and then two random numbers, which were lying next to it in the stack.
+\printf will print 1234, and then two random numbers\footnote{Not random in strict sense, but rather unpredictable: \myref{noise_in_stack}}, which were lying next to it in the stack.
 
 \par
 That's why it is not very important how we declare the \main function: as \main, \\
@@ -74,7 +74,7 @@ A somewhat popular way among assembly language newbies is to pass arguments via 
 
 But this method has obvious drawback: \IT{do\_something()} function cannot call itself recursively (or via another function),
 because it has to zap its own arguments.
-The same story with local variables: if to hold them in global variables, the function couldn't call itself.
+The same story with local variables: if you hold them in global variables, the function couldn't call itself.
 And this is also not thread-safe
 \footnote{Correctly implemented, each thread would have its own stack with its own arguments/variables.}.
 A method to store such information in stack makes this easier---it can hold as many function arguments and/or values,
