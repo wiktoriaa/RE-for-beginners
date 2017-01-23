@@ -2,55 +2,101 @@
 \subsection{Memory \q{snapshots} comparing}
 \label{snapshots_comparing}
 
-The technique of the straightforward comparison of two memory snapshots in order to see changes was often used to hack
-8-bit computer games and for hacking \q{high score} files.
+Die Technik zwei Memory Snapshots zu vergleichen ist recht einfach, das wurde auch oft benutzt um 8-Bit Computerspiele und
+\q{high score}'s  zu hacken.
+% The technique of the straightforward comparison of two memory snapshots in order to see changes was often used to hack
+% 8-bit computer games and for hacking \q{high score} files.
 
-For example, if you had a loaded game on an 8-bit computer (there isn't much memory on these, but the game usually
-consumes even less memory) and you know that you have now, let's say, 100 bullets, you can do a \q{snapshot}
-of all memory and back it up to some place. Then shoot once, the bullet count goes to 99, do a second \q{snapshot}
-and then compare both: it must be a byte somewhere which has been 100 at the beginning, and now it is 99.
+Zum Beispiel, wenn man ein geladenes Spiel auf einem 8-Bit Computer hat ( auf den Maschinen ist nicht viel Speicher 
+vorhanden, jedoch braucht das Spiel noch weniger Speicher) und du weißt was du im Spiel hast, sagen wir 100 Patronen, 
+nun kann man einen \q{snapshot} vom gesamten Speicher machen und diesen Irgendwohin speichern. Dann verschiesst man 
+eine Patrone, dann geht der Patronen zähler auf 99, nun erstellt man den zweiten Snapshot und vergleich beiden: 
+Nun muss es irgendwo ein Byte geben das vorher 100 war und jetzt 99 ist. 
 
-Considering the fact that these 8-bit games were often written in assembly language and such variables were global,
-it can be said for sure which address in memory has holding the bullet count. If you searched for all references to the
-address in the disassembled game code, it was not very hard to find a piece of code \glslink{decrement}{decrementing} the bullet count,
-then to write a \gls{NOP} instruction there, or a couple of \gls{NOP}-s, 
-and then have a game with 100 bullets forever.
+% For example, if you had a loaded game on an 8-bit computer (there isn't much memory on these, but the game usually
+% consumes even less memory) and you know that you have now, let's say, 100 bullets, you can do a \q{snapshot}
+% of all memory and back it up to some place. Then shoot once, the bullet count goes to 99, do a second \q{snapshot}
+% and then compare both: it must be a byte somewhere which has been 100 at the beginning, and now it is 99.
+
+
+Betrachtet man den Fakt das diese 8-Bit Spiele oftmals in Assembler geschrieben wurden und diese Variablen meist global 
+waren, konnte man ziemlich einfach bestimmen welche Adressen im Speicher den Kugelzähler beinhalten. Wenn man nach allen 
+referenzen der Adresse im dissassembelten Spiel code sucht, ist es nicht schwer den Code \glslink{decrement}{decrementing} 
+zu finden und dann eine \gls{NOP} Instruktion an diese Stelle zu schreiben, oder gar mehrere \gls{NOP}-s, und dann hat man 
+ein Spiel bei dem man für immer 100 Kugeln hat. %<-- das kacke der ganze block
 \myindex{BASIC!POKE}
-Games on these 8-bit computers were commonly loaded at the constant
-address, also, there were not much different versions of each game (commonly just one version was popular for a long span of time),
-so enthusiastic gamers knew which bytes must be overwritten (using the BASIC's instruction \gls{POKE}) at which address in
-order to hack it. This led to \q{cheat} lists that contained \gls{POKE} instructions, published in magazines related to
-8-bit games. See also: \href{http://go.yurichev.com/17114}{wikipedia}.
+Spiele auf 8-Bit Computern wurden algemein an konstanten Adressen geladen, zusätzlich gab es nicht viele unterschiedliche
+Versionen des Spiels (  Es war meist eine Version für lange Zeit populär ), dadurch wussten enthusiastische Gamer welche
+Bytes (durch das benutzen von Basic Instruktionen wie \gls{POKE}) überschrieben werden mussten um das Spiel zu hacken. 
+Das hat wiederrum zu \q{cheat} listen geführt die in Magazinen für 8-Bit Games erschienen, die dann \gls{POKE} Instuktionen enthielten.
+Siehe auch: \href{http://go.yurichev.com/17114}{wikipedia}.
+
+
+% Considering the fact that these 8-bit games were often written in assembly language and such variables were global,
+% it can be said for sure which address in memory has holding the bullet count. If you searched for all references to the
+% address in the disassembled game code, it was not very hard to find a piece of code \glslink{decrement}{decrementing} the bullet count,
+% then to write a \gls{NOP} instruction there, or a couple of \gls{NOP}-s, 
+% and then have a game with 100 bullets forever.
+% \myindex{BASIC!POKE}
+% Games on these 8-bit computers were commonly loaded at the constant
+% address, also, there were not much different versions of each game (commonly just one version was popular for a long span of time),
+% so enthusiastic gamers knew which bytes must be overwritten (using the BASIC's instruction \gls{POKE}) at which address in
+% order to hack it. This led to \q{cheat} lists that contained \gls{POKE} instructions, published in magazines related to
+% 8-bit games. See also: \href{http://go.yurichev.com/17114}{wikipedia}.
 
 \myindex{MS-DOS}
 
-Likewise, it is easy to modify \q{high score} files, this does not work with just 8-bit games. Notice 
-your score count and back up the file somewhere. When the \q{high score} count gets different, just compare the two files,
-it can even be done with the DOS utility FC\footnote{MS-DOS utility for comparing binary files} (\q{high score} files
-are often in binary form).
+Es ist auch einfach \q{high score} Datein zu modifizieren, das funktioniert nicht nur bei 8-Bit Spielen. Man achte 
+auf seinen Highscore zähler, dann macht man ein backup der Datei. Wenn sich der \q{high score} zäler ändert, vergleicht man die 
+zwei Datein miteinander, das kann man sogar mit dem DOS Tool FC\footnote{MS-DOS utility for comparing binary files} (\q{high score} Datein,
+sind of in Binärer Form). 
 
-There will be a point where a couple of bytes are different and it is easy to see which ones are
-holding the score number.
-However, game developers are fully aware of such tricks and may defend the program against it.
+% Likewise, it is easy to modify \q{high score} files, this does not work with just 8-bit games. Notice 
+% your score count and back up the file somewhere. When the \q{high score} count gets different, just compare the two files,
+% it can even be done with the DOS utility FC\footnote{MS-DOS utility for comparing binary files} (\q{high score} files
+% are often in binary form).
 
-Somewhat similar example in this book is: \myref{Millenium_DOS_game}.
+Es wird beim Vergleichen der Datein meinen Punkt geben wo einige Bytes sich unterscheiden und 
+es wird leicht sein welche Bytes den Punktezähler beinhaltet. 
+Jedoch sind sich die Spiele Entwickler solcher Tricks bewusst und bauen Wege ein um das Programm
+vor solchen Manipulationen zu schützen. 
+
+Ein ähnliches Beispiel findet man auch in dem Buch \myref{Millenium_DOS_game}.
+
+% There will be a point where a couple of bytes are different and it is easy to see which ones are
+% holding the score number.
+% However, game developers are fully aware of such tricks and may defend the program against it.
+
+% Somewhat similar example in this book is: \myref{Millenium_DOS_game}.
 
 % TODO: пример с какой-то простой игрушкой?
 
 \subsubsection{Windows registry}
 
-It is also possible to compare the Windows registry before and after a program installation.
+Es ist auch möglich die Windows Regestry zu vergleichen vor und nach der Programm installation.
+% It is also possible to compare the Windows registry before and after a program installation.
 
-It is a very popular method of finding which registry elements are used by the program.
-Perhaps, this is the reason why the \q{windows registry cleaner} shareware is so popular.
+Es ist eine sehr populäre Methode Regestry Elemente zu finden die vom Programm benutzt werden.
+Vielleicht ist das auch der Grund warum die \q{windows regestry cleaner} Shareware so populär ist.
+% It is a very popular method of finding which registry elements are used by the program.
+% Perhaps, this is the reason why the \q{windows registry cleaner} shareware is so popular.
 
 \subsubsection{Blink-comparator}
 
-Comparison of files or memory snapshots remind us blink-comparator
-\footnote{\url{http://go.yurichev.com/17348}}:
-a device used by astronomers in past, intended to find moving celestial objects.
+Der Vergleich von Datei- oder Speichersnapshots erinnert ein wenig an einen Blinkkomparator
+\footnote{\url{http://go.yurichev.com/17348}}
+ein Gerät das in der Vergangenheit von Astronomen benutzt wurde, um sich bewegende Astronomische
+Objekte zu finden.
 
-Blink-comparator allows to switch quickly between two photographies shot in different time,
-so astronomer would spot the difference visually.
+% Comparison of files or memory snapshots remind us blink-comparator
+% \footnote{\url{http://go.yurichev.com/17348}}:
+% a device used by astronomers in past, intended to find moving celestial objects.
 
-By the way, Pluto was discovered by blink-comparator in 1930.
+Ein Blinkkomperator erlaubt es schnell zwischen Photografien zu wechseln die zu unterscheiedlicher
+Zeit aufgenommen wurden, so kann ein Astronom unterschiede zwischen Fotografien visuell erkennen.
+
+% Blink-comparator allows to switch quickly between two photographies shot in different time,
+% so astronomer would spot the difference visually.
+
+Ach übrigens, Plute wurde durch einen solchen Blink-Komperator 1930 entdeckt.
+% By the way, Pluto was discovered by blink-comparator in 1930.
