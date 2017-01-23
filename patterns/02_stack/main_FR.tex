@@ -6,23 +6,28 @@ La pile est une des structures de données les plus fondamentales en informatiqu
 \footnote{\href{http://go.yurichev.com/17119}{wikipedia.org/wiki/Call\_stack}}.
 \ac{AKA} \ac{LIFO}.
 
-Techniquement, il s'agit d'un bloc de mémoire présent dans l'espace d'adressage d'un processus et qui est utilisé par le registre \ESP ou \RSP en x86 ou x64, ou par le registre \ac{SP} en ARM comme un pointeur dans ce bloc mémoire. 
+Techniquement, il s'agit d'un bloc de mémoire présent dans l'espace d'adressage
+d'un processus et qui est utilisé par le registre \ESP ou \RSP en x86 ou x64,
+ou par le registre \ac{SP} en ARM comme un pointeur dans ce bloc mémoire. 
 
 \myindex{ARM!\Instructions!PUSH}
 \myindex{ARM!\Instructions!POP}
 \myindex{x86!\Instructions!PUSH}
 \myindex{x86!\Instructions!POP}
 Les instructions d'accès à la pile sont \PUSH et \POP (en x86 ainsi qu'en ARM Thumb-mode).
-\PUSH soustrait à \ESP/\RSP/\ac{SP} 4 en mode 32-bit(ou 8 en mode 64-bit) et écrit ensuite le contenu de l'opérande associée à l'adresse mémoire pointée par \ESP/\RSP/\ac{SP}.
+\PUSH soustrait à \ESP/\RSP/\ac{SP} 4 en mode 32-bit (ou 8 en mode 64-bit) et écrit
+ensuite le contenu de l'opérande associée à l'adresse mémoire pointée par \ESP/\RSP/\ac{SP}.
 
-\POP est l'operation inverse: elle récupére la donnée depuis l'adresse mémoire pointée par \ac{SP}, l'écrit dans l'opérande associée (souvent un registre) puis ajoute 4 (ou 8) au \gls{stack pointer}.
+\POP est l'operation inverse: elle récupére la donnée depuis l'adresse mémoire pointée par \ac{SP},
+l'écrit dans l'opérande associée (souvent un registre) puis ajoute 4 (ou 8) au \glslink{stack pointer}{pointeur de pile}.
 
-Après une allocation sur la pile, le \gls{stack pointer} pointe sur le bas de la pile.
+Après une allocation sur la pile, le \glslink{stack pointer}{pointeur de pile} pointe sur le bas de la pile.
 \PUSH décrémente le \gls{stack pointer} et \POP l'incrémente.
 
-Le bas de la pile représente en réalité le début de la mémoire alloué pour le bloc de pile. Cela semble étrange, mais c'est comme ça.
+Le bas de la pile représente en réalité le début de la mémoire allouée pour
+ le bloc de pile. Cela semble étrange, mais c'est comme ça.
 
-ARM supporte à la fois les piles montantes et descendantes.
+ARM supporte à la fois les piles ascendantes et descendantes.
 
 \myindex{ARM!\Instructions!STMFD}
 \myindex{ARM!\Instructions!LDMFD}
@@ -33,9 +38,11 @@ ARM supporte à la fois les piles montantes et descendantes.
 \myindex{ARM!\Instructions!STMEA}
 \myindex{ARM!\Instructions!LDMEA}
 
-Par exemple les instructions \ac{STMFD}/\ac{LDMFD}, \ac{STMED}/\ac{LDMED} sont utilisées pour gérer les piles descendantes (qui grandissent vers le bas en commençant avec une adresse haute et évoluent vers une plus basse).
+Par exemple les instructions \ac{STMFD}/\ac{LDMFD}, \ac{STMED}/\ac{LDMED} sont utilisées pour gérer les piles
+descendantes (qui grandissent vers le bas en commençant avec une adresse haute et évoluent vers une plus basse).
 
-Les instructions \ac{STMFA}/\ac{LDMFA}, \ac{STMEA}/\ac{LDMEA} sont utilisées pour gérer les piles montantes (qui grandissent vers les adresses hautes de l'adresse space, en commençant avec une adresse située en bas de l'adresse space)
+Les instructions \ac{STMFA}/\ac{LDMFA}, \ac{STMEA}/\ac{LDMEA} sont utilisées pour gérer les piles montantes
+(qui grandissent vers les adresses hautes de l'adresse space, en commençant avec une adresse située en bas de l'adresse space)
 
 % It might be worth mentioning that STMED and STMEA write first,
 % and then move the pointer,
@@ -47,11 +54,15 @@ Les instructions \ac{STMFA}/\ac{LDMFA}, \ac{STMEA}/\ac{LDMEA} sont utilisées po
 \subsection{Pourquoi la pile grandit en descendant ?}
 \label{stack_grow_backwards}
 
-Intuitivement, on pourrait penser que la pile grandit vers le haut, i.e. vers des adresses plus élevées, comme n'importe qu'elle autre structure de donnée.
+Intuitivement, on pourrait penser que la pile grandit vers le haut, i.e. vers des
+adresses plus élevées, comme n'importe qu'elle autre structure de données.
 
 La raison pour laquelle la pile grandit vers le bas est probablement historique.
-Dans le passé, les ordinateurs étaient énormes et occupaient des piéces entières, il était facile de diviser la mémoire en deux parties, une pour le \gls{heap} et une pour la pile.
-Evidemment, on ignorait quelle serait la taille du \gls{heap} et de la pile durant l'éxécution du progamme, donc cette solution était la plus simple possible.
+Dans le passé, les ordinateurs étaient énormes et occupaient des piéces entières,
+il était facile de diviser la mémoire en deux parties, une pour le \gls{heap} et
+une pour la pile.
+Evidemment, on ignorait quelle serait la taille du \gls{heap} et de la pile durant
+l'éxécution du progamme, donc cette solution était la plus simple possible.
 
 \input{patterns/02_stack/stack_and_heap}
 
@@ -80,9 +91,7 @@ Les notes de cours finissent par se rencontrer à un moment dans le cahier quand
 % subsections
 \input{patterns/02_stack/01_saving_ret_addr}
 \input{patterns/02_stack/02_args_passing}
-\EN{\input{patterns/02_stack/03_local_vars_EN}}
-\RU{\input{patterns/02_stack/03_local_vars_RU}}
-\PTBR{\input{patterns/02_stack/03_local_vars_PTBR}}
+\input{patterns/02_stack/03_local_vars_FR}
 \input{patterns/02_stack/04_alloca/main}
 \input{patterns/02_stack/05_SEH}
 \input{patterns/02_stack/06_BO_protection}
@@ -93,7 +102,7 @@ Peut-être que la raison pour laquelle les variables locales et les enregistreme
 pile est qu'ils sont automatiquement libérés quand la fonction se termine en utilisant simplement une
 instruction pour corriger la position du pointeur de pile (souvent \ADD).
 Les arguments de fonction sont aussi désalloués automatiquement à la fin de la fonction.
-À l'inverse, toutes les données allouées sur le \IT{heap} doivent être déallouées de façon explicite.
+À l'inverse, toutes les données allouées sur le \IT{heap} doivent être désallouées de façon explicite.
 
 % sections
 \EN{\input{patterns/02_stack/07_layout_EN}}
