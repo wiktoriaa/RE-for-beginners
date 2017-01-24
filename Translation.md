@@ -33,7 +33,7 @@ Informal or verbose language in technical books annoys you each time you looking
 
 On the other hand, terminology may be informal, just as typical modern IT bloggers use.
 Don't hesitate to use English words in your language if this is norm in IT speech of your language and there are no good translation yet.
-For example, Russian IT language is a mix of Russian and English words, and this is current language norm (at least in 2016), so I use this language in this book.
+For example, Russian IT language is a mix of Russian and English words, and this is current language norm (at least in 2016), so I use this language in the book.
 
 ## Defined macros
 
@@ -44,7 +44,6 @@ Italian: `\ITA{}`
 German: `\DE{}`
 Thai: `\THA{}`
 Dutch: `\NL{}`
-German: `\DE{}`
 
 There are also `\ESph{}`, `\PTBRph{}`, `\PLph{}`, `\DEph{}` and `\ITAph{}` placeholder macros in `*.tex` files, where the translated text must be.
 
@@ -52,6 +51,21 @@ There are also `\ESph{}`, `\PTBRph{}`, `\PLph{}`, `\DEph{}` and `\ITAph{}` place
 
 To check your results, just run `make ES`, `make PTBR`, `make PL`, `make ITA`, `make DE`.
 You'll see almost blank pages with only listings and screenshots, without any text, but your text will be present.
+
+## Coordination
+
+It's very frustrating to find out that a piece of text you have just translated has been translated by someone else
+at the very same time.
+For a simple coordination, you can leave a text file named like "Note_to_German_translators.txt"
+in the directory you're currently working with contents like
+
+	I'm going to translate this part soon.
+	-- my@email.com, username@github.com, DD/MM/YYYY.
+
+[For example](https://github.com/dennis714/RE-for-beginners/blob/2bc65d9533d48b023cf5ac467c42f4ef1aee90e0/OS/Note_to_German_translators.txt).
+Feel free to add any other notes for rest of translators.
+
+If you are not familiar with git/github, just send me fragment you translated, so I could add it as early as possible.
 
 ## Contact me
 
