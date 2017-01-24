@@ -3,7 +3,7 @@
 
 La fonction la plus simple possible est sans doute celle qui ne fait rien:
 
-\lstinputlisting[caption=\EN{\CCpp Code}]{patterns/00_empty/1.c}
+\lstinputlisting[caption=Code \CCpp]{patterns/00_empty/1.c}
 
 Compilons le!
 
@@ -11,7 +11,7 @@ Compilons le!
 
 Voici ce que les compilateurs GCC et MSVC avec l'option d'optimisation produisent sur une plateforme x86:
 
-\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput)]{patterns/00_empty/1.s}
+\lstinputlisting[caption=GCC/MSVC \Optimizing (\assemblyOutput)]{patterns/00_empty/1.s}
 
 \myindex{x86!\Instructions!RET}
 Il y a juste une instruction: \RET, qui retourne l'exécution vers le \gls{caller}. % TODO : translate caller ?
@@ -30,11 +30,11 @@ par nombre (de \$0 à \$31) ou pas un pseudo nom (\$V0, \$A0, etc.).
 
 La sortie de l'assemblage GCC ci-dessous liste les registres par nombre:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput)]{patterns/00_empty/MIPS.s}
+\lstinputlisting[caption=GCC 4.4.5 \Optimizing (\assemblyOutput)]{patterns/00_empty/MIPS.s}
 
 \dots tandis que \IDA le fait---avec les pseudo noms:
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/00_empty/MIPS_IDA.lst}
+\lstinputlisting[caption=GCC 4.4.5 \Optimizing (IDA),style=customasmMIPS]{patterns/00_empty/MIPS_IDA.lst}
 
 \myindex{MIPS!\Instructions!J}
 La première instruction est l'instruction de saut(J ou JR) qui retourne le flux d'exécution vers le \gls{caller},
@@ -57,7 +57,7 @@ Bien que les fonctions vides soient inutiles, elles sont assez présentes dans l
 
 Tout d'abord, les fonctions de debogage sont assez populaires, comme celle-ci:
 
-\lstinputlisting[caption=\EN{\CCpp Code}]{patterns/00_empty/dbg_print.c}
+\lstinputlisting[caption=Code \CCpp]{patterns/00_empty/dbg_print.c}
 
 Dans une compilation en non-debug (e.g., ``release''), \TT{\_DEBUG} n'est pas défini,
 donc la fonction \TT{dbg\_print()}, bien qu'elle soit appelée pendant l'exécution,
@@ -66,7 +66,7 @@ sera vide.
 Un autre moyen de protection logicielle est de faire plusieurs compilations: une pour les clients, une pour démonstration.
 La compilation de démonstration peut manquer de certaines fonctions importantes, comme ici:
 
-\lstinputlisting[caption=\EN{\CCpp Code}]{patterns/00_empty/demo.c}
+\lstinputlisting[caption=Code \CCpp]{patterns/00_empty/demo.c}
 
 La fonction \TT{save\_file()} peut être appelée lorsque l'utilisateur clique sur le menu \TT{Fichier->Enregistrer}.
 La version de démo peut être livrée avec cet item du menu désactivé, mais même si un logiciel cracker pourra l'activer,
