@@ -63,9 +63,16 @@ in the directory you're currently working with contents like
 	-- my@email.com, username@github.com, DD/MM/YYYY.
 
 [For example](https://github.com/dennis714/RE-for-beginners/blob/2bc65d9533d48b023cf5ac467c42f4ef1aee90e0/OS/Note_to_German_translators.txt).
+You can jokingly call it "mutex".
 Feel free to add any other notes for rest of translators.
 
 If you are not familiar with git/github, just send me fragment you translated, so I could add it as early as possible.
+
+## Keeping translation in sync
+
+Whenever I add/modify some part of text, I also add "\ac{TBT}" (To Be Translated) mark to other translations,
+into a place where translation should be updated.
+And/or, I add commentary at the first line of each translated file, which should be updated.
 
 ## Contact me
 
