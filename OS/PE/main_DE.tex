@@ -2,62 +2,70 @@
 \label{win32_pe}
 \myindex{Windows!Win32}
 
-%\acs{PE} is an executable file format used in Windows.
-%The difference between .exe, .dll and .sys is that .exe and .sys usually do not have exports, only imports.
-%
-%\myindex{OEP}
-%
-%A \ac{DLL}, just like any other PE-file, has an entry point (\ac{OEP}) (the function DllMain() is located there) 
-%but this function usually does nothing.
-%.sys is usually a device driver.
-%As of drivers, Windows requires the checksum to be present in the PE file and for it to be correct
-%\footnote{For example, Hiew(\myref{Hiew}) can calculate it}.
-%
-%\myindex{Windows!Windows Vista}
-%Starting at Windows Vista, a driver's files must also be signed with a digital signature. It will fail to load otherwise.
-%
-%\myindex{MS-DOS}
-%Every PE file begins with tiny DOS program that prints a
-%message like \q{This program cannot be run in DOS mode.}---if you run this program in DOS or Windows 3.1 (\ac{OS}-es which are not aware of the PE format), 
-%this message will be printed.
-%
-%\subsubsection{Terminology}
-%
-%\myindex{VA}
-%\myindex{Base address}
-%\myindex{RVA}
-%\myindex{Windows!IAT}
-%\myindex{Windows!INT}
-%
-%\begin{itemize}
-%\item Module---a separate file, .exe or .dll.
-%
-%\item Process---a program loaded into memory and currently running.  Commonly consists of one .exe file and bunch of .dll files.
-%
-%\item Process memory---the memory a process works with.  Each process has its own.
-%There usually are loaded modules, memory of the stack, \gls{heap}(s), etc.
-%
-%\item \ac{VA}---an address which is to be used in program while runtime.
-%
-%\item Base address (of module)---the address within the process memory at which the module is to be loaded.
-%\ac{OS} loader may change it, if the base address is already occupied by another module just loaded before.
-%
-%\item \ac{RVA}---the \ac{VA}-address minus the base address.
-%
-%Many addresses in PE-file tables use \ac{RVA}-addresses.
-%
-%%\item
-%%Data directory\EMDASH{}...
-%
-%\item \ac{IAT}---an array of addresses of imported symbols \footnote{\PietrekPE}. 
-%Sometimes, the \TT{IMAGE\_DIRECTORY\_ENTRY\_IAT} data directory points at the \ac{IAT}. 
-%\label{IDA_idata}
-%It is worth noting that \ac{IDA} (as of 6.1) may allocate a pseudo-section named \TT{.idata} for
-%\ac{IAT}, even if the \ac{IAT} is a part of another section!
-%
-%\item \ac{INT}---an array of names of symbols to be imported\footnote{\PietrekPE}.
-%\end{itemize}
-%
+\acs{PE} ist ein Dateiformat für ausführbare Dateien unter Windows.
+Der Unterschied zwischen .exe, .dll und .sys ist, dass .exe und .sys in der Regel
+nur Imports und keine Exports haben.
+
+\myindex{OEP}
+
+Eine \ac{DLL} hat wie jede andere PE-Datei einen Eintrittspunkt (\ac{OEP}) (die
+Funktion DllMain() befindet sich hier), allerdings macht diese Funktion in der
+Regel nichts.
+.sys ist normalerweise ein Gerätetreiber.
+Wie auch bei Treibern, erwartet Windows eine Prüfsumme in der PE-Datei, die korrekt
+sein muss\footnote{Hiew(\myref{Hiew}) kann diese berechnen}.
+
+\myindex{Windows!Windows Vista}
+Ab Windows Vista, muss eine Treiberdatei auch mit einer digitalen Signatur versehen
+sein. Anderseits wird das Laden des Treibers fehlschlagen.
+
+\myindex{MS-DOS}
+Jede PE-Datei beginnt mit einem kleinen DOS-Programm, welches eine Nachricht in der
+Art wie folgt ausgibt:
+\q{Dieses Programm kann nicht im MS-DOS-Modus gestartet werden.}---wenn versucht wird
+das Programm unter DOS oder Windows 3.1 zu starten (\ac{OS}e die das PE-Format
+nicht kennen).
+
+\subsubsection{Terminologie}
+
+\myindex{VA}
+\myindex{Base address}
+\myindex{RVA}
+\myindex{Windows!IAT}
+\myindex{Windows!INT}
+
+\begin{itemize}
+\item Modul: eine separate Datei, .exe oder .dll
+
+\item Prozess: ein Programm das in den Speicher geladen wurde und gerade ausgeführt
+wird. Besteht meist aus einer .exe-Datei und einer Reihe von .dll-Dateien.
+
+\item Prozessspeicher: der Speicher, mit dem der Prozess arbeitet. Jeder Prozess
+hat seinen eigenen Bereich. Hier befinden sich in der Regel Module, der Stack,
+\gls{heap}(s) usw.
+
+\item \ac{VA}: Eine Adresse welche zur Laufzeit in einem Programm verwendet wird.
+
+\item Basisadresse (eines Moduls): die Adresse im Prozessspeicher an der das Modul
+geladen wird. Der \ac{OS}-Lader kann diese ändern wenn die Basisadresse bereits
+von einem vorher geladenen Modul verwendet wird.
+
+\item \ac{RVA}: die \ac{VA}-Adresse minus der Basisadresse.
+
+Viele Adressen in PE-Dateien-Tabellen nutzen \ac{RVA}-Adressen.
+
+%\item
+%Data directory\EMDASH{}...
+
+\item \ac{IAT}: Ein Array von Adressen importierter Module\footnote{\PietrekPE}. 
+Manchmal zeigt das \TT{IMAGE\_DIRECTORY\_ENTRY\_IAT}-Daten-Verzeichnis auf \ac{IAT}.
+\label{IDA_idata}
+Erwähnenswert ist es dass \ac{IDA} (v6.1) eine Pseudosektion namens \TT{.idata}
+für \ac{IAT} allozieren kann, selbst wenn \ac{IAT} Teil einer anderen Sektion ist.
+
+\item \ac{INT}: Ein Array von Namen zu importierender Symbole\footnote{\PietrekPE}.
+\end{itemize}
+
 %\subsubsection{Base address}
 %
 %The problem is that several module authors can prepare DLL files for others to use and it is not possible
