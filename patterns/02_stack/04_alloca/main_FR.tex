@@ -11,7 +11,7 @@ Intéressons-nous à la fonction \TT{alloca()}
 Cette fonction fonctionne comme \TT{malloc()}, mais alloue de la mémoire directement sur la pile.
 % page break added to prevent "\vref on page boundary" error. it may be dropped in future.
 Le bout de mémoire ne doit pas être libéré via un appel à la fonction \TT{free()}, \\
-puisque l'epilogue de fonction (\myref{sec:prologepilog}) retourne \ESP à son état initial précédant ce qui va automatiquement désallouer ce bout de mémoire.
+puisque l'épilogue de fonction (\myref{sec:prologepilog}) retourne \ESP à son état initial précédant ce qui va automatiquement désallouer ce bout de mémoire.
 
 Intéressons-nous à l'implémentation d'\TT{alloca()}.
 Cette fonction décale simplement \ESP du nombre d'octets demandé vers le bas et vers le fond de la pile et définit \ESP en tant que pointeur vers la mémoire \IT{allouée}.
@@ -20,7 +20,7 @@ Essayons :
 
 \lstinputlisting[style=customc]{patterns/02_stack/04_alloca/2_1.c}
 
-La fonction \TT{\_snprintf()} fonctionne comme \printf, mais au lieu d'afficher le résultat sur \gls{stdout} (ex., dans un terminal ou une console), il l'écrit dans le buffer \TT{buf}. La fonction \puts copie le contenu de \TT{buf} dans \gls{stdout}. Évidemment, ces deux appels de fonctions peuvent être remplacé par un seul appel à la fonction \printf, mais nous devons illustrer l'utilisation de petit buffer.
+La fonction \TT{\_snprintf()} fonctionne comme \printf, mais au lieu d'afficher le résultat sur \gls{stdout} (ex., dans un terminal ou une console), il l'écrit dans le buffer \TT{buf}. La fonction \puts copie le contenu de \TT{buf} dans \gls{stdout}. Évidemment, ces deux appels de fonctions peuvent être remplacés par un seul appel à la fonction \printf, mais nous devons illustrer l'utilisation de petit buffer.
 
 \myparagraph{MSVC}
 
@@ -40,7 +40,7 @@ GCC 4.4.1 fait la même chose sans effectuer d'appel à des fonctions externes :
 
 \myparagraph{GCC + \ATTSyntax}
 
-Voyons le même code mais avec la syntax AT\&T : 
+Voyons le même code mais avec la syntaxe AT\&T :
 
 \lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/02_stack/04_alloca/2_1_gcc_ATT_O3.s}
 
@@ -48,6 +48,6 @@ Voyons le même code mais avec la syntax AT\&T :
 Le code est le même que le précédent.
 
 Au fait, \INS{movl \$3, 20(\%esp)} correspond à
-\INS{mov DWORD PTR [esp+20], 3} avec la syntax intel.
-Dans la syntax AT\&T, le format registre+offset pour l'adressage mémoire
+\INS{mov DWORD PTR [esp+20], 3} avec la syntaxe intel.
+Dans la syntaxe AT\&T, le format registre+offset pour l'adressage mémoire
 ressemble à \TT{offset(\%{register})}.
