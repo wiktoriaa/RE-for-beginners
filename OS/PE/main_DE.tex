@@ -57,7 +57,7 @@ Viele Adressen in PE-Dateien-Tabellen nutzen \ac{RVA}-Adressen.
 %\item
 %Data directory\EMDASH{}...
 
-\item \ac{IAT}: Ein Array von Adressen importierter Module\footnote{\PietrekPE}. 
+\item \ac{IAT}: Ein Array von Adressen importierter Module\footnote{\PietrekPE}.
 Manchmal zeigt das \TT{IMAGE\_DIRECTORY\_ENTRY\_IAT}-Daten-Verzeichnis auf \ac{IAT}.
 \label{IDA_idata}
 Erwähnenswert ist es dass \ac{IDA} (v6.1) eine Pseudosektion namens \TT{.idata}
@@ -106,116 +106,126 @@ Mal an zufällige Basisadressen.
 \ac{ASLR}-Unterstützung ist in der PE-Datei mit dem Flag
 \TT{IMAGE\_DLL\_CHARACTERISTICS\_DYNAMIC\_BASE} markiert \InSqBrackets{siehe \Russinovich}.
 
-%\subsubsection{Subsystem}
-%
-%There is also a \IT{subsystem} field, usually it is:
-%
-%\myindex{Native API}
-%
-%\begin{itemize}
-%\item native\footnote{Meaning, the module use Native API instead of Win32} (.sys-driver), 
-%
-%\item console (console application) or
-%
-%\item \ac{GUI} (non-console).
-%\end{itemize}
-%
-%\subsubsection{OS version}
-%
-%A PE file also specifies the minimal Windows version it needs in order to be loadable.
-%
-%The table of version numbers stored in the PE file and corresponding Windows codenames is
-%here\footnote{\href{http://go.yurichev.com/17044}{wikipedia}}.
-%
-%\myindex{Windows!Windows NT4}
-%\myindex{Windows!Windows 2000}
-%For example, \ac{MSVC} 2005 compiles .exe files for running on Windows NT4 (version 4.00), but \ac{MSVC} 2008 does not 
-%(the generated files have a version of 5.00, at least Windows 2000 is needed to run them).
-%
-%\myindex{Windows!Windows XP}
-%
-%\ac{MSVC} 2012 generates .exe files of version 6.00 by default, 
-%targeting at least Windows Vista. 
-%However, by changing the compiler's options\footnote{\href{http://go.yurichev.com/17045}{MSDN}},
-%it is possible to force it to compile for Windows XP.
-%
-%\subsubsection{Sections}
-%
-%Division in sections, as it seems, is present in all executable file formats.
-%
-%It is devised in order to separate code from data, and data---from constant data.
-%
-%\begin{itemize}
-%\item Either the \IT{IMAGE\_SCN\_CNT\_CODE} or \IT{IMAGE\_SCN\_MEM\_EXECUTE} flags will be set on the code section---this is executable code.
-%
-%\item On data section---\IT{IMAGE\_SCN\_CNT\_INITIALIZED\_DATA},\\
-%\IT{IMAGE\_SCN\_MEM\_READ} and \IT{IMAGE\_SCN\_MEM\_WRITE} flags.
-%
-%\item On an empty section with uninitialized data---\\
-%\IT{IMAGE\_SCN\_CNT\_UNINITIALIZED\_DATA}, \IT{IMAGE\_SCN\_MEM\_READ} \\
-%		and \IT{IMAGE\_SCN\_MEM\_WRITE}.
-%
-%\item On a constant data section (one that's protected from writing), the flags \\
-%\IT{IMAGE\_SCN\_CNT\_INITIALIZED\_DATA} and \IT{IMAGE\_SCN\_MEM\_READ} can be set, \\
-%but not \IT{IMAGE\_SCN\_MEM\_WRITE}. 
-%A process going to crash if it tries to write to this section.
-%\end{itemize}
-%
-%\myindex{TLS}
-%\myindex{BSS}
-%Each section in PE-file may have a name, however, it is not very important.
-%Often (but not always) the code section is named \TT{.text}, 
-%the data section---\TT{.data}, the constant data section --- \TT{.rdata} \IT{(readable data)}.
-%Other popular section names are: 
-%
-%\myindex{MIPS}
-%\begin{itemize}
-%\item \TT{.idata}---imports section.
-%\ac{IDA} may create a pseudo-section named like this: \myref{IDA_idata}.
-%\item \TT{.edata}---exports section (rare)
-%\item \TT{.pdata}---section holding all information about exceptions in Windows NT for MIPS, \ac{IA64} and x64: \myref{SEH_win64}
-%\item \TT{.reloc}---relocs section
-%\item \TT{.bss}---uninitialized data (\ac{BSS})
-%\item \TT{.tls}---thread local storage (\ac{TLS})
-%\item \TT{.rsrc}---resources
-%\item \TT{.CRT}---may present in binary files compiled by ancient MSVC versions
-%\end{itemize}
-%
-%PE file packers/encryptors often garble section names or replace the names with their own.
-%
-%\ac{MSVC} allows you to declare data in arbitrarily named section
-%\footnote{\href{http://go.yurichev.com/17047}{MSDN}}.
-%
-%Some compilers and linkers can add a section with debugging symbols and 
-%other debugging information (MinGW for instance).
-%\myindex{Windows!PDB}
-%However it is not so in latest versions of \ac{MSVC} (separate \gls{PDB} files are used there for this purpose).\\
-%\\
-%That is how a PE section is described in the file:
-%
-%\begin{lstlisting}
-%typedef struct _IMAGE_SECTION_HEADER {
-%  BYTE  Name[IMAGE_SIZEOF_SHORT_NAME];
-%  union {
-%    DWORD PhysicalAddress;
-%    DWORD VirtualSize;
-%  } Misc;
-%  DWORD VirtualAddress;
-%  DWORD SizeOfRawData;
-%  DWORD PointerToRawData;
-%  DWORD PointerToRelocations;
-%  DWORD PointerToLinenumbers;
-%  WORD  NumberOfRelocations;
-%  WORD  NumberOfLinenumbers;
-%  DWORD Characteristics;
-%} IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;
-%\end{lstlisting}
-%\footnote{\href{http://go.yurichev.com/17048}{MSDN}}
-%
-%\myindex{Hiew}
-%A word about terminology: \IT{PointerToRawData} it called \q{Offset} in Hiew
-%and \IT{VirtualAddress} is called \q{RVA} there.
-%
+\subsubsection{Subsystem}
+
+Es existiert auch ein \IT{Subsystem}-Feld, dass normalerweise wie folgt ist:
+
+\myindex{Native API}
+
+\begin{itemize}
+\item native\footnote{bedeutet, dass das Modul eine eigene API statt Win32 nutzt} (.sys-Treiber),
+
+\item console (Konsolenanwendung) oder
+
+\item \ac{GUI} (Anwendung mit grafischer Oberfläche).
+\end{itemize}
+
+\subsubsection{Betriebssystem-Version}
+
+Eine PE-Datei spezifiziert auch die minimale Windows-Version die sie benötigt um
+ladbar zu sein.
+
+Die Tabelle mit Versionsnummern in der PE-Datei und die entsprechenden Windows-Codenamen
+ist hier\footnote{\href{http://go.yurichev.com/17044}{Wikipedia}}.
+
+\myindex{Windows!Windows NT4}
+\myindex{Windows!Windows 2000}
+Beispielsweise kompiliert \ac{MSVC} 2005 .exe-Dateien für Windows NT4 (Version 4.00),
+\ac{MSVC} 2008 jedoch nicht (die erzeugten Dateien haben die Version 5.00, es ist
+mindestens Windows 2000 notwendig um sie ausführen zu können).
+
+\myindex{Windows!Windows XP}
+
+\ac{MSVC} 2012 erzeugt standardmäßig .exe-Dateien mit der Version 6.00, die mindestens
+Windows Vista benötigen.
+Mit Änderungen an den Compiler-Option\footnote{\href{http://go.yurichev.com/17045}{MSDN}}
+ist es jedoch möglich eine Kompilierung für Windows XP zu erzwingen.
+
+\subsubsection{Sektionen}
+
+Abschnitte in Sektionen sind in allen Formaten für ausführbare Dateien vorhanden.
+
+Dies wurde entwickelt um Code von Daten und Daten von Konstanten zu trennen.
+
+\begin{itemize}
+\item Entweder das \IT{IMAGE\_SCN\_CNT\_CODE}- oder \IT{IMAGE\_SCN\_MEM\_EXECUTE}-Flag
+ist in der Code-Sektion gesetzt. Dies kennzeichnet ausführbaren Code.
+
+\item In der Daten-Sektion sind die Flags \IT{IMAGE\_SCN\_CNT\_INITIALIZED\_DATA},
+\IT{IMAGE\_SCN\_MEM\_READ} und \IT{IMAGE\_SCN\_MEM\_WRITE} gesetzt.
+
+\item In einer leeren Sektion mit uninitialisierten Daten sind die Flags
+\IT{IMAGE\_SCN\_CNT\_UNINITIALIZED\_DATA}, \IT{IMAGE\_SCN\_MEM\_READ} und
+\IT{IMAGE\_SCN\_MEM\_WRITE} gesetzt.
+
+\item In der Sektion mit konstanten Daten (die schreibgeschützt ist), sind die
+Flags \IT{IMAGE\_SCN\_CNT\_INITIALIZED\_DATA} und \IT{IMAGE\_SCN\_MEM\_READ}
+gesetzt, nicht jedoch \IT{IMAGE\_SCN\_MEM\_WRITE}.
+Ein Prozess wird abstürzen, wenn er versucht hier schreibend zuzugreifen.
+
+\end{itemize}
+
+\myindex{TLS}
+\myindex{BSS}
+Jede Sektion in einer PE-Datei kann einen Namen haben, auch wenn dieser nicht
+unbedingt wichtig ist.
+Oft (aber nicht immer) ist die Code-Sektion mit \TT{.text} benannt, die Datensektion
+mit \TT{.data}, und die Sektion mit konstanten Daten \TT{.rdata} für \IT{(readable data)}.
+
+Andere verbreitete Sektionsnamen sind:
+
+\myindex{MIPS}
+\begin{itemize}
+\item \TT{.idata}: Import-Sektion
+\ac{IDA} kann eine Pseudosektion mit dem Namen \myref{IDA_idata} erzeugen.
+\item \TT{.edata}: Export-Sektion (selten)
+\item \TT{.pdata}: Sektion, die alle Informationen über Ausnahmen in Windows NT
+für MIPS, \ac{IA64} und x64 enthält: \myref{SEH_win64}
+\item \TT{.reloc}: Reloc-Sektion
+\item \TT{.bss}: uninitialisierte Daten (\ac{BSS})
+\item \TT{.tls}: Thread-lokaler Speicher (\ac{TLS})
+\item \TT{.rsrc}: Ressourcen
+\item \TT{.CRT}: kann in Binärdateien vorhanden sein die mit alten MSVC-Compilern
+erzeugt wurden
+\end{itemize}
+
+Pack- und Verschlüsselungsprogramme für PE-Dateien verändern häufig die Sektionsnamen
+oder ersetzen sie durch eigene Namen.
+
+\ac{MSVC} ermöglicht es Daten in beliebigen benannte Sektion zu
+deklarieren\footnote{\href{http://go.yurichev.com/17047}{MSDN}}.
+
+Einige Compiler und Linker können eine Sektion mit Debug-Symbolen und anderen
+Debug-Informationen hinzufügen (MinGW zum Beispiel).
+\myindex{Windows!PDB}
+Nichtsdestotrotz ist dies in der aktuellen Version von \ac{MSVC} möglich.
+Hier gibt es separate \gls{PDB}-Dateien für diesen Zweck.
+
+Nachfolgend der Aufbau der PE-Sektion in dieser Datei:
+
+\begin{lstlisting}
+typedef struct _IMAGE_SECTION_HEADER {
+  BYTE  Name[IMAGE_SIZEOF_SHORT_NAME];
+  union {
+    DWORD PhysicalAddress;
+    DWORD VirtualSize;
+  } Misc;
+  DWORD VirtualAddress;
+  DWORD SizeOfRawData;
+  DWORD PointerToRawData;
+  DWORD PointerToRelocations;
+  DWORD PointerToLinenumbers;
+  WORD  NumberOfRelocations;
+  WORD  NumberOfLinenumbers;
+  DWORD Characteristics;
+} IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;
+\end{lstlisting}
+\footnote{\href{http://go.yurichev.com/17048}{MSDN}}
+
+\myindex{Hiew}
+Ein Wort zur Terminologie: \IT{PointerToRawData} wird in Hiew \q{Offset}
+und \IT{VirtualAddress} \q{RVA} genannt.
+
 %\subsubsection{Data section}
 %
 %Data section in file can be smaller than in memory.
@@ -262,7 +272,7 @@ Mal an zufällige Basisadressen.
 %But it is not always convenient.
 %
 %That is why a relocations table is present.
-%There the addresses of points that must be corrected are enumerated, 
+%There the addresses of points that must be corrected are enumerated,
 %in case of loading at a different base address.
 %
 %% TODO тут бы пример с HIEW или objdump..
@@ -282,7 +292,7 @@ Mal an zufällige Basisadressen.
 %
 %That is why the address of the 4 bytes after \TT{0xA1}, is written in the relocs table.
 %
-%If the module is loaded at a different base address, the \ac{OS} loader enumerates all addresses in the table, 
+%If the module is loaded at a different base address, the \ac{OS} loader enumerates all addresses in the table,
 %
 %finds each 32-bit word the address points to, subtracts the original base address from it
 %(we get the \ac{RVA} here), and adds the new base address to it.
@@ -314,7 +324,7 @@ Mal an zufällige Basisadressen.
 %And every .exe file or DLL has \q{imports}, a table of functions it needs for execution including
 %list of DLL filenames.
 %
-%After loading the main .exe-file, the \ac{OS} loader processes imports table: 
+%After loading the main .exe-file, the \ac{OS} loader processes imports table:
 %it loads the additional DLL-files, finds function names
 %among the DLL exports and writes their addresses down in the \ac{IAT} of the main .exe-module.
 %
@@ -356,15 +366,15 @@ Mal an zufällige Basisadressen.
 %
 %Each element holds the \ac{RVA} address of the text string (DLL name) (\IT{Name}).
 %
-%\IT{OriginalFirstThunk} is the \ac{RVA} address of the \ac{INT} table. 
-%This is an array of \ac{RVA} addresses, each of which points to a text string with a function name. 
-%Each string is prefixed by a 16-bit integer 
+%\IT{OriginalFirstThunk} is the \ac{RVA} address of the \ac{INT} table.
+%This is an array of \ac{RVA} addresses, each of which points to a text string with a function name.
+%Each string is prefixed by a 16-bit integer
 %(\q{hint})---\q{ordinal} of function.
 %
 %While loading, if it is possible to find a function by ordinal,
 %then the strings comparison will not occur. The array is terminated by zero.
 %
-%There is also a pointer to the \ac{IAT} table named \IT{FirstThunk}, it is just the \ac{RVA} address 
+%There is also a pointer to the \ac{IAT} table named \IT{FirstThunk}, it is just the \ac{RVA} address
 %of the place where the loader writes the addresses of the resolved functions.
 %
 %The points where the loader writes addresses are marked by \IDA like this: \IT{\_\_imp\_CreateFileA}, etc.
@@ -373,8 +383,8 @@ Mal an zufällige Basisadressen.
 %
 %\myindex{x86!\Instructions!CALL}
 %\begin{itemize}
-%\item The code will have instructions like \IT{call \_\_imp\_CreateFileA}, 
-%and since the field with the address of the imported function is a global variable in some sense, 
+%\item The code will have instructions like \IT{call \_\_imp\_CreateFileA},
+%and since the field with the address of the imported function is a global variable in some sense,
 %the address of the \IT{call} instruction (plus 1 or 2) is to be added to the relocs table,
 %for the case when the module is loaded at a different base address.
 %
@@ -386,7 +396,7 @@ Mal an zufällige Basisadressen.
 %
 %\myindex{x86!\Instructions!JMP}
 %\myindex{thunk-functions}
-%\item For each imported function, there is only one jump allocated, using the \JMP instruction 
+%\item For each imported function, there is only one jump allocated, using the \JMP instruction
 %plus a reloc to it.
 %Such points are also called \q{thunks}.
 %
@@ -401,10 +411,10 @@ Mal an zufällige Basisadressen.
 %but not done by default. \\
 %\\
 %By the way, the array of function addresses to which FirstThunk is pointing is not necessary to be located in the \ac{IAT} section.
-%For example, the author of these lines once wrote the PE\_add\_import\footnote{\href{http://go.yurichev.com/17049}{yurichev.com}} 
+%For example, the author of these lines once wrote the PE\_add\_import\footnote{\href{http://go.yurichev.com/17049}{yurichev.com}}
 %utility for adding imports to an existing .exe-file.
 %
-%Some time earlier, in the previous versions of the utility, 
+%Some time earlier, in the previous versions of the utility,
 %at the place of the function you want to substitute with a call to another DLL,
 %my utility wrote the following code:
 %
@@ -417,7 +427,7 @@ Mal an zufällige Basisadressen.
 %the loader writes the address of the \IT{function} function right in the code.
 %
 %It also worth noting that a code section is usually write-protected, so my utility adds the \\
-%\IT{IMAGE\_SCN\_MEM\_WRITE} 
+%\IT{IMAGE\_SCN\_MEM\_WRITE}
 %flag for code section. Otherwise, the program to crash while loading with error code
 %5 (access denied). \\
 %\\
@@ -445,7 +455,7 @@ Mal an zufällige Basisadressen.
 %\myindex{Windows!Win32!LoadLibrary}
 %\myindex{Windows!Win32!GetProcAddress}
 %
-%Therefore, the packer/encryptor does this on its own, with the help of 
+%Therefore, the packer/encryptor does this on its own, with the help of
 %\IT{LoadLibrary()} and the \IT{GetProcAddress()} functions.
 %
 %That is why these two functions are often present in \ac{IAT} in packed files.\\
@@ -467,7 +477,7 @@ Mal an zufällige Basisadressen.
 %Perhaps they were separated from the main code, so all these things could be multilingual,
 %and it would be simpler to pick text or picture for the language that is currently set in the \ac{OS}. \\
 %\\
-%As a side effect, they can be edited easily and saved back to the executable file, even if one does not have special knowledge, 
+%As a side effect, they can be edited easily and saved back to the executable file, even if one does not have special knowledge,
 %by using the ResHack editor, for example (\myref{ResHack}).
 %
 %\subsubsection{.NET}
