@@ -226,154 +226,166 @@ typedef struct _IMAGE_SECTION_HEADER {
 Ein Wort zur Terminologie: \IT{PointerToRawData} wird in Hiew \q{Offset}
 und \IT{VirtualAddress} \q{RVA} genannt.
 
-%\subsubsection{Data section}
-%
-%Data section in file can be smaller than in memory.
-%For example, some variables can be initialized, some are not.
-%Compiler and linker will collect them all into one section, but the first part of it is initialized and allocated in file,
-%while another is absent in file (of course, to make it smaller).
-%\IT{VirtualSize} will be equal to the size of section in memory, and \IT{SizeOfRawData} --- to
-%size of section in file.
-%
-%IDA can show the border between initialized and not initialized parts like that:
-%
-%\begin{lstlisting}
-%...
-%
-%.data:10017FFA                 db    0
-%.data:10017FFB                 db    0
-%.data:10017FFC                 db    0
-%.data:10017FFD                 db    0
-%.data:10017FFE                 db    0
-%.data:10017FFF                 db    0
-%.data:10018000                 db    ? ;
-%.data:10018001                 db    ? ;
-%.data:10018002                 db    ? ;
-%.data:10018003                 db    ? ;
-%.data:10018004                 db    ? ;
-%.data:10018005                 db    ? ;
-%
-%...
-%\end{lstlisting}
-%
-%\subsubsection{Relocations (relocs)}
-%\label{subsec:relocs}
-%
-%\ac{AKA} FIXUP-s (at least in Hiew).
-%
-%They are also present in almost all executable file formats
-%\footnote{Even in .exe files for MS-DOS}.
-%Exceptions are shared dynamic libraries compiled with \ac{PIC}, or any other \ac{PIC}-code.
-%
-%What are they for?
-%
-%Obviously, modules can be loaded on various base addresses, but how to deal with global variables, for example?
-%They must be accessed by address.  One solution is \PICcode{} (\myref{sec:PIC}).
-%But it is not always convenient.
-%
-%That is why a relocations table is present.
-%There the addresses of points that must be corrected are enumerated,
-%in case of loading at a different base address.
-%
-%% TODO тут бы пример с HIEW или objdump..
-%For example, there is a global variable at address \TT{0x410000} and this is how it is accessed:
-%
-%\begin{lstlisting}
-%A1 00 00 41 00         mov         eax,[000410000]
-%\end{lstlisting}
-%
-%The base address of the module is \TT{0x400000}, the \ac{RVA} of the global variable is \TT{0x10000}.
-%
-%If the module is loaded at base address \TT{0x500000}, the real address of the global variable must be \TT{0x510000}.
-%
-%\myindex{x86!\Instructions!MOV}
-%
-%As we can see, the address of variable is encoded in the instruction \TT{MOV}, after the byte \TT{0xA1}.
-%
-%That is why the address of the 4 bytes after \TT{0xA1}, is written in the relocs table.
-%
-%If the module is loaded at a different base address, the \ac{OS} loader enumerates all addresses in the table,
-%
-%finds each 32-bit word the address points to, subtracts the original base address from it
-%(we get the \ac{RVA} here), and adds the new base address to it.
-%
-%If a module is loaded at its original base address, nothing happens.
-%
-%All global variables can be treated like that.
-%
-%Relocs may have various types, however, in Windows for x86 processors, the type is usually \\
-%\IT{IMAGE\_REL\_BASED\_HIGHLOW}.
-%
-%\myindex{Hiew}
-%
-%By the way, relocs are darkened in Hiew, for example: \figref{fig:scanf_ex3_hiew_1}.
-%
-%\myindex{\olly}
-%\olly underlines the places in memory to which relocs are to be applied, for example: \figref{fig:switch_lot_olly3}.
-%
-%\subsubsection{Exports and imports}
-%
-%\label{PE_exports_imports}
-%As we all know, any executable program must use the \ac{OS}'s services and other DLL-libraries somehow.
-%
-%It can be said that functions from one module (usually DLL) must be connected somehow to the points of their
-%calls in other modules (.exe-file or another DLL).
-%
-%For this, each DLL has an \q{exports} table, which consists of functions plus their addresses in a module.
-%
-%And every .exe file or DLL has \q{imports}, a table of functions it needs for execution including
-%list of DLL filenames.
-%
-%After loading the main .exe-file, the \ac{OS} loader processes imports table:
-%it loads the additional DLL-files, finds function names
-%among the DLL exports and writes their addresses down in the \ac{IAT} of the main .exe-module.
-%
-%\myindex{Windows!Win32!Ordinal}
-%
-%As we can see, during loading the loader must compare a lot of function names, but string comparison is not a very
-%fast procedure, so there is a support for \q{ordinals} or \q{hints},
-%which are function numbers stored in the table, instead of their names.
-%
-%That is how they can be located faster when loading a DLL.
-%Ordinals are always present in the \q{export} table.
-%
-%\myindex{MFC}
-%For example, a program using the \ac{MFC} library usually loads mfc*.dll by ordinals,
-%and in such programs there are no \ac{MFC} function names in \ac{INT}.
-%
-%% TODO example!
-%When loading such programs in \IDA, it will ask for a path to the mfc*.dll files
-%in order to determine the function names.
-%
-%If you don't tell \IDA the path to these DLLs, there will be \IT{mfc80\_123} instead of function names.
-%
-%\myparagraph{Imports section}
-%
-%Often a separate section is allocated for the imports table and everything related to it (with name like \TT{.idata}),
-%however, this is not a strict rule.
-%
-%Imports are also a confusing subject because of the terminological mess. Let's try to collect all information in one place.
-%
-%\begin{figure}[H]
-%\centering
-%\myincludegraphics{OS/PE/unnamed0.png}
-%\caption{
-%A scheme that unites all PE-file structures related to imports}
-%\end{figure}
-%
-%The main structure is the array \IT{IMAGE\_IMPORT\_DESCRIPTOR}.
-%Each element for each DLL being imported.
-%
-%Each element holds the \ac{RVA} address of the text string (DLL name) (\IT{Name}).
-%
-%\IT{OriginalFirstThunk} is the \ac{RVA} address of the \ac{INT} table.
-%This is an array of \ac{RVA} addresses, each of which points to a text string with a function name.
-%Each string is prefixed by a 16-bit integer
-%(\q{hint})---\q{ordinal} of function.
-%
-%While loading, if it is possible to find a function by ordinal,
-%then the strings comparison will not occur. The array is terminated by zero.
-%
+\subsubsection{Datensektion}
+Die Datensektion in der Datei kann kleiner sein als im Arbeitsspeicher. Zum
+Beispiel können einige Variablen initialisiert sein und andere nicht.
+Compiler und Linker sammeln diese alle in einer einzelnen Sektion, aber
+der erste Teil davon ist initialisiert und in der Datei enthalten, während
+ein anderer in der Datei fehlt um diese kleiner zu machen.
+\IT{VirtualSize} wird gleich groß sein wie die Sektion im Speicher und
+\IT{SizeOfRawData} wie die Sektion in der Datei.
+
+IDA kann die Grenze der initialisierten und nicht initialisierten Teile
+wie folgt anzeigen:
+
+\begin{lstlisting}
+...
+
+.data:10017FFA                 db    0
+.data:10017FFB                 db    0
+.data:10017FFC                 db    0
+.data:10017FFD                 db    0
+.data:10017FFE                 db    0
+.data:10017FFF                 db    0
+.data:10018000                 db    ? ;
+.data:10018001                 db    ? ;
+.data:10018002                 db    ? ;
+.data:10018003                 db    ? ;
+.data:10018004                 db    ? ;
+.data:10018005                 db    ? ;
+
+...
+\end{lstlisting}
+
+\subsubsection{Relocations (relocs)}
+\label{subsec:relocs}
+
+\ac{AKA} FIXUPs (zumindest in Hiew).
+Diese sind ebenfalls in den meisten Formaten für ausführbare Dateien
+vorhanden\footnote{Sogar in .exe-Dateien für MS-DOS.}.
+Ausnahmen sind gemeinsam genutzte (dynamische) Bibliotheken, die \ac{PIC} enthalten
+
+Wofür dienen die relocs?
+
+Offensichtlich können Module an verschiedene Basisadressen geladen werden. Wie
+wird jedoch zum Beispiel mit globalen Variablen umgegangen?
+Auf diese muss anhand der Adresse zugegriffen werden. Eine Möglichkeit dazu ist
+\PICcode{} (\myref{sec:PIC}), was aber nicht immer komfortabel ist
+
+Aus diesem Grund existieren Relocation-Tabellen. Hier sind die Adressen die korrigiert
+werden müssen aufgelistet, falls an eine andere Basisadresse geladen wird.
+
+% TODO тут бы пример с HIEW или objdump..
+Beispielsweise ist eine globale Variable an Adresse \TT{0x410000}. Das folgende
+Listing zeigt wie auf diese zugegriffen wird:
+
+\begin{lstlisting}
+A1 00 00 41 00         mov         eax,[000410000]
+\end{lstlisting}
+
+Die Basisadresse des Moduls ist \TT{0x400000}, die \ac{RVA} der globalen Variablen
+ist \TT{0x10000}.
+
+Falls das Modul an die Basisadresse \TT{0x500000} geladen wird, muss die reale
+Adresse der globalen Variablen auf \TT{0x510000} geändert werden.
+
+\myindex{x86!\Instructions!MOV}
+
+Wie man sieht ist die Adresse der Variablen in der Anweisung \TT{MOV}, nach dem
+\TT{0xA1} kodiert.
+
+Aus diesem Grund wird die Adresse der vier Byte nach \TT{0xA1} in die
+Relocation-Tabelle geschrieben.
+
+Wenn das Modul an einer anderen Basisadresse geladen wird, listet der \ac{OS}-Lader
+alle Adressen in der Tabelle auf, findet jedes 32-Bit-Word auf das die Adresse zeigt,
+subtrahiert die Basisadresse davon (das ergibt hier die \ac{RVA}) und addiert die
+neue Basisadresse hinzu.
+
+Wird das Modul an der originalen Basisadresse geladen passiert nichts.
+
+Alle globalen Variablen können auf diese Weise behandelt werden.
+
+Relocs können verschiedene Typen haben. In Windows für x86-Prozessoren ist dieser
+üblicherweise \IT{IMAGE\_REL\_BASED\_HIGHLOW}.
+
+\myindex{Hiew}
+
+Übrigens sind Relocs in Hiew abgedunkelt, wie hier zu sehen: \figref{fig:scanf_ex3_hiew_1}.
+
+\myindex{\olly}
+\olly unterstreicht die Orte im Speicher auf die Relocs angewendet wurden,
+beispielsweise: \figref{fig:switch_lot_olly3}.
+
+\subsubsection{Exports und Imports}
+
+\label{PE_exports_imports}
+Wie bereits bekannt ist, muss jedes ausführbare Programm in irgendeiner Weise die
+Dienste des \ac{OS} oder anderer DLL-Bibliotheken nutzen.
+
+Die Funktionen eines Moduls (in der Regel eine DLL) muss irgendwie mit den Aufrufen
+in anderen Modulen (.exe-Dateien oder eine andere DLL) verbunden werden.
+
+Aus diesem Grund hat jede DLL eine \q{Export}-Tabelle die aus Funktionen und deren
+Adressen in einem Modul besteht.
+
+Außerdem hat jede .exe-Datei oder DLL \q{Imports}, eine Tabelle von Funktionen und
+Liste von DLL-Dateinamen, die sie für die Ausführung benötigt.
+
+Nach dem laden der Haupt-exe-Datei verarbeitet der \ac{OS}-Lader die Import-Tabelle:
+er lädt die zusätzlichen DLL-Dateien, findet die Funktionsnamen in den DLL-Exports
+und schreibt deren Adressen in die \ac{IAT} der .exe-Datei.
+
+\myindex{Windows!Win32!Ordinal}
+
+Wie man sieht, muss der Lader während seiner Aufgabe viele Funktionsnamen vergleichen.
+Vergleiche von Zeichenketten sind jedoch nicht sehr performant, so dass es Unterstützung
+für \q{ordinals} oder \q{hints} gibt, welche aus Funktionsnamen in der Tabelle
+bestehen statt deren Namen.
+
+Auf diese Weise können sie beim Laden einer DLL schneller gefunden werden.
+
+Die \q{ordinals} also Zahlworte, sind in der \qquad{Export}-Tabelle immer vorhanden.
+
+\myindex{MFC}
+Auf diese Weise laden Programme welche die \ac{MFC}-Bibliothek nutzen die mfc*.dll
+und es existieren keine \ac{MFC}-Namen wie in \ac{INT}.
+
+% TODO example!
+Wenn solche Programme in \IDA geladen werden, wird nach dem Pfad zu den mfc*.dll-Dateien
+gefragt um die Funktionsnamen herausfinden zu können.
+
+Wenn der Pfad zu diesen DLLs in \IDA nicht angegeben wird, erscheint \IT{mfc80\_123}
+statt der Funktionsnamen.
+
+\myparagraph{Import-Sektion}
+
+Häufig wird eine separate Sektion mit dem Namen \TT{.idata} für die Import-Tabelle
+und alle dafür relevanten Dinge angelegt. Dies ist aber keine strikte Regel.
+
+Imports sind manchmal etwas verwirrend wegen der uneinheitlichen Terminologie.
+Versuchen wir alle Informationen an einer Stelle zu sammeln.
+
+\begin{figure}[H]
+\centering
+\myincludegraphics{OS/PE/unnamed0.png}
+\caption{
+Ein Schema dass alle PE-Datei-Strukturen im Zusammenhang mit Imports vereint}
+\end{figure}
+
+Die Hauptstruktur ist das Array \IT{IMAGE\_IMPORT\_DESCRIPTOR}. Jedes Element für
+jede DLL wird importiert.
+
+Jedes Element hat die \ac{RVA}-Adresse der Zeichenkette (DLL-Name) (\IT{Name}).
+
+\IT{OriginalFirstThunk} ist die \ac{RVA}-Adresse der \ac{INT}-Tabelle. Diese ist
+ein Array von \ac{RVA}-Adressen, jede davon zeigt auf eine Zeichenkette mit einem
+Funktionsnamen. Jeder Zeichenkette wird eine 16-Bit-Integerzahl voran gestellt
+(\q{hint})---\q{ordinal} der Funktion).
+
+Während des Ladens und falls es möglich ist die Funktion anhand der Zahl zu finden,
+wird der Vergleich der Zeichenketten nicht auftauchen. Das Array ist mit Null terminiert.
+
 %There is also a pointer to the \ac{IAT} table named \IT{FirstThunk}, it is just the \ac{RVA} address
 %of the place where the loader writes the addresses of the resolved functions.
 %
