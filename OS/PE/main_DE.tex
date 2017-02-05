@@ -317,69 +317,75 @@ Relocs können verschiedene Typen haben. In Windows für x86-Prozessoren ist die
 \olly unterstreicht die Orte im Speicher auf die Relocs angewendet wurden,
 beispielsweise: \figref{fig:switch_lot_olly3}.
 
-%\subsubsection{Exports and imports}
-%
-%\label{PE_exports_imports}
-%As we all know, any executable program must use the \ac{OS}'s services and other DLL-libraries somehow.
-%
-%It can be said that functions from one module (usually DLL) must be connected somehow to the points of their
-%calls in other modules (.exe-file or another DLL).
-%
-%For this, each DLL has an \q{exports} table, which consists of functions plus their addresses in a module.
-%
-%And every .exe file or DLL has \q{imports}, a table of functions it needs for execution including
-%list of DLL filenames.
-%
-%After loading the main .exe-file, the \ac{OS} loader processes imports table:
-%it loads the additional DLL-files, finds function names
-%among the DLL exports and writes their addresses down in the \ac{IAT} of the main .exe-module.
-%
-%\myindex{Windows!Win32!Ordinal}
-%
-%As we can see, during loading the loader must compare a lot of function names, but string comparison is not a very
-%fast procedure, so there is a support for \q{ordinals} or \q{hints},
-%which are function numbers stored in the table, instead of their names.
-%
-%That is how they can be located faster when loading a DLL.
-%Ordinals are always present in the \q{export} table.
-%
-%\myindex{MFC}
-%For example, a program using the \ac{MFC} library usually loads mfc*.dll by ordinals,
-%and in such programs there are no \ac{MFC} function names in \ac{INT}.
-%
-%% TODO example!
-%When loading such programs in \IDA, it will ask for a path to the mfc*.dll files
-%in order to determine the function names.
-%
-%If you don't tell \IDA the path to these DLLs, there will be \IT{mfc80\_123} instead of function names.
-%
-%\myparagraph{Imports section}
-%
-%Often a separate section is allocated for the imports table and everything related to it (with name like \TT{.idata}),
-%however, this is not a strict rule.
-%
-%Imports are also a confusing subject because of the terminological mess. Let's try to collect all information in one place.
-%
-%\begin{figure}[H]
-%\centering
-%\myincludegraphics{OS/PE/unnamed0.png}
-%\caption{
-%A scheme that unites all PE-file structures related to imports}
-%\end{figure}
-%
-%The main structure is the array \IT{IMAGE\_IMPORT\_DESCRIPTOR}.
-%Each element for each DLL being imported.
-%
-%Each element holds the \ac{RVA} address of the text string (DLL name) (\IT{Name}).
-%
-%\IT{OriginalFirstThunk} is the \ac{RVA} address of the \ac{INT} table.
-%This is an array of \ac{RVA} addresses, each of which points to a text string with a function name.
-%Each string is prefixed by a 16-bit integer
-%(\q{hint})---\q{ordinal} of function.
-%
-%While loading, if it is possible to find a function by ordinal,
-%then the strings comparison will not occur. The array is terminated by zero.
-%
+\subsubsection{Exports und Imports}
+
+\label{PE_exports_imports}
+Wie bereits bekannt ist, muss jedes ausführbare Programm in irgendeiner Weise die
+Dienste des \ac{OS} oder anderer DLL-Bibliotheken nutzen.
+
+Die Funktionen eines Moduls (in der Regel eine DLL) muss irgendwie mit den Aufrufen
+in anderen Modulen (.exe-Dateien oder eine andere DLL) verbunden werden.
+
+Aus diesem Grund hat jede DLL eine \q{Export}-Tabelle die aus Funktionen und deren
+Adressen in einem Modul besteht.
+
+Außerdem hat jede .exe-Datei oder DLL \q{Imports}, eine Tabelle von Funktionen und
+Liste von DLL-Dateinamen, die sie für die Ausführung benötigt.
+
+Nach dem laden der Haupt-exe-Datei verarbeitet der \ac{OS}-Lader die Import-Tabelle:
+er lädt die zusätzlichen DLL-Dateien, findet die Funktionsnamen in den DLL-Exports
+und schreibt deren Adressen in die \ac{IAT} der .exe-Datei.
+
+\myindex{Windows!Win32!Ordinal}
+
+Wie man sieht, muss der Lader während seiner Aufgabe viele Funktionsnamen vergleichen.
+Vergleiche von Zeichenketten sind jedoch nicht sehr performant, so dass es Unterstützung
+für \q{ordinals} oder \q{hints} gibt, welche aus Funktionsnamen in der Tabelle
+bestehen statt deren Namen.
+
+Auf diese Weise können sie beim Laden einer DLL schneller gefunden werden.
+
+Die \q{ordinals} also Zahlworte, sind in der \qquad{Export}-Tabelle immer vorhanden.
+
+\myindex{MFC}
+Auf diese Weise laden Programme welche die \ac{MFC}-Bibliothek nutzen die mfc*.dll
+und es existieren keine \ac{MFC}-Namen wie in \ac{INT}.
+
+% TODO example!
+Wenn solche Programme in \IDA geladen werden, wird nach dem Pfad zu den mfc*.dll-Dateien
+gefragt um die Funktionsnamen herausfinden zu können.
+
+Wenn der Pfad zu diesen DLLs in \IDA nicht angegeben wird, erscheint \IT{mfc80\_123}
+statt der Funktionsnamen.
+
+\myparagraph{Import-Sektion}
+
+Häufig wird eine separate Sektion mit dem Namen \TT{.idata} für die Import-Tabelle
+und alle dafür relevanten Dinge angelegt. Dies ist aber keine strikte Regel.
+
+Imports sind manchmal etwas verwirrend wegen der uneinheitlichen Terminologie.
+Versuchen wir alle Informationen an einer Stelle zu sammeln.
+
+\begin{figure}[H]
+\centering
+\myincludegraphics{OS/PE/unnamed0.png}
+\caption{
+Ein Schema dass alle PE-Datei-Strukturen im Zusammenhang mit Imports vereint}
+\end{figure}
+
+Die Hauptstruktur ist das Array \IT{IMAGE\_IMPORT\_DESCRIPTOR}. Jedes Element für
+jede DLL wird importiert.
+
+Jedes Element hat die \ac{RVA}-Adresse der Zeichenkette (DLL-Name) (\IT{Name}).
+
+\IT{OriginalFirstThunk} ist die \ac{RVA}-Adresse der \ac{INT}-Tabelle. Diese ist
+ein Array von \ac{RVA}-Adressen, jede davon zeigt auf eine Zeichenkette mit einem
+Funktionsnamen. Jeder Zeichenkette wird eine 16-Bit-Integerzahl voran gestellt
+(\q{hint})---\q{ordinal} der Funktion).
+
+Während des Ladens und falls es möglich ist die Funktion anhand der Zahl zu finden,
+wird der Vergleich der Zeichenketten nicht auftauchen. Das Array ist mit Null terminiert.
+
 %There is also a pointer to the \ac{IAT} table named \IT{FirstThunk}, it is just the \ac{RVA} address
 %of the place where the loader writes the addresses of the resolved functions.
 %
