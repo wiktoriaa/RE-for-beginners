@@ -380,48 +380,51 @@ Jedes Element hat die \ac{RVA}-Adresse der Zeichenkette (DLL-Name) (\IT{Name}).
 
 \IT{OriginalFirstThunk} ist die \ac{RVA}-Adresse der \ac{INT}-Tabelle. Diese ist
 ein Array von \ac{RVA}-Adressen, jede davon zeigt auf eine Zeichenkette mit einem
-Funktionsnamen. Jeder Zeichenkette wird eine 16-Bit-Integerzahl voran gestellt
+Funktionsnamen. Jede Zeichenkette wird eine 16-Bit-Integerzahl voran gestellt
 (\q{hint})---\q{ordinal} der Funktion).
 
 Während des Ladens und falls es möglich ist die Funktion anhand der Zahl zu finden,
 wird der Vergleich der Zeichenketten nicht auftauchen. Das Array ist mit Null terminiert.
 
-%There is also a pointer to the \ac{IAT} table named \IT{FirstThunk}, it is just the \ac{RVA} address
-%of the place where the loader writes the addresses of the resolved functions.
-%
-%The points where the loader writes addresses are marked by \IDA like this: \IT{\_\_imp\_CreateFileA}, etc.
-%
-%There are at least two ways to use the addresses written by the loader.
-%
-%\myindex{x86!\Instructions!CALL}
-%\begin{itemize}
-%\item The code will have instructions like \IT{call \_\_imp\_CreateFileA},
-%and since the field with the address of the imported function is a global variable in some sense,
-%the address of the \IT{call} instruction (plus 1 or 2) is to be added to the relocs table,
-%for the case when the module is loaded at a different base address.
-%
-%But, obviously, this may enlarge relocs table significantly.
-%
-%Because there are might be a lot of calls to imported functions in the module.
-%
-%Furthermore, large relocs table slows down the process of loading modules.
-%
-%\myindex{x86!\Instructions!JMP}
-%\myindex{thunk-functions}
-%\item For each imported function, there is only one jump allocated, using the \JMP instruction
-%plus a reloc to it.
-%Such points are also called \q{thunks}.
-%
-%All calls to the imported functions are just \CALL instructions to the corresponding \q{thunk}.
-%In this case, additional relocs are not necessary because these \CALL{}-s
-%have relative addresses and do not need to be corrected.
-%\end{itemize}
-%
-%These two methods can be combined.
-%
-%Possible, the linker creates individual \q{thunk}s if there are too many calls to the function,
-%but not done by default. \\
-%\\
+Es gibt auch einen Zeiger zur \ac{IAT}-Tabelle mit dem Namen \IT{FirstThunk}. Dies
+entspricht der \ac{RVA}-Adresse der Stelle an der der Lader die Adressen der aufgelösten
+Funktionen schreibt.
+
+Die Punkte an denen der Lader die Adressen schreibt werden in \IDA mit \IT{\_\_imp\_CreateFileA}
+und so weiter gekennzeichnet.
+
+Es gibt zumindest zwei Arten die vom Lader geschriebenen Adressen zu nutzen.
+
+\myindex{x86!\Instructions!CALL}
+\begin{itemize}
+\item Der Code enthält eine Anweisung wie \IT{call \_\_imp\_CreateFileA}. Da das Feld
+mit der Adresse der importierten Funktion in gewisser Weise eine globale Variable
+ist, wird die Adresse der \IT{call}-Anweisung (plus 1 oder 2) zur Relocation-Tabelle
+hinzugefügt. Dies gilt für den Fall falls das Modul an eine andere Basisadresse
+geladen wird.
+
+Aber offensichtlich kann dies die Relocation-Tabelle erheblich vergrößern, da
+möglicherweise in dem Modul viele Aufrufe von importierten Funktionen enthalten sind.
+
+Des weiteren verlangsamen die großen Tabellen das Laden der Module.
+
+\myindex{x86!\Instructions!JMP}
+\myindex{thunk-functions}
+\item Für jede importierte Funktion wird nur ein Sprung mittels der \JMP-Anweisung
+und einem Reloc darauf alloziert.
+Solche Punkte werden auch \q{thunk}s genannt.
+
+Alle Aufrufe zu den importierten Funktionen sind lediglich \CALL-Anweisungen auf
+die entsprechenden \q{thunks}.
+In diesem Fall sind keine zusätzlichen Relocs notwendig, da diese \CALL{}s eine
+relative Adresse haben und nicht korrigiert werden müssen.
+\end{itemize}
+
+Diese beiden Methoden können miteinander kombiniert werden.
+
+Der Linker kann mehrere einzelne \q{thunk}s erstellen, falls zu viele Aufrufe der
+Funktion vorliegen. Dies ist jedoch nicht das Standardverhalten.
+
 %By the way, the array of function addresses to which FirstThunk is pointing is not necessary to be located in the \ac{IAT} section.
 %For example, the author of these lines once wrote the PE\_add\_import\footnote{\href{http://go.yurichev.com/17049}{yurichev.com}}
 %utility for adding imports to an existing .exe-file.
