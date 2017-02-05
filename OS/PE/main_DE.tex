@@ -505,69 +505,73 @@ Ein Seiteneffekt ist, dass diese einfach editiert und in der ausführbaren Datei
 zurück gespeichert werden können. Mit speziellen Editoren wie beispielsweise
 (\myref{ResHack}) ist dies auch ohne spezielles Wissen möglich.
 
-%\subsubsection{.NET}
-%
-%\myindex{.NET}
-%
-%.NET programs are not compiled into machine code but into a special bytecode.
-%\myindex{OEP}
-%Strictly speaking, there is bytecode instead of the usual x86 code
-%in the .exe file, however, the entry point (\ac{OEP}) points to this tiny fragment of x86 code:
-%
-%\begin{lstlisting}
-%jmp         mscoree.dll!_CorExeMain
-%\end{lstlisting}
-%
-%The .NET loader is located in mscoree.dll, which processes the PE file.
-%\myindex{Windows!Windows XP}
-%
-%It was so in all pre-Windows XP \ac{OS}es. Starting from XP, the \ac{OS} loader is able to detect the .NET file
-%and run it without executing that \JMP instruction
-%\footnote{\href{http://go.yurichev.com/17051}{MSDN}}.
-%
-%\myindex{TLS}
-%\subsubsection{TLS}
-%
-%This section holds initialized data for the \ac{TLS}(\myref{TLS}) (if needed).
-%When a new thread start, its \ac{TLS} data is initialized using the data from this section. \\
-%\\
-%\myindex{TLS!Callbacks}
-%
-%Aside from that, the PE file specification also provides initialization of the
-%\ac{TLS} section, the so-called TLS callbacks.
-%
-%If they are present, they are to be called before the control is passed to the main entry point (\ac{OEP}).
-%
-%This is used widely in the PE file packers/encryptors.
-%
-%\subsubsection{Tools}
-%
-%\myindex{objdump}
-%\myindex{Cygwin}
-%\myindex{Hiew}
-%\label{ResHack}
-%
-%\begin{itemize}
-%\item objdump (present in cygwin) for dumping all PE-file structures.
-%
-%\item Hiew(\myref{Hiew}) as editor.
-%
-%\item pefile---Python-library for PE-file processing \footnote{\url{http://go.yurichev.com/17052}}.
-%
-%\item ResHack \acs{AKA} Resource Hacker---resources editor\footnote{\url{http://go.yurichev.com/17052}}.
-%
-%\item PE\_add\_import\footnote{\url{http://go.yurichev.com/17049}}---
-%simple tool for adding symbol(s) to PE executable import table.
-%
-%\item PE\_patcher\footnote{\href{http://go.yurichev.com/17054}{yurichev.com}}---simple tool for patching PE executables.
-%
-%\item PE\_search\_str\_refs\footnote{\href{http://go.yurichev.com/17055}{yurichev.com}}---simple tool for searching for a function in PE executables which use some text string.
-%\end{itemize}
-%
-%\subsubsection{Further reading}
-%
-%% FIXME: bibliography per chapter or section
-%\begin{itemize}
-%\item Daniel Pistelli---The .NET File Format \footnote{\url{http://go.yurichev.com/17056}}
-%\end{itemize}
-%
+\subsubsection{.NET}
+
+\myindex{.NET}
+
+.NET-Progamme werden nicht in Maschinencode übersetzt sondern in einen speziellen Bytecode.
+\myindex{OEP}
+Streng genommen befindet sich anstatt des gewöhnlichen x86-Code der Bytecode in
+der .exe-Datei. Der Einsprungpunkt (\ac{OEP}) jedoch zeigt auf ein kleines Fragment
+x86-Code:
+
+\begin{lstlisting}
+jmp         mscoree.dll!_CorExeMain
+\end{lstlisting}
+
+Der .NET-Lader befindet sich in mscoree.dll, welche die PE-Datei verarbeitet.
+\myindex{Windows!Windows XP}
+
+Dies war in allen Windows-Versionen vor Windows XP der Fall. Seit Windows XP
+ist der \ac{OS}-Lader in der Lage .NET-Dateien zu erkennen und diese ohne eine
+\JMP-Anweisung auszuführen\footnote{\href{http://go.yurichev.com/17051}{MSDN}}.
+
+\myindex{TLS}
+\subsubsection{TLS}
+
+Diese Sektion beinhaltet initialisierte Daten für \ac{TLS}(\myref{TLS}) (falls notwendig).
+Wird ein neuer Thread gestartet, werden dessen \ac{TLS}-Daten mit den Daten dieser
+Sektion initialisiert.
+
+\myindex{TLS!Callbacks}
+Abgesehen davon beinhaltet die Spezifikation für PE-Dateien auch die Möglichkeit
+der Initialisierung der \ac{TLS}-Sektion, sogenannte TLS-Callbacks.
+
+Falls diese vorhanden sind, werden sie aufgerufen bevor die Ausführungskontrolle
+an den Haupteinsprungpunkt (\ac{OEP}) übergeben wird.
+
+Dies ist sehr verbreitet bei Packern und Verschlüsselungsprogrammen für PE-Dateien.
+
+\subsubsection{Tools}
+
+\myindex{objdump}
+\myindex{Cygwin}
+\myindex{Hiew}
+\label{ResHack}
+
+\begin{itemize}
+\item objdump (in Cygwin enthalten) um alle PE-Dateistrukturen auszugeben.
+
+\item Hiew(\myref{Hiew}) als Editor.
+
+\item pefile: Python-Bibliothek für die Verarbeitung von PE-Dateien\footnote{\url{http://go.yurichev.com/17052}}.
+
+\item ResHack \acs{AKA} Resource Hacker: Ressourcen-Editor\footnote{\url{http://go.yurichev.com/17052}}.
+
+\item PE\_add\_import\footnote{\url{http://go.yurichev.com/17049}}: einfaches Tool
+um Symbole zur PE Importtabelle hinzuzufügen.
+
+\item PE\_patcher\footnote{\href{http://go.yurichev.com/17054}{yurichev.com}}:
+einfaches Tool um ausführbare PE-Dateien zu patchen.
+
+\item PE\_search\_str\_refs\footnote{\href{http://go.yurichev.com/17055}{yurichev.com}}:
+einfaches Tool zum Suchen von Funktionen in ausführbaren PE-Dateien die bestimmte
+Zeichenketten nutzen.
+\end{itemize}
+
+\subsubsection{weitere Informationen}
+
+% FIXME: bibliography per chapter or section
+\begin{itemize}
+\item Daniel Pistelli: The .NET File Format \footnote{\url{http://go.yurichev.com/17056}}
+\end{itemize}
