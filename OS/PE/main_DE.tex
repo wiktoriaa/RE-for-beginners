@@ -425,64 +425,71 @@ Diese beiden Methoden können miteinander kombiniert werden.
 Der Linker kann mehrere einzelne \q{thunk}s erstellen, falls zu viele Aufrufe der
 Funktion vorliegen. Dies ist jedoch nicht das Standardverhalten.
 
-%By the way, the array of function addresses to which FirstThunk is pointing is not necessary to be located in the \ac{IAT} section.
-%For example, the author of these lines once wrote the PE\_add\_import\footnote{\href{http://go.yurichev.com/17049}{yurichev.com}}
-%utility for adding imports to an existing .exe-file.
-%
-%Some time earlier, in the previous versions of the utility,
-%at the place of the function you want to substitute with a call to another DLL,
-%my utility wrote the following code:
-%
-%\begin{lstlisting}
-%MOV EAX, [yourdll.dll!function]
-%JMP EAX
-%\end{lstlisting}
-%
-%FirstThunk points to the first instruction. In other words, when loading yourdll.dll,
-%the loader writes the address of the \IT{function} function right in the code.
-%
-%It also worth noting that a code section is usually write-protected, so my utility adds the \\
-%\IT{IMAGE\_SCN\_MEM\_WRITE}
-%flag for code section. Otherwise, the program to crash while loading with error code
-%5 (access denied). \\
-%\\
-%One might ask: what if I supply a program with a set of DLL files which is not supposed to change (including addresses of all DLL functions),
-%is it possible to speed up the loading process?
-%
-%Yes, it is possible to write the addresses of the functions to be imported into the FirstThunk arrays in advance.
-%The \IT{Timestamp} field is present in the \\
-%\IT{IMAGE\_IMPORT\_DESCRIPTOR} structure.
-%
-%If a value is present there, then the loader compares this value with the date-time of the DLL file.
-%
-%If the values are equal, then the loader does not do anything, and the loading of the process can be faster.
-%This is called \q{old-style binding}
-%\footnote{\href{http://go.yurichev.com/17050}{MSDN}. There is also the \q{new-style binding}.}.
-%\myindex{BIND.EXE}
-%
-%The BIND.EXE utility in Windows SDK is for for this.
-%For speeding up the loading of your program, Matt Pietrek in \PietrekPEURL, suggests to do the binding shortly after your program
-%installation on the computer of the end user. \\
-%\\
-%PE-files packers/encryptors may also compress/encrypt imports table.
-%
-%In this case, the Windows loader, of course, will not load all necessary DLLs.
-%\myindex{Windows!Win32!LoadLibrary}
-%\myindex{Windows!Win32!GetProcAddress}
-%
-%Therefore, the packer/encryptor does this on its own, with the help of
-%\IT{LoadLibrary()} and the \IT{GetProcAddress()} functions.
-%
-%That is why these two functions are often present in \ac{IAT} in packed files.\\
-%\\
-%In the standard DLLs from the Windows installation, \ac{IAT} often is located right at the beginning of the PE file.
-%Supposedly, it is made so for optimization.
-%
-%While loading, the .exe file is not loaded into memory as a whole (recall huge install programs which are
-%started suspiciously fast), it is \q{mapped}, and loaded into memory in parts as they are accessed.
-%
-%Probably, Microsoft developers decided it will be faster.
-%
+Übrigens muss das Array der Funktionsadressen auf das FirstThunk zeigt nicht unbedingt
+in der \ac{IAT}-Sektion sein. Beispielsweise hat der Autor dieser Zeilen einmal das
+PE\_add\_import\footnote{\href{http://go.yurichev.com/17049}{yurichev.com}}-Tool
+geschrieben um Imports zu einer existierenden .exe-Datei hinzufügen zu können.
+
+In einer früheren Version des Tools hat dieses an die Stelle der Funktion an der
+ein Aufruf zu einer anderen DLL geschrieben werden sollte, folgenden Code erzeugt:
+
+\begin{lstlisting}
+MOV EAX, [yourdll.dll!function]
+JMP EAX
+\end{lstlisting}
+
+FirstThunk zeigt auf die erste Anweisung. Mit anderen Worten, wenn yourdll.dll
+geladen wird, schreibt der Lader die Adresse der Funktion \IT{function} direkt
+in den Code.
+
+Erwähnenswert ist, dass die Code-Sektion normalerweise schreibgeschützt ist.
+Daher fügt das Tool das \IT{IMAGE\_SCN\_MEM\_WRITE}-Flag hinzu, da andernfalls
+das Programm beim Laden mit dem Fehlercode 5 (Zugriff verweigert.) abstürzen
+würde.
+
+Man mag sich fragen: was ist wenn ein Programm mit ein paar DLLs kommt, die
+sich nicht ändern (inklusive der Adressen aller DLL-Funktionen). Ist es möglich
+den Lade-Vorgang zu beschleunigen?
+
+Dies ist in der Tat möglich, wenn die Adressen der Funktionen bereits im Voraus
+in das FirstThunk-Array geschrieben werden. Das \IT{Timestamp}-Feld ist in der
+\IT{IMAGE\_IMPORT\_DESCRIPTOR}-Struktur vorhanden.
+
+Wenn der Wert dort verfügbar ist, vergleicht der Lader diesen Wert mit dem
+Zeitstempel der DLL-Datei.
+
+Wenn der Wert gleich ist, macht der Lader nichts und der Vorgang kann schneller
+sein. Dies wird \q{old-style binding}\footnote{\href{http://go.yurichev.com/17050}{MSDN}. Dort auch \q{new-style binding}.}
+genannt.
+
+\myindex{BIND.EXE}
+Das Tool BIND.EXE ist für diesen Vorgang gedacht.
+
+Um das Laden eigener Programme zu beschleunigen empfiehlt Matt Pietrek in \PietrekPEURL
+das Binden kurz nach der Installation des Programms auf dem Rechner des Endanwenders
+durchzuführen.
+
+Komprimierungs- und Verschlüsselungsprogramme für PE-Dateien komprimieren bzw.
+Verschlüsseln auch die Import-Tabellen.
+
+In diesem Fall wird der Windows-Lader natürlich nicht alle notwendigen DLL-Dateien lasen.
+\myindex{Windows!Win32!LoadLibrary}
+\myindex{Windows!Win32!GetProcAddress}
+
+Der Komprimierer / Verschlüsseler macht dies selber mithilfe der Funktionen
+\IT{LoadLibrary()} und \IT{GetProcAddress()}.
+
+Aus diesem Grund sind die beiden Funktionen oft im \ac{IAT} von gepackten Dateien.
+
+In den Standard-DLLs der Windows-Installation ist \ac{IAT} häufig zu Beginn einer
+PE-Datei zu finden. Vermutlich geschieht dies aus Optimierungsgründen.
+
+Während die .exe-Datei geladen wird, befindet sich diese nicht als Ganzes im Speicher
+(man denke an riesige Installationsprogramme welche verdächtig schnell geladen werden),
+sondern ist \q{gemapped} und wird in Teilen geladen, wenn auf diese zugegriffen wird.
+
+Vielleicht waren die Microsoft-Entwickler der Meinung, dass dies schneller ist.
+
 %\subsubsection{Resources}
 %
 %\label{PEresources}
