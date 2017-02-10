@@ -36,14 +36,14 @@ Nachverfolgen bis zum Ende der Funktion:
 \end{figure}
 Richten wir unser Augenmerk auf die Register.
 
-\EPI ist jetzt gerade 0x15. Das ist keine gültige Adreses für Code---zumindest nicht für win32 Code!
+\EIP ist jetzt gerade 0x15. Das ist keine gültige Adreses für Code---zumindest nicht für win32 Code!
 Interessant ist auch, dass das \EBP Register 0x14 enthält und \ECX sowie \EDX jeweils 0x1D
 
 Schauen wir uns das Stacklayout etwas genauer an.
 
 Nachdem der Control Flow an \TT{\main} übergeben worde ist, wurde der Wert in \EBP auf dem Stack abgelegt.
 Danach wurden 84 Byte für das Array und die Variable $i$ reserviert.
-Das entspricht \TT{(20+1)\cdot sizeof(int)}.
+Das entspricht \TT{(20+1)*sizeof(int)}.
 \ESP zeigt jetzt auf die Variable \TT{\_i} im lokalen Stack und nach der Ausführung von \TT{PUSH something} scheint sich
 \TT{something} neben \TT{\_i} zu befinden.
 
