@@ -55,7 +55,7 @@ The function \main starts with prologue code and ends with epilogue code (like a
 After the function prologue we see the call to the \printf{} function:\\
 \INS{CALL \_printf}.
 \myindex{x86!\Instructions!PUSH}
-Before the call the string address (or a pointer to it) containing our greeting is placed on the stack with the help of the \PUSH instruction.
+Before the call, a string address (or a pointer to it) containing our greeting is placed on the stack with the help of the \PUSH instruction.
 
 When the \printf function returns the control to the \main function, the string address (or a pointer to it) is still on the stack.
 Since we do not need it anymore, the \gls{stack pointer} (the \ESP register) needs to be corrected.
@@ -97,8 +97,8 @@ In the generated code this is implemented by the instruction \INS{XOR EAX, EAX}.
 \INS{MOV EAX, 0}---again because it is a slightly shorter opcode (2 bytes for \XOR against 5 for \MOV).
 
 \myindex{x86!\Instructions!SUB}
-Some compilers emit \INS{SUB EAX, EAX}, which means \IT{SUBtract the value in the} \EAX \IT{from the value in} \EAX, which, in any case, results in zero.
+Some compilers emit \INS{SUB EAX, EAX}, which means \IT{SUBtract the value in the} \EAX \IT{from the value in} \EAX. That in any case will results in zero.
 
 \myindex{x86!\Instructions!RET}
-The last instruction \RET returns the control to the \gls{caller}. Usually, this is \CCpp \ac{CRT} code, which, in turn, returns control to the \ac{OS}.
+The last instruction \RET returns the control to the \gls{caller}. Usually, this is \CCpp \ac{CRT} code which in turn returns control to the \ac{OS}.
 
