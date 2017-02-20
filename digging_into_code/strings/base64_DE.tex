@@ -1,0 +1,107 @@
+\subsubsection{Base64}
+\myindex{Base64}
+
+Die Base64 codierung ist sehr weit verbreitet für fälle in denen man Binärdaten als Textstring übertragen will.
+% The base64 encoding is highly popular for the cases when you have to transfer binary data as a text string.
+
+Im Grunde, codiert dieser Algorithmus 3 Binär Bytes in 4 druckbare Zeichen: 
+Alle 26 Latin Zeichen (beides klein und groß Buchstaben), Ziffern, plus Zeichen (\q{+}) und slash Zeichen (\q{/}),
+64 Zeichen insgesammt. 
+
+% In essence, this algorithm encodes 3 binary bytes into 4 printable characters:
+% all 26 Latin letters (both lower and upper case), digits, plus sign (\q{+}) and slash sign (\q{/}),
+% 64 characters in total.
+
+Ein charakteristisches Feature von Base64 Strings ist das sie of (aber nicht immer) mit 1 oder 2  \gls{padding}
+gleichheitszeichen (\q{=}) Enden, zum Beispiel: 
+
+% One distinctive feature of base64 strings is that they often (but not always) ends with 1 or 2 \gls{padding}
+% equality symbol(s) (\q{=}), for example:
+
+\begin{lstlisting}
+AVjbbVSVfcUMu1xvjaMgjNtueRwBbxnyJw8dpGnLW8ZW8aKG3v4Y0icuQT+qEJAp9lAOuWs=
+\end{lstlisting}
+
+\begin{lstlisting}
+WVjbbVSVfcUMu1xvjaMgjNtueRwBbxnyJw8dpGnLW8ZW8aKG3v4Y0icuQT+qEJAp9lAOuQ==
+\end{lstlisting}
+
+Das Gleichheitszeichen Symbol (q{=}) wird man niemals in der Mitte eines Base64-codierten
+Strings sehen.
+% The equality sign (\q{=}) is never encounter in the middle of base64-encoded strings.
+
+Jetzt ein beispiel wie man per Hand Base64 codieren kann.
+Lasst uns 0x00, 0x11 , 0x22 und 0x33 in Hexadezimalzahlen in einen Base64
+String umwandeln: 
+
+% Now example of manual encoding.
+% Let's encode 0x00, 0x11, 0x22, 0x33 hexadecimal bytes into base64 string:
+
+\lstinputlisting{digging_into_code/strings/base64_ex.sh}
+
+Lasst uns alle 4 Bytes in Binär form bringen und dann neu gruppieren in 6-Bit Gruppen:
+% Let's put all 4 bytes in binary form, then regroup them into 6-bit groups:
+
+\begin{lstlisting}
+|  00  ||  11  ||  22  ||  33  ||      ||      |
+00000000000100010010001000110011????????????????
+| A  || B  || E  || i  || M  || w  || =  || =  |
+\end{lstlisting}
+
+Die ersten drei Bytes (0x00, 0x11, 0x22) können in 4 Base64 Zeichen umgewandelt werden (``ABEi''),
+aber nicht das letzte Byte (0x33), also wird das Byte codiert indem man Zweibuchstaben 
+benutzt (``Mw'') und das \gls{padding} Symbol (``='') wird zweimal hinzugefügt um die letzte
+Gruppe auf 4 Zeichen zu erweitern. Das bedeutet das die länge aller correcten base64 Strings
+sich immer durch 4 Teilen lässt. 
+
+% Three first bytes (0x00, 0x11, 0x22) can be encoded into 4 base64 characters (``ABEi''),
+% but the last one (0x33) --- cannot be,
+% so it's encoded using two characters (``Mw'') and \gls{padding} symbol (``='')
+% is added twice to pad the last group to 4 characters.
+% Hence, length of all correct base64 strings are always divisible by 4.
+
+\myindex{XML}
+\myindex{PGP}
+Base64 wird oft benutzt wenn es darum geht Binärdaten in  XML Datein zu speichern.
+``Armored'' (z.B, in Text Form) PGP keys und Signaturen werden codiert mit Base64.
+
+% Base64 is often used when binary data needs to be stored in XML.
+% ``Armored'' (i.e., in text form) PGP keys and signatures are encoded using base64.
+
+Manche Leute versuchen auch base64 zu benutzen um Strings zu verschleiern. 
+% Some people tries to use base64 to obfuscate strings:
+\url{http://blog.sec-consult.com/2016/01/deliberately-hidden-backdoor-account-in.html}
+\footnote{\url{http://archive.is/nDCas}}.
+
+\myindex{base64scanner}
+Es gibt Werkzeuge zum scannen von beliebigen Binärdatein nach Base64 Strings.
+Ein solch ein Scanner ist base64scanner\footnote{\url{https://github.com/dennis714/base64scanner}}.
+% There are utilities for scanning an arbitrary binary files for base64 strings.
+% One such utility is base64scanner\footnote{\url{https://github.com/dennis714/base64scanner}}.
+
+\myindex{UseNet}
+\myindex{FidoNet}
+\myindex{Uuencoding}
+Ein weiteres codierungs System was sehr weit verbreitet und weit mehr genutzt wurde im UseNet und im 
+FidoNet ist Uuencoding. Es hat eigentlich die gleichen Features, aber unterscheidet sich von Base64 
+in so fern das der Dateiname auch im header gespeichert wird.
+
+% Another encoding system which was much more popular in UseNet and FidoNet is Uuencoding.
+% It offers mostly the same features, but is different from base64 in the sense that file name
+% is also stored in header.
+
+
+\myindex{Tor}
+\myindex{base32}
+By the Way: Es gibt auch einen nahen Verwandten zu Base64: Base32., ein Alphabet das ~10 Zeichen und ~26 Latin Zeichen hat. 
+Eine verbreitete anwendung ist Onion Adressen zu codieren. 
+\footnote{\url{https://trac.torproject.org/projects/tor/wiki/doc/HiddenServiceNames}},
+like: \url{http://3g2upl4pq6kufc4m.onion/}.
+\ac{URL} kann keine mixed-case Latin Zeichen beinhalten, deshalb haben Tor Entwickler sich für Base32 entschieden.
+
+% By the way: there is also close sibling to base64: base32, alphabet of which has ~10 digits and ~26 Latin characters.
+% One well-known usage of it is onion addresses
+% \footnote{\url{https://trac.torproject.org/projects/tor/wiki/doc/HiddenServiceNames}},
+% like: \url{http://3g2upl4pq6kufc4m.onion/}.
+% \ac{URL} can't have mixed-case Latin characters, so apparently, this is why Tor developers used base32.
+
