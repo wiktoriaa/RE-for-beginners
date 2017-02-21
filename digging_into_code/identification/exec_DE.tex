@@ -4,7 +4,6 @@
 \label{MSVC_versions}
 
 MSVC Versionen und DLLs die Importiert werden können:
-% MSVC versions and DLLs that can be imported:
 
 \small
 \begin{center}
@@ -46,16 +45,12 @@ MSVC Versionen und DLLs die Importiert werden können:
 \end{center}
 \normalsize
 
-msvcp*.dll hat \Cpp{}-bezogne Funktionen, bedeutet wenn die library importiert wird,
-ist das Programm das sie importiert warscheinlich ein \Cpp program.
+msvcp*.dll hat \Cpp{}-bezogene Funktionen, bedeutet wenn die library importiert wird,
+ist das Programm das sie importiert wahrscheinlich ein \Cpp program.
 
-% msvcp*.dll has \Cpp{}-related functions, so if it is imported, 
-% this is probably a \Cpp program.
-
-\subsubsection{Name mangling}
+\subsubsection{Name mangling} % <-- Übersetzen
 
 Die Namen fangen normal an mit dem \TT{?} Symbol.
-% The names usually start with the \TT{?} symbol.
 
 Man kann mehr nachlesen über MSVC's \gls{name mangling} hier: \myref{namemangling}. % <-- bessere formulierung
 % You can read more about MSVC's \gls{name mangling} here: \myref{namemangling}.
@@ -64,40 +59,30 @@ Man kann mehr nachlesen über MSVC's \gls{name mangling} hier: \myref{namemangli
 \myindex{GCC}
 
 Neben *NIX Umgebungen, ist GCC auch in win32 Umgebungen präsent, in der Form von Cygwin and MinGW. 
-% Aside from *NIX targets, GCC is also present in the win32 environment, in the form of Cygwin and MinGW.
 
-\subsubsection{Name mangling}
+\subsubsection{Name mangling} % <-- Übersetzen
 
 Namen fangen hier normal mit dem \TT{\_Z} Symbolen an.
-% Names usually start with the \TT{\_Z} symbols.
 
 Man kann mehr lesen über GCC's \gls{name mangling} hier: \myref{namemangling}.
-% You can read more about GCC's \gls{name mangling} here: \myref{namemangling}.
 
 \subsubsection{Cygwin}
 \myindex{Cygwin}
 
 cygwin1.dll wird oft importiert.
-% cygwin1.dll is often imported.
 
 \subsubsection{MinGW}
 \myindex{MinGW}
 
 msvcrt.dll wird vielleicht importiert.
-% msvcrt.dll may be imported.
 
 \subsection{Intel Fortran}
 \myindex{Fortran}
 
 
-libifcoremd.dll, libifportmd.dll and libiomp5md.dll (OpenMP support) werden vielleicht importiert.
+libifcoremd.dll, libifportmd.dll and libiomp5md.dll (OpenMP Support) werden vielleicht importiert.
 
-% libifcoremd.dll, libifportmd.dll and libiomp5md.dll (OpenMP support) may be imported.
-
-
-libifcoremd.dll hat eine menge an Funktionen die das \TT{for\_\ prefix haben, was \IT{Fortran} bedeutet.
-
-% libifcoremd.dll has a lot of functions prefixed with \TT{for\_}, which means \IT{Fortran}.
+libifcoremd.dll hat eine menge an Funktionen die das \TT{for\_\ Präfix haben, was \IT{Fortran} bedeutet.
 
 \subsection{Watcom, OpenWatcom}
 \myindex{Watcom}
@@ -106,7 +91,6 @@ libifcoremd.dll hat eine menge an Funktionen die das \TT{for\_\ prefix haben, wa
 \subsubsection{Name mangling}
 
 Namen fangen normal mit dem \TT{W} Symbol an. 
-% Names usually start with the \TT{W} symbol.
 
 Zum Beispiel wird so eine Methode benannt \q{method} der Klasse \q{class} die keine Argumente hat und \Tvoid zurück gibt: % <-- Finde was besseres!
 % For example, that is how the method named \q{method} of the class \q{class} that does not have any arguments and returns
@@ -121,44 +105,30 @@ W?method$_class$n__v
 \myindex{Borland C++Builder}
 
 Hier ist ein Beispiel für Borland Delphi's und C++Builder's \gls{name mangling}:
-% Here is an example of Borland Delphi's and C++Builder's \gls{name mangling}:
 
 \lstinputlisting{digging_into_code/identification/borland_mangling.txt}
 
-Die Namen fangen immer mit dem \TT{@} Symbol an, dann haben wir den namen
-der Klassen namen, Methoden namen, und codiert die Typen der Argumente der Methode.
+Die Namen fangen immer mit dem \TT{@} Symbol an, dann haben wir den Namen
+der Klassen Namen, Methoden Namen, und codiert die Typen der Argumente der Methode.
 
-% The names always start with the \TT{@} 
-% symbol, then we have the class name came, method name, and encoded the types of the arguments of the method.
-
-Diese Namen können in den .exe imports, .dll exports, Debug Daten und etc existieren.
-
-% These names can be in the .exe imports, .dll exports, debug data, etc.
+Diese Namen können in den .exe Imports, .dll Exports, Debug Daten und etc existieren.
 
 Borland Visual Component Libraries (VCL) 
-werden in .bpl Datein gehalten anstatt .dll's, zum Beispiel vcl50.dll, rtl60.dll.
-
-% Borland Visual Component Libraries (VCL) 
-% are stored in .bpl files instead of .dll ones, for example, vcl50.dll, rtl60.dll.
+werden in .bpl Dateien gehalten anstatt .dll's, zum Beispiel vcl50.dll, rtl60.dll.
 
 Eine weitere DLL die vielleicht importiert wird: BORLNDMM.DLL
-% Another DLL that might be imported: BORLNDMM.DLL.
 
 \subsubsection{Delphi}
 
-Fast alle Delphi executables haben den \q{Boolean} Text String am anfang des Code Segments, zusammen mit anderen Typen namen liegen. %  <-- Finde eine bessere formulierung
+Fast alle Delphi executables haben den \q{Boolean} Text String am Anfang des Code Segments, zusammen mit anderen Typen Namen liegen. %  <-- Finde eine bessere formulierung
 % Almost all Delphi executables has the \q{Boolean} text string at the beginning of the code segment, along with other type names.
 
-Dies ist ein sehr typischeer anfang für das \TT{CODE} Segment bei einem 
+Dies ist ein sehr typischer Anfang für das \TT{CODE} Segment bei einem 
 Delphi Programm, dieser Block kam direkt nach dem win32 PE Datei header:
-
-% This is a very typical beginning of the \TT{CODE} 
-% segment of a Delphi program, this block came right after the win32 PE file header:
 
 \lstinputlisting{digging_into_code/identification/delphi.txt}
 
 Die ersten 4 Btyes des Daten Segments (\TT{DATA}) können \TT{00 00 00 00}, \TT{32 13 8B C0} oder \TT{FF FF FF FF} sein.
-% The first 4 bytes of the data segment (\TT{DATA}) can be \TT{00 00 00 00}, \TT{32 13 8B C0} or \TT{FF FF FF FF}.%
 
 Diese Informationen können nützlich sein wenn man mit gepackten oder verschlüsselten Delphi executables arbeiten muss. % <-- ?
 % This information can be useful when dealing with packed/encrypted Delphi executables.
@@ -167,7 +137,6 @@ Diese Informationen können nützlich sein wenn man mit gepackten oder verschlü
 
 \myindex{OpenMP}
 \begin{itemize}
-\item vcomp*.dll---Microsoft's implementierung von OpenMP. 
-% \item vcomp*.dll---Microsoft's implementation of OpenMP.
+\item vcomp*.dll---Microsoft's Implementierung von OpenMP. 
 \end{itemize}
 
