@@ -1,47 +1,31 @@
-\section{Finding the right instructions}
+\section{Finding the right instructions} % <-- Übersetzen
 
 Wenn ein Programm auf die FPU Instruktionen zugreift und der Code selber enthält nur sehr wenige
 dieser Instruktionen, kann man diese einzeln mit einem Debugger überprüfen.
 
-% If the program is utilizing FPU instructions and there are very few of them in the code,
-% one can try to check each one manually with a debugger.
-
-\par Zum Beispiel, eventuell haben wir interesse daran wie Microsoft Excel die Formel berechnet die vom Benutzer eingegeben wurde.
-Zum Beispiel die divisions Operation.
-
-% \par For example, we may be interested how Microsoft Excel calculates the formulae entered by user.
-% For example, the division operation.
+\par Zum Beispiel, eventuell haben wir Interesse daran wie Microsoft Excel die Formel berechnet die vom Benutzer eingegeben wurde.
+Zum Beispiel die Division Operation.
 
 \myindex{\GrepUsage}
 \myindex{x86!\Instructions!FDIV}
 
 Wenn wir excel.exe (von Office 2010) in Version 14.0.4756.1000 in \IDA laden ,ein komplettes
-Listing erstellen und jede \FDIV Instruktion anschauen (ausgenommen die Instruktionen die
+Listig erstellen und jede \FDIV Instruktion anschauen (ausgenommen die Instruktionen die
 eine Konstante als zweiten Parameter haben---diese Instruktionen interessieren uns nicht)
-
-% If we load excel.exe (from Office 2010) version 14.0.4756.1000 into \IDA, make a full listing
-% and to find every \FDIV instruction (except the ones which use constants as a second 
-% operand---obviously, they do not suit us):
 
 \begin{lstlisting}
 cat EXCEL.lst | grep fdiv | grep -v dbl_ > EXCEL.fdiv
 \end{lstlisting}
 
 \dots dann sehen wir das es 144 FPU Instruktionen gibt.
-% \dots then we see that there are 144 of them.
 
 \par Wir können einen String wie z.B \TT{=(1/3)} in Ecxel eingeben und dann die Instruktionen überprüfen.
-% \par We can enter a string like \TT{=(1/3)} in Excel and check each instruction.
 
 \myindex{tracer}
 
 \par Beim prüfen jeder dieser Instruktionen in einem debugger oder \tracer
-( manche pfrüfen 4 Instruktionen auf einmal), haben wir glück und die
+( manche Prüfen 4 Instruktionen auf einmal), haben wir Glück und die
 gesuchte Instruktion ist die Nummer 14:
-
-% \par By checking each instruction in a debugger or \tracer
-% (one may check 4 instruction at a time),
-% we get lucky and the sought-for instruction is just the 14th:
 
 \begin{lstlisting}[style=customasmx86]
 .text:3011E919 DC 33          fdiv    qword ptr [ebx]
@@ -59,19 +43,16 @@ FPU ST(0): 1.000000
 \end{lstlisting}
 
 \ST{0} Beinhaltet das erste Argument (1) und das zweite Argument ist in \TT{[EBX]}.\\
-% \ST{0} holds the first argument (1) and second one is in \TT{[EBX]}.\\
 \\
 \myindex{x86!\Instructions!FDIV}
 
 Die Instruktion nach \FDIV (\TT{FSTP}) schreibt jedes Ergebnis in den Speicher:\\
-% The instruction after \FDIV (\TT{FSTP}) writes the result in memory:\\
 
 \begin{lstlisting}[style=customasmx86]
 .text:3011E91B DD 1E          fstp    qword ptr [esi]
 \end{lstlisting}
 
 Wenn wir einen Breakpoint auf diese Instruktion setzen können wir das Ergebnis betrachten:
-% If we set a breakpoint on it, we can see the result:
 
 \begin{lstlisting}
 PID=32852|TID=36488|(0) 0x2f40e91b (Excel.exe!BASE+0x11e91b)
@@ -85,7 +66,6 @@ FPU ST(0): 0.333333
 \end{lstlisting}
 
 Auch ein netter Scherz, wir können das Ergebnis auf die schnelle ändern:
-% Also as a practical joke, we can modify it on the fly:
 
 \begin{lstlisting}
 tracer -l:excel.exe bpx=excel.exe!BASE+0x11E91B,set(st0,666)
@@ -103,22 +83,17 @@ FPU ST(0): 0.333333
 Set ST0 register to 666.000000
 \end{lstlisting}
 
-Excel zeigt nun 666 in unserer Zelle, was uns letztendlich auch bestätig das wir das richtige Ergebnis gefunden haben.
-% Excel shows 666 in the cell, finally convincing us that we have found the right point.
+Excel zeigt nun 666 in unserer Zelle, was uns letztendlich auch bestätigt das wir das richtige Ergebnis gefunden haben.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textwidth]{digging_into_code/Excel_prank.png}
 \caption{Der Scherz hat funktioniert}
-% \caption{The practical joke worked}
 \end{figure}
 
 Wenn wir das gleiche mit der selben Excel Version versuchen, jedoch in 64-Bit Umgebungen.
-Dann finden wir nur noch 12 \FDIV Instuktionen und die Instruktion nach der wir suchen ist
+Dann finden wir nur noch 12 \FDIV Instruktionen und die Instruktion nach der wir suchen ist
 die dritte. 
-% If we try the same Excel version, but in x64,
-% we will find only 12 \FDIV instructions there,
-% and the one we looking for is the third one.
 
 \begin{lstlisting}
 tracer.exe -l:excel.exe bpx=excel.exe!BASE+0x1B7FCC,set(st0,666)
@@ -126,8 +101,5 @@ tracer.exe -l:excel.exe bpx=excel.exe!BASE+0x1B7FCC,set(st0,666)
 
 \myindex{x86!\Instructions!DIVSD}
 
-Es sieht danach aus als wären viele der Divisions Operationen der \Tfloat und \Tdouble Typen, vom Compiler mit SSE Instuktionen ersetzt wurden.
-Wie z.B \TT{DIVSD} (\TT{DIVSD} kommt instesammt 268 mal vor).
-
-% It seems that a lot of division operations of \Tfloat and \Tdouble types, were replaced by the compiler with SSE instructions
-% like \TT{DIVSD} (\TT{DIVSD} is present 268 times in total).
+Es sieht danach aus als wären viele der Division Operationen der \Tfloat und \Tdouble Typen, vom Compiler mit SSE Instruktionen ersetzt wurden.
+Wie z.B \TT{DIVSD} (\TT{DIVSD} kommt insgesamt 268 mal vor).

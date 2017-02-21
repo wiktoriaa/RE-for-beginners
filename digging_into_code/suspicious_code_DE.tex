@@ -8,11 +8,6 @@ werden normal dafür benutzt Register Werte auf Null zu setzen, wenn jedoch
 einer der Operanden sich unterscheidet wird die \q{exclusive or} Operation 
 ausgeführt.
 
-% Instructions like \TT{XOR op, op} (for example, \TT{XOR EAX, EAX}) 
-% are usually used for setting the register value
-% to zero, but if the operands are different, the \q{exclusive or} operation
-% is executed.
-
 Diese Operation wird allgemein selten benutzt beim programmieren, ist aber 
 weit verbreitet in der Kryptografie, besonders bei Amateuren der Kryptografie. % <-- Bessere formulierung?
 Das ist besonders Verdächtig wenn der zweite Operand eine große Zahl ist.
@@ -22,31 +17,23 @@ Das ist besonders Verdächtig wenn der zweite Operand eine große Zahl ist.
 % It's especially suspicious if the
 % second operand is a big number.
 
-Das könnte ein Hinweis sein das etwas ver-/entschlüsselt wird oder checksummen berechnet werden, etc.\\
+Das könnte ein Hinweis sein das etwas ver-/entschlüsselt wird oder Checksumme berechnet werden, etc.\\
 \\
-
-% This may point to encrypting/decrypting, checksum computing, etc.\\
-% \\
 
 Eine Ausnahme dieser Beobachtung ist der \q{canary} (\myref{subsec:BO_protection}). 
-Die generierung und das prüfen des \q{canary} werden oft mit hilfe der \XOR Instruktion gemacht. \\
+Die Generierung und das prüfen des \q{canary} werden oft mit Hilfe der \XOR Instruktion gemacht. \\
 \\
 
 
-% One exception to this observation worth noting is the \q{canary} (\myref{subsec:BO_protection}). 
-% Its generation and checking are often done using the \XOR instruction. \\
-% \\
 \myindex{AWK}
 
-Dieses AWK Skript kann benutzt werden um \IDA{} listing (.lst) Datein zu parsen:
-% This AWK script can be used for processing \IDA{} listing (.lst) files:
+Dieses AWK Skript kann benutzt werden um \IDA{} listing (.lst) Dateien zu parsen:
 
 \begin{lstlisting}
 gawk -e '$2=="xor" { tmp=substr($3, 0, length($3)-1); if (tmp!=$4) if($4!="esp") if ($4!="ebp") { print $1, $2, tmp, ",", $4 } }' filename.lst
 \end{lstlisting}
 
 Es sollte auch noch erwähnt werden das diese Art von Skript in der Lage ist inkorrekt disassemblierten Code zu erkennen
-% It is also worth noting that this kind of script can also match incorrectly disassembled code 
 (\myref{sec:incorrectly_disasmed_code}).
 
 \subsection{Hand-written assembly code}
@@ -56,28 +43,21 @@ Es sollte auch noch erwähnt werden das diese Art von Skript in der Lage ist ink
 \myindex{x86!\Instructions!LOOP}
 \myindex{x86!\Instructions!RCL}
 
-Moderne Compiler benutzen keine \TT{LOOP} und \TT{RCL} Instuktionen.
-Auf der anderen Seite sind diese Instruktionen sehr beliebt bei Programmieren die Code direkt in assembler schreiben.
+Moderne Compiler benutzen keine \TT{LOOP} und \TT{RCL} Instruktionen.
+Auf der anderen Seite sind diese Instruktionen sehr beliebt bei Programmieren die Code direkt in Assembler schreiben.
 Wenn man diese Instruktionen sieht, kann man mit hoher Sicherheit sagen das dieses Code Fragment händisch geschrieben wurde.,
 Diese Instruktionen sind in der Instruktionsliste im Anhang mit (M) markiert: \myref{sec:x86_instructions}.
 
-% Modern compilers do not emit the \TT{LOOP} and \TT{RCL} instructions.
-% On the other hand, these instructions are well-known to coders who like to code directly in assembly language.
-% If you spot these, it can be said that there is a high probability that this fragment of code was hand-written.
-% Such instructions are marked as (M) in the instructions list in this appendix: \myref{sec:x86_instructions}.
-
 \par
 
-Auch die Funktions Proglog und Epilog sind im allgemeinen nicht vorhanden bei handgeschriebenen Assembler Code. % <--- ??? 
+Auch die Funktions Prolog und Epilog sind im allgemeinen nicht vorhanden bei handgeschriebenen Assembler Code. % <--- ??? 
 % Also the function prologue/epilogue are not commonly present in hand-written assembly.
 \par
 
-Tazächlich gibt es kein bestimmtes System um Argumente an Funktionen zu übergeben wenn der Code handgeschrieben wurde. 
-% Commonly there is no fixed system for passing arguments to functions in the hand-written code.
+Tatsächlich gibt es kein bestimmtes System um Argumente an Funktionen zu übergeben wenn der Code handgeschrieben wurde. 
 
 \par
 Beispiel aus dem Windows 2003 Kernel
-% Example from the Windows 2003 kernel 
 (ntoskrnl.exe file):
 
 \begin{lstlisting}[style=customasmx86]
@@ -111,12 +91,7 @@ locret_62057F:                       ; CODE XREF: Multiply+10
 Multiply     endp
 \end{lstlisting}
 
-Tazächlich, wenn wir in den 
+Tatsächlich, wenn wir in den 
 \ac{WRK} v1.2 source code schauen,
 kann dieser Code einfach in der Datei
 \IT{WRK-v1.2\textbackslash{}base\textbackslash{}ntos\textbackslash{}ke\textbackslash{}i386\textbackslash{}cpu.asm} gefunden werden.
-
-% Indeed, if we look in the 
-% \ac{WRK} v1.2 source code, this code
-% can be found easily in file \\
-% \IT{WRK-v1.2\textbackslash{}base\textbackslash{}ntos\textbackslash{}ke\textbackslash{}i386\textbackslash{}cpu.asm}.

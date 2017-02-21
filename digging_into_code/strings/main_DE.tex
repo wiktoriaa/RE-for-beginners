@@ -5,31 +5,22 @@
 \label{C_strings}
 
 Die normalen C-strings sind NULL-Terminiert (\ac{ASCIIZ}-strings).
-% The normal C strings are zero-terminated (\ac{ASCIIZ}-strings).
 
 Der Grund warum C Stringformatierung so ist wie sie ist (NULL-Terminiert) scheint Historische zu sein.
 In [Dennis M. Ritchie, \IT{The Evolution of the Unix Time-sharing System}, (1979)] kann man lesen:
 
-% The reason why the C string format is as it is (zero-terminated) is apparently historical.
-% In [Dennis M. Ritchie, \IT{The Evolution of the Unix Time-sharing System}, (1979)]
-% we read:
-
 \begin{framed}
 \begin{quotation}
-Ein kleiner Unterschied war das die I/O Einheit ein ``word'' war, nicht ein Byte, weil die PDP-7 eine word-addressierte
+Ein kleiner Unterschied war das die I/O Einheit ein ``word'' war, nicht ein Byte, weil die PDP-7 eine word-adressierte
 Maschine war. In der Praxis bedeutete das lediglich das alle Programme die mit Zeichen Streams arbeiteten, das NULL 
-Zeichen ignorieren mussten, weil die NULL benutzt wurde um eine Datei bis zu einer graden Zahl an Bytes auf zu füllen.
+Zeichen ignorieren mussten, weil die NULL benutzt wurde um eine Datei bis zu einer Graden Zahl an Bytes auf zu füllen.
 
-% A minor difference was that the unit of I/O was the word, not the byte, because the PDP-7 was a word-addressed
-% machine. In practice this meant merely that all programs dealing with character streams ignored null
-% characters, because null was used to pad a file to an even number of characters.
 \end{quotation}
 \end{framed}
 
 \myindex{Hiew}
 
 In Hiew oder FAR Manager sehen diese Strings so aus:
-% In Hiew or FAR Manager these strings looks like this:
 
 \begin{lstlisting}[style=customc]
 int main()
@@ -51,10 +42,8 @@ int main()
 \myindex{Borland Delphi}
 
 Dem String in Passcal und Borland Delphi hängt eine 8 oder 32-Bit Zeichenkette an. 
-% The string in Pascal and Borland Delphi is preceded by an 8-bit or 32-bit string length.
 
 Zum Beispiel:
-% For example:
 
 \begin{lstlisting}[caption=Delphi,style=customasmx86]
 CODE:00518AC8                 dd 19h
@@ -71,41 +60,27 @@ CODE:00518B00 aPreparingRun__ db 'Preparing run...',0
 \myindex{Unicode}
 
 Oft, ist das was Unicode genannt wird einfach eine Methode um Strings zu codieren bei denen jedes Zeichen 2 Byte oder 
-16 Bits verbraucht. Das ist ein häufiger Terminologischer Fehler. Unicode ist ein standart bei dem eine Nummer zugeordnet
+16 Bits verbraucht. Das ist ein häufiger Terminologischer Fehler. Unicode ist ein Standard bei dem eine Nummer zugeordnet
 wird zu einem der vielen Schreibsysteme der Welt, aber es beschreibt nicht die codierungs Methode. 
 
-% Often, what is called Unicode is a methods for encoding strings where each character occupies 2 bytes or 16 bits.
-% This is a common terminological mistake.
-% Unicode is a standard for assigning a number to each character in the many writing systems of the 
-% world, but does not describe the encoding method.
 \myindex{UTF-8}
 \myindex{UTF-16LE}
 
-Die bekannteste Methode zu Codieren ist: UTF-8 ( ist weit verteilt im INternet und auf *NIX Systemen) und UTF-16LE ( wird bei Windows benutzt). 
-% The most popular encoding methods are: UTF-8 (is widespread in Internet and *NIX systems) and UTF-16LE (is used in Windows).
+Die bekannteste Methode zu Codieren ist: UTF-8 ( ist weit verteilt im Internet und auf *NIX Systemen) und UTF-16LE ( wird bei Windows benutzt). 
 
 \myparagraph{UTF-8}
 
 \myindex{UTF-8}
 UTF-8 ist eine der erfolgreichsten Methoden um Zeichen zu codieren.
-Alle Latin Zeichen werden codiert so wie in ASCII, und alle Symbole nach der
+Alle Latein Zeichen werden codiert so wie in ASCII, und alle Symbole nach der
 ASCII Tabelle wurden codiert mit zusätzlichen Bytes. 0 wird codiert als davor,
-also arbeiten alle Standart C String Funktionen mit UTF-8 Strings wie mit jedem anderen auch.
-
-% UTF-8 is one of the most successful methods for
-% encoding characters.
-% All Latin symbols are encoded just like in ASCII,
-% and the symbols beyond the ASCII table are encoded using several bytes.
-% 0 is encoded as
-% before, so all standard C string functions work with UTF-8 strings just like any other string.
+also arbeiten alle Standard C String Funktionen mit UTF-8 Strings wie mit jedem anderen auch.
 
 Lasst uns anschauen wie die Symbole in verschiedenen anderen Sprachen in UTF-8 Codiert werden und  % <--- Bessere fomulierung?!
 wie man sie als FAR aussehen lassen kann, durch das benutzen der codepage 437.
 % Let's see how the symbols in various languages are encoded in UTF-8 and how it looks like in FAR, using the 437 codepage
-\footnote{Beispiel und übersetzung können von hier bezogen werden:  
+\footnote{Beispiel und Übersetzung können von hier bezogen werden:  
 \url{http://go.yurichev.com/17304}}:
-% \footnote{The example and translations was taken from here: 
-% \url{http://go.yurichev.com/17304}}:
 
 \begin{figure}[H]
 \centering
@@ -119,54 +94,41 @@ wie man sie als FAR aussehen lassen kann, durch das benutzen der codepage 437.
 \caption{FAR: UTF-8}
 \end{figure}
 
-Wie man hier sehen kann, der Englische String sieht genauso aus wie sein gegenstück in ASCII.
-% As you can see, the English language string looks the same as it is in ASCII.
+Wie man hier sehen kann, der Englische String sieht genauso aus wie sein Gegenstück in ASCII.
 
-Die Ungarische Sprache benutzt Latin Symbole plus ein paar Symbole mit diacritic Marks. % <--- Verbessung finden
+Die Ungarische Sprache benutzt Latein Symbole plus ein paar Symbole mit diacritic Marks. % <--- Verbessung finden
 % The Hungarian language uses some Latin symbols plus symbols with diacritic marks.
 
 Diese Symbole werden mit mehreren Bytes codiert, diese wurden rot unterstrichen.
 Das gleiche gilt für die Isländischen und Polnischen Sprachen.
-% These symbols are encoded using several bytes, these are underscored with red.
-% It's the same story with the Icelandic and Polish languages.
 
-Es gibt auch das \q{Euro} Währungs Symbol im Standart, das Symbol wurde mit 3 Bytes Codiert.
-% There is also the \q{Euro} currency symbol at the start, which is encoded with 3 bytes.
+Es gibt auch das \q{Euro} Währung Symbol im Standard, das Symbol wurde mit 3 Bytes Codiert.
 
-Der Rest der Schreibsysteme haben keine Verbindung/Bezug zum Latin. % <--- Besser formulieren
-The rest of the writing systems here have no connection with Latin.
+Der Rest der Schreibsysteme haben keine Verbindung/Bezug zum Latein. % <--- Besser formulieren
+% The rest of the writing systems here have no connection with Latin.
 
-Zumindest in Russisch, Arabisch, Häreisch und Hindi können wir wiederkehrende Bytes erkennen und das ist nicht mal überraschend:
-Alle Zeichen eines Schreibsystems werden normalerweise in der selben Unicode Tabelle angelegt, also föngt ihr code mit den 
+Zumindest in Russisch, Arabisch, Hebräisch und Hindu können wir wiederkehrende Bytes erkennen und das ist nicht mal überraschend:
+Alle Zeichen eines Schreibsystems werden normalerweise in der selben Unicode Tabelle angelegt, also fängt ihr code mit den 
 immer gleichen nummern an. % <--- Wird anders übersetzt.
 
 % At least in Russian, Arabic, Hebrew and Hindi we can see some recurring bytes, and that is not surprise:
 % all symbols from a writing system are usually located in the same Unicode table, so their code begins with
 % the same numbers.
 
-Zu anfang, noch vor dem \q{How much?} String sehen wir 3 Bytes, die tatzächlich das \ac{BOM} darstellen.
-Das \ac{BOM} deffiniert das Codierungssystem was benutzt werden soll.
-% At the beginning, before the \q{How much?} string we see 3 bytes, which are in fact the \ac{BOM}.
-% The \ac{BOM} defines the encoding system to be
-% used.
+Zu Anfang, noch vor dem \q{How much?} String sehen wir 3 Bytes, die tatsächlich das \ac{BOM} darstellen.
+Das \ac{BOM} definiert das Codierungssystem was benutzt werden soll.
 
 \myparagraph{UTF-16LE}
 
 \myindex{UTF-16LE}
 \myindex{Windows!Win32}
-Viele win32 Funktionen in Windows haben die suffixe \TT{-A} und \TT{-W}. 
+Viele win32 Funktionen in Windows haben die Suffixe \TT{-A} und \TT{-W}. 
 Der erste Typ Funktionen arbeitet mit normalen Strings, der andere Typ mit 
 UTF-16LE Strings (\IT{wide}). 
 
-% Many win32 functions in Windows have the suffixes \TT{-A} and \TT{-W}.
-% The first type of functions works
-% with normal strings, the other with UTF-16LE strings (\IT{wide}).
-
 Im zweiten Fall, wird jedes Symbol normal als 16-Bit Wert des Typs \IT{short} gespeichert.
-% In the second case, each symbol is usually stored in a 16-bit value of type \IT{short}.
 
-Die Latin Symbole in UFT-16 Strings sehen in Hiew oder FAR aus als wären sie mit Null Bytes verschachtelt:
-% The Latin symbols in UTF-16 strings look in Hiew or FAR like they are interleaved with zero byte:
+Die Latein Symbole in UFT-16 Strings sehen in Hiew oder FAR aus als wären sie mit Null Bytes verschachtelt:
 
 \begin{lstlisting}[style=customc]
 int wmain()
@@ -181,8 +143,7 @@ int wmain()
 \caption{Hiew}
 \end{figure}
 
-Wir können das oft auch in gls{Windows NT} System Datein sehen:
-% We can see this often in \gls{Windows NT} system files:
+Wir können das oft auch in gls{Windows NT} System Dateien sehen:
 
 \begin{figure}[H]
 \centering
@@ -191,8 +152,7 @@ Wir können das oft auch in gls{Windows NT} System Datein sehen:
 \end{figure}
 
 \myindex{IDA}
-Strings mit Zeichen die exact 2 Bytes verbrauchen werden \q{Unicode} in \IDA genannt:
-% Strings with characters that occupy exactly 2 bytes are called \q{Unicode} in \IDA:
+Strings mit Zeichen die exakt 2 Bytes verbrauchen werden \q{Unicode} in \IDA genannt:
 
 \begin{lstlisting}[style=customasmx86]
 .data:0040E000 aHelloWorld:
@@ -201,7 +161,6 @@ Strings mit Zeichen die exact 2 Bytes verbrauchen werden \q{Unicode} in \IDA gen
 \end{lstlisting}
 
 Hier sieht man wie Russische Sprache in UTF-16LE Codiert wird:
-% Here is how the Russian language string is encoded in UTF-16LE:
 
 \begin{figure}[H]
 \centering
@@ -210,18 +169,12 @@ Hier sieht man wie Russische Sprache in UTF-16LE Codiert wird:
 \end{figure}
 
 Was man leicht sehen kann ist das die Symbole durchzogen sind von den Diamant Zeichen (das im ASCII code mit 4 codiert wird).
-Tatzächlich, findet man die Kyrillischen Symbole in der vierten Unicode tabelle 
+Tatsächlich, findet man die Kyrillischen Symbole in der vierten Unicode Tabelle 
 \footnote{\href{http://go.yurichev.com/17003}{wikipedia}}.
 Deswegen, alle Kyrillischen Symbole in UTF-16LE findet man im Bereich \TT{0x400-0x4FF}.
-% What we can easily spot is that the symbols are interleaved by the diamond character (which has the ASCII code of 4).
-% Indeed, the Cyrillic symbols are located in the fourth Unicode plane
-% \footnote{\href{http://go.yurichev.com/17003}{wikipedia}}.
-% Hence, all Cyrillic symbols in UTF-16LE are located in the \TT{0x400-0x4FF} range.
 
 Lass uns noch mal zu dem Beispiel gehen mit dem String der in verschiedenen Sprachen geschrieben ist.
 Hier sieht man wie der String in UTF-16LE aussieht. 
-% Let's go back to the example with the string written in multiple languages.
-% Here is how it looks like in UTF-16LE.
 
 % FIXME: cut it
 \begin{figure}[H]
@@ -230,13 +183,12 @@ Hier sieht man wie der String in UTF-16LE aussieht.
 \caption{FAR: UTF-16LE}
 \end{figure}
 
-Hier können wir auch das \ac{BOM} am anfang sehen. 
-Alle Latin Zeichen haben Zero Bytes. % <-- Prüfen/Umformulieren verbessern
+Hier können wir auch das \ac{BOM} am Anfang sehen. 
+Alle Latein Zeichen haben Null Bytes. % <-- Prüfen/Umformulieren verbessern
 % Here we can also see the \ac{BOM} at the beginning.
 % All Latin characters are interleaved with a zero byte.
 
 Manche Zeichen mit unterschiedlichen Markierungen (Ungarisch und Isländisch) wurden rot unterstrichen.
-% Some characters with diacritic marks (Hungarian and Icelandic languages) are also underscored in red.
 
 % subsection:
 \input{digging_into_code/strings/base64_EN}

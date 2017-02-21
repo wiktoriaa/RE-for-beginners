@@ -2,33 +2,26 @@
 \subsection{Memory \q{snapshots} comparing}
 \label{snapshots_comparing}
 
-Die Technik zwei Memory Snapshots zu vergleichen ist recht einfach, das wurde auch oft benutzt um 8-Bit Computerspiele und
+Die Technik zwei Memory Snapshots zu vergleichen ist recht einfach, das hat man auch oft benutzt um 8-Bit Computerspiele und
 \q{high score}'s  zu hacken.
-% The technique of the straightforward comparison of two memory snapshots in order to see changes was often used to hack
-% 8-bit computer games and for hacking \q{high score} files.
 
 Zum Beispiel, wenn man ein geladenes Spiel auf einem 8-Bit Computer hat ( auf den Maschinen ist nicht viel Speicher 
 vorhanden, jedoch braucht das Spiel noch weniger Speicher) und du weißt was du im Spiel hast, sagen wir 100 Patronen, 
 nun kann man einen \q{snapshot} vom gesamten Speicher machen und diesen Irgendwohin speichern. Dann verschiesst man 
-eine Patrone, dann geht der Patronen zähler auf 99, nun erstellt man den zweiten Snapshot und vergleich beiden: 
+eine Patrone, dann geht der Patronen Zähler auf 99, nun erstellt man den zweiten Snapshot und Vergleich die beiden: 
 Nun muss es irgendwo ein Byte geben das vorher 100 war und jetzt 99 ist. 
-
-% For example, if you had a loaded game on an 8-bit computer (there isn't much memory on these, but the game usually
-% consumes even less memory) and you know that you have now, let's say, 100 bullets, you can do a \q{snapshot}
-% of all memory and back it up to some place. Then shoot once, the bullet count goes to 99, do a second \q{snapshot}
-% and then compare both: it must be a byte somewhere which has been 100 at the beginning, and now it is 99.
 
 
 Betrachtet man den Fakt das diese 8-Bit Spiele oftmals in Assembler geschrieben wurden und diese Variablen meist global 
 waren, konnte man ziemlich einfach bestimmen welche Adressen im Speicher den Kugelzähler beinhalten. Wenn man nach allen 
-referenzen der Adresse im dissassembelten Spiel code sucht, ist es nicht schwer den Code \glslink{decrement}{decrementing} 
+Referenzen der Adresse im dissassembelten Spiel code sucht, ist es nicht schwer den Code \glslink{decrement}{decrementing} 
 zu finden und dann eine \gls{NOP} Instruktion an diese Stelle zu schreiben, oder gar mehrere \gls{NOP}-s, und dann hat man 
 ein Spiel bei dem man für immer 100 Kugeln hat. %<-- das kacke der ganze block
 \myindex{BASIC!POKE}
-Spiele auf 8-Bit Computern wurden algemein an konstanten Adressen geladen, zusätzlich gab es nicht viele unterschiedliche
+Spiele auf 8-Bit Computern wurden allgemein an konstanten Adressen geladen, zusätzlich gab es nicht viele unterschiedliche
 Versionen des Spiels (  Es war meist eine Version für lange Zeit populär ), dadurch wussten enthusiastische Gamer welche
 Bytes (durch das benutzen von Basic Instruktionen wie \gls{POKE}) überschrieben werden mussten um das Spiel zu hacken. 
-Das hat wiederrum zu \q{cheat} listen geführt die in Magazinen für 8-Bit Games erschienen, die dann \gls{POKE} Instuktionen enthielten.
+Das hat wiederum zu \q{cheat} listen geführt die in Magazinen für 8-Bit Games erschienen, die dann \gls{POKE} Instruktionen enthielten.
 Siehe auch: \href{http://go.yurichev.com/17114}{wikipedia}.
 
 
@@ -46,40 +39,26 @@ Siehe auch: \href{http://go.yurichev.com/17114}{wikipedia}.
 
 \myindex{MS-DOS}
 
-Es ist auch einfach \q{high score} Datein zu modifizieren, das funktioniert nicht nur bei 8-Bit Spielen. Man achte 
-auf seinen Highscore zähler, dann macht man ein backup der Datei. Wenn sich der \q{high score} zäler ändert, vergleicht man die 
-zwei Datein miteinander, das kann man sogar mit dem DOS Tool FC\footnote{MS-DOS utility for comparing binary files} (\q{high score} Datein,
-sind of in Binärer Form). 
+Es ist auch einfach \q{high score} Dateien zu modifizieren, das funktioniert nicht nur bei 8-Bit Spielen. Man achte 
+auf seinen Highscore Zähler, dann macht man ein Backup der Datei. Wenn sich der \q{high score} Zähler ändert, vergleicht man die 
+zwei Dateien miteinander, das kann man sogar mit dem DOS Tool FC\footnote{MS-DOS Utility zum vergleichen von  Dateien} (\q{high score} Dateien,
+sind oft in Binärer Form). 
 
-% Likewise, it is easy to modify \q{high score} files, this does not work with just 8-bit games. Notice 
-% your score count and back up the file somewhere. When the \q{high score} count gets different, just compare the two files,
-% it can even be done with the DOS utility FC\footnote{MS-DOS utility for comparing binary files} (\q{high score} files
-% are often in binary form).
-
-Es wird beim Vergleichen der Datein meinen Punkt geben wo einige Bytes sich unterscheiden und 
-es wird leicht sein welche Bytes den Punktezähler beinhaltet. 
+Es wird beim Vergleichen der Dateien einen Punkt geben wo einige Bytes sich unterscheiden und 
+es wird leicht sein, die Punkte zu sehen die die Bytes des Punktezähler beinhalten. 
 Jedoch sind sich die Spiele Entwickler solcher Tricks bewusst und bauen Wege ein um das Programm
 vor solchen Manipulationen zu schützen. 
 
 Ein ähnliches Beispiel findet man auch in dem Buch \myref{Millenium_DOS_game}.
 
-% There will be a point where a couple of bytes are different and it is easy to see which ones are
-% holding the score number.
-% However, game developers are fully aware of such tricks and may defend the program against it.
-
-% Somewhat similar example in this book is: \myref{Millenium_DOS_game}.
-
 % TODO: пример с какой-то простой игрушкой?
 
 \subsubsection{Windows registry}
 
-Es ist auch möglich die Windows Regestry zu vergleichen vor und nach der Programm installation.
-% It is also possible to compare the Windows registry before and after a program installation.
+Es ist auch möglich die Windows Regestry zu vergleichen vor und nach der Programm Installation.
 
 Es ist eine sehr populäre Methode Regestry Elemente zu finden die vom Programm benutzt werden.
 Vielleicht ist das auch der Grund warum die \q{windows regestry cleaner} Shareware so populär ist.
-% It is a very popular method of finding which registry elements are used by the program.
-% Perhaps, this is the reason why the \q{windows registry cleaner} shareware is so popular.
 
 \subsubsection{Blink-comparator}
 
@@ -88,15 +67,7 @@ Der Vergleich von Datei- oder Speichersnapshots erinnert ein wenig an einen Blin
 ein Gerät das in der Vergangenheit von Astronomen benutzt wurde, um sich bewegende Astronomische
 Objekte zu finden.
 
-% Comparison of files or memory snapshots remind us blink-comparator
-% \footnote{\url{http://go.yurichev.com/17348}}:
-% a device used by astronomers in past, intended to find moving celestial objects.
+Ein Blinkkomperator erlaubt es schnell zwischen Photographie zu wechseln die zu unterschiedlicher
+Zeit aufgenommen wurden, so kann ein Astronom Unterschiede zwischen Fotografien visuell erkennen.
 
-Ein Blinkkomperator erlaubt es schnell zwischen Photografien zu wechseln die zu unterscheiedlicher
-Zeit aufgenommen wurden, so kann ein Astronom unterschiede zwischen Fotografien visuell erkennen.
-
-% Blink-comparator allows to switch quickly between two photographies shot in different time,
-% so astronomer would spot the difference visually.
-
-Ach übrigens, Plute wurde durch einen solchen Blink-Komperator 1930 entdeckt.
-% By the way, Pluto was discovered by blink-comparator in 1930.
+Ach übrigens, Pluto wurde durch einen solchen Blink-Komparator 1930 entdeckt.

@@ -1,82 +1,47 @@
 \section{Communication with the outer world (win32)}
-% \section{Communication with the outer world (win32)}
 
-Machmal reicht es aus die Ein- und Ausgaben einer Funktion zu beobachten um zu verstehen was sie tut.
-Auf diese Weise kann man Zeit sparren.
-% Sometimes it's enough to observe some function's inputs and outputs in order to understand what it does.
-% That way you can save time.
+Manchmal reicht es aus die Ein- und Ausgaben einer Funktion zu beobachten um zu verstehen was sie tut.
+Auf diese Weise kann man Zeit Sparren.
 
 Datei und Regestry Zugriff:
-Für einfache Analsysen kann das Process Monitor\footnote{\url{http://go.yurichev.com/17301}}
+Für einfache Analysen kann das Process Monitor\footnote{\url{http://go.yurichev.com/17301}}
 Tool von SysInternals hilfreich sein.
 
-% Files and registry access: 
-% for the very basic analysis, Process Monitor\footnote{\url{http://go.yurichev.com/17301}}
-% utility from SysInternals can help.
-
-Für grundlegende analysen des Netzwerk zugriffs ist Wireshark\footnote{\url{http://go.yurichev.com/17303}} ganz nützlich.
+Für grundlegende Analysen des Netzwerk Zugriffs ist Wireshark\footnote{\url{http://go.yurichev.com/17303}} ganz nützlich.
 % For the basic analysis of network accesses, Wireshark\footnote{\url{http://go.yurichev.com/17303}} can be useful.
 
-Dennoch muss man dann trotzdem % <-- Der Satz ist kacke 
-
-Das erste wonach man schauen kann ist welche Funktionen die \ac{OS} \ac{API}s benutzen und was für Standart libraries
+Dennoch muss man dann trotzdem hinein schauen. % <-- Der Satz ist kacke 
+\\
+Das erste wonach man schauen kann ist welche Funktionen die \ac{OS} \ac{API}s benutzen und was für Standard libraries
 benutzt werden. 
 
-Wenn das Programm unterteilt ist in eine main executable und mehrere DLL Datein, können manchmal die Namen der Funktionen innerhalb
+Wenn das Programm unterteilt ist in eine Main executable und mehrere DLL Dateien, können manchmal die Namen der Funktionen innerhalb
 der DLLs Helfen. 
-
-
-% But then you will have to to look inside anyway. \\   % <-- Der Satz ist kacke 
-% \\
-% The first thing to look for is which functions from the \ac{OS}'s \ac{API}s and standard libraries are used.
-% 
-% If the program is divided into a main executable file and a group of DLL files, sometimes the names of the functions in these DLLs can help.
 
 Wenn wir daran interessiert sind was genau zum call von \TT{MessageBox()} mit einem spezifischen Text führt,
 können wir versuchen diesen Text innerhalb des Data Segments zu finden, die Referenzen auf den Text und die 
 Punkte von denen aus die Kontrolle an den \TT{MessageBox()} Aufruf an dem wir interessiert sind.
 
-% If we are interested in exactly what can lead to a call to \TT{MessageBox()} with specific text, 
-% we can try to find this text in the data segment, find the references to it and find the points
-% from which the control may be passed to the \TT{MessageBox()} call we're interested in.
-
-
 \myindex{\CStandardLibrary!rand()}
 Wenn wir über Video Spiele sprechen sind wir daran interessiert welche mehr oder weniger zufällig darin vorkommen,
-vielleicht versuchen wir die \rand Funktion oder ersatz FUnktionen zu finden ( wie z.B der Mersenne Twister Algorithmus) 
-und wir versuchen die Orte zu finden von wlechen aus diese FUnktionen aufgerufen werden, und noch wichtiger was für
+vielleicht versuchen wir die \rand Funktion oder Ersatz Funktionen zu finden ( wie z.B der Mersenne Twister Algorithmus) 
+und wir versuchen die Orte zu finden von welchen aus diese Funktionen aufgerufen werden, und noch wichtiger was für
 Ergebnisse verwertet werden. 
 % BUG in varioref: http://tex.stackexchange.com/questions/104261/varioref-vref-or-vpageref-at-page-boundary-may-loop
-Ein Beispiel:
-
-
-% If we are talking about a video game and we're interested in which events are more or less random in it,
-% we may try to find the \rand function or its replacements (like the Mersenne twister algorithm) and find the places
-% from which those functions are called, and more importantly, how are the results used.
-% BUG in varioref: http://tex.stackexchange.com/questions/104261/varioref-vref-or-vpageref-at-page-boundary-may-loop
-% One example: \ref{chap:color_lines}. 
+Ein Beispiel: \ref{chap:color_lines}.
 
 Aber wenn es sich nicht um ein Spiel handelt und \rand wird trotzdem benutzt, ist es interessant zu wissen warum.
-Es gibt Fälle bei denen unerwartet \rand in Daten Kompressions Algorithmen benutzt wird (für die imitation von verschlüsslung):
+Es gibt Fälle bei denen unerwartet \rand in Daten Kompression Algorithmen benutzt wird (für die Imitation von Verschlüsslung):
 \href{http://go.yurichev.com/17221}{blog.yurichev.com}.
 
-% But if it is not a game, and \rand is still used, it is also interesting to know why.
-% There are cases of unexpected \rand usage in data compression algorithms (for encryption imitation):
-% \href{http://go.yurichev.com/17221}{blog.yurichev.com}.
-
 \subsection{Oft benutzte Funktionen in der Windows API}
-% \subsection{Often used functions in the Windows API}
 
 Diese Funktionen sind vielleicht unter den importierten.
-Es ist Sinnvoll an dieser Stelle zu erwähnen das nicht umgedingt jede Funktion benutzt wird aus 
+Es ist Sinnvoll an dieser Stelle zu erwähnen das nicht umbedingt jede Funktion benutzt wird aus 
 dem Code den der Programmierer geschrieben hat.
 
-% These functions may be among the imported.
-% It is worth to note that not every function might be used in the code that was written by the programmer.
-% A lot of functions might be called from library functions and \ac{CRT} code.
-
 Manche Funktionen haben eventuell das \GTT{-A} Suffix für die ASCII Version und das \GTT{-W} für die Unicode Version.
-% Some functions may have the \GTT{-A} suffix for the ASCII version and \GTT{-W} for the Unicode version.
+
 
 \begin{itemize}
 
@@ -105,16 +70,15 @@ CreateFile, ReadFile, ReadFileEx, WriteFile, WriteFileEx.
 
 \item
 High-level Zugriff auf das Internet (wininet.dll): WinHttpOpen.
-% High-level access to the Internet (wininet.dll): WinHttpOpen.
 
 \item
 Die digitale Signatur einer ausführbaren Datei prüfen (wintrust.dll):
-% Checking the digital signature of an executable file (wintrust.dll):
+
 WinVerifyTrust.
 
 \item
-Die Standart MSVC library ( wenn sie dynamisch gelinked wurde) 
-% The standard MSVC library (if it's linked dynamically) (msvcr*.dll):
+Die Standard MSVC library ( wenn sie dynamisch gelinked wurde) 
+
 assert, itoa, ltoa, open, printf, read, strcmp, atol, atoi, fopen, fread, fwrite, memcmp, rand,
 strlen, strstr, strchr.
 
@@ -122,72 +86,54 @@ strlen, strstr, strchr.
 
 \subsection{Extending trial period}
 
-Regestry zugriffs Funtkionen sind häufig ziele für Leute die versuchen die Testphase einer Software zu cracken, die 
+Regestry Zugriffs Funktionen sind häufig ziele für Leute die versuchen die Testphase einer Software zu cracken, die 
 eventuell die Installations Zeit und Datum in der Regestry zu speichert. 
-
-% Registry access functions are frequent targets for those who try to crack trial period of some software, which may save
-% installation date/time into registry.
 
 Ein weiteres beliebtes Ziel sind die GetLocalTime() und GetSystemTime() Funktionen:
 eine Test Software, muss bei jedem Start die aktuelle Zeit und Datum überprüfen.
-% Another popular target are GetLocalTime() and GetSystemTime() functions:
-% a trial software, at each startup, must check current date/time somehow anyway.
 
 \subsection{Removing nag dialog box}
 
-Ein verbreiteter Weg raus zu finden was eine dieser nervigen Dialogboxen macht, ist den 
+Ein verbreiteter Weg raus zu finden was eine dieser nervigen Dialog boxen macht, ist den 
 Aufruf von MessageBox(), CreateDialog() und CreateWindow() Funktionen abzufangen.
 
-% A popular way to find out what causing popping nag dialog box is intercepting MessageBox(), 
-% CreateDialog() and CreateWindow() functions.
 
 \subsection{tracer: Alle Funktionen innerhalb eines bestimmten Modules abfangen}
-% \subsection{tracer: Intercepting all functions in specific module}
+
 \myindex{tracer}
 
 \myindex{x86!\Instructions!INT3}
 Es gibt INT3 breakpoints in \tracer, die nur einmal ausgelöst werden. Jedoch können diese breakpoints für alle 
-Funktionen in einer bestimmten DLL gestetzt werden.
-% There are INT3 breakpoints in the \tracer, that are triggered only once, however, they can be set for all functions
-% in a specific DLL.
+Funktionen in einer bestimmten DLL gesetzt werden.
 
 \begin{lstlisting}
 --one-time-INT3-bp:somedll.dll!.*
 \end{lstlisting}
 
-Oder, lasst uns einfach mal INT3 breakpoints für alle Funktionen setzen, die das \TT{xml} prefix in ihrem Namen haben:
-% Or, let's set INT3 breakpoints on all functions with the \TT{xml} prefix in their name:
+Oder, lasst uns einfach mal INT3 breakpoints für alle Funktionen setzen, die das \TT{xml} Präfix in ihrem Namen haben:
 
 \begin{lstlisting}
 --one-time-INT3-bp:somedll.dll!xml.*
 \end{lstlisting}
 
-Die andere Seite der Medallie ist, solche breakpoints werden nur einmal ausgelöst.
+Die andere Seite der Medaille ist, solche breakpoints werden nur einmal ausgelöst.
 Tracer zeigt den Aufruf der Funktion, wenn er passiert, aber auch nur einmal. 
-Ein weiterer nachteil ist---es ist unmöglich die Argumente der Funktion zu betrachten.
-% On the other side of the coin, such breakpoints are triggered only once.
-% Tracer will show the call of a function, if it happens, but only once.
-% Another drawback---it is impossible to see the function's arguments.
+Ein weiterer Nachteil ist---es ist unmöglich die Argumente der Funktion zu betrachten.
 
 Dennoch, dieses Feature ist sehr nützlich wenn man weiß das das Programm eine DLL benutzt,
 aber man nicht weiß welche Funktionen aufgerufen werden. Und es gibt eine ganze Menge an 
 Funktionen.
 
-% Nevertheless, this feature is very useful when you know that the program uses a DLL,
-% but you do not know which functions are actually used.
-% And there are a lot of functions. 
 
 \par
 \myindex{Cygwin}
-Zum Beispiel, schauen wir uns einmal an was das uptime kommando aus cygwin benutzt:
-% For example, let's see, what does the uptime utility from cygwin use:
+Zum Beispiel, schauen wir uns einmal an was das uptime Kommando aus cygwin benutzt:
 
 \begin{lstlisting}
 tracer -l:uptime.exe --one-time-INT3-bp:cygwin1.dll!.*
 \end{lstlisting}
 
-Dadurch sehen wir alle cygwin1.dll library Funtkionen die zumindest einmal aufgerufen wurden, und von welcher
+Dadurch sehen wir alle cygwin1.dll library Funktionen die zumindest einmal aufgerufen wurden, und von welcher
 Stelle: 
-% Thus we may see all that cygwin1.dll library functions that were called at least once, and where from:
 \lstinputlisting{digging_into_code/uptime_cygwin.txt}
 
