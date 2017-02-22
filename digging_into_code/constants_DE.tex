@@ -88,12 +88,20 @@ Zum Beispiel, alle Win32 und MS-DOS executable starten mit zwei Zeichen \q{MZ}\f
 
 % <--------------------------------------------------------------------------------- Ab hier bis zum schluss fehlt!
 
-At the beginning of a MIDI file the \q{MThd} signature must be present. 
-If we have a program which uses MIDI files for something,
-it's very likely that it must check the file for validity by checking at least the first 4 bytes.
+Am Anfang einer MIDI Datei muss die \q{MThd} signatur vorhanden sein.
+Wenn wir ein Programm haben das auf MIDI Datein zugreift um sonstwas zu machen,
+ist es sehr warscheinlich das das Programm die Datei validieren muss in dem es
+mindestens die ersten 4 Bytes prüft.
 
-This could be done like this:
-(\IT{buf} points to the beginning of the loaded file in memory)
+% At the beginning of a MIDI file the \q{MThd} signature must be present. 
+% If we have a program which uses MIDI files for something,
+% it's very likely that it must check the file for validity by checking at least the first 4 bytes.
+
+Das kann wie folgt realisiert werden: % <-- 
+(\IT{buf} Zeigt auf den Anfang der geladenen Datei im Speicher) 
+
+% This could be done like this:
+% (\IT{buf} points to the beginning of the loaded file in memory)
 
 \begin{lstlisting}[style=customasmx86]
 cmp [buf], 0x6468544D ; "MThd"
@@ -103,12 +111,19 @@ jnz _error_not_a_MIDI_file
 \myindex{\CStandardLibrary!memcmp()}
 \myindex{x86!\Instructions!CMPSB}
 
-\dots or by calling a function for comparing memory blocks like \TT{memcmp()} or any other equivalent code
-up to a \TT{CMPSB} (\myref{REPE_CMPSx}) instruction.
+\dots oder durch das Aufrufen der Funktion für das vergleichen von speicherblöcken wie z.B \TT{memcmp()} oder 
+beliebigen anderen code bis hin zu einem \TT{CMPSB} (\myref{REPE_CMPSx}) Instruction.
 
-When you find such point you already can say where the loading of the MIDI file starts,
-also, we could see the location
-of the buffer with the contents of the MIDI file, what is used from the buffer, and how.
+% \dots or by calling a function for comparing memory blocks like \TT{memcmp()} or any other equivalent code
+% up to a \TT{CMPSB} (\myref{REPE_CMPSx}) instruction.
+
+Wenn man so einen Punkt findet kann man bereits sagen das eine MIDI Datei geladen wird, % <-- Ändern?
+wir können auch sehen wo der Buffer mit den Inhalten der MIDI Datei liegt und was/wie aus diesem
+Buffer verwendet wird.
+
+% When you find such point you already can say where the loading of the MIDI file starts,
+% also, we could see the location
+% of the buffer with the contents of the MIDI file, what is used from the buffer, and how.
 
 \subsubsection{Dates}
 
@@ -116,20 +131,34 @@ of the buffer with the contents of the MIDI file, what is used from the buffer, 
 \myindex{FreeBSD}
 \myindex{HASP}
 
-Often, one may encounter number like \TT{0x19870116}, which is clearly looks like a date (year 1987, 1th month (January), 16th day).
-This may be someone's birthday (a programmer, his/her relative, child), or some other important date.
-The date may also be written in a reverse order, like \TT{0x16011987}.
-American-style dates are also popular, like \TT{0x01161987}.
+Oft findet man auch nur eine Zahl wie \TT{0x19870116}, was ganz klar nach einem Jahres Datum aussieht (Tag 16,  1 Monat (Januar),  Jahr 1987).
+Das ist vielleicht das Geburtsdatum von jemandem (ein Programmierer. ihre/seine bekannte, Kind), oder ein anderes wichtiges Datum.
+Das Datum kann auch in umgekehrter folge auftretten, wie z.B \TT{0x16011987}. 
+Datums angaben im Amerikanischen-stihl sind auch weit verbreitet wie \TT{0x01161987}.
 
-Well-known example is \TT{0x19540119} (magic number used in UFS2 superblock structure), which is a birthday of Marshall Kirk McKusick, prominent FreeBSD contributor.
+% Often, one may encounter number like \TT{0x19870116}, which is clearly looks like a date (year 1987, 1th month (January), 16th day).
+% This may be someone's birthday (a programmer, his/her relative, child), or some other important date.
+% The date may also be written in a reverse order, like \TT{0x16011987}.
+% American-style dates are also popular, like \TT{0x01161987}.
+
+Ein ziemlich bekanntes beispiel ist  \TT{0x19540119} (magic number wird in der UFS2 Superblock Struktur benutzt), das 
+Geburtsdatum von Marshall Kirk McKusick ist, einem Prominenten FreeBSD Entwickler. 
+
+% Well-known example is \TT{0x19540119} (magic number used in UFS2 superblock structure), which is a birthday of Marshall Kirk McKusick, prominent FreeBSD contributor.
+
 
 \myindex{Stuxnet}
-Stuxnet uses the number ``19790509'' (not as 32-bit number, but as string, though), and this led to speculation
-that the malware is connected to Israel
-\footnote{This is a date of execution of Habib Elghanian, persian jew.}
+Stuxnet benutzt die Zahl ``19790509'' (nicht als 32-Bit Zahl, aber als String), was zu spekulationen geführt hat
+weil die malware verbindungen nach Israel aufzeigt.
+\footnote{Das ist das Datum der Hinrichtung von Habib Elghanian, persischer jude.}
+% Stuxnet uses the number ``19790509'' (not as 32-bit number, but as string, though), and this led to speculation
+% that the malware is connected to Israel
+% \footnote{This is a date of execution of Habib Elghanian, persian jew.}
 
-Also, numbers like those are very popular in amateur-grade cryptography, for example, excerpt from the \IT{secret function} internals from HASP3 dongle
+Solche Zahlen sind auch sehr beliebt in amateur Kryptografie, zum Beispiel, ein Ausschnitt aus den \IT{secret function} Internas aus dem HASP3 Dongle %  <-- Vielleicht bessere formulierung?
 \footnote{\url{https://web.archive.org/web/20160311231616/http://www.woodmann.com/fravia/bayu3.htm}}:
+% Also, numbers like those are very popular in amateur-grade cryptography, for example, excerpt from the \IT{secret function} internals from HASP3 dongle
+% \footnote{\url{https://web.archive.org/web/20160311231616/http://www.woodmann.com/fravia/bayu3.htm}}:
 
 \begin{lstlisting}[style=customc]
 void xor_pwd(void) 
@@ -162,23 +191,36 @@ void emulate_func2(unsigned short seed)
 
 \subsubsection{DHCP}
 
-This applies to network protocols as well.
-For example, the DHCP protocol's network packets contains the so-called \IT{magic cookie}: \TT{0x63538263}.
-Any code that generates DHCP packets somewhere must embed this constant into the packet.
-If we find it in the code we may find where this happens and, not only that.
-Any program which can receive DHCP packet must verify the \IT{magic cookie}, comparing it with the constant.
+Das Trifft auf Netzwerk Protokolle ebenso zu. 
+Zum Beispiel, die Packete des DHCP Protokoll's beinhalten so genannte \IT{magic cookie}: \TT{0x63538263}.
+Jeder Code der ein DHCP Packet generiert, muss diese Konstante in das Packet einbetten.
+Wenn wir diesen Code finden, wissen wir auch wo es passiert und nicht nur was passiert.
+Jedes Programm das DHCP Packete emfpangen kann muss verifizieren das der \IT{magic cookie} mit der Konstante 
+übereinstimmt. 
 
-For example, let's take the dhcpcore.dll file from Windows 7 x64 and search for the constant.
-And we can find it, twice:
-it seems that the constant is used in two functions with descriptive names\\
+% This applies to network protocols as well.
+% For example, the DHCP protocol's network packets contains the so-called \IT{magic cookie}: \TT{0x63538263}.
+% Any code that generates DHCP packets somewhere must embed this constant into the packet.
+% If we find it in the code we may find where this happens and, not only that.
+% Any program which can receive DHCP packet must verify the \IT{magic cookie}, comparing it with the constant.
+
+Zum Beispiel, lasst uns die dhcpcore.dll Datei aus Windows 7 x64 analysiereun die nach der Konstante suchen.
+Wir können die Konstante zweimal finden:
+Es sieht danach aus als wäre die Konstante in zwei Funktionen benutzt mit dem selbstredenden Namen\\
 \TT{DhcpExtractOptionsForValidation()} and \TT{DhcpExtractFullOptions()}:
+
+% For example, let's take the dhcpcore.dll file from Windows 7 x64 and search for the constant.
+% And we can find it, twice:
+% it seems that the constant is used in two functions with descriptive names\\
+% \TT{DhcpExtractOptionsForValidation()} and \TT{DhcpExtractFullOptions()}:
 
 \begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasmx86]
 .rdata:000007FF6483CBE8 dword_7FF6483CBE8 dd 63538263h          ; DATA XREF: DhcpExtractOptionsForValidation+79
 .rdata:000007FF6483CBEC dword_7FF6483CBEC dd 63538263h          ; DATA XREF: DhcpExtractFullOptions+97
 \end{lstlisting}
 
-And here are the places where these constants are accessed:
+Und hier die (Speicher) Orte an denen auf die Konstante zugegriffen wird:
+% And here are the places where these constants are accessed:
 
 \begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasmx86]
 .text:000007FF6480875F  mov     eax, [rsi]
@@ -186,7 +228,7 @@ And here are the places where these constants are accessed:
 .text:000007FF64808767  jnz     loc_7FF64817179
 \end{lstlisting}
 
-And:
+Und:
 
 \begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasmx86]
 .text:000007FF648082C7  mov     eax, [r12]
@@ -196,26 +238,47 @@ And:
 
 \subsection{Specific constants}
 
-Sometimes, there is a specific constant for some type of code.
-For example, the author once dug into a code, where number 12 was encountered suspiciously often.
-Size of many arrays is 12, or multiple of 12 (24, etc).
-As it turned out, that code takes 12-channel audio file at input and process it.
+Machmal, gibt es spezifische Konstanten für gewissen code % <-- Besser? 
+Zum Beispiel, einmal hat der Author sich in ein Stück Code gegraben wo die Nummer 12 verdächtig
+oft vorkam. Arrays haben oft eine größe von 12 oder ein vielfaches von 12 (24, etc). 
+Wie sich rausstellte, hat der Code eine 12-Kannal Audiodatei an der Eingabe entgegen genommen und
+sie verarbeitet.
 
-And vice versa: for example, if a program works with text field which has length of 120 bytes,
-there has to be a constant 120 or 119 somewhere in the code.
-If UTF-16 is used, then $2 \cdot 120$.
-If a code works with network packets of fixed size, it's good idea to search for this constant in the code as well.
+% Sometimes, there is a specific constant for some type of code.
+% For example, the author once dug into a code, where number 12 was encountered suspiciously often.
+% Size of many arrays is 12, or multiple of 12 (24, etc).
+% As it turned out, that code takes 12-channel audio file at input and process it.
 
-This is also true for amateur cryptography (license keys, etc).
-If encrypted block has size of $n$ bytes, you may want to try to find occurences of this number throughout the code.
-Also, if you see a piece of code which is been repeated $n$ times in loop during execution,
-this may be encryption/decryption routine.
+Und umgekehrt: zum Beispiel, wenn ein Programm ein Textfeld verarbeitet das eine länge von 120 Bytes hat,
+dann gibt es auch eine Konstante 120 oder 119 irgendwo im Code.
+Wenn UFT-16 Benutzt wird, dann $2 \cdot 120$. Wenn ein Code mit Netzwerkpaketen von fester größe
+arbeitet, ist es eine gute Idee nach dieser Konstante auch im Code zu suchen.
+
+% And vice versa: for example, if a program works with text field which has length of 120 bytes,
+% there has to be a constant 120 or 119 somewhere in the code.
+% If UTF-16 is used, then $2 \cdot 120$.
+% If a code works with network packets of fixed size, it's good idea to search for this constant in the code as well.
+
+Das trifft auch auf Amateur Kryptografie zu (Lizenz schlüssel, etc). 
+Bei einem verschlüsselten Block von $n$ Bytes, will man vielleicht versuchen vorkommen dieser Nummer im Code zu suchen,
+Auch, wenn man ein Stück code sieht der sich $n$ mal wärend einer Schleifen ausführung wiederholt, ist das vielleicht
+eine ver-/entschlüsselungs Routine.
+
+% This is also true for amateur cryptography (license keys, etc).
+% If encrypted block has size of $n$ bytes, you may want to try to find occurences of this number throughout the code.
+% Also, if you see a piece of code which is been repeated $n$ times in loop during execution,
+% this may be encryption/decryption routine.
 
 \subsection{Searching for constants}
 
-It is easy in \IDA: Alt-B or Alt-I.
-\myindex{binary grep}
-And for searching for a constant in a big pile of files, or for searching in non-executable files,
-there is a small utility called \IT{binary grep}\footnote{\BGREPURL}.
+Das ist einfach in \IDA: Alt-B oder Alt-I.
+\myindex{binär grep}
+Und für das suchen von Konstanten in einem Haufen großer Datein, oder für das suchen in nicht ausführbaren Datein,
+gibt es ein kleines Utility gennant \IT{binary grep}\footnote{\BGREPURL}.
 
-<
+% It is easy in \IDA: Alt-B or Alt-I.
+% \myindex{binary grep}
+% And for searching for a constant in a big pile of files, or for searching in non-executable files,
+% there is a small utility called \IT{binary grep}\footnote{\BGREPURL}.
+
+
