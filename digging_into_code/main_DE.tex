@@ -16,7 +16,7 @@ Deshalb ist es sehr wichtig den Ursprung einer Funktion zu bestimmen, wenn die F
 einer Standard library oder aus einer sehr bekannten library stammt (wie z.B Boost\FOOTNOTEBOOST, libpng\FOOTNOTELIBPNG),
 oder ob die Funktion sich auf das bezieht was wir im Code versuchen zu finden.
 
-Es ist ein wenig absurd sämtlichen code neu zu schreiben in \CCpp um das zu finden 
+Es ist ein wenig absurd sämtlichen Code neu zu schreiben in \CCpp um das zu finden 
 was wir suchen.
 
 Eine der Hauptaufgaben eines Reverse Enigneers ist es schnell den Code zu finden den er/sie sucht. % <-- nachbessern (formulierung) ?
@@ -25,7 +25,7 @@ Eine der Hauptaufgaben eines Reverse Enigneers ist es schnell den Code zu finden
 \myindex{\GrepUsage}
 
 Der \IDA disassembler erlaubt uns durch Text Strings, Byte Sequenzen und konstanten zu suchen. % <-- noch mal? 
-Es ist sogar möglich den code in .lst oder .asm Text Dateien zu exportieren und diese mit \TT{grep}, \TT{awk}, etc. zu untersuchen.
+Es ist sogar möglich den Code in .lst oder .asm Text Dateien zu exportieren und diese mit \TT{grep}, \TT{awk}, etc. zu untersuchen.
 
 % The \IDA disassembler allow us to search among text strings, byte sequences and constants.
 % It is even possible to export the code to .lst or .asm text files and then use \TT{grep}, \TT{awk}, etc.
@@ -49,19 +49,19 @@ normal benutzt werden anstatt selbst geschriebene librarys.
 \myindex{SAP}
 \myindex{Windows!PDB}
 
-Zum Beispiel, der Autor dieser Zeilen wollte verstehen wie die Kompression/Dekompression von Netzwerkpaketen in SAP 6.0 funktioniert.
-SAP ist ein gewaltiges Stück Software, aber detaillierte -\gls{PDB} Dateien mit debugging Informationen sind vorhanden, was sehr praktisch 
-ist. Der Autor hat schließlich eine Ahnung gehabt, das eine Funktion genannt \IT{CsDecomprLZC} die Dekompression der Netzwerkpakete übernahm.
-Er hat den Namen der Funktion gegoogled und ist schnell darauf gekommen das diese Funktion in MaxDB benutzt wurde
-(Das ist ein Open-Source SAP Projekt) \footnote{Mehr darüber in der relevanten Sektion~(\myref{sec:SAPGbUI})}. 
+Zum Beispiel, der Autor dieser Zeilen wollte verstehen wie die Kompression/Dekompression von Netzwerkpacketen in SAP 6.0 funktioniert.
+SAP ist ein gewaltiges Stück Software, aber detaillierte -\gls{PDB} Dateien mit Debug Informationen sind vorhanden, was sehr praktisch 
+ist. Der Autor hat schließlich eine Ahnung gehabt, das eine Funktion genannt \IT{CsDecomprLZC} die Dekompression der Netzwerkpackete übernahm.
+Er hat nach dem Namen der Funktion auf google gesucht und ist schnell zum schluss gekommen das diese Funktion in 
+MaxDB benutzt wurde (Das ist ein Open-Source SAP Projekt) \footnote{Mehr darüber in der relevanten Sektion~(\myref{sec:SAPGbUI})}. 
 
 \url{http://www.google.com/search?q=CsDecomprLZC}
 
-Erstaunlich, das MaxDB und die SAP 6.0 Software den selben code geteilt haben für die Kompression/Dekompression der Netzwerkpakete.
+Erstaunlich, das MaxDB und die SAP 6.0 Software den selben Code geteilt haben für die Kompression/Dekompression der Netzwerkpackete.
 
 \input{digging_into_code/identification/exec_EN} % <-- Auf exec_DE umbiegen
 
-\section{Communication with outer world (function level)} % <-- übersetzen
+\section{Kommunikation mit der außen Welt (Funktion Level)} % <-- übersetzen
 Oft ist es empfehlenswert die Funktion Argumente und die Rückgabe werte im Debugger oder \ac{DBI} zu überwachen.
 Zum Beispiel, einmal hat der Autor versucht die Bedeutung einer obskuren Funktion zu verstehen, die einen inkorrekten
 Bubble sort Algorithmus implementiert hatte. (Sie hat funktioniert, jedoch langsamer.) 
@@ -69,34 +69,31 @@ Zwischenzeitlich, die Eingaben und Ausgaben der Funktion zu überwachen hilft in
 
 % The following input files each one has to be also translated! 
 % Folgende auf DE umbiegen
-\input{digging_into_code/communication_win32_EN}
-\input{digging_into_code/strings_EN}\input{digging_into_code/strings_RU}
-\input{digging_into_code/assert_EN}
-\input{digging_into_code/constants_EN}
-\input{digging_into_code/instructions_EN}
-\input{digging_into_code/suspicious_code_EN}
-\input{digging_into_code/magic_numbers_tracing_EN}
+\input{digging_into_code/communication_win32_DE}
+\input{digging_into_code/strings_DE}\input{digging_into_code/strings_RU}
+\input{digging_into_code/assert_DE}
+\input{digging_into_code/constants_DE}
+\input{digging_into_code/instructions_DE}
+\input{digging_into_code/suspicious_code_DE}
+\input{digging_into_code/magic_numbers_tracing_DE}
 
-\section{Other things}  % <-- übersetzen
+\section{Andere Dinge}  % <-- übersetzen
 
-\subsection{General idea}  % <-- übersetzen
+\subsection{Die Idee}  % <-- übersetzen
 
 Ein Reverse Engineer sollte versuchen so oft wie Möglich in den Schuhen des Programmierers zu laufen.
 Um ihren/seinen Standpunkt zu betrachten uns sich selbst zu Fragen wie man einen Task in spezifischen Fällen lösen würde.
 
-\subsection{Order of functions in binary code}  % <-- übersetzen
+\subsection{Anordnung von Funktionen in Binär Code}  % <-- übersetzen
 
-Sämtliche Funktionen die in einer einzelnen .c oder .cpp-file gefunden werden, werden zu den entsprechenden Objekt Dateien (.o) kompiliert. 
-Später, fügt der Linker alle Objektdatein die er braucht zusammen, ohne die Reihenfolge oder die Funktionen in Ihnen zu verändern. 
-Als eine Konsequenz, ergibt sich daraus wenn man zwei oder mehr aufeinander folgende Funktionen sieht, bedeutet dass das sie in der 
-gleichen Source code Datei platziert waren ( Ausser natürlich man bewegt sich an der Grenze zwischen zwei Dateien. ).  Das bedeutet
+Sämtliche Funktionen die in einer einzelnen .c oder .cpp-Datei gefunden werden, werden zu den entsprechenden Objekt Dateien (.o) kompiliert. Später, fügt der Linker alle Objektdatein die er braucht zusammen, ohne die Reihenfolge oder die Funktionen in Ihnen zu verändern. Als eine Konsequenz, ergibt sich daraus wenn man zwei oder mehr aufeinander folgende Funktionen sieht, bedeutet dass das sie in der gleichen Source Code Datei platziert waren ( Ausser natürlich man bewegt sich an der Grenze zwischen zwei Dateien. ).  Das bedeutet
 das diese Funktionen etwas gemeinsam haben, das sie aus dem gleichen \ac{API} Level stammen oder aus der gleichen library, etc.
 
-\subsection{Tiny functions}  % <-- übersetzen
+\subsection{kleine Funktionen}  % <-- übersetzen
 
 Sehr kleine oder leere Funktionen  (\myref{empty_func})
 oder Funktionen die nur ``true'' (1) oder ``false'' (0) (\myref{ret_val_func}) sind weit verbreitet,
-und fast jeder ordentlicher Compiler tendiert dazu nur solche Funktionen in den resultierenden ausführbaren code zu stecken,
+und fast jeder ordentlicher Compiler tendiert dazu nur solche Funktionen in den resultierenden ausführbaren Code zu stecken,
 sogar wenn es mehrere gleiche Funktionen im Source Code bereits gibt. 
 Also, wann immer man solche kleinen Funktionen sieht die z.B nur aus \TT{mov eax, 1 / ret} bestehen und von mehreren 
 Orten aus referenziert werden (und aufgerufen werden können), und scheinbar keine Verbindung zu einander haben, dann 
@@ -108,6 +105,6 @@ ist das wahrscheinlich das Ergebnis einer Optimierung.
 
 % sections
 % DE Translation also needed for subfiles here
-\input{digging_into_code/binary/main_EN}
-\input{digging_into_code/snapshots_comparing_EN}
+\input{digging_into_code/binary/main_DE}
+\input{digging_into_code/snapshots_comparing_DE}
 
