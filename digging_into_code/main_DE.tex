@@ -19,16 +19,12 @@ oder ob die Funktion sich auf das bezieht was wir im Code versuchen zu finden.
 Es ist ein wenig absurd sämtlichen Code neu zu schreiben in \CCpp um das zu finden 
 was wir suchen.
 
-Eine der Hauptaufgaben eines Reverse Enigneers ist es schnell den Code zu finden den er/sie sucht. % <-- nachbessern (formulierung) ?
-% One of the primary tasks of a reverse engineer is to find quickly the code he/she needs.
+Eine der Hauptaufgaben eines Reverse Enigneers ist es schnell Code zu finden den er/sie sucht.
 
 \myindex{\GrepUsage}
 
-Der \IDA disassembler erlaubt uns durch Text Strings, Byte Sequenzen und konstanten zu suchen. % <-- noch mal? 
+Der \IDA disassembler erlaubt es durch Text Strings, Byte Sequenzen und konstanten zu suchen. 
 Es ist sogar möglich den Code in .lst oder .asm Text Dateien zu exportieren und diese mit \TT{grep}, \TT{awk}, etc. zu untersuchen.
-
-% The \IDA disassembler allow us to search among text strings, byte sequences and constants.
-% It is even possible to export the code to .lst or .asm text files and then use \TT{grep}, \TT{awk}, etc.
 
 Wenn man versucht zu verstehen wie ein bestimmter Code funktioniert, kann es auch einfach eine open-source library wie libpng sein. % <-- kling scheisse, noch mal über den Sinn nachdenken?!
 Wenn man also eine Konstante oder Textstrings findet die vertraut erscheinen, ist es immer einen Versuch wert diese zu \IT{google}n .
@@ -59,16 +55,14 @@ MaxDB benutzt wurde (Das ist ein Open-Source SAP Projekt) \footnote{Mehr darübe
 
 Erstaunlich, das MaxDB und die SAP 6.0 Software den selben Code geteilt haben für die Kompression/Dekompression der Netzwerkpackete.
 
-\input{digging_into_code/identification/exec_EN} % <-- Auf exec_DE umbiegen
+\input{digging_into_code/identification/exec_DE} 
 
-\section{Kommunikation mit der außen Welt (Funktion Level)} % <-- übersetzen
+\section{Kommunikation mit der außen Welt (Funktion Level)} 
 Oft ist es empfehlenswert die Funktion Argumente und die Rückgabe werte im Debugger oder \ac{DBI} zu überwachen.
 Zum Beispiel, einmal hat der Autor versucht die Bedeutung einer obskuren Funktion zu verstehen, die einen inkorrekten
 Bubble sort Algorithmus implementiert hatte. (Sie hat funktioniert, jedoch langsamer.) 
 Zwischenzeitlich, die Eingaben und Ausgaben der Funktion zu überwachen hilft instand zu verstehen was die Funktion tut.
 
-% The following input files each one has to be also translated! 
-% Folgende auf DE umbiegen
 \input{digging_into_code/communication_win32_DE}
 \input{digging_into_code/strings_DE}\input{digging_into_code/strings_RU}
 \input{digging_into_code/assert_DE}
@@ -77,19 +71,19 @@ Zwischenzeitlich, die Eingaben und Ausgaben der Funktion zu überwachen hilft in
 \input{digging_into_code/suspicious_code_DE}
 \input{digging_into_code/magic_numbers_tracing_DE}
 
-\section{Andere Dinge}  % <-- übersetzen
+\section{Andere Dinge}
 
-\subsection{Die Idee}  % <-- übersetzen
+\subsection{Die Idee}  
 
 Ein Reverse Engineer sollte versuchen so oft wie Möglich in den Schuhen des Programmierers zu laufen.
 Um ihren/seinen Standpunkt zu betrachten uns sich selbst zu Fragen wie man einen Task in spezifischen Fällen lösen würde.
 
-\subsection{Anordnung von Funktionen in Binär Code}  % <-- übersetzen
+\subsection{Anordnung von Funktionen in Binär Code}  
 
 Sämtliche Funktionen die in einer einzelnen .c oder .cpp-Datei gefunden werden, werden zu den entsprechenden Objekt Dateien (.o) kompiliert. Später, fügt der Linker alle Objektdatein die er braucht zusammen, ohne die Reihenfolge oder die Funktionen in Ihnen zu verändern. Als eine Konsequenz, ergibt sich daraus wenn man zwei oder mehr aufeinander folgende Funktionen sieht, bedeutet dass das sie in der gleichen Source Code Datei platziert waren ( Ausser natürlich man bewegt sich an der Grenze zwischen zwei Dateien. ).  Das bedeutet
 das diese Funktionen etwas gemeinsam haben, das sie aus dem gleichen \ac{API} Level stammen oder aus der gleichen library, etc.
 
-\subsection{kleine Funktionen}  % <-- übersetzen
+\subsection{kleine Funktionen} 
 
 Sehr kleine oder leere Funktionen  (\myref{empty_func})
 oder Funktionen die nur ``true'' (1) oder ``false'' (0) (\myref{ret_val_func}) sind weit verbreitet,
@@ -103,8 +97,7 @@ ist das wahrscheinlich das Ergebnis einer Optimierung.
 
 \ac{RTTI}~(\myref{RTTI})-data ist vielleicht auch nützlich für die \Cpp Klassen Identifikation.
 
-% sections
-% DE Translation also needed for subfiles here
+
 \input{digging_into_code/binary/main_DE}
 \input{digging_into_code/snapshots_comparing_DE}
 

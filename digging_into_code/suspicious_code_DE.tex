@@ -1,6 +1,6 @@
-\section{Suspicious code patterns}
+\section{Verdächtige Code muster}
 
-\subsection{XOR instructions}
+\subsection{XOR Instruktionen}
 \myindex{x86!\Instructions!XOR}
 
 Instruktionen wie \TT{XOR op, op} (zum Beispiel, \TT{XOR EAX, EAX})
@@ -8,14 +8,9 @@ werden normal dafür benutzt Register Werte auf Null zu setzen, wenn jedoch
 einer der Operanden sich unterscheidet wird die \q{exclusive or} Operation 
 ausgeführt.
 
-Diese Operation wird allgemein selten benutzt beim programmieren, ist aber 
-weit verbreitet in der Kryptografie, besonders bei Amateuren der Kryptografie. % <-- Bessere formulierung?
-Das ist besonders Verdächtig wenn der zweite Operand eine große Zahl ist.
-
-% This operation is rare in common programming, but widespread in cryptography,
-% including amateur one.
-% It's especially suspicious if the
-% second operand is a big number.
+Diese Operation wird allgemeinen selten benutzt beim programmieren, aber ist
+weit verbreitet in der Kryptografie, besonders bei Amateuren der Kryptografie.
+Sowas ist besonders Verdächtig wenn der zweite Operand eine große Zahl ist.
 
 Das könnte ein Hinweis sein das etwas ver-/entschlüsselt wird oder Checksumme berechnet werden, etc.\\
 \\
@@ -36,7 +31,7 @@ gawk -e '$2=="xor" { tmp=substr($3, 0, length($3)-1); if (tmp!=$4) if($4!="esp")
 Es sollte auch noch erwähnt werden das diese Art von Skript in der Lage ist inkorrekt disassemblierten Code zu erkennen
 (\myref{sec:incorrectly_disasmed_code}).
 
-\subsection{Hand-written assembly code}
+\subsection{Hand geschriebener Assembler code}
 
 \myindex{Function prologue}
 \myindex{Function epilogue}
@@ -50,8 +45,7 @@ Diese Instruktionen sind in der Instruktionsliste im Anhang mit (M) markiert: \m
 
 \par
 
-Auch die Funktions Prolog und Epilog sind im allgemeinen nicht vorhanden bei handgeschriebenen Assembler Code. % <--- ??? 
-% Also the function prologue/epilogue are not commonly present in hand-written assembly.
+Die Funktions Prolog und Epilog sind allgemein nicht vorhanden bei handgeschriebenen Assembler Code.
 \par
 
 Tatsächlich gibt es kein bestimmtes System um Argumente an Funktionen zu übergeben wenn der Code handgeschrieben wurde. 
