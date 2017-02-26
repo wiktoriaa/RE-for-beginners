@@ -83,6 +83,8 @@ How to escape French diacritic symbols, [for example](https://github.com/dennis7
 Do not worry about misplacing them or not placing at all, I'll fix it by myself.
 
 For those, who interested, § symbol is in fact switches you into TeX mode, and you can write anything here as in .tex files, like `\IT{italic}`, etc.
+This is why single `$` symbol cannot be used inside escaped line.
+
 ## Contact me
 
 Do not hesitate to contact me if you have any questions: dennis(a)yurichev.com
