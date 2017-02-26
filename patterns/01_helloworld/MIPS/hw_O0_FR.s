@@ -6,12 +6,12 @@ main:
 	addiu	$sp,$sp,-32
 	sw	$31,28($sp)
 	sw	$fp,24($sp)
-; définir FP (stack frame pointer):
+; §définir FP§ (stack frame pointer):
 	move	$fp,$sp
-; définir GP:
+; §définir GP:§
 	lui	$28,%hi(__gnu_local_gp)
 	addiu	$28,$28,%lo(__gnu_local_gp)
-; charger l'adresse de la chaîne de texte:
+; §charger l'adresse de la chaîne de texte:§
 	lui	$2,%hi($LC0)
 	addiu	$4,$2,%lo($LC0)
 ; charger l'adresse de puts() en utilisant GP:
@@ -24,9 +24,9 @@ main:
 
 ; restaurer GP depuis la pile locale:
 	lw	$28,16($fp)
-; mettre le registre $2 ($V0) à zéro:
+; §mettre le registre $2 ($V0) à zéro:§
 	move	$2,$0
-; épilogue de la fonction.
+; §épilogue de la fonction.§
 ; restaurer SP:
 	move	$sp,$fp
 ; restaurer RA:

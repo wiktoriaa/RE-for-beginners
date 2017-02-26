@@ -37,7 +37,7 @@ main:
 
 ; Funktionsepilog:
 	lw	$31,36($sp)
-; setze Rückgabewert auf 0:
+; §setze Rückgabewert auf 0:§
 	move	$2,$0
 ; return:
 	j	$31

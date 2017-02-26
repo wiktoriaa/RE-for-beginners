@@ -16,8 +16,8 @@ main	ENDP
 
 f	PROC
 	; ECX - 1er argument
-	; EDX - 2ème argument
-	; R8D - 3ème argument
+	; EDX - §2ème argument§
+	; R8D - §3ème argument§
 	imul	ecx, edx
 	lea	eax, DWORD PTR [r8+rcx]
 	ret	0

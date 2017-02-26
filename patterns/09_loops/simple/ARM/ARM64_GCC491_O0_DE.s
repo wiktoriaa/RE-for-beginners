@@ -22,11 +22,11 @@ main:
 	stp	x29, x30, [sp, -32]!
 ; setze den Stack Frame:
 	add	x29, sp, 0
-; Zähler initialisieren
+; §Zähler initialisieren§
 	mov	w0, 2
 ; auf dem Stack an zugewiesener Stelle ablegen:
 	str	w0, [x29,28]
-; Schleifenkörper überspringen und zur Bedingungsprüfung springen:
+; §Schleifenkörper überspringen und zur Bedingungsprüfung springen:§
 	b	.L3
 .L4:
 ; lade Zähler nach W0.
@@ -34,13 +34,13 @@ main:
 	ldr	w0, [x29,28]
 ; Aufruf printing_function():
 	bl	printing_function
-; Zähler erhöhen:
+; §Zähler erhöhen:§
 	ldr	w0, [x29,28]
 	add	w0, w0, 1
 	str	w0, [x29,28]
 .L3:
-; Bedingungsprüfung der Schleife.
-; Zähler laden:
+; §Bedingungsprüfung der Schleife.§
+; §Zähler laden:§
 	ldr	w0, [x29,28]
 ; ist 9 erreicht?
 	cmp	w0, 9

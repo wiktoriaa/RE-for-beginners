@@ -6,8 +6,8 @@ arg_8           = dword ptr  10h
 arg_10          = dword ptr  18h
 
 		; ECX - 1er argument
-		; EDX - 2ème argument
-		; R8D - 3ème argument
+		; EDX - §2ème argument§
+		; R8D - §3ème argument§
                 mov     [rsp+arg_10], r8d
                 mov     [rsp+arg_8], edx
                 mov     [rsp+arg_0], ecx
