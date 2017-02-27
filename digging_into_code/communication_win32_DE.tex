@@ -1,45 +1,45 @@
 \section{Kommunikation mit der Außen Welt (Win32)}
 
-Manchmal reicht es aus die Ein- und Ausgaben einer Funktion zu beobachten um zu verstehen was sie tut.
+Manchmal reicht es die Ein- und Ausgaben einer Funktion zu beobachten um zu verstehen was sie tut.
 Auf diese Weise kann man Zeit Sparren.
 
 Datei und Regestry Zugriff:
-Für einfache Analysen kann das Tool Prozess Monitor\footnote{\url{http://go.yurichev.com/17301}}
+F\"ur einfache Analysen kann das Tool Prozess Monitor\footnote{\url{http://go.yurichev.com/17301}}
 von SysInternals hilfreich sein.
 
-Bei einfachen Analysen von Netzwerk Zugriffen ist Wireshark\footnote{\url{http://go.yurichev.com/17303}} ganz nützlich.
+Bei einfachen Netzwerk Zugriffen ist Wireshark\footnote{\url{http://go.yurichev.com/17303}} zum analysieren ganz n\"utzlich.
 
-Aber man dann muss trotzdem einen Blick hinein werfen.
+Trotzdem muss man einen Blick in die Netzwerkpakte werfen.
 \\
-Das erste wonach man schauen kann ist welche Funktionen die \ac{OS} \ac{API}s benutzen und was für Standard libraries
+Das erste wonach man schauen kann ist welche Funktionen die \ac{OS} \ac{API}s benutzen und was f\"ur Standard libraries
 benutzt werden. 
 
-Wenn das Programm unterteilt ist in eine Main executable und mehrere DLL Dateien, können manchmal die Namen der Funktionen innerhalb
+Wenn das Programm unterteilt ist in eine Main executable und mehrere DLL Dateien, k\"onnen manchmal die Namen der Funktionen innerhalb
 der DLLs Helfen. 
 
-Wenn wir daran interessiert sind was genau zum Aufruf von \TT{MessageBox()} mit einem spezifischen Text führt,
-können wir versuchen diesen Text innerhalb des Data Segments zu finden, die Referenzen auf den Text und die 
-Punkte von denen aus die Kontrolle an den \TT{MessageBox()} Aufruf an dem wir interessiert sind.
+Wenn wir daran interessiert sind was genau zum Aufruf von \TT{MessageBox()} mit einem spezifischen Text f\"uhrt,
+k\"onnen wir versuchen diesen Text innerhalb des Data Segments zu finden, die Referenzen auf den Text und die 
+Punkte von denen aus die Kontrolle an den \TT{MessageBox()} Aufruf an dem wir interessiert sind. %<--- Das muss verständlicher geschrieben werden.
 
 \myindex{\CStandardLibrary!rand()}
-Wenn wir über Video Spiele sprechen sind wir daran interessiert welche mehr oder weniger zufällig darin vorkommen,
+Wenn wir \"uber Video Spiele sprechen sind wir daran interessiert welche mehr oder weniger zuf\"allig darin vorkommen, %<-- was was kommt darin vor?
 vielleicht versuchen wir die \rand Funktion oder Ersatz Funktionen zu finden ( wie z.B der Mersenne Twister Algorithmus) 
-und wir versuchen die Orte zu finden von welchen aus diese Funktionen aufgerufen werden, und noch wichtiger was für
+und wir versuchen die Orte zu finden von welchen aus diese Funktionen aufgerufen werden, und noch wichtiger was f\"ur
 Ergebnisse verwertet werden. 
 % BUG in varioref: http://tex.stackexchange.com/questions/104261/varioref-vref-or-vpageref-at-page-boundary-may-loop
 Ein Beispiel: \ref{chap:color_lines}.
 
 Aber wenn es sich nicht um ein Spiel handelt und \rand wird trotzdem benutzt, ist es interessant zu wissen warum.
-Es gibt Fälle bei denen unerwartet \rand in Daten Kompression Algorithmen benutzt wird (für die Imitation von Verschlüsslung):
+Es gibt F\"alle bei denen unerwartet \rand in Daten Kompression Algorithmen benutzt wird (f\"ur die Imitation von Verschl\"usslung):
 \href{http://go.yurichev.com/17221}{blog.yurichev.com}.
 
 \subsection{Oft benutzte Funktionen in der Windows API}
 
 Diese Funktionen sind vielleicht unter den importierten.
-Es ist Sinnvoll an dieser Stelle zu erwähnen das nicht unbedingt jede Funktion benutzt wird aus 
+Es ist Sinnvoll an dieser Stelle zu erw\"ahnen das nicht unbedingt jede Funktion benutzt wird aus 
 dem Code den der Programmierer geschrieben hat.
 
-Manche Funktionen haben eventuell das \GTT{-A} Suffix für die ASCII Version und das \GTT{-W} für die Unicode Version.
+Manche Funktionen haben eventuell das \GTT{-A} Suffix f\"ur die ASCII Version und das \GTT{-W} f\"ur die Unicode Version.
 
 
 \begin{itemize}
@@ -71,7 +71,7 @@ CreateFile, ReadFile, ReadFileEx, WriteFile, WriteFileEx.
 High-level Zugriff auf das Internet (wininet.dll): WinHttpOpen.
 
 \item
-Die digitale Signatur einer ausführbaren Datei prüfen (wintrust.dll):
+Die digitale Signatur einer ausf\"uhrbaren Datei pr\"ufen (wintrust.dll):
 
 WinVerifyTrust.
 
@@ -83,15 +83,15 @@ strlen, strstr, strchr.
 
 \end{itemize}
 
-\subsection{Verlängerung der Testphase}
+\subsection{Verl\"angerung der Testphase}
 
-Registry Zugriffs Funktionen sind häufig ziele für Leute die versuchen die Testphase einer Software zu cracken, die 
+Registry Zugriffs Funktionen sind h\"aufig ziele f\"ur Leute die versuchen die Testphase einer Software zu cracken, die 
 eventuell die Installations Zeit und Datum in der Regestry zu speichert. 
 
 Ein weiteres beliebtes Ziel sind die GetLocalTime() und GetSystemTime() Funktionen:
-eine Test Software, muss bei jedem Start die aktuelle Zeit und Datum überprüfen.
+eine Test Software, muss bei jedem Start die aktuelle Zeit und Datum \"uberpr\"ufen.
 
-\subsection{Entfernen nerviger Dialog Boxenx}
+\subsection{Entfernen nerviger Dialog Boxen}
 
 Ein verbreiteter Weg raus zu finden was eine dieser nervigen Dialog boxen macht, ist den 
 Aufruf von MessageBox(), CreateDialog() und CreateWindow() Funktionen abzufangen.
@@ -102,24 +102,24 @@ Aufruf von MessageBox(), CreateDialog() und CreateWindow() Funktionen abzufangen
 \myindex{tracer}
 
 \myindex{x86!\Instructions!INT3}
-Es gibt INT3 breakpoints in \tracer, die nur einmal ausgelöst werden. Jedoch können diese breakpoints für alle 
+Es gibt INT3 breakpoints in \tracer, die nur einmal ausgel\"ost werden. Jedoch k\"onnen diese breakpoints f\"ur alle 
 Funktionen in einer bestimmten DLL gesetzt werden.
 
 \begin{lstlisting}
 --one-time-INT3-bp:somedll.dll!.*
 \end{lstlisting}
 
-Oder, lasst uns einfach mal INT3 breakpoints für alle Funktionen setzen, die das \TT{xml} Präfix in ihrem Namen haben:
+Oder, lasst uns einfach mal INT3 breakpoints f\"ur alle Funktionen setzen, die das \TT{xml} Pr\"afix in ihrem Namen haben:
 
 \begin{lstlisting}
 --one-time-INT3-bp:somedll.dll!xml.*
 \end{lstlisting}
 
-Die andere Seite der Medaille ist, solche breakpoints werden nur einmal ausgelöst.
+Die andere Seite der Medaille ist, solche breakpoints werden nur einmal ausgel\"ost.
 Tracer zeigt den Aufruf der Funktion, wenn er passiert, aber auch nur einmal. 
-Ein weiterer Nachteil ist---es ist unmöglich die Argumente der Funktion zu betrachten.
+Ein weiterer Nachteil ist---es ist unm\"oglich die Argumente der Funktion zu betrachten.
 
-Dennoch, dieses Feature ist sehr nützlich wenn man weiß das das Programm eine DLL benutzt,
+Dennoch, dieses Feature ist sehr n\"utzlich wenn man weiß das das Programm eine DLL benutzt,
 aber man nicht weiß welche Funktionen aufgerufen werden. Und es gibt eine ganze Menge an 
 Funktionen.
 

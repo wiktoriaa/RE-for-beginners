@@ -1,7 +1,7 @@
 \section{Die richtigen Instruktionen finden}
 
-Wenn ein Programm auf die FPU Instruktionen zugreift und der Code selber enthält nur sehr wenige
-dieser Instruktionen, kann man diese einzeln mit einem Debugger überprüfen.
+Wenn ein Programm auf die FPU Instruktionen zugreift und der Code selber enth\"alt nur sehr wenige
+dieser Instruktionen, kann man diese einzeln mit einem Debugger \"uberpr\"ufen.
 
 \par Zum Beispiel, eventuell haben wir Interesse daran wie Microsoft Excel die Formel berechnet die vom Benutzer eingegeben wurde.
 Zum Beispiel die Division Operation.
@@ -19,12 +19,12 @@ cat EXCEL.lst | grep fdiv | grep -v dbl_ > EXCEL.fdiv
 
 \dots dann sehen wir das es 144 FPU Instruktionen gibt.
 
-\par Wir können einen String wie z.B \TT{=(1/3)} in Excel eingeben und dann die Instruktionen überprüfen.
+\par Wir k\"onnen einen String wie z.B \TT{=(1/3)} in Excel eingeben und dann die Instruktionen \"uberpr\"ufen.
 
 \myindex{tracer}
 
-\par Beim prüfen jeder dieser Instruktionen in einem Debugger oder \tracer
-( manche Prüfen 4 Instruktionen auf einmal), haben wir Glück und die
+\par Beim pr\"ufen jeder dieser Instruktionen in einem Debugger oder \tracer
+( manche Pr\"ufen 4 Instruktionen auf einmal), haben wir Gl\"uck und die
 gesuchte Instruktion ist die Nummer 14:
 
 \begin{lstlisting}[style=customasmx86]
@@ -52,7 +52,7 @@ Die Instruktion nach \FDIV (\TT{FSTP}) schreibt jedes Ergebnis in den Speicher:\
 .text:3011E91B DD 1E          fstp    qword ptr [esi]
 \end{lstlisting}
 
-Wenn wir einen Breakpoint auf diese Instruktion setzen können wir das Ergebnis betrachten:
+Wenn wir einen Breakpoint auf diese Instruktion setzen k\"onnen wir das Ergebnis betrachten:
 
 \begin{lstlisting}
 PID=32852|TID=36488|(0) 0x2f40e91b (Excel.exe!BASE+0x11e91b)
@@ -65,7 +65,7 @@ FPU StatusWord=C1 P
 FPU ST(0): 0.333333
 \end{lstlisting}
 
-Auch ein netter Scherz, wir können das Ergebnis auf die schnelle ändern:
+Auch ein netter Scherz, wir k\"onnen das Ergebnis auf die schnelle \"andern:
 
 \begin{lstlisting}
 tracer -l:excel.exe bpx=excel.exe!BASE+0x11E91B,set(st0,666)
@@ -83,7 +83,7 @@ FPU ST(0): 0.333333
 Set ST0 register to 666.000000
 \end{lstlisting}
 
-Excel zeigt nun 666 in unserer Zelle, was uns letztendlich auch bestätigt das wir das richtige Ergebnis gefunden haben.
+Excel zeigt nun 666 in unserer Zelle, was uns letztendlich auch best\"atigt das wir das richtige Ergebnis gefunden haben.
 
 \begin{figure}[H]
 \centering
@@ -101,5 +101,5 @@ tracer.exe -l:excel.exe bpx=excel.exe!BASE+0x1B7FCC,set(st0,666)
 
 \myindex{x86!\Instructions!DIVSD}
 
-Es sieht danach aus als wären viele der Division Operationen der \Tfloat und \Tdouble Typen, vom Compiler mit SSE Instruktionen ersetzt wurden.
+Es sieht danach aus als w\"aren viele der Division Operationen der \Tfloat und \Tdouble Typen, vom Compiler mit SSE Instruktionen ersetzt wurden.
 Wie z.B \TT{DIVSD} (\TT{DIVSD} kommt insgesamt 268 mal vor).

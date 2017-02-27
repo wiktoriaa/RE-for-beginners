@@ -3,12 +3,12 @@
 Menschen, Programmierer eingeschlossen, neigen dazu Zahlen zu Runden wie z.B 10, 100, 1000,
 im realen Leben so wie in ihrem Code.
 
-Der angehende Reverse Engineer kennt diese Werte und ihre Hexadezimale Repräsentation sehr gut:
+Der angehende Reverse Engineer kennt diese Werte und ihre Hexadezimale Repr\"asentation sehr gut:
 0b10=0xA, 0b100=0x64, 0b1000=0x3E8, 0b10000=0x2710.
 
 Die Konstanten \TT{0xAAAAAAAA} (0b10101010101010101010101010101010) und 
-\TT{0x55555555} (0b01010101010101010101010101010101) sind auch sehr populär---
-sie sind zusammen-gesetzt aus verändernden Bits. % <-- Findest vielleicht noch ne besere bezeichnung
+\TT{0x55555555} (0b01010101010101010101010101010101) sind auch sehr popul\"ar---
+sie sind zusammen-gesetzt aus ver\"andernden Bits. % <-- Findest vielleicht noch ne besere bezeichnung
 
 Das hilft vielleicht ein Signal von einem Signal zu unterscheiden bei dem alle Bits eingeschaltet werden  (0b1111 \dots) oder ausgeschaltet (0b0000 \dots).
 Zum Beispiel die \TT{0x55AA} Konstante wird
@@ -46,9 +46,9 @@ u16 const crc16_table[256] = {
 	...
 \end{lstlisting}
 
-Man beachte auch die vor berechnete Tabelle für CRC32: \myref{sec:CRC32}.
+Man beachte auch die vor berechnete Tabelle f\"ur CRC32: \myref{sec:CRC32}.
 
-In Tabellen losen CRC Algorithmen werden bekannte Polynome benutzt, zum Beispiel, 0xEDB88320 für CRC32.
+In Tabellen losen CRC Algorithmen werden bekannte Polynome benutzt, zum Beispiel, 0xEDB88320 f\"ur CRC32.
 
 \subsection{Magic numbers}
 \label{magic_numbers}
@@ -68,7 +68,7 @@ Zum Beispiel, alle Win32 und MS-DOS executable starten mit zwei Zeichen \q{MZ}\f
 Am Anfang einer MIDI Datei muss die \q{MThd} Signatur vorhanden sein.
 Wenn wir ein Programm haben das auf MIDI Dateien zugreift um sonst was zu machen,
 ist es sehr wahrscheinlich das das Programm die Datei validieren muss in dem es
-mindestens die ersten 4 Bytes prüft.
+mindestens die ersten 4 Bytes pr\"uft.
 
 Das kann man wie folgt realisieren:
 (\IT{buf} Zeigt auf den Anfang der geladenen Datei im Speicher) 
@@ -81,11 +81,11 @@ jnz _error_not_a_MIDI_file
 \myindex{\CStandardLibrary!memcmp()}
 \myindex{x86!\Instructions!CMPSB}
 
-\dots oder durch das Aufrufen der Funktion für das vergleichen von Speicherblöcken wie z.B \TT{memcmp()} oder 
-beliebigen anderen Code bis hin zu einem \TT{CMPSB} (\myref{REPE_CMPSx}) Instruktion.
+\dots oder durch das Aufrufen der Funktion f\"ur das vergleichen von Speicherbl\"ocken wie z.B \TT{memcmp()} oder 
+beliebigen anderen Code bis hin zu einer \TT{CMPSB} (\myref{REPE_CMPSx}) Instruktion.
 
-Wenn man so einen Punkt findet kann man bereits sagen das eine MIDI Datei geladen wird, % <-- Ändern?
-wir können auch sehen wo der Puffer mit den Inhalten der MIDI Datei liegt und was/wie aus diesem
+Wenn man so einen Punkt findet kann man bereits sagen das eine MIDI Datei geladen wird, % <-- \"Andern?
+wir k\"onnen auch sehen wo der Puffer mit den Inhalten der MIDI Datei liegt und was/wie aus diesem
 Puffer verwendet wird.
 
 \subsubsection{Daten}
@@ -104,7 +104,7 @@ Geburtsdatum von Marschall Kirk McKusick ist, einem Prominenten FreeBSD Entwickl
 
 
 \myindex{Stuxnet}
-Stuxnet benutzt die Zahl ``19790509'' (nicht als 32-Bit Zahl, aber als String), was zu Spekulationen geführt hat
+Stuxnet benutzt die Zahl ``19790509'' (nicht als 32-Bit Zahl, aber als String), was zu Spekulationen gef\"uhrt hat
 weil die malware Verbindungen nach Israel aufzeigt.
 \footnote{Das ist das Datum der Hinrichtung von Habib Elghanian, persischer Jude.}
 
@@ -144,14 +144,14 @@ void emulate_func2(unsigned short seed)
 
 Das Trifft auf Netzwerk Protokolle ebenso zu. 
 Zum Beispiel, die Pakete des DHCP Protokoll's beinhalten so genannte \IT{magic cookie}: \TT{0x63538263}.
-Jeder Code der ein DHCP Packte generiert, muss diese Konstante in das Packte einbetten.
+Jeder Code der ein DHCP Pakete generiert, muss diese Konstante in das Pakete einbetten.
 Wenn wir diesen Code finden, wissen wir auch wo es passiert und nicht nur was passiert.
 Jedes Programm das DHCP Pakete empfangen kann muss verifizieren das der \IT{magic cookie} mit der Konstante 
-übereinstimmt. 
+\"ubereinstimmt. 
 
 Zum Beispiel, lasst uns die dhcpcore.dll Datei aus Windows 7 x64 analysieren die nach der Konstante suchen.
-Wir können die Konstante zweimal finden:
-Es sieht danach aus als wäre die Konstante in zwei Funktionen benutzt mit dem selbst redenden Namen\\
+Wir k\"onnen die Konstante zweimal finden:
+Es sieht danach aus als w\"are die Konstante in zwei Funktionen benutzt mit dem selbst redenden Namen\\
 \TT{DhcpExtractOptionsForValidation()} und \TT{DhcpExtractFullOptions()}:
 
 \begin{lstlisting}[caption=dhcpcore.dll (Windows 7 x64),style=customasmx86]
@@ -177,25 +177,25 @@ Und:
 
 \subsection{Spezifische Konstanten}
 
-Manchmal, gibt es spezifische Konstanten für gewissen Code % <-- Besser? 
-Zum Beispiel, einmal hat der Autor sich in ein Stück Code gegraben wo die Nummer 12 verdächtig
-oft vor kam. Arrays haben oft eine Größe von 12 oder ein vielfaches von 12 (24, etc). 
+Manchmal, gibt es spezifische Konstanten f\"ur gewissen Code % <-- Besser? 
+Zum Beispiel, einmal hat der Autor sich in ein St\"uck Code gegraben wo die Nummer 12 verd\"achtig
+oft vor kam. Arrays haben oft eine Gr\"oße von 12 oder ein vielfaches von 12 (24, etc). 
 Wie sich raus stellte, hat der Code eine 12-Kanal Audiodatei an der Eingabe entgegen genommen und
 sie verarbeitet.
 
-Und umgekehrt: zum Beispiel, wenn ein Programm ein Textfeld verarbeitet das eine Länge von 120 Bytes hat,
+Und umgekehrt: zum Beispiel, wenn ein Programm ein Textfeld verarbeitet das eine L\"ange von 120 Bytes hat,
 dann gibt es auch eine Konstante 120 oder 119 irgendwo im Code.
-Wenn UFT-16 Benutzt wird, dann $2 \cdot 120$. Wenn ein Code mit Netzwerkpaketen von fester Größe
-arbeitet, ist es eine gute Idee nach dieser Konstante auch im Code zu suchen.
+Wenn UTF-16 Benutzt wird, dann $2 \cdot 120$. Wenn Code mit Netzwerkpaketen arbeitet die von fester Gr\"oße
+sind, ist es eine gute Idee nach dieser Konstante im Code zu suchen.
 
-Das trifft auch auf Amateur Kryptografie zu (Lizenz Schlüssel, etc). 
-Bei einem verschlüsselten Block von $n$ Bytes, will man vielleicht versuchen vorkommen dieser Nummer im Code zu suchen,
-Auch, wenn man ein Stück Code sieht der sich $n$ mal während einer Schleifen Ausführung wiederholt, ist das vielleicht
-eine ver-/Entschlüsselung Routine.
+Das trifft auch auf Amateur Kryptografie zu (Lizenz Schl\"ussel, etc). 
+Bei einem verschl\"usselten Block von $n$ Bytes, will man versuchen die vorkommen dieser Nummer im Code zu suchen,
+auch, wenn man ein St\"uck Code sieht der sich $n$ mal w\"ahrend einer Schleifen Ausf\"uhrung wiederholt, ist das vielleicht
+eine ver-/Entschl\"usselung Routine.
 
 \subsection{Nach Konstanten suchen}
 
-Das ist einfach in \IDA: Alt-B oder Alt-I.
-\myindex{binär grep}
-Und für das suchen von Konstanten in einem Haufen großer Dateien, oder für das suchen in nicht ausführbaren Dateien,
+Das ist einfach mit \IDA: Alt-B oder Alt-I.
+\myindex{bin\"ar grep}
+Und f\"ur das suchen von Konstanten in einem Haufen großer Dateien, oder f\"ur das suchen in nicht ausf\"uhrbaren Dateien,
 gibt es ein kleines Utility genannt \IT{binary grep}\footnote{\BGREPURL}.
