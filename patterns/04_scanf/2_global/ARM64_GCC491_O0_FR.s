@@ -8,7 +8,7 @@
 f5:
 ; sauver FP et LR dans la structure de pile locale:
 	stp	x29, x30, [sp, -16]!
-; set stack frame (FP=SP)
+; §définir la pile locale§ (FP=SP)
 	add	x29, sp, 0
 ; §charger le pointeur sur la chaîne§ "Enter X:":
 	adrp	x0, .LC0

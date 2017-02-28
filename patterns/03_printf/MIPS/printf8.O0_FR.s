@@ -39,7 +39,7 @@ main:
 	move	$25,$2
 	jalr	$25
 	nop
-; §épilogue de la function:§
+; §épilogue de la fonction:§
 	lw	$28,40($fp)
 ; §mettre la valeur de retour à 0:§
 	move	$2,$0
