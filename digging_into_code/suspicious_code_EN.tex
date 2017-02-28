@@ -23,9 +23,7 @@ Its generation and checking are often done using the \XOR instruction. \\
 
 This AWK script can be used for processing \IDA{} listing (.lst) files:
 
-\begin{lstlisting}
-gawk -e '$2=="xor" { tmp=substr($3, 0, length($3)-1); if (tmp!=$4) if($4!="esp") if ($4!="ebp") { print $1, $2, tmp, ",", $4 } }' filename.lst
-\end{lstlisting}
+\lstinputlisting{digging_into_code/awk.sh}
 
 It is also worth noting that this kind of script can also match incorrectly disassembled code 
 (\myref{sec:incorrectly_disasmed_code}).
@@ -53,36 +51,7 @@ Commonly there is no fixed system for passing arguments to functions in the hand
 Example from the Windows 2003 kernel 
 (ntoskrnl.exe file):
 
-\begin{lstlisting}[style=customasmx86]
-MultiplyTest proc near               ; CODE XREF: Get386Stepping
-             xor     cx, cx
-loc_620555:                          ; CODE XREF: MultiplyTest+E
-             push    cx
-             call    Multiply
-             pop     cx
-             jb      short locret_620563
-             loop    loc_620555
-             clc
-locret_620563:                       ; CODE XREF: MultiplyTest+C
-             retn
-MultiplyTest endp
-
-Multiply     proc near               ; CODE XREF: MultiplyTest+5
-             mov     ecx, 81h
-             mov     eax, 417A000h
-             mul     ecx
-             cmp     edx, 2
-             stc
-             jnz     short locret_62057F
-             cmp     eax, 0FE7A000h
-             stc
-             jnz     short locret_62057F
-             clc
-locret_62057F:                       ; CODE XREF: Multiply+10
-                                     ; Multiply+18
-             retn
-Multiply     endp
-\end{lstlisting}
+\lstinputlisting[style=customasmx86]{digging_into_code/ntoskrnl.lst}
 
 Indeed, if we look in the 
 \ac{WRK} v1.2 source code, this code

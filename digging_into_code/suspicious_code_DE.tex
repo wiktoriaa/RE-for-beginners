@@ -12,21 +12,16 @@ Diese Operation wird allgemeinen selten benutzt beim programmieren, aber ist
 weit verbreitet in der Kryptografie, besonders bei Amateuren der Kryptografie.
 Sowas ist besonders Verd\"achtig wenn der zweite Operand eine große Zahl ist.
 
-Das k\"onnte ein Hinweis sein das etwas ver-/entschl\"usselt wird oder Checksumme berechnet werden, etc.\\
-\\
+Das k\"onnte ein Hinweis sein das etwas ver-/entschl\"usselt wird oder Checksumme berechnet werden, etc.
 
 Eine Ausnahme dieser Beobachtung ist der \q{canary} (\myref{subsec:BO_protection}). 
-Die Generierung und das pr\"ufen des \q{canary} werden oft mit Hilfe der \XOR Instruktion gemacht. \\
-\\
-
+Die Generierung und das pr\"ufen des \q{canary} werden oft mit Hilfe der \XOR Instruktion gemacht. 
 
 \myindex{AWK}
 
 Dieses AWK Skript kann benutzt werden um \IDA{} listing (.lst) Dateien zu parsen:
 
-\begin{lstlisting}
-gawk -e '$2=="xor" { tmp=substr($3, 0, length($3)-1); if (tmp!=$4) if($4!="esp") if ($4!="ebp") { print $1, $2, tmp, ",", $4 } }' filename.lst
-\end{lstlisting}
+\lstinputlisting{digging_into_code/awk.sh}
 
 Es sollte auch noch erw\"ahnt werden das diese Art von Skript in der Lage ist inkorrekt disassemblierten Code zu erkennen
 (\myref{sec:incorrectly_disasmed_code}).
@@ -43,49 +38,13 @@ Auf der anderen Seite sind diese Instruktionen sehr beliebt bei Programmieren di
 Wenn man diese Instruktionen sieht, kann man mit hoher Sicherheit sagen das dieses Code Fragment h\"andisch geschrieben wurde.,
 Diese Instruktionen sind in der Instruktionsliste im Anhang mit (M) markiert: \myref{sec:x86_instructions}.
 
-\par
+\par Die Funktions Prolog und Epilog sind allgemein nicht vorhanden bei handgeschriebenen Assembler Code.
 
-Die Funktions Prolog und Epilog sind allgemein nicht vorhanden bei handgeschriebenen Assembler Code.
-\par
+\par Tats\"achlich gibt es kein bestimmtes System um Argumente an Funktionen zu \"ubergeben wenn der Code handgeschrieben wurde. 
 
-Tats\"achlich gibt es kein bestimmtes System um Argumente an Funktionen zu \"ubergeben wenn der Code handgeschrieben wurde. 
+\par Beispiel aus dem Windows 2003 Kernel (ntoskrnl.exe file):
 
-\par
-Beispiel aus dem Windows 2003 Kernel
-(ntoskrnl.exe file):
+\lstinputlisting[style=customasmx86]{digging_into_code/ntoskrnl.lst}
 
-\begin{lstlisting}[style=customasmx86]
-MultiplyTest proc near               ; CODE XREF: Get386Stepping
-             xor     cx, cx
-loc_620555:                          ; CODE XREF: MultiplyTest+E
-             push    cx
-             call    Multiply
-             pop     cx
-             jb      short locret_620563
-             loop    loc_620555
-             clc
-locret_620563:                       ; CODE XREF: MultiplyTest+C
-             retn
-MultiplyTest endp
-
-Multiply     proc near               ; CODE XREF: MultiplyTest+5
-             mov     ecx, 81h
-             mov     eax, 417A000h
-             mul     ecx
-             cmp     edx, 2
-             stc
-             jnz     short locret_62057F
-             cmp     eax, 0FE7A000h
-             stc
-             jnz     short locret_62057F
-             clc
-locret_62057F:                       ; CODE XREF: Multiply+10
-                                     ; Multiply+18
-             retn
-Multiply     endp
-\end{lstlisting}
-
-Tats\"achlich, wenn wir in den 
-\ac{WRK} v1.2 source code schauen,
-kann dieser Code einfach in der Datei
+Tats\"achlich, wenn wir in den \ac{WRK} v1.2 source code schauen, kann dieser Code einfach in der Datei
 \IT{WRK-v1.2\textbackslash{}base\textbackslash{}ntos\textbackslash{}ke\textbackslash{}i386\textbackslash{}cpu.asm} gefunden werden.
