@@ -31,13 +31,13 @@ main:
 	li	$6,2			# 0x2
 ; appeler printf():
 	jalr	$25
-; §passer le 4ème argument dans§ $a3 (slot de retard de branchement):
+; §passer le 4ème argument dans \$a3 (slot de délai de branchement):§
 	li	$7,3			# 0x3
 
-; §épilogue de la function:§
+; §épilogue de la fonction:§
 	lw	$31,52($sp)
 ; §mettre la valeur de retour à 0:§
 	move	$2,$0
 ; retourner
 	j	$31
-	addiu	$sp,$sp,56 ; branch delay slot
+	addiu	$sp,$sp,56 ; §slot de délai de branchement§

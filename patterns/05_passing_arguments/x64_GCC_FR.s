@@ -1,7 +1,7 @@
 f:
 	; EDI - 1er argument
-	; ESI - 2ème argument
-	; EDX - 3ème argument
+	; ESI - §2ème argument§
+	; EDX - §3ème argument§
 	push	rbp
 	mov	rbp, rsp
 	mov	DWORD PTR [rbp-4], edi
@@ -23,7 +23,7 @@ main:
 	mov	eax, OFFSET FLAT:.LC0 ; "%d\n"
 	mov	esi, edx
 	mov	rdi, rax
-	mov	eax, 0  ; nombre de registres vectoriel passés
+	mov	eax, 0  ; §nombre de registres vectoriel passés§
 	call	printf
 	mov	eax, 0
 	leave

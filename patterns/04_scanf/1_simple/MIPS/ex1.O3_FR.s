@@ -19,7 +19,7 @@ main:
 	lw	$28,16($sp)
 	lui	$4,%hi($LC1)
 	lw	$25,%call16(__isoc99_scanf)($28)
-; §définir le 2nd argument de scanf(), $a1=$sp+24:§
+; §définir le 2nd argument de scanf(), \$a1=\$sp+24:§
 	addiu	$5,$sp,24
 	jalr	$25
 	addiu	$4,$4,%lo($LC1) ; §slot de délai de branchement§
@@ -27,7 +27,7 @@ main:
 ; appel de printf():
 	lw	$28,16($sp)
 ; §définir le 2nd argument de printf(),§
-; §charger un mot à l'adresse $sp+24:§
+; §charger un mot à l'adresse \$sp+24:§
 	lw	$5,24($sp)
 	lw	$25,%call16(printf)($28)
 	lui	$4,%hi($LC2)

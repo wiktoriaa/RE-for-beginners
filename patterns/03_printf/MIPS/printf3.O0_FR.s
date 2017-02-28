@@ -27,7 +27,7 @@ main:
 	jalr	$25
 	nop
 
-; §épilogue de la function:§
+; §épilogue de la fonction:§
 	lw	$28,16($fp)
 ; §mettre la valeur de retour à 0:§
 	move	$2,$0

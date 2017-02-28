@@ -27,7 +27,7 @@
 .text:0000002C                 li      $v0, 7
 .text:00000030                 lw      $t9, (printf & 0xFFFF)($gp)
 .text:00000034                 sw      $v0, 0x38+var_1C($sp)
-; preparer le 1er argument dans $a0: 
+; §préparer le 1er argument dans \$a0:§ 
 .text:00000038                 lui     $a0, ($LC0 >> 16)  # "a=%d; b=%d; c=%d; d=%d; e=%d; f=%d; g=%"...
 ; §passer le 9ème argument dans la pile:§
 .text:0000003C                 li      $v0, 8
@@ -40,12 +40,12 @@
 .text:0000004C                 li      $a2, 2
 ; appeler printf():
 .text:00000050                 jalr    $t9
-; §passer le 4ème argument dans§ $a3 (slot de retard de branchement):
+; §passer le 4ème argument dans \$a3 (slot de délai de branchement):§
 .text:00000054                 li      $a3, 3
-; §épilogue de la function:§
+; §épilogue de la fonction:§
 .text:00000058                 lw      $ra, 0x38+var_4($sp)
 ; §mettre la valeur de retour à 0:§
 .text:0000005C                 move    $v0, $zero
 ; retourner
 .text:00000060                 jr      $ra
-.text:00000064                 addiu   $sp, 0x38 ; branch delay slot
+.text:00000064                 addiu   $sp, 0x38 ; §slot de délai de branchement§

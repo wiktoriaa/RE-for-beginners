@@ -6,7 +6,7 @@ main:
 	addiu	$sp,$sp,-32
 	sw	$31,28($sp)
 	sw	$fp,24($sp)
-; §définir FP§ (stack frame pointer):
+; §définir le pointeur de pile FP§ (stack frame pointer):
 	move	$fp,$sp
 ; §définir GP:§
 	lui	$28,%hi(__gnu_local_gp)
@@ -24,7 +24,7 @@ main:
 
 ; restaurer GP depuis la pile locale:
 	lw	$28,16($fp)
-; §mettre le registre $2 ($V0) à zéro:§
+; §mettre le registre \$2 (\$V0) à zéro:§
 	move	$2,$0
 ; §épilogue de la fonction.§
 ; restaurer SP:
@@ -36,4 +36,4 @@ main:
 	addiu	$sp,$sp,32
 ; sauter en RA:
 	j	$31
-	nop  ; slot de retard de branchement
+	nop  ; §slot de délai de branchement§

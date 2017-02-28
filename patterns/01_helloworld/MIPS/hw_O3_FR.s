@@ -11,7 +11,7 @@ main:
 	sw	$31,28($sp)
 ; charger l'adresse de la fonction puts() dans $25 depuis GP:
 	lw	$25,%call16(puts)($28)
-; §charger ladresse de la chaîne de texte dans $4 ($a0):§
+; §charger l'adresse de la chaîne de texte dans \$4 (\$a0):§
 	lui	$4,%hi($LC0)
 ; §sauter à puts(), en sauvant l'adresse de retour dans le register link:§
 	jalr	$25

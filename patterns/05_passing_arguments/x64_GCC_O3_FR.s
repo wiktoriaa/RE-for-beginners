@@ -1,7 +1,7 @@
 f:
 	; EDI - 1er argument
-	; ESI - 2ème argument
-	; EDX - 3ème argument
+	; ESI - §2ème argument§
+	; EDX - §3ème argument§
 	imul	esi, edi
 	lea	eax, [rdx+rsi]
 	ret
@@ -14,7 +14,7 @@ main:
 	call	f
 	mov	edi, OFFSET FLAT:.LC0 ; "%d\n"
 	mov	esi, eax
-	xor	eax, eax  ; nombre de registres vectoriel passés
+	xor	eax, eax  ; §nombre de registres vectoriel passés§
 	call	printf
 	xor	eax, eax
 	add	rsp, 8
