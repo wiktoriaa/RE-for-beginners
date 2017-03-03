@@ -2,30 +2,34 @@
 \label{itanium}
 \myindex{Itanium}
 
-Auch wenn fast gescheitert, ist der Intel Itanium (\ac{IA64}) eine sehr interessante Architektur.
+Auch wenn fast gescheitert, ist der Intel Itanium (\ac{IA64}) eine sehr interessante
+Architektur.
 
-%While \ac{OOE} CPUs decides how to rearrange their instructions and execute them in parallel,
-%\ac{EPIC} was an attempt to shift these decisions to the compiler:
-%to let it group the instructions at the compile stage.
-%
-%This resulted in notoriously complex compilers.
-%
-%Here is one sample of \ac{IA64} code: simple cryptographic algorithm from the Linux kernel:
-%
-%\lstinputlisting[caption=Linux kernel 3.2.0.4,style=customc]{other/itanium/tea_from_linux.c}
-%
-%Here is how it was compiled:
-%
-%\lstinputlisting[caption=Linux Kernel 3.2.0.4 for Itanium 2 (McKinley)]{other/itanium/ia64_linux_3.2.0.4_mckinley.lst}
-%
-%First of all, all \ac{IA64} instructions are grouped into 3-instruction bundles.
-%
-%Each bundle has a size of 16 bytes (128 bits) and consists of template code (5 bits) + 3 instructions (41 bits for each).
-%
-%\IDA shows the bundles as 6+6+4 bytes~---you can easily spot the pattern.
-%
-%All 3 instructions from each bundle usually executes simultaneously, unless one of instructions has a \q{stop bit}.
-%
+Während \ac{OOE}-CPUs entscheiden wie die Anweisungen neu organisiert werden und
+diese parallel ausführen, war \ac{EPIC} ein Versuch diese Entscheidung dem Compiler
+zu überlassen: das Gruppieren der Anweisungen soll während des Kompilierens erfolgen.
+
+Dies führte zu einer berüchtigten Komplexität der Compiler.
+
+Hier ist ein Beispiel von \ac{IA64}-Code, ein einfacher kryptografischer Algorithmus
+aus dem Linux-Kernel:
+
+\lstinputlisting[caption=Linux kernel 3.2.0.4,style=customc]{other/itanium/tea_from_linux.c}
+
+Nachfolgend das Ergebnis des Compilers:
+
+\lstinputlisting[caption=Linux Kernel 3.2.0.4 for Itanium 2 (McKinley)]{other/itanium/ia64_linux_3.2.0.4_mckinley.lst}
+
+Zunächst sind alle \ac{IA64}-Anweisungen in Pakete von 3 Anweisungen zusammengefasst.
+
+Jedes Paket hat eine Größe von 16 Byte (128 Bit) und besteht aus Template-Code
+(5 Bit) und drei Anweisungen (je 41 Bit).
+
+\IDA zeigt die Pakete als 6+6+4 Byte, das Muster ist leicht zu erkennen.
+
+Alle drei Anweisungen von jedem Paket wird in der Regel gleichzeitig ausgeführt,
+außer eine der Anweisungen enthält ein \q{Stop-Bit}.
+
 %Supposedly, Intel and HP engineers gathered statistics on most frequent instruction patterns and decided to bring
 %bundle types (\ac{AKA} \q{templates}): a bundle code defines the instruction types in the bundle.
 %There are 12 of them.
