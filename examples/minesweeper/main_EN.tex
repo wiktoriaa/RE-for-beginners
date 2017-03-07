@@ -183,6 +183,16 @@ and it will dump it
 
 It attaches itself to a win32 process by \ac{PID} and just reads process memory an the address.
 
+\subsection{Finding grid automatically}
+
+This is kind of nuisance to set address each time when we run our utility.
+Also, various Minesweeper versions may have the array on different address.
+Knowing the fact that there is always a border (0x10 bytes), we can just find it in memory:
+
+\lstinputlisting[style=customc]{examples/minesweeper/cheater2_fragment.c}
+
+Full source code: \url{https://github.com/dennis714/RE-for-beginners/blob/master/examples/minesweeper/minesweeper_cheater2.c}.
+
 \subsection{\Exercises}
 
 \begin{itemize}
@@ -200,13 +210,5 @@ Try to find the meaning of each one.
 \item 
 Modify my utility so it can remove all mines or set them in a fixed pattern that you want in the Minesweeper
 process currently running.
-
-\item 
-Modify my utility so it can work without the array address specified and without a \gls{PDB} file.
-
-Yes, it's possible to find board information in the data segment of Minesweeper's running process automatically.
-%Hint: \myref{minesweeper_winxp_hint}.
-%Hint: 
-%think about  \IT{border bytes} (0x10).
 
 \end{itemize}
