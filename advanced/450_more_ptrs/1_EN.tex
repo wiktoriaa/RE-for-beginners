@@ -1,15 +1,16 @@
 \subsection{Working with addresses instead of pointers}
 
-Pointer is just an address in memory. But why we write "char* string" instead of something like "address string"?
+Pointer is just an address in memory. But why we write \TT{char* string} instead of something like \TT{address string}?
 Pointer variable is supplied with a type of the value to which pointer points.
-So then compiler will able to check bugs in compilation time.
+So then compiler will able to catch data typization bugs during compilation.
 
 To be pedantic, data typing in programming languages is all about preventing bugs and self-documentation.
-It's possible to use maybe two of data types like \IT{int} (or \IT{int64\_t}) and byte --- these are the only types which are available to assembly language programmers.
+It's possible to use maybe two of data types like \IT{int} (or \IT{int64\_t}) and byte---these are the only types which are available to assembly language programmers.
 But it's just very hard task to write big and practical assembly programs without nasty bugs.
 Any small typo can lead to hard-to-find bug.
 
-Data type information is absent in a compiled code (and this is one of the main problems for decompilers), and I can demonstrate this:
+Data type information is absent in a compiled code (and this is one of the main problems for decompilers),
+and I can demonstrate this.
 
 This is what sane C/C++ programmer can write:
 
@@ -31,7 +32,7 @@ int main()
 };
 \end{lstlisting}
 
-This is what I can write ("Do not try this at home" ("MythBusters")):
+This is what I can write:
 
 \begin{lstlisting}[style=customc]
 #include <stdio.h>
@@ -51,8 +52,8 @@ int main()
 };
 \end{lstlisting}
 
-I use \IT{uint64\_t} because I run this example on Linux x64. \IT{int} would work for 32-bit OS-es.
-First, a pointer to character (the very first in the greeting string) is casted to \IT{uint64\_t}, then it's passed.
+I use \IT{uint64\_t} because I run this example on Linux x64. \IT{int} would work for 32-bit \ac{OS}-es.
+First, a pointer to character (the very first in the greeting string) is casted to \IT{uint64\_t}, then it's passed further.
 \TT{print\_string()} function casts back incoming \IT{uint64\_t} value into pointer to a character.
 
 What is interesting is that GCC 4.8.4 produces identical assembly output for both versions:
@@ -85,7 +86,7 @@ main:
 	ret
 \end{lstlisting}
 
-(I've removed all insignificant GCC directives).
+(I've removed all insignificant GCC directives.)
 
 I also tried UNIX \IT{diff} utility and it shows no differences at all.
 
@@ -192,8 +193,8 @@ main:
 	ret
 \end{lstlisting}
 
-(I have also removed all insignificant GCC directives).
+(I have also removed all insignificant GCC directives.)
 
 No difference: C/C++ pointers are essentially addresses, but supplied with type information, in order to prevent possible mistakes at the time of compilation.
-Types are not checked during runtime --- it would be huge (and unneeded) overhead.
+Types are not checked during runtime---it would be huge (and unneeded) overhead.
 

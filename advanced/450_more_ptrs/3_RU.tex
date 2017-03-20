@@ -1,11 +1,12 @@
-\subsection{Pointers abuse in Windows kernel}
+\subsection{Издевательство над указателями в ядре Windows}
 
-The resource section of PE executable file in Windows OS is a section containing pictures, icons, strings, etc.
-Early Windows versions allowed to address resources only by IDs, but then Microsoft added a way to address them using strings.
+Секция ресурсов в исполняемых файлах типа PE в Windows это секция, содержащая картинки, иконки, строки, итд.
+Ранние версии Windows позволяли иметь к ним доступ только при помощи идентификаторов, но потом в Microsoft добавили
+также и способ адресовать ресурсы при помощи строк.
 
-So then it would be possible to pass ID or string to 
-\href{https://msdn.microsoft.com/en-us/library/windows/desktop/ms648042%28v=vs.85%29.aspx}{FindResource()} function.
-Which is declared like this:
+Так что потом стало возможным передать идентификатор или строку в ф-цию
+\href{https://msdn.microsoft.com/en-us/library/windows/desktop/ms648042%28v=vs.85%29.aspx}{FindResource()}.
+Которая декларирована вот так:
 
 \myindex{win32!FindResource()}
 
@@ -17,9 +18,9 @@ HRSRC WINAPI FindResource(
 );
 \end{lstlisting}
 
-\IT{lpName} and \IT{lpType} has \IT{char*} or \IT{wchar*} types, and when someone still wants to pass ID,
-he/she have to use
-\href{https://msdn.microsoft.com/en-us/library/windows/desktop/ms648029%28v=vs.85%29.aspx}{MAKEINTRESOURCE} macro, like this:
+\IT{lpName} и \IT{lpType} имеют тип \IT{char*} или \IT{wchar*}, и когда кто-то всё еще хочет передать идентификатор,
+нужно использовать макрос
+\href{https://msdn.microsoft.com/en-us/library/windows/desktop/ms648029%28v=vs.85%29.aspx}{MAKEINTRESOURCE}, вот так:
 
 \myindex{win32!MAKEINTRESOURCE()}
 
@@ -27,9 +28,10 @@ he/she have to use
 result = FindResource(..., MAKEINTRESOURCE(1234), ...);
 \end{lstlisting}
 
-It's interesting fact that MAKEINTRESOURCE is merely casting integer to pointer.
-In MSVC 2013, in the file\\
-\IT{Microsoft SDKs\textbackslash{}Windows\textbackslash{}v7.1A\textbackslash{}Include\textbackslash{}Ks.h} we can find this:
+Очень интересно то, что всё что делает MAKEINTRESOURCE это приводит целочисленное к указателю.
+В MSVC 2013, в файле\\
+\IT{Microsoft SDKs\textbackslash{}Windows\textbackslash{}v7.1A\textbackslash{}Include\textbackslash{}Ks.h},
+мы можем найти это:
 
 \begin{lstlisting}[style=customc]
 ...
@@ -41,8 +43,8 @@ In MSVC 2013, in the file\\
 ...
 \end{lstlisting}
 
-Sounds insane. Let's peek into ancient leaked Windows NT4 source code.
-In \IT{private/windows/base/client/module.c} we can find \IT{FindResource()} source code:
+Звучит безумно. Заглянем внутрь древнего, когда-то утекшего, исходного кода Windows NT4.
+В \IT{private/windows/base/client/module.c} мы можем найти исходный код \IT{FindResource()}:
 
 \begin{lstlisting}[style=customc]
 HRSRC
@@ -71,7 +73,7 @@ FindResourceA(
 ...
 \end{lstlisting}
 
-Let's proceed to \IT{BaseDllMapResourceIdA()} in the same source file:
+Посмотрим в \IT{BaseDllMapResourceIdA()} в том же исходном файле:
 
 \begin{lstlisting}[style=customc]
 ULONG
@@ -130,7 +132,7 @@ BaseDllMapResourceIdA(
 }
 \end{lstlisting}
 
-\IT{lpId} is ANDed with \IT{LDR\_RESOURCE\_ID\_NAME\_MASK}. Which we can find in \IT{public/sdk/inc/ntldr.h}:
+К \IT{lpId} применяется операция ``И'' с \IT{LDR\_RESOURCE\_ID\_NAME\_MASK}. Маску можно найти в \IT{public/sdk/inc/ntldr.h}:
 
 \begin{lstlisting}[style=customc]
 ...
@@ -140,11 +142,11 @@ BaseDllMapResourceIdA(
 ...
 \end{lstlisting}
 
-So \IT{lpId} is ANDed with \IT{0xFFFF0000} and if some bits beyond lowest 16 bits are still present,
-first half of function is executed (\IT{lpId} is treated as a string).
-Otherwise - second half (\IT{lpId} is treated as 16-bit value).
+Так что к \IT{lpId} применяется операция ``И'' c \IT{0xFFFF0000}, и если присутствуют какие-либо биты за младшими 16 битами,
+исполняется первая часто ф-ции и (\IT{lpId} принимается за адрес строки).
+Иначе --- вторая часть ф-ции (\IT{lpId} принимается за 16-битное значение).
 
-Still, this code can be found in Windows 7 kernel32.dll file:
+Этот же код можно найти и в Windows 7, в файле kernel32.dll:
 
 \begin{lstlisting}[style=customasmx86]
 ....
@@ -204,14 +206,15 @@ Still, this code can be found in Windows 7 kernel32.dll file:
 
 \end{lstlisting}
 
-If value in input pointer is greater than 0x10000, jump to string processing is occurred.
-Otherwise, input value of \IT{lpId} is returned as is.
-\IT{0xFFFF0000} mask is not used here any more, because this is 64-bit code after all, but still, \IT{0xFFFFFFFFFFFF0000} could work here.
+Если значение больше чем 0x10000, происходит переход в то место, где обрабатывается строка.
+Иначе, входное значение \IT{lpId} возвращается как есть.
+Маска \IT{0xFFFF0000} здесь больше не используется, т.к., это все же 64-битный код, но всё-таки,
+маска \IT{0xFFFFFFFFFFFF0000} могла бы здесь использоваться.
 
-Attentive reader may ask, what if address of input string is lower than 0x10000?
-This code relied on the fact that there are no pointers below 0x10000 in Windows code, well, at least in Win32 realm.
+Внимательный читатель может спросить, что если адрес входной строки будет ниже 0x10000?
+Этот код полагается на тот факт, что в Windows нет ничего по адресам ниже 0x10000, по крайней мере, в Win32.
 
-Raymond Chen \href{https://blogs.msdn.microsoft.com/oldnewthing/20130925-00/?p=3123}{writes} about this:
+Raymond Chen \href{https://blogs.msdn.microsoft.com/oldnewthing/20130925-00/?p=3123}{пишет} об этом:
 
 \begin{framed}
 \begin{quotation}
@@ -219,11 +222,11 @@ How does MAKE­INT­RESOURCE work? It just stashes the integer in the bottom 16 
 \end{quotation}
 \end{framed}
 
-In short words, this is dirty hack and probably one should use it only if there is a real necessity.
-Perhaps, \IT{FindResource()} function in past had \IT{SHORT} type for its arguments, and then Microsoft has added a way to pass strings there,
-but older code must also be supported? I'm not sure, but that's possible.
+Коротко говоря, это грязный хак, и наверное не стоит его использовать, если только нет большой необходимости.
+Вероятно, аргумент ф-ции \IT{FindResource()} в прошлом имел тип \IT{SHORT}, а потом в Microsoft добавили возможность
+передавать здесь и строки, но старый код также нужно было поддерживать.
 
-Now here is my short distilled example:
+Вот мой короткий очищенный пример:
 
 \begin{lstlisting}[style=customc]
 #include <stdio.h>
@@ -244,13 +247,14 @@ int main()
 };
 \end{lstlisting}
 
-It works!
+Работает!
 
-\subsubsection{Pointers abuse in Linux kernel}
+\subsubsection{Издевательство над указателями в ядре Linux}
 
-As it has been noted in \href{https://news.ycombinator.com/item?id=11823647}{comments on Hacker News}, Linux kernel also has something like that.
+Как было упомянуто среди \href{https://news.ycombinator.com/item?id=11823647}{комментариев на Hacker News},
+в ядре Linux также есть что-то подобное.
 
-For example, this function can return both error code and pointer:
+Например, эта ф-ция может возвращать и код ошибки и указатель:
 
 \begin{lstlisting}[style=customc]
 struct kernfs_node *kernfs_create_link(struct kernfs_node *parent,
@@ -280,7 +284,7 @@ struct kernfs_node *kernfs_create_link(struct kernfs_node *parent,
 
 ( \url{https://github.com/torvalds/linux/blob/fceef393a538134f03b778c5d2519e670269342f/fs/kernfs/symlink.c#L25} )
 
-\IT{ERR\_PTR} is a macro to cast integer to pointer:
+\IT{ERR\_PTR} это макрос, приводящий целочисленное к указателю:
 
 \begin{lstlisting}[style=customc]
 static inline void * __must_check ERR_PTR(long error)
@@ -291,21 +295,21 @@ static inline void * __must_check ERR_PTR(long error)
 
 ( \url{https://github.com/torvalds/linux/blob/61d0b5a4b2777dcf5daef245e212b3c1fa8091ca/tools/virtio/linux/err.h} )
 
-This header file also has a macro helper to distinguish error code from pointer:
+Этот же заголовочный файл имеет также макрос, который можно использовать, чтобы отличить код ошибки от указателя:
 
 \begin{lstlisting}[style=customc]
 #define IS_ERR_VALUE(x) unlikely((x) >= (unsigned long)-MAX_ERRNO)
 \end{lstlisting}
 
-This means, errors are the "pointers" which are very close to -1 and, hopefully, there are no valid addresses there in kernel memory area
-(addresses like 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFE,\\
-0xFFFFFFFFFFFFFFFD, etc.).
+Это означает, коды ошибок это ``указатели'' очень близкие к -1, и, будем надеяться, в памяти ядра ничего не находится
+по адресам вроде 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFE, 0xFFFFFFFFFFFFFFFD, итд.
 
-Much more popular solution is to return \IT{NULL} in case of error and to pass error code via additional argument.
-Linux kernel authors don't do that, but everyone who use these functions must always keep in mind that returning pointer
-must always be checked with \IT{IS\_ERR\_VALUE} before dereferencing.
+Намного более популярный способ это возвращать \IT{NULL} в случае ошибки и передавать код ошибки через дополнительный
+аргумент.
+Авторы ядры Linux так не делают, но все кто пользуется этими ф-циями, должны помнить, что возвращаемый указатель
+должен быть вначале проверен при помощи \IT{IS\_ERR\_VALUE} перед разыменовыванием.
 
-For example:
+Например:
 
 \begin{lstlisting}[style=customc]
 	fman->cam_offset = fman_muram_alloc(fman->muram, fman->cam_size);
@@ -318,9 +322,10 @@ For example:
 
 ( \url{https://github.com/torvalds/linux/blob/aa00edc1287a693eadc7bc67a3d73555d969b35d/drivers/net/ethernet/freescale/fman/fman.c#L826} )
 
-\subsubsection{Pointers abuse in UNIX userland}
+\subsubsection{Издевательство над указателями в пользовательской среде UNIX}
 
 \myindex{UNIX!mmap()}
-mmap() function returns -1 in case of error (or \TT{MAP\_FAILED}, which equals to -1).
-Some people say, mmap() can map a memory at zeroth address in rare situations, so it can't use 0 as error code.
+Ф-ция mmap() возвращает -1 в случае ошибки (или \TT{MAP\_FAILED}, что равно -1).
+Некоторые люди говорят, что в некоторых случаях, mmap() может подключить память по нулевому адресу, так что использовать
+0 или NULL как код ошибки нельзя.
 
