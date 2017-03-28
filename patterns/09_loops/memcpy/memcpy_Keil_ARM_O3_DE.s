@@ -12,7 +12,7 @@ my_memcpy PROC
 ; Bedingung, ; d.h., falls R2<R3 oder i<size wahr ist.
 ; lade Byte von R1+i:
         LDRBCC   r12,[r1,r3]
-; speichere Byte an der Stelle R1+i:
+; speichere Byte an der Stelle R0+i:
         STRBCC   r12,[r0,r3]
 ; i++
         ADDCC    r3,r3,#1

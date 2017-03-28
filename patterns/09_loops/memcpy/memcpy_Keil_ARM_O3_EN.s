@@ -12,7 +12,7 @@ my_memcpy PROC
 ; i.e., if R2<R3 or i<size.
 ; load byte at R1+i:
         LDRBCC   r12,[r1,r3]
-; store byte at R1+i:
+; store byte at R0+i:
         STRBCC   r12,[r0,r3]
 ; i++
         ADDCC    r3,r3,#1

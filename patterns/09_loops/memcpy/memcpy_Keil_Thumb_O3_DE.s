@@ -11,7 +11,7 @@ my_memcpy PROC
 |L0.6|
 ; lade Byte von R1+i:
         LDRB     r4,[r1,r3]
-; speichere Byte an der Stelle R1+i:
+; speichere Byte an der Stelle R0+i:
         STRB     r4,[r0,r3]
 ; i++
         ADDS     r3,r3,#1
