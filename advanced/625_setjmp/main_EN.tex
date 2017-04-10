@@ -35,7 +35,7 @@ Here is an example from zlib:
 
 Call to \TT{setjmp()} saves current \ac{PC}, \ac{SP} and other registers into \TT{env} structure, then it returns 0.
 
-In case of error, \TT{longjmp()} \IT{teleporting} execution flow into the point after right after \TT{setjmp()} call,
+In case of error, \TT{longjmp()} \IT{teleporting} you into the point after right after \TT{setjmp()} call,
 as if \TT{setjmp()} call returned non-null value (which was passed to \TT{longjmp()}).
 \myindex{UNIX!fork}
 This reminds as \TT{fork()} syscall in UNIX.
@@ -67,7 +67,7 @@ Now longjmp():
 \lstinputlisting[style=customasmx86]{advanced/625_setjmp/longjmp_VC2013_x64.asm}
 
 It just restores (almost) all registers, takes \ac{RA} from structure and jumps there.
-This effectively works as if setjmp() returned in past.
+This effectively works as if setjmp() returned to caller.
 Also, \TT{RAX} is set to be equal to the second argument of longjmp().
 This works as if setjmp() returned non-zero value at first place.
 
