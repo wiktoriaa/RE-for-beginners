@@ -41,42 +41,42 @@ This is what is called \IT{serialization} nowadays.
 Now let's write C program to read highscore file:
 
 \begin{lstlisting}[style=customc]
-	#include <assert.h>
-	#include <stdio.h>
-	#include <stdint.h>
-	#include <string.h>
+#include <assert.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
 
-	struct entry
+struct entry
+{
+	char name[11]; // incl. terminating zero
+	uint32_t score;
+	char date[11]; // incl. terminating zero
+} __attribute__ ((aligned (1),packed));
+
+struct highscore_file
+{
+	uint8_t count;
+	uint8_t unknown;
+	struct entry entries[10];
+} __attribute__ ((aligned (1), packed));
+
+struct highscore_file file;
+
+int main(int argc, char* argv[])
+{
+	FILE* f=fopen(argv[1], "rb");
+	assert (f!=NULL);
+	size_t got=fread(&file, 1, sizeof(struct highscore_file), f);
+	assert (got==sizeof(struct highscore_file));
+	fclose(f);
+	for (int i=0; i<file.count; i++)
 	{
-		char name[11]; // incl. terminating zero
-		uint32_t score;
-		char date[11]; // incl. terminating zero
-	} __attribute__ ((aligned (1),packed));
-
-	struct highscore_file
-	{
-		uint8_t count;
-		uint8_t unknown;
-		struct entry entries[10];
-	} __attribute__ ((aligned (1), packed));
-
-	struct highscore_file file;
-
-	int main(int argc, char* argv[])
-	{
-		FILE* f=fopen(argv[1], "rb");
-		assert (f!=NULL);
-		size_t got=fread(&file, 1, sizeof(struct highscore_file), f);
-		assert (got==sizeof(struct highscore_file));
-		fclose(f);
-		for (int i=0; i<file.count; i++)
-		{
-			printf ("name=%s score=%d date=%s\n",
-					file.entries[i].name,
-					file.entries[i].score,
-					file.entries[i].date);
-		};
+		printf ("name=%s score=%d date=%s\n",
+				file.entries[i].name,
+				file.entries[i].score,
+				file.entries[i].date);
 	};
+};
 \end{lstlisting}
 
 We need GCC \IT{((aligned (1),packed))} attribute so that all structure fields will be packed on 1-byte boundary.
@@ -84,16 +84,16 @@ We need GCC \IT{((aligned (1),packed))} attribute so that all structure fields w
 Of course it works:
 
 \begin{lstlisting}
-	name=Irene..... score=10970 date=08-12-2016
-	name=Saddler... score=7819 date=08-12-2016
-	name=Mary...... score=300 date=08-12-2016
-	name=James..... score=151 date=08-12-2016
-	name=Mike...... score=135 date=08-12-2016
-	name=AAAAAAAAAA score=135 date=08-12-2016
-	name=Joe....... score=130 date=08-12-2016
-	name=John...... score=128 date=08-12-2016
-	name=Doe....... score=124 date=08-12-2016
-	name=Alex...... score=120 date=08-12-2016
+name=Irene..... score=10970 date=08-12-2016
+name=Saddler... score=7819 date=08-12-2016
+name=Mary...... score=300 date=08-12-2016
+name=James..... score=151 date=08-12-2016
+name=Mike...... score=135 date=08-12-2016
+name=AAAAAAAAAA score=135 date=08-12-2016
+name=Joe....... score=130 date=08-12-2016
+name=John...... score=128 date=08-12-2016
+name=Doe....... score=124 date=08-12-2016
+name=Alex...... score=120 date=08-12-2016
 \end{lstlisting}
 
 (Needless to say, each name is padded with dots, both on screen and in the file, perhaps, for \ae{}sthetical reasons.)
@@ -103,24 +103,24 @@ Of course it works:
 Let's check if we right about width of score value. Is it really has 32 bits?
 
 \begin{lstlisting}[style=customc]
-	int main(int argc, char* argv[])
-	{
-		FILE* f=fopen(argv[1], "rb");
-		assert (f!=NULL);
-		size_t got=fread(&file, 1, sizeof(struct highscore_file), f);
-		assert (got==sizeof(struct highscore_file));
-		fclose(f);
-	
-		strcpy (file.entries[1].name, "Mallory...");
-		file.entries[1].score=12345678;
-		strcpy (file.entries[1].date, "08-12-2016");
-	
-		f=fopen(argv[1], "wb");
-		assert (f!=NULL);
-		got=fwrite(&file, 1, sizeof(struct highscore_file), f);
-		assert (got==sizeof(struct highscore_file));
-		fclose(f);
-	};
+int main(int argc, char* argv[])
+{
+	FILE* f=fopen(argv[1], "rb");
+	assert (f!=NULL);
+	size_t got=fread(&file, 1, sizeof(struct highscore_file), f);
+	assert (got==sizeof(struct highscore_file));
+	fclose(f);
+
+	strcpy (file.entries[1].name, "Mallory...");
+	file.entries[1].score=12345678;
+	strcpy (file.entries[1].date, "08-12-2016");
+
+	f=fopen(argv[1], "wb");
+	assert (f!=NULL);
+	got=fwrite(&file, 1, sizeof(struct highscore_file), f);
+	assert (got==sizeof(struct highscore_file));
+	fclose(f);
+};
 \end{lstlisting}
 
 Let's run Blockout:
@@ -145,7 +145,7 @@ Now it's correct. Yes, high score value is 32-bit integer.
 \subsubsection{Is it serialization?}
 
 \dots almost.
-Serialization like this is highly popular in scientific software, where efficiency and speed is much more important
+Serialization like this is highly popular in scientific and engineering software, where efficiency and speed is much more important
 than converting into \ac{XML} or \ac{JSON} and back.
 
 One important thing is that you obviously cannot serialize pointers, because each time you load the file into memory,
@@ -182,6 +182,7 @@ When \q{Block out} loads high score file at the next run, it reads number of ent
 then completely ignores what is after it.
 
 This is common problem.
+Not a problem in strict sense: it's not a bug, but information can be exposed outwards.
 
 \myindex{Microsoft Word}
 Microsoft Word versions from 1990s has been often left pieces of previously edited texts into the *.doc* files.
@@ -198,11 +199,10 @@ in OpenSSL.
 
 \q{Block out} has several polycubes (flat/basic/extended), size of pit can be configured, etc.
 And it seems, for each configuration, \q{Block out} has its own high score table.
-I've notices that some information is probably stored in \IT{BLSCORE.IDX} file.
+I've noticed that some information is probably stored in \IT{BLSCORE.IDX} file.
 This can be a homework for hardcore \q{Block out} fans---to understand its structure as well.
 
 The \q{Block out} files are here: \url{http://beginners.re/examples/blockout.zip}
-(including the binary high score files
-I've used in this example).
+(including the binary high score files I've used in this example).
 You can use DosBox to run it.
 
