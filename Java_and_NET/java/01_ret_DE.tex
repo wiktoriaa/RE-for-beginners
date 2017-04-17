@@ -1,52 +1,53 @@
 % TODO proof-reading
 \subsection{Rückgabe eines Wertes}
 
-%Probably the simplest Java function is the one which returns some value.
-%
-%Oh, and we must keep in mind that there are no \q{free} functions in Java in common sense,
-%they are \q{methods}. 
-%
-%Each method is related to some class, so it's not possible to define
-%a method outside of a class.
-%
-%But we'll call them \q{functions} anyway, for simplicity.
-%
-%\begin{lstlisting}[style=customjava]
-%public class ret
-%{
-%	public static int main(String[] args) 
-%	{
-%		return 0;
-%	}
-%}
-%\end{lstlisting}
-%
-%Let's compile it:
-%
-%\begin{lstlisting}
-%javac ret.java
-%\end{lstlisting}
-%
-%\dots and decompile it using the standard Java utility:
-%
-%\begin{lstlisting}
-%javap -c -verbose ret.class
-%\end{lstlisting}
-%
-%And we get:
-%
-%\begin{lstlisting}[caption=JDK 1.7 (excerpt)]
-%  public static int main(java.lang.String[]);
-%    flags: ACC_PUBLIC, ACC_STATIC
-%    Code:
-%      stack=1, locals=1, args_size=1
-%         0: iconst_0      
-%         1: ireturn       
-%\end{lstlisting}
-%
-%The Java developers decided that 0 is one of the busiest constants in programming, 
-%so there is a separate short one-byte \GTT{iconst\_0} instruction which pushes 0
-%
+Die vermutlich einfachste Java-Funktion ist eine, die einen Wert zurück gibt.
+
+Es sollte hier noch beachtet werden, dass es keine \q{freien} Funktionen im
+allgemeinen Sinne in Java gibt sondern \q{Methoden}. 
+
+Jede Methode gehört zu einer Klasse, somit ist es nicht möglich eine Methode
+außerhalb einer Klasse zu definieren.
+
+Wir werden die Methoden hier trotzdem der Einfachheit halber \q{Funktionen} nennen.
+
+\begin{lstlisting}[style=customjava]
+public class ret
+{
+	public static int main(String[] args) 
+	{
+		return 0;
+	}
+}
+\end{lstlisting}
+
+Kompilieren wir diesen Code:
+
+\begin{lstlisting}
+javac ret.java
+\end{lstlisting}
+
+\dots und dekompilieren ihn mit dem Standard-Java-Tool:
+
+\begin{lstlisting}
+javap -c -verbose ret.class
+\end{lstlisting}
+
+Und wir bekommen:
+
+\begin{lstlisting}[caption=JDK 1.7 (excerpt)]
+  public static int main(java.lang.String[]);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: iconst_0      
+         1: ireturn       
+\end{lstlisting}
+
+Die Java-Entwickler entschieden, dass 0 eine der beliebteste Konstanten in der
+Programmierung ist, also gibt es eine separate, kurze Ein-Byte-Anweisung die
+0 pushed.
+
 %\footnote{Just like in MIPS, where a separate register for zero constant exists: \myref{MIPS_zero_register}.}.
 %There are also \GTT{iconst\_1} (which pushes 1), \GTT{iconst\_2}, etc., up to \GTT{iconst\_5}.
 %
