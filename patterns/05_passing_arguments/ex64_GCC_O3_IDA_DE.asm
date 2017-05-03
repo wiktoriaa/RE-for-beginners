@@ -12,7 +12,7 @@ main    proc near
         call    f
         mov     edi, offset format ; "%lld\n"
         mov     rsi, rax
-        xor     eax, eax ; Anzahl der Vector Register wird übergeben
+        xor     eax, eax ; §Anzahl der Vector Register wird übergeben§
         call    _printf
         xor     eax, eax
         add     rsp, 8

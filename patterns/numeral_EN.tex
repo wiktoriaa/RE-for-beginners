@@ -11,11 +11,11 @@ Binary numeral system has \IT{radix} of 2.
 
 Important things to recall:
 1) \IT{number} is a number, while \IT{digit} is a term of writing system and is usually one character;
-2) number is not changed when converted to another radix: writing notation is.
+2) number is not changed when converted to another radix: writing notation is (and way of representing it in \ac{RAM}).
 
 How to convert a number from one radix to another?
 
-Positional notation is used almost everywhere, this means, a digit (number placed in single character) has some weight depending on where it is placed.
+Positional notation is used almost everywhere, this means, a digit has some weight depending on where it is placed inside of number.
 If 2 is placed at the rightmost place, it's 2.
 If it is placed at the place one digit before rightmost, it's 20.
 
@@ -37,7 +37,7 @@ Perhaps, humankind switched to positional notation because it's easier to do bas
 Indeed, binary numbers can be added, subtracted and so on in the very same as taught in schools, but only 2 digits are available.
 
 Binary numbers are bulky when represented in source code and dumps, so that is where hexadecimal numeral system can be used.
-Hexadecimal radix uses 0..9 numbers and also 6 Latin characters: A..F.
+Hexadecimal radix uses 0..9 digits and also 6 Latin characters: A..F.
 Each hexadecimal digit takes 4 bits or 4 binary digits, so it's very easy to convert from binary number to hexadecimal and back, even manually, in one's mind.
 
 \begin{center}
@@ -65,7 +65,7 @@ F	&1111	&15 \\
 \end{longtable}
 \end{center}
 
-How to understand, which radix is currently used?
+How to understand, which radix is used in a specific place?
 
 Decimal numbers are usually written as is, i.e., 1234. But some assemblers allows to make emphasis on decimal radix and this number can be written with "d" suffix: 1234d.
 
@@ -74,8 +74,9 @@ There is also another way: "b" suffix, for example: 100110111b.
 I'll try to stick to "0b" prefix throughout the book for binary numbers.
 
 Hexadecimal numbers are prepended with "0x" prefix in \CCpp and other \ac{PL}s: 0x1234ABCD.
-Or they are has "h" suffix: 1234ABCDh - this is common way of representing them in assemblers and debuggers.
+Or they are has "h" suffix: 1234ABCDh---this is common way of representing them in assemblers and debuggers.
 If the number is started with A..F digit, 0 is to be added before: 0ABCDEFh.
+There was also convention that was popular in 8-bit home computers era, using \$ prefix, like \$ABCD.
 I'll try to stick to "0x" prefix throughout the book for hexadecimal numbers.
 
 Should one learn to convert numbers in mind? A table of 1-digit hexadecimal numbers can easily be memorized.
@@ -92,7 +93,7 @@ Another numeral system heavily used in past of computer programming is octal: th
 It has been superseded by hexadecimal system almost everywhere, but surprisingly, there is *NIX utility used by many people often which takes octal number as argument: \TT{chmod}.
 
 \myindex{UNIX!chmod}
-As many *NIX users know, \TT{chmod} argument can be a number of 3 digits. The first one is rights for owner of file, second is rights for group (to which file belongs), third is for everyone else.
+As many *NIX users know, \TT{chmod} argument can be a number of 3 digits. The first digit is rights for owner of file, second is rights for group (to which file belongs), third is for everyone else.
 And each digit can be represented in binary form:
 
 \begin{center}
@@ -126,7 +127,7 @@ Nowadays, all popular computers employs word/address size of 16, 32 or 64 bits, 
 
 Octal numeral system is supported by all standard \CCpp compilers.
 This is source of confusion sometimes, because octal numbers are encoded with zero prepended, for example, 0377 is 255.
-And sometimes, you may make a typo and write "09" instead of 9, and the compiler wouldn't allow you.
+And sometimes, you may make a typo and write "09" instead of 9, and the compiler would report error.
 GCC may report something like that:\\
 \TT{error: invalid digit "9" in octal constant}.
 
@@ -146,7 +147,7 @@ The reason behind this is in the fact that almost all \ac{PE} sections are padde
 \subsubsection{Multi-precision arithmetic and radix}
 
 \index{RSA}
-Multi-precision arithmetic uses huge numbers, and each one may be stored in several bytes.
+Multi-precision arithmetic can use huge numbers, and each one may be stored in several bytes.
 For example, RSA keys, both public and private, are spanning up to 4096 bits and maybe even more.
 
 In \InSqBrackets{\TAOCPvolII, 265} we can find the following idea: when you store multi-precision number in several bytes,
@@ -162,5 +163,5 @@ Words like ``ten'', ``thousand'', etc, are usually not pronounced, because it wi
 \subsubsection{Floating point numbers}
 
 To distinguish floating point numbers from integer ones, they are usually written with ``.0'' at the end,
-like 0.0, 123.0, etc.
+like $0.0$, $123.0$, etc.
 

@@ -15,7 +15,7 @@ void f()
 };
 \end{lstlisting}
 
-The memory (or structure) for object is allocated in stack, using simple \ac{SP} shift, in the same manner, as memory for structure in C is allocated.
+The memory for object (or structure) is allocated in stack, using simple \ac{SP} shift.
 The memory is deallocated upon function exit, or, more precisely, at the end of \IT{scope}---\ac{SP} is returning to its state (same as at the start of function) and destructor of \IT{Class} is called.
 In the same manner, memory for allocated structure in C is deallocated upon function exit.
 
@@ -43,7 +43,7 @@ void f2()
 
 \myindex{\CStandardLibrary!malloc()}
 \myindex{\CStandardLibrary!free()}
-This is the same as allocating structure using \IT{malloc()} call.
+This is the same as allocating memory for a structure using \IT{malloc()} call.
 In fact, \IT{new} in C++ is wrapper for \IT{malloc()}, and \IT{delete} is wrapper for \IT{free()}.
 Since memory block has been allocated in \gls{heap}, it must be deallocated explicitly, using \IT{delete}.
 Class destructor will be automatically called right before that moment.
@@ -52,6 +52,7 @@ Which method is better?
 Allocating \IT{on stack} is very fast, and good for small, short-lived object, which will be used only in the current function.
 
 Allocating \IT{on heap} is slower, and better for long-lived object, which will be used across many functions.
-Also, objects allocated in \gls{heap} are prone to memory leakage, because they must to be freed explicitly.
+Also, objects allocated in \gls{heap} are prone to memory leakage, because they must to be freed explicitly, but one can
+forget about it.
 
 Anyway, this is matter of taste.

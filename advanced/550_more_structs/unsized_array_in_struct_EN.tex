@@ -1,22 +1,23 @@
 \subsection{Unsized array in C structure}
 
-In some win32 structures we can find ones with last element defined as one character:
+In some win32 structures we can find ones with last field defined as an array of one element:
 
 \begin{lstlisting}[style=customc]
-	typedef struct _SYMBOL_INFO {
-	  ULONG   SizeOfStruct;
-	  ULONG   TypeIndex;
-	  
-	  ...
-	
-	  ULONG   MaxNameLen;
-	  TCHAR   Name[1];
-	} SYMBOL_INFO, *PSYMBOL_INFO;
+typedef struct _SYMBOL_INFO {
+  ULONG   SizeOfStruct;
+  ULONG   TypeIndex;
+  
+  ...
+
+  ULONG   MaxNameLen;
+  TCHAR   Name[1];
+} SYMBOL_INFO, *PSYMBOL_INFO;
 \end{lstlisting}
 
 ( \url{https://msdn.microsoft.com/en-us/library/windows/desktop/ms680686(v=vs.85).aspx} )
 
-This is a hack, meaning, the last field is array of unknown size, to be calculated at the time of structure allocation.
+This is a hack, meaning, the last field is array of unknown size,
+which is to be calculated at the time of structure allocation.
 
 Why: \IT{Name} field may be short, so why to define it with some kind of \IT{MAX\_NAME}
 constant which can be 128, 256, or even bigger?
@@ -31,30 +32,30 @@ This is also known as \IT{struct hack}: \url{http://c-faq.com/struct/structhack.
 Example:
 
 \begin{lstlisting}[style=customc]
-	#include <stdio.h>
+#include <stdio.h>
 
-	struct st
-	{
-		int a;
-		int b;
-		char s[];
-	};
+struct st
+{
+	int a;
+	int b;
+	char s[];
+};
 
-	void f (struct st *s)
-	{
-		printf ("%d %d %s\n", s->a, s->b, s->s);
-		// f() can't replace s[] with bigger string - size of allocated block is unknown at this point
-	};
+void f (struct st *s)
+{
+	printf ("%d %d %s\n", s->a, s->b, s->s);
+	// f() can't replace s[] with bigger string - size of allocated block is unknown at this point
+};
 
-	int main()
-	{
-	#define STRING "Hello!"
-		struct st *s=malloc(sizeof(struct st)+strlen(STRING)+1); // incl. terminating zero
-		s->a=1;
-		s->b=2;
-		strcpy (s->s, STRING);
-		f(s);
-	};
+int main()
+{
+#define STRING "Hello!"
+	struct st *s=malloc(sizeof(struct st)+strlen(STRING)+1); // incl. terminating zero
+	s->a=1;
+	s->b=2;
+	strcpy (s->s, STRING);
+	f(s);
+};
 \end{lstlisting}
 
 In short, it works because C has no array boundary checks. Any array is treated as having infinite size.

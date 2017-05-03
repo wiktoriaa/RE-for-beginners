@@ -70,16 +70,16 @@ This how it happens in Glibc 2.24 in non-optimized C part.
 
 Given all that, \IT{memmove()} may be slower than \IT{memcpy()}.
 But some people, including Linus Torvalds, argue\footnote{\url{https://bugzilla.redhat.com/show_bug.cgi?id=638477\#c132}}
-that \IT{memmove()} should be an alias (or synonym) of \IT{memcpy()}, and the single
+that \IT{memcpy()} should be an alias (or synonym) of \IT{memmove()}, and the latter
 function must just check at start, if the buffers are overlapping or not, and then behave as \IT{memcpy()} or \IT{memmove()}.
 Nowadays, check for overlapping buffers is very cheap, after all.
 
 \subsection{Anti-debugging trick}
 
 I've heard about anti-debugging trick where all you need is just set \TT{DF} to crash the process: the very next \IT{memcpy()}
-routine crashes because it copies backwardly.
+routine will lead to crash because it copies backwardly.
 But I can't check this: it seems all memory copy routines clears/sets \TT{DF} as they want to.
-On the other hand, \IT{memmove()} from uClibc I cited in this article,
+On the other hand, \IT{memmove()} from uClibc I cited here,
 has no explicit clear of \TT{DF} (it assumes \TT{DF} is always clear?),
 so it can really crash.
 
