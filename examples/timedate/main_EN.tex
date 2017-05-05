@@ -1,14 +1,13 @@
-% TODO translate
 \section{Hacking Windows clock}
 
-Sometimes I did some kind of first April prank for my coworkers.
+Sometimes I do some kind of first April prank for my coworkers.
 
 Let's find, if we could do something with Windows clock?
 Can we force to go clock hands backwards?
 
 First of all, when you click on date/time in status bar,\\
 a \IT{C:\textbackslash{}WINDOWS\textbackslash{}SYSTEM32\textbackslash{}TIMEDATE.CPL} module gets executed,
-which is usual executable PE file.
+which is usual executable \ac{PE}-file.
 
 Let's see, how it draw hands?
 When I open the file (from Windows 7) in Resource Hacker, there are clock faces, but with no hands:
@@ -40,7 +39,8 @@ What is inside of table[]?
 
 \lstinputlisting[style=customasmx86]{examples/timedate/2.lst}
 
-It's referenced only from \IT{DrawHand()} function at has 120 32-bit words or 60 32-bit pairs... wait, 60?
+It's referenced only from \IT{DrawHand()} function.
+It has 120 32-bit words or 60 32-bit pairs... wait, 60?
 Let's take a closer look at these values.
 First of all, I'll zap 6 pairs or 12 32-bit words with zeros, and then I'll put patched \IT{TIMEDATE.CPL}
 into \IT{C:\textbackslash{}WINDOWS\textbackslash{}SYSTEM32}.
@@ -53,7 +53,7 @@ and also, boot in safe mode with command prompt so you can copy the file, which 
 \caption{Attempt to run}
 \end{figure}
 
-Now when any hand is located at 0-5 seconds/minutes, it's invisible! However, opposite (shorter) part of second hand
+Now when any hand is located at 0..5 seconds/minutes, it's invisible! However, opposite (shorter) part of second hand
 is visible and moving.
 When any hand is outside of this area, hand is visible as usual.
 
@@ -121,13 +121,13 @@ First 15 pairs are coordinates for $\frac{1}{4}$ of circle.
 
 Perhaps, Microsoft developers precalculated all coordinates and put them into table.
 
-Now I can understand why when I zapped 6 pairs, hands were invisible at that area: in fact, hands were drawn,
+Now I can understand why when I zapped first 6 pairs, hands were invisible at that area: in fact, hands were drawn,
 they just had zero length, because hand started at 0:0 coordinate and ended there.
 
 \subsubsection{The prank (practical joke)}
 
 Given all that, how would we force hands to go counterclockwise?
-In fact, this is simple, we need just to rotate the table, so each hand, instead of drawing at place of first second,
+In fact, this is simple, we need just to rotate the table, so each hand, instead of drawing at place of zeroth second,
 would be drawing at place of 59th second.
 
 I made the patcher a long time ago, at the very beginning of 2000s, for Windows 2000.
@@ -143,7 +143,7 @@ Now I can see all hands goes backwards:
 \caption{Now it works}
 \end{figure}
 
-Well, there is no animation in this article, but if you look closer, you can see, that hands are in fact shows correct
+Well, there is no animation in this book, but if you look closer, you can see, that hands are in fact shows correct
 time, but the whole clock face is rotated vertically, like we see it from the inside of clock.
 
 \subsubsection{Windows 2000 leaked source code}
