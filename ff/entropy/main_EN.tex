@@ -1,15 +1,17 @@
 % TODO translate
 % TODO png blur? too wide listings
-% TODO separate section for Mathematica example
 \section[Analyzing using information entropy]{Analyzing unknown binary files using information entropy}
 \label{entropy}
 \myindex{Entropy}
 
-For the sake of simplification, I would say, information entropy is a measure, how tightly some piece of data can be compressed.
+For the sake of simplification, I would say, information entropy is a measure,
+how tightly some piece of data can be compressed.
 For example, it is usually not possible to compress already compressed archive file, so it has high entropy.
 On the other hand, one megabyte of zero bytes can be compressed to a tiny output file.
-Indeed, in plain English language, one million of zeros can be described just as ``resulting file is one million zero bytes''.
-Compressed files are usually a list of instructions to decompressor, like this: ``put 1000 zeros, then 0x23 byte, then 0x45 byte, then put a block of size 10 bytes which we've seen 500 bytes back, etc.''
+Indeed, in plain English language, one million of zeros can be described just as
+``resulting file is one million zero bytes''.
+Compressed files are usually a list of instructions to decompressor, like this:
+``put 1000 zeros, then 0x23 byte, then 0x45 byte, then put a block of size 10 bytes which we've seen 500 bytes back, etc.''
 
 Texts written in natural languages are also can be compressed tightly, 
 because natural languages has a lot of redundancy
@@ -18,13 +20,11 @@ like any toggled bit in compressed archive make decompression nearly impossible)
 some words are used very often, etc.
 It's possible to drop some words and text will be still readable.
 
-Code for CPUs is also can be compressed, because some ISA instructions are used much more often than others.
+Code for CPUs is also can be compressed, because some \ac{ISA} instructions are used much more often than others.
 \myindex{x86!\Instructions!MOV}
 \myindex{x86!\Instructions!PUSH}
 \myindex{x86!\Instructions!CALL}
-In x86, most used instructions are MOV/PUSH/CALL---indeed, most of the time, computer CPU is just shuffling data and switching between
-levels of abstractions.
-If to consider data shuffling as moving data between levels of abstractions, this is also part of switching.
+In x86, most used instructions are \INS{MOV}/\INS{PUSH}/\INS{CALL} (\myref{correctly_disasmed_code}).
 
 Data compressors and encryptors tend to produce very high entropy results.
 Good pseudorandom number generators also produce data which cannot be compressed 
@@ -38,7 +38,7 @@ So, in other words, entropy is a measure which can help to probe unknown data bl
 
 Information entropy can be used as a quick-n-dirty method for inspecting unknown binary files.
 In particular, it is a very quick way to find compressed/encrypted pieces of data.
-Someone say it's possible to find RSA (and other asymmetric cryptographic algorithms) public/private keys 
+Someone say it's possible to find \ac{RSA} (and other asymmetric cryptographic algorithms) public/private keys 
 in executable code (which has high entropy as well), but I didn't try this myself.
 
 \subsection{Tools}
@@ -62,7 +62,8 @@ A tool for IDA: IDAtropy\footnote{\url{https://github.com/danigargu/IDAtropy}}.
 It's interesting that simple XOR encryption doesn't affect entropy of data.
 I've shown this in \IT{Norton Guide} example in the book (\myref{norton_guide}).
 
-Generalizing: encryption by substitution cipher also doesn't affect entropy of data (and XOR can be viewed as substitution cipher).
+Generalizing: encryption by substitution cipher also doesn't affect entropy of data
+(and XOR can be viewed as substitution cipher).
 The reason of that is because entropy calculation algorithm view data on byte-level.
 On the other hand, the data encrypted by 2 or 4-byte XOR pattern will result in another entropy.
 
@@ -71,7 +72,8 @@ Nevertheless, low entropy is usually a good sign of weak amateur cryptography
 
 \subsection{More about entropy of executable code}
 
-It is quickly noticeable that probably a biggest source of high-entropy in executable code are relative offsets encoded in opcodes.
+It is quickly noticeable that probably a biggest source of high-entropy in executable code
+are relative offsets encoded in opcodes.
 For example, these two consequent instructions will produce different relative offsets in their opcodes, 
 while they are in fact pointing to the same function:
 
@@ -98,7 +100,7 @@ One example is UPX: \url{http://sourceforge.net/p/upx/code/ci/default/tree/doc/f
 \subsection{Random number generators}
 
 \myindex{GnuPG}
-When I run GnuPG to generate new secret key, it asking for some entropy...
+When I run GnuPG to generate new secret key, it asking for some entropy \dots
 
 \begin{lstlisting}
 We need to generate a lot of random bytes. It is a good idea to perform
