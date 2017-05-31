@@ -87,11 +87,11 @@ Punched tapes for teletypes had 5 and 6 possible holes, this is 5 or 6 bits for 
 \myindex{octet}
 \myindex{fetchmail}
 To emphasize the fact the byte has 8 bits, byte is sometimes called \IT{octet}:
-it least \IT{fetchmail} uses this terminology.
+at least \IT{fetchmail} uses this terminology.
 
-9-bit bytes were exist in 36-bit architectures: 4 9-bit bytes were fit in single \gls{word}.
+9-bit bytes used to exist in 36-bit architectures: 4 9-bit bytes would fit in a single \gls{word}.
 Probably because of this fact, C/C++ standard tells that \IT{char} has to have a room for \IT{at least} 8 bits, but more
-bits is allowable.
+bits are allowable.
 
 \subsubsection{Standard ASCII table}
 
@@ -104,7 +104,7 @@ in non-Latin writing systems.
 leaving a space to parity bit for each character.
 
 There is no need to memorize whole \ac{ASCII} table, but rather ranges.
-\InSqBrackets{0..0x1F} are not control characters (non-printable).
+\InSqBrackets{0..0x1F} are control characters (non-printable).
 \InSqBrackets{0x20..0x7E} are printable ones.
 Codes starting at 0x80 are usually used for non-Latin writing systems and/or pseudographics.
 
@@ -124,7 +124,7 @@ RISC CPUs like ARM and MIPS---not.
 \myindex{UTF-16}
 \myindex{UCS-2}
 
-This is attempt to support multi-lingual environment by extending byte to 16-bit.
+This is an attempt to support multi-lingual environment by extending byte to 16-bit.
 Most well-known example is Windows NT kernel and win32 functions with \IT{W} suffix.
 This is why each Latin character in plain English text string is interleaved with zero byte.
 This encoding is called UCS-2 or UTF-16
@@ -140,7 +140,7 @@ Another benefit of using unsigned data types is self-documenting:
 you define a variable which can't be assigned to negative values.
 
 \myindex{Java}
-Unsigned data types absent in Java, for which it's criticized.
+Unsigned data types are absent in Java, for which it's criticized.
 It's hard to implement cryptographical algorithms using boolean operations over signed data types.
 
 Values like 0xFFFFFFFF (-1) are used often, mostly as error codes.
@@ -150,8 +150,8 @@ Values like 0xFFFFFFFF (-1) are used often, mostly as error codes.
 \Gls{word} word is somewhat ambiguous term and usually denotes a data type fitting in \ac{GPR}.
 Bytes are practical for characters, but impractical for other arithmetical calculations.
 
-Hence, many \ac{CPU}s has \ac{GPR}s with width of 16, 32 or 64 bits.
-Even 8-bit CPUs like 8080 and Z80 offers to work with 8-bit register pairs, each pair forms 16-bit \IT{pseudoregister}
+Hence, many \ac{CPU}s have \ac{GPR}s with width of 16, 32 or 64 bits.
+Even 8-bit CPUs like 8080 and Z80 offer to work with 8-bit register pairs, each pair forming a 16-bit \IT{pseudoregister}
 (\IT{BC}, \IT{DE}, \IT{HL}, etc.).
 Z80 has some capability to work with register pairs, and this is, in a sense, some kind of 16-bit CPU emulation.
 
@@ -234,7 +234,7 @@ Access to RAM/cache by address aligned by word boundary is often cheaper than no
 
 During data structures development, which are supposed to be fast and efficient,
 one should always take into consideration length of the \gls{word} on the CPU to be executed on.
-Sometimes compiler do this for programmer, sometimes not.
+Sometimes the compiler will do this for programmer, sometimes not.
 
 \subsection{Address register}
 
@@ -251,13 +251,13 @@ Cray-1 supercomputer has 64-bit GPRs, but 24-bit address registers, so it can ad
 RAM was very expensive in 1970s, and even in supercomputing environment it cannot be expected it could have more.
 So why to allocate 64-bit register for address or pointer?
 
-8086/8088 CPUs has really weird addressing scheme:
-values of two 16-bit registers were summed in weird manner resulting 20-bit address.
+8086/8088 CPUs had a really weird addressing scheme:
+values of two 16-bit registers were summed in a weird manner resulting in a 20-bit address.
 Perhaps, this was some kind of toy-level virtualization (\myref{8086_memory_model})?
 8086 could run several programs (not simultaneously, though).
 
 \myindex{ARM!ARM1}
-Early ARM1 has interesting artifact:
+Early ARM1 has an interesting artifact:
 
 \begin{framed}
 \begin{quotation}
@@ -275,10 +275,10 @@ x86-64 architecture has virtual 64-bit pointers/addresses, but internally, width
 
 \subsection{Numbers}
 
-What numbers are used for?
+What are numbers used for?
 
-When you see some number(s) altering in CPU register, you may be interesting, what this number means.
-It's an important skill of reverse engineer to determine possible data type from a set of changing numbers.
+When you see some number(s) altering in a CPU register, you may be interested in what this number means.
+It's an important skill for a reverse engineer to determine possible data type from a set of changing numbers.
 
 \subsubsection{Boolean}
 
@@ -286,19 +286,19 @@ If the number is switching from 0 to 1 and back, most chances that this value ha
 
 \subsubsection{Loop counter, array index}
 
-Variable increasing from 0, like: 0, 1, 2, 3\dots---a good chance this is loop counter and/or array index.
+Variable increasing from 0, like: 0, 1, 2, 3\dots---a good chance this is a loop counter and/or array index.
 
 \subsubsection{Signed numbers}
 
 If you see a variable which holds very low numbers and sometimes very high numbers,
 like 0, 1, 2, 3, and 0xFFFFFFFF, 0xFFFFFFFE, 0xFFFFFFFD,
-it's a good chance this is a signed variable in \IT{two's complement} form (\myref{sec:signednumbers}),
+there's a good chance it is a signed variable in \IT{two's complement} form (\myref{sec:signednumbers}),
 and last 3 numbers are -1, -2, -3.
 
 \subsubsection{32-bit numbers}
 
 There are numbers so large\footnote{\url{https://en.wikipedia.org/wiki/Large_numbers}},
-that there is even special notation for it exist (Knuth's up-arrow notation
+that there is even a special notation which exists to represent them (Knuth's up-arrow notation
 \footnote{\url{https://en.wikipedia.org/wiki/Knuth\%27s_up-arrow_notation}}).
 These numbers are so large so these are not practical for engineering, science and mathematics.
 
@@ -308,7 +308,7 @@ value around $1.8 \cdot 10^{308}$.
 $4 \cdot 10^{79}$ and $4 \cdot 10^{81}$.)
 
 In fact, upper bound in practical computing is much, much lower.
-If you get source code of UNIX v6 for PDP-11
+If you get the source code of UNIX v6 for PDP-11
 \footnote{\url{http://minnie.tuhs.org/Archive/PDP-11/Distributions/research/Dennis_v6/}},
 16-bit \IT{int} is used everywhere while 32-bit \IT{long} type is not used at all.
 
@@ -324,13 +324,13 @@ Given that, if you see unusually large 32-bit value like 0x87654321, this is a g
 
 \begin{itemize}
 
-\item this can be still 16-bit number, but signed, between 0xFFFF8000 (-32768) and 0xFFFFFFFF (-1).
+\item this can still be a 16-bit number, but signed, between 0xFFFF8000 (-32768) and 0xFFFFFFFF (-1).
 % TODO: [Example](https://github.com/dennis714/random_notes/blob/master/timedate.md).
-\item address of memory cell (can be checked using memory map feature of debugger);
-\item packed bytes (can be checked visually);
-\item bit flags;
-\item something related to (amateur) cryptography;
-\item magic number (\myref{magic_numbers});
+\item address of memory cell (can be checked using memory map feature of debugger).
+\item packed bytes (can be checked visually).
+\item bit flags.
+\item something related to (amateur) cryptography.
+\item magic number (\myref{magic_numbers}).
 \item IEEE 754 floating point number (can also be checked).
 
 \end{itemize}
@@ -351,7 +351,7 @@ That reminds us Z80 with alternate pack of registers (suffixed with apostrophe),
 
 \subsubsection{Size of buffer}
 
-When a programmer need to declare a size of some buffer, values in form of $2^x$ are usually used (512 bytes, 1024, etc.).
+When a programmer needs to declare the size of some buffer, values in form of $2^x$ are usually used (512 bytes, 1024, etc.).
 Values in $2^x$ form are easily recognizable (\myref{2n_numbers_table}) in decimal, hexadecimal and binary base.
 
 But needless to say, programmers are still humans with their decimal culture.
@@ -365,13 +365,13 @@ There is nothing wrong with this, this is just a place where numbers like $10^x$
 
 \subsubsection{Address}
 
-It's always good idea to keep in mind approximate memory map of the process you currently debug.
-For example, many win32 executables started at 0x00401000, so address like 0x00451230 is probably located inside
-executable section. You'll see addresses like these in \TT{EIP} register.
+It's always a good idea to keep in mind an approximate memory map of the process you currently debug.
+For example, many win32 executables started at 0x00401000, so an address like 0x00451230 is probably located inside
+executable section. You'll see addresses like these in the \TT{EIP} register.
 
 Stack is usually located somewhere below. % TODO
 
-Many debuggers is able to show the memory map of the debuggee, for example: \myref{olly_memory_map_example}.
+Many debuggers are able to show the memory map of the debuggee, for example: \myref{olly_memory_map_example}.
 
 If a value is increasing by step 4 on 32-bit architecture or by step 8 on 64-bit one,
 this probably sliding address of some elements of array.
@@ -385,7 +385,7 @@ OllyDbg can also show an ASCII string if the value is an address of it.
 \subsubsection{Bit field}
 
 If you see a value where one (or more) bit(s) are flipping from time to time like 0xABCD1234 $\rightarrow$ 0xABCD1434 and back,
-this is probably bit field (or bitmap).
+this is probably a bit field (or bitmap).
 
 \subsubsection{Packed bytes}
 
@@ -394,5 +394,5 @@ this is probably bit field (or bitmap).
 When \IT{strcmp()} or \IT{memcmp()} copies a buffer, it loads/stores 4 (or 8) bytes simultaneously,
 so if a string containing \q{4321}, and it would be copied to another place,
 at one point you'll see 0x31323334 value in some register.
-This is 4 packed bytes into 32-bit value.
+This is 4 packed bytes into a 32-bit value.
 
