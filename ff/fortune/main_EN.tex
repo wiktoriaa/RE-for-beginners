@@ -1,5 +1,4 @@
-% TODO translate
-\section[\IT{fortune} program indexing file]{Reverse engineering of simple \IT{fortune} program indexing file}
+\section{\IT{fortune} program indexing file}
 
 (This part was first appeared in my blog at 25-Apr-2015.)
 
@@ -30,7 +29,7 @@ In order to achieve this, it must scan the whole text file, count phrases, choos
 But the text file can get bigger, and even on modern computers, this naive algorithm is a bit uneconomical to computer resources.
 The straightforward way is to keep binary index file containing offset of each phrase in text file.
 With index file, \IT{fortune} program can work much faster: just to choose random index element, take offset from there, set offset in text file and read phrase from it.
-This is actually done in \IT{fortune} file.
+This is actually done in \IT{fortune} program.
 Let's inspect what is in its index file inside (these are .dat files in the same directory) in hexadecimal editor.
 This program is open-source of course, but intentionally, I will not peek into its source code.
 
@@ -56,7 +55,8 @@ Out[]= {33554432, 2936078336, 3137339392, 251658240, 0, 37, 0, \
 \end{lstlisting}
 
 Nope, something wrong. Numbers are suspiciously big.
-But let's back to \IT{od} output: each common 4-byte element has two zero bytes and two non-zero bytes, so the offsets (at least at the beginning of the file) are 16-bit at maximum.
+But let's back to \IT{od} output: each 4-byte element has two zero bytes and two non-zero bytes,
+so the offsets (at least at the beginning of the file) are 16-bit at maximum.
 Probably different endianness is used in the file?
 Default endiannes in Mathematica is little-endian, as used in Intel CPUs.
 Now I'm changing it to big-endian:
@@ -91,7 +91,7 @@ Do what comes naturally.  Seethe and fume and throw a tantrum.
 Other offset are also can be checked, yes, they are valid offsets.
 
 I can also check in Mathematica that each subsequent element is bigger than previous.
-I.e., the array is ascending.
+I.e., elements of array are ascending.
 In mathematics lingo, this is called \IT{strictly increasing monotonic function}.
 
 \begin{lstlisting}[style=custommath]
@@ -166,7 +166,7 @@ In case of very simple index files, number of elements can be easily deduced fro
 Anyway, there are 432 phrases in the text file.
 And we see something very familiar at the second element (value 431).
 I've checked other files (literature.dat and riddles.dat in Ubuntu Linux) and yes, the second 32-bit element is indeed number of phrases minus 1.
-Why \IT{minus 1}? Perhaps, this is not number of phrases, but rather index of the last phrase (starting at zero)?
+Why \IT{minus 1}? Perhaps, this is not number of phrases, but rather the number of the last phrase (starting at zero)?
 
 And there are some other elements in the header.
 In Mathematica, I'm loading each of three available files and I'm taking a look on the header:
@@ -184,16 +184,16 @@ From my own experience, there could be:
 \item file signature;
 \item file version;
 \item checksum;
-\item some other flags;
+\item some flags;
 \item maybe even text language identifier;
-\item text file timestamp, so \IT{fortune} program will regenerate index file if user added some new phrase(s) to it.
+\item text file timestamp, so the \IT{fortune} program will regenerate index file if a user modified text file.
 \end{itemize}
 
 For example, Oracle .SYM files (\myref{Oracle_SYM_files_example}) which contain symbols table for DLL files, also contain timestamp of corresponding DLL file, so to be sure it is still valid.
-But there are still possibility that the index file is regenerated if modification time of index file is older than text file.
+
 On the other hand, text file and index file timestamps can gone out of sync after archiving/unarchiving/installing/deploying/etc.
 
-But there are no timestamp, in my opinion. The most compact way of representing date and time is UNIX time value, which is big 32-bit number. We don't see any of such here. Other ways are even less compact.
+But there are no timestamp, in my opinion. The most compact way of representing date and time is UNIX time value, which is big 32-bit number. We don't see any of such here. Other ways of representation are even less compact.
 
 So here is algorithm, how \IT{fortune} supposedly works:
 
@@ -201,7 +201,7 @@ So here is algorithm, how \IT{fortune} supposedly works:
 \item take number of last phrase from the second element;
 \item generate random number in range of 0..number\_of\_last\_phrase;
 \item find corresponding element in array of offsets, take also following offset;
-\item output to \IT{stdout} all characters from the text file starting at current offset until
+\item output to \IT{stdout} all characters from the text file starting at the offset until
 the next offset minus 2 (so to ignore terminating percent sign 
 and character of the following phrase).
 \end{itemize}
@@ -241,7 +241,7 @@ Hmmm. Let's leave only one element in array (0) without terminating one:
 
 Fortune program always shows only first phrase.
 
-From this experiment we got to know that percent sign is parsed inside of fortune file and the size is not calculated as
+From this experiment we got to know that percent sign in text file is parsed and the size is not calculated as
 I deduced before, perhaps, even terminal array element is not used.
 However, it still can be used. And probably it was used in past?
 
@@ -255,7 +255,8 @@ Files I took from Ubuntu Linux 14.04 are here: \url{http://beginners.re/examples
 
 Oh, and I took the files from x64 version of Ubuntu, but array elements are still has size of 32 bit.
 It is because \IT{fortune} text files are probably never exceeds 4\ac{GiB} size.
-But if it will, all elements must have size of 64 bit so to be able to store offset to the text file larger than 4GB.
+But if it will, all elements must have size of 64 bit so to be able to store offset to the text file larger than 4GiB.
 
-For impatient readers, the source code of \IT{fortune} is \href{https://launchpad.net/ubuntu/+source/fortune-mod/1:1.99.1-3.1ubuntu4}{here}.
+For impatient readers, the source code of \IT{fortune} is here:
+\url{https://launchpad.net/ubuntu/+source/fortune-mod/1:1.99.1-3.1ubuntu4}.
 
