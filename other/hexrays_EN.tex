@@ -409,6 +409,43 @@ This problem has been solved by me by manual splitting big function into several
 Just make local variables as global ones, etc, etc.
 And don't forget about tests.
 
+\subsection{Long and messed expressions}
+
+Sometimes, during rewriting, you can end up with long and hard to understand expressions in \IT{if()} constructs, like:
+
+\begin{lstlisting}
+if ((! (v38 && v30 <= 5 && v27 != -1)) && ((! (v38 && v30 <= 5) && v27 != -1) || (v24 >= 5 || v26)) && v25)
+{
+...
+}
+\end{lstlisting}
+
+Wolfram Mathematica can minimize some of them, using \TT{BooleanMinimize[]} function:
+
+\begin{lstlisting}
+In[1]:= BooleanMinimize[(! (v38 && v30 <= 5 && v27 != -1)) && v38 && v30 <= 5 && v25 == 0]
+
+Out[1]:= v38 && v25 == 0 && v27 == -1 && v30 <= 5
+\end{lstlisting}
+
+There is even better way, to find common subexpressions:
+
+\begin{lstlisting}
+In[2]:= Experimental`OptimizeExpression[(! (v38 && v30 <= 5 && 
+      v27 != -1)) && ((! (v38 && v30 <= 5) && 
+      v27 != -1) || (v24 >= 5 || v26)) && v25]
+
+Out[2]= Experimental`OptimizedExpression[
+ Block[{Compile`$1, Compile`$2}, Compile`$1 = v30 <= 5; 
+  Compile`$2 = 
+   v27 != -1; ! (v38 && Compile`$1 && 
+      Compile`$2) && ((! (v38 && Compile`$1) && Compile`$2) || 
+     v24 >= 5 || v26) && v25]]
+\end{lstlisting}
+
+Mathematica adds two new variables: \TT{Compile`\$1} and \TT{Compile`\$2}, values of which will be used several times in expression.
+So we can add two additional variables.
+
 \subsection{My plan}
 
 \begin{itemize}
