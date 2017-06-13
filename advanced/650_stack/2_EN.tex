@@ -26,9 +26,15 @@ First, let's understand, why.
 This is a stack state before amsg() return:
 
 \begin{lstlisting}
-[amsg(): 100 bytes][RA][two amsg arguments][something else][main() local variables]
-                    ^^
-                 current SP
+(lower addresses)
+
+[amsg(): 100 bytes]
+[RA]                   <- current SP
+[two amsg arguments]
+[something else]
+[main() local variables]
+
+(upper addresses)
 \end{lstlisting}
 
 When amsg() returns control flow to \main, so far so good.
@@ -70,17 +76,31 @@ will be printed.
 Let's see stack state at the moment when amsg() returns control to interim():
 
 \begin{lstlisting}
-[amsg(): 100 bytes][RA][two amsg() arguments][interim() stuff, incl. 8000 bytes][something else][main() local variables]
-                    ^^
-                 current SP
+(lower addresses)
+
+[amsg(): 100 bytes]
+[RA]                                     <- current SP
+[two amsg() arguments]
+[interim() stuff, incl. 8000 bytes]
+[something else]
+[main() local variables]
+
+(upper addresses)
 \end{lstlisting}
 
 Now the stack state at the moment when interim() returns control to \main{}:
 
 \begin{lstlisting}
-[amsg(): 100 bytes][RA][two amsg() arguments][interim() stuff, incl. 8000 bytes][something else][main() local variables]
-                                                                                        ^^
-                                                                                     current SP
+(lower addresses)
+
+[amsg(): 100 bytes]
+[RA]
+[two amsg() arguments]
+[interim() stuff, incl. 8000 bytes]
+[something else]                         <- current SP
+[main() local variables]
+
+(upper addresses)
 \end{lstlisting}
 
 So when \main calls \printf, it uses stack at the place where interim()'s buffer was allocated,
