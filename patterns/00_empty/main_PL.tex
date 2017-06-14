@@ -1,0 +1,68 @@
+\section{Pusta funkcja}
+\label{empty_func}
+
+Najprostszą istniejącą funkcją jest funkcja, która nic nie robi:
+
+\lstinputlisting[caption= Kod w \CCpp,style=customc]{patterns/00_empty/1.c}
+
+Kompilujemy!
+
+\subsection{x86}
+
+Dla x86 i MSVC i GCC generuję się ten sam kod:
+
+\lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput),style=customasmx86]{patterns/00_empty/1.s}
+
+\myindex{x86!\Instructions!RET}
+Tu jest tylko jedna instrukcja \RET, która zwraca zarządzanie funkcji wywołującej \glslink{caller}{вызывающую ф-цию}.
+
+\subsection{ARM}
+
+\lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) ASM Output,style=customasmARM]{patterns/00_empty/1_Keil_ARM_O3.s}
+
+Adres powrotu (\ac{RA}) w ARM zapisuję się nie w steku lokalnym, a w rejestrze \ac{LR}.
+Dlatego instrukcja \INS{BX LR} przechodzi pod ten adres, czyli robi to samo - zwraca zarządzanie funkcji wywołującej.
+
+\subsection{MIPS}
+
+Są dwa sposoby deklaracji nazwy rejestru w MIPS. Według numeracji (от \$0 до \$31) lub nadając pseudo-nazwę (\$V0, \$A0, itd.).
+
+Output assemblera w GCC pokazuję rejestry według numerów:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),style=customasmMIPS]{patterns/00_empty/MIPS.s}
+
+\dots a \IDA --- nadając pseudonazwę:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/00_empty/MIPS_IDA.lst}
+
+\myindex{MIPS!\Instructions!J}
+
+Pierwsza instrukcja jest instrukcją skoku (J lub JR),
+która zwraca zarządzanie \glslink{caller}{вызывающую ф-цию}, skacząc pod adres w rejestrze \$31 (или \$RA).
+
+Jest to analog \ac{LR} w ARM.
+
+Druga instrukcja to \ac{NOP}, która nic nie robi.
+Na razie możemy nie zwracać na nią uwagi.
+
+\subsubsection{Jeszcze małe co nieco o konwecji nazewnictwa w MIPS}
+Nazwy rejestrów i instrukcji w MIPS tradycyjnie są zapisywane małymi literami.
+Lecz my będziemy je zapisywać dużymi literami dlatego że nazwy instrukcji i rejestrów innych 
+\ac{ISA} w tej książce są zapisywane dużymi.
+
+\subsection{Puste funkcje na praktyce}
+
+Mimo że puste funkcje są bezużyteczne, są one dość często spotykane w niskopoziomowym kodzie.
+
+Po-pierwsze, popularne są funkcje wyprowadzające informację do logów, naprzykład:
+
+\lstinputlisting[caption=Kod w \CCpp,style=customc]{patterns/00_empty/dbg_print.c}
+
+Po drugie, popularnym sposobem na ochronę oprogramowania jest kompilacja kilku wersji: pierwsza dla legalnych konsumentów, druga - demonstracyjna. Demonstracyjna wersja może nie zawierać jakiejś ważnej funkcjonalności, naprzykład:
+\lstinputlisting[caption=Kod w \CCpp,style=customc]{patterns/00_empty/demo.c}
+
+Funkcja \TT{save\_file()} może być wywołana, kiedy użytkownik klika na menu \TT{File->Save}.
+Demo-wersja może zawierać wyłączony przycisk menu, ale nawet jeśli kraker ją włączy, to będze wywoływany pusta funkcja w której nie ma użytecznego kodu.
+IDA oznacza takie funkcje, naprzykład, w ten sposób \TT{nullsub\_00}, \TT{nullsub\_01}, itd.
+
+
