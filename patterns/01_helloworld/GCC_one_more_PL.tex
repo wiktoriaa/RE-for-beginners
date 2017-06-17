@@ -1,0 +1,72 @@
+\subsection{GCC --- jeszcze co nieco}
+\label{use_parts_of_C_strings}
+
+To, że \IT{anonimowa} linia w C ma typ \IT{const} (\myref{string_is_const_char}), 
+i to, że zaznaczone w segmencie stałych C-linie są gwarantowanie nie do zmiany (immutable), 
+prowadzi do ciekawych konsekwencji: kompilator może korzystać tylko z pewnej części linii.
+
+Prosty przykład:
+
+\begin{lstlisting}[style=customc]
+
+#include <stdio.h>
+
+int f1()
+{
+	printf ("world\n");
+}
+
+int f2()
+{
+	printf ("hello world\n");
+}
+
+int main()
+{
+	f1();
+	f2();
+}
+\end{lstlisting}
+
+Typowy kompilator \CCpp (w tym MSVC) przydzieli miejsce dla 2 linii, ale o to jest to co robi GCC 4.8.1:
+
+\begin{lstlisting}[caption=GCC 4.8.1 + listing w IDA,style=customasmx86]
+f1              proc near
+
+s               = dword ptr -1Ch
+
+                sub     esp, 1Ch
+                mov     [esp+1Ch+s], offset s ; "world\n"
+                call    _puts
+                add     esp, 1Ch
+                retn
+f1              endp
+
+f2              proc near
+
+s               = dword ptr -1Ch
+
+                sub     esp, 1Ch
+                mov     [esp+1Ch+s], offset aHello ; "hello "
+                call    _puts
+                add     esp, 1Ch
+                retn
+f2              endp
+
+aHello          db 'hello '
+s               db 'world',0xa,0
+\end{lstlisting}
+
+Naprawdę, kiedy printujemy linię \q{hello world}, 
+te dwa słowa są usytuowane w pamięci tuż obok siebie i \puts, będąc wywołane z funkcji \GTT{f2()}, w ogóle nie wie,
+że te linię są rozdzielone. Tak naprawdę to one i nie są rozdzielone, są rozdzielone 
+tylko \q{wirtualnie}, w naszym listingu.
+
+Kiedy \puts zostaje wywołane z \GTT{f1()}, ono wykorzystuje linie \q{world} + zerowy bajt. \puts w ogóle nie wie, że tam jest jeszcze jakaś linia przed tą!
+
+Ten trik jest często wykorzystywany (przynajmniej w GCC) i może zaoszczędzić trochę pamięci.
+Jest to podobny mechanizm do mechanizmu \IT{internowania łańcuchów}.
+
+Jeszcze jeden przykład można znaleźć tutaj: \myref{strstr_example}.
+
+
