@@ -1,0 +1,123 @@
+\subsubsection{GCC}
+
+Teraz skompilujmy to samo za pomocą GCC 4.4.1 w Linux: \TT{gcc 1.c -o 1}.
+Dale za pomocą \IDA podejrzmy jak się skompilowała f-cja \main.
+\IDA, jak i MSVC,pokazuje kod w syntaksie Intel\footnote{Również możemy zmusić GCC generować listingi w tym formacie za pomocą kluczy \TT{-S -masm=intel}.}.
+
+\begin{lstlisting}[caption=kod w \IDA,style=customasmx86]
+main            proc near
+
+var_10          = dword ptr -10h
+
+                push    ebp
+                mov     ebp, esp
+                and     esp, 0FFFFFFF0h
+                sub     esp, 10h
+                mov     eax, offset aHelloWorld ; "hello, world\n"
+                mov     [esp+10h+var_10], eax
+                call    _printf
+                mov     eax, 0
+                leave
+                retn
+main            endp
+\end{lstlisting}
+
+\myindex{Function prologue}
+\myindex{x86!\Instructions!AND}
+Prawie to samo. 
+Adres linii \TT{hello, world}, leżącej w segmencie danych, najpierw jest zapisywany do \EAX, a później odkładany na stos.
+Jeszcze w prologu f-cji widzimy \TT{AND ESP, 0FFFFFFF0h}~--- 
+ta instrukcja wyrównuje \ESP do granicy 16-bajtówej, robiąc wszystkie pozycje 
+na stosie wyrównanymi w-g tego schematu (co zapewnia szybszy dostęp przez mikroprocesor)\footnote{\URLWPDA}.
+
+\myindex{x86!\Instructions!SUB}
+\INS{SUB ESP, 10h} przydziela na stosie 16 bajt. Choć tutaj i wystarczy 4 bajty, co będzie widoczne dalej.
+
+Tak się dzieje dlatego że ilość przydzielanego miejsca w stosie lokalnym jest również wyrównana do granicy 16-bajtowej.
+
+% TODO1: rewrite.
+\myindex{x86!\Instructions!PUSH}
+Adres linii (lub wskaźnik na nią) zatem jest odkładany prosto na stos bez wykorzystywania instrukcji \PUSH.
+\IT{var\_10} jednocześnie i lokalna zmienna i argument dla \printf{}. Dokładniej to będzie omawiane w ciągu dalszym.
+
+Dalej jest wywoływane \printf.
+
+W odróżnieniu od MSVC, GCC przy kompilacji z wyłączoną optymalizacją generuje \TT{MOV EAX, 0} zamiast krótszego opcode.
+
+\myindex{x86!\Instructions!LEAVE}
+Ostatnia instrukcja \LEAVE~--- jest analogiczna do poleceń \TT{MOV ESP, EBP} i \TT{POP EBP}~--- jest to powrót \glslink{stack pointer}{wskaźnika stosu} i rejestru \EBP do stanu początkowego.
+Jest to niezbędne, ponieważ na początku f-cji modyfikowaliśmy rejestry \ESP i \EBP{}\\
+(za pomocą \INS{MOV EBP, ESP} / \INS{AND ESP, \ldots}).
+
+\subsubsection{GCC: \ATTSyntax}
+\label{ATT_syntax}
+
+Spróbujmy podejrzeć, jak wygląda to samo w syntaksie AT\&T.
+Ten zapis jest bardziej rozpowszechniony w świecie UNIX.
+
+\begin{lstlisting}[caption=kompilujemy w GCC 4.7.3]
+gcc -S 1_1.c
+\end{lstlisting}
+
+Otrzymamy taki plik:
+
+\lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/01_helloworld/GCC.s}
+
+Tu jest dużo makro (rozpoczynających się z kropki). Na razie one nas nie interesują.
+
+Na razie możemy je ignorować (za wyjątkiem \IT{.string}, za pomocą którego kodujemy sekwencję znaków zakończonych znakiem null ~--- tak jak w C).Wtedy otrzymamy następujące:
+\footnote{Dla zmniejszenia liczby generowanych \q{zbędnych} makro, można skorzystać z następującego klucza GCC: \IT{-fno-asynchronous-unwind-tables}}:
+
+\lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/01_helloworld/GCC_refined.s}
+
+\myindex{\ATTSyntax}
+\myindex{\IntelSyntax}
+Główne różnice między syntaksą Intel i AT\&T :
+
+\begin{itemize}
+
+\item
+Operandy są zapisywane na odwrót
+
+W Intel: \\
+<instrukcja> <dest byte> <source byte>.
+
+W AT\&T: \\
+<instrukcja> <source byte> <dest byte>.
+
+\myindex{\CStandardLibrary!memcpy()}
+\myindex{\CStandardLibrary!strcpy()}
+Żeby łatwiej było zrozumieć różnicę można skorzystać z takiej reguły:
+kiedy pracujecie z syntaksą Intel~--- możecie w głowie postawić znak równości ($=$) między operandami,
+a z AT\&T~--- strałkę w prawo ($\rightarrow$)
+\footnote{W niektórych standardowych funkcjach biblioteki C (np, memcpy(), strcpy()) również korzysta się z usytuowania argumentóœ jak w syntaksie Intel: najpierw wskaźnik w pamięci na destination byte, 
+następnie wskaźnik na source byte.}.
+
+\item
+AT\&T: Przed nazwami rejestróœ stawi się symbol (\%), a przed liczbami (\$).
+Zamiast nawiasów kwadratowych korzysta się z okrągłych.
+
+\item
+AT\&T: Do każdej instrukcji dostawia się specjalny symbol określający typ danych:
+
+\begin{itemize}
+\item q --- quad (64 bity)
+\item l --- long (32 bity)
+\item w --- word (16 bitów)
+\item b --- byte (8 bitów)
+\end{itemize}
+
+
+\end{itemize}
+
+Wracając do wyniku kompilacji: jest on identyczny do tego, który widzieliśmy w \IDA.
+Jedna drobnostka: \TT{0FFFFFFF0h} jest zapisywane jako \TT{\$-16}.
+To jest dokładnie to samo: \TT{16} w sytemie dziesiętnym to \TT{0x10} w szesnastkowym.
+\TT{-0x10} to będzie akurat \TT{0xFFFFFFF0} (w ramach 32-bitowych liczb).
+
+\myindex{x86!\Instructions!MOV}
+Zwracany wynik jest ustawiany w 0 za pomocą zwykłej instrukcji \MOV, a nie \XOR.
+\MOV po prostu ładuje wartość do rejestru.
+Nazwa tej instrukcji nie jest do końca poprawna (wartości nie są przemieszczane, tylko kopiowane). W innych architekturach instrukcja ta nosi nazwę \q{LOAD} lub \q{STORE} lub coś w tym stylu.
+
+
