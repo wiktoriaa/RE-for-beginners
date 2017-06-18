@@ -1,0 +1,33 @@
+\subsubsection{GCC: x86-64}
+
+\myindex{x86-64}
+Spróbujmy GCC в 64-bitowym Linux:
+
+\lstinputlisting[caption=GCC 4.4.6 x64,style=customasmx86]{patterns/01_helloworld/GCC_x64_RU.s}
+
+W Linux, *BSD i \MacOSX dla x86-64 także przekazuje się argumenty funkcji poprzez rejestry \SysVABI.
+
+6 pierwszych argumentów są przekazywane przez rejestry \RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}, a reszta --- przez stos.
+
+Także wskaźnik na linię jest przekazywany przez \EDI (32-bitową część rejestru).
+Ale dlaczego nie przez 64-bitową część, \RDI?
+
+Warto zapamiętać, że w 64-bitowym trybie wszystkie instrukcje \MOV, zapisujące cokolwiek do młodszej 32-bitowej części rejestru, zerują starsze 32-bity (Jest to opisane w dokumentacji Intel: \myref{x86_manuals}).
+Czyli instrukcja \INS{MOV EAX, 011223344h} poprawnie zapisze tę wartość do \RAX, a starsze bity się wyzerują.
+
+Jeśli podejrzeć w \IDA skompilowany plik (.o), to można zobaczyć również opcode wszystkich instrukcji
+\footnote{To trzeba wskazać w \textbf{Options $\rightarrow$ Disassembly $\rightarrow$ Number of opcode bytes}}:
+
+\lstinputlisting[caption=GCC 4.4.6 x64,style=customasmx86]{patterns/01_helloworld/GCC_x64.lst}
+
+\label{hw_EDI_instead_of_RDI}
+Jak widać, instrukcja, która zapisuje do \EDI wg adresu \TT{0x4004D4}, zajmuje 5 bajt.
+Та же инструкция, записывающая 64-битное значение в \RDI, занимает 7 байт.
+Możliwe, że GCC stwierdził, że trochę zaoszczędzi.
+Do tego, on jest pewien, że segment danych, gdzie są przechowywane linie, nigdy nie będzie usytuowany powyżej 4\gls{GiB}.
+
+\label{SysVABI_input_EAX}
+Tutaj my również widzimy wyzerowanie rejestru \EAX przed wywołaniem \printf.
+To się robi dlatego że według standardu opisanego wyżej w *NIX dla x86-64 w \EAX jest przekazywana ilość wykorzystywanych rejestrów wektorowych.
+
+
