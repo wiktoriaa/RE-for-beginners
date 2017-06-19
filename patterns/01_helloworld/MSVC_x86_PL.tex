@@ -1,0 +1,104 @@
+\subsubsection{MSVC}
+
+Skompilujmy kod w MSVC 2010:
+
+\begin{lstlisting}
+cl 1.cpp /Fa1.asm
+\end{lstlisting}
+
+(Klucz \TT{/Fa} oznacza wygenerowanie listingu w asemblerze)
+
+\begin{lstlisting}[caption=MSVC 2010,style=customasmx86]
+CONST	SEGMENT
+$SG3830	DB	'hello, world', 0AH, 00H
+CONST	ENDS
+PUBLIC	_main
+EXTRN	_printf:PROC
+; Function compile flags: /Odtp
+_TEXT	SEGMENT
+_main	PROC
+	push	ebp
+	mov	ebp, esp
+	push	OFFSET $SG3830
+	call	_printf
+	add	esp, 4
+	xor	eax, eax
+	pop	ebp
+	ret	0
+_main	ENDP
+_TEXT	ENDS
+\end{lstlisting}
+
+MSVC generuje listingi w syntaksie Intel.
+Różnica między syntaksą Intel a AT\&T będzie omówiona trochę później:
+
+Kompilator wygenerował plik \TT{1.obj}, który następnie będzie połączony konsolidatorem ( ang. linker) w \TT{1.exe}.
+W naszym przypadku ten plik składa się z dwóch segmentów: \TT{CONST} (dla danych-stałych) i \TT{\_TEXT} (dla kodu).
+
+\myindex{\CLanguageElements!const}
+\label{string_is_const_char}
+Linia \TT{hello, world} w \CCpp ma typ \TT{const char[]}\InSqBrackets{\TCPPPL p176, 7.3.2}, jednak nie posiada nazwy.
+Ale kompilator potrzebuje jakiejś nazwy, żeby z tą linią pracować, dlatego nadaje jej własną nazwę \TT{\$SG3830}.
+
+Dlatego ten przykład można by było zapisać w ten sposób:
+
+\lstinputlisting[style=customc]{patterns/01_helloworld/hw_2.c}
+
+Wróćmy do przykładu w asemblerze. Jak widać, linia się kończy bajtem zerowym~--- są to wymagania standardu \CCpp do linii.
+Więcej o liniach w \CCpp: \myref{C_strings}.
+
+W segmencie kodu \TT{\_TEXT} znajduje się na razie tylko jedna f-cja: \main{}.
+Funkcja \main, jak i prawie wszystkie funkcje, zaczyna się od prologu i kończy się epilogiem
+
+\myindex{x86!\Instructions!CALL}
+Dalej następuje wywołanie funkcji \printf{}: \INS{CALL \_printf}.
+\myindex{x86!\Instructions!PUSH}
+Przed tym wywołaniem adres linii (lub wskaźnik na nią) z naszym powiadomieniem (``Hello, world!'') za pomocą instrukcji \PUSH odkłada się na stos.
+
+Po tym jak funkcja \printf zwaraca zarządzanie do funkcji \main, adres linii (lub wskaźnik na nią) dalej jest na stosie.
+Z racji tego, że nie jest on już więcej potrzebny \glslink{stack pointer}{wskaźnik stosu} (rejestr \ESP) zostaje skorygowany.
+
+\myindex{x86!\Instructions!ADD}
+\INS{ADD ESP, 4} oznacza dodawanie wartości 4 do zawartości rejestru \ESP.
+
+Dlaczego 4? Z racji tego, że jest to kod 32-bitowy, do przekazania adresu potrzebujemy 4 bajtów. W x64 są to 8 bajtów.\\
+\INS{ADD ESP, 4} ekwiwalentnie \TT{POP rejestr}, ale bez wykorzystania jakiegokolwiek rejestru.
+
+\myindex{Intel C++}
+\myindex{\oracle}
+\myindex{x86!\Instructions!POP}
+
+Niektóre kompilatory, naprzykład, Intel C++ Compiler, w tej samej sytuacji mogą zamiast 
+\ADD wygenerować \TT{POP ECX} (podobne rzeczy można również spotkać, np, w kodzie \oracle{}, skompilowanym w nim samym),
+co jest w zasadzie tym samym, o tyle że wartość w rejestrze \ECX się psuje.
+Możliwe, że kompilator stosuje tu \TT{POP ECX}, dlatego że ta instrukcja jest krótsza (1 bajt w \TT{POP} kontra 3 w \TT{ADD}).
+
+Oto przykład wykorzystania \POP zamiast \ADD z \oracle{}:
+
+\begin{lstlisting}[caption=\oracle 10.2 Linux (plik app.o),style=customasmx86]
+.text:0800029A                 push    ebx
+.text:0800029B                 call    qksfroChild
+.text:080002A0                 pop     ecx
+\end{lstlisting}
+
+%Więcej informacji o stosie można znaleźć w odpowiednim rozdziale
+% ~(\myref{sec:stack}).
+\myindex{\CLanguageElements!return}
+Po wywołaniu \printf w kodzie w \CCpp wskazane \TT{return 0}~--- zwrócić 0 jako wynik f-cji \main.
+
+\myindex{x86!\Instructions!XOR}
+W kodzie wygenerowanym robi to instrukcja \\
+\INS{XOR EAX, EAX}.
+
+\myindex{x86!\Instructions!MOV}
+
+\XOR, jak można się domyśleć~--- \q{alternatywa wykluczająca}\footnote{\href{http://go.yurichev.com/17118}{wikipedia}}, ale kompilatory często korzystają z niego zamiast prostego
+\INS{MOV EAX, 0} --- znowu dlatego, że opcode jest krótszy (2 bajty w \XOR kontra 5 w \MOV).
+
+\myindex{x86!\Instructions!SUB}
+Niektóre kompilatory genrują \INS{SUB EAX, EAX}, co oznacza \IT{odjąć wartość w} \EAX \IT{od wartości w }\EAX, co w każdym przypadku da w wyniku końcowym 0.
+
+\myindex{x86!\Instructions!RET}
+Ostatnia instrukcja \RET zwraca zarządzanie do funkcji wywołującej. Zwykle jest to kod \CCpp \ac{CRT}, który zwróci zarządzanie do \ac{OS}.
+
+
