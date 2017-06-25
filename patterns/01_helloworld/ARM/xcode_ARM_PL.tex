@@ -1,0 +1,64 @@
+\subsubsection{\OptimizingXcodeIV (\ARMMode)}
+
+Xcode 4.6.3 bez włączonego trybu optymalizacji generuje za dużo zbędnego kodu, dlatego włączymy optymalizacje kodu (flaga \Othree).
+
+\begin{lstlisting}[caption=\OptimizingXcodeIV (\ARMMode),style=customasmARM]
+__text:000028C4             _hello_world
+__text:000028C4 80 40 2D E9   STMFD           SP!, {R7,LR}
+__text:000028C8 86 06 01 E3   MOV             R0, #0x1686
+__text:000028CC 0D 70 A0 E1   MOV             R7, SP
+__text:000028D0 00 00 40 E3   MOVT            R0, #0
+__text:000028D4 00 00 8F E0   ADD             R0, PC, R0
+__text:000028D8 C3 05 00 EB   BL              _puts
+__text:000028DC 00 00 A0 E3   MOV             R0, #0
+__text:000028E0 80 80 BD E8   LDMFD           SP!, {R7,PC}
+
+__cstring:00003F62 48 65 6C 6C+aHelloWorld_0  DCB "Hello world!",0
+\end{lstlisting}
+
+Instrukcje \TT{STMFD} i \TT{LDMFD} już są nam znane.
+
+\myindex{ARM!\Instructions!MOV}
+Instrukcja \MOV po prostu zapisuje liczbę \TT{0x1686} do rejestru \Reg{0}~--- jest to przesunięcie, wskazujące na linię \q{Hello world!}.
+
+Rejestr \Reg{7} (wg standardu \IOSABI) jest frame pointer, będzie to omawiane później.
+
+\myindex{ARM!\Instructions!MOVT}
+Instrukcja \TT{MOVT R0, \#0} (MOVe Top) zapisuje 0 do starszych 16 bitów rejestru.
+Rzecz polega na tym, że zwykła instrukcja \MOV w trybie ARM może zapisywać jakąkolwiek wartość tylko do młodszych 16 bitów rejestru, dlatego że nie można w niej zakodować więcej.
+Warto pamiętać, że w trybie ARM opcode wszystkich instrukcji mogą wynosić maksymalnie 32 bity. Oczywiście, nie jest to prawda dla przemieszczenia danych między rejestrami.
+
+Dlatego do zapisywania do starszych bitów (bity 16-31) istnieje dodatkowa instrukcja \INS{MOVT}.
+Tutaj, natomiast, jej wykorzystanie jest zbędne, jako że \INS{MOV R0, \#0x1686} i bez tego wyzerowało starszą część rejestru.
+Możliwe, że jest to niedociągnięcie kompilatora.
+% TODO:
+% I think, more specifically, the string is not put in the text section,
+% ie. the compiler is actually not using position-independent code,
+% as mentioned in the next paragraph.
+% MOVT is used because the assembly code is generated before the relocation,
+% so the location of the string is not yet known,
+% and the high bits may still be needed.
+
+\myindex{ARM!\Instructions!ADD}
+Instrukcja \TT{ADD R0, PC, R0} dodaje \ac{PC} do \Reg{0} żeby wyliczyć adres rzeczywisty linii \q{Hello world!}. Jak już wiemy, jest to \q{\PICcode}, dlatego taka korektywa jest niezbędna.
+
+Instrukcja \TT{BL} wywołuje \puts zamiast \printf.
+
+\label{puts}
+\myindex{\CStandardLibrary!puts()}
+\myindex{puts() zamiast printf()}
+Kompilator zamienia wywołanie \printf na \puts. 
+Rzeczywiście, \printf z jednym argumentem jest prawie analogiczne do \puts.
+ 
+\IT{Prawie}, jeśli założyć, że w linii nie będzie znaków sterujących \printf, 
+zaczynających się od znaku procentu. Wtedy wyniki pracy tych dwóch f-cji będą różne
+\footnote{Należy również zauważyć, że \puts nie potrzebuje znaku nowej linii `\textbackslash{}n',
+dlatego jego tu nie ma.}.
+
+Po co kompilator zamienił wywołanie jednej f-cji na inną? Prawdopodobnie, dlatego że \puts jest szybsze
+\footnote{\href{http://go.yurichev.com/17063}{ciselant.de/projects/gcc\_printf/gcc\_printf.html}}. 
+Najwidoczniej, dlatego że \puts wyprowadza symbole na \gls{stdout} nie porównując każdy ze znakiem procentu.
+
+Dalej jest już znana instrukcja \TT{MOV R0, \#0}, ustawiająca 0 jako wartość zwracaną.
+
+
