@@ -1,7 +1,7 @@
 _TEXT	SEGMENT
-_a$ = 8		; size = 4
-_b$ = 12	; size = 4
-_c$ = 16	; size = 4
+_a$ = 8		; taille = 4
+_b$ = 12	; taille = 4
+_c$ = 16	; taille = 4
 _f	PROC
 	push	ebp
 	mov	ebp, esp
@@ -15,9 +15,9 @@ _f	ENDP
 _main	PROC
 	push	ebp
 	mov	ebp, esp
-	push	3 ; 3rd argument
-	push	2 ; 2nd argument
-	push	1 ; 1st argument
+	push	3 ; 3ème argument
+	push	2 ; 2ème argument
+	push	1 ; 1er argument
 	call	_f
 	add	esp, 12
 	push	eax
