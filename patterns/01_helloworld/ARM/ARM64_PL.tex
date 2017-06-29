@@ -9,34 +9,34 @@ Skompilujmy przykład w GCC 4.8.1 dla ARM64:
 W ARM64 nie ma trybów Thumb i Thumb-2, tylko ARM, dlatego tu korzystamy tylko z 32-bitowych instrukcji.
 
 Jest tu dwa razy więcej rejestrów: \myref{ARM64_GPRs}.
-64-bitowe rejsetry mają prefiks 
+64-bitowe rejestry mają prefiks 
 \TT{X-}, a ich 32-bitowe części --- \TT{W-}.
 
 \myindex{ARM!\Instructions!STP}
 Instrukcja \TT{STP} (\IT{Store Pair}) 
 odkłada na stos od razu 2 rejestry: \RegX{29} i \RegX{30}.
-Oczywiście, ta instrukcja może zapisać tę parę rejestrów gdziekolwiek w pamięci, ale tu jest ukazany rejestr \ac{SP}, także ta para jest odkładana na stos.
+Oczywiście, ta instrukcja może zapisać tę parę rejestrów gdziekolwiek w pamięci, ale tu jest wskazany rejestr \ac{SP}, także ta para jest odkładana na stos.
 
-Rejestry w ARM64 są 64-bitowe, każdy o długości 8 bajt, dlatego do przechowywania 2 rejestrów potrzeba 16 bajtów.
+Rejestry w ARM64 są 64-bitowe, każdy o długości 8 bajtów, dlatego do przechowywania 2 rejestrów potrzeba 16 bajtów.
 
 Wykrzyknik (``!'') po operandzie oznacza, że najpierw od \ac{SP} będzie odjęte 16 i dopiero po tej czynności wartości z obu rejestrów będą odłożone na stos.
 
-Na to się mówi \IT{pre-index}.
+Jest to nazywane \IT{pre-index}.
 Więcej o róznicy między \IT{post-index} a \IT{pre-index} 
 można znaleźć tu: \myref{ARM_postindex_vs_preindex}.
 
 W ten sposób, posługując się terminologią x86, pierwsza instrukcja~--- jest analogiczna do \TT{PUSH X29} i \TT{PUSH X30}.
 \RegX{29} w ARM64 jest wykorzystywane jako \ac{FP}, a \RegX{30} 
-jako \ac{LR}, dlatego one są zapisywane w prologu funkcji.
+jako \ac{LR}, dlatego są one zapisywane w prologu funkcji.
 
 Druga instrukcja kopiuje \ac{SP} do \RegX{29} (lub \ac{FP}).
 Jest to niezbędne do ustawienia stack frame funkcji.
 
 \label{pointers_ADRP_and_ADD}
 \myindex{ARM!\Instructions!ADRP/ADD pair}
-Instrukcje \TT{ADRP} i \ADD są potrzebne do sformowania adresu linii \q{Hello!} w rejestrze \RegX{0}, 
+Instrukcje \TT{ADRP} i \ADD są potrzebne do skonstruowania adresu linii \q{Hello!} w rejestrze \RegX{0}, 
 jako że pierwszy argument f-cji jest przekazywany przez ten rejestr.
-Ale w ARM nie ma instrukcji, za pomocą których można zapisać do rejestru dużą liczbę 
+Jednakże w ARM nie ma instrukcji, za pomocą których można zapisać do rejestru dużą liczbę 
 (dlatego że długość instrukcji wynosi maksymalnie 4 bajty. Więcej informacji o tym można znaleźć tutaj: \myref{ARM_big_constants_loading}).
 Dlatego trzeba skorzystać z kilku instrukcji.
 Pierwsza instrukcja (\TT{ADRP}) zapisuje do \RegX{0} adres 4-kB strony, na której się znajduje linia, 
@@ -57,9 +57,9 @@ Instrukcja \MOV zapisuje 0 do \RegW{0}.
 Wynik funkcji jest zwracany przez \RegX{0}, i \main zwraca 0.
 
 Dlaczego 32-bitowa część?
-Dletgo że w ARM64, jak i w x86-64, typ \Tint zostawili 32-bitowym, dla kompatybilności.
+Dlatego że w ARM64, jak i w x86-64, typ \Tint zostawili 32-bitowym, dla kompatybilności.
 
-Odpowiednio, jako że funkcja zwraca 32-bitowy \Tint, to gtrzeba wypełnić tylko młodsze 32 bity 64-bitowego rejestru \RegX{0}.
+Odpowiednio, jako że funkcja zwraca 32-bitowy \Tint, to trzeba wypełnić tylko młodsze 32 bity 64-bitowego rejestru \RegX{0}.
 
 Żeby mieć pewność, trochę zmienimy przykład i skompilujemy go ponownie.%
 
@@ -87,12 +87,12 @@ Następnie za pomocą instrukcji \INS{LDP} (\IT{Load Pair}) są przywracane reje
 
 Wykrzyknika po instrukcji brak. To oznacza, że najpierw wartości są zdejmowane ze stosu, i dopiero po tej czynności \ac{SP} jest zwiększane o 16.
 
-Na to się mówi \IT{post-index}.
+Jest to nazywane \IT{post-index}.
 
 \myindex{ARM!\Instructions!RET}
 W ARM64 pojawia się nowa instrukcja: \RET. 
 Ona działa tak samo jak i \INS{BX LR}, ale zawiera bit ,
-który podpowiada procesorowi, że jest to wyjście z f-cji, a nie zwykłe przejście, żeby procesor mogł zoptymalizować tę instrukcję.
+który podpowiada procesorowi, że jest to wyjście z f-cji, a nie zwykłe przejście, żeby procesor mógł zoptymalizować tę instrukcję.
 
 Jako że ta funkcja jest bardzo prosta, optymalizujący GCC generuje dokładnie taki sam kod.
 
