@@ -17,7 +17,7 @@
 ; załadować adres linii tekstowej:
 .text:0000001C                 lui     $v0, (aHelloWorld >> 16)  # "Hello, world!"
 .text:00000020                 addiu   $a0, $v0, (aHelloWorld & 0xFFFF)  # "Hello, world!"
-; załadować adres f-cji puts() korzystając z GP:
+; załadować adres f-cji puts(), korzystając z GP:
 .text:00000024                 lw      $v0, (puts & 0xFFFF)($gp)
 .text:00000028                 or      $at, $zero ; NOP
 ; wywołać puts():
@@ -28,7 +28,7 @@
 .text:00000038                 lw      $gp, 0x20+var_10($fp)
 ; ustawić rejestr $2 ($V0) na zero:
 .text:0000003C                 move    $v0, $zero
-; epilog dunkcji.
+; epilog funkcji.
 ; przywrócić SP:
 .text:00000040                 move    $sp, $fp
 ; przywrócić RA:

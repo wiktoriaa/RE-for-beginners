@@ -19,7 +19,7 @@ Otrzymamy (w \IDA):
 .text:00000304 68 65 6C 6C+aHelloWorld  DCB "hello, world",0    ; DATA XREF: main+2
 \end{lstlisting}
 
-Od razu rzucają się w oczy (16-bitowe) opcode --- jest to, jak już było powiedziane, Thumb.
+Od razu można zauważyć (16-bitowe) opcode --- jest to, jak już było powiedziane, Thumb.
 
 \myindex{ARM!\Instructions!BL}
 Oprócz instrukcji \TT{BL}.
@@ -47,15 +47,15 @@ Dlatego pierwsza 16-bitowa instrukcja ładuje starsze 10 bitów przesunięcia, a
 % In this case, though, the new program counter can only be 1M away,
 % because of the highest bit is used for the sign.
 
-jak już było powiedziane, wszystkie instrukcje w Thumb-trybie są 2 bajtowe (lub 16 bitowe).
+jak już było powiedziane, wszystkie instrukcje w trybie Thumb są 2 bajtowe (lub 16 bitowe).
 Dlatego sytuacja, w której Thumb-instrukcja zaczyna się pod adresem nieparzystym, jest niemożliwa.
 
-Wniosek z tego jest taki, że ostatni bit adresu można nie kodować.
+Wniosek z tego jest taki, że ostatniego bitu adresu można nie kodować.
 W ten sposób, w Thumb-instrukcji \TT{BL} można zakodować adres $current\_PC \pm{}\approx{}2M$.
 
 \myindex{ARM!\Instructions!PUSH}
 \myindex{ARM!\Instructions!POP}
-Reszta instrukcji w funkcji (\PUSH i \POP) tutaj działają prawie tak samo, jak i opisane wyżej \TT{STMFD}/\TT{LDMFD}, tyle że rejestr \ac{SP} tu nie jest ukazany w sposób jawny.
+Reszta instrukcji w funkcji (\PUSH i \POP) działa prawie tak samo, jak i opisane wyżej \TT{STMFD}/\TT{LDMFD}, tyle że rejestr \ac{SP} nie jest tu wskazany w sposób jawny.
 \INS{ADR} działa dokładnie tak samo, jak i w poprzednim przykładzie.
 \INS{MOVS} zapisuje wartość 0 do rejestru \Reg{0}, żeby f-cja zwróciła zero.
 

@@ -40,7 +40,7 @@ W ten sposób bajty są wypisywane w listingach IDA:
 \begin{itemize}
 \item dla trybów ARM i ARM64: 4-3-2-1;
 \item dla trybu Thumb: 2-1;
-\item dla pary 16-bitowych instrukcji w trybi Thumb-2: 2-1-4-3.
+\item dla pary 16-bitowych instrukcji w trybie Thumb-2: 2-1-4-3.
 \end{itemize}
 
 \myindex{ARM!\Instructions!MOVW}
@@ -81,12 +81,12 @@ Program rozruchowy ładuje niezbędne moduły i, iterując po symbolach zaimport
 W naszym przypadku, \IT{\_\_imp\_\_puts} 
 jest zmienną 32-bitową, gdzie program rozruchowy wpiszę adres rzeczywisty tej f-cji w bibliotece zewnętrznej. 
 Czyli instrukcja \TT{LDR} po prostu bierze 32-bitową wartość z tej zmiennej, i, zapisując ją do rejestru \ac{PC}, przekazuje tam zarządzanie.
-Żeby zmniejszyć czas działania programu rozruchowego, trzeba, żeby adres się zapisywał tylko raz do specjalnie przydzielonego miejsca.
+Żeby zmniejszyć czas działania programu rozruchowego, trzeba sprawić aby adres zapisywał się tylko raz do specjalnie przydzielonego miejsca.
 
 \myindex{thunk-функции}
 Do tego, jak się już upewniliśmy, zapisywanie 32-bitowej liczby do rejestru jest niemożliwe bez odwoływań się do pamięci.
 Także najbardziej optymalnym rozwiązaniem jest przydzielenie osobnej f-cji, pracującej w trybie ARM, 
-jedynym celem której jest przekazywanie zarządzania dalej, do bbilioteki dynamicznie łączonej, i, następnie, odwoływanie się do tej któtkiej f-cji (tzw \glslink{thunk function}{thunk-funkcja}) z Thumb-kodu.
+jedynym celem której jest przekazywanie zarządzania dalej, do bilioteki dynamicznie łączonej, a następnie, odwoływanie się do tej któtkiej f-cji (tzw \glslink{thunk function}{thunk-funkcja}) z Thumb-kodu.
 
 \myindex{ARM!\Instructions!BL}
 A propos, w poprzednim przykładzie (skompilowanym dla trybu ARM), przejście za pomocą instrukcji \TT{BL} prowadzi 
