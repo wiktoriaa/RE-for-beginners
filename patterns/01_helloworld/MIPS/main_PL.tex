@@ -1,0 +1,134 @@
+\subsection{MIPS}
+
+\subsubsection{O \q{wskaźniku globalnym} (\q{global pointer})}
+\label{MIPS_GP}
+
+\myindex{MIPS!\GlobalPointer}
+\q{Wskaźnik globalny} (\q{global pointer})~--- jest bardzo ważną koncepcją MIPS.
+Jak już wiemy, każda instrukcja w MIPS ma długość 32 bity, dlatego kodowanie 32-bitowego adresu w jednej instrukcji nie jest możliwe. Zamiast tego trzeba wykorzystać parę instrukcji
+(jak to zrobił GCC dla załadowania adresu linii tekstowej w naszym przykładzie).
+Z innej strony, korzystając tylko z jednej instrukcji, 
+można ładować dane do adresów w granicach $register-32768...register+32767$, dlatego że 16 bitów
+przesunięcia można zakodować w jednej instrukcji).
+Także możemy przydzielić jakiś rejestr do tych celów i jeszcze bufor 64KiB dla najczęściej wykorzystywanych danych.
+Przydzielony rejestr nazywamy \q{wskaźnikiem globalnym} (\q{global pointer}) i wskazuje on na środek buforu 64KiB.
+Ten bufor zwykle zawiera zmienne globalne oraz adresy funkcji importowanych typu \printf,
+dlatego że deweloperzy GCC stwierdzili, że dostęp do adresu funkcji musi być jak najszybszy,
+wykonywany jako jedna instrukcja zamiast dwóch.
+W ELF-pliku ten 64KiB-bufor znajduje się po części w segmencie .sbss (\q{small \ac{BSS}}) dla danych niezainicjalizowanych i w segmencie .sdata (\q{small data}) dla danych zainicjalizowanych.
+To oznacza, że programista może wybierać, do czego potrzebuje szybszego dostępu, i następnie rozmieścić to
+w segmentach .sdata/.sbss.
+Niektórzy \q{old-school} programiści mogą pamiętać model pamięci w MS-DOS \myref{8086_memory_model} 
+lub w menadżerach pamięci typu XMS/EMS, gdzie cała pamięć była podzielona na bloki po 64KiB długości.
+
+\myindex{PowerPC}
+Ta koncepcja jest stosowana nie tylko w MIPS. Jeszcze co najmniej PowerPC również korzysta z tej techniki.
+
+\subsubsection{\Optimizing GCC}
+
+Popatrzmy na następujący przykład, realizujący koncepcję \q{wskaźnika globalnego}.
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),numbers=left,style=customasmMIPS]{patterns/01_helloworld/MIPS/hw_O3_PL.s}
+
+Jak widać, rejestr \$GP w prologu funkcji wystawia się na środek tego obszaru.
+Rejestr \ac{RA} jest odkładany na stos lokalny.
+Tutaj kompilator również skorzystał z \puts zamiast \printf.
+\myindex{MIPS!\Instructions!LW}
+Adres funkcji \puts jest ładowany do \$25 za pomocą instrukcji \INS{LW} (\q{Load Word}).
+\myindex{MIPS!\Instructions!LUI}
+\myindex{MIPS!\Instructions!ADDIU}
+Następnie adres linii tekstowej jest ładowany do \$4 za pomocą pary instrukcji \INS{LUI} (\q{Load Upper Immediate}) i
+\INS{ADDIU} (\q{Add Immediate Unsigned Word}).
+\INS{LUI} ustawia starsze 16 bitów rejestru (dlatego w nazwie jest obecne \q{upper}) i \INS{ADDIU}
+dodaje młodsze 16 bitów do adresu.
+\INS{ADDIU} idzie za \INS{JALR} (pamiętając o \IT{branch delay slots}).
+Rejestr \$4 także jest nazywany \$A0, który jest wykorzystywany do przekazywania pierwszego argumentu funkcji
+\footnote{Tablica rejestrów MIPS jest dostępna w dodatku \myref{MIPS_registers_ref}}.
+\myindex{MIPS!\Instructions!JALR}
+\INS{JALR} (\q{Jump and Link Register}) robi przejście wg adresu zawartego w \$25 (tam się znajduje adres \puts) 
+jednocześnie zapisując adres następnej instrukcji (\INS{LW}) w \ac{RA}.
+Wygląda to tak samo jak w ARM.
+I jeszcze jedna bardzo ważna rzecz: adres zapisywany do \ac{RA} nie jest adresem następnej instrukcji (dlatego, że jest to
+\IT{delay slot} i wykonuje się przed instrukcją przejścia),
+a instrukcji następującej po \IT{delay slot}.
+W ten sposób podczas wykonania \INS{JALR} do \ac{RA} jest zapisywane $PC + 8$.
+W naszym wypadku jest to adres instrukcji \INS{LW} kolejnej po \INS{ADDIU}.
+
+\INS{LW} (\q{Load Word}) w linii 20 przywraca \ac{RA} ze stosu lokalnego (ta instrukcja jest raczej częścią epilogu f-cji).
+
+\myindex{MIPS!\Pseudoinstructions!MOVE}
+\INS{MOVE} w linii 22 kopiuje wartość z \$0 (\$ZERO) do \$2 (\$V0).
+
+\label{MIPS_zero_register}
+W MIPS istnieje rejestr dla stałych, zawsze zawierający zero.
+Możliwe, że deweloperzy MIPS stwierdzili, że 0 jest stałą w programowaniu z największym zapotrzebowaniem,
+także niech rejestr \$0, będzie wykorzystywany za każdym razem, kiedy będzie potrzebne 0.
+Inna ciekawostka: w MIPS nie ma instrukcji, kopiującej wartość z rejestru do rejestru.
+Naprawdę, \TT{MOVE DST, SRC} to \TT{ADD DST, SRC, \$ZERO} ($DST=SRC+0$), która robi to samo.
+Najwidoczniej, twórcy MIPS chcieli stworzyć jak najbardziej zwięzłą tablicę opcode'ów.
+To wcale nie znaczy, że dodawanie jest wykonywane podczas każdej instrukcji \INS{MOVE}.
+Prawdopodobnie, te pseudo-instrukcje są optymalizowane w \ac{CPU} i \ac{ALU} nigdy nie jest wykorzystywane.
+
+\myindex{MIPS!\Instructions!J}
+\INS{J} w linii 24 robi przejście pod adres w \ac{RA}, i to działa jako wyjście z funkcji.
+\INS{ADDIU} po \INS{J} wprawdzie jest wykonywane przed \INS{J} (\IT{branch delay slots}?) 
+jest to częścią epilogu funkcji.
+
+To jest listing wygenerowany w \IDA. Każdy rejestr posiada swoją pseudonazwę:
+
+\lstinputlisting[caption=\Optimizing GCC 4.4.5 (\IDA),numbers=left,style=customasmMIPS]{patterns/01_helloworld/MIPS/hw_O3_IDA_PL.lst}
+
+Instrukcja w linii 15 odkłada GP na lokalny stos. Ta instrukcja w dziwny sposób nie jest obecna na listingu GCC, możliwe, że jest to spowodowane błędem w samym GCC\footnote{Najwidoczniej, f-cja wygenerowania listingów nie jest krytyczna
+dla użytkowników GCC, dlatego tam mogą być obecne niepoprawione błędy.}.
+Wartość GP musi być zapisana, dlatego że każda funkcjamoże pracować ze swoim własnym obszarem danych o długości 64KiB.
+Rejestr, zawierający adres \puts to \$T9, dlatego że rejestry z prefiksem T- nazywają się
+\q{temporaries} i ich zawartości można nie zapisywać.
+
+\subsubsection{\NonOptimizing GCC}
+
+\NonOptimizing GCC generuje większy objętościowo kod.
+
+\lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (\assemblyOutput),numbers=left,style=customasmMIPS]{patterns/01_helloworld/MIPS/hw_O0_PL.s}
+
+Widzimy, że FP jest wykorzystywany jako frame pointer.
+Również widzimy 3 instrukcje \ac{NOP}.
+Drugi i trzeci \ac{NOP} występują po instrukcjach skoku.
+Najwidoczniej, kompilator GCC zawsze dodaje \ac{NOP}-y (przez \IT{branch delay slots})
+po instrukcjach skoku i następnie, jeśli optymalizacja jest włączona, może się od nich pozbywać.
+Także one tutaj zostały.
+
+Jeszcze jeden listing w \IDA:
+
+\lstinputlisting[caption=\NonOptimizing GCC 4.4.5 (\IDA),numbers=left,style=customasmMIPS]{patterns/01_helloworld/MIPS/hw_O0_IDA_PL.lst}
+
+\myindex{MIPS!\Pseudoinstructions!LA}
+Ciekawe, że \IDA zebrała parę instrukcji \INS{LUI}/\INS{ADDIU} w jedną pseudoinstrukcję 
+\INS{LA} (\q{Load Address}) w linii 15.
+Również widzimy, że długość tej pseudoinstrukcji to 8 bajt!
+Jest to pseudoinstrukcja (lub \IT{makro}), dlatego że nie jest to typowa instrukcja MIPS, a raczej wygodna nazwa zbiorowa dla tych dwóch instrukcji.
+
+\myindex{MIPS!\Pseudoinstructions!NOP}
+\myindex{MIPS!\Instructions!OR}
+Jeszcze coś: \IDA nie rozpoznała \ac{NOP}-instrukcje w liniach 22, 26 i 41.
+
+Jest to \TT{OR \$AT, \$ZERO}.
+Generalnie, jest to instrukcja \IT{LUB} stosowana do zawartości rejestru \$AT z zerem,
+co, oczywiście, jest pustą instrukcją.
+MIPS, jak i inne \ac{ISA}, nie posiada oddzielnej \ac{NOP}-instrukcji.
+
+\subsubsection{Rola stack frame w tym przykładzie}
+
+Adres linii tekstowej jest przekazywany przez rejestr.
+Po co w takim razie ustawiać stos lokalny?
+Dzieje się tak dlatego, że wartości rejestrów \ac{RA} i GP muszą być gdzieś zapisane
+(dlatego że jest wywoływane \printf) i po to się korzysta ze stosu lokalnego.
+
+Gdyby to była \gls{leaf function}, to wtedy można by było pozbyć prologu i epilogu funkcji. Na przykład:
+ \myref{MIPS_leaf_function_ex1}.
+
+\subsubsection{\Optimizing GCC: załadujemy do GDB}
+
+\myindex{GDB}
+\lstinputlisting[caption=przykład sesji w GDB]{patterns/01_helloworld/MIPS/O3_GDB.txt}
+
+
