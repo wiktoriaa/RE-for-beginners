@@ -1,0 +1,106 @@
+\section{\Stack}
+\label{sec:stack}
+\myindex{\Stack}
+
+Stos w informatyce~--- to jedna z najbardziej fundamentalnym struktur danych
+\footnote{\href{http://go.yurichev.com/17119}{wikipedia.org/wiki/Call\_stack}}.
+\ac{AKA} \ac{LIFO}.
+
+Technicznie jest to tylko blok pamięci w pamięci procesora + rejestr \ESP w x86 lub \RSP w x64, lub \ac{SP} w ARM, który wskazuje gdzieś w granicach tego bloku.
+
+\myindex{ARM!\Instructions!PUSH}
+\myindex{ARM!\Instructions!POP}
+\myindex{x86!\Instructions!PUSH}
+\myindex{x86!\Instructions!POP}
+Najczęsciej wykorzystywanymi instrukcjami do operowania na stosie są \PUSH i \POP (w x86 i Thumb-trybie ARM). 
+\PUSH zmniejsza \ESP/\RSP/\ac{SP} o 4 w trybie 32-bitowym (lub o 8 w 64-bitowym),
+następnie zapisuje pod adres, na który wskazuje \ESP/\RSP/\ac{SP}, zawartość swojego operandu.
+
+\POP jest operacją wsteczną~--- najpierw wyjmuje ze \glslink{stack pointer}{wskaźnika stosu} wartość i umieszcza ją do operandu 
+(który często jest rejestrem) i następnie zwiększa wskaźnik o 4 (lub 8).
+
+Na samym początku \glslink{stack pointer}{rejestr-wskaźnik} wskazuje na koniec stosu.
+Koniec stosu znajduje się na początku bloku pamięci, przeznaczonego na stos. Jest to dziwne, ale tak już jest.
+\PUSH zmniejsza \glslink{stack pointer}{rejestr-wskaźnik}, а \POP~--- zwiększa.
+
+W procesorze ARM jest wsparcie dla stosów zarówno rosnących w dół, jak i rosnącyh w górę.
+
+\myindex{ARM!\Instructions!STMFD}
+\myindex{ARM!\Instructions!LDMFD}
+\myindex{ARM!\Instructions!STMED}
+\myindex{ARM!\Instructions!LDMED}
+\myindex{ARM!\Instructions!STMFA}
+\myindex{ARM!\Instructions!LDMFA}
+\myindex{ARM!\Instructions!STMEA}
+\myindex{ARM!\Instructions!LDMEA}
+
+Na przykład, instrukcje \ac{STMFD}/\ac{LDMFD}, \ac{STMED}/\ac{LDMED} są przeznaczone dla descending-stosu (rośnie do tyłu, zaczynając od adresów high, do adresów low).\\
+Instrukcje \ac{STMFA}/\ac{LDMFA}, \ac{STMEA}/\ac{LDMEA}, natomiast, są przeznaczone dla ascending-stosu (rośnie do przodu, zaczynając od low-adresów, kończąc na high-adresach).
+
+% It might be worth mentioning that STMED and STMEA write first,
+% and then move the pointer,
+% and that LDMED and LDMEA move the pointer first, and then read.
+% In other words, ARM not only lets the stack grow in a non-standard direction,
+% but also in a non-standard order.
+% Maybe this can be in the glossary, which would explain why E stands for "empty".
+
+\subsection{Dlaczego stos rośnie wstecznie?}
+\label{stack_grow_backwards}
+
+Intuicyjnie moglibyśmy pomyśleć, że, jak i każda inna struktura danych, stos mogłby rosnąć do przodu, tzn w kierunku zwiększenia adresów.
+
+Przyczyna, dlaczego stos rośnie do tyłu, jest najwidoczniej ukryta w historii.
+Kiedy komputery były duże i zajmowały cały pokój, można było bardzo łatwo rozdzielić segment na dwa obszary: dla \glslink{heap}{kopca} i dla stosu.
+Z góry nie było wiadomo, jak dużym może być \glslink{heap}{kopiec} lub stos, dlatego takie rozwiązanie było najbardziej logicznym.
+
+\input{patterns/02_stack/stack_and_heap}
+
+W \RitchieThompsonUNIX można przeczytać:
+
+\begin{framed}
+\begin{quotation}
+The user-core part of an image is divided into three logical segments. The program text segment begins at location 0 in the virtual address space. During execution, this segment is write-protected and a single copy of it is shared among all processes executing the same program. At the first 8K byte boundary above the program text segment in the virtual address space begins a nonshared, writable data segment, the size of which may be extended by a system call. Starting at the highest address in the virtual address space is a stack segment, which automatically grows downward as the hardware's stack pointer fluctuates.
+\end{quotation}
+\end{framed}
+
+To trochę przypomina podejście studenta,
+który piszę dwie osobne lektury w jednym zeszycie:
+pierwsza lektura jest pisana jak zwykle od początku zeszytu, a druga jest pisana od końca zeszytu.
+Lektury mogą się "spotkać" gdzieś na środku zeszytu, jeśli zabraknie miejsca.
+
+% I think if we want to expand on this analogy,
+% one might remember that the line number increases as as you go down a page.
+% So when you decrease the address when pushing to the stack, visually,
+% the stack does grow upwards.
+% Of course, the problem is that in most human languages,
+% just as with computers,
+% we write downwards, so this direction is what makes buffer overflows so messy.
+
+\subsection{Do jakich celów służy stos?}
+
+% subsections
+\input{patterns/02_stack/01_saving_ret_addr}
+\input{patterns/02_stack/02_args_passing}
+\EN{\input{patterns/02_stack/03_local_vars_EN}}
+\RU{\input{patterns/02_stack/03_local_vars_RU}}
+\PTBR{\input{patterns/02_stack/03_local_vars_PTBR}}
+\input{patterns/02_stack/04_alloca/main}
+\input{patterns/02_stack/05_SEH}
+\input{patterns/02_stack/06_BO_protection}
+
+\subsubsection{Automatyczne zwalnianie danych na stosie}
+
+Możliwe, że na stosie są przechowywane zmienne lokalne i SEH-wpisy dlatego, że po wyjściu z funkcji, wszystkie te dane są zwalniane automatycznie,
+korzystając tylko z jednej instrukcji przesunięcia wskaźnika stosu (często jest to \ADD).
+Argumenty funkcji, można powiedzieć, też są zwalniane automatycznie na końcu funkcji.
+Natomiast wszystko co jest przechowywane w kopcu(\IT{heap}) trzeba zwalniać jawnie.
+
+% sections
+\EN{\input{patterns/02_stack/07_layout_EN}}
+\RU{\input{patterns/02_stack/07_layout_RU}}
+\PTBR{\input{patterns/02_stack/07_layout_PTBR}}
+\PL{\input{patterns/02_stack/07_layout_PL}}
+\input{patterns/02_stack/08_noise/main}
+\input{patterns/02_stack/exercises}
+
+
