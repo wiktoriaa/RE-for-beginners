@@ -17,7 +17,7 @@ Software Customization [ASP] Version 3.5 Feb. 2000
 It's downloadable here: \url{https://github.com/dennis714/RE-for-beginners/blob/master/ff/XOR/mask_1/files/newcastle.tgz}.
 
 There is a file inside (named \IT{castle.dbf}) which is clearly encrypted, but not by a real crypto algorithm, nor it's compressed, this is something rather simpler.
-I wouldn't even measure entropy level (\myref{entropy}) of the file.
+I wouldn't even measure entropy level (\myref{entropy}) of the file, because I'm sure it's low.
 Here is how it looks like in Midnight Commander:
 
 \begin{figure}[H]
@@ -32,7 +32,8 @@ The encrypted file can be downloaded here:
 Will it be possible to decrypt it without accessing to the program, using just this file?
 
 There is a clearly visible pattern of repeating string.
-If a simple encryption by XOR mask was applied, such repeating strings is a prominent signature, because, probably, there were a long lacunas of zero bytes,
+If a simple encryption by XOR mask was applied, such repeating strings is a prominent signature,
+because, probably, there were a long lacunas of zero bytes,
 which, in turn, are present in many executable files as well as in binary data files.
 
 \myindex{UNIX!xxd}
@@ -40,15 +41,15 @@ Here I'll dump the file's beginning using \IT{xxd} UNIX utility:
 
 \lstinputlisting{ff/XOR/mask_1/xxd_result.txt}
 
-Let's stick at visible repeating \q{iubgv} string.
+Let's stick at visible repeating \TT{iubgv} string.
 By looking at this dump, we can clearly see that the period of the string occurrence is 0x51 or 81.
 Probably, 81 is size of block?
-Size of the file is 1658961, and it can be divided evenly by 81 (and there are 20481 blocks then).
+The size of the file is 1658961, and it can be divided evenly by 81 (and there are 20481 blocks then).
 
 Now I'll use Mathematica to analyze, are there repeating 81-byte blocks in the file?
 I'll split input file by 81-byte blocks and then I'll use 
 \IT{Tally[]}\footnote{\url{https://reference.wolfram.com/language/ref/Tally.html}}
-function which just calculates, how many times some item has been occurred in the input list.
+function which just counts, how many times some item has been occurred in the input list.
 Tally's output is not sorted, so I also add \IT{Sort[]} function to sort it by number of occurrences in descending order.
 
 \begin{lstlisting}[style=custommath]
@@ -109,13 +110,14 @@ And here is output:
    30, 122, 2, 117}, 1}}
 \end{lstlisting}
 
-Tally's output is list pairs, each pair has 81-byte block and number of times it has been occurred in the file.
+Tally's output is a list of pairs, each pair has 81-byte block and number of times it has been occurred in the file.
 We see that the most frequent block is the first, it has been occurred 1739 times.
 The second one has been occurred 1422 times. There are others: 1012 times, 377 times, etc.
 81-byte blocks which has been occurred just once are at the end of output.
 
-Let's try to compare these blocks? The first and the second?
-Is there a function in Mathematica which compares lists/arrays? Certainly is, but for educational purposes, I'll use XOR operation for comparison.
+Let's try to compare these blocks. The first and the second.
+Is there a function in Mathematica which compares lists/arrays?
+Certainly is, but for educational purposes, I'll use XOR operation for comparison.
 Indeed: if bytes in two input arrays are identical, XOR result is 0. If they are non-equal, result will be non-zero.
 
 Let's compare first block (occurred 1739 times) and the second (occurred 1422 times):
@@ -130,7 +132,7 @@ Out[]= {0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
 
 They are differ only in the second byte.
 
-Let's compare second (occurred 1422 times) and third (occurred 1012 times):
+Let's compare the second block (occurred 1422 times) and the third (occurred 1012 times):
 
 \begin{lstlisting}[style=custommath]
 In[]:= BitXor[stat[[2]][[1]], stat[[3]][[1]]]
@@ -195,9 +197,11 @@ Out[]= {" ", "f", "H", "O", " ", "K", "N", "O", "W", "S", " ", \
 
 (I've replaced unprintable characters by \q{?}.)
 
-So we see that first and third blocks are empty (or almost empty), but second and fourth has clearly visible English language words/phrases.
+So we see that the first and the third blocks are empty (or almost empty),
+but the second and the fourth has clearly visible English language words/phrases.
 It seems that our assumption about key is correct (at least partially).
-This means that the most occurred 81-block in the file can be found at places of lacunas of zero bytes or something like that.
+This means that the most occurred 81-byte block in the file can be found at places of lacunas
+of zero bytes or something like that.
 
 Let's try to decrypt the whole file:
 
@@ -217,8 +221,9 @@ Close["/home/dennis/.../tmp"]
 \caption{Decrypted file in Midnight Commander, 1st attempt}
 \end{figure}
 
-Looks like some kind of English phrases for some game, but something wrong.
-First of all, cases are inverted: phrases and some words are started with lowercase characters, while other characters are in upper case.
+Looks like some kind of English phrases from some game, but something wrong.
+First of all, cases are inverted: phrases and some words are started with lowercase characters,
+while other characters are in upper case.
 Also, some phrases started with wrong letters.
 Take a look at the very first phrase: \q{eHE WEED OF CRIME BEARS BITTER FRUIT}.
 What is \q{eHE}? Isn't \q{tHE} have to be here?
@@ -251,9 +256,9 @@ Out[]= {0, 101, 72, 69, 0, 87, 69, 69, 68, 0, 79, 70, 0, 67, 82, \
 0, 0, 0, 0}
 \end{lstlisting}
 
-Encrypted byte is 2, byte from key is 103, $2 \oplus 103=101$ and 101 is ASCII code for \q{e} character.
-What byte a key must be equal to, so the resulting ASCII code will be 116 (for \q{t} character)?
-$2 \oplus 116=118$, let's put 118 in key at the second byte...
+Encrypted byte is 2, the byte from the key is 103, $2 \oplus 103=101$ and 101 is ASCII code for \q{e} character.
+What byte of a key must be equal to, so the resulting ASCII code will be 116 (for \q{t} character)?
+$2 \oplus 116=118$, let's put 118 in key at the second byte \dots
 
 \begin{lstlisting}[style=custommath]
 key = {80, 118, 2, 116, 113, 102, 118, 25, 99, 8, 19, 23, 116, 125, 
@@ -281,7 +286,8 @@ Maybe our key is still incorrect?
 While observing ASCII table in Wikipedia article\footnote{\url{https://en.wikipedia.org/wiki/ASCII}}
 we can notice that uppercase and lowercase letter's ASCII codes are differ in just one bit
 (6th bit starting at 1st, 0b100000).
-This bit in decimal form is 32... 32? But 32 is ASCII code for space!
+This bit in decimal form is 32 \dots 32?
+But 32 is ASCII code for space!
 
 Indeed, one can switch case just by XOR-ing ASCII character code with 32.
 
@@ -311,18 +317,20 @@ Let's decrypt the input file again:
 
 (Decrypted file is available here:
 \url{https://github.com/dennis714/RE-for-beginners/blob/master/ff/XOR/mask_1/files/decrypted.dat.bz2}.)
+
 This is undoubtedly a correct source file.
 Oh, and we see numbers at the start of each block. It has to be a source of our erroneous XOR key.
 As it seems, the most occurred 81-byte block in the file is a block filled with spaces and containing \q{1} character at the place of second byte.
 Indeed, somehow, many blocks here are interleaved with this one.
 Maybe it's some kind of padding for short phrases/messages?
-Other highly occurred 81-byte blocks are also space-filled blocks, but with different digits, hence, they are differ only at the second byte.
+Other frequently occurred 81-byte blocks are also space-filled blocks, but with different digit,
+hence, they are differ only at the second byte.
 
-That's all! Now we can write utility to encrypt the file back, and maybe modify it before.
+That's all! Now we can write an utility to encrypt the file back, and maybe modify it before.
 
 Mathematica notebook file is downloadable here:
 \url{https://github.com/dennis714/RE-for-beginners/blob/master/ff/XOR/mask_1/files/XOR_mask_1.nb}.
 
-Summary: XOR encryption like that is not robust at all. It has been intended by game's developer(s), probably, just to prevent gamer(s) to peek into internals of game, nothing else.
+Summary: XOR encryption like that is not robust at all. It has been intended by game's developer(s), probably, just to prevent gamer(s) to peek into internals of game, nothing else more serious.
 Still, encryption like that is extremely popular due to its simplicity and many reverse engineers are usually familiar with it.
 
