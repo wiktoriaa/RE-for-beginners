@@ -12,9 +12,10 @@ I've got another encrypted file, which is clearly encrypted by something simple,
 
 The encrypted file can be downloaded \href{https://github.com/dennis714/RE-for-beginners/blob/master/ff/XOR/mask_2/files/cipher.txt}{here}.
 
-\IT{ent} Linux utility reports about ~7.5 bits per byte, and this is high level of entropy (\myref{entropy}),
+\IT{ent} Linux utility reports about $\textasciitilde{}7.5$ bits per byte, and this is high level of entropy (\myref{entropy}),
 close to compressed or properly encrypted file.
-But still, we clearly see some pattern, there are some blocks with size of 17 bytes, hence, you see some kind of ladder, shifting by 1 byte at each 16-byte line.
+But still, we clearly see some pattern, there are some blocks with size of 17 bytes, hence, you see some kind of ladder,
+shifting by 1 byte at each 16-byte line.
 
 It's also known that the plain text is just English language text.
 
@@ -51,7 +52,7 @@ Perhaps, there are no 17-byte zero (or space) lacunas.
 It is possible indeed: such long space indentation and padding may be absent in tightly typeset text.
 
 The first idea is to try all possible 17-byte keys and find those, which will result in printable plain text after decryption.
-Bruteforce is not an option, because there are $256^{17}$ possible keys ($\tilde{}10^{40}$), that's too much.
+Bruteforce is not an option, because there are $256^{17}$ possible keys ($\textasciitilde{}10^{40}$), that's too much.
 But there are good news: who said we have to test 17-byte key as a whole, why can't we test each byte of key separately?
 It is possible indeed.
 
@@ -64,7 +65,7 @@ Now the algorithm is:
 \item do so for all 17 bytes of key.
 \end{itemize}
 
-I wrote with the following Python script to check this idea:
+I've wrotten the following Python script to check this idea:
 
 \begin{lstlisting}[caption=Python script,style=custompy]
 each_Nth_byte=[""]*KEY_LEN
@@ -178,9 +179,11 @@ In[]:= Length[input]/1285884 // N
 Out[]= 4.34712
 \end{lstlisting}
 
-There are 1285884 spaces in the whole file, and the frequency of space occurrence is 1 space per ~4.3 characters.
+There are 1285884 spaces in the whole file, and the frequency of space occurrence is 1 space per
+$\textasciitilde{}4.3$ characters.
 
-Now here is \href{http://www.gutenberg.org/ebooks/11}{Alice's Adventures in Wonderland, by Lewis Carroll} from the same library:
+Now here is \href{http://www.gutenberg.org/ebooks/11}{Alice's Adventures in Wonderland, by Lewis Carroll}
+from the same library:
 
 \begin{lstlisting}[caption=Mathematica,style=custommath]
 In[]:= input = BinaryReadList["/home/dennis/tmp/pg11.txt"];
@@ -212,7 +215,8 @@ The result is different probably because of different formatting of these texts 
 OK, so let's assume the average frequency of space in English language is 1 space per 4..7 characters.
 
 Now the good news again: we can measure frequency of spaces while decrypting our file gradually.
-Now I count spaces in each \IT{slice} and throw away 1-byte keys which produce buffers with too small number of spaces (or too large, but this is almost impossible given so short key):
+Now I count spaces in each \IT{slice} and throw away 1-byte keys which produce buffers with too small number of spaces
+(or too large, but this is almost impossible given so short key):
 
 \begin{lstlisting}[caption=Python script,style=custompy]
 each_Nth_byte=[""]*KEY_LEN
@@ -348,10 +352,13 @@ Each language has some very frequent letter triplets, these may be \q{the} and \
 Read more about it:
 \href{http://odur.let.rug.nl/~vannoord/TextCat/textcat.pdf}{N-Gram-Based Text Categorization},
 \url{http://code.activestate.com/recipes/326576/}.
-Interestingly enough, trigrams detection can be used when you decrypt a ciphertext gradually, like in this example (you just have to test 3 adjacent decrypted characters).
+Interestingly enough, trigrams detection can be used when you decrypt a ciphertext gradually,
+like in this example (you just have to test 3 adjacent decrypted characters).
 
-For non-Latin writing systems encoded in UTF-8, things may be easier. For example, Russian text encoded in UTF-8 has each byte interleaved with 0xD0/0xD1 byte.
-It is because Cyrillic characters are placed in 4th block of Unicode.
+For non-Latin writing systems encoded in UTF-8, things may be easier.
+For example, Russian text encoded in UTF-8 has each byte interleaved with 0xD0/0xD1 byte.
+It is because Cyrillic characters are placed in 4th block of Unicode table.
 Other writing systems has their own blocks.
 
 \end{itemize}
+
