@@ -14,14 +14,14 @@ The encrypted file can be downloaded \href{https://github.com/dennis714/RE-for-b
 
 \IT{ent} Linux utility reports about $\textasciitilde{}7.5$ bits per byte, and this is high level of entropy (\myref{entropy}),
 close to compressed or properly encrypted file.
-But still, we clearly see some pattern, there are some blocks with size of 17 bytes, hence, you see some kind of ladder,
+But still, we clearly see some pattern, there are some blocks with size of 17 bytes, and you can see some kind of ladder,
 shifting by 1 byte at each 16-byte line.
 
 It's also known that the plain text is just English language text.
 
 Now let's assume that this piece of text is encrypted by simple XOR-ing with 17-byte key.
 
-I tried to find some repeating 17-byte blocks in Mathematica, like I did before in my previous example (\myref{XOR_mask_1}):
+I tried to find some repeating 17-byte blocks using Mathematica, like I did before in my previous example (\myref{XOR_mask_1}):
 
 \begin{lstlisting}[caption=Mathematica,style=custommath]
 In[]:=input = BinaryReadList["/home/dennis/tmp/cipher.txt"];
@@ -48,10 +48,10 @@ Out[]:={{{248,128,88,63,58,175,159,154,232,226,161,50,97,127,3,217,80},1},
 \end{lstlisting}
 
 No luck, each 17-byte block is unique within the file and occurred only once.
-Perhaps, there are no 17-byte zero (or space) lacunas.
+Perhaps, there are no 17-byte zero lacunas, or lacunas containing only spaces.
 It is possible indeed: such long space indentation and padding may be absent in tightly typeset text.
 
-The first idea is to try all possible 17-byte keys and find those, which will result in printable plain text after decryption.
+The first idea is to try all possible 17-byte keys and find those, which will result in readable text after decryption.
 Bruteforce is not an option, because there are $256^{17}$ possible keys ($\textasciitilde{}10^{40}$), that's too much.
 But there are good news: who said we have to test 17-byte key as a whole, why can't we test each byte of key separately?
 It is possible indeed.
@@ -65,7 +65,7 @@ Now the algorithm is:
 \item do so for all 17 bytes of key.
 \end{itemize}
 
-I've wrotten the following Python script to check this idea:
+I've written the following Python script to check this idea:
 
 \begin{lstlisting}[caption=Python script,style=custompy]
 each_Nth_byte=[""]*KEY_LEN
@@ -215,7 +215,7 @@ The result is different probably because of different formatting of these texts 
 OK, so let's assume the average frequency of space in English language is 1 space per 4..7 characters.
 
 Now the good news again: we can measure frequency of spaces while decrypting our file gradually.
-Now I count spaces in each \IT{slice} and throw away 1-byte keys which produce buffers with too small number of spaces
+Now I count spaces in each \IT{slice} and throw away 1-byte keys which produce results with too small number of spaces
 (or too large, but this is almost impossible given so short key):
 
 \begin{lstlisting}[caption=Python script,style=custompy]
