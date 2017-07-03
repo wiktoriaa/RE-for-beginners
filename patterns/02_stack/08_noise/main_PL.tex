@@ -1,0 +1,115 @@
+\subsection{Śmieci na stosie}
+\label{noise_in_stack}
+
+\epigraph{When one says that something seems random, what one usually
+means in practice is that one cannot see any regularities in it.}{Stephen Wolfram, A New Kind of Science.}
+
+Często w tej książce się wspomina o \q{śmieciach} na stosie lub w pamięci.
+Skąd one się biorą?
+Są to pozostałości po poprzednich funkcjach.
+
+Krótki przykład:
+
+\lstinputlisting[style=customc]{patterns/02_stack/08_noise/st.c}
+
+Kompilujemy\dots
+
+\lstinputlisting[caption=\NonOptimizing MSVC 2010,style=customasmx86]{patterns/02_stack/08_noise/st.asm}
+
+Kompilator się trochę oburzy\dots
+
+\begin{lstlisting}
+c:\Polygon\c>cl st.c /Fast.asm /MD
+Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 16.00.40219.01 for 80x86
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+st.c
+c:\polygon\c\st.c(11) : warning C4700: uninitialized local variable 'c' used
+c:\polygon\c\st.c(11) : warning C4700: uninitialized local variable 'b' used
+c:\polygon\c\st.c(11) : warning C4700: uninitialized local variable 'a' used
+Microsoft (R) Incremental Linker Version 10.00.40219.01
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:st.exe
+st.obj
+\end{lstlisting}
+
+Ale kiedy uruchamiamy\dots
+
+\begin{lstlisting}
+c:\Polygon\c>st
+1, 2, 3
+\end{lstlisting}
+
+Dziwne, przecież nie ustawialiśmy żadnych zmiennych w \TT{f2()}. 
+Te wartości --- to są \q{duchy}, które wciąż się znajdują na stosie.
+
+\clearpage
+Uruchomimy przykład w \olly:
+
+\begin{figure}[H]
+\centering
+\myincludegraphics{patterns/02_stack/08_noise/olly1.png}
+\caption{\olly: \TT{f1()}}
+\label{fig:stack_noise_olly1}
+\end{figure}
+
+Kiedy \TT{f1()} ustawia zmienne $a$, $b$ i $c$ one są zapisywane pod adresem \TT{0x1FF860}, itd.
+
+\clearpage
+A kiedy jest wykonywana \TT{f2()}:
+
+\begin{figure}[H]
+\centering
+\myincludegraphics{patterns/02_stack/08_noise/olly2.png}
+\caption{\olly: \TT{f2()}}
+\label{fig:stack_noise_olly2}
+\end{figure}
+
+... $a$, $b$ i $c$ w funkcji \TT{f2()} znajdują się na tych samych miejscach!
+Taka dziwna sytuacja powstaje, kiedy kilka funkcji jest wykonywane po sobie
+i \ac{SP} powinien być taki sam przy wejściu do funkcji, tzn funkcja powinna mieć taką samą ilość argumentów. 
+Wtedy zmienne lokalne będą alokowane na te same miejsca.
+Podsumowując, wszystkie wartości na stosie (i ogólnie w pamięci) to wartości pozostałe po poprzedzających funkcjach
+Nie są one przypadkowe, lecz nieprzewidywalne.
+A jak inaczej?
+Można by było czyścić stos przed wykonywaniem kolejnej funkcji,
+ale to za dużo zbędnej (i nieporzebnej) roboty.
+
+\subsubsection{MSVC 2013}
+
+Ten przykład był skompilowany w MSVC 2010.
+Ale jeden czytelnik tej książki spróbował skompilować to w MSVC 2013, uruchomił i zobaczył 3 liczby w odwrotnej kolejności:
+
+\begin{lstlisting}
+c:\Polygon\c>st
+3, 2, 1
+\end{lstlisting}
+
+Dkaczego?
+Również spróbowałem skompilować ten przykład w MSVC 2013 i zobaczyłem to:
+
+\begin{lstlisting}[caption=MSVC 2013,style=customasmx86]
+_a$ = -12	; size = 4
+_b$ = -8	; size = 4
+_c$ = -4	; size = 4
+_f2	PROC
+
+...
+
+_f2	ENDP
+
+_c$ = -12	; size = 4
+_b$ = -8	; size = 4
+_a$ = -4	; size = 4
+_f1	PROC
+
+...
+
+_f1	ENDP
+\end{lstlisting}
+
+W odróżnieniu od MSVC 2010, MSVC 2013 rozmieścił zmienne a/b/c w funkcji \TT{f2()} w kolejności odwrotnej.
+I jest to całkowicie poprawne, ponieważ w \CCpp nie ma zdefiniowanego standardu, reguły która by wyznaczała w jakiej kolejności zmienne lokalne powinne być usytuowane na stosie.
+
+
