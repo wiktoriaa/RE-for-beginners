@@ -1,8 +1,8 @@
-\section{Overclocking Cointerra Bitcoin miner}
+\section{Разгон майнера биткоинов Cointerra}
 \index{Bitcoin}
 \index{BeagleBone}
 
-There was Cointerra Bitcoin miner, looking like that:
+Был такой майнер биткоинов Cointerra, выглядящий так:
 
 \begin{figure}[H]
 \centering
@@ -10,17 +10,17 @@ There was Cointerra Bitcoin miner, looking like that:
 \caption{Board}
 \end{figure}
 
-And there was also (possibly leaked) utility\footnote{Can be downloaded here: \url{https://github.com/dennis714/RE-for-beginners/raw/master/examples/bitcoin_miner/files/cointool-overclock}}
-which can set clock rate for the board.
-It runs on additional BeagleBone Linux ARM board (small board at bottom of the picture).
+И была также (возможно утекшая) утилита\footnote{Можно скачать здесь: \url{https://github.com/dennis714/RE-for-beginners/raw/master/examples/bitcoin_miner/files/cointool-overclock}}
+которая могла выставлять тактовую частоту платы.
+Она запускается на дополнительной плате BeagleBone на ARM с Linux (маленькая плата внизу фотографии).
 
-And the author was once asked, is it possible to hack this utility to see, which frequency can be set and which are not.
-And it is possible to tweak it?
+И у автора (этих строк) однажды спросили, можно ли хакнуть эту утилиту и посмотреть, какие частоты можно выставлять, и какие нет.
+И можно ли твикнуть её?
 
-The utility must be executed like that: \TT{./cointool-overclock 0 0 900}, where 900 is frequency in MHz.
-If the frequency is too high, utility will print \q{Error with arguments} and exit.
+Утилиту нужно запускать так: \TT{./cointool-overclock 0 0 900}, где 900 это частота в МГц.
+Если частота слишком большая, утилита выведет ошибку \q{Error with arguments} и закончит работу.
 
-This is a fragment of code around reference to \q{Error with arguments} text string:
+Вот фрагмент кода вокруг ссылки на текстовую строку \q{Error with arguments}:
 
 \begin{lstlisting}[style=customasmARM]
 
@@ -175,35 +175,36 @@ This is a fragment of code around reference to \q{Error with arguments} text str
 
 \end{lstlisting}
 
-Function names were present in debugging information of the original binary, like \TT{write\_power}, \TT{read\_loop}.
-But labels inside functions were named by me.
+Имена ф-ций присутствовали в отладочной информации в оригинальном исполняемом файле,
+такие как \TT{write\_power}, \TT{read\_loop}.
+Но имена меткам внутри ф-ции дал я.
 
 \myindex{UNIX!getopt}
 \myindex{strtoll()}
-\TT{optind} name looks familiar. It is from \IT{getopt} *NIX library intended for command-line parsing---well,
-this is exactly what happens inside.
-Then, the 3rd argument (where frequency value is to be passed) is converted from a string to a number using
-a call to \IT{strtoll()} function.
+Имя \TT{optind} звучит знакомо. Это библиотека \IT{getopt} из *NIX предназначенная для парсинга командной строки ---
+и это то, что внутри и происходит.
+Затем, третий аргумент (где передается значение частоты) конвертируется из строку в число используя вызов ф-ции \IT{strtoll()}.
 
-The value is then checked against various constants.
-At 0xACEC, it's checked, if it is lesser or equal to 499, and if it is so,
-0x64 is to be passed to \TT{write\_power()} function (which sends a command through USB using \TT{send\_msg()}).
-If it is greater than 499, jump to 0xAD08 is occurred.
+Значение затем сравнивается с разными константами.
+На 0xACEC есть проверка, меньше ли оно или равно 499, и если это так, то 0x64 будет передано в ф-цию
+\TT{write\_power()} (которая посылает команду через USB используя \TT{send\_msg()}).
+Если значение больше 499, происходит переход на 0xAD08.
 
-At 0xAD08 it's checked, if it's lesser or equal to 799. 0x5F is then passed to \TT{write\_power()} function in case of success.
+На 0xAD08 есть проверка, меньше ли оно или равно 799. Если это так, то 0x5F передается в ф-цию \TT{write\_power()}.
 
-There are more checks: for 899 at 0xAD24, for 0x999 at 0xAD40 and finally, for 1099 at 0xAD5C.
-If the input frequency is lesser or equal to 1099, 0x50 will be passed (at 0xAD6C) to \TT{write\_power()} function.
-And there is some kind of bug.
-If the value is still greater than 1099, the value itself is passed into \TT{write\_power()} function.
-Oh, it's not a bug, because we can't get here: value is checked first against 950 at 0xAC88, and if it is greater, error message will be displayed and the utility will finish.
+Есть еще проверки: на 899 на 0xAD24, на 0x999 на 0xAD40, и наконец, на 1099 на 0xAD5C.
+Если входная частота меньше или равна 1099, 0x50 (на 0xAD6C) будет передано в ф-цию \TT{write\_power()}.
+И тут что-то вроде баги.
+Если значение все еще больше 1099, само значение будет передано в ф-цию \TT{write\_power()}.
+Но с другой стороны это не бага, потому что мы не можем попасть сюда: значение в начале проверяется с 950 на 0xAC88,
+и если оно больше, выводится сообщение об ошибке и утилита заканчивает работу.
 
-Now the table between frequency in MHz and value passed to \TT{write\_power()} function:
+Вот таблица между частотами в МГц и значениями передаваемыми в ф-цию \TT{write\_power()}:
 
 \begin{center}
 \begin{longtable}{ | l | l | l | }
 \hline
-\HeaderColor MHz & \HeaderColor hexadecimal & \HeaderColor decimal \\
+\HeaderColor МГц & \HeaderColor шестнадцатеричное представление & \HeaderColor десятичное \\
 \hline
 499MHz & 0x64 & 100 \\
 \hline
@@ -218,28 +219,31 @@ Now the table between frequency in MHz and value passed to \TT{write\_power()} f
 \end{longtable}
 \end{center}
 
-As it seems, a value passed to the board is gradually decreasing during frequency increasing.
+Как видно, значение передаваемое в плату постепенно уменьшается с ростом частоты.
 
-Now we see that value of 950MHz is a hardcoded limit, at least in this utility. Can we trick it?
+Видно что значение в 950МГц это жесткий предел, по крайней мере в этой утилите. Можно ли её обмануть?
 
-Let's back to this piece of code:
+Вернемся к этому фрагменту кода:
 
 \begin{lstlisting}[style=customasmARM]
 .text:0000AC84      LDR     R2, [R11,#third_argument]
 .text:0000AC88      MOV     R3, #950
 .text:0000AC8C      CMP     R2, R3
-.text:0000AC90      BGT     errors_with_arguments ; I've patched here to 00 00 00 00
+.text:0000AC90      BGT     errors_with_arguments ; Я пропатчил здесь на 00 00 00 00
 \end{lstlisting}
 
-We must disable \INS{BGT} branch instruction at 0xAC90 somehow. And this is ARM in ARM mode, because, as we see, all addresses are increasing by 4, i.e., each instruction has size of 4 bytes.
-\TT{NOP} (no operation) instruction in ARM mode is just four zero bytes: \TT{00 00 00 00}.
-So by writing four zeros at 0xAC90 address (or physical offset in file 0x2C90) we can disable the check.
+Нам нужно как-то запретить инструкцию перехода \INS{BGT} на 0xAC90. И это ARM в режиме ARM, потому что, как мы видим,
+все адреса увеличиваются на 4, т.е., длина каждой инструкции это 4 байта.
+Инструкция \TT{NOP} (нет операции) в режиме ARM это просто 4 нулевых байта: \TT{00 00 00 00}.
+Так что, записывая 4 нуля по адресу 0xAC90 (или по физическому смещению в файле: 0x2C90) мы можем выключить
+эту проверку.
 
-Now it's possible to set frequencies up to 1050MHz. Even more is possible, but due to the bug, if input value is greater than 1099, a value \IT{as is} in MHz will be passed to the board, which is incorrect.
+Теперь можно выставлять частоты вплоть до 1050МГц. И даже больше, но из-за ошибки, если входное значение больше 1099,
+значение в МГц, \IT{как есть}, будет передано в плату, что неправильно.
 
-I didn't go further, but if I had to, I would try to decrease a value which is passed to \TT{write\_power()} function.
+Дальше я не разбирался, но если бы продолжил, я бы уменьшал значение передаваемое в ф-цию \TT{write\_power()}.
 
-Now the scary piece of code which I skipped at first:
+Теперь страшный фрагмент кода, который я в начале пропустил:
 
 \begin{lstlisting}[style=customasmARM]
 .text:0000AC94       LDR       R2, [R11,#third_argument]
@@ -257,9 +261,9 @@ Now the scary piece of code which I skipped at first:
 .text:0000ACC4 errors_with_arguments
 \end{lstlisting}
 
-Division via multiplication is used here, and constant is 0x51EB851F.
-I wrote a simple programmer's calculator\footnote{\url{https://github.com/dennis714/progcalc}} for myself.
-And I have there a feature to calculate modulo inverse.
+Здесь используется деление через умножение, и константа 0x51EB851F.
+Я написал для себя простой программистский калькулятор\footnote{\url{https://github.com/dennis714/progcalc}}.
+И там есть возможность вычислять обратное число по модулю.
 
 \begin{lstlisting}
 modinv32(0x51EB851F)
@@ -267,28 +271,29 @@ Warning, result is not integer: 3.125000
 (unsigned) dec: 3 hex: 0x3 bin: 11
 \end{lstlisting}
 
-That means that \INS{SMULL} instruction at 0xACA0 is basically divides 3rd argument by 3.125.
-In fact, all \TT{modinv32()} function in my calculator does, is this:
+Это значит что инструкция \INS{SMULL} на 0xACA0 просто делит 3-й аргумент на 3.125.
+На самом деле, все что делает ф-ция \TT{modinv32()} в моем калькуляторе, это:
 
 \[
 \frac{1}{\frac{input}{2^{32}}} = \frac{2^{32}}{input}
 \]
 
-Then there are additional shifts and now we see than 3rg argument is just divided by 50.
-And then it's multiplied by 50 again.
-Why?
-This is simplest check, if the input value is can be divided by 50 evenly.
-If the value of this expression is non-zero, $x$ can't be divided by 50 evenly:
+Потом там есть дополнительные сдвиги и теперь мы видим что 3-й аргумент просто делится на 50.
+И затем умножается снова на 50.
+Зачем?
+Это простейшая проверка, можно ли делить входное значение на 50 без остатка.
+Если значение этого выражения ненулевое, $x$ не может быть разделено на 50 без остатка:
 
 \[
 x-((\frac{x}{50}) \cdot 50)
 \]
 
-This is in fact simple way to calculate remainder of division.
+На самом деле, это простой способ вычисления остатка от деления.
 
-And then, if the remainder is non-zero, error message is displayed.
-So this utility takes frequency values in form like 850, 900, 950, 1000, etc., but not 855 or 911.
+И затем, если остаток ненулевой, выводится сообщение об ошибке.
+Так что эта утилита берет значения частотв вроде 850, 900, 950, 1000, итд, но не 855 или 911.
 
-That's it! If you do something like that, please be warned that you may damage your board, just as in case of overclocking other devices like \ac{CPU}s, \ac{GPU}s, etc.
-If you have a Cointerra board, do this on your own risk!
+Вот и всё! Если вы делаете что-то такое, имейте ввиду, что это может испортить вашу плату, как и в случае разгона
+чиспов вроде \ac{CPU}, \ac{GPU}, итд.
+Если у вас есть плата Cointerra, делайте всё это на свой собственный риск!
 
