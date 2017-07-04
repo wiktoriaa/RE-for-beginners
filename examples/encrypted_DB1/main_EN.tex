@@ -9,7 +9,7 @@ Some discussion: \url{https://news.ycombinator.com/item?id=10128684}.)
 \subsection{Base64 and entropy}
 
 \myindex{XML}
-I've got the XML file containing some encrypted data.
+I've got the \ac{XML} file containing some encrypted data.
 Perhaps, it's related to some orders and/or customers information.
 
 \begin{lstlisting}
@@ -161,7 +161,7 @@ ListPlot[Counts[Map[StringLength[#] &, BinaryStrings]]]
 \myincludegraphics{examples/encrypted_DB1/lengths.png}
 \end{figure}
 
-So, most blocks has size between ~36 and ~48.
+So, most blocks has size between $\textasciitilde{}36$ and $\textasciitilde{}48$.
 There is also another thing to notice: all block sizes are even.
 No single block with odd size.
 
@@ -174,12 +174,12 @@ The program which can browse this encrypted database is written C\# and the .NET
 is heavily obfuscated.
 Nevertheless, there is DLL with x86 code, which, after brief examination,
 has parts of the CryptoPP popular open-source library!
-(I just spotted "CryptoPP" strings inside.)
+(I just spotted \q{CryptoPP} strings inside.)
 Now it's very easy to find all functions inside of DLL because CryptoPP library is open-source.
 
 \myindex{AES}
 CryptoPP library has a lot of crypto-functions, including AES (AKA Rijndael).
-Newer x86 CPUs has AES helper instructions like AESENC, AESDEC and AESKEYGENASSIST
+Newer x86 CPUs has AES helper instructions like \INS{AESENC}, \INS{AESDEC} and \INS{AESKEYGENASSIST}
 \footnote{\url{https://en.wikipedia.org/wiki/AES_instruction_set}}.
 They are not performing encryption/decryption completely, but they do significant amount of job.
 And newer CryptoPP versions use them.
@@ -189,13 +189,13 @@ For example, here:
 \myindex{x86!\Instructions!AESENC}
 \myindex{x86!\Instructions!AESDEC}
 \myindex{tracer}
-To my surprise, during decryption, AESENC is executed, while AESDEC is not 
+To my surprise, during decryption, \INS{AESENC} gets executed, while \INS{AESDEC} is not 
 (I just checked with my tracer utility, but any debugger can be used).
 I checked, if my CPU really supports AES instructions. Some Intel i3 CPUs are not.
 And if not, CryptoPP library falling back to AES functions implemented in old way
 \footnote{\url{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L355}}.
 But my CPU supports them.
-Why AESDEC is still not executed?
+Why \INS{AESDEC} is still not executed?
 Why the program use AES encryption in order to decrypt database?
 
 OK, it's not a problem to find a function which encrypts block.
@@ -208,7 +208,7 @@ which, in turn, has references to two functions (
 and 
 \href{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L1012}{AESNI\_Enc\_4\_Blocks}
 )
-which has AESENC instructions.
+which has \INS{AESENC} instructions.
 
 So, judging by CryptoPP internals, \\
 \IT{CryptoPP::Rijndael::Enc::ProcessAndXorBlock()} encrypts one 16-byte block.
@@ -282,9 +282,9 @@ encryption but rather decryption?!
 
 \myindex{Cipher Feedback mode}
 \myindex{XOR}
-The answer is CFB (Cipher Feedback mode):
+The answer is \ac{CFB}:
 In this mode, AES algorithms used not as encryption algorithm, but as a device which generates cryptographically secure random data.
-The actual encryption is happens using simple XOR operation.
+The actual encryption is happening using simple XOR operation.
 
 Here is encryption algorithm (images are taken from Wikipedia):
 
@@ -305,15 +305,15 @@ Now let's see: AES encryption operation generates 16 bytes (or 128 bits) or \IT{
 to be used while XOR-ing, who forces us to use all 16 bytes?
 If at the last stage we've got 1 byte of data, let's xor 1 byte of data with 1 byte of generated
 \IT{random} data?
-This leads to important property of CFB mode: data must not be padded, data of arbitrary size
+This leads to important property of \ac{CFB} mode: data must not be padded, data of arbitrary size
 can be encrypted and decrypted.
 
 Oh, that's why all encrypted blocks are not padded.
-And that's why AESDEC instruction is never called.
+And that's why \INS{AESDEC} instruction is never called.
 
 Let's try to decrypt first block manually, using Python.
-CFB mode also use IV (initialization vector), as a \IT{seed} to \IT{random generator}.
-In our case, IV is the block which is encrypted at first stage:
+\ac{CFB} mode also use \ac{IV}, as a \IT{seed} to \IT{random generator}.
+In our case, \ac{IV} is the block which is encrypted at first stage:
 
 \begin{lstlisting}
 0038B920: 01 00 00 00 FF FF FF FF-79 C1 69 0B 67 C1 04 7D "........y.i.g..}"
@@ -321,7 +321,7 @@ In our case, IV is the block which is encrypted at first stage:
 
 Oh, and we also have to recover encryption key.
 \myindex{x86!\Instructions!AESKEYGENASSIST}
-There is AESKEYGENASSIST is DLL, and it is called, and it is used in the \\
+There is \INS{AESKEYGENASSIST} is DLL, and it is called, and it is used in the \\
 \IT{Rijndael::Base::UncheckedSetKey()} function:\\
 \url{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L198}
 It's easy to find it in IDA and set breakpoint. Let's see:
@@ -395,28 +395,28 @@ All blocks decrypted seems correctly except of first 16 byte part.
 
 What can affect first 16 bytes?
 
-Let's back to CFB decryption algorithm again: \myref{fig:CFB_decryption}.
+Let's back to \ac{CFB} decryption algorithm again: \myref{fig:CFB_decryption}.
 
-We can see that IV can affect to first block decryption operation, but not the second,
+We can see that \ac{IV} can affect to first block decryption operation, but not the second,
 because the second stage used ciphertext from the first stage, and in case of decryption,
-it's the same, no matter what IV has!
+it's the same, no matter what \ac{IV} has!
 
-So probably, IV is different each time.
+So probably, \ac{IV} is different each time.
 Using my tracer, I'll take a look at the first input during decryption of the second block
-of XML file:
+of \ac{XML} file:
 
 \begin{lstlisting}
 0038B920: 02 00 00 00 FE FF FF FF-79 C1 69 0B 67 C1 04 7D "........y.i.g..}"
 \end{lstlisting}
 
-... third:
+\dots third:
 
 \begin{lstlisting}
 0038B920: 03 00 00 00 FD FF FF FF-79 C1 69 0B 67 C1 04 7D "........y.i.g..}"
 \end{lstlisting}
 
 It seems, first and fifth byte are changed each time.
-I finally concluded that the first 32-bit integer is just OrderID from the XML file,
+I finally concluded that the first 32-bit integer is just OrderID from the \ac{XML} file,
 and the second is also OrderID, but negated. All other 8 bytes are static.
 Now I have decrypted the whole database: 
 \url{https://raw.githubusercontent.com/dennis714/RE-for-beginners/master/examples/encrypted_DB1/decrypted.full.txt}.
@@ -424,15 +424,15 @@ Now I have decrypted the whole database:
 The Python script used for this is: 
 \url{https://github.com/dennis714/RE-for-beginners/blob/master/examples/encrypted_DB1/decrypt_blocks.py}.
 
-Perhaps, author wanted each block encrypted differently, so he/she used OrderID as part of key.
-It would be also possible to make different AES key instead of IV.
+Perhaps, the author wanted each block encrypted differently, so he/she used OrderID as part of key.
+It would be also possible to make different AES key instead of \ac{IV}.
 
-So now we know that IV only affects first block during decryption in CFB mode, this is
+So now we know that \ac{IV} only affects first block during decryption in \ac{CFB} mode, this is
 feature of it.
-All other blocks can be decrypted without knowledge IV, but using the key.
+All other blocks can be decrypted without knowledge \ac{IV}, but using the key.
 
-OK, so why CFB mode? Apparently, because the very first AES example on CryptoPP wiki
-uses CFB mode: 
+OK, so why \ac{CFB} mode? Apparently, because the very first AES example on CryptoPP wiki
+uses \ac{CFB} mode: 
 \url{http://www.cryptopp.com/wiki/Advanced_Encryption_Standard#Encrypting_and_Decrypting_Using_AES}.
 Supposedly, CryptoPP developers choose it for simplicity: 
 the example can encrypt/decrypt text strings with arbitrary lengths, without padding.
@@ -440,9 +440,9 @@ the example can encrypt/decrypt text strings with arbitrary lengths, without pad
 It is very likely, my program's programmer(s) just copypasted the example from CryptoPP wiki page.
 Many programmers do so.
 
-The only difference that IV is chosen randomly in CryptoPP wiki example, while this indeterminism
+The only difference that \ac{IV} is chosen randomly in CryptoPP wiki example, while this indeterminism
 wasn't allowable to programmers of the software we are dissecting now, 
-so they choose to initialize IV using Order ID.
+so they choose to initialize \ac{IV} using Order ID.
 
 Now we can proceed to analyzing matter of each byte in the decrypted block.
 
@@ -556,7 +556,7 @@ See more: \url{https://raw.githubusercontent.com/dennis714/RE-for-beginners/mast
 Or filtered: \url{https://github.com/dennis714/RE-for-beginners/blob/master/examples/encrypted_DB1/decrypted.short.txt}.
 Seems correct.
 
-This is some kind of OOP serialization, i.e., packing differently typed values into binary buffer for storing and/or transmitting.
+This is some kind of \ac{OOP} serialization, i.e., packing differently typed values into binary buffer for storing and/or transmitting.
 
 \subsection{Noise at the end}
 
@@ -597,7 +597,7 @@ OrderID= 171 name= BONNIE GOLDSTEIN sum= 44.95 date= 2004 / 7 / 25
 OrderID= 172 name= THERESE TUTTLE sum= 152.95 date= 2004 / 7 / 26
 \end{lstlisting}
 
-(The last \IT{07 07 19} bytes are copied from the previous plaintext buffer).
+(The last \IT{07 07 19} bytes are copied from the previous plaintext buffer.)
 
 Another two subsequent buffers:
 
@@ -641,13 +641,13 @@ All files used in this article are here: \url{https://github.com/dennis714/RE-fo
 Nevertheless, many features like these I've observed in real-world software applications.
 This example is based on them.
 
-% TODO \ac{}
-\subsection{Post Scriptum: brute-forcing IV}
+\subsection{Post Scriptum: brute-forcing \ac{IV}}
 
-The case you saw is artificially constructed, but based on some real applications I've observed.
-When I've been working on one of such real applications, 
-I first noticed that Initializing Vector (IV) is generating using some 32-bit number, I wasn't able to find a link between this value and OrderID.
+The case you saw is artificially constructed, but is based on a real application I've reverse engineered.
+When I've been working on it, I first noticed that \ac{IV} is generating using some 32-bit number,
+I wasn't able to find a link between this value and OrderID.
 So I prepared to use brute-force, which is indeed possible here.
-It's not a problem to enumerate all 32-bit values and try each IV based on each.
+
+It's not a problem to enumerate all 32-bit values and try each \ac{IV} based on each.
 Then you decrypt 16-byte block and check for zero bytes, which are always at fixed places.
 

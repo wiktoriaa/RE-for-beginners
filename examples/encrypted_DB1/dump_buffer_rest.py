@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import frobenoid, sys, base64, struct, hexdump
 from lxml import etree
 
