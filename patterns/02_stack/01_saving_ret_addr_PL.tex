@@ -1,0 +1,104 @@
+\subsubsection{Zapisywanie adresu powrotu}
+
+\myparagraph{x86}
+
+\myindex{x86!\Instructions!CALL}
+Przy wywołaniu funkcji przez \CALL najpierw na stos jest odkładany adres, wskazujący na miejsce po 
+instrukcji \CALL, następnie robi się przejście bezwzględne (prawie jak \TT{JMP}) pod adres, zapisany w operandzie.
+
+\myindex{x86!\Instructions!PUSH}
+\myindex{x86!\Instructions!JMP}
+\CALL~--- jest analogiczny do pary instrukcji \INS{PUSH address\_after\_call / JMP}.
+
+\myindex{x86!\Instructions!RET}
+\myindex{x86!\Instructions!POP}
+\RET zdejmuje ze stosu wartość i przekazuje zarządzanie pod ten adres~--- 
+jest to analogiczne do działania pary instrukcji \TT{POP tmp / JMP tmp}.
+
+\myindex{\Stack!\MLStackOverflow}
+\myindex{\Recursion}
+Bardzo łatwo przepełnić stos, poprzez rekurencję:
+
+\begin{lstlisting}[style=customc]
+void f()
+{
+	f();
+};
+\end{lstlisting}
+
+MSVC 2008 uprzedza:
+
+\begin{lstlisting}
+c:\tmp6>cl ss.cpp /Fass.asm
+Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 15.00.21022.08 for 80x86
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+ss.cpp
+c:\tmp6\ss.cpp(4) : warning C4717: 'f' : recursive on all control paths, function will cause runtime stack overflow
+\end{lstlisting}
+
+\dots ale, niemniej jednak, tworzy potrzebny kod:
+
+\begin{lstlisting}[style=customasmx86]
+?f@@YAXXZ PROC			; f
+; File c:\tmp6\ss.cpp
+; Line 2
+	push	ebp
+	mov	ebp, esp
+; Line 3
+	call	?f@@YAXXZ	; f
+; Line 4
+	pop	ebp
+	ret	0
+?f@@YAXXZ ENDP			; f
+\end{lstlisting}
+
+\dots do tego, jeśli optymalizacja jest wyłączona (\TT{\Ox}), to będzie ciekawiej, bez przepełnienia stosu, 
+ale będzie działało \IT{poprawnie}\footnote{ironia}:
+
+\begin{lstlisting}[style=customasmx86]
+?f@@YAXXZ PROC			; f
+; File c:\tmp6\ss.cpp
+; Line 2
+$LL3@f:
+; Line 3
+	jmp	SHORT $LL3@f
+?f@@YAXXZ ENDP			; f
+\end{lstlisting}
+
+GCC 4.4.1 generuje taki sam kod w obu przypadkach, chociaż i nie wydaje stosownego komunikatu.
+
+\myparagraph{ARM}
+
+\myindex{ARM!\Registers!Link Register}
+Programy dla ARM również korzystają ze stosu do zapisywania \ac{RA}, gdzie trzeba wrócić, ale trochę w inny sposób.
+Jak już było wspomniane w sekcji \q{\HelloWorldSectionName}~(\myref{sec:hw_ARM}),
+\ac{RA} jest zapisywany do rejestru \ac{LR} (\gls{link register}).
+Ale jeśli wynika potrzeba wywołania jeszcze jakiejś funkcji i trzeba skorzystać z rejestru \ac{LR} jeszcze
+raz, to jego zawartość najlepiej gdzieś zapisać.
+\myindex{Function prologue}
+\myindex{ARM!\Instructions!PUSH}
+\myindex{ARM!\Instructions!POP}
+
+Zwykle to się odbywa w prologu funkcji, często widzimy tam instrukcje w stylu \INS{PUSH \{R4-R7,LR\}}, a w epilogu
+\INS{POP \{R4-R7,PC\}}~--- w ten sposób są zapisywane rejestry, z których będzie korzystała bieżąca funkcja, w tym rejestr \ac{LR}.
+
+\myindex{ARM!Leaf function}
+Niemniej jednak, jeśli jakaś funkcja nie wywołuje żadnych innych funkcji w trakcie swojej roboty, według terminologii \ac{RISC} jest ona nazywana
+\IT{\gls{leaf function}}\footnote{\href{http://go.yurichev.com/17064}{infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.faqs/ka13785.html}}. 
+Wskutek tego, \q{leaf}-funkcja nie zapisuje rejestru \ac{LR} (dlatego że ona go nie zmienia).
+A jeśli funkcja jest niewielkich rozmiarów, korzysta z małej ilości rejestrów, to może nie korzystać ze stosu w ogóle.
+W ten sposób, w ARM możliwe jest wywoływanie małych leaf-funkcji nie korzystając ze stosu.
+jest to szybsze niż w starych x86, dlatego że nie korzysta się z pamięci zewnętrznej do stosu
+\footnote{Kiedyś, bardzo dawno temu, na PDP-11 i VAX na wykonanie instrukcjii CALL (wywołanie innych funkcji) mogło być zatracone
+nawet 50\% czasu (przwdopodobnie przez pracę z pamięcią zewnętrzną),
+dlatego było uważane, że dużo małych funkcji to \glslink{anti-pattern}
+\InSqBrackets{\TAOUP Chapter 4, Part II}.}.
+Również to może być też korzystne, kiedy pamięć pod stos jeszcze nie jest zaalokowana, lub jest niedostępna,
+
+kilka przykładów takich funkcji:
+\myref{ARM_leaf_example1}, \myref{ARM_leaf_example2}, 
+\myref{ARM_leaf_example3}, \myref{ARM_leaf_example4}, \myref{ARM_leaf_example5},
+\myref{ARM_leaf_example6}, \myref{ARM_leaf_example7}, \myref{ARM_leaf_example10}.
+
+
