@@ -107,6 +107,25 @@ Some people has irritation sometimes: now one needs twice as much memory for sto
 including cache memory, despite the fact that x64 \ac{CPU}s can address only 48 bits of external 
 \ac{RAM}.
 
+\begin{framed}
+\begin{quotation}
+Pointers have gone out of favor to the point now where I had to
+flame about it because on my 64-bit computer that I have here, if I really
+care about using the capability of my machine I find that I’d better not use
+pointers because I have a machine that has 64-bit registers but it only has 2
+gigabytes of RAM. So a pointer never has more than 32 significant bits to it.
+But every time I use a pointer it’s costing me 64 bits and that doubles the
+size of my data structure. Worse, it goes into the cache and half of my
+cache is gone and that costs cash—cache is expensive.
+
+So if I’m really trying to push the envelope now, I have to use arrays instead
+of pointers. I make complicated macros so that it looks like I’m using
+pointers, but I’m not really.
+\end{quotation}
+\end{framed}
+
+( Donald Knuth in ``Coders at Work''. )
+
 Some people made their own memory allocators.
 \myindex{CryptoMiniSat}
 It's interesting to know about CryptoMiniSat\footnote{\url{https://github.com/msoos/cryptominisat/}} case.
@@ -114,4 +133,3 @@ This program rarely uses more than 4GiB of \ac{RAM}, but it uses pointers heavil
 So it requires less memory on 32-bit architecture than on 64-bit one.
 To mitigate this problem, author made his own allocator (in \IT{clauseallocator.(h|cpp)} files),
 which allows to have access to allocated memory using 32-bit identifiers instead of 64-bit pointers.
-
