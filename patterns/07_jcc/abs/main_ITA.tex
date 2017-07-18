@@ -1,17 +1,17 @@
-\subsection{Calculating absolute value}
+\subsection{Calcolo del valore assoluto}
 \label{sec:abs}
 
-A simple function:
+Una funzione semplice:
 
 \lstinputlisting[style=customc]{abs.c}
 
 \subsubsection{\Optimizing MSVC}
 
-This is how the code is usually generated:
+Il codice solitamente generato è questo:
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{patterns/07_jcc/abs/abs_MSVC2012_Ox_x64_EN.asm}
 
-GCC 4.9 does mostly the same.
+GCC 4.9 fa più o meno lo stesso.
 
 \subsubsection{\OptimizingKeilVI: \ThumbMode}
 
@@ -19,21 +19,21 @@ GCC 4.9 does mostly the same.
 
 \myindex{ARM!\Instructions!RSB}
 
-ARM lacks a negate instruction, so the Keil compiler uses the \q{Reverse Subtract} instruction, which just subtracts with reversed operands.
+In ARM manca l'istruzione di negazione, quindi il compilatore Keil usa l'istruzione \q{Reverse Subtract}, che semplicemente sottrae gli operandi in modo inverso.
 
 \subsubsection{\OptimizingKeilVI: \ARMMode}
 
-It is possible to add condition codes to some instructions in ARM mode, so that is what the Keil compiler does:
+In modalità ARM è possibile agguingere condition codes ad alcune istruzioni, e questo è ciò che fa il compilatore keil:
 
 \lstinputlisting[caption=\OptimizingKeilVI: \ARMMode,style=customasmARM]{patterns/07_jcc/abs/abs_Keil_ARM_O3_EN.s}
 
-Now there are no conditional jumps and this is good: \myref{branch_predictors}.
+Adesso non ci sono più jump condizionali, e ciò è bene: \myref{branch_predictors}.
 
 \subsubsection{\NonOptimizing GCC 4.9 (ARM64)}
 
 \myindex{ARM!\Instructions!XOR}
 
-ARM64 has instruction \INS{NEG} for negating:
+ARM64 ha un'istruzione \INS{NEG} per la negazione:
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64),style=customasmARM]{patterns/07_jcc/abs/abs_GCC49_ARM64_O0_EN.s}
 
@@ -42,12 +42,12 @@ ARM64 has instruction \INS{NEG} for negating:
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/07_jcc/abs/MIPS_O3_IDA_EN.lst}
 
 \myindex{MIPS!\Instructions!BLTZ}
-Here we see a new instruction: \INS{BLTZ} (\q{Branch if Less Than Zero}).
+Qui vediamo una nuova istruzione: \INS{BLTZ} (\q{Branch if Less Than Zero}).
 \myindex{MIPS!\Instructions!SUBU}
 \myindex{MIPS!\Pseudoinstructions!NEGU}
 
-There is also the \INS{NEGU} pseudo instruction, which just does subtraction from zero.
-The \q{U} suffix in both \INS{SUBU} and \INS{NEGU} implies that no exception to be raised in case of integer overflow.
+C'è anche la pseudoistruzione \INS{NEGU} , che semplicemente fa la sottrazione da zero.
+Il suffisso \q{U} suffix in entrambe \INS{SUBU} e \INS{NEGU} implica che non verrà sollevata nessuna eccezione in caso di integer overflow.
 
 \subsubsection{Branchless version?}
 
