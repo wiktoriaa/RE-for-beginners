@@ -2,18 +2,9 @@
 
 const char* month1[]=
 {
-	"January",
-	"February",
-	"March",
-	"April",
-	"May",
-	"June",
-	"July",
-	"August",
-	"September",
-	"October",
-	"November",
-	"December"
+	"January", "February", "March", "April",
+	"May", "June", "July", "August",
+	"September", "October", "November", "December"
 };
 
 // in 0..11 range

@@ -112,34 +112,34 @@ In[]:= Entropy[2, "No"] // N
 Out[]= 1.
 \end{lstlisting}
 
-\subsection{Is it compressed?}
+\subsection{Is data compressed?}
 
 OK, so our data is compressed and/or encrypted.
 Is it compressed? Almost all data compressors put some header at the start, signature, or something like that.
-As we can see, there are no consistent data at the start.
-It's still possible that this is DIY handmade data compressor, but they are very rare.
-Handmade cryptoalgorithm is very easy implement because it's very easy to make it work.
+As we can see, there are no consistent data at the start of each block.
+It's still possible that this is a handmade data compressor, but they are very rare.
+On the other hand, handmade cryptoalgorithms are much more popular, because it's very easy to make it work.
 \myindex{memfrob()}
 \myindex{ROT13}
 Even primitive keyless cryptosystems like \IT{memfrob()}\footnote{\url{http://linux.die.net/man/3/memfrob}}
-and ROT13 working fine without errors.
-It's a challenge to write data compressor from scratch using only fantasy and imagination in a way so it will have no evident bugs.
+and ROT13 works fine without errors.
+It's a serious challenge to write data compressor from scratch using only fantasy and imagination in a way so it will have no evident bugs.
 Some programmers implements data compression functions by reading textbooks, but this is also rare.
 The most popular two ways are:
 \myindex{zlib}
 1) just take open-source library like zlib;
 2) copy\&paste something from somewhere.
-Open-source data compressions algorithms usually puts some kind of header, and so
-are popular code snippets from the sites like \url{http://www.codeproject.com/}.
+Open-source data compressions algorithms usually puts some kind of header, and so do
+algorithms from sites like \url{http://www.codeproject.com/}.
 
-\subsection{Is it encrypted?}
+\subsection{Is data encrypted?}
 
-All major data encryption algorithms process data in blocks. DES---8 bytes, AES---16 bytes.
-If the input buffer is not divided evenly by block, it's padded, so encrypted data is aligned
-by cryptoalgorithm's block size.
+Major data encryption algorithms process data in blocks. DES---8 bytes, AES---16 bytes.
+If the input buffer is not divided evenly by block size, it's padded by zeroes (or something else),
+so encrypted data will be aligned by cryptoalgorithm's block size.
 This is not our case.
 
-Using Wolfram Mathematica, I analyzed data block's lengths:
+Using Wolfram Mathematica, I analyzed block's lengths:
 
 \begin{lstlisting}
 In[]:= Counts[Map[StringLength[#] &, BinaryStrings]]
@@ -165,7 +165,7 @@ So, most blocks has size between $\textasciitilde{}36$ and $\textasciitilde{}48$
 There is also another thing to notice: all block sizes are even.
 No single block with odd size.
 
-There are, however, stream ciphers which can operate on byte or bit-level.
+There are, however, stream ciphers which can operate on byte level or even on bit level.
 
 \subsection{CryptoPP}
 \myindex{CryptoPP}
@@ -201,9 +201,9 @@ Why the program use AES encryption in order to decrypt database?
 OK, it's not a problem to find a function which encrypts block.
 It is called \IT{CryptoPP::Rijndael::Enc::ProcessAndXorBlock}:\\
 \url{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L349},
-and it has references to another function: \IT{Rijndael::Enc::AdvancedProcessBlocks()}\\
+and it can call from another function: \IT{Rijndael::Enc::AdvancedProcessBlocks()}\\
 \url{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L1179},
-which, in turn, has references to two functions (
+which, in turn, can be call the two functions (
 \href{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L1000}{AESNI\_Enc\_Block}
 and 
 \href{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L1012}{AESNI\_Enc\_4\_Blocks}
@@ -220,7 +220,7 @@ let's have it at hand:
 
 \lstinputlisting{examples/encrypted_DB1/1.lst}
 
-This is also arguments of the function from CryptoPP source files:
+These are also arguments of the function from CryptoPP source files:
 
 \begin{lstlisting}
 size_t Rijndael::Enc::AdvancedProcessBlocks(const byte *inBlocks, const byte *xorBlocks, byte *outBlocks, size_t length, word32 flags);
@@ -236,17 +236,17 @@ OK, run tracer on \IT{ProcessAndXorBlock()} function:
 
 \lstinputlisting{examples/encrypted_DB1/2.lst}
 
-Here we can see inputs and outputs to the \IT{ProcessAndXorBlock()} function.
+Here we can see inputs to the \IT{ProcessAndXorBlock()} function, and outputs from it.
 
-This is output from the first call of encryption operation:
+This is output from the function during first call:
 
 \begin{lstlisting}
 00000000: C7 39 4E 7B 33 1B D6 1F-B8 31 10 39 39 13 A5 5D ".9N{3....1.99..]"
 \end{lstlisting}
 
-Then the \IT{ProcessAndXorBlock()} is called with 0-length block, but with 8 flag (\IT{BT\_ReverseDirection}).
+Then the \IT{ProcessAndXorBlock()} is called with zero-length block, but with 8 flag (\IT{BT\_ReverseDirection}).
 
-Second:
+Second call:
 
 \begin{lstlisting}
 00000000: 45 00 20 00 4A 00 4F 00-48 00 4E 00 53 00 00 00 "E. .J.O.H.N.S..."
@@ -254,7 +254,7 @@ Second:
 
 Wow, there is some string familiar to us!
 
-Third:
+Third call:
 
 \begin{lstlisting}
 00000000: B1 27 7F E4 9F 01 E3 81-CF C6 12 FB B9 7C F1 BC ".'...........|.."
@@ -275,7 +275,7 @@ First 16 bytes of encrypted buffer:
 \end{lstlisting}
 
 There are too much equal bytes!
-How AES encryption result can be very similar to the encrypted buffer while this is not
+How come AES encryption result can be very similar to the encrypted buffer while this is not
 encryption but rather decryption?!
 
 \subsection{Cipher Feedback mode}
@@ -283,7 +283,7 @@ encryption but rather decryption?!
 \myindex{Cipher Feedback mode}
 \myindex{XOR}
 The answer is \ac{CFB}:
-In this mode, AES algorithms used not as encryption algorithm, but as a device which generates cryptographically secure random data.
+in this mode, AES algorithm used not as encryption algorithm, but as a device which generates cryptographically secure random data.
 The actual encryption is happening using simple XOR operation.
 
 Here is encryption algorithm (images are taken from Wikipedia):
@@ -303,17 +303,17 @@ And decryption:
 
 Now let's see: AES encryption operation generates 16 bytes (or 128 bits) or \IT{random} data
 to be used while XOR-ing, who forces us to use all 16 bytes?
-If at the last stage we've got 1 byte of data, let's xor 1 byte of data with 1 byte of generated
+If at the last iteration we've got 1 byte of data, let's xor 1 byte of data with 1 byte of generated
 \IT{random} data?
-This leads to important property of \ac{CFB} mode: data must not be padded, data of arbitrary size
+This leads to important property of \ac{CFB} mode: data can be not padded, data of arbitrary size
 can be encrypted and decrypted.
 
 Oh, that's why all encrypted blocks are not padded.
 And that's why \INS{AESDEC} instruction is never called.
 
 Let's try to decrypt first block manually, using Python.
-\ac{CFB} mode also use \ac{IV}, as a \IT{seed} to \IT{random generator}.
-In our case, \ac{IV} is the block which is encrypted at first stage:
+\ac{CFB} mode also use \ac{IV}, as a \IT{seed} for \ac{CSPRNG}.
+In our case, \ac{IV} is the block which is encrypted at first iteration:
 
 \begin{lstlisting}
 0038B920: 01 00 00 00 FF FF FF FF-79 C1 69 0B 67 C1 04 7D "........y.i.g..}"
@@ -358,7 +358,7 @@ During manual decryption we've got this:
 \end{lstlisting}
 
 Now this is something readable!
-And now we can see why there were so many equal bytes at the first decryption stage:
+And now we can see why there were so many equal bytes at the first decryption iteration:
 because plaintext has so many zero bytes!
 
 Let's decrypt the second block:
@@ -398,7 +398,7 @@ What can affect first 16 bytes?
 Let's back to \ac{CFB} decryption algorithm again: \myref{fig:CFB_decryption}.
 
 We can see that \ac{IV} can affect to first block decryption operation, but not the second,
-because the second stage used ciphertext from the first stage, and in case of decryption,
+because during the second iteration, ciphertext from the first iteration is used, and in case of decryption,
 it's the same, no matter what \ac{IV} has!
 
 So probably, \ac{IV} is different each time.
@@ -417,7 +417,7 @@ of \ac{XML} file:
 
 It seems, first and fifth byte are changed each time.
 I finally concluded that the first 32-bit integer is just OrderID from the \ac{XML} file,
-and the second is also OrderID, but negated. All other 8 bytes are static.
+and the second 32-bit integer is also OrderID, but negated. All other 8 bytes are same for each operation.
 Now I have decrypted the whole database: 
 \url{https://raw.githubusercontent.com/dennis714/RE-for-beginners/master/examples/encrypted_DB1/decrypted.full.txt}.
 
@@ -434,10 +434,10 @@ All other blocks can be decrypted without knowledge \ac{IV}, but using the key.
 OK, so why \ac{CFB} mode? Apparently, because the very first AES example on CryptoPP wiki
 uses \ac{CFB} mode: 
 \url{http://www.cryptopp.com/wiki/Advanced_Encryption_Standard#Encrypting_and_Decrypting_Using_AES}.
-Supposedly, CryptoPP developers choose it for simplicity: 
+Supposedly, developer choose it for simplicity: 
 the example can encrypt/decrypt text strings with arbitrary lengths, without padding.
 
-It is very likely, my program's programmer(s) just copypasted the example from CryptoPP wiki page.
+It is very likely, program's author(s) just copypasted the example from CryptoPP wiki page.
 Many programmers do so.
 
 The only difference that \ac{IV} is chosen randomly in CryptoPP wiki example, while this indeterminism
@@ -476,16 +476,16 @@ There are 12 more bytes after each string.
 
 Using this script 
 (\url{https://github.com/dennis714/RE-for-beginners/blob/master/examples/encrypted_DB1/dump_buffer_rest.py})
-I've got random selection of the block \IT{tails}:
+I've got random selection of the \IT{tails}:
 
 \lstinputlisting{examples/encrypted_DB1/tails.lst}
 
 We first see the 0x40 and 0x07 bytes present in each \IT{tail}.
-The very last byte s always in 1..0x1F (1..31) range, as I checked.
+The very last byte s always in 1..0x1F (1..31) range, I've checked.
 The penultimate byte is always in 1..0xC (1..12) range.
 Wow, that looks like a date!
 Year can be represented as 16-bit value, and maybe last 4 bytes is date (16 bits for year, 8 bits
-for month and day)?
+for month and 8 more for day)?
 0x7DD is 2013, 0x7D5 is 2005, etc. Seems fine. This is a date.
 There are 8 more bytes.
 Judging by the fact this is database named \IT{orders}, maybe some kind of sum is present here?
@@ -560,7 +560,7 @@ This is some kind of \ac{OOP} serialization, i.e., packing differently typed val
 
 \subsection{Noise at the end}
 
-The only thing is that sometimes, tail is bigger:
+The only question remaining is that sometimes, \IT{tail} is bigger:
 
 \begin{lstlisting}
 00000000: 0E 00 FF FE 54 00 48 00  45 00 52 00 45 00 53 00  ....T.H.E.R.E.S.
@@ -569,7 +569,7 @@ The only thing is that sometimes, tail is bigger:
 OrderID= 172 name= THERESE TUTTLE sum= 152.95 date= 2004 / 7 / 26
 \end{lstlisting}
 
-(\IT{00 07 07 19} bytes are not used and is ballast).
+(\IT{00 07 07 19} bytes are not used and is ballast.)
 
 \begin{lstlisting}
 00000000: 0C 00 FF FE 4D 00 45 00  4C 00 41 00 4E 00 49 00  ....M.E.L.A.N.I.
@@ -578,9 +578,9 @@ OrderID= 172 name= THERESE TUTTLE sum= 152.95 date= 2004 / 7 / 26
 OrderID= 286 name= MELANIE KIRK sum= 161.0 date= 2004 / 9 / 2
 \end{lstlisting}
 
-(\IT{00 02} are not used).
+(\IT{00 02} are not used.)
 
-After close examination, we can see, that the noise at the end of tail is just left
+After close examination, we can see, that the noise at the end of \IT{tail} is just left
 from previous encryption!
 
 Here are two subsequent buffers:
@@ -613,16 +613,16 @@ OrderID= 285 name= LORENE OTOOLE sum= 120.95 date= 2004 / 9 / 2
 OrderID= 286 name= MELANIE KIRK sum= 161.0 date= 2004 / 9 / 2
 \end{lstlisting}
 
-The last 02 byte is copied from the previous plaintext buffer.
+The last 02 byte has been copied from the previous plaintext buffer.
 
-It's possible if the buffer used while encrypting is global and/or isn't cleared before
+It's possible if the buffer used while encrypting is global and/or isn't clearing before
 each encryption.
-The final buffer size value is also biased somehow, nevertheless, the bug left uncaught
-because it doesn't affect decrypting software, it's just ignores noise at the end.
+The final buffer size is also chaotic, nevertheless, the bug left uncaught
+because it doesn't affect decrypting process, which just ignores noise at the end.
 This is common mistake.
 \myindex{OpenSSL}
 \myindex{Heartbleed}
-It even affected OpenSSL (Heartbleed bug).
+It's been present in OpenSSL (Heartbleed bug).
 
 \subsection{Conclusion}
 
@@ -636,18 +636,18 @@ I've got most popular USA names and surnames from there: \url{http://stackoverfl
 and combined them randomly.
 Dates and sums were also generated randomly.
 
-All files used in this article are here: \url{https://github.com/dennis714/RE-for-beginners/tree/master/examples/encrypted_DB1}.
+All files used in this part are here: \url{https://github.com/dennis714/RE-for-beginners/tree/master/examples/encrypted_DB1}.
 
 Nevertheless, many features like these I've observed in real-world software applications.
 This example is based on them.
 
 \subsection{Post Scriptum: brute-forcing \ac{IV}}
 
-The case you saw is artificially constructed, but is based on a real application I've reverse engineered.
-When I've been working on it, I first noticed that \ac{IV} is generating using some 32-bit number,
-I wasn't able to find a link between this value and OrderID.
+The case you have just seen has been artificially constructed, but is based on a real application I've reverse engineered.
+When I've been working on it, I first noticed that \ac{IV} has been generating using some 32-bit number,
+and I wasn't able to find a link between this value and OrderID.
 So I prepared to use brute-force, which is indeed possible here.
 
-It's not a problem to enumerate all 32-bit values and try each \ac{IV} based on each.
-Then you decrypt 16-byte block and check for zero bytes, which are always at fixed places.
+It's not a problem to enumerate all 32-bit values and try each as a base for \ac{IV}.
+Then you decrypt the first 16-byte block and check for zero bytes, which are always at fixed places.
 
