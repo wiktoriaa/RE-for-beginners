@@ -18,7 +18,7 @@ For better understanding, the reader may take a look at the 7-bit standard \ac{A
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{\CURPATH/ascii.png}
+\includegraphics[width=0.7\textwidth]{ascii.png}
 \caption{7-bit \ac{ASCII} table in Emacs}
 \end{figure}
 
@@ -31,7 +31,7 @@ For better understanding, the reader may take a look at the 7-bit standard \ac{A
 
 There are also some minor compiler artifact:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2013 (x64),numbers=left,style=customasmx86]{\CURPATH/MSVC_2013_x64.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2013 (x64),numbers=left,style=customasmx86]{\CURPATH/MSVC_2013_x64_EN.asm}
 
 It's important to notice that the input byte is loaded into a 64-bit local stack slot at line 3.
 
@@ -76,7 +76,7 @@ In contrast the original algorithm uses two comparison operations plus one subtr
 \Optimizing GCC is even better, it gets rid of the jumps (which is good: \myref{branch_predictors}) 
 by using the CMOVcc instruction:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 (x64),numbers=left,style=customasmx86]{\CURPATH/GCC_49_x64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 (x64),numbers=left,style=customasmx86,label=toupper_GCC_O3]{\CURPATH/GCC_49_x64_O3.s}
 
 At line 3 the code prepares the subtracted value in advance, as if the conversion will always happen.
 
@@ -113,6 +113,39 @@ that loads the 0xFF constant into a register plus an AND instruction.
 \lstinputlisting[caption=\NonOptimizing GCC 4.9 (ARM64),style=customasmARM]{\CURPATH/GCC_49_ARM64_O0.s}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64),style=customasmARM]{\CURPATH/GCC_49_ARM64_O3.s}
+
+\subsection{Using bit operations}
+\label{toupper_bit}
+
+Given the fact that 5th bit (counting from 0th) is always present after the check, subtracting is merely clearing
+this sole bit, but the very same effect can be achieved with ANDing (\myref{AND_OR_as_SUB_ADD}).
+
+Even simpler, with XOR-ing:
+
+\lstinputlisting[style=customc]{\CURPATH/toupper2.c}
+
+The code is close to what the optimized GCC has produced for the previous example (\myref{toupper_GCC_O3}):
+
+\lstinputlisting[caption=\Optimizing GCC 5.4 (x86),style=customasmx86]{\CURPATH/toupper2_GCC540_x86_O3.s}
+
+\dots but \INS{XOR} is used instead of \INS{SUB}.
+
+Flipping 5th bit is just moving a \textit{cursor} in \ac{ASCII} table up and down by two rows.
+
+Some people say that lowercase/uppercase letters has been placed in the \ac{ASCII} table in such a way deliberately,
+because:
+
+\begin{framed}
+\begin{quotation}
+Very old keyboards used to do Shift just by toggling the 32 or 16 bit, depending on the key; this is why the relationship between small and capital letters in ASCII is so regular, and the relationship between numbers and symbols, and some pairs of symbols, is sort of regular if you squint at it.
+\end{quotation}
+\end{framed}
+
+( Eric S. Raymond, \url{http://www.catb.org/esr/faqs/things-every-hacker-once-knew/} )
+
+Therefore, we can write this piece of code, which just flips the case of letters:
+
+\lstinputlisting[style=customc]{\CURPATH/flip_EN.c}
 
 \subsection{Summary}
 

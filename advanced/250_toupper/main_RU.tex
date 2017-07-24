@@ -19,7 +19,7 @@
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{\CURPATH/ascii.png}
+\includegraphics[width=0.7\textwidth]{ascii.png}
 \caption{7-битная таблица \ac{ASCII} в Emacs}
 \end{figure}
 
@@ -32,7 +32,7 @@
 
 Имеется также небольшой артефакт компилятора:
 
-\lstinputlisting[caption=\NonOptimizing MSVC 2013 (x64),numbers=left,style=customasmx86]{\CURPATH/MSVC_2013_x64.asm}
+\lstinputlisting[caption=\NonOptimizing MSVC 2013 (x64),numbers=left,style=customasmx86]{\CURPATH/MSVC_2013_x64_RU.asm}
 
 Важно отметить что (на строке 3) входной байт загружается в 64-битный слот локального стека.
 
@@ -77,7 +77,7 @@ else
 \Optimizing GCC 
 даже лучше, он избавился от переходов (а это хорошо: \myref{branch_predictors}) используя инструкцию CMOVcc:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 (x64),numbers=left,style=customasmx86]{\CURPATH/GCC_49_x64_O3.s}
+\lstinputlisting[caption=\Optimizing GCC 4.9 (x64),numbers=left,style=customasmx86,label=toupper_GCC_O3]{\CURPATH/GCC_49_x64_O3.s}
 
 На строке 3 код готовит уже сконвертированное значение заранее, как если бы конверсия всегда происходила.
 
@@ -116,6 +116,40 @@ else
 \lstinputlisting[caption=\NonOptimizing GCC 4.9 (ARM64),style=customasmARM]{\CURPATH/GCC_49_ARM64_O0.s}
 
 \lstinputlisting[caption=\Optimizing GCC 4.9 (ARM64),style=customasmARM]{\CURPATH/GCC_49_ARM64_O3.s}
+
+\subsection{Используя битовые операции}
+\label{toupper_bit}
+
+Учитывая тот факт, что 5-й бит (считая с 0-его) всегда присутствует после проверки, вычитание его это просто
+сброс этого единственного бита, но точно такого же эффекта можно достичть при помощи обычного применения операции
+``И'' (\myref{AND_OR_as_SUB_ADD}).
+
+И даже проще, с исключающим ИЛИ:
+
+\lstinputlisting[style=customc]{\CURPATH/toupper2.c}
+
+Код близок к тому, что сгенерировал оптимизирующий GCC для предыдущего примера (\myref{toupper_GCC_O3}):
+
+\lstinputlisting[caption=\Optimizing GCC 5.4 (x86),style=customasmx86]{\CURPATH/toupper2_GCC540_x86_O3.s}
+
+\dots но используется \INS{XOR} вместо \INS{SUB}.
+
+Переворачивание 5-го бита это просто перемещение \textit{курсора} в таблице \ac{ASCII} вверх/вниз на 2 ряда.
+
+Некоторые люди говорят, что буквы нижнего/верхнего регистра были расставлены в \ac{ASCII}-таблице таким манером намеренно,
+потому что:
+
+\begin{framed}
+\begin{quotation}
+Very old keyboards used to do Shift just by toggling the 32 or 16 bit, depending on the key; this is why the relationship between small and capital letters in ASCII is so regular, and the relationship between numbers and symbols, and some pairs of symbols, is sort of regular if you squint at it.
+\end{quotation}
+\end{framed}
+
+( Eric S. Raymond, \url{http://www.catb.org/esr/faqs/things-every-hacker-once-knew/} )
+
+Следовательно, мы можем написать такой фрагмент кода, который просто меняет регистр букв:
+
+\lstinputlisting[style=customc]{\CURPATH/flip_EN.c}
 
 \subsection{Итог}
 
