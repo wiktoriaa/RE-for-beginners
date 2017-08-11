@@ -1,22 +1,20 @@
 \section{Konstanten}
 
-Menschen, Programmierer eingeschlossen, neigen dazu Zahlen zu Runden wie z.B 10, 100, 1000,
+Menschen, Programmierer eingeschlossen, neigen dazu Zahlen zu runden wie z.B 10, 100, 1000,
 im realen Leben so wie in ihrem Code.
 
-Der angehende Reverse Engineer kennt diese Werte und ihre Hexadezimale Repr\"asentation sehr gut:
+Der angehende Reverse Engineer kennt diese Werte und ihre hexadezimale Repr\"asentation sehr gut:
 10=0xA, 100=0x64, 1000=0x3E8, 10000=0x2710.
 
 Die Konstanten \TT{0xAAAAAAAA} (0b10101010101010101010101010101010) und 
 \TT{0x55555555} (0b01010101010101010101010101010101) sind auch sehr popul\"ar---
-sie sind zusammen-gesetzt aus ver\"andernden Bits. % <-- Findest vielleicht noch ne besere bezeichnung
+sie sind zusammengesetzt aus ver\"andernden Bits. % <-- Findest vielleicht noch ne bessere Bezeichnung
 
-Das hilft vielleicht ein Signal von einem Signal zu unterscheiden bei dem alle Bits eingeschaltet werden  (0b1111 \dots) oder ausgeschaltet (0b0000 \dots).
-Zum Beispiel die \TT{0x55AA} Konstante wird
-zumindest beim Boot Sektor benutzt, \ac{MBR},
-und im \ac{ROM} von IBM-Kompatiblen Erweiterung Karten.
+Dies hilft Signale voneinander zu unterscheiden bei denen alle Bits eingeschaltet (0b1111 \dots) oder ausgeschaltet (0b0000 \dots) werden .
+Zum Beispiel wird die Konstante \TT{0x55AA} beim Boot Sektor, \ac{MBR},
+und im \ac{ROM} von IBM-Kompatiblen Erweiterung Karten benutzt.
 
-Manche Algorithmen, speziell die Kryptografischen benutzen eindeutige Konstanten, die einfach zu finden 
-sind im Code mit der Hilfe von \IDA.
+Manche Algorithmen, speziell die Kryptografischen benutzen eindeutige Konstanten, die mit der Hilfe von \IDA einfach im Code zu finden sind.
 
 \myindex{MD5}
 \newcommand{\URLMD}{http://go.yurichev.com/17111}
@@ -35,7 +33,7 @@ Wenn man diese vier Konstanten im Code hintereinander benutzt findet, dann ist d
 sich auf MD5 bezieht.
 
 \par Ein weiteres Beispiel sind die CRC16/CRC32 Algorithmen,
-ihre Berechnungs Algorithmen benutzen oft vor-berechnete Tabellen wie diese:
+ihre Berechnungs Algorithmen benutzen oft vorberechnete Tabellen wie diese:
 
 \begin{lstlisting}[caption=linux/lib/crc16.c,style=customc]
 /** CRC table for the CRC-16. The poly is 0x8005 (x^16 + x^15 + x^2 + 1) */
@@ -46,17 +44,16 @@ u16 const crc16_table[256] = {
 	...
 \end{lstlisting}
 
-Man beachte auch die vor berechnete Tabelle f\"ur CRC32: \myref{sec:CRC32}.
+Man beachte auch die vorberechnete Tabelle f\"ur CRC32: \myref{sec:CRC32}.
 
-In Tabellen losen CRC Algorithmen werden bekannte Polynome benutzt, zum Beispiel, 0xEDB88320 f\"ur CRC32.
+In tabellenlosen CRC-Algorithmen werden bekannte Polynome benutzt, zum Beispiel, 0xEDB88320 f\"ur CRC32.
 
 \subsection{Magic numbers}
 \label{magic_numbers}
 
 \newcommand{\FNURLMAGIC}{\footnote{\href{http://go.yurichev.com/17112}{wikipedia}}}
 
-Viele Datei Formate definieren einen Standard Datei Header wo eine \IT{magic number(s)}\FNURLMAGIC{} benutzt wird, einzelne oder
-sogar mehrere. 
+Viele Datei-Formate definieren einen Standard-Dateiheader in dem eine \IT{magic number(s)}\FNURLMAGIC{} benutzt wird, einzelne oder sogar mehrere. 
 
 \myindex{MS-DOS}
 
