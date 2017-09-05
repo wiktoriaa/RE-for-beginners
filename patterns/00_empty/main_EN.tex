@@ -1,15 +1,15 @@
-\section{Empty function}
+\section{An Empty Function}
 \label{empty_func}
 
 The simplest possible function is arguably one that does nothing:
 
 \lstinputlisting[caption=\EN{\CCpp Code},style=customc]{patterns/00_empty/1.c}
 
-Lets compile it!
+Let's compile it!
 
 \subsection{x86}
 
-Here's what both the optimizing GCC and MSVC compilers produce on the x86 platform:
+Here's what both the GCC and MSVC compilers produce on the x86 platform:
 
 \lstinputlisting[caption=\Optimizing GCC/MSVC (\assemblyOutput),style=customasmx86]{patterns/00_empty/1.s}
 
@@ -33,7 +33,7 @@ The GCC assembly output below lists registers by number:
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),style=customasmMIPS]{patterns/00_empty/MIPS.s}
 
-\dots while \IDA does it---by their pseudo names:
+\dots while \IDA does it by pseudo name:
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/00_empty/MIPS_IDA.lst}
 
@@ -44,34 +44,34 @@ jumping to the address in the \$31 (or \$RA) register.
 This is the register analogous to \ac{LR} in ARM.
 
 The second instruction is \ac{NOP}, which does nothing.
-We can ignore it so far.
+We can ignore it for now.
 
-\subsubsection{A note about MIPS instruction/register names}
+\subsubsection{A Note About MIPS Instructions and Register Names}
 
 Register and instruction names in the world of MIPS are traditionally written in lowercase.
-However, for the sake of consistency, we'll stick to using uppercase letters,
-as it is the convention followed by all other \ac{ISA}s featured this book.
+However, for the sake of consistency, this book will stick to using uppercase letters,
+as it is the convention followed by all the other \ac{ISA}s featured this book.
 
-\subsection{Empty functions in practice}
+\subsection{Empty Functions in Practice}
 
-Despite the fact empty functions are useless, they are quite frequent in low-level code.
+Despite the fact empty functions seem useless, they are quite frequent in low-level code.
 
-First of all, debugging functions are quite popular, like this one:
+First of all, they are quite popular in debugging functions, like this one:
 
 \lstinputlisting[caption=\EN{\CCpp Code},style=customc]{patterns/00_empty/dbg_print.c}
 
-In non-debug build (e.g., ``release''), \TT{\_DEBUG} is not defined,
-so \TT{dbg\_print()} function, despite still being called during execution,
+In a non-debug build (as in a ``release''), \TT{\_DEBUG} is not defined,
+so the \TT{dbg\_print()} function, despite still being called during execution,
 will be empty.
 
-Another popular way of software protection is make several builds: one for legal customers, and a demo build.
-Demo build can lack some important functions, like this:
+Similarly, a popular method of software protection is to make one build for legal customers, and another demo build.
+A demo build can lack some important functions, as with this example:
 
 \lstinputlisting[caption=\EN{\CCpp Code},style=customc]{patterns/00_empty/demo.c}
 
-\TT{save\_file()} function can be called when user click \TT{File->Save} menu.
-Demo version may be delivered with this menu item disabled, but even if software cracker will enable it,
-empty function with no useful code will be called.
+The \TT{save\_file()} function can be called when the user clicks \TT{File->Save} on the menu.
+The demo version may be delivered with this menu item disabled, but even if a software cracker will enable it,
+only an empty function with no useful code will be called.
 
 IDA marks such functions with names like \TT{nullsub\_00}, \TT{nullsub\_01}, etc.
 
