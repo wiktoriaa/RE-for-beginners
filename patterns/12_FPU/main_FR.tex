@@ -20,8 +20,9 @@ appelé \IT{fraction}) et un \IT{exposant}.
 
 \subsection{x86}
 
-Ca vaut la peine de jetter un oeil sur les machines à base de piles ou d'apprendre
-les bases du langage Forth\FNURLFORTH, avant d'étudier le \ac{FPU} en x86.
+Ca vaut la peine de jetter un oeil sur les machines à base de piles\FNURLSTACK ou
+d'apprendre les bases du langage Forth\FNURLFORTH, avant d'étudier le \ac{FPU} en
+x86.
 
 \myindex{Intel!80486}
 \myindex{Intel!FPU}
@@ -38,7 +39,7 @@ A partir du CPU 80486 DX, le \ac{FPU} est intégré dans le \ac{CPU}.
 
 \myindex{x86!\Instructions!FWAIT}
 L'instruction \INS{FWAIT} nous rapelle le fait qu'elle passe le \ac{CPU} dans un
-état d'attente, afin d'attendre que le \ac{FPU} ait fini son traitement.
+état d'attente, jusqu'à ce que le \ac{FPU} ait fini son traitement.
 
 Un autre rudiment est le fait que les opcodes d'instruction \ac{FPU} commencent
 avec ce qui est appelé l'opcode-\q{d'échappement} (\GTT{D8..DF}), i.e., opcodes
@@ -55,7 +56,8 @@ qui est représenté dans certains livres et manuels comme \q{Stack Top}.
 
 \subsection{ARM, MIPS, x86/x64 SIMD}
 
-En ARM et MIPS le FPU n'a pas de pile, mais un ensemble de registres.
+En ARM et MIPS le FPU n'a pas de pile, mais un ensemble de registres, qui peuvent
+être accédés aléatoirement, comme \ac{GPR}.
 
 La même idéologie est utilisée dans l'extension SIMD des CPUs x86/x64.
 
@@ -120,9 +122,22 @@ Par exemple, pour aditionner 12 et 34, on doit entrer 12, puis 34, et presser le
 C'est parce que les anciens calculateurs étaient juste des implémentations de machine
 à pile, et c'était bien plus simple que de manipuler des expressions complexes avec
 parenthèses.
+
+\subsection{80 bits?}
+
+\myindex{Punched card}
+
+Représentation interne des nombres dans le FPU --- 80-bit.
+Nombre étrange, car il n'est pas de la forme $2^n$.
+Il y a une hypothèse que c'est probablement dû à des raisons historiques---le standard
+IBM de carte perforée peut encoder 12 lignes de 80 bits.
+La résolution en mode texte de $80\cdot 25$ était aussi très populaire dans le passé.
+Si vous en savez plus, s'il vous plait envoyez un email à l'auteur: \EMAIL{}.
+
 \subsection{x64}
 
-Sur la manière dont sont traités les nombres à virgules flottante en x86-64, lire ici: \myref{floating_SIMD}.
+Sur la manière dont sont traités les nombres à virgules flottante en x86-64, lire
+ici: \myref{floating_SIMD}.
 
 % sections
 \input{patterns/12_FPU/exercises}
