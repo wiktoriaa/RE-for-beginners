@@ -5,12 +5,13 @@ Let's also try GCC in 64-bit Linux:
 
 \lstinputlisting[caption=GCC 4.4.6 x64,style=customasmx86]{patterns/01_helloworld/GCC_x64_EN.s}
 
-A method to pass function arguments in registers is also used in Linux, *BSD and \MacOSX is \SysVABI.
+% I think I got the intent right on the following line - Renaissance
+Linux, *BSD and \MacOSX also use a method to pass function arguments in registers. \SysVABI{}.
 
-The first 6 arguments are passed in the \RDI, \RSI, \RDX, \RCX, \Reg{8}, \Reg{9}  registers, and the rest---via the stack.
+The first 6 arguments are passed in the \RDI, \RSI, \RDX, \RCX, \Reg{8}, and \Reg{9}  registers, and the rest---via the stack.
 
 So the pointer to the string is passed in \EDI (the 32-bit part of the register).
-But why not use the 64-bit part, \RDI?
+Why doesn't it use the 64-bit part, \RDI?
 
 It is important to keep in mind that all \MOV instructions in 64-bit mode that write something into the lower 32-bit register part also clear the higher 32-bits (as stated in Intel manuals: \myref{x86_manuals}).\\
 I.e., the \INS{MOV EAX, 011223344h} writes a value into \RAX correctly, since the higher bits will be cleared.
@@ -27,7 +28,8 @@ Apparently, GCC is trying to save some space.
 Besides, it can be sure that the data segment containing the string will not be allocated at the addresses higher than 4\gls{GiB}.
 
 \label{SysVABI_input_EAX}
+% There isn't an ABI acronym in acronyms.tex - I figure the intent is to Application Binary Interface,
+% so I put it in there (in the EN section, commented out)
 We also see that the \EAX register has been cleared before the \printf function call.
 This is done because according to \ac{ABI} standard mentioned above,
-the number of used vector registers is passed in \EAX in *NIX systems on x86-64.
-
+the number of used vector registers is to be passed in \EAX in *NIX systems on x86-64.

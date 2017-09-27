@@ -38,7 +38,7 @@ In our case, the file contains two segments: \TT{CONST} (for data constants) and
 \myindex{\CLanguageElements!const}
 \label{string_is_const_char}
 The string \TT{hello, world} in \CCpp has type \TT{const char[]}\InSqBrackets{\TCPPPL p176, 7.3.2}, but it does not have its own name.
-The compiler needs to deal with the string somehow so it defines the internal name \TT{\$SG3830} for it.
+The compiler needs to deal with the string somehow, so it defines the internal name \TT{\$SG3830} for it.
 
 That is why the example may be rewritten as follows:
 
@@ -70,7 +70,7 @@ Why 4? Since this is a 32-bit program, we need exactly 4 bytes for address passi
 \myindex{\oracle}
 \myindex{x86!\Instructions!POP}
 
-For the same purpose, some compilers (like the Intel C++ Compiler) may emit \TT{POP ECX} 
+For the same purpose, some compilers (like the Intel C++ Compiler) may emit \TT{POP ECX}
 instead of \ADD (e.g., such a pattern can be observed in the \oracle{} code as it is compiled with the Intel C++ compiler).
 This instruction has almost the same effect but the \ECX register contents will be overwritten.
 The Intel C++ compiler supposedly uses \TT{POP ECX} since this instruction's opcode is shorter than \TT{ADD ESP, x} (1 byte for \TT{POP} against 3 for \TT{ADD}).
@@ -93,7 +93,7 @@ In the generated code this is implemented by the instruction \INS{XOR EAX, EAX}.
 
 \myindex{x86!\Instructions!MOV}
 
-\XOR is in fact just \q{eXclusive OR}\footnote{\href{http://go.yurichev.com/17118}{wikipedia}} but the compilers often use it instead of
+\XOR is in fact just \q{eXclusive OR}\footnote{\href{http://go.yurichev.com/17118}{Wikipedia}} but the compilers often use it instead of
 \INS{MOV EAX, 0}---again because it is a slightly shorter opcode (2 bytes for \XOR against 5 for \MOV).
 
 \myindex{x86!\Instructions!SUB}
@@ -101,4 +101,3 @@ Some compilers emit \INS{SUB EAX, EAX}, which means \IT{SUBtract the value in th
 
 \myindex{x86!\Instructions!RET}
 The last instruction \RET returns the control to the \gls{caller}. Usually, this is \CCpp \ac{CRT} code which in turn returns control to the \ac{OS}.
-

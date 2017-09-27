@@ -1,7 +1,7 @@
 \subsubsection{Address patching (Win64)}
 
-If our example compiled in MSVC2013 using \TT{\textbackslash{}MD} switch
-(meaning smaller executable due to \TT{MSVCR*.DLL} file linkage), the \main function came first and can be easily found:
+If our example was compiled in MSVC2013 using \TT{\textbackslash{}MD} switch
+(meaning a smaller executable due to \TT{MSVCR*.DLL} file linkage), the \main function comes first, and can be easily found:
 
 \begin{figure}[H]
 \centering
@@ -19,15 +19,15 @@ As an experiment, we can \gls{increment} address by 1:
 \label{}
 \end{figure}
 
-Hiew shows \q{ello, world} string.
-And when we run patched executable, this very string is printed.
+Hiew shows \q{ello, world}.
+And when we run the patched executable, this very string is printed.
 
 \subsubsection{Pick another string from binary image (Linux x64)}
 
-The binary file I've got when I compile our example using GCC 5.4.0 on Linux x64 box has many other text strings:
-they are mostly imported function names and library names.
+The binary file I've got when I compile our example using GCC 5.4.0 on Linux x64 box has many other text strings.
+They are mostly imported function names and library names.
 
-I run objdump to get contents of all sections of the compiled file:
+Run objdump to get the contents of all sections of the compiled file:
 
 \begin{lstlisting}[basicstyle=\ttfamily, mathescape]
 $\$$ objdump -s a.out
@@ -48,7 +48,7 @@ Contents of section .note.gnu.build-id:
 ...
 \end{lstlisting}
 
-It's not a problem to pass address of the text string \q{/lib64/ld-linux-x86-64.so.2} to \TT{printf()} call:
+It's not a problem to pass address of the text string \q{/lib64/ld-linux-x86-64.so.2} to \TT{printf()}:
 
 \begin{lstlisting}[style=customc]
 #include <stdio.h>
@@ -60,10 +60,9 @@ int main()
 }
 \end{lstlisting}
 
-Hard to believe, this code prints mentioned string.
+It's hard to believe, but this code prints the aforementioned string.
 
-Change the address to \TT{0x400260}, and the \q{GNU} string will be printed.
-The address is true for my specific GCC version, GNU toolset, etc.
-On your system, executable may be slightly different, and all addresses will also be different.
-Also, adding/removing code to/from this source code will probably shift all addresses back or forth.
-
+If you would change the address to \TT{0x400260}, the \q{GNU} string would be printed.
+This address is true for my specific GCC version, GNU toolset, etc.
+On your system, the executable may be slightly different, and all addresses will also be different.
+Also, adding/removing code to/from this source code will probably shift all addresses back or forward.
