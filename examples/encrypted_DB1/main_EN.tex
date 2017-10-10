@@ -45,10 +45,10 @@ Keeping in mind these base64 properties, it's very easy to recognize them.
 Let's decode them and calculate entropies (\myref{entropy}) of these blocks in Wolfram Mathematica:
 
 \begin{lstlisting}
-In[]:= ListOfBase64Strings = 
+In[]:= ListOfBase64Strings =
   Map[First[#[[3]]] &, Cases[Import["encrypted.xml"], XMLElement["Data", _, _], Infinity]];
 
-In[]:= BinaryStrings = 
+In[]:= BinaryStrings =
   Map[ImportString[#, {"Base64", "String"}] &, ListOfBase64Strings];
 
 In[]:= Entropies = Map[N[Entropy[2, #]] &, BinaryStrings];
@@ -143,8 +143,8 @@ Using Wolfram Mathematica, I analyzed block's lengths:
 
 \begin{lstlisting}
 In[]:= Counts[Map[StringLength[#] &, BinaryStrings]]
-Out[]= <|42 -> 1858, 38 -> 1235, 36 -> 699, 46 -> 1151, 40 -> 1784, 
- 44 -> 1558, 50 -> 366, 34 -> 291, 32 -> 74, 56 -> 15, 48 -> 716, 
+Out[]= <|42 -> 1858, 38 -> 1235, 36 -> 699, 46 -> 1151, 40 -> 1784,
+ 44 -> 1558, 50 -> 366, 34 -> 291, 32 -> 74, 56 -> 15, 48 -> 716,
  30 -> 13, 52 -> 156, 54 -> 71, 60 -> 3, 58 -> 6, 28 -> 4|>
 \end{lstlisting}
 
@@ -189,7 +189,7 @@ For example, here:
 \myindex{x86!\Instructions!AESENC}
 \myindex{x86!\Instructions!AESDEC}
 \myindex{tracer}
-To my surprise, during decryption, \INS{AESENC} gets executed, while \INS{AESDEC} is not 
+To my surprise, during decryption, \INS{AESENC} gets executed, while \INS{AESDEC} is not
 (I just checked with my tracer utility, but any debugger can be used).
 I checked, if my CPU really supports AES instructions. Some Intel i3 CPUs are not.
 And if not, CryptoPP library falling back to AES functions implemented in old way
@@ -205,7 +205,7 @@ and it can call from another function: \IT{Rijndael::Enc::AdvancedProcessBlocks(
 \url{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L1179},
 which, in turn, can be call the two functions (
 \href{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L1000}{AESNI\_Enc\_Block}
-and 
+and
 \href{https://github.com/mmoss/cryptopp/blob/2772f7b57182b31a41659b48d5f35a7b6cedd34d/src/rijndael.cpp#L1012}{AESNI\_Enc\_4\_Blocks}
 )
 which has \INS{AESENC} instructions.
@@ -290,14 +290,14 @@ Here is encryption algorithm (images are taken from Wikipedia):
 
 \begin{figure}[H]
 \centering
-\myincludegraphics{examples/encrypted_DB1/601px-CFB_encryption.svg.png}
+\myincludegraphics{examples/encrypted_DB1/601px-CFB_encryption.png}
 \end{figure}
 
 And decryption:
 
 \begin{figure}[H]
 \centering
-\myincludegraphics{examples/encrypted_DB1/601px-CFB_decryption.svg.png}
+\myincludegraphics{examples/encrypted_DB1/601px-CFB_decryption.png}
 \label{fig:CFB_decryption}
 \end{figure}
 
@@ -337,9 +337,9 @@ no module registered with image base 0x77320000
 no module registered with image base 0x77220000
 Warning: unknown (to us) INT3 breakpoint at ntdll.dll!LdrVerifyImageMatchesChecksum+0x96c (0x776c103b)
 (0) software.exe!0x435c30(0x15e8000, 0x10, 0x14f808) (called from software.exe!.text+0x22fa1 (0x13d3fa1))
-Argument 1/3 
+Argument 1/3
 015E8000: CD C5 7E AD 28 5F 6D E1-CE 8F CC 29 B1 21 88 8E "..~.(_m....).!.."
-Argument 3/3 
+Argument 3/3
 0014F808: 38 82 58 01 C8 B9 46 00-01 D1 3C 01 00 F8 14 00 "8.X...F...<....."
 Argument 3/3 +0x0: software.exe!.rdata+0x5238
 Argument 3/3 +0x8: software.exe!.text+0x1c101
@@ -418,10 +418,10 @@ of \ac{XML} file:
 It seems, first and fifth byte are changed each time.
 I finally concluded that the first 32-bit integer is just OrderID from the \ac{XML} file,
 and the second 32-bit integer is also OrderID, but negated. All other 8 bytes are same for each operation.
-Now I have decrypted the whole database: 
+Now I have decrypted the whole database:
 \url{https://raw.githubusercontent.com/dennis714/RE-for-beginners/master/examples/encrypted_DB1/decrypted.full.txt}.
 
-The Python script used for this is: 
+The Python script used for this is:
 \url{https://github.com/dennis714/RE-for-beginners/blob/master/examples/encrypted_DB1/decrypt_blocks.py}.
 
 Perhaps, the author wanted each block encrypted differently, so he/she used OrderID as part of key.
@@ -432,16 +432,16 @@ feature of it.
 All other blocks can be decrypted without knowledge \ac{IV}, but using the key.
 
 OK, so why \ac{CFB} mode? Apparently, because the very first AES example on CryptoPP wiki
-uses \ac{CFB} mode: 
+uses \ac{CFB} mode:
 \url{http://www.cryptopp.com/wiki/Advanced_Encryption_Standard#Encrypting_and_Decrypting_Using_AES}.
-Supposedly, developer choose it for simplicity: 
+Supposedly, developer choose it for simplicity:
 the example can encrypt/decrypt text strings with arbitrary lengths, without padding.
 
 It is very likely, program's author(s) just copypasted the example from CryptoPP wiki page.
 Many programmers do so.
 
 The only difference that \ac{IV} is chosen randomly in CryptoPP wiki example, while this indeterminism
-wasn't allowable to programmers of the software we are dissecting now, 
+wasn't allowable to programmers of the software we are dissecting now,
 so they choose to initialize \ac{IV} using Order ID.
 
 Now we can proceed to analyzing matter of each byte in the decrypted block.
@@ -474,7 +474,7 @@ The first byte (or 16-bit word) is seems string length, we can visually check it
 
 There are 12 more bytes after each string.
 
-Using this script 
+Using this script
 (\url{https://github.com/dennis714/RE-for-beginners/blob/master/examples/encrypted_DB1/dump_buffer_rest.py})
 I've got random selection of the \IT{tails}:
 
@@ -650,4 +650,3 @@ So I prepared to use brute-force, which is indeed possible here.
 
 It's not a problem to enumerate all 32-bit values and try each as a base for \ac{IV}.
 Then you decrypt the first 16-byte block and check for zero bytes, which are always at fixed places.
-
