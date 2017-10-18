@@ -11,7 +11,8 @@ TLS, position-independent code (PIC), profile-guided optimization, C++ STL, Open
 
 Compiled versions can be found here:
 [English](http://beginners.re/Reverse_Engineering_for_Beginners-en.pdf),
-[Russian](http://beginners.re/Reverse_Engineering_for_Beginners-ru.pdf).
+[Russian](http://beginners.re/Reverse_Engineering_for_Beginners-ru.pdf) and
+[German](https://beginners.re/RE4B-DE.pdf).
 
 See also the [ChangeLog](https://github.com/dennis714/RE-for-beginners/blob/master/ChangeLog) for the latest changes.
 
