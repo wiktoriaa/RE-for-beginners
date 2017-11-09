@@ -31,15 +31,13 @@ void itoa(int n, char s[])
 		s[i++] = '-';
 	s[i] = '\0';
 	strrev(s);
-	return;
 }
 
 int main()
 {
 	char buf[10];
-	//itoa (1234567890, buf);
+	itoa (1234567890, buf);
 	//itoa (-1234567890, buf);
-	itoa (INT_MIN, buf);
 	printf ("%s\n", buf);
 };
 
