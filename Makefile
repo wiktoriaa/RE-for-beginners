@@ -79,3 +79,6 @@ NL:
 FR:
 	$(call compile,RE4B-FR)
 
+JP:
+	$(call compile,RE4B-JP)
+
