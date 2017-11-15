@@ -81,4 +81,3 @@ FR:
 
 JP:
 	$(call compile,RE4B-JP)
-
