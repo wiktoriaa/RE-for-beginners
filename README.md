@@ -6,9 +6,10 @@
 Topics discussed: x86/x64, ARM/ARM64, MIPS, Java/JVM.
 
 Compiled versions can be found here:
-[English](http://beginners.re/Reverse_Engineering_for_Beginners-en.pdf),
-[Russian](http://beginners.re/Reverse_Engineering_for_Beginners-ru.pdf) and
-[German](https://beginners.re/RE4B-DE.pdf).
+[English](http://beginners.re/RE4B-EN.pdf),
+[Russian](http://beginners.re/RE4B-RU.pdf),
+[German](https://beginners.re/RE4B-DE.pdf) and
+[French](https://beginners.re/RE4B-FR.pdf).
 
 See also the [ChangeLog](https://github.com/dennis714/RE-for-beginners/blob/master/ChangeLog) for the latest changes.
 
