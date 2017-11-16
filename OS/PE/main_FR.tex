@@ -155,7 +155,6 @@ est mis dans la section de code---c'est de code exécutable.
 \item Dans la section de données---les flags \IT{IMAGE\_SCN\_CNT\_INITIALIZED\_DATA},\\
 \IT{IMAGE\_SCN\_MEM\_READ} et \IT{IMAGE\_SCN\_MEM\_WRITE}.
 
-		%%and \IT{IMAGE\_SCN\_MEM\_WRITE}.
 \item Dans une section vide avec des données non initialisées---\\
 \IT{IMAGE\_SCN\_CNT\_UNINITIALIZED\_DATA}, \IT{IMAGE\_SCN\_MEM\_READ} \\
 et \IT{IMAGE\_SCN\_MEM\_WRITE}.
@@ -170,7 +169,7 @@ Un process plantera s'il essaye d'écrire dans cette section.
 \myindex{BSS}
 Chaque section dans un fichier PE peut avoir un nom, toutefois, ce n'est pas très
 important.
-Souvant (mais pas toujours) la section de code est appelée \TT{.text}, la section
+Souvent (mais pas toujours) la section de code est appelée \TT{.text}, la section
 de données---\TT{.data}, la section de données constante --- \TT{.rdata} \IT{(readable data)}.
 D'autres noms de section courants sont:
 
@@ -181,7 +180,7 @@ D'autres noms de section courants sont:
 \item \TT{.edata}---section d'exports section (rare)
 \item \TT{.pdata}---section contenant toutes les informations sur les exceptions
 dans Windows NT pout MIPS, \ac{IA64} et x64: \myref{SEH_win64}
-\item \TT{.reloc}---section de relocation
+\item \TT{.reloc}---section de relocalisation
 \item \TT{.bss}---données non initialisées (\ac{BSS})
 \item \TT{.tls}---stockage local d'un thread (\ac{TLS})
 \item \TT{.rsrc}---ressources
@@ -189,7 +188,7 @@ dans Windows NT pout MIPS, \ac{IA64} et x64: \myref{SEH_win64}
 anciennes versions de MSVC
 \end{itemize}
 
-Les paqueurs/chiffreurs rendent souvent les noms de sections initelligibles ou les
+Les packeurs/chiffreurs rendent souvent les noms de sections initelligibles ou les
 remplacent avec des noms qui leurs sont propres.
 
 \ac{MSVC} permet de déclarer des données dans une section de n'importe quel nom
@@ -226,7 +225,7 @@ typedef struct _IMAGE_SECTION_HEADER {
 Un mot à propos de le terminilogie: \IT{PointerToRawData} est appelé \q{Offset} dans
 Hiew et \IT{VirtualAddress} est appelé \q{RVA} ici.
 
-\subsubsection{Relocs (relocation)}
+\subsubsection{Relocs (relocalisation)}
 \label{subsec:relocs}
 
 \ac{AKA} FIXUP-s (au moins dans Hiew).
@@ -243,7 +242,7 @@ comment traiter les variables globales, par exemple? Elles doivent être accèd�
 par adresse. Une solution est le \PICcode{} (\myref{sec:PIC}).
 Mais ce n'est pas toujours pratique.
 
-C'est pourquoi une table de relocations est présente.
+C'est pourquoi une table des relocalisations est présente.
 Elle contient les adresses des points qui doivent être corrigés en cas de chargement
 à une adresse de base différente.
 
@@ -267,7 +266,7 @@ Comme nous pouvons le voir, l'adresse de la variable est encodée dans l'instruc
 \TT{MOV}, après l'octet \TT{0xA1}.
 
 C'est pourquoi l'adresse des 4 octets aprés \TT{0xA1} est écrite dans la table de
-relocations.
+relocalisations.
 
 Si le module est chargé à une adresse de base différente, le chargeur de l'\ac{OS}
 parcourt toutes les adresses dans la table, trouve chaque mot de 32-bit vers lequel
@@ -320,7 +319,7 @@ C'est ainsi qu'elles peuvent être localisées plus rapidement lors du chargemen
 DLL. Les ordinaux sont toujours présents dans la table d'\q{export}.
 
 \myindex{MFC}
-% TODO clarify
+% TODO clarifier
 Par exemple, un programme utilisant la bibliothèque \ac{MFC} charge en général mfc*.dll
 par ordinaux, et dans un programme n'ayant aucun nom de fonction \ac{MFC} dans \ac{INT}.
 
