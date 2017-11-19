@@ -26,82 +26,71 @@ main            endp
 
 \myindex{Function prologue}
 \myindex{x86!\Instructions!AND}
-The result is almost the same.
-The address of the \TT{hello, world} string (stored in the data segment) is loaded in the \EAX register first, and then saved onto the stack. \\
-In addition, the function prologue has \INS{AND ESP, 0FFFFFFF0h}~---this
-instruction aligns the \ESP register value on a 16-byte boundary.
-This results in all values in the stack being aligned the same way (The CPU performs better if the values it is dealing with are located in memory at addresses aligned
-on a 4-byte or 16-byte boundary)\footnote{\URLWPDA}.
+結果はほぼ同じです。 helloのワールド文字列（データセグメントに格納されている）のアドレスは、最初にEAXレジスタにロードされ、スタックに保存されます。
+
+さらに、関数プロローグには \INS{AND ESP, 0FFFFFFF0h} があります。この命令は、 \ESP レジスタ値を16バイトの境界に揃えます。この結果、スタック内のすべての値が同じ方法で整列されます（処理中の値が4バイト境界または16バイト境界に整列したアドレスにある場合、CPUのパフォーマンスは向上します）。
 
 \myindex{x86!\Instructions!SUB}
-\INS{SUB ESP, 10h} allocates 16 bytes on the stack. Although, as we can see hereafter, only 4 are necessary here.
+\INS{SUB ESP, 10h} はスタックに16バイトを割り当てます。しかし、私たちはこれから見るように、ここでは4つだけが必要です。
 
-This is because the size of the allocated stack is also aligned on a 16-byte boundary.
+これは、割り当てられたスタックのサイズも16バイトの境界に揃えられているためです。
 
 % TODO1: rewrite.
 \myindex{x86!\Instructions!PUSH}
-The string address (or a pointer to the string) is then stored directly onto the stack without using the \PUSH instruction.
-\IT{var\_10}~---is a local variable and is also an argument for \printf{}.
-Read about it below.
+文字列アドレス（または文字列へのポインタ）は、 \PUSH 命令を使用せずにスタックに直接格納されます。 \IT{var\_10} はローカル変数であり、 \printf{} の引数でもあります。それについて下記を読んでください。
 
-Then the \printf function is called.
+\printf 関数が呼び出されます。
 
-Unlike MSVC, when GCC is compiling without optimization turned on, it emits \TT{MOV EAX, 0} instead of a shorter opcode.
+MSVCと異なり、GCCは最適化をオンにしないでコンパイルすると、より短いオペコードの代わりに\TT{MOV EAX, 0}を発行します。
 
 \myindex{x86!\Instructions!LEAVE}
-The last instruction, \LEAVE~---is the equivalent of the \TT{MOV ESP, EBP} and \TT{POP EBP} instruction pair~---in other words, this instruction sets the \gls{stack pointer} (\ESP) back and restores the \EBP register to its initial state.
-This is necessary since we modified these register values (\ESP and \EBP) at the beginning of the function (by executing \INS{MOV EBP, ESP} / \INS{AND ESP, \ldots}).
+最後の命令、 \LEAVE は、\TT{MOV ESP, EBP}、および\TT{POP EBP}命令ペアと同等です。言い換えれば、この命令は\gls{stack pointer} (\ESP)を戻し、 \EBP レジスタを初期状態に戻す。これは、これらのレジスタ値（\ESP と \EBP ）を関数の始めに（\INS{MOV EBP, ESP} / \INS{AND ESP, \ldots}を実行することによって）変更したので必要です。
 
 \subsubsection{GCC: \ATTSyntax}
 \label{ATT_syntax}
 
-Let's see how this can be represented in assembly language AT\&T syntax.
-This syntax is much more popular in the UNIX-world.
+これをアセンブリ言語のAT\&T構文でどのように表現できるかを見てみましょう。 この構文は
+UNIXの世界でずっと人気があります。
 
 \begin{lstlisting}[caption=let's compile in GCC 4.7.3]
 gcc -S 1_1.c
 \end{lstlisting}
 
-We get this:
+下記を得ます。
 
 \lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/01_helloworld/GCC.s}
 
-The listing contains many macros (the parts that begin with a dot). These are not interesting for us at the moment.
+リストには、多くのマクロ（ドットで始まる部分）が含まれています。 現時点では興味深いものではありません。
 
-For now, for the sake of simplicity, we can ignore them (except the \IT{.string} macro which
-encodes a null-terminated character sequence just like a C-string). Then we'll see this
-\footnote{This GCC option can be used to eliminate \q{unnecessary} macros: \IT{-fno-asynchronous-unwind-tables}}:
+今のところ、簡単にするため、無視してもかまいません（C言語の文字列のように終端文字列をエンコードする\IT{.string}マクロを除く）。 
+それからこれを見てみましょう。
+\footnote{このGCCオプションは\q{不要な}マクロを削除するために使用できます：\IT{-fno-asynchronous-unwind-tables}}
 
 \lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/01_helloworld/GCC_refined.s}
 
 \myindex{\ATTSyntax}
 \myindex{\IntelSyntax}
-Some of the major differences between Intel and AT\&T syntax are:
+インテルとAT\&T構文の主な違いのいくつかは次のとおりです。
 
 \begin{itemize}
 
 \item
-Source and destination operands are written in opposite order.
+ソースオペランドとデスティネーションオペランドは逆の順序で記述されます。
 
-In Intel-syntax: <instruction> <destination operand> <source operand>.
+インテル構文では：<命令> <デスティネーション・オペランド> <ソース・オペランド>
 
-In AT\&T syntax: <instruction> <source operand> <destination operand>.
+AT\&T構文の場合：<命令> <ソースオペランド> <デスティネーションオペランド>
 
 \myindex{\CStandardLibrary!memcpy()}
 \myindex{\CStandardLibrary!strcpy()}
-Here is an easy way to memorize the difference:
-when you deal with Intel-syntax, you can imagine that there is an equality sign ($=$) between operands
-and when you deal with AT\&T-syntax imagine there is a right arrow ($\rightarrow$)
-\footnote{By the way, in some C standard functions (e.g., memcpy(), strcpy()) the arguments
-are listed in the same way as in Intel-syntax: first the pointer to the destination memory block, and then
-the pointer to the source memory block.}.
+違いを覚えるのは簡単な方法です：インテル構文を扱うとき、オペランド間に等号($=$)があり、AT＆T-syntaxを扱うときに右矢印($\rightarrow$)があると想像してください。
+\footnote{ところで、いくつかのC標準関数（例えば、memcpy()、strcpy()）では、インテル構文と同じ方法で引数がリストされています。まず、デスティネーションメモリブロックへのポインタ、次にソースメモリブロックへのポインタです}
 
 \item
-AT\&T: Before register names, a percent sign must be written (\%) and before numbers a dollar sign (\$).
-Parentheses are used instead of brackets.
+AT\&T：レジスタ名の前にはパーセント記号(\%)を、数字の前にはドル記号(\$)を書く必要があります。 角カッコのかわりに丸カッコが使用されています。
 
 \item
-AT\&T: A suffix is added to instructions to define the operand size:
+AT\&T：オペランドサイズを定義する命令に接尾辞が追加されます
 
 \begin{itemize}
 \item q --- quad (64 bits)
@@ -114,12 +103,9 @@ AT\&T: A suffix is added to instructions to define the operand size:
 
 \end{itemize}
 
-To go back to the compiled result: it is almost identical to what was displayed by \IDA.
-There is one subtle difference: \TT{0FFFFFFF0h} is presented as \TT{\$-16}.
-It's the same thing: \TT{16} in the decimal system is \TT{0x10} in hexadecimal.
-\TT{-0x10} is equal to \TT{0xFFFFFFF0} (for a 32-bit data type).
+コンパイル結果に戻るには、 \IDA が表示した結果とほぼ同じです。 微妙な違いが1つあります。\TT{0FFFFFFF0h}は\TT{\$-16}として表示されます。 これは同じことです：10進数の\TT{16}は16進数で\TT{0x10}です。 \TT{-0x10}は\TT{0xFFFFFFF0}に等しくなります（32ビットデータ型の場合）。
 
 \myindex{x86!\Instructions!MOV}
-One more thing: the return value is set to 0 by using the usual \MOV, not \XOR.
-\MOV just loads a value to a register.
-Its name is a misnomer (as the data is not moved but rather copied). In other architectures, this instruction is named \q{LOAD} or \q{STORE} or something similar.
+もう1つ：戻り値は、 \XOR ではなく通常の \MOV を使用して0に設定されます。 \MOV はレジスタに値をロードするだけです。 
+誤ってつけられた名前です（データは移動せず、コピーされるため）。 他のアーキテクチャでは、この命令の名前は\q{LOAD}または\q{STORE}などと同様です。
+
