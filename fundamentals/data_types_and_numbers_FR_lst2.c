@@ -1,6 +1,6 @@
-	char *input=...;
+ï»¿	char *input=...;
 
-	while(*input) // exécute le corps si le caractère *input est différent de zéro
+	while(*input) // Â§exÃ©cute le corps si le caractÃ¨re *input est diffÃ©rent de zÃ©roÂ§
 	{
 		// utiliser *input
 		input++;

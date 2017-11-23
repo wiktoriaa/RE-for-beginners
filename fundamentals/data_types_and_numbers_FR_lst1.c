@@ -1,4 +1,4 @@
-	if (1234)
-		printf ("toujours ex�cut�\n");
+﻿	if (1234)
+		printf ("§toujours exécuté§\n");
 	else
-		printf ("jamais ex�cut�\n");
+		printf ("§jamais exécuté§\n");
