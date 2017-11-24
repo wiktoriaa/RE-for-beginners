@@ -1,0 +1,226 @@
+﻿\subsubsection{Oublions MSVC}
+
+Sous Windows, \ac{SEH} concerne à la gestion d'exceptions. Ce mécanisme est indépendant du langage 
+de programmation et n'est en aucun cas spécifique ni à \Cpp, ni à l'\ac{OOP}.
+
+Nous nous intéressons donc au \ac{SEH} indépendamment du C++ et des extensions du langage dans MSVC.
+
+\myindex{Windows!TIB}
+\myindex{Windows!Win32!RaiseException()}
+
+A chaque processus est associé une chaîne de gestionnaires \ac{SEH}. A tout moment, chaque \ac{TIB} 
+référence le gestionnaire le plus récent de la chaîne.
+
+Dès qu'une exception intervient (division par zéro, violation d'accès mémoire, exception explicitement 
+déclenchée par le programe en appelant la fonction \TT{RaiseException()} ...), l'OS retrouve dans le 
+\ac{TIB} le gestionnaire le plus récemment déclaré et l'appelle. Il lui fourni l'état de la \ac{CPU} 
+(contenu des registres ...) tels qu'ils étaient lors du déclenchement de l'exception.
+
+Le gestionnaire considère le type de l'exception et décide de la traiter s'il la reconnaît. Sinon, il 
+signale à l'\ac{OS} qu'il passe la main et celui-ci appelle le prochain gestionnaire dans la chaîne, 
+et ainsi de suite jusuqu'à ce qu'il trouve un gestionnaire qui soit capable de la traiter.
+
+A la toute fin de la chaîne se trouve un gestionnaire standard qui affiche la fameuse boîte de 
+dialogue qui informe l'utilisateur que le processus va être avorté. Ce dialogue fournit quelques
+informations techniques au sujet de l'état de la \ac{CPU} au moment du crash, et propose de collecter 
+des informations techniques qui seront envoyées aux développeurs de Microsoft. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_xp1.png}
+\caption{Windows XP}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_xp2.png}
+\caption{Windows XP}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_win7.png}
+\caption{Windows 7}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{OS/SEH/1/crash_win81.png}
+\caption{Windows 8.1}
+\end{figure}
+
+Historiquement, cette chaîne de gestionnaires était connue sous l'appelation Dr. Watson
+\footnote{\href{http://go.yurichev.com/17046}{wikipedia}}.
+
+Certains développeurs ont eu l'idée d'écrire leur propre gestionnaire d'exceptions pour recevoir 
+les informations relatives au crash.
+\myindex{Windows!Win32!SetUnhandledExceptionFilter()}
+Ils enregistrent leur gestionnaire en appelant la fonction \TT{SetUnhandledExceptionFilter()} qui 
+sera alors appelée si l'\ac{OS} ne trouve aucun autre gestionnaire qui souhaite gérer l'exception.
+
+\myindex{\oracle}
+\oracle--- en est un bon exemple qui sauvegarde un énorme fichier dump collectant toutes les 
+informations possibles concernant la \ac{CPU} et l'état de la mémoire.
+
+Ecrivons notre propre gestionnaire d'exception. Cet exemple s'appuie sur celui de \PietrekSEH.
+Pour le compiler, il faut utiliser l'option SAFESEH : \TT{cl seh1.cpp /link /safeseh:no}.
+Vous trouverez plus d'informations concernant SAFESEH à: \href{http://go.yurichev.com/17252}{MSDN}.
+
+\lstinputlisting[style=customc]{OS/SEH/1/1.cpp}
+
+En environnement win32, le registre de segment FS: contient l'adresse du \ac{TIB}.
+
+Le tout premier élément de la structure \ac{TIB} est un pointeur sur le premier gestionnaire de la 
+chaîne de traitement des exceptions.
+Nous le sauvegardons sur la pile et remplaçons la valeur par celle de notre propre gestionnaire.
+La structure est du type \TT{\_EXCEPTION\_REGISTRATION}. Il s'agit d'une simple liste chaînée dont 
+les éléments sont conservés sur la pile.
+
+\begin{lstlisting}[caption=MSVC/VC/crt/src/exsup.inc,style=customasmx86]
+\_EXCEPTION\_REGISTRATION struc
+     prev    dd      ?
+     handler dd      ?
+\_EXCEPTION\_REGISTRATION ends
+\end{lstlisting}
+
+Le champ \q{handler} contient l'adresse du gestionnaire et le champ \q{prev} celle de 
+l'enregistrement suivant dans la chaîne.
+Le dernier enregistremThe last record contient la valeur \TT{0xFFFFFFFF} (-1) dans son champ \q{prev}.
+
+\input{OS/SEH/1/tikz}
+
+Une fois notre gestionnaire installé, nous invoquons la fonction \TT{RaiseException()}
+\footnote{\href{http://go.yurichev.com/17253}{MSDN}}.
+Il s'agit d'une exception utilisateur. 
+Le gestionnaire vérifie le code.
+Si le code est égal à \TT{0xE1223344}, il retourne la valeur \TT{ExceptionContinueExecution} qui 
+signifie que le gestionnaire a corrigé le contenu de la structure passée en paramètre qui décrit 
+l'état de la CPU. La modification concerne généralement les registres EIP/ESP. L'\ac{OS} peut alors 
+reprendre l'exécution du thread.
+
+Si vous modifiez légèrement le code pour que le gestionaire retourne la valeur \TT{ExceptionContinueSearch},
+l'\ac{OS} appelera les gestionnaires suivants dans la liste. Il est peu probable que l'un d'eux sache 
+la gérer puisqu'aucun d'eux ne la comprend, ni ne connait le code exception.
+Vous verrez donc apparaître la boîte de dialogue Windows précurseure du crash.
+
+What is the difference between a system exceptions and a user one? Here are the system ones:
+
+\small
+\begin{center}
+\begin{tabular}{ | l | l | l | }
+\hline
+\HeaderColor as defined in WinBase.h & 
+\HeaderColor as defined in ntstatus.h & 
+\HeaderColor value \\
+\hline
+EXCEPTION\_ACCESS\_VIOLATION          & STATUS\_ACCESS\_VIOLATION           & 0xC0000005 \\
+\hline
+EXCEPTION\_DATATYPE\_MISALIGNMENT     & STATUS\_DATATYPE\_MISALIGNMENT      & 0x80000002 \\
+\hline
+EXCEPTION\_BREAKPOINT                & STATUS\_BREAKPOINT                 & 0x80000003 \\
+\hline
+EXCEPTION\_SINGLE\_STEP               & STATUS\_SINGLE\_STEP                & 0x80000004 \\
+\hline
+EXCEPTION\_ARRAY\_BOUNDS\_EXCEEDED     & STATUS\_ARRAY\_BOUNDS\_EXCEEDED      & 0xC000008C \\
+\hline
+EXCEPTION\_FLT\_DENORMAL\_OPERAND      & STATUS\_FLOAT\_DENORMAL\_OPERAND     & 0xC000008D \\
+\hline
+EXCEPTION\_FLT\_DIVIDE\_BY\_ZERO        & STATUS\_FLOAT\_DIVIDE\_BY\_ZERO       & 0xC000008E \\
+\hline
+EXCEPTION\_FLT\_INEXACT\_RESULT        & STATUS\_FLOAT\_INEXACT\_RESULT       & 0xC000008F \\
+\hline
+EXCEPTION\_FLT\_INVALID\_OPERATION     & STATUS\_FLOAT\_INVALID\_OPERATION    & 0xC0000090 \\
+\hline
+EXCEPTION\_FLT\_OVERFLOW              & STATUS\_FLOAT\_OVERFLOW             & 0xC0000091 \\
+\hline
+EXCEPTION\_FLT\_STACK\_CHECK           & STATUS\_FLOAT\_STACK\_CHECK          & 0xC0000092 \\
+\hline
+EXCEPTION\_FLT\_UNDERFLOW             & STATUS\_FLOAT\_UNDERFLOW            & 0xC0000093 \\
+\hline
+EXCEPTION\_INT\_DIVIDE\_BY\_ZERO        & STATUS\_INTEGER\_DIVIDE\_BY\_ZERO     & 0xC0000094 \\
+\hline
+EXCEPTION\_INT\_OVERFLOW              & STATUS\_INTEGER\_OVERFLOW           & 0xC0000095 \\
+\hline
+EXCEPTION\_PRIV\_INSTRUCTION          & STATUS\_PRIVILEGED\_INSTRUCTION     & 0xC0000096 \\
+\hline
+EXCEPTION\_IN\_PAGE\_ERROR             & STATUS\_IN\_PAGE\_ERROR              & 0xC0000006 \\
+\hline
+EXCEPTION\_ILLEGAL\_INSTRUCTION       & STATUS\_ILLEGAL\_INSTRUCTION        & 0xC000001D \\
+\hline
+EXCEPTION\_NONCONTINUABLE\_EXCEPTION  & STATUS\_NONCONTINUABLE\_EXCEPTION   & 0xC0000025 \\
+\hline
+EXCEPTION\_STACK\_OVERFLOW            & STATUS\_STACK\_OVERFLOW             & 0xC00000FD \\
+\hline
+EXCEPTION\_INVALID\_DISPOSITION       & STATUS\_INVALID\_DISPOSITION        & 0xC0000026 \\
+\hline
+EXCEPTION\_GUARD\_PAGE                & STATUS\_GUARD\_PAGE\_VIOLATION       & 0x80000001 \\
+\hline
+EXCEPTION\_INVALID\_HANDLE            & STATUS\_INVALID\_HANDLE             & 0xC0000008 \\
+\hline
+EXCEPTION\_POSSIBLE\_DEADLOCK         & STATUS\_POSSIBLE\_DEADLOCK          & 0xC0000194 \\
+\hline
+CONTROL\_C\_EXIT                      & STATUS\_CONTROL\_C\_EXIT             & 0xC000013A \\
+\hline
+\end{tabular}
+\end{center}
+\normalsize
+
+That is how the code is defined:
+
+\begin{center}
+\begin{bytefield}[bitwidth=0.03\linewidth]{32}
+\bitheader[endianness=big]{31,29,28,27,16,15,0} \\
+\bitbox{2}{S} & 
+\bitbox{1}{U} &
+\bitbox{1}{0} & 
+\bitbox{12}{Facility code} &
+\bitbox{16}{Error code}
+\end{bytefield}
+\end{center}
+
+S is a basic status code: 
+11---error;
+10---warning;
+01---informational;
+00---success.
+U---whether the code is user code.
+
+That is why we chose 0xE1223344---E\textsubscript{16} (1110\textsubscript{2}) 0xE (1110b) 
+means that it is 1) user exception; 2) error.
+
+But to be honest, this example works fine without these high bits.
+
+Then we try to read a value from memory at address 0.
+
+Of course, there is nothing at this address in win32, so an exception is raised.
+
+The very first handler is to be called---yours, and it will know about it first, by checking
+the code if it's equal to the \TT{EXCEPTION\_ACCESS\_VIOLATION} constant.
+
+The code that's reading from memory at address 0 is looks like this:
+
+\lstinputlisting[style=customasmx86,caption=MSVC 2010]{OS/SEH/1/1_fragment.asm}
+
+Will it be possible to fix this error \q{on the fly} and to continue with program execution?
+
+Yes, our exception handler can fix the \EAX value and let the \ac{OS} execute this instruction once again.
+So that is what we do. \printf prints 1234, because after the execution of our handler \EAX is not 0,
+but contains the address of the global variable \TT{new\_value}.
+The execution will resume.
+
+That is what is going on: the memory manager in the \ac{CPU} signals about an error, the \ac{CPU} suspends the thread,
+finds the exception handler in the Windows kernel, 
+which, in turn, starts to call all handlers in the \ac{SEH} chain, one by one.
+
+We use MSVC 2010 here, but of course, there is no any guarantee that \EAX will be used for this pointer.
+
+This address replacement trick is showy, and we considering it here as an illustration of \ac{SEH}'s internals.
+Nevertheless, it's hard to recall any case where it is used for \q{on-the-fly} error fixing.
+
+Why SEH-related records are stored right in the stack instead of some other place?
+
+Supposedly because the \ac{OS} is not needing to care about freeing this information, 
+these records are simply disposed when the function finishes its execution.
+\myindex{\CStandardLibrary!alloca()}
+This is somewhat like alloca(): (\myref{alloca}).
+
