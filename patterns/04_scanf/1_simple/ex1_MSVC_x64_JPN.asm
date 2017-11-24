@@ -18,7 +18,7 @@ $LN3:
 	lea	rcx, OFFSET FLAT:$SG1292 ; 'You entered %d...'
 	call	printf
 
-	; return 0
+	; 0‚ğƒŠƒ^[ƒ“
 	xor	eax, eax
 	add	rsp, 56
 	ret	0

@@ -6,7 +6,7 @@ CONST    ENDS
 PUBLIC    _main
 EXTRN    _scanf:PROC
 EXTRN    _printf:PROC
-; Function compile flags: /Odtp
+; 関数のコンパイルフラグ: /Odtp
 _TEXT    SEGMENT
 _x$ = -4                        ; size = 4
 _main    PROC
@@ -27,7 +27,7 @@ _main    PROC
     call   _printf
     add    esp, 8
 
-    ; return 0
+    ; 0をリターン
     xor    eax, eax
     mov    esp, ebp
     pop    ebp
