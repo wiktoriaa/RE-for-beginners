@@ -2,36 +2,36 @@
 
 \myparagraph{MSVC}
 
-Here is what we get after compiling with MSVC 2010:
+MSVC 2010でコンパイルした後に得られるものは次のとおりです。
 
 \lstinputlisting[style=customasmx86]{patterns/04_scanf/1_simple/ex1_MSVC_JPN.asm}
 
-\TT{x} is a local variable.
+\TT{x}はローカル変数です。
 
-According to the \CCpp standard it must be visible only in this function and not from any other external scope. 
-Traditionally, local variables are stored on the stack. 
-There are probably other ways to allocate them, but in x86 that is the way it is.
+\CCpp 標準によれば、この関数でのみ表示でき、他の外部スコープでは表示できません。
+従来、ローカル変数はスタックに格納されていました。
+それらを割り当てる方法はおそらく他にもありますが、それはx86の方法です。
 
 \myindex{x86!\Instructions!PUSH}
-The goal of the instruction following the function prologue, \TT{PUSH ECX}, is not to save the \ECX state 
-(notice the absence of corresponding \TT{POP ECX} at the function's end).
+関数プロローグ、\TT{PUSH ECX}に続く命令の目的は、 \ECX 状態を保存することではありません
+（関数の最後に対応する\TT{POP ECX}が存在しないことに注意してください）。
 
-In fact it allocates 4 bytes on the stack for storing the \TT{x} variable.
+実際、\TT{x}変数を格納するためにスタックに4バイトを割り当てます。
 
 \label{stack_frame}
 \myindex{\Stack!Stack frame}
 \myindex{x86!\Registers!EBP}
-\TT{x} is to be accessed with the assistance of the \TT{\_x\$} macro (it equals to -4) and the \EBP register pointing to the current frame.
+\TT{x}は、\TT{\_x\$} マクロ (-4に等しい)と現在のフレームを指す \EBP レジスタの助けを借りてアクセスされます。
 
-Over the span of the function's execution, \EBP is pointing to the current \gls{stack frame}
-making it possible to access local variables and function arguments via \TT{EBP+offset}.
+関数の実行の範囲にわたって、 \EBP は現在の\gls{stack frame}を指しており、 \TT{EBP+オフセット}
+を介してローカル変数と関数引数にアクセスすることができます。
 
 \myindex{x86!\Registers!ESP}
-It is also possible to use \ESP for the same purpose, although that is not very convenient since it changes frequently.
-The value of the \EBP could be perceived as a \IT{frozen state} of the value in \ESP at the start of the function's execution.
+同じ目的で \ESP を使用することもできますが、 \ESP は頻繁に変更されるためあまり便利ではありません。 
+\EBP の値は、関数の実行開始時に \ESP の値が固定された状態として認識される可能性があります。
 
 % FIXME1 это уже было в 02_stack?
-Here is a typical \gls{stack frame} layout in 32-bit environment:
+32ビット環境での典型的な\gls{stack frame}レイアウトを次に示します。
 
 \begin{center}
 \begin{tabular}{ | l | l | }
@@ -57,41 +57,40 @@ EBP+0x10 & \argument \#3, \MarkedInIDAAs{} \TT{arg\_8} \\
 \end{tabular}
 \end{center}
 
-The \scanf function in our example has two arguments.
+この例の \scanf 関数には2つの引数があります。
 
-The first one is a pointer to the string containing \TT{\%d} and the second is the address of the \TT{x} variable.
+最初のものは\TT{\%d}を含む文字列へのポインタで、2番目のものは\TT{x}変数のアドレスです。
 
 \myindex{x86!\Instructions!LEA}
-First, the \TT{x} variable's address is loaded into the \EAX register by the \\
-\TT{lea eax, DWORD PTR \_x\$[ebp]} instruction.
+最初に、\TT{x}変数のアドレスが\TT{lea eax, DWORD PTR \_x\$[ebp]}命令によって \EAX レジスタにロードされます。
 
-\LEA stands for \IT{load effective address}, and is often used for forming an address ~(\myref{sec:LEA}).
+\LEA は\IT{ロード実効アドレス}の略で、アドレスを形成するためによく使用されます（~(\myref{sec:LEA})）。
 
-We could say that in this case \LEA simply stores the sum of the \EBP register value and the \TT{\_x\$} macro in the \EAX register.
+この場合、\LEA は単に \EBP レジスタ値と\TT{\_x\$}マクロの合計を \EAX レジスタに格納すると言うことができます。
 
-This is the same as \INS{lea eax, [ebp-4]}.
+これは\INS{lea eax, [ebp-4]}と同じです。
 
-So, 4 is being subtracted from the \EBP register value and the result is loaded in the \EAX register.
-Next the \EAX register value is pushed into the stack and \scanf is being called.
+したがって、 \EBP レジスタ値から4が減算され、その結果が \EAX レジスタにロードされます。
+次に、 \EAX レジスタの値がスタックにプッシュされ、 \scanf が呼び出されます。
 
-\printf is being called after that with its first argument --- a pointer to the string:
-\TT{You entered \%d...\textbackslash{}n}.
+\printf は最初の引数で呼び出されています。文字列へのポインタ：
+\TT{You entered \%d...\textbackslash{}n}
 
-The second argument is prepared with: \TT{mov ecx, [ebp-4]}.
-The instruction stores the \TT{x} variable value and not its address, in the \ECX register.
+2番目の引数は\TT{mov ecx, [ebp-4]}で準備されています。
+命令は、 \ECX レジスタにそのアドレスではなく\TT{x}変数値を格納します。
 
-Next the value in the \ECX is stored on the stack and the last \printf is being called.
+次に、 \ECX の値がスタックに格納され、最後の \printf が呼び出されます。
 
 \input{patterns/04_scanf/1_simple/olly.tex}
 
 \myparagraph{GCC}
 
-Let's try to compile this code in GCC 4.4.1 under Linux:
+Linux上のGCC 4.4.1でこのコードをコンパイルしようとしましょう。
 
 \lstinputlisting[style=customasmx86]{patterns/04_scanf/1_simple/ex1_GCC.asm}
 
 \myindex{puts() instead of printf()}
-GCC replaced the \printf call with call to \puts. The reason for this was explained in ~(\myref{puts}).
+GCCは \printf 呼び出しを \puts の呼び出しで置き換えました。 この理由は、~(\myref{puts})で説明されました。
 
 % TODO: rewrite
 %\RU{Почему \scanf переименовали в \TT{\_\_\_isoc99\_scanf}, я честно говоря, пока не знаю.}
@@ -101,12 +100,11 @@ GCC replaced the \printf call with call to \puts. The reason for this was explai
 % For example if you compile with -std=c89 the outputted assmebly file will contain scanf and not __isoc99__scanf. I guess current GCC version adhares to c99 by default.
 % According to my understanding the two implementations differ in the set of suported modifyers (See printf man page)
 
-As in the MSVC example---the arguments are placed on the stack using the \MOV instruction.
+MSVCの例のように、引数は \MOV 命令を使用してスタックに配置されます。
 
-\myparagraph{By the way}
+\myparagraph{ところで}
 
-By the way, this simple example is a demonstration of the fact that compiler translates
-list of expressions in \CCpp-block into sequential list of instructions.
-There are nothing between expressions in \CCpp, and so in resulting machine code, 
-there are nothing between, control flow slips from one expression to the next one.
-
+ところで、この単純な例は、コンパイラが \CCpp ブロックの式のリストを命令の連続したリストに
+変換するという事実のデモンストレーションです。
+\CCpp の式の間には何もないので、結果のマシンコードには、
+ある式から次の式への制御フローの間には何もありません。
