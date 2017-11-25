@@ -1,4 +1,4 @@
-\subsection{Méthode de protection contre les débordements de tampon}
+\subsection{Méthodes de protection contre les débordements de tampon}
 \label{subsec:BO_protection}
 
 Il existe quelques méthodes pour protèger contre ce fléau, indépendamment de la négligence
@@ -15,7 +15,7 @@ de tampons côté compilateur:\href{http://go.yurichev.com/17133}{wikipedia.org/
 \myindex{Function prologue}
 \myindex{Security cookie}
 
-Une des méthodes est d'écrire une valeur aléatoire entre les variables locales dans
+Une des méthodes est d'écrire une valeur aléatoire entre les variables locales sur
 la pile dans le prologue de la fonction et de la vérifier dans l'épilogue, avant de
 sortir de la fonction.
 Si la valeur n'est pas la même, ne pas exécuter la dernière instruction \RET, mais
@@ -33,9 +33,8 @@ Les canaris sont très sensibles aux gaz, ils deviennent très agités en cas de
 et même meurent.
 
 Si nous compilons notre exemple de tableau très simple~(\myref{arrays_simple}) dans
-\ac{MSVC} avec les options RTC1 et RTCs,\\
-nous voyons un appel à \TT{@\_RTC\_CheckStackVars@8} une fonction à la fin de la
-fonction qui vérifie si le \q{canari} est correct.
+\ac{MSVC} avec les options RTC1 et RTCs, nous voyons un appel à \TT{@\_RTC\_CheckStackVars@8}
+une fonction à la fin de la fonction qui vérifie si le \q{canari} est correct.
 
 Voyons comment GCC gère ceci.
 Prenons un exemple \TT{alloca()}~(\myref{alloca}):
@@ -100,8 +99,9 @@ Dit brièvement, le registre \TT{gs} dans Linux pointe toujours sur le
 Á propos, en win32 le registre \TT{fs} joue le même rôle, pointant sur \ac{TIB}
 \footnote{\href{http://go.yurichev.com/17104}{wikipedia.org/wiki/Win32\_Thread\_Information\_Block}}.
 
-Il y a plus d'information dans le code source du noyau Linux (au moins dans la version 3.11),\\
-dans \IT{arch/x86/include/asm/stackprotector.h} cette variable est décrite dans les commentaires.
+Il y a plus d'information dans le code source du noyau Linux (au moins dans la version 3.11),
+dans\\
+\IT{arch/x86/include/asm/stackprotector.h} cette variable est décrite dans les commentaires.
 
 \input{patterns/13_arrays/3_BO_protection/ARM_FR.tex}
 

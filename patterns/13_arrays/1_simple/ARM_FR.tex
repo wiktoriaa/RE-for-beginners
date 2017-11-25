@@ -7,9 +7,9 @@
 Le type \Tint nécessite 32 bits pour le stockage (ou 4 octets).
 
 donc pour stocker 20 variables, \Tint 80 (\TT{0x50}) octets sont nécessaires.
-C'est pourquoi l'instruction \INS{SUB SP, SP, \#0x50}
 
-dans le prologue de la fonction alloue exactement cet espace sur la pile.
+C'est pourquoi l'instruction \INS{SUB SP, SP, \#0x50} dans le prologue de la fonction
+alloue exactement cet espace sur la pile.
 
 Dans la première et la seconde boucle, la variable de boucle \var{i} se trouve dans
 le registre \Reg{4}.
@@ -17,14 +17,14 @@ le registre \Reg{4}.
 \myindex{ARM!Optional operators!LSL}
 
 Le nombre qui doit être écrit dans le tableau est calculé comme $i*2$, ce qui est
-effectivement équivalent à décaler d'un bit vers la gauche,\\
+effectivement équivalent à décaler d'un bit vers la gauche,
 ce que fait l'instruction \INS{MOV R0, R4,LSL\#1}.
 
 \myindex{ARM!\Instructions!STR}
 \INS{STR R0, [SP,R4,LSL\#2]} écrit le contenu de \Reg{0} dans le tableau.
 
 Voici comment le pointeur sur un élément du tableau est calculé: \ac{SP} pointe sur
-le début du tableau, \Reg{4} est$i$.
+le début du tableau, \Reg{4} est $i$.
 
 Donc décaler $i$ de 2 bits vers la gauche est effectivement équivalent à la multiplication
 par 4 (puisque chaque élément du tableau a une taille de 4 octets) et ensuite on

@@ -21,7 +21,8 @@ loc_4A0
             MOV     R4, #0             ; i
             B       loc_4C4
 loc_4B0
-            LDR     R2, [SP,R4,LSL#2]  ; (second argument de printf) R2=*(SP+R4<<4) (pareil que *(SP+R4*4))
+            LDR     R2, [SP,R4,LSL#2]  ; (second argument de printf) R2=*(SP+R4<<4)
+                                       ; (pareil que *(SP+R4*4))
             MOV     R1, R4             ; (premier argument de printf) R1=i
             ADR     R0, aADD           ; "a[%d]=%d\n"
             BL      __2printf
