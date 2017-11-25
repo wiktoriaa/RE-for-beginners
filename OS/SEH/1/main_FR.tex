@@ -103,7 +103,8 @@ l'\ac{OS} appelera les gestionnaires suivants dans la liste. Il est peu probable
 la gérer puisqu'aucun d'eux ne la comprend, ni ne connait le code exception.
 Vous verrez donc apparaître la boîte de dialogue Windows précurseure du crash.
 
-What is the difference between a system exceptions and a user one? Here are the system ones:
+Quelles sont les différences entre les exceptions système et les exceptions utilisateur ?
+Les exceptions système sont listées ci-dessous:
 
 \small
 \begin{center}
@@ -165,7 +166,7 @@ CONTROL\_C\_EXIT                      & STATUS\_CONTROL\_C\_EXIT             & 0
 \end{center}
 \normalsize
 
-That is how the code is defined:
+Le code de chaque exception se décompose comme suit:
 
 \begin{center}
 \begin{bytefield}[bitwidth=0.03\linewidth]{32}
@@ -178,49 +179,53 @@ That is how the code is defined:
 \end{bytefield}
 \end{center}
 
-S is a basic status code: 
-11---error;
+S est un code status de base: 
+11---erreur;
 10---warning;
-01---informational;
-00---success.
-U---whether the code is user code.
+01---information;
+00---succès.
+U---lorsqu'il s'agit d'un code utilisateur.
 
-That is why we chose 0xE1223344---E\textsubscript{16} (1110\textsubscript{2}) 0xE (1110b) 
-means that it is 1) user exception; 2) error.
+Voici pourquoi nous choisissons le code 0xE1223344---E\textsubscript{16} (1110\textsubscript{2}) 0xE (1110b) 
+qui signifie 1) qu'il s'agit d'une exception utilisateur; 2) qu'il s'agit d'une erreur.
 
-But to be honest, this example works fine without these high bits.
+Pour être honnête, l'exemple fonctionne aussi bien sans ces bits de poids fort.
 
-Then we try to read a value from memory at address 0.
+Tentons maintenant de lire la valeur à l'adresse mémoire 0.
 
-Of course, there is nothing at this address in win32, so an exception is raised.
+Bien entendu, dans win32 il n'existe rien à cette adresse, ce qui déclenche une exception.
 
-The very first handler is to be called---yours, and it will know about it first, by checking
-the code if it's equal to the \TT{EXCEPTION\_ACCESS\_VIOLATION} constant.
+Le premier gestionnaire à être invoqué est le vôtre. Il reconnaît l'exception car il compare
+le code avec celui de la constante \TT{EXCEPTION\_ACCESS\_VIOLATION}.
 
-The code that's reading from memory at address 0 is looks like this:
+Le code qui lit la mémoire à l'adresse 0 ressemble à ceci:
 
 \lstinputlisting[style=customasmx86,caption=MSVC 2010]{OS/SEH/1/1_fragment.asm}
 
-Will it be possible to fix this error \q{on the fly} and to continue with program execution?
+Serait-il possible de corriger cette erreur \q{on the fly} afin de continuer l'exécution du programme?
 
-Yes, our exception handler can fix the \EAX value and let the \ac{OS} execute this instruction once again.
-So that is what we do. \printf prints 1234, because after the execution of our handler \EAX is not 0,
-but contains the address of the global variable \TT{new\_value}.
-The execution will resume.
+Notre gestionnaire d'exception peut modifier la valeur du registre \EAX puis laisser l'\ac{OS} 
+exécuter de nouveau l'instruction fautive.
+C'est ce que nous faisons et la raison pour laquelle \printf affiche 1234. Lorsque notre gestionnaire 
+a fini son travail, la valeur de \EAX n'est plus 0 mais l'adresse de la variable globale \TT{new\_value}.
+L'exécution du programme se poursuit donc.
 
-That is what is going on: the memory manager in the \ac{CPU} signals about an error, the \ac{CPU} suspends the thread,
-finds the exception handler in the Windows kernel, 
-which, in turn, starts to call all handlers in the \ac{SEH} chain, one by one.
+Voici ce qui se passe: le gestionnaire mémoire de la \ac{CPU} signale une erreur, la \ac{CPU} suspend 
+le thread, trouve le gestionnaire d'exception dans le noyau Windows, lequel à son tour appelle les 
+gestionnaires de la chaîne \ac{SEH} un par un.
 
-We use MSVC 2010 here, but of course, there is no any guarantee that \EAX will be used for this pointer.
+Nous utilisons ici le compilateur MSVC 2010. Bien entendu, il n'y a aucune garantie que celui-ci 
+décide d'utiliser le registre \EAX pour conserver la valeur du pointeur.
 
-This address replacement trick is showy, and we considering it here as an illustration of \ac{SEH}'s internals.
-Nevertheless, it's hard to recall any case where it is used for \q{on-the-fly} error fixing.
+Le truc du remplacement du contenu du registre n'est qu'une illustration de ce que peut être le 
+fonctionnement interne des \ac{SEH}.
+En pratique, il est très rare qu'il soit utilisé pour corriger \q{on-the-fly} une erreur.
 
-Why SEH-related records are stored right in the stack instead of some other place?
+Pourquoi les enregistrements SEH sont-ils conservés directement sur la pile et non pas à un autre 
+endroit?
 
-Supposedly because the \ac{OS} is not needing to care about freeing this information, 
-these records are simply disposed when the function finishes its execution.
+L'explication la plus plausible est que l'\ac{OS} n'a ainsi pas besoin de libérer l'espace qu'ils 
+utilisent. Ces enregistrements sont automatiquement supprimés lorsque la fonction se termine.
 \myindex{\CStandardLibrary!alloca()}
-This is somewhat like alloca(): (\myref{alloca}).
+C'est un peu comme la fonction alloca(): (\myref{alloca}).
 
