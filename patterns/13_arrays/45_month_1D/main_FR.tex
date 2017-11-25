@@ -7,7 +7,7 @@ notamment, il peut en occuper plusieurs. Par exemple, 'û' est codé \$fb (1 oct
 en ISO-8859 et \$c3\$bb (2 octets) en UTF-8. J'ai donc volontairement mis des caractères
 non accentués dans le code.}
 
-\lstinputlisting[caption=Get month name,label=get_month1,style=customc]{patterns/13_arrays/45_month_1D/month1_FR.c}
+\lstinputlisting[caption=Prendre le nom du mois,label=get_month1,style=customc]{patterns/13_arrays/45_month_1D/month1_FR.c}
 
 \subsubsection{x64}
 
@@ -143,7 +143,7 @@ l'éditeur de lien à stocker après la table:
 Les noms des mois se trouvent juste après.
 
 Notre programme est minuscule, il n'y a donc pas beaucoup de données à mettre dans
-le segment de données, donc c'est juste les noms des mois.
+le segment de données, juste les noms des mois.
 Mais il faut noter qu'il peut y avoir ici vraiment \IT{n'importe quoi} que l'éditeur
 de lien aurait décidé d'y mettre.
 
@@ -152,7 +152,7 @@ Le 13ème élément va être renvoyé.
 
 Voyons comment le CPU traite les octets en une valeur 64-bit:
 
-\lstinputlisting[caption=Executable file in IDA,style=customasmx86]{patterns/13_arrays/45_month_1D/MSVC2012_win64_2.lst}
+\lstinputlisting[caption=Fichier exécutable dans IDA,style=customasmx86]{patterns/13_arrays/45_month_1D/MSVC2012_win64_2.lst}
 
 Et c'est 0x797261756E614A.
 
@@ -162,7 +162,7 @@ de lire des octets à cette adresse, y attendant une chaîne-C.
 Plus probablement, ça planterait, car cette valeur ne ressemble pas à une adresse
 valide.
 
-\myparagraph{Protection contre les débordements de tableaux}
+\myparagraph{Protection contre les débordements de tampon}
 
 \epigraph{Si quelque chose peut mal tourner, ça tournera mal}{Loi de Murphy}
 
@@ -178,12 +178,12 @@ Une telle méthode en \CCpp est les assertions.
 Nous pouvons modifier notre programme pour qu'il échoue si une valeur incorrecte
 est passée:
 
-\lstinputlisting[caption=assert() added,style=customc]{patterns/13_arrays/45_month_1D/month1_assert.c}
+\lstinputlisting[caption=assert() ajoutée,style=customc]{patterns/13_arrays/45_month_1D/month1_assert.c}
 
 La macro assertion vérifie que la validité des valeurs à chaque démarrage de fonction
 et échoue si l'expression est fausse.
 
-\lstinputlisting[caption=\Optimizing MSVC 2013 x64,style=customasmx86]{patterns/13_arrays/45_month_1D/MSVC2013_x64_Ox_checked.asm}
+\lstinputlisting[caption=MSVC 2013 x64 \Optimizing,style=customasmx86]{patterns/13_arrays/45_month_1D/MSVC2013_x64_Ox_checked.asm}
 
 En fait, assert() n'est pas une fonction, mais une macro. Elle teste une condition,
 puis passe le numéro de ligne et le nom du fichier à une autre fonction qui rapporte
@@ -195,14 +195,14 @@ Le numéro de ligne est aussi passé (c'est 29).
 Le mécanisme est sans doute le même dans tous les compilateurs.
 Voici ce que fait GCC:
 
-\lstinputlisting[caption=\Optimizing GCC 4.9 x64,style=customasmx86]{patterns/13_arrays/45_month_1D/GCC491_x64_O3_checked.s}
+\lstinputlisting[caption=GCC 4.9 x64 \Optimizing,style=customasmx86]{patterns/13_arrays/45_month_1D/GCC491_x64_O3_checked.s}
 
 Donc la macro dans GCC passe aussi le nom de la fonction par commodité.
 
 Rien n'est vraiment gratuit, et c'est également vrai pour les tests de validité.
 
 Ils rendent votre programme plus lent, en particulier si la macro assert() est utilisée
-dans des petites fonctions à durée critiques.
+dans des petites fonctions à durée critique.
 
 Donc MSCV, par exemple, laisse les tests dans les compilations debug, mais ils disparaissent
 dans celles de release.
@@ -235,4 +235,9 @@ données:
 
 Il est très important de comprendre, que, malgrè la syntaxe similaire, c'est différent
 d'un tableau à deux dimensions, dont nous allons parler plus tard.
+
+Une autre chose importante à noter: les chaînes considérées doivent être encodées
+dans un système oú chaque caractère occupe un seul octet, comme l'\ac{ASCII} ou l'\ac{ASCII}
+étendu.
+UTF-8 ne fonctionnera pas ici.
 

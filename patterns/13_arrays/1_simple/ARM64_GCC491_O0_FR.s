@@ -18,7 +18,7 @@ main:
 	add	x0, x29, 24
 ; charger l'entier 32-bit depuis la pile locale et l'§étendre§ en un 64-bit §signé§:
 	ldrsw	x1, [x29,108]
-; calculer l'adresse de l§l'élément§ (X0+X1<<2=adresse du tableau+i*4) et y stocker W2 (i*2):
+; calculer l'adresse de §l'élément§ (X0+X1<<2=adresse du tableau+i*4) et y stocker W2 (i*2):
 	str	w2, [x0,x1,lsl 2]
 ; §incrémenter§ le compteur (i):
 	ldr	w0, [x29,108]
@@ -33,7 +33,7 @@ main:
 ; La seconde partie de la fonction commence ici.
 ; mettre la valeur initiale da la variable compteur §à§ 0.
 ; §à§ propos, le même espace est §utilisé§ dans la pile locale,
-; car la même variable locale (i) est §utilisée§ comme compteur.
+; car la §même§ variable locale (i) est §utilisée§ comme compteur.
 	str	wzr, [x29,108]
 	b	.L4
 .L5:
@@ -43,7 +43,7 @@ main:
 	ldrsw	x1, [x29,108]
 ; charger la valeur du tableau §à§ l'adresse (X0+X1<<2 = adresse du tableau + i*4)
 	ldr	w2, [x0,x1,lsl 2]
-; charger l'adresse de la §chaîne" "a[%d]=%d\n":
+; charger l'adresse de la §chaîne§ "a[%d]=%d\n":
 	adrp	x0, .LC0
 	add	x0, x0, :lo12:.LC0
 ; charger la variable "i" dans W1 et la passer §à§ printf() comme second argument:
