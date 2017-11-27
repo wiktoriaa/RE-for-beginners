@@ -8,18 +8,18 @@ Non, pas du tout.
 Ouvrez un exécutable dans \IDA ou HIEW, et vous constaterez que l'\ac{OEP} pointe sur un bloc de 
 code qui se situe ailleurs.
 
-Ce code prépare l'environnement 
-This code is doing some maintenance and preparations before passing control flow to our code.
-It is called startup-code or CRT code (C RunTime). \\
+Ce code prépare l'environnement avant de passer le contrôle à notre propre code. Ce fragment de code 
+initial est dénommé CRT (pour C RunTime). \\
 \\
-The \main{} function takes an array of the arguments passed on the command line, and also
-one with environment variables.
-But in fact a generic string is passed to the program,
-the CRT code finds the spaces in it and cuts it in parts.
-The CRT code also prepares the environment
-variables array \TT{envp}.
+La fonction \main{} accepte en arguments un tableau des paramètres passés en ligne de commande, et 
+un autre contenant les variables d'environnement.
+En réalité, ce qui est passé au programme est une simple chaîne de caractères. Le code du CRT repère 
+les espaces dans la chaîne et découpe celle-ci en plusieurs morceaux qui constitueront le tableau des 
+paramètres.
+Le CRT est également responsable de la préparation du tableau des variables d'environnement \TT{envp}.
 
-As for \ac{GUI} win32 applications, \TT{WinMain} is used instead of \main{}, having its own arguments:
+En ce qui concerne les applications win32 dotées d'un interface graphique (\ac{GUI}). La fonction 
+principale est nommée \TT{WinMain} et non pas \main{}. Elle possède aussi ses propres arguments:
 
 \begin{lstlisting}[style=customc]
 int CALLBACK WinMain(
@@ -30,46 +30,51 @@ int CALLBACK WinMain(
 );
 \end{lstlisting}
 
-The CRT code prepares them as well.
+C'est toujours le CRT qui est responsable de leur préparation.
 
-Also, the number returned by the \main{} function is the exit code.
+La valeur retournée par la fonction \main{} est également ce qui constitue le code retour du 
+programme.
 
-It may be passed in CRT to the \TT{ExitProcess()} function, which takes the exit code as an argument. \\
+Le CRT peut utiliser cette valeur lors de l'appel de la fonction \TT{ExitProcess()} qui prend le code 
+retour du programme en paramètre. \\
 \\
-Usually, each compiler has its own CRT code. \\
+En règle générale, le code du CRT est propre à chaque compilateur. \\
 \\
-Here is a typical CRT code for MSVC 2008.
+Voici celui du MSVC 2008.
 
 \lstinputlisting[numbers=left,style=customasmx86]{OS/win32_CRT/crt_msvc_2008.asm}
 
-Here we can see calls to \TT{GetCommandLineA()} (line 62),
-then to \TT{setargv()} (line 66) and \TT{setenvp()} (line 74),
-which apparently fill the global variables
+Nous y trouvons des appels à \TT{GetCommandLineA()} (line 62),
+puis \TT{setargv()} (line 66) et \TT{setenvp()} (line 74),
+qui semblent utilisés pour initialiser les variables globales 
 \TT{argc}, \TT{argv}, \TT{envp}.
 
-Finally, \main{} is called with these arguments (line 97).
+Enfin, \main{} est invoqué avec ces arguments (line 97).
 
-There are also calls to functions
-with self-describing names like \TT{heap\_init()} (line 35), \TT{ioinit()} (line 54).
+Nous observons également des appels à des fonctions au nom évoquateur telles que \TT{heap\_init()} 
+(line 35), \TT{ioinit()} (line 54).
 
-The \glslink{heap}{heap} is indeed initialized in the \ac{CRT}.
-If you try to use \TT{malloc()} in a program without CRT, it will exit abnormally with the following error:
+Le tas \glslink{heap}{heap} est lui aussi initialisé par le \ac{CRT}.
+Si vous tentez d'utiliser la fonction \TT{malloc()} dans un programme ou le CRT n'a pas été ajouté, 
+le programme va s'achever de manière anormale avec l'erreur suivante:
 
 \begin{lstlisting}
 runtime error R6030
 - CRT not initialized
 \end{lstlisting}
 
-Global object initializations in \Cpp is also occur in the \ac{CRT} before the execution of \main{}: 
+L'initialisation des objets globaux en \Cpp est également de la responsabilité du \ac{CRT} avant 
+qu'il ne passe la main à \main{}: 
 \myref{sec:std_string_as_global_variable}.
 
-The value that \main{} returns is passed to \TT{cexit()}, 
-or in \TT{\$LN32}, which in turn calls \TT{doexit()}.
+La valeur retournée par \main{} est passée soit à la fonction \TT{cexit()}, soit à \TT{\$LN32} qui 
+à son tour invoque \TT{doexit()}.
 
-Is it possible to get rid of the \ac{CRT}?
-Yes, if you know what you are doing.
+Mais pourrait-on se passe du \ac{CRT}?
+Oui, si vous savez ce que vous faites.
 
-The \ac{MSVC}'s linker has the \TT{/ENTRY} option for setting an entry point.
+L'éditeur de lien \ac{MSVC} accepte une option \TT{/ENTRY} qui permet de définir le point d'entrée 
+du programme.
 
 \begin{lstlisting}[style=customc]
 #include <windows.h>
@@ -80,36 +85,39 @@ int main()
 };
 \end{lstlisting}
 
-Let's compile it in MSVC 2008.
+Compilons ce programme avec MSVC 2008.
 
 \begin{lstlisting}
 cl no_crt.c user32.lib /link /entry:main
 \end{lstlisting}
 
-We are getting a runnable .exe with size 2560 bytes, that has a PE header in it, instructions 
-calling \TT{MessageBox}, two strings in the data segment,
-the \TT{MessageBox} function imported from \TT{user32.dll} and nothing else.
+Nous obtenons un programme exécutable .exe de 2560 octets qui contient en tout et pour tout l'en-tête 
+PE, les  instructions pour invoquer \TT{MessageBox} et deux chaînes de caractères dans le segment de 
+données:  le nom de la fonction \TT{MessageBox} et celui de sa DLL d'origine \TT{user32.dll}.
 
-This works, but you cannot write \TT{WinMain} with its 4 arguments instead of \main{}.
+Cela fonctionne, mais vous ne pouvez pas déclarer \TT{WinMain} et ses 4 arguments à la place de 
+\main{}.
 
-To be precise, you can, but the arguments are not prepared at the moment of execution.
+Pour être précis, vous pourriez, mais les arguments ne seraient pas préparés au moment de 
+l'exécution du programme.
 
-By the way, it is possible to make the .exe even 
-shorter by aligning the \ac{PE} sections at less than the default 4096 bytes.
+Cela étant, il est possible de réduire encore la taille de l'exécutable en utilisant une valeur 
+pour l'alignement des sections du fichier au format \ac{PE} une valeur inférieur à celle par 
+défaut de 4096 octets.
 
 \begin{lstlisting}
 cl no_crt.c user32.lib /link /entry:main /align:16
 \end{lstlisting}
 
-Linker says:
+L'éditeur de lien prévient cependant:
 
 \begin{lstlisting}
 LINK : warning LNK4108: /ALIGN specified without /DRIVER; image may not run
 \end{lstlisting}
 
-We get an .exe that's 720 bytes.
-It can be executed in Windows 7 x86, but not in x64 
-(an error message will be shown when you try to execute it).
+Nous pouvons ainsi obtenir un exécutable de 720 octets.
+Son exécution est possible sur Windows 7 x86, mais pas en environnement x64 
+(un message d'erreur apparaîtra alors si vous tentez de l'exécuter).
 
-With even more efforts, it is possible
-to make the executable even shorter, but as you can see, compatibility problems arise quickly.
+Avec des efforts accrusn il est possible de réduire encore la taille, mais avec des problèmes de
+compatibilité comme vous le voyez.
