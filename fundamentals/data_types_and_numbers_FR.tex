@@ -8,11 +8,11 @@ Les types intégraux comportent les nombres, les énumérations et les booléens
 
 Les valeurs booléennes sont une utilisation évidente des bits: 0 pour \IT{faux} et 1 pour \IT{vrai}.
 
-Plusieurs valeurs booléennes peuvent être regroupées en un \gls{word}: Un mot de 32 bits contiendra 32 valeur booléennes, etc.
+Plusieurs valeurs booléennes peuvent être regroupées en un \glslink{word}{mot}: Un mot de 32 bits contiendra 32 valeur booléennes, etc.
 On appelle \IT{bitmap} ou \IT{bitfield} un tel assemblage.
 
 Cette approche engendre un surcoût de traitement: décalages, extraction, etc.
-A l'inverse l'utilisation d'un \gls{word} (ou d'un type \IT{int}) pour chaque booléen gaspille de l'espace, au profit des performances.
+A l'inverse l'utilisation d'un \glslink{word}{mot} (ou d'un type \IT{int}) pour chaque booléen gaspille de l'espace, au profit des performances.
 
 Dans les environnements C/C++, la valeur 0 représente \IT{faux} et toutes les autres valeurs \IT{vrai}.
 Par exemple:
@@ -43,7 +43,7 @@ La valeur décimale 1234 est ainsi représentée par 0x1234.
 Il est évident que cette représentation n'est pas la plus efficace en matière d'espace.
 
 Elle possède en revanche un avantage: la conversion des nombres depuis et vers le format \ac{BCD} est extrêmement simple.
-Les nombres au format BCDpeuvent être additionés, soustraits, etc., au prix d'une opération supplémentaire de gestion des demi-retenues.
+Les nombres au format BCD peuvent être additionnés, soustraits, etc., au prix d'une opération supplémentaire de gestion des demi-retenues.
 Les CPUs x86 proposent pour cela quelques instructions assez rares:
 \INS{AAA}/\INS{DAA} (gestion de la demi-retenue après addition),
 \INS{AAS}/\INS{DAS} (gestion de la demi-retenue après soustraction),
@@ -53,11 +53,11 @@ Les CPUs x86 proposent pour cela quelques instructions assez rares:
 \myindex{x86!\Registers!AF}
 Le support par les CPUs des nombres au format \ac{BCD} est la raison d'être des \IT{half-carry flag} (sur 8080/Z80) et
 \IT{auxiliary flag} (\TT{AF} sur x86).
-Ils représentent la retenue générée après traitements des 4 bits de poids faible (d'un octet).
+Ils représentent la retenue générée après traitement des 4 bits de poids faible (d'un octet).
 Le drapeau est utilisé par les instructions de gestion de retenue ci-dessus.
 
 Le livre \InSqBrackets{Peter Abel, \IT{IBM PC assembly language and programming} (1987)} doit sa popularité à la facilité de ces conversions.
-Hormis ce livre, l'auteur de ces notes n'a jamais rencontré en pratique de nombres au format \ac{BCD}, sauf dans certains 
+Hormis ce livre, l'auteur de ces notes n'a jamais rencontré en pratique de nombres au format \ac{BCD}, sauf dans certains
 \IT{nombres magiques} (\myref{magic_numbers}),
 tels que lorsque la date de naissance d'un individu est encodé sous la forme 0x19791011---qui n'est autre qu'un nombre au format \ac{BCD}.
 
@@ -89,7 +89,7 @@ Les cartes perforées utilisées pour les télétypes ne pouvaient comporter que
 Le terme \IT{octet} met l'accent sur l'utilisation de 8 bits.:
 \IT{fetchmail} est un de ceux qui utilise cette terminologie.
 
-Sur les architectures à 36 bits, l'utilisation de 9 bits par caractère a été utilisée: un \gls{word} pouvait contenir 4 caractères.
+Sur les architectures à 36 bits, l'utilisation de 9 bits par caractère a été utilisée: un \glslink{word}{mot} pouvait contenir 4 caractères.
 Ceci explique peut-être que le standard C/C++ indique que le type \IT{char} doit supporter \IT{au moins} 8 bits, mais que l'utilisation
 d'un nombre plus importants de bits est autorisé.
 
@@ -104,18 +104,18 @@ H6070 signifie probablement Honeywell 6070, qui comprenait des mots de 36 bits.
 
 \subsubsection{table ASCII standard}
 
-La représentation ASCII des caractères sur 7 bits constitue un standard, qui supporte donc 128 charactères différents.
+La représentation ASCII des caractères sur 7 bits constitue un standard, qui supporte donc 128 caractères différents.
 Les premiers logiciels de transport de mails fonctionnaient avec des codes ASCII sur 7 bits.
 Le standard \ac{MIME} nécessitait donc l'encodage des messages rédigés avec des alphabets non latins.
-Les code ASCII sur 7 bits ont ensuite été aggrémenté d'un bit de parité qui a aboutit à la représentation sur 8 bits.
+Le code ASCII sur 7 bits a ensuite été augmenté d'un bit de parité qui a aboutit à la représentation sur 8 bits.
 
 Les clefs de chiffrage utilisées par \IT{Data Encryption Standard} (\ac{DES}) comportent 56 bits, soit 8 groupes de 7 bits
 ce qui laisse un espace pour un bit de parité dans chaque groupe.
 
-La mémorisation de la table \ac{ASCII} est inutile. Il suffit de se souvenir de certaines intervalles.
+La mémorisation de la table \ac{ASCII} est inutile. Il suffit de se souvenir de certains intervalles.
 \InSqBrackets{0..0x1F} sont les caractères de contrôle (non imprimables).
 \InSqBrackets{0x20..0x7E} sont les caractères imprimables.
-Les dodes à partir de la valeur 0x80 sont généralement utilisés pour les caractères non latins et pour certains caractères pseudo graphiques.
+Les codes à partir de la valeur 0x80 sont généralement utilisés pour les caractères non latins et pour certains caractères pseudo graphiques.
 
 Quelques valeurs typiques à mémoriser sont :
 0 (terminateur d'une chaîne de caractères en C, \TT{'\textbackslash{}0'} et C/C++);
@@ -145,27 +145,28 @@ En règle général, la notation \IT{wchar\_t} est un synonyme du type \IT{short
 Certains s'étonneront qu'il existe un type de données entier non signé (positif ou nul) puisque chaque entier de ce type peut être représenté par un entier signé (positif ou négatif).
 Certes, mais le fait de ne pas avoir à utiliser un bit pour représenter le signe permet de doubler la taille de l'intervalle des valeurs qu'il est possible de représenter.
 Ainsi un octet signé permet de représenter les valeurs de -128 à +127, et l'octet non signé les valeurs de 0 à 255.
-L'utilisation d'un type de données non signée pour une variable véhicule également le message qu'elle n'est pas destinée à recevoir une valeur négative.
+Un autre avantage d'utiliser un type de données non signé est l'auto-documentation:
+vous définissez une variable qui ne peut pas recevoir de valeurs négatives.
 
 \myindex{Java}
 L'absence de type de données non signées dans le langage Java a été critiqué.
 L'implémentation d'algorithmes cryptographiques à base d'opérations booléennes avec les seuls types de données signées est compliquée.
 
-Une valeur telle que 0xFFFFFFFF (-1) est souvent utilisée, en particulier pour représenetr un code d'erreur.
+Une valeur telle que 0xFFFFFFFF (-1) est souvent utilisée, en particulier pour représenter un code d'erreur.
 
-\subsection{Word}
+\subsection{Mot}
 
-\gls{word} Le terme de 'mot' est quelque peu ambigu et débote en général un type de données dont la taille correspond à celle d'un \ac{GPR}.
+\glslink{word}{mot} Le terme de 'mot' est quelque peu ambigu et dénote en général un type de données dont la taille correspond à celle d'un \ac{GPR}.
 L'utilisation d'octets est pratique pour le stockage des caractères, mais souvent inadapté aux calculs arithmétiques.
 
 C'est pourquoi, nombre de \ac{CPU}s possèdent des \ac{GPR}s dont la taille est de 16, 32 ou 64 bits.
-Les CPUs 8 bits tele que le 8080 et le Z80 proposent quant à elle de travailler sur des paires de registres 8 bits, dont chacune constitue un \IT{pseudoregistre} de 16 bits.
+Les CPUs 8 bits tels que le 8080 et le Z80 proposent quant à eux de travailler sur des paires de registres 8 bits, dont chacune constitue un \IT{pseudo-registre} de 16 bits.
 (\IT{BC}, \IT{DE}, \IT{HL}, etc.).
 Les capacités des paires de registres du Z80 en font, en quelque sorte, un émulateur d'une CPU 16 bits.
 
-En règle générale, une CPU présentée comme ''CPU n-bits'' possède des \ac{GPR}s dont la taille est de n bits.
+En règle générale, un CPU présenté comme ''CPU n-bits'' possède des \ac{GPR}s dont la taille est de n bits.
 
-A une certaine époque, les disques durs et les barettes de \ac{RAM} étaient caractérisées comme ayant \IT{n} kilo-mots 
+A une certaine époque, les disques durs et les barettes de \ac{RAM} étaient caractérisés comme ayant \IT{n} kilo-mots
 et non pas \IT{b} kilooctets/megaoctets.
 
 Par exemple, \IT{Apollo Guidance Computer}\footnote{\url{https://en.wikipedia.org/wiki/Apollo_Guidance_Computer}}
@@ -176,14 +177,14 @@ La mémoire magnétique du \IT{TX-0}\footnote{\url{https://en.wikipedia.org/wiki
 i.e., 64 kilo-mots.
 
 \IT{DECSYSTEM-2060}\footnote{\url{https://en.wikipedia.org/wiki/DECSYSTEM-20}}
-pouvait supporter jusqu'à 4096 kilo mots of \IT{solid state memory}
+pouvait supporter jusqu'à 4096 kilo mots de \IT{solid state memory}
 (i.e., hard disks, tapes, etc).
 S'agissant d'un ordinateur 36 bits, cela représentait 18432 kilo octets ou ~18 mega octets.
 
 \myhrule{}
 
-\IT{int} en C/C++ est presque systématiquement représenté par un \gls{word}.
-(L'architecture AMD64 fait exception car le type \IT{int} possède une taille de 32 bits, perhaps, peut-être pour une meilleure portabilité.)
+\IT{int} en C/C++ est presque systématiquement représenté par un \glslink{word}{mot}.
+(L'architecture AMD64 fait exception car le type \IT{int} possède une taille de 32 bits, peut-être pour une meilleure portabilité.)
 
 Le type \IT{int} est représenté sur 16 bits par le PDP-11 et les anciens compilateurs MS-DOS.
 Le type \IT{int} est représenté sur 32 bits sur VAX, ainsi que sur l'architecture x86 à partir du 80386, etc.
@@ -199,55 +200,55 @@ Ceci reste vrai même lorsque le registre est utilisé comme compteur d'itérati
 
 \myhrule{}
 
-En langage assembleur x86, un \gls{word} représente 16 bits, car il en était ainsi sur les processeurs 8086 16 bits.
+En langage assembleur x86, un \glslink{word}{mot} représente 16 bits, car il en était ainsi sur les processeurs 8086 16 bits.
 Un \IT{Double word} représente 32 bits, et un \IT{quad word} 64 bits.
 C'est pourquoi, les mots de 16 bits sont déclarés par \TT{DW} en assembleur x86, ceux de 32 bits par \TT{DD} et ceux de 64 bits par \TT{DQ}.
 
-Dans les architectures ARM, MIPS, etc... un \gls{word} représente 32 bits, on parlera alors de \IT{demi-mot} pour les types sur 16 bits.
+Dans les architectures ARM, MIPS, etc... un \glslink{word}{mot} représente 32 bits, on parlera alors de \IT{demi-mot} pour les types sur 16 bits.
 En conséquence, un \IT{double word} sur une architecture RISC 32 bits est un type de données qui représente 64 bits.
 
-\IT{GDB} utilise la terminologie suivante : \IT{demi-mot} pour 16 bits, \gls{word} pour 32 bits et \IT{mot géant} pour 64 bits.
+\IT{GDB} utilise la terminologie suivante : \IT{demi-mot} pour 16 bits, \glslink{word}{mot} pour 32 bits et \IT{mot géant} pour 64 bits.
 
-Les environnements C/C++ 16 bits sur PDP-11 et MS-DOS définissent le type \IT{long} comme ayant une taille de 32 bits, 
+Les environnements C/C++ 16 bits sur PDP-11 et MS-DOS définissent le type \IT{long} comme ayant une taille de 32 bits,
 ce qui serait sans doute une abbréviation de \IT{long word} ou de \IT{long int}.
 
 Les environnements C/C++ 32 bits définissent le type \IT{long long} dont la taille est de 64 bits.
 
-L'ambiguité du terme \IT{mot} est donc désormais évidente.
+L'ambiguïté du terme \IT{mot} est donc désormais évidente.
 
 \subsubsection{Dois-je utiliser le type \IT{int}?}
 
-Certains affirment que le type \IT{int} ne doit jamais être utilisé, l'ambiguité de sa définition pouvant être générateur de bugs.
-A une certaine époque, la librairie bien connue \IT{lzhuf} utilisais le type \IT{int} et fonctionnait parfaitement sur les architectures 16 bits.
+Certains affirment que le type \IT{int} ne doit jamais être utilisé, l'ambiguïté de sa définition pouvant être génératrice de bugs.
+A une certaine époque, la bibliothèque bien connue \IT{lzhuf} utilisais le type \IT{int} et fonctionnait parfaitement sur les architectures 16 bits.
 Portée sur une architecture pour laquelle le type \IT{int} représentait 32 bits, elle pouvait alors crasher: \url{http://yurichev.com/blog/lzhuf/}.
 
-Des types de données moins ambigüs sont définis dans le fichier \IT{stdint.h}:
+Des types de données moins ambigus sont définis dans le fichier \IT{stdint.h}:
 \IT{uint8\_t}, \IT{uint16\_t}, \IT{uint32\_t}, \IT{uint64\_t}, etc.
 
 \myindex{Donald E. Knuth}
 Donald E. Knuth fut l'un de ceux qui proposa\footnote{\url{http://www-cs-faculty.stanford.edu/~uno/news98.html}}
-d'utiliser pour ces différents types des dénominations aux consonnances distinctes: \IT{octet/wyde/tetrabyte/octabyte}.
-Cette pratique est cependant moins courante que celle consistant à inclure directement dans le nom du type 
+d'utiliser pour ces différents types des dénominations aux consonances distinctes: \IT{octet/wyde/tetrabyte/octabyte}.
+Cette pratique est cependant moins courante que celle consistant à inclure directement dans le nom du type
 les termes \IT{u} (\IT{unsigned}) ainsi que le nombre de bits.
 
 \subsubsection{Ordinateurs à base de mots}
 
-En dépit de l'ambiguité du terme \gls{word}, les ordinateurs modernes restent conçus sur ce concept: la \ac{RAM} ainsi que tous
+En dépit de l'ambiguïté du terme \glslink{word}{mot}, les ordinateurs modernes restent conçus sur ce concept: la \ac{RAM} ainsi que tous
 les niveaux de mémoire cache demeurent organisés en mots et non pas en octets.
 La notion d'octet reste prépondérante en marketing.
 % <!-- TODO word length on intel, etc... -->
 
-Les accès aux adresses mémoire et cache alignées sur des frontières de mots est souvent plus performante que lorsque l'adress n'est pas alignée.
+Les accès aux adresses mémoire et cache alignées sur des frontières de mots est souvent plus performante que lorsque l'adresse n'est pas alignée.
 
 Afin de rendre performante l'utilisation des structures de données, il convient toujours de de prendre en compte la longueur du
-\gls{word} de la CPU sur laquelle sera exécuté le programme lors de la définition des structures de données.
+\glslink{word}{mot} du CPU sur lequel sera exécuté le programme lors de la définition des structures de données.
 Certains compilateurs - mais pas tous - prennent en charge cet alignement.
 
 \subsection{Registre d'adresse}
 
 Ceux qui ont fait leur premières armes sur les processeurs x86 32 et 64 bits, ou les processeurs RISC des années 90
 tels que ARM, MIPS ou PowerPC prennent pour acquis que la taille du bus d'adresse est la même que celle d'un \ac{GPR}
-ou d'un \gls{word}.
+ou d'un \glslink{word}{mot}.
 Cependant, cette règle n'est pas toujours respectée sur d'autres architectures.
 
 Le processeur 8 bits Z80 peut adresser $2^{16}$ octets, en utilisant une paire de registres 8 bits ou certains registres
@@ -260,12 +261,12 @@ Dans les années 70, la RAM était très coûteuse. Il paraissait alors inconcev
 les 128 Mo. Dès lors pourquoi aurait-on utilisé des registres 64 bits pour l'adressage.
 
 Les processeurs 8086/8088 utilisent un schéma d'adressage particulièrement bizarre:
-Les valeurs de deux registres de 16 bits sont addutionnées de manière étrange afin d'obtenir une adresse sur 20 bits.
+Les valeurs de deux registres de 16 bits sont additionnées de manière étrange afin d'obtenir une adresse sur 20 bits.
 S'agirait-il d'une sorte de virtualisation gadget (\myref{8086_memory_model})?
 Les processeurs 8086 pouvaient en effet faire fonctionner plusieurs programmes côte à côte (mais pas simultanément bien sûr).
 
 \myindex{ARM!ARM1}
-Les premiers processeurs ARM1 implémentent un artefact intéressant:
+Les premiers processeurs ARM1 implémentent un artéfact intéressant:
 
 \begin{framed}
 \begin{quotation}
@@ -278,11 +279,11 @@ inutilisés mais purement et simplement absents du processeur.
 
 ( \url{http://www.righto.com/2015/12/reverse-engineering-arm1-ancestor-of.html} )
 
-En conséquence, il n'est pas possible d'affecter au registre PC une valeur dont l'un des uex bits de poids faible est
+En conséquence, il n'est pas possible d'affecter au registre PC une valeur dont l'un des deux bits de poids faible est
 différent de 0, pas plus qu'il n'est possible de positionner à 1 l'un des 6 bits de poids fort.
 
 L'architecture x86-64 utilise des pointeurs et des adresses sur 64 bits, cependant en interne la largeur du bus
-d'adresse est de 48 bits, (ce qui est suffisant pour adresser 256 Tera octests de \ac{RAM}).
+d'adresse est de 48 bits, (ce qui est suffisant pour adresser 256 Tera octets de \ac{RAM}).
 
 \subsection{Nombres}
 
@@ -326,16 +327,16 @@ Si vous examinez le codes source UNIX v6 pour PDP-11
 \footnote{\url{http://minnie.tuhs.org/Archive/PDP-11/Distributions/research/Dennis_v6/}},
 les \IT{int} 16 bits y sont utilisés partout, tandis que le type \IT{long} sur 32 bits ne l'est jamais.
 
-Pareil à l'poque de MS-DOS: les \IT{int} 16 bits étaient utilisés pratiquement pout tout (indice de tableau, compteur de boucle),
+Pareil à l'époque de MS-DOS: les \IT{int} 16 bits étaient utilisés pratiquement pour tout (indice de tableau, compteur de boucle),
 tandis que le type \IT{long} sur 32 bits ne l'était que rarement.
 
-Durant l'avènement de l'architecture x86-64, uk fut décidé que le type \IT{int} conserverait une taille de 32 bits,
+Durant l'avènement de l'architecture x86-64, il fut décidé que le type \IT{int} conserverait une taille de 32 bits,
 probablement parce que l'utilisation d'un type \IT{int} de 64 bits est encore plus rare.
 
 Je dirais que les nombre sur 16 bits qui couvrent l'intervalle 0..65535 sont probablement les nombres les plus
 utilisés en informatique.
 
-Ceci étant, si vous rencontré des nombres sur 32 bits particulièrement élevé tels que 0x87654321, il existe une
+Ceci étant, si vous rencontrez des nombres sur 32 bits particulièrement élevé tels que 0x87654321, il existe une
 bonne chance qu'il s'agisse :
 
 \begin{itemize}
@@ -351,19 +352,19 @@ bonne chance qu'il s'agisse :
 
 \end{itemize}
 
-Il en va a peu près de même pour les valeurs sur 64 bits.
+Il en va à peu près de même pour les valeurs sur 64 bits.
 
 \myparagraph{\dots donc un \IT{int} sur 16 bits est suffisant pout à peu près n'importe quoi?}
 
 Il est intéressant de constater que dans \InSqBrackets{\MAbrash{} chapitre 13}
-nous pouvons lire qu'il existe pléthore de cas pour lesquel des variables sur 16 bits sont largement suffisantes.
+nous pouvons lire qu'il existe pléthore de cas pour lesquels des variables sur 16 bits sont largement suffisantes.
 Dans le même temps, Michael Abrash se plaint que les CPUs 80386 et 80486 disposent de si peu de registres et propose donc de
 placer deux registres de 16 bits dans un registre de 32 bits et d'en effectuer des rotations en utilisant les instructions
-\INS{ROR reg, 16} (sur 80386 et suivant) (\INS{ROL reg, 16} fonctionne également) ou 
+\INS{ROR reg, 16} (sur 80386 et suivant) (\INS{ROL reg, 16} fonctionne également) ou
 \INS{BSWAP} (sur 80486 et suivant).
 
-Cette approche rappelle celle du Z80 et de ces groupes de registres alternatifs (suffixés d'un apostrophe)
-vers lesquels la CPU pouvait être basculé (et inversement) au moyen de l'instruction \INS{EXX}.
+Cette approche rappelle celle du Z80 et de ses groupes de registres alternatifs (suffixés d'une apostrophe)
+vers lesquels le CPU pouvait être basculé (et inversement) au moyen de l'instruction \INS{EXX}.
 
 \subsubsection{Taille des buffers}
 
@@ -372,8 +373,8 @@ forme $2^x$ (512 octets, 1024, etc.).
 Les valeurs de la forme $2^x$ sont faciles à reconnaître (\myref{2n_numbers_table}) en décimal, en hexadécimal
 et en binaire.
 
-Les programmeurs restent cependant des humains et conservent leurculture décimale.
-C'est pourquoi, dans le domaine des \ac{DBMS}, la taille des champs textuels est souvent choisi sous la forme $10^x$,
+Les programmeurs restent cependant des humains et conservent leur culture décimale.
+C'est pourquoi, dans le domaine des \ac{DBMS}, la taille des champs textuels est souvent choisie sous la forme $10^x$,
 100, 200 par exemple.
 Ils pensent simplement \q{Okay, 100 suffira, attendez, 200 ira mieux}.
 Et bien sûr, ils ont raison.
@@ -387,7 +388,7 @@ multiple d'une puissance de dix.
 
 Garder à l'esprit une cartographie approximative de l'occupation mémoire du processus que vous
 déboguez est toujours une bonne idée.
-Ainsi, beaucoup d'exécutables win32 démarrent à l'adresse 0x00401000, donc une addresse telle que
+Ainsi, beaucoup d'exécutables win32 démarrent à l'adresse 0x00401000, donc une adresse telle que
 0x00451230 se situe probablement dans sa section exécutable. Vous trouverez des adresses de cette
 sorte dans le registre \TT{EIP}.
 
@@ -396,11 +397,11 @@ La pile est généralement située à une adresse inférieure à % TODO
 Beaucoup de débogueurs sont capables d'afficher la cartographie d'occupation mémoire du processus
 débogué, par exemple: \myref{olly_memory_map_example}.
 
-Une addresse qui augmente par pas de 4 sur une architecture 32bits, ou par pas de 8 sur une
-architecture 64 bits constitue probablement l'énumération des addresses d'un élément d'un tableau.
+Une adresse qui augmente par pas de 4 sur une architecture 32-bit, ou par pas de 8 sur une
+architecture 64-bit constitue probablement l'énumération des adresses des éléments d'un tableau.
 
-Il convient de savoir que win32 n'utilise pas les addresses inférieures à 0x10000, donc si vous
-observez un nombre inférieur à cette valeur, ce ne peut être une addresse (voir aussi 
+Il convient de savoir que win32 n'utilise pas les adresses inférieures à 0x10000, donc si vous
+observez un nombre inférieur à cette valeur, ce ne peut être une adresse (voir aussi
 \url{https://msdn.microsoft.com/en-us/library/ms810627.aspx}).
 
 De toute manière, beaucoup de débogueurs savent vous indiquer si la valeur contenue dans un
