@@ -34,19 +34,19 @@ IDAは$x$変数が.dataセクションに存在することを示しています
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/04_scanf/2_global/MIPS/O3_IDA_init_JPN.lst}
 
-Why not .sdata? Perhaps that this depends on some GCC option?
+.sdataにしたら？ これはおそらくいくつかのGCCオプションに依存するのでしょうか？
 
-Nevertheless, now $x$ is in .data, which is a general memory area, and we can take a look
-how to work with variables there.
+それにもかかわらず、$x$は一般的なメモリ領域である.dataにあり、
+ここで変数を扱う方法を見てみることができます。
 
 \myindex{MIPS!\Instructions!LUI}
 \myindex{MIPS!\Instructions!ADDIU}
 
-The variable's address must be formed using a pair of instructions.
+変数のアドレスは、命令のペアを使用して構成する必要があります。
 
-In our case those are \INS{LUI} (\q{Load Upper Immediate}) and \INS{ADDIU} (\q{Add Immediate Unsigned Word}).
+私たちの場合、それらは\INS{LUI}（\q{Load Upper Immediate}）と\INS{ADDIU}（\q{Add Immediate Unsigned Word}）です。 
 
-Here is also the objdump listing for close inspection:
+厳密な検査のためのobjdumpリストもあります：
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump),style=customasmMIPS]{patterns/04_scanf/2_global/MIPS/O3_objdump_init_JPN.txt}
 
@@ -54,17 +54,17 @@ Here is also the objdump listing for close inspection:
 \myindex{MIPS!\Instructions!ADDIU}
 \myindex{MIPS!\Instructions!LW}
 
-We see that the address is formed using \INS{LUI} and \INS{ADDIU}, but the high part of address is still in
-the \$S0 register, and it is possible to encode the offset in a \INS{LW} (\q{Load Word}) instruction, so one single \INS{LW} is enough 
-to load a value from the variable and pass it to \printf.
+アドレスは\INS{LUI}と\INS{ADDIU}を使用して形成されていますが、アドレスの上位部分はまだ \$S0 レジスタにあり、
+\INS{LW}（\q{Load Word}）命令でオフセットをエンコードすることができます。 
+変数から値をロードして \printf に渡すには十分です。
 
-Registers holding temporary data are prefixed with T-, but here we also see some prefixed with S-, 
-the contents of which must be preserved before use in other functions (i.e., saved somewhere).
+一時的なデータを保持するレジスタの先頭にはT-が付いていますが、ここでは接頭辞S-が付いています。
+その内容は他の関数で使用する前に保持しておく必要があります。
 % FIXME:
 % This needs to be clarified a bit, e.g. "the registers need to be preserved if a function is called and it wants to use them
 
-That is why the value of \$S0 has been set at address 0x4006cc and has been used again
-at address 0x4006e8, after the \scanf call. 
-The \scanf function does not change its value.
+そのため、 \$S0 の値は0x4006ccのアドレスに設定されており、
+\scanf 呼び出し後に0x4006e8番地で再び使用されています。 
+\scanf 関数は値を変更しません。
 
 % TODO non-optimized example?
