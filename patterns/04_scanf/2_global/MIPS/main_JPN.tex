@@ -1,36 +1,36 @@
 \subsubsection{MIPS}
 
-\myparagraph{Uninitialized global variable}
+\myparagraph{初期化されていないグローバル変数}
 
-So now the $x$ variable is global.
-Let's compile to executable file rather than object file and load it into \IDA.
-IDA displays the $x$ variable in the \TT{.sbss} ELF section (remember the \q{Global Pointer}? \myref{MIPS_GP}),
-since the variable is not initialized at the start.
+だから今$x$変数はグローバルです。 
+オブジェクトファイルではなく実行ファイルにコンパイルし、 \IDA にロードしてみましょう。 
+IDAは、\IT{.sbss} ELFセクションに$x$変数を表示します（25ページの\q{グローバルポインタ} \myref{MIPS_GP}を覚えておいてください）。
+これは変数が最初に初期化されていないためです。
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/04_scanf/2_global/MIPS/O3_IDA_JPN.lst}
 
-IDA reduces the amount of information, so we'll also do a listing using objdump and comment it:
+IDAは情報量を減らすため、objdumpを使用してリスティングを行い、コメントします。
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (objdump),numbers=left,style=customasmMIPS]{patterns/04_scanf/2_global/MIPS/O3_objdump_JPN.txt}
 
-Now we see the $x$ variable address is read from a 64KiB data buffer using GP and adding negative offset to it (line 18).
-More than that, the addresses of the three external functions  which are used in our example (\puts, \scanf, \printf), are also read from the 64KiB global data buffer using GP (lines 9, 16 and 26).
-GP points to the middle of the buffer, and such offset suggests that all three function's addresses,
-and also the address of the $x$ variable, are all stored somewhere at the beginning of that buffer.
-That make sense, because our example is tiny.
+今度は$x$変数アドレスがGPを使って64KiBのデータバッファから読み込まれ、負のオフセットが加えられていることがわかります（18行目）。 
+さらに、この例（ \puts 、 \scanf 、 \printf ）で使用されている3つの外部関数のアドレスもGPを使用して64KiBグローバルデータバッファから読み込まれます（9,16,26行目） 。 
+GPはバッファの中央を指しています。このようなオフセットは、
+3つの関数のアドレスと$x$変数のアドレスがすべてそのバッファの先頭に格納されていることを示しています。 
+私たちの例は非常に小さいので、それは理にかなっています。
 
 \myindex{MIPS!\Pseudoinstructions!MOVE}
 \myindex{MIPS!\Pseudoinstructions!NOP}
 
-Another thing worth mentioning is that the function ends with two \ac{NOP}s (\TT{MOVE \$AT,\$AT} --- an idle instruction), in order to align next function's start on 16-byte boundary.
+言及する価値がある別のことは、次の関数の開始を16バイトの境界に合わせるために、関数が2つの\ac{NOP}（\TT{MOVE \$AT,\$AT}、アイドル命令）で終了することです。
 
-\myparagraph{Initialized global variable}
+\myparagraph{初期化されたグローバル変数}
 
-Let's alter our example by giving the $x$ variable a default value:
+$x$変数にデフォルト値を与えることで、この例を変更しましょう。
 
 \lstinputlisting[style=customc]{patterns/04_scanf/2_global/default_value_EN.c}
 
-Now IDA shows that the $x$ variable is residing in the .data section:
+IDAは$x$変数が.dataセクションに存在することを示しています：
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/04_scanf/2_global/MIPS/O3_IDA_init_JPN.lst}
 

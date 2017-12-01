@@ -1,22 +1,20 @@
-\subsection{Popular mistake}
+\subsection{一般的な間違い}
 
-It's a very popular mistake (and/or typo) to pass value of \IT{x} instead of pointer to \IT{x}:
+\IT{x}へのポインタではなく、\IT{x}の値を渡すのは極めて一般的な間違い（および/またはタイプミス）です。
 
 \lstinputlisting[style=customc]{patterns/04_scanf/error.c}
 
-So what happens here?
-\IT{x} is not uninitialized and contains some random noise from local stack.
-When \scanf called, it takes string from user, parses it into number and tries to write it into \IT{x}, treating
-it as an address in memory.
-But there is a random noise, so \scanf will try to write at random address.
-Most likely, the process will crash.
+では、何が起こるでしょうか？ 
+\IT{x}は初期化されておらず、ローカルスタックからのランダムノイズを含んでいます。 
+\scanf が呼び出されると、ユーザーから文字列を受け取り、数値に解析し、\IT{x}に書き込んでメモリ内のアドレスとして扱います。 
+しかしランダムなノイズがあるので、 \scanf はランダムなアドレスに書き込もうとします。 
+おそらく、プロセスがクラッシュするでしょう。
 
 \myindex{0xCCCCCCCC}
 \myindex{0x0BADF00D}
-Interestingly enough, some \ac{CRT} libraries in debug build, put visually distinctive patterns
-into memory just allocated, like 0xCCCCCCCC or 0x0BADF00D and so on.
-In this case, \IT{x} may contain 0xCCCCCCCC, and \scanf would try to write at address 0xCCCCCCCC.
-And if you'll notice that something in your process tries to write at address 0xCCCCCCCC, you'll know
-that uninitialized variable (or pointer) gets used without prior initialization.
-This is better than as if newly allocated memory is just cleared.
-
+興味深いことに、デバッグビルドのいくつかの \ac{CRT} ライブラリは、
+視覚的に特徴的なパターンを0xCCCCCCCCや0x0BADF00Dのように割り当てられたメモリに入れています。 
+この場合、\IT{x}は0xCCCCCCCCを含むことができ、\scanf はアドレス0xCCCCCCCCに書き込みを試みます。 
+また、プロセス内の何かがアドレス0xCCCCCCCCに書き込もうとすると、
+初期化されていない変数（またはポインタ）が事前初期化なしで使用されることがわかります。 
+これは、新しく割り当てられたメモリがちょうどクリアされた場合よりも優れています。

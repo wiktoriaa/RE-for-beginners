@@ -2,7 +2,7 @@
 \subsubsection{MSVC: x86 + \olly}
 \myindex{\olly}
 
-Things are even simpler here:
+ここではさらに単純です。
 
 \begin{figure}[H]
 \centering
@@ -11,25 +11,25 @@ Things are even simpler here:
 \label{fig:scanf_ex2_olly_1}
 \end{figure}
 
-The variable is located in the data segment.
-After the \PUSH instruction (pushing the address of $x$) gets executed, 
-the address appears in the stack window. Right-click on that row and select \q{Follow in dump}.
-The variable will appear in the memory window on the left.
-After we have entered 123 in the console, 
-\TT{0x7B} appears in the memory window (see the highlighted screenshot regions).
+変数はデータセグメントにあります。 
+\PUSH 命令（$x$のアドレスを押す）が実行されると、
+アドレスがスタックウィンドウに表示されます。 その行を右クリックし、\q{ダンプに従う}を選択します。 
+変数は、左側のメモリウィンドウに表示されます。 
+コンソールに123を入力すると、
+メモリウィンドウに\TT{0x7B}が表示されます（ハイライトされたスクリーンショット領域を参照）。
 
-But why is the first byte \TT{7B}?
-Thinking logically, \TT{00 00 00 7B} must be there.
-The cause for this is referred as  \gls{endianness}, and x86 uses \IT{little-endian}.
-This implies that the lowest byte is written first, and the highest written last.
-Read more about it at: \myref{sec:endianness}.
-Back to the example, the 32-bit value is loaded from this memory address into \EAX and passed to \printf.
+しかし、最初のバイトはなぜ7Bでしょうか？ 
+論理的に考えると、\TT{00 00 00 7B}のはずです。 
+この原因は\gls{endianness}と呼ばれるもので、x86はリトルエンディアンを使用します。 
+これは、最下位バイトが最初に書き込まれ、最上位バイトが最後に書き込まれることを意味します。 
+これについての詳細：\myref{sec:endianness}
+この例では、32ビットの値がこのメモリアドレスから \EAX にロードされ、 \printf に渡されます。
 
-The memory address of $x$ is \TT{0x00C53394}.
+$x$のメモリアドレスは\TT{0x00C53394}です。
 
 \clearpage
-In \olly we can review the process memory map (Alt-M)
-and we can see that this address is inside the \TT{.data} PE-segment of our program:
+\olly では、プロセスメモリマップ（Alt-M）を見ることができ、
+このアドレスはプログラムの\TT{.data} PEセグメント内にあることがわかります。
 
 \label{olly_memory_map_example}
 \begin{figure}[H]
