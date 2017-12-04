@@ -4,15 +4,14 @@
 
 \myindex{Fused multiply–add}
 \myindex{ARM!\Instructions!MADD}
-Everything here is simple.
-\TT{MADD} is just an instruction doing fused multiply/add (similar to the \TT{MLA} we already saw).
-All 3 arguments are passed in the 32-bit parts of X-registers.
-Indeed, the argument types are 32-bit \IT{int}'s.
-The result is returned in \TT{W0}.
+ここでのすべては簡単です。 
+\TT{MADD}は乗算/加算を一緒に行う命令です（既に見た\TT{MLA}に似ています）。 
+3つの引数はすべて、Xレジスタの32ビット部分に渡されます。 
+実際、引数の型は32ビット\IT{int}です。 結果は\TT{W0}に返されます。
 
 \lstinputlisting[caption=\Optimizing GCC (Linaro) 4.9,style=customasmARM]{patterns/05_passing_arguments/ARM/ARM64_O3_JPN.s}
 
-Let's also extend all data types to 64-bit \TT{uint64\_t} and test:
+すべてのデータ型を64ビット\TT{uint64\_t}に拡張してテストしましょう：
 
 \lstinputlisting[style=customc]{patterns/05_passing_arguments/ex64.c}
 
@@ -38,12 +37,12 @@ main:
 	.string	"%lld\n"
 \end{lstlisting}
 
-The \ttf{} function is the same, only the whole 64-bit X-registers are now used.
-Long 64-bit values are loaded into the registers by parts, this is also described here: \myref{ARM_big_constants_loading}.
+\ttf 関数は同じで、64ビットのXレジスタ全体が使用されます。 
+長い64ビットの値は、レジスタごとにロードされます。これについては、以下で説明します：\myref{ARM_big_constants_loading}
 
 \myparagraph{\NonOptimizing GCC (Linaro) 4.9}
 
-The non-optimizing compiler is more redundant:
+非最適化コンパイラはより冗長です。
 
 \begin{lstlisting}[style=customasmARM]
 f:
@@ -60,21 +59,21 @@ f:
 	ret
 \end{lstlisting}
 
-The code saves its input arguments in the local stack, 
-in case someone (or something) in this function needs using the \TT{W0...W2} 
-registers. This prevents overwriting the original
-function arguments, which may be needed again in the future.
+コードは、この関数の誰か（または何か）が
+\TT{W0...W2}レジスタを使用する必要がある場合に、その入力引数をローカルスタックに保存します。 
+これにより、元の関数の引数を上書きすることが防止されます。
+これは、将来必要になる可能性があります。
 
-This is called \IT{Register Save Area.} (\ARMPCS).
-The callee, however, is not obliged to save them.
-This is somewhat similar to \q{Shadow Space}: \myref{shadow_space}.
+これは、\IT{レジスタセーブエリア}と呼ばれます。((\ARMPCS))
+しかし、呼び出し先関数はそれらを保存する義務はありません。 
+これは、\q{シャドースペース}(\myref{shadow_space})に多少似ています。
 
-Why did the optimizing GCC 4.9 drop this argument saving code?
-Because it did some additional optimizing work and concluded
-that the function arguments will not be needed in the future 
-and also that the registers \TT{W0...W2} will not be used.
+GCC 4.9を最適化すると、なぜこの引数はコードを保存しなくなったのでしょうか？ 
+これはいくつかの追加の最適化作業を行い、
+関数の引数がこの先に必要ではなく、
+レジスタ\TT{W0...W2}が使用されないと結論付けたためです。
 
 \myindex{ARM!\Instructions!MUL}
 \myindex{ARM!\Instructions!ADD}
 
-We also see a \TT{MUL}/\TT{ADD} instruction pair instead of single a \TT{MADD}.
+また、単一の\TT{MADD}の代わりに\TT{MUL}/\TT{ADD}命令ペアがあります。

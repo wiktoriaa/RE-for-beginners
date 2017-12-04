@@ -2,70 +2,68 @@
 
 \myindex{x86-64}
 
-The story is a bit different in x86-64. Function arguments (first 4 or first 6 of them) 
-are passed in registers i.e. the \gls{callee} reads them from registers instead of reading them from the stack.
+この話はx86-64では少し違っています。関数の引数（最初の4つまたは最初の6つ）
+はレジスタに渡されます。つまり、\gls{callee}はレジスタからレジスタを読み込みます。
 
 \subsubsection{MSVC}
 
 \Optimizing MSVC:
 
-\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{patterns/05_passing_arguments/x64_MSVC_Ox_EN.asm}
+\lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{patterns/05_passing_arguments/x64_MSVC_Ox_JPN.asm}
 
-As we can see, the compact function \ttf takes all its arguments from the registers.
+見てわかるように、コンパクトな関数 \ttf はすべての引数をレジスタから取ります。
 
-The \LEA instruction here is used for addition,
-apparently the compiler considered it faster than \TT{ADD}.
+ここでの \LEA 命令は加算に使用され、
+明らかにコンパイラは \TT{ADD} よりも速いと考えました。
 \myindex{x86!\Instructions!LEA}
 
-\LEA is also used in the \main function to prepare the first and third \ttf arguments. The compiler
-must have decided that this would work faster than the usual way of loading values into a register using \MOV instruction.
+\LEA は、第1および第3の \ttf 引数を準備するために \main 関数でも使用されます。
+コンパイラは、 \MOV 命令を使用してレジスタに値をロードする通常の方法よりも速く動作すると判断する必要があります。
 
-Let's take a look at the non-optimizing MSVC output:
+非最適化MSVCの出力を見てみましょう。
 
-\lstinputlisting[caption=MSVC 2012 x64,style=customasmx86]{patterns/05_passing_arguments/x64_MSVC_IDA_EN.asm}
+\lstinputlisting[caption=MSVC 2012 x64,style=customasmx86]{patterns/05_passing_arguments/x64_MSVC_IDA_JPN.asm}
 
-It looks somewhat puzzling because all 3 arguments from the registers are saved to the stack for some reason.
+レジスタからの3つの引数は何らかの理由でスタックに保存されるため、ややこしいことになっています。
+
 \myindex{Shadow space}
 \label{shadow_space}
-This is called \q{shadow space}
-\footnote{\href{http://go.yurichev.com/17256}{MSDN}}: 
-every Win64 may (but is not required to) save all 4 register values there.
-This is done for two reasons: 
-1) it is too lavish to allocate a whole register (or even 4 registers) for an input argument,
-so it will be accessed via stack;
-2) the debugger is always aware where to find the function arguments at a break
-\footnote{\href{http://go.yurichev.com/17257}{MSDN}}.
+これは "シャドウスペース"と呼ばれます。
+\footnote{\href{http://go.yurichev.com/17256}{MSDN}}
+すべてのWin64は、そこにある4つのレジスタ値をすべて保存することができます（必須ではありません）。
+これは2つの理由で行われます。
+1）入力引数にレジスタ全体（または4つのレジスタ）を割り当てるのはあまりにも贅沢なので、スタック経由でアクセスされます。 
+2）デバッガはブレークで関数の引数をどこに見つけるか常に認識しています。
+\footnote{\href{http://go.yurichev.com/17257}{MSDN}}
 
-So, some large functions can save their input arguments in the \q{shadows space} if they want to use them
-during execution, but some small functions (like ours) may not do this.
+だから、大規模な関数の中には、実行中にそれらを使用したい場合、入力引数を \q{シャドウスペース}に保存することができますが、
+私たちのような小さな関数ではそうでないかもしれません。
 
-It is a \gls{caller} responsibility to allocate \q{shadow space} in the stack.
+スタックに\q{シャドウスペース}を割り当てるのは\gls{caller}の責任です。
 
 \subsubsection{GCC}
 
-\Optimizing GCC generates more or less understandable code:
+\Optimizing GCCはまあまあわかりやすいコードを生成します。
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasmx86]{patterns/05_passing_arguments/x64_GCC_O3_EN.s}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasmx86]{patterns/05_passing_arguments/x64_GCC_O3_JPN.s}
 
 \NonOptimizing GCC:
 
-\lstinputlisting[caption=GCC 4.4.6 x64,style=customasmx86]{patterns/05_passing_arguments/x64_GCC_EN.s}
+\lstinputlisting[caption=GCC 4.4.6 x64,style=customasmx86]{patterns/05_passing_arguments/x64_GCC_JPN.s}
 
 \myindex{Shadow space}
 
-There are no \q{shadow space} requirements in System V *NIX (\SysVABI), but the \gls{callee} may want to save
-its arguments somewhere in case of registers shortage.
+System V *NIX (\SysVABI)には\q{シャドースペース}の要件はありませんが、 \gls{callee}は
+レジスタが不足している場合には引数をどこかに保存します。
 
-\subsubsection{GCC: uint64\_t instead of int}
+\subsubsection{GCC: intの代わりのuint64\_t}
 
+私たちの例は32ビットintで動作するため、32ビットのレジスタが使用されています（\TT{E-}が前に付いています）。 
 
-Our example works with 32-bit \Tint, that is why 32-bit register parts are used (prefixed by \TT{E-}).
-
-It can be altered slightly in order to use 64-bit values:
+64ビット値を使用するためには少し変更する必要があります。
 
 \lstinputlisting[style=customc]{patterns/05_passing_arguments/ex64.c}
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasmx86]{patterns/05_passing_arguments/ex64_GCC_O3_IDA_EN.asm}
+\lstinputlisting[caption=\Optimizing GCC 4.4.6 x64,style=customasmx86]{patterns/05_passing_arguments/ex64_GCC_O3_IDA_JPN.asm}
 
-The code is the same, but this time the \IT{full size} registers (prefixed by \TT{R-}) are used.
-
+コードは同じですが、今回は\IT{フルサイズ}のレジスタ（\TT{R-}が前に付いています）が使用されています。

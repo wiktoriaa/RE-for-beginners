@@ -2,40 +2,40 @@
 
 \subsubsection{MSVC}
 
-Here is what we get after compilation (MSVC 2010 Express):
+コンパイルして得られるものを次に示します（MSVC 2010 Express）。
 
-\lstinputlisting[label=src:passing_arguments_ex_MSVC_cdecl,caption=MSVC 2010 Express,style=customasmx86]{patterns/05_passing_arguments/msvc_EN.asm}
+\lstinputlisting[label=src:passing_arguments_ex_MSVC_cdecl,caption=MSVC 2010 Express,style=customasmx86]{patterns/05_passing_arguments/msvc_JPN.asm}
 
 \myindex{x86!\Registers!EBP}
 
-What we see is that the \main function pushes 3 numbers onto the stack and calls \TT{f(int,int,int).} 
+\main 関数は3つの数値をスタックにプッシュし、\TT{f(int,int,int)}を呼び出すことがわかります。
 
-Argument access inside \ttf is organized with the help of macros like:\\
-\TT{\_a\$ = 8}, 
-in the same way as local variables, but with positive offsets (addressed with \IT{plus}).
-So, we are addressing the \IT{outer} side of the \gls{stack frame} by adding the \TT{\_a\$} macro to the value in the \EBP register.
+\ttf 内の引数アクセスは、ローカル変数と同じ方法で
+\TT{\_a\$ = 8}
+のようなマクロの助けを借りて構成されますが、正のオフセット（\IT{プラス}で扱われます）を持ちます。 
+したがって、\TT{\_a\$}マクロを \EBP レジスタの値に追加することによって\gls{stack frame}の\IT{外側}を処理しています。
 
 \myindex{x86!\Instructions!IMUL}
 \myindex{x86!\Instructions!ADD}
 
-Then the value of $a$ is stored into \EAX. After \IMUL instruction execution, the value in \EAX is 
-a \gls{product} of the value in \EAX and the content of \TT{\_b}.
+次に、 $a$ の値が \EAX に格納されます。 \IMUL 命令実行後、 
+\EAX の値は \EAX の値と\TT{\_b}の内容の\gls{product}です。
 
-After that, \ADD adds the value in \TT{\_c} to \EAX.
+その後、 \ADD は\TT{\_c}の値を \EAX に追加します。
 
-The value in \EAX does not need to be moved: it is already where it must be.
-On returning to \gls{caller}, it takes the \EAX value and use it as an argument to \printf.
+\EAX の値は移動する必要はありません。すでに存在している必要があります。 
+\gls{caller}に戻ると、 \EAX 値をとり、 \printf の引数として使用します。
 
-\input{patterns/05_passing_arguments/olly_EN}
+\input{patterns/05_passing_arguments/olly_JPN}
 
 \subsubsection{GCC}
 
-Let's compile the same in GCC 4.4.1 and see the results in \IDA:
+GCC 4.4.1で同じものをコンパイルし、 \IDA の結果を見てみましょう。
 
-\lstinputlisting[caption=GCC 4.4.1,style=customasmx86]{patterns/05_passing_arguments/gcc_EN.asm}
+\lstinputlisting[caption=GCC 4.4.1,style=customasmx86]{patterns/05_passing_arguments/gcc_JPN.asm}
 
-The result is almost the same with some minor differences discussed earlier.
+結果はほぼ同じで、以前に説明したいくつかの小さな違いがあります。
 
-The \gls{stack pointer} is not set back after the two function calls(f and printf), 
-because the penultimate \TT{LEAVE} (\myref{x86_ins:LEAVE}) 
-instruction takes care of this at the end.
+\gls{stack pointer}は2つの関数呼び出し（fとprintf）の後にセットバックされません。
+最後から2番目の\TT{LEAVE}命令（\myref{x86_ins:LEAVE}）
+命令が最後にこれを処理するためです。

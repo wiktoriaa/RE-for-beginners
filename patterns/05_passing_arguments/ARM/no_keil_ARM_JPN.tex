@@ -19,37 +19,34 @@
 .text:000000D8 10 80 BD E8      LDMFD   SP!, {R4,PC}
 \end{lstlisting}
 
-The \main function simply calls two other functions, with three values passed to the 
-first one~---(\ttf).
+\main 関数は他の2つの関数を呼び出し、3つの値が最初の関数に渡されます（\ttf）。
 
-As was noted before, in ARM the first 4 values are usually passed in the first 4 registers (\Reg{0}-\Reg{3}).
+前述のように、ARMでは最初の4つの値が通常最初の4つのレジスタ（\Reg{0}-\Reg{3}）に渡されます。
 
-The \ttf function, as it seems, uses the first 3 registers (\Reg{0}-\Reg{2}) as arguments.
+\ttf 関数は、最初の3つのレジスタ（\Reg{0}-\Reg{2}）を引数として使用します。
 
 \myindex{ARM!\Instructions!MLA}
-The \TT{MLA} (\IT{Multiply Accumulate}) 
-instruction multiplies its first two operands (\Reg{3} and \Reg{1}), adds the third operand (\Reg{2}) to the product and stores
-the result into the zeroth register (\Reg{0}), via which, by standard, functions return values.
+\TT{MLA}（\IT{Multiply Accumulate}）
+命令は最初の2つのオペランド（\Reg{3}と\Reg{1}）を乗算し、3番目のオペランド（\Reg{2}）を積に加算し、
+その結果をゼロ関数（\Reg{0}）に格納します。
 
 \myindex{Fused multiply–add}
-Multiplication and addition at once (\IT{Fused multiply–add}) 
-is a very useful operation. By the way, there was no such instruction in x86 
-before FMA-instructions appeared in SIMD
-\footnote{\href{http://go.yurichev.com/17103}{wikipedia}}.
+一度に乗算と加算を同時に行うの（\IT{Fused multiply?add}）は非常に便利な操作です。
+ところで、SIMD\footnote{\href{http://go.yurichev.com/17103}{wikipedia}}
+にFMA命令が登場する前に、x86にそのような命令はありませんでした。
 
-The very first \TT{MOV R3, R0}, 
-instruction is, apparently, redundant (a single \TT{MLA} instruction could be used here instead). 
-The compiler has not optimized it, since this is non-optimizing compilation.
+最初の\TT{MOV R3, R0}命令は
+明らかに冗長です（ここでは単一の\TT{MLA}命令を代わりに使用できます）。
+これは最適化されないコンパイルであるため、コンパイラは最適化していません。
 
 \myindex{ARM!Mode switching}
 \myindex{ARM!\Instructions!BX}
 
-The \TT{BX} instruction returns the control to the address stored in the \ac{LR} register and, if necessary, 
-switches the processor mode from Thumb to ARM or vice versa.
-This can be necessary since, as we can see, function \ttf is not aware from what kind of code it may be
-called, ARM or Thumb.
-Thus, if it gets called from Thumb code, 
-\TT{BX} is not only returns control to the calling function,
-but also switches the processor mode to Thumb.
-Or not switch, if the function has been called from ARM code \InSqBrackets{\ARMSevenRef A2.3.2}.
+\TT{BX}命令は、制御を \ac{LR}レジスタに格納されているアドレスに戻し、
+必要に応じてプロセッサモードをThumbからARMに、またはその逆に切り替えます。
+これは、関数 \ttf がどのような種類のコード（ARMまたはThumb）から認識されていないため、必要な場合があります。
+したがって、Thumbコードから呼び出された場合、
+\TT{BX}は呼び出し元の関数に制御を戻すだけでなく、
+プロセッサーモードをThumbに切り替えます。 
+ARMコード(\InSqBrackets{\ARMSevenRef A2.3.2})から関数が呼び出されているかどうかを切り替えます。
 % look for "BXWritePC()" in manual
