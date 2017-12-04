@@ -7,43 +7,43 @@
 .LC3:
 	.string	"What you entered? Huh?"
 f6:
-; save FP and LR in stack frame:
+; スタックフレームにFPとLRと保存
 	stp	x29, x30, [sp, -32]!
-; set stack frame (FP=SP)
+; スタックフレームを設定(FP=SP)
 	add	x29, sp, 0
-; load pointer to the "Enter X:" string:
+; "Enter X:"文字列へのポインタをロード
 	adrp	x0, .LC0
 	add	x0, x0, :lo12:.LC0
 	bl	puts
-; load pointer to the "%d" string:
+; "%d"文字列へのポインタをロード
 	adrp	x0, .LC1
 	add	x0, x0, :lo12:.LC1
-; calculate address of x variable in the local stack
+; ローカルスタックにある変数xのアドレスを計算
 	add	x1, x29, 28
 	bl	__isoc99_scanf
-; scanf() returned result in W0.
-; check it:
+; W0にscanf()の戻り値が入っている
+; チェックする
 	cmp	w0, 1
-; BNE is Branch if Not Equal 
-; so if W0<>0, jump to L2 will be occurred
+; BNEはイコールでない場合に分岐する
+; だから、W0<>0の場合、L2にジャンプする
 	bne	.L2
-; at this moment W0=1, meaning no error
-; load x value from the local stack
+; W0=1の場合、エラーなし
+; ローカルスタックからxの値をロードする
 	ldr	w1, [x29,28]
-; load pointer to the "You entered %d...\n" string:
+; "You entered %d...\n"文字列へのポインタをロードする
 	adrp	x0, .LC2
 	add	x0, x0, :lo12:.LC2
 	bl	printf
-; skip the code, which print the "What you entered? Huh?" string:
+; "What you entered? Huh?"文字列を表示するコードをスキップする
 	b	.L3
 .L2:
-; load pointer to the "What you entered? Huh?" string:
+; "What you entered? Huh?"文字列へのポインタをロードする
 	adrp	x0, .LC3
 	add	x0, x0, :lo12:.LC3
 	bl	puts
 .L3:
-; return 0
+; 0をリターン
 	mov	w0, 0
-; restore FP and LR:
+; FPとLRを元に戻す:
 	ldp	x29, x30, [sp], 32
 	ret

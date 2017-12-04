@@ -1,17 +1,17 @@
 \subsection{scanf()}
 
-�O�q�̂悤�ɁA���� \scanf ���g�p����̂͂�����ƌÂ߂������ł��B 
-�������A�K�v�Ȃ�΁A \scanf ���G���[�Ȃ��������I�����邩�ǂ������m�F����K�v������܂��B
+前述のように、今日 \scanf を使用するのはちょっと古めかしいです。 
+しかし、必要ならば、 \scanf がエラーなく正しく終了するかどうかを確認する必要があります。
 
 \lstinputlisting[style=customc]{patterns/04_scanf/3_checking_retval/ex3.c}
 
-�W���ł́A \scanf \footnote{scanf, wscanf: \href{http://go.yurichev.com/17255}{MSDN}}�֐��͐���ɓǂݎ��ꂽ�t�B�[���h�̐���Ԃ��܂��B
+標準では、 \scanf \footnote{scanf, wscanf: \href{http://go.yurichev.com/17255}{MSDN}}関数は正常に読み取られたフィールドの数を返します。
 
-�������̏ꍇ�A���ׂĂ����܂��s���A���[�U�[����������͂����ꍇ�A \scanf ��1��Ԃ��A�G���[�i�܂���\ac{EOF}�j�ł�0��Ԃ��܂��B
+私たちの場合、すべてがうまく行き、ユーザーが数字を入力した場合、 \scanf は1を返し、エラー（または\ac{EOF}）では0を返します。
 
-\scanf �̖߂�l���`�F�b�N���邽�߂�C�R�[�h��ǉ����A�G���[�̏ꍇ�ɂ̓G���[���b�Z�[�W���o�͂��Ă݂܂��傤�B
+\scanf の戻り値をチェックするためのCコードを追加し、エラーの場合にはエラーメッセージを出力してみましょう。
 
-���҂ǂ���ɓ��삵�܂��B
+期待どおりに動作します。
 
 \begin{lstlisting}
 C:\...>ex3.exe
@@ -35,7 +35,7 @@ What you entered? Huh?
 
 \myindex{x86!\Instructions!Jcc}
 \myindex{ARM!\Instructions!Bcc}
-�킩��܂������A\INS{JNE}/\INS{JNZ}���߂�\INS{JE}/\INS{JZ}���߂ɊȒP�ɒu�������邱�Ƃ��ł��܂�
-�i\INS{BNE} by \INS{BEQ}�܂��͂��̋t�j�B 
-�������A��{�u���b�N������ւ���K�v������܂��B 
-�������̗�ł���������Ă��������B
+見てきたように、\INS{JNE}/\INS{JNZ}命令は\INS{JE}/\INS{JZ}命令に簡単に置き換えることができます
+（\INS{BNE} by \INS{BEQ}またはその逆）。 
+しかし、基本ブロックも入れ替える必要があります。 
+いくつかの例でこれを試してください。

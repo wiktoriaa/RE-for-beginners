@@ -5,79 +5,76 @@
 \lstinputlisting[style=customasmx86]{patterns/04_scanf/3_checking_retval/ex3_MSVC_x86.asm}
 
 \myindex{x86!\Registers!EAX}
-The \gls{caller} function (\main) needs the \gls{callee} function (\scanf) result, 
-so the \gls{callee} returns it in the \EAX register.
+\gls{caller} 関数（ \main ）は \gls{callee} 関数（ \scanf ）の結果を必要とするため、
+呼び出し先は \EAX レジスタに返します。
 
 \myindex{x86!\Instructions!CMP}
-We check it with the help of the instruction \TT{CMP EAX, 1} (\IT{CoMPare}). In other words, we compare the value in the \EAX register with 1.
+我々は、\TT{CMP EAX, 1} (\IT{CoMPare})の指示によりそれをチェックします。つまり、 \EAX レジスタの値と1を比較します。
 
 \myindex{x86!\Instructions!JNE}
-A \JNE conditional jump follows the \CMP instruction. \JNE stands for \IT{Jump if Not Equal}.
+\JNE 条件ジャンプが \CMP 命令の後に続きます。  \JNE は\IT{Jump if Not Equal}の略です。
 
-So, if the value in the \EAX register is not equal to 1, the \ac{CPU} will pass the execution to the address mentioned in the \JNE operand, in our case \TT{\$LN2@main}.
-Passing the control to this address results in the \ac{CPU} executing \printf with the argument \TT{What you entered? Huh?}.
-But if everything is fine, the conditional jump is not be taken, and another \printf call is to be executed, with two arguments:\\
-\TT{'You entered \%d...'} and the value of \TT{x}.
+したがって、 \EAX レジスタの値が1に等しくない場合、\ac{CPU}は \JNE オペランドに記述されているアドレス（この場合は\TT{\$LN2@main}）に実行を渡します。
+このアドレスに制御を渡すと、\ac{CPU}は \printf を引数\TT{What you entered? Huh?} で実行します 。
+しかし、すべてがうまくいけば、条件付きジャンプは取られず、別の \printf 呼び出しが\TT{'You entered \%d...'}と\TT{x}の値を引数にとって実行されます。
 
 \myindex{x86!\Instructions!XOR}
 \myindex{\CLanguageElements!return}
-Since in this case the second \printf has not to be executed, there is a \JMP preceding it (unconditional jump). 
-It passes the control to the point after the second \printf and just before the \TT{XOR EAX, EAX} instruction, which implements \TT{return 0}.
+この場合、2番目の \printf は実行されないため、その前に \JMP があります（無条件ジャンプ）。
+2番目の \printf の後、\TT{戻り値0}を実装する\TT{XOR EAX, EAX}命令の直前に制御を渡します。
 
 % FIXME internal \ref{} to x86 flags instead of wikipedia
 \myindex{x86!\Registers!\Flags}
-So, it could be said that comparing a value with another is \IT{usually} implemented by \CMP/\Jcc instruction pair, where \IT{cc} is \IT{condition code}.
-\CMP compares two values and sets processor flags\footnote{x86 flags, see also: \href{http://go.yurichev.com/17120}{wikipedia}.}.
-\Jcc checks those flags and decides to either pass the control to the specified address or not.
+したがって、ある値を別の値と比較することは、\TT{通常}、 \CMP/\Jcc 命令ペアによって実装されると言えます\IT{cc}は\IT{条件コード}です。 
+\CMP は2つの値を比較し、プロセッサフラグ\footnote{x86フラグは以下を参照: \href{http://go.yurichev.com/17120}{wikipedia}}を設定します。 
+\Jcc はこれらのフラグをチェックし、指定されたアドレスに制御を渡すかどうかを決定します。
 
 \myindex{x86!\Instructions!CMP}
 \myindex{x86!\Instructions!SUB}
 \myindex{x86!\Instructions!JNE}
 \myindex{x86!\Registers!ZF}
 \label{CMPandSUB}
-This could sound paradoxical, but the \CMP instruction is in fact \SUB (subtract).
-All arithmetic instructions set processor flags, not just \CMP.
-If we compare 1 and 1, $1-1$ is 0 so the \ZF flag would be set (meaning that the last result is 0).
-In no other circumstances \ZF can be set, except when the operands are equal.
-\JNE checks only the \ZF flag and jumps only if it is not set.  \JNE is in fact a synonym for \JNZ (\IT{Jump if Not Zero}).
-Assembler translates both \JNE and \JNZ instructions into the same opcode.
-So, the \CMP instruction can be replaced with a \SUB instruction and almost everything will be fine, with the difference that \SUB alters the value of the first operand.
-\CMP is \IT{SUB without saving the result, but affecting flags}.
+これは逆説的に聞こえるかもしれませんが、 \CMP 命令は実際には \SUB （減算）です。
+すべての算術命令は、 \CMP だけでなくプロセッサフラグを設定します。 1と1を比較し、$1-1$が0であるため、ZFフラグが設定されます（最後の結果が0であることを意味します）。
+オペランドが等しい場合を除いて、 \ZF は設定できません。  \JNE は \ZF フラグのみをチェックし、設定されていない場合にジャンプします。 
+JNEは実際にはJNZ（\IT{Jump if Not Zero}）の同義語です。アセンブラは、JNE命令とJNZ命令の両方を同じオペコードに変換します。
+したがって、 \CMP 命令は \SUB 命令で置き換えることができ、 \SUB が最初のオペランドの値を変更するという違いを除けば、ほとんどすべてが問題ありません。 
+\CMP \IT{は結果を保存しない \SUB ですが、フラグに影響}します。
 
 \subsubsection{MSVC: x86: IDA}
 
 \myindex{IDA}
-It is time to run \IDA and try to do something in it.
-By the way, for beginners it is good idea to use \TT{/MD} option in MSVC, which means that all these
-standard functions are not be linked with the executable file, 
-but are to be imported from the \TT{MSVCR*.DLL} file instead.
-Thus it will be easier to see which standard function are used and where.
+IDAを実行してIDAを実行しようとします。 
+ところで、初心者の方は、MSVCで\TT{/MD}オプションを使用することをお勧めします。つまり、
+これらの標準関数はすべて実行可能ファイルにリンクされず、
+代わりに\TT{MSVCR*.DLL}ファイルからインポートされます。 
+したがって、どの標準関数が使用され、どこでどこが使用されているのかが分かりやすくなります。
 
-While analyzing code in \IDA, it is very helpful to leave notes for oneself (and others).
-In instance, analyzing this example, 
-we see that \TT{JNZ} is to be triggered in case of an error.
-So it is possible to move the cursor to the label, press \q{n} and rename it to \q{error}.
-Create another label---into \q{exit}.
-Here is my result:
+\IDA のコードを分析する際には、自分自身（と他者）のためにノートを残すことが非常に役に立ちます。 
+例えば、この例を分析すると、
+エラーが発生した場合に \JNZ がトリガーされることがわかります。 
+カーソルをラベルに移動して\q{n}を押し、\q{エラー}に名前を変更することができます。 
+別のラベルを作成し、\q{終了}にします。 
+以下が私の環境での結果です。
 
 \lstinputlisting[style=customasmx86]{patterns/04_scanf/3_checking_retval/ex3.lst}
 
-Now it is slightly easier to understand the code.
-However, it is not a good idea to comment on every instruction.
+これで、コードを少し理解しやすくなりました。 
+しかし、すべての命令についてコメントするのは良い考えではありません。
 
 % FIXME draw button?
-You could also hide(collapse) parts of a function in \IDA.
-To do that mark the block, then press \q{--} on the numerical pad and enter the text to be displayed instead.
+また、 \IDA の関数の一部を隠すこともできます。 
+ブロックをマークするには、 \q{--} を数値パッドに入力し、代わりに表示するテキストを入力します。
 
-Let's hide two blocks and give them names:
+2つのブロックを隠して名前を付けましょう。
 
 \lstinputlisting[style=customasmx86]{patterns/04_scanf/3_checking_retval/ex3_2.lst}
 
 % FIXME draw button?
-To expand previously collapsed parts of the code, use \q{+} on the numerical pad.
+以前に折りたたまれた部分を展開するには、数値パッドで\q{+}を使用します。
 
 \clearpage
-By pressing \q{space}, we can see how \IDA represents a function as a graph:
+\q{スペース}を押すと、 \IDA が関数をグラフとして表示するのを見ることができます。
 
 \begin{figure}[H]
 \centering
@@ -86,12 +83,12 @@ By pressing \q{space}, we can see how \IDA represents a function as a graph:
 \label{fig:ex3_IDA_1}
 \end{figure}
 
-There are two arrows after each conditional jump: green and red.
-The green arrow points to the block which executes if the jump is triggered, and red if otherwise.
+各条件ジャンプの後、緑と赤の2つの矢印があります。 
+緑の矢印は、ジャンプがトリガされた場合に実行されるブロックを指し、そうでない場合は赤を指します。
 
 \clearpage
-It is possible to fold nodes in this mode and give them names as well (\q{group nodes}).
-Let's do it for 3 blocks:
+このモードでノードを折りたたみ、名前を付けることもできます（[q{グループノード}）。
+3つのブロックでやってみましょう。
 
 \begin{figure}[H]
 \centering
@@ -100,24 +97,24 @@ Let's do it for 3 blocks:
 \label{fig:ex3_IDA_2}
 \end{figure}
 
-That is very useful.
-It could be said that a very important part of the reverse engineers' job (and any other researcher as well) is to reduce the amount of information they deal with.
+それは非常に便利です。
+リバースエンジニアの仕事（および他の研究者の仕事）の非常に重要な部分は、彼らが扱う情報の量を減らすことであると言えます。
 
-\input{patterns/04_scanf/3_checking_retval/olly_EN.tex}
+\input{patterns/04_scanf/3_checking_retval/olly_JPN.tex}
 
 \clearpage
 \subsubsection{MSVC: x86 + Hiew}
 \myindex{Hiew}
 
-This can also be used as a simple example of executable file patching.
-We may try to patch the executable so the program would always print the input, no matter what we enter.
+これは、実行可能ファイルのパッチ適用の簡単な例としても使用できます。 
+実行可能ファイルにパッチを適用して、入力内容にかかわらずプログラムが常に入力を出力するようにすることがあります。
 
-Assuming that the executable is compiled against external \TT{MSVCR*.DLL} (i.e., with \TT{/MD} option)
-\footnote{that's what also called \q{dynamic linking}}, 
-we see the \main function at the beginning of the \TT{.text} section.
-Let's open the executable in Hiew and find the beginning of the \TT{.text} section (Enter, F8, F6, Enter, Enter).
+実行可能ファイルが外部の\TT{MSVCR*.DLL}（つまり\TT{/MD}オプション付き）
+\footnote{\q{ダイナミックリンク}とも呼ばれる}
+に対してコンパイルされていると仮定すると、\TT{.text}セクションの先頭に \main 関数があります。 
+Hiewで実行可能ファイルを開き、\TT{.text}セクションの先頭を見つけましょう（Enter、F8、F6、Enter、Enter）。 
 
-We can see this:
+以下のように見えます。
 
 \begin{figure}[H]
 \centering
@@ -126,10 +123,10 @@ We can see this:
 \label{fig:scanf_ex3_hiew_1}
 \end{figure}
 
-Hiew finds \ac{ASCIIZ} strings and displays them, as it does with the imported functions' names.
+Hiewは\ac{ASCIIZ}文字列を検索し、インポートされた関数の名前と同様に表示します。
 
 \clearpage
-Move the cursor to address \TT{.00401027} (where the \TT{JNZ} instruction, we have to bypass, is located), press F3, and then type \q{9090} (meaning two \ac{NOP}s):
+カーソルを\TT{.00401027}番地（ここでバイパスする \JNZ 命令がある場所）に移動し、F3を押し、\q{9090}（2つの\ac{NOP}を意味する）と入力します。
 
 \begin{figure}[H]
 \centering
@@ -138,13 +135,12 @@ Move the cursor to address \TT{.00401027} (where the \TT{JNZ} instruction, we ha
 \label{fig:scanf_ex3_hiew_2}
 \end{figure}
 
-Then press F9 (update). Now the executable is saved to the disk. It will behave as we wanted.
+その後、F9（更新）を押します。 これで、実行可能ファイルがディスクに保存されます。 私たちが望むように動作します。
 
-Two \ac{NOP}s are probably not the most \ae{}sthetic approach.
-Another way to patch this instruction is to write just 0 to the second opcode byte (\gls{jump offset}), 
-so that \TT{JNZ} will always jump to the next instruction.
+2つの\ac{NOP}はおそらく最も美しいアプローチではありません。 
+この命令をパッチする別の方法は、第2オペコードバイトに0を書き込むことであり（ \gls{jump offset} ）、 
+\JNZ は常に次の命令にジャンプします。
 
-We could also do the opposite: replace first byte with \TT{EB} while not touching the second byte (\gls{jump offset}).
-We would get an unconditional jump that is always triggered.
-In this case the error message would be printed every time, no matter the input.
-
+また、最初のバイトを\TT{EB}で置き換え、2番目のバイト（ \gls{jump offset} ）には触れないでください。 
+私たちは常に無条件のジャンプを得るでしょう。 
+この場合、エラーメッセージは入力に関係なく毎回表示されます。

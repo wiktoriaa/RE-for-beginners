@@ -25,7 +25,7 @@ $LN2@main:
 	lea	rcx, OFFSET FLAT:$SG2929 ; 'What you entered? Huh?'
 	call	printf
 $LN1@main:
-	; return 0
+	; 0をリターン
 	xor	eax, eax
 	add	rsp, 56
 	ret	0
