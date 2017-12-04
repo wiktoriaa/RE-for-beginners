@@ -1,9 +1,9 @@
 \clearpage
 \subsubsection{MSVC: x86 + \olly}
 
-Let's try to hack our program in \olly, forcing it to think \scanf always works without error.
-When an address of a local variable is passed into \scanf,
-the variable initially contains some random garbage, in this case \TT{0x6E494714}:
+\olly でプログラムをハックしようとして、 \scanf が常にエラーなく動作するようにしましょう。 
+ローカル変数のアドレスが \scanf に渡されると、
+変数には最初にいくつかのランダムなガベージが含まれます。この場合、\TT{0x6E494714}です。
 
 \begin{figure}[H]
 \centering
@@ -13,8 +13,8 @@ the variable initially contains some random garbage, in this case \TT{0x6E494714
 \end{figure}
 
 \clearpage
-While \scanf executes, in the console we enter something that is definitely not a number, like \q{asdasd}.
-\scanf finishes with 0 in \EAX, which indicates that an error has occurred:
+\scanf が実行されている間、コンソールでは、 \q{asdasd}のように、数字ではないものを入力します。 
+\scanf は、エラーが発生したことを示す \EAX が0で終了します。
 
 \begin{figure}[H]
 \centering
@@ -23,20 +23,20 @@ While \scanf executes, in the console we enter something that is definitely not 
 \label{fig:scanf_ex3_olly_2}
 \end{figure}
 
-We can also check the local variable in the stack and note that it has not changed.
-Indeed, what would \scanf write there?
-It simply did nothing except returning zero.
+また、スタック内のローカル変数をチェックし、変更されていないことに注意してください。 
+実際、 \scanf は何を書いていますか？ 
+ゼロを返す以外は何もしませんでした。
 
-Let's try to \q{hack} our program.
-Right-click on \EAX, 
-Among the options there is \q{Set to 1}.
-This is what we need.
+私たちのプログラムを\q{ハックする}ようにしましょう。 
+\EAX を右クリックし、
+オプションの中に\q{Set to 1}があります。 
+これが必要なものです。
 
-We now have 1 in \EAX, so the following check is to be executed as intended, 
-and \printf will print the value of the variable in the stack.
+\EAX には1があるので、以下のチェックを意図どおりに実行し、
+\printf は変数の値をスタックに出力します。 
 
-When we run the program (F9) we can see the following in the console window:
+プログラム（F9）を実行すると、コンソールウィンドウで次のように表示されます。
 
 \lstinputlisting[caption=console window]{patterns/04_scanf/3_checking_retval/console.txt}
 
-Indeed, 1850296084 is a decimal representation of the number in the stack (\TT{0x6E494714})!
+実際、1850296084はスタック（\TT{0x6E494714}）の数値を10進表現したものです！
