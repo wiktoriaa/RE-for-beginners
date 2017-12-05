@@ -1,4 +1,4 @@
-all:    RU EN DE FR
+all:    RU EN DE FR JP
 
 clean:
 	rm -f *.aux
