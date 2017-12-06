@@ -1,12 +1,12 @@
 my_abs:
-; jump if $a0<0:
+; $a0<0ならジャンプ:
                 bltz    $a0, locret_10
-; just return input value ($a0) in $v0:
+; 入力値 ($a0)を$v0に設定してリターン
                 move    $v0, $a0
                 jr      $ra
                 or      $at, $zero ; branch delay slot, NOP
 locret_10:
-; negate input value and store it in $v0:
+; 入力値を反転し、$v0に保存する:
                 jr      $ra
-; this is pseudoinstruction. in fact, this is "subu $v0,$zero,$a0" ($v0=0-$a0)
+; これは疑似命令です。実際には、"subu $v0,$zero,$a0" ($v0=0-$a0)です。
                 negu    $v0, $a0

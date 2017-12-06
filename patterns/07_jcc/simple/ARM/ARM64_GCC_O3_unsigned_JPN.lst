@@ -5,12 +5,12 @@ f_unsigned:
 	add	x29, sp, 0
 	str	x19, [sp,16]
 	mov	w19, w0
-	bhi	.L25	; Branch if HIgher (a>b)
+	bhi	.L25	; 大きければ (a>b)分岐
 	cmp	w19, w1
-	beq	.L26	; Branch if Equal (a==b)
+	beq	.L26	; 等しければ (a==b)分岐
 .L23:
-	bcc	.L27	; Branch if Carry Clear (if less than) (a<b)
-; function epilogue, impossible to be here
+	bcc	.L27	; キャリーフラグがクリアされてたら分岐 (小さければ) (a<b)
+; 関数エピローグ、ここに来るのは不可能
 	ldr	x19, [sp,16]
 	ldp	x29, x30, [sp], 48
 	ret
@@ -27,7 +27,7 @@ f_unsigned:
 	bl	puts
 	ldr	x1, [x29,40]
 	cmp	w19, w1
-	bne	.L23	; Branch if Not Equal 
+	bne	.L23	; 等しくなければ分岐
 .L26:
 	ldr	x19, [sp,16]
 	adrp	x0, .LC10	; "a==b"

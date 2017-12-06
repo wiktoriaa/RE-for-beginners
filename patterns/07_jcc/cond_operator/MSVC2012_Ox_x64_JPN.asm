@@ -3,13 +3,13 @@ $SG1356	DB	'it is not ten', 00H
 
 a$ = 8
 f	PROC
-; load pointers to the both strings
+; 両方の文字列のポインタをロードする
 	lea	rdx, OFFSET FLAT:$SG1355 ; 'it is ten'
 	lea	rax, OFFSET FLAT:$SG1356 ; 'it is not ten'
-; compare input value with 10
+; 入力値と10を比較
 	cmp	ecx, 10
-; if equal, copy value from RDX ("it is ten")
-; if not, do nothing. pointer to the string "it is not ten" is still in RAX as for now.
+; 同じなら、値をRDXからコピー("it is ten")
+; 異なるなら、何もしない。文字列へのポインタ"it is not ten"はまだRAXにある。
 	cmove	rax, rdx
 	ret	0
 f	ENDP

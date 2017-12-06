@@ -4,11 +4,11 @@
 	.string	"it is not ten"
 f:
 .LFB0:
-; compare input value with 10
+; 入力値と10を比較
 	cmp	DWORD PTR [esp+4], 10
 	mov	edx, OFFSET FLAT:.LC1 ; "it is not ten"
 	mov	eax, OFFSET FLAT:.LC0 ; "it is ten"
-; if comparison result is Not Equal, copy EDX value to EAX
-; if not, do nothing
+; 比較結果が同じでなければ、EDXの値をEAXにコピー
+; そうでなければ、何もしない
 	cmovne	eax, edx
 	ret

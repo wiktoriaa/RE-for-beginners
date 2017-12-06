@@ -7,19 +7,19 @@ _f	PROC
 	push	ebp
 	mov	ebp, esp
 	push	ecx
-; compare input value with 10
+; 入力値と10を比較
 	cmp	DWORD PTR _a$[ebp], 10
-; jump to $LN3@f if not equal
+; 同じでなければ、$LN3@fにジャンプ
 	jne	SHORT $LN3@f
-; store pointer to the string into temporary variable:
+; 文字列へのポインタを一時変数に保存
 	mov	DWORD PTR tv65[ebp], OFFSET $SG746 ; 'it is ten'
-; jump to exit
+; exitにジャンプ
 	jmp	SHORT $LN4@f
 $LN3@f:
-; store pointer to the string into temporary variable:
+; 文字列へのポインタを一時変数に保存
 	mov	DWORD PTR tv65[ebp], OFFSET $SG747 ; 'it is not ten'
 $LN4@f:
-; this is exit. copy pointer to the string from temporary variable to EAX.
+; exitです。文字列へのポインタを一時変数からEAXにコピー
 	mov	eax, DWORD PTR tv65[ebp]
 	mov	esp, ebp
 	pop	ebp

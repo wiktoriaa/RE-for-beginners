@@ -1,9 +1,9 @@
 my_abs PROC
         CMP      r0,#0
-; is input value equal to zero or greater than zero?
-; skip RSBS instruction then
+; 入力値はゼロに等しいかゼロより大きいか
+; RSBS命令をスキップする
         BGE      |L0.6|
-; subtract input value from 0:
+; 入力値を0から減算する
         RSBS     r0,r0,#0
 |L0.6|
         BX       lr
