@@ -3,86 +3,88 @@
 \myindex{\olly}
 \myindex{x86!\Registers!\Flags}
 
-We can see how flags are set by running this example in \olly.
-Let's begin with \TT{f\_unsigned()}, which works with unsigned numbers.
+\olly でこの例を実行すると、フラグがどのように設定されているかを見ることができます。 
+符号なしの数値で動作する\TT{f\_unsigned()}から始めましょう。
 
-\CMP is executed thrice here, but for the same arguments, so the flags are the same each time.
+\CMP はここで3回実行されますが、同じ引数についてはフラグは毎回同じです。
 
-Result of the first comparison:
+最初の比較の結果は、
 
 \begin{figure}[H]
 \centering
 \myincludegraphics{patterns/07_jcc/simple/olly_unsigned1.png}
-\caption{\olly: \TT{f\_unsigned()}: first conditional jump}
+\caption{\olly: \TT{f\_unsigned()}: 最初の条件付きジャンプ}
 \label{fig:jcc_olly_unsigned_1}
 \end{figure}
 
-So, the flags are: C=1, P=1, A=1, Z=0, S=1, T=0, D=0, O=0.
+従って、フラグは、C=1、P=1、A=1、Z=0、S=1、T=0、D=0、O=0です。
 
-They are named with one character for brevity in \olly.
+これらは \olly では1文字の略号で命名されています。
 
-\olly gives a hint that the (\JBE) jump is to be triggered now.
-Indeed, if we take a look into Intel manuals (\myref{x86_manuals}), 
-we can read there that \JBE is triggering if CF=1 or ZF=1.
-The condition is true here, so the jump is triggered.
+\olly は、（\JBE）ジャンプがトリガーされることを示唆しています。 
+実際に、インテルのマニュアル（\myref{x86_manuals}）を調べると、
+CF=1またはZF=1の場合、JBEが起動することがわかります。 
+条件はここに当てはまるので、ジャンプが開始されます。
 
 \clearpage
-The next conditional jump:
+次の条件付きジャンプは、
 
 \begin{figure}[H]
 \centering
 \myincludegraphics{patterns/07_jcc/simple/olly_unsigned2.png}
-\caption{\olly: \TT{f\_unsigned()}: second conditional jump}
+\caption{\olly: \TT{f\_unsigned()}: 2番目の条件付きジャンプ}
 \label{fig:jcc_olly_unsigned_2}
 \end{figure}
 
-\olly gives a hint that \JNZ is to be triggered now.
-Indeed, \JNZ triggering if ZF=0 (zero flag).
+\olly は、 \JNZ がトリガーされることを示唆しています。 
+実際、ZF=0（ゼロフラグ）の場合、JNZが起動します。
 
 \clearpage
-The third conditional jump, \JNB:
+3番目の条件付きジャンプは、 \JNB です。
 
 \begin{figure}[H]
 \centering
 \myincludegraphics{patterns/07_jcc/simple/olly_unsigned3.png}
-\caption{\olly: \TT{f\_unsigned()}: third conditional jump}
+\caption{\olly: \TT{f\_unsigned()}: 3番目の条件付きジャンプ}
 \label{fig:jcc_olly_unsigned_3}
 \end{figure}
 
-In Intel manuals (\myref{x86_manuals}) we can see that \JNB triggers if CF=0 (carry flag).
-That is not true in our case, so the third \printf will execute.
+インテルのマニュアル（\myref{x86_manuals}）では、CF=0（キャリーフラグ）の場合に \JNB が起動することがわかります。 
+今回は当てはまらないので、3番目の \printf が実行されます。
 
 \clearpage
-Now let's review the \TT{f\_signed()} function, which works with signed values, in \olly.
-Flags are set in the same way: C=1, P=1, A=1, Z=0, S=1, T=0, D=0, O=0.
-The first conditional jump \JLE is to be triggered:
+次に、\olly で、符号付きの値で動作する\TT{f\_signed()}関数を見てみましょう。 
+フラグは、C=1、P=1、A=1、Z=0、S=1、T=0、D=0、O=0と同様に設定されます。 
+最初の条件付きジャンプ \JLE が起動されます。
+
+インテルマニュアル（166ページの7.1.4）では、ZF = 1またはSFxOFの場合にこの命令がトリガされることがわかりました。 SFxOF私たちの場合は、ジャンプがトリガするように。
 
 \begin{figure}[H]
 \centering
 \myincludegraphics{patterns/07_jcc/simple/olly_signed1.png}
-\caption{\olly: \TT{f\_signed()}: first conditional jump}
+\caption{\olly: \TT{f\_signed()}: 最初の条件付きジャンプ}
 \label{fig:jcc_olly_signed_1}
 \end{figure}
 
-In Intel manuals (\myref{x86_manuals}) we find that this instruction is triggered if ZF=1 or SF$\neq$OF.
-SF$\neq$OF in our case, so the jump triggers.
+インテルマニュアル（\myref{x86_manuals}）では、ZF=1または SF$\neq$OF の場合にこの命令が起動されることがわかりました。 
+私たちの場合では SF$\neq$OF が、ジャンプが起動されます。
 
 \clearpage
-The second \JNZ conditional jump triggering: if ZF=0 (zero flag):
+2番目の \JNZ 条件付きジャンプはZF=0の場合（ゼロ・フラグ）に起動します。
 
 \begin{figure}[H]
 \centering
 \myincludegraphics{patterns/07_jcc/simple/olly_signed2.png}
-\caption{\olly: \TT{f\_signed()}: second conditional jump}
+\caption{\olly: \TT{f\_signed()}: 2番目の条件付きジャンプ}
 \label{fig:jcc_olly_signed_2}
 \end{figure}
 
 \clearpage
-The third conditional jump \JGE will not trigger because it would only do so if SF=OF, and that is not true in our case:
+第3の条件付きジャンプ \JGE は、SF=OFの場合にのみ実行されるため、起動しません。今回は、当てはまりません。
 
 \begin{figure}[H]
 \centering
 \myincludegraphics{patterns/07_jcc/simple/olly_signed3.png}
-\caption{\olly: \TT{f\_signed()}: third conditional jump}
+\caption{\olly: \TT{f\_signed()}: 3番目の条件付きジャンプ}
 \label{fig:jcc_olly_signed_3}
 \end{figure}
