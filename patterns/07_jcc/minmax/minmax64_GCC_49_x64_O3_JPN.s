@@ -1,23 +1,23 @@
 my_max:
 ; RDI=A
 ; RSI=B
-; compare A and B:
+; AとBを比較
 	cmp	rdi, rsi
-; prepare B in RAX for return:
+; Bを戻り値としてRAXにコピー
 	mov	rax, rsi
-; if A>=B, put A (RDI) in RAX for return.
-; this instruction is idle if otherwise (if A<B)
+; A>=Bの場合、A(RDI)を戻り値としてRAXにコピー
+; それ以外(A<B)では、アイドル命令
 	cmovge	rax, rdi
 	ret
 
 my_min:
 ; RDI=A
 ; RSI=B
-; compare A and B:
+; AとBを比較
 	cmp	rdi, rsi
-; prepare B in RAX for return:
+; Bを戻り値としてRAXにコピー
 	mov	rax, rsi
-; if A<=B, put A (RDI) in RAX for return.
-; this instruction is idle if otherwise (if A>B)
+; A<=Bの場合、A(RDI)を戻り値としてRAXにコピー
+; それ以外(A>B)では、アイドル命令
 	cmovle	rax, rdi
 	ret

@@ -1,4 +1,4 @@
-﻿\subsection{Getting minimal and maximal values}
+﻿\subsection{最小値と最大値の取得}
 
 \subsubsection{32-bit}
 
@@ -8,65 +8,64 @@
 
 \myindex{x86!\Instructions!Jcc}
 
-These two functions differ only in the conditional jump instruction: 
-\INS{JGE} (\q{Jump if Greater or Equal}) is used in the first one
-and \INS{JLE} (\q{Jump if Less or Equal}) in the second.
+これらの2つの機能は条件ジャンプ命令でのみ異なります。
+最初の命令では\INS{JGE} (\q{Jump if Greater or Equal})が使用され、
+2番目の場合は\INS{JLE} (\q{Jump if Less or Equal})が使用されます。
 
 \myindex{\CompilerAnomaly}
 \label{MSVC_double_JMP_anomaly}
 
-There is one unneeded \JMP instruction in each function, which MSVC presumably left by mistake.
+各関数には不必要な \JMP 命令が1つありますが、おそらく誤って残っています。
 
-\myparagraph{Branchless}
+\myparagraph{分岐}
 
-ARM for Thumb mode reminds us of x86 code:
+ThumbモードのARMは、x86コードを思い起こします。
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmARM]{patterns/07_jcc/minmax/minmax_Keil_Thumb_O3_JPN.s}
 
 \myindex{ARM!\Instructions!Bcc}
 
-The functions differ in the branching instruction: \INS{BGT} and \INS{BLT}.
-It's possible to use conditional suffixes in ARM mode, so the code is shorter.
+関数は分岐命令が異なります。\INS{BGT} と \INS{BLT}です。
+ARMモードでは条件付きの接尾辞を使用することができるため、コードは短くなります。
 
 \myindex{ARM!\Instructions!MOVcc}
-\INS{MOVcc} is to be executed only if the condition is met:
+\INS{MOVcc}は、条件が満たされた場合にのみ実行されます。
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/07_jcc/minmax/minmax_Keil_ARM_O3_JPN.s}
 
 \myindex{x86!\Instructions!CMOVcc}
-\Optimizing GCC 4.8.1 and optimizing MSVC 2013 can use \INS{CMOVcc} instruction, which is analogous to \INS{MOVcc} in ARM:
+\Optimizing GCC 4.8.1とMSVC 2013の最適化では、ARMの\INS{CMOVcc}に似た\INS{MOVcc}命令を使用できます。
 
-\lstinputlisting[caption=\Optimizing MSVC 2013,style=customasmx86]{patterns/07_jcc/minmax/minmax_GCC481_O3_EN.s}
+\lstinputlisting[caption=\Optimizing MSVC 2013,style=customasmx86]{patterns/07_jcc/minmax/minmax_GCC481_O3_JPN.s}
 
 \subsubsection{64-bit}
 
 \lstinputlisting[style=customc]{patterns/07_jcc/minmax/minmax64.c}
 
-There is some unneeded value shuffling, but the code is comprehensible:
+いくつかの不要な値のシャッフルがありますが、コードは理解できます。
 
 \lstinputlisting[caption=\NonOptimizing GCC 4.9.1 ARM64,style=customasmARM]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O0.s}
 
-\myparagraph{Branchless}
+\myparagraph{分岐なし}
 
-No need to load function arguments from the stack, as they are already in the registers:
+スタックから関数の引数をロードする必要はありません。レジスタにすでに入っています。
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 x64,style=customasmx86]{patterns/07_jcc/minmax/minmax64_GCC_49_x64_O3_JPN.s}
 
-MSVC 2013 does almost the same.
+MSVC 2013はほぼ同じです。
 
 \myindex{ARM!\Instructions!CSEL}
 
-ARM64 has the \INS{CSEL} instruction, which works just as \INS{MOVcc} in ARM or \INS{CMOVcc} in x86, just the name is different:
-\q{Conditional SELect}.
+ARM64にはARMの\INS{MOVcc}またはx86の\INS{CMOVcc}と同じように機能する\INS{CSEL}命令がありますが、
+その名前は\q{Conditional SELect}とは異なります。
 
 \lstinputlisting[caption=\Optimizing GCC 4.9.1 ARM64,style=customasmARM]{patterns/07_jcc/minmax/minmax64_GCC_49_ARM64_O3_JPN.s}
 
 \subsubsection{MIPS}
 
-Unfortunately, GCC 4.4.5 for MIPS is not that good:
+残念ながら、MIPS用のGCC 4.4.5はあまり良くありません。
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (IDA),style=customasmMIPS]{patterns/07_jcc/minmax/minmax_MIPS_O3_IDA_JPN.lst}
 
-Do not forget about the \IT{branch delay slots}: the first \INS{MOVE} is executed \IT{before} \INS{BEQZ}, 
-the second \INS{MOVE} is executed only if the branch hasn't been taken.
-
+\IT{分岐遅延スロット}を忘れないでください。最初の\INS{MOVE}は\INS{BEQZ}の\IT{前に}実行され、
+2番目の\INS{MOVE}は分岐が実行されなかった場合にのみ実行されます。

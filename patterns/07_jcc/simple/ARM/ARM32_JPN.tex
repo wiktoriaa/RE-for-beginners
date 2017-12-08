@@ -8,75 +8,73 @@
 \myindex{ARM!Condition codes}
 % FIXME \ref -> which instructions?
 
-Many instructions in ARM mode could be executed only when specific flags are set.
-E.g. this is often used when comparing numbers.
+ARMモードの多くの命令は、特定のフラグがセットされている場合にのみ実行できます。
+例えば、これは数字を比較するときによく使用されます。
 
 \myindex{ARM!\Instructions!ADD}
 \myindex{ARM!\Instructions!ADDAL}
 
-For instance, the \ADD instruction is in fact named \TT{ADDAL} internally, where \TT{AL} stands for
-\IT{Always}, i.e., execute always.
-The predicates are encoded in 4 high bits of the 32-bit ARM instructions (\IT{condition field}).
+例えば、 \ADD 命令は実際には内部で\TT{ADDAL}と名付けられ、
+ALは\IT{常に}、すなわち常に実行する。
+述語は、32ビットARM命令の4つの上位ビット（\IT{条件フィールド}）でエンコードされます。
 \myindex{ARM!\Instructions!B}
-The \TT{B} instruction for unconditional jumping is in fact conditional and encoded just like any other
-conditional jump, but has \TT{AL} in the \IT{condition field}, and it implies \IT{execute ALways}, 
-ignoring flags.
+無条件ジャンプの\TT{B}命令は、実際には条件付きで他の条件ジャンプと同様にエンコードされますが、
+条件フィールドには\TT{AL}があり、フラグを無視して\IT{常に実行}することを意味します。
 
 \myindex{ARM!\Instructions!ADR}
 \myindex{ARM!\Instructions!ADRcc}
 \myindex{ARM!\Instructions!CMP}
 
-The \TT{ADRGT} instruction works just like \TT{ADR} but executes only in case the previous \CMP
-instruction founds one of the numbers greater than the another, while comparing the two (\IT{Greater Than}).
+\TT{ADRGT}命令は\TT{ADR}と同じように動作しますが、前の \CMP 命令が2つ（\IT{大きい方}）を比較しながら、
+他の命令より大きな数値の1つを検出した場合にのみ実行されます。
 
 \myindex{ARM!\Instructions!BL}
 \myindex{ARM!\Instructions!BLcc}
 
-The next \TT{BLGT} instruction behaves exactly as \TT{BL} 
-and is triggered only if the result of the comparison has been (\IT{Greater Than}). 
-\TT{ADRGT} writes a pointer to the string \TT{a>b\textbackslash{}n} into \Reg{0} and \TT{BLGT} calls \printf.
-Therefore, instructions suffixed with \TT{-GT} are to execute only in case the value in \Reg{0} (which is $a$) is bigger than the value in \Reg{4} (which is $b$).
+次の\TT{BLGT}命令は\TT{BL}と同じように動作し、
+比較の結果が（より大きい）場合にのみ実行されます。 
+\TT{ADRGT}は文字列\TT{a>b\textbackslash{}n}へのポインタを\Reg{0}に書き込み、\TT{BLGT}は \printf を呼び出します。
+したがって、\TT{-GT}の後に続く命令は、\Reg{0}（$a$）の値が\Reg{4}（$b$）の値より大きい場合にのみ実行されます。
 
 \myindex{ARM!\Instructions!ADRcc}
 \myindex{ARM!\Instructions!BLcc}
 
-Moving forward we see the \TT{ADREQ} and \TT{BLEQ} instructions.
-They behave just like \TT{ADR} and \TT{BL}, but are to be executed only if operands were equal to each
-other during the last comparison.
-Another \CMP is located before them (because the \printf execution may have tampered the flags).
+\TT{ADREQ}命令と\TT{BLEQ}命令が順方向に進みます。
+それらは\TT{ADR}と\TT{BL}のように動作しますが、最後の比較時にオペランドが等しい場合にのみ実行されます。 
+\printf の実行によってフラグが改ざんされた可能性があるため、別の \CMP がその前に配置されます。
 
 \myindex{ARM!\Instructions!LDMccFD}
 \myindex{ARM!\Instructions!LDMFD}
 
-Then we see \TT{LDMGEFD}, this instruction works just like \TT{LDMFD}\footnote{\ac{LDMFD}},
-but is triggered only when one of the values is greater or equal than the other (\IT{Greater or Equal}).
-The \TT{LDMGEFD SP!, \{R4-R6,PC\}} instruction acts like a function epilogue, but it will be triggered only if $a>=b$, and only then the function execution will finish.
+次に、\TT{LDMGEFD}を参照してください。この命令は\TT{LDMFD}\footnote{\ac{LDMFD}}のように機能しますが、
+一方の値が他方の値より大きいか等しい場合にのみ実行されます。 
+\TT{LDMGEFD SP!, \{R4-R6,PC\}}命令は関数エピローグのように動作しますが、$a>=b$の場合にのみトリガされ、その後に関数の実行が終了します。
 
 \myindex{Function epilogue}
 
-But if that condition is not satisfied, i.e., $a<b$, then the control flow will continue to the next \\
-\TT{\q{LDMFD SP!, \{R4-R6,LR\}}} instruction, which is one more function epilogue. This instruction restores not only the \TT{R4-R6} registers state, but also \ac{LR} instead of \ac{PC}, thus, it does not return from the function.
-The last two instructions call \printf with the string <<a<b\textbackslash{}n>> as a sole argument.
-We already examined an unconditional jump to the \printf function instead of function return in <<\PrintfSeveralArgumentsSectionName>> section~(\myref{ARM_B_to_printf}).
+しかし、その条件が満たされない場合、すなわち$a<b$の場合、制御フローは次の
+\TT{\q{LDMFD SP!, \{R4-R6,LR\}}}命令に続き、これはもう1つの関数エピローグです。この命令は、\TT{R4-R6}だけでなく\ac{PC}の代わりに\ac{LR}も登録されているため、関数からは戻りません。
+最後の2つの命令は、文字列<<a<b\textbackslash{}n>>を唯一の引数として \printf を呼び出します。  
+\printf セクション（\myref{ARM_B_to_printf}）の関数の戻り値ではなく、 \printf 関数への無条件ジャンプを調べました。
 
 \myindex{ARM!\Instructions!ADRcc}
 \myindex{ARM!\Instructions!BLcc}
 \myindex{ARM!\Instructions!LDMccFD}
-\TT{f\_unsigned} is similar, only the \TT{ADRHI}, \TT{BLHI}, and \TT{LDMCSFD} instructions are used there, these predicates (\IT{HI = Unsigned higher, CS = Carry Set (greater than or equal)}) are analogous to those examined before, but for unsigned values.
+\TT{f\_unsigned}は類似しており、\TT{ADRHI}、\TT{BLHI}、および\TT{LDMCSFD}命令のみが使用されています。これらの述部（\IT{HI = Unsigned higher, CS = Carry Set (greater than or equal)}）は、前に説明したものと類似しています。
 
-There is not much new in the \main function for us:
+\main 関数にはそんなに新しい点はありません。
 
 \lstinputlisting[caption=\main,style=customasmARM]{patterns/07_jcc/simple/ARM/ARM_O3_main.asm}
 
-That is how you can get rid of conditional jumps in ARM mode.
+これは、ARMモードでの条件付きジャンプを取り除く方法です。
 
 \myindex{RISC pipeline}
-Why is this so good? Read here: \myref{branch_predictors}.
+なぜこれがよいのでしょう？ 以下を読んでください：\myref{branch_predictors}
 
 \myindex{x86!\Instructions!CMOVcc}
 
-There is no such feature in x86, except the \TT{CMOVcc} instruction, it is the same as \MOV,
-but triggered only when specific flags are set, usually set by \CMP.
+x86では、\TT{CMOVcc}命令以外は \MOV と同じですが、
+通常は \CMP によって設定された特定のフラグが設定されている場合にのみ実行されます。
 
 \mysubparagraph{\OptimizingKeilVI (\ThumbMode)}
 
@@ -90,13 +88,12 @@ but triggered only when specific flags are set, usually set by \CMP.
 \myindex{ARM!\Instructions!B}
 \myindex{ARM!\ThumbMode}
 
-Only \TT{B} instructions in Thumb mode may be supplemented by \IT{condition codes}, so the Thumb code 
-looks more ordinary.
+Thumbモードの\TT{B}命令だけが\IT{条件コード}で補完されるため、
+Thumbコードはより一般的に見えます。
 
-\TT{BLE} is a normal conditional jump \IT{Less than or Equal}, 
-\TT{BNE}---\IT{Not Equal}, 
-\TT{BGE}---\IT{Greater than or Equal}.
+\TT{BLE}は通常の条件ジャンプであり、\IT{Less than or Equal}の意味です。 
+\TT{BNE}は\IT{Not Equal}の意味です。
+\TT{BGE}は\IT{Greater than or Equal}の意味です。
 
-\TT{f\_unsigned} is similar, only other instructions are used while dealing 
-with unsigned values: \TT{BLS} 
-(\IT{Unsigned lower or same}) and \TT{BCS} (\IT{Carry Set (Greater than or equal)}).
+\TT{f\_unsigned}は似ていますが、符号なしの値を扱う際には、
+\TT{BLS}（\IT{Unsigned lower or same}）および\TT{BCS}（\IT{Carry Set (Greater than or equal)}）命令しか使用されません。

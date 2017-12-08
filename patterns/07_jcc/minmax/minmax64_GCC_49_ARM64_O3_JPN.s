@@ -1,19 +1,19 @@
 my_max:
 ; X0=A
 ; X1=B
-; compare A and B:
+; AとBを比較
 	cmp	x0, x1
-; select X0 (A) to X0 if X0>=X1 or A>=B (Greater or Equal) 
-; select X1 (B) to X0 if A<B
+; X0>=X1 または A>=B (Greater or Equal)の場合、X0(A)を選択する
+; A<Bの場合、X1 (B)を選択する
 	csel	x0, x0, x1, ge
 	ret
 
 my_min:
 ; X0=A
 ; X1=B
-; compare A and B:
+; AとBを比較
 	cmp	x0, x1
-; select X0 (A) to X0 if X0<=X1 or A<=B (Less or Equal)
-; select X1 (B) to X0 if A>B
+; X0<=X1 または A<=B (Less or Equal)の場合、X0(A)を選択する
+; A>Bの場合、X1 (B)を選択する
 	csel	x0, x0, x1, le
 	ret

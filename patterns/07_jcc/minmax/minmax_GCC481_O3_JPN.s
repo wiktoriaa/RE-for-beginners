@@ -3,9 +3,10 @@ my_max:
 	mov	eax, DWORD PTR [esp+8]
 ; EDX=A
 ; EAX=B
-; compare A and B:
+; AとBを比較
 	cmp	edx, eax
-; if A>=B, load A value into EAX
+; A>=Bなら、Aの値をEAXにロード
+; それ以外(A<B)の場合は、アイドル命令
 ; the instruction idle if otherwise (if A<B)
 	cmovge	eax, edx
 	ret
@@ -15,9 +16,9 @@ my_min:
 	mov	eax, DWORD PTR [esp+8]
 ; EDX=A
 ; EAX=B
-; compare A and B:
+; AとBを比較
 	cmp	edx, eax
-; if A<=B, load A value into EAX
-; the instruction idle if otherwise (if A>B)
+; A<=Bなら、Aの値をEAXにロード
+; それ以外(A>B)の場合は、アイドル命令
 	cmovle	eax, edx
 	ret

@@ -1,78 +1,78 @@
-\subsection{Ternary conditional operator}
+\subsection{三項条件演算子}
 \label{chap:cond}
 
-The ternary conditional operator in \CCpp has the following syntax:
+\CCpp の三項条件演算子の構文は次のとおりです。
 
 \begin{lstlisting}
 expression ? expression : expression
 \end{lstlisting}
 
-Here is an example:
+次に例を示します。
 
 \lstinputlisting[style=customc]{patterns/07_jcc/cond_operator/cond.c}
 
 \subsubsection{x86}
 
-Old and non-optimizing compilers generate assembly code just as if an \TT{if/else} statement was used:
+古いコンパイラと最適化していないコンパイラは、\TT{if/else}文が使用されたかのようにアセンブリコードを生成します。
 
 \lstinputlisting[caption=\NonOptimizing MSVC 2008,style=customasmx86]{patterns/07_jcc/cond_operator/MSVC2008_JPN.asm}
 
 \lstinputlisting[caption=\Optimizing MSVC 2008,style=customasmx86]{patterns/07_jcc/cond_operator/MSVC2008_Ox_JPN.asm}
 
-Newer compilers are more concise:
+新しいコンパイラはより簡潔です。
 
 \lstinputlisting[caption=\Optimizing MSVC 2012 x64,style=customasmx86]{patterns/07_jcc/cond_operator/MSVC2012_Ox_x64_JPN.asm}
 
 \myindex{x86!\Instructions!CMOVcc}
-\Optimizing GCC 4.8 for x86 also uses the \TT{CMOVcc} instruction, while the non-optimizing GCC 4.8 uses conditional jumps.
+x86用の\Optimizing GCC 4.8も\TT{CMOVcc}命令を使用し、非最適化GCC 4.8は条件付きジャンプを使用します。
 
 \subsubsection{ARM}
 
 \myindex{x86!\Instructions!ADRcc}
-\Optimizing Keil for ARM mode also uses the conditional instructions \TT{ADRcc}:
+ARMモード用の \Optimizing Keilでは、条件付き命令\TT{ADRcc}を使います。
 
 \lstinputlisting[label=cond_Keil_ARM_O3,caption=\OptimizingKeilVI (\ARMMode),style=customasmARM]{patterns/07_jcc/cond_operator/Keil_ARM_O3_JPN.s}
 
-Without manual intervention, the two instructions \TT{ADREQ} and \TT{ADRNE} cannot be executed in the same run.
+手動で介入しなければ、2つの命令\TT{ADREQ} と \TT{ADRNE}を同じときにで実行することはできません。
 
-\Optimizing Keil for Thumb mode needs to use conditional jump instructions, since there are no load instructions
-that support conditional flags:
+Thumbモードでは、 \Optimizing Keilは、条件付きフラグをサポートするロード命令がないため、
+条件付きジャンプ命令を使用する必要があります。
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ThumbMode),style=customasmARM]{patterns/07_jcc/cond_operator/Keil_thumb_O3_JPN.s}
 
 \subsubsection{ARM64}
 
-\Optimizing GCC (Linaro) 4.9 for ARM64 also uses conditional jumps:
+ARM64の \Optimizing GCC（Linaro）4.9でも、条件付きジャンプが使用されます。
 
 \lstinputlisting[label=cond_ARM64,caption=\Optimizing GCC (Linaro) 4.9,style=customasmARM]{patterns/07_jcc/cond_operator/ARM64_GCC_O3_JPN.s}
 
-That is because ARM64 does not have a simple load instruction with conditional flags,
-like \TT{ADRcc} in 32-bit ARM mode or \INS{CMOVcc} in x86.
+これは、ARM64には32ビットARMモードの\TT{ADRcc}やx86の\INS{CMOVcc}などの
+条件フラグを伴った単純なロード命令がないためです。
 
 \myindex{ARM!\Instructions!CSEL}
-It has, however, \q{Conditional SELect} instruction (\TT{CSEL})\InSqBrackets{\ARMSixFourRef p390, C5.5},
-but GCC 4.9 does not seem to be smart enough to use it in such piece of code.
+しかし、\q{Conditional SELect}命令（\TT{CSEL}）\InSqBrackets{\ARMSixFourRef p390, C5.5}を使用していますが、
+GCC 4.9ではこのようなコードの中で使用するには十分スマートではないようです。
 
 \subsubsection{MIPS}
 
-Unfortunately, GCC 4.4.5 for MIPS is not very smart, either:
+残念ながら、MIPS用のGCC 4.4.5はそれほどスマートではありません。
 
 \lstinputlisting[caption=\Optimizing GCC 4.4.5 (\assemblyOutput),style=customasmMIPS]{patterns/07_jcc/cond_operator/MIPS_O3_JPN.s}
 
-\subsubsection{Let's rewrite it in an \TT{if/else} way}
+\subsubsection{\TT{if/else}の方法で書き直しましょう}
 
 \lstinputlisting[style=customc]{patterns/07_jcc/cond_operator/cond2.c}
 
 \myindex{x86!\Instructions!CMOVcc}
 
-Interestingly, optimizing GCC 4.8 for x86 was also able to use \TT{CMOVcc} in this case:
+興味深いことに、x86用のGCC 4.8の最適化は、この場合に\TT{CMOVcc}を使用することもできました。
 
 \lstinputlisting[caption=\Optimizing GCC 4.8,style=customasmx86]{patterns/07_jcc/cond_operator/cond2_GCC_O3_JPN.s}
 
-\Optimizing Keil in ARM mode generates code identical to \lstref{cond_Keil_ARM_O3}.
+ARMモードの \Optimizing Keilでは、\lstref{cond_Keil_ARM_O3}と同じコードが生成されます。
 
-But the optimizing MSVC 2012 is not that good (yet).
+しかし、MSVC 2012の最適化は（まだ）あまり良くありません。
 
 \subsubsection{\Conclusion{}}
 
-Why optimizing compilers try to get rid of conditional jumps? Read here about it: \myref{branch_predictors}.
+コンパイラを最適化するとどうして条件付きジャンプを取り除こうとするのでしょうか？以下を読んでください：\myref{branch_predictors}

@@ -1,11 +1,11 @@
 my_max PROC
 ; R0=A
 ; R1=B
-; compare A and B:
+; AとBを比較
         CMP      r0,r1
-; return B instead of A by placing B in R0
-; this instruction will trigger only if A<=B (hence, LE - Less or Equal)
-; if instruction is not triggered (in case of A>B), A is still in R0 register
+; BをR0に入れて、AではなくBをリターン
+; A<=Bのときにのみ、この命令は実行されます (つまり、 LE - Less or Equal)
+; 命令が実行されない場合(A>Bのとき)、AはR0レジスタにあります。
         MOVLE    r0,r1
         BX       lr
         ENDP
@@ -13,11 +13,11 @@ my_max PROC
 my_min PROC
 ; R0=A
 ; R1=B
-; compare A and B:
+; AとBを比較
         CMP      r0,r1
-; return B instead of A by placing B in R0
-; this instruction will trigger only if A>=B (hence, GE - Greater or Equal)
-; if instruction is not triggered (in case of A<B), A value is still in R0 register
+; BをR0に入れて、AではなくBをリターン
+; A>=Bのときにのみ、この命令は実行されます (つまり、 GE - Greater or Equal)
+; 命令が実行されない場合(A<Bのとき)、AはR0レジスタにあります。
         MOVGE    r0,r1
         BX       lr
         ENDP
