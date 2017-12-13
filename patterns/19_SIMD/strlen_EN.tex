@@ -78,12 +78,12 @@ So, in normal conditions the program calls \strlen, passing it a pointer to the 
 placed in memory at address 0x008c1ff8.
 \strlen reads one byte at a time until 0x008c1ffd, where there's a zero byte, and then it stops.
 
-Now if we implement our own \strlen reading 16 byte at once, starting at any address, aligned or not,
+Now if we implement our own \strlen reading 16 bytes at once, starting at any address, aligned or not,
 \MOVDQU may attempt to load 16 bytes at once at address 0x008c1ff8 up to 0x008c2008, 
 and then an exception will be raised.
 That situation is to be avoided, of course.
 
-So then we'll work only with the addresses aligned on a 16 byte boundary, which in combination with the knowledge
+So then we'll work only with the addresses aligned on a 16 bytes boundary, which in combination with the knowledge
 that the \ac{OS}' page size is usually aligned on a 16-byte boundary gives us some warranty that our function will not
 read from unallocated memory.
 
