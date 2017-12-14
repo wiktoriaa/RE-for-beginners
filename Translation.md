@@ -1,6 +1,6 @@
 # Want to translate this book to another language?
 
-Take a look on [GitHub repository](https://github.com/dennis714/RE-for-beginners).
+Take a look on [GitHub repository](https://github.com/DennisYurichev/RE-for-beginners).
 For example, `main_EN.tex` for English, `main_RU.tex` for Russian, etc.
 So just find `filename_EN.tex` file you want to translate, copy to filename_XX.tex (where XX is your language)
 and replace English text by yours.
@@ -8,7 +8,7 @@ No special TeX/LaTeX knowledge is needed.
 Then just send it to me.
 Or if you familiar with git and github, add your file to source tree and create pull request.
 How to find directories with `*_EN.tex` files?
-[Look here](https://github.com/dennis714/RE-for-beginners/search?utf8=%E2%9C%93&q=input+EN&type=Code).
+[Look here](https://github.com/DennisYurichev/RE-for-beginners/search?utf8=%E2%9C%93&q=input+EN&type=Code).
 
 Please submit your work as early as possible: other translators will be aware of the piece of work already done.
 
@@ -62,7 +62,7 @@ in the directory you're currently working with contents like
 	I'm going to translate this part soon.
 	-- my@email.com, username@github.com, DD/MM/YYYY.
 
-[For example](https://github.com/dennis714/RE-for-beginners/blob/2bc65d9533d48b023cf5ac467c42f4ef1aee90e0/OS/Note_to_German_translators.txt).
+[For example](https://github.com/DennisYurichev/RE-for-beginners/blob/2bc65d9533d48b023cf5ac467c42f4ef1aee90e0/OS/Note_to_German_translators.txt).
 You can jokingly call it "mutex".
 Feel free to add any other notes for rest of translators.
 
@@ -78,8 +78,8 @@ And/or, I add commentary at the first line of each translated file, which should
 
 listings TeX package sometimes goes crazy if it encounters UTF-8 character(s) and digit(s) in one line: [stack overflow discussion](http://tex.stackexchange.com/questions/24528/having-problems-with-listings-and-utf-8-can-it-be-fixed).
 So it must be escaped, and in this project, "paragraph" symbol is used: `§`.
-(Almost) all Cyrillic comments in listings are escaped, [for example](https://github.com/dennis714/RE-for-beginners/blob/9bcd72d176b1f86aa31dda21007740f83ae90484/patterns/02_stack/04_alloca/2_1_gcc_intel_O3_RU.asm#L9).
-How to escape French diacritic symbols, [for example](https://github.com/dennis714/RE-for-beginners/blob/c4ee7d6abc3022fd60167d22f47cf100bc4be425/patterns/03_printf/ARM/ARM8_O0_FR.lst#L12).
+(Almost) all Cyrillic comments in listings are escaped, [for example](https://github.com/DennisYurichev/RE-for-beginners/blob/9bcd72d176b1f86aa31dda21007740f83ae90484/patterns/02_stack/04_alloca/2_1_gcc_intel_O3_RU.asm#L9).
+How to escape French diacritic symbols, [for example](https://github.com/DennisYurichev/RE-for-beginners/blob/c4ee7d6abc3022fd60167d22f47cf100bc4be425/patterns/03_printf/ARM/ARM8_O0_FR.lst#L12).
 Do not worry about misplacing them or not placing at all, I'll fix it by myself.
 
 For those, who interested, § symbol is in fact switches you into TeX mode, and you can write anything here as in .tex files, like `\IT{italic}`, etc.
