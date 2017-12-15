@@ -93,7 +93,7 @@ loc_D6: ; CODE XREF: f(int,int *,int *,int *)+B2
        mov     esi, [esp+10h+ar2]
        lea     esi, [esi+edi*4] ; est-ce que ar2+i*4 est §aligné§ sur 16-octets?
        test    esi, 0Fh
-       jz      short loc_109   ; yes!
+       jz      short loc_109   ; oui!
        mov     ebx, [esp+10h+ar1]
        mov     esi, [esp+10h+ar2]
 

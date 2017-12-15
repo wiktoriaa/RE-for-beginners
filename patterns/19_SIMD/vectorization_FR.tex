@@ -3,10 +3,11 @@
 \newcommand{\URLVEC}{\href{http://go.yurichev.com/17080}{Wikipédia: vectorisation}}
 
 La vectorisation\footnote{\URLVEC}, c'est lorsque, par exemple, vous avez une boucle
-qui prend un couple de tableaux en entrée et produit un tableau.
+qui prend une paire de tableaux en entrée et produit un tableau.
 Le corps de la boucle prend les valeurs dans les tableaux en entrée, fait quelque
 chose et met le résultat dans le tableau de sortie.
-Il est important qu'il n'y ait qu'une seule opération appliquée à chaque élément.
+%It is important that there is only a single operation applied to each element.
+%Il est important qu'il n'y ait qu'une seule opération appliquée à chaque élément.
 La vectorisation est le fait de traiter plusieurs éléments simultanément.
 
 La vectorisation n'est pas une nouvelle technologie: l'auteur de ce livre l'a vu
@@ -33,7 +34,7 @@ dans C.
 \newcommand{\PMULHW}{\TT{PMULHW} (\IT{Multiply Packed Signed Integers and Store High Result})}
 
 Si chaque élément du tableau que nous avons est un \Tint 32-bit, alors il est possible
-de charger 4 éléments de A dans un registre XMM 128-bit, de B dans un autre registre
+de charger 4 éléments de A dans un registre XMM 128-bit, 4 de B dans un autre registre
 XMM, et en exécutant \PMULLD{} et \PMULHW{}, il est possible d'obtenir 4 \glslink{product}{produits}
 64-bit en une fois.
 
@@ -64,7 +65,7 @@ int f (int sz, int *ar1, int *ar2, int *ar3)
 
 \myparagraph{Intel C++}
 
-Compilons le avec Intel C++ 11.1.051 win32:
+Compilons la avec Intel C++ 11.1.051 win32:
 
 \begin{verbatim}
 icl intel.cpp /QaxSSE2 /Faintel.asm /Ox
@@ -80,34 +81,34 @@ Les instructions relatives à SSE2 sont:
 \myindex{x86!\Instructions!PADDD}
 \begin{itemize}
 \item
-\MOVDQU (\IT{Move Unaligned Double Quadword})---charge juste 16 octets depuis la
-mémoire dans un registre XMM.
+\MOVDQU (\IT{Move Unaligned Double Quadword} déplacer double quadruple mot non
+alignés)---charge juste 16 octets depuis la mémoire dans un registre XMM.
 
 \item
-\PADDD (\IT{Add Packed Integers})---ajoute 4 paires de nombres 32-bit et laisse le
-résultat dans le premier opérande.
+\PADDD (\IT{Add Packed Integers} ajouter entier paqué)---ajoute 4 paires de nombres
+32-bit et laisse le résultat dans le premier opérande.
 Á propos, aucune exception n'est levée en cas de débordement et aucun flag n'est mis,
-seul les 32-bit bas du résultat sont stockés.
+seuls les 32-bit bas du résultat sont stockés.
 Si un des opérandes de \PADDD est l'adresse d'une valeur en mémoire, alors l'adresse
-doit être alignée sur une frontière de 16 octets.
+doit être alignée sur une limite de 16 octets.
 Si elle n'est pas alignée, une exception est levée\footnote{En savoir plus sur l'alignement
 des données: \URLWPDA}.
 
 \item
 \MOVDQA (\IT{Move Aligned Double Quadword}) est la même chose que \MOVDQU, mais nécessite
-que l'adresse de la valeur en mémoire soit alignée sur une frontière de 16 octets.
-Si elle n'est pas alignée, une exception est levée.
+que l'adresse de la valeur en mémoire soit alignée sur une limite de 16 octets. Si
+elle n'est pas alignée, une exception est levée.
 \MOVDQA fonctionne plus vite que \MOVDQU, mais nécessite la condition qui vient d'être
 écrite.
 
 \end{itemize}
 
 Donc, ces instructions SSE2 sont exécutées seulement dans le cas oú il y a plus
-de 4 paires à traiter et que le pointeur \TT{ar3} est aligné sur une frontière de
-16-octets.
+de 4 paires à traiter et que le pointeur \TT{ar3} est aligné sur une limite de 16
+octets.
 
-Ainsi, si \TT{ar2} est également aligné sur une frontière de 16 octets, ce morceau
-de code sera exécuté:
+Ainsi, si \TT{ar2} est également aligné sur une limite de 16 octets, ce morceau de
+code sera exécuté:
 
 \begin{lstlisting}[style=customasmx86]
 movdqu  xmm0, xmmword ptr [ebx+edi*4] ; ar1+i*4
