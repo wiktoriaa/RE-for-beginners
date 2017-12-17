@@ -15,7 +15,7 @@ _str$ = 8                ; taille = 4
     cmp      esi, eax
     je       SHORT $LN4@strlen_sse
     lea      edx, DWORD PTR [eax+1]
-    npad     3 ; aligner les prochain label
+    npad     3 ; aligner le prochain label
 $LL11@strlen_sse:
     mov      cl, BYTE PTR [eax]
     inc      eax
