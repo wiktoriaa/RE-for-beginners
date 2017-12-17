@@ -1,4 +1,4 @@
-\section{Valeur de retour}
+﻿\section{Valeur de retour}
 \label{ret_val_func}
 
 Une autre fonction simple est celle qui retourne juste une valeur constante:
@@ -16,7 +16,7 @@ Voici ce que les compilateurs GCC et MSVC produisent sur une plateforme x86:
 \lstinputlisting[caption=GCC/MSVC \Optimizing (\assemblyOutput),style=customasmx86]{patterns/011_ret/1.s}
 
 \myindex{x86!\Instructions!RET}
-Il y a juste deux instructions: la premiére place la valeur 123 dans le registre \EAX, qui est par convention le registre utilisé pour stocker la valeur retournée d'une fonction et la seconde est \RET, qui retourne l'exécution vers le \gls{caller}.
+Il y a juste deux instructions: la première place la valeur 123 dans le registre \EAX, qui est par convention le registre utilisé pour stocker la valeur retournée d'une fonction et la seconde est \RET, qui retourne l'exécution vers le \gls{caller}.
 
 Le caller prendra le resultat de cette fonction dans le registre \EAX.
 
@@ -26,7 +26,7 @@ Il y a quelques différences sur la platforme ARM:
 
 \lstinputlisting[caption=\OptimizingKeilVI (\ARMMode) ASM Output,style=customasmARM]{patterns/011_ret/1_Keil_ARM_O3.s}
 
-ARM utilise le registre \Reg{0} pour retourner le résultat d'une fonctions, donc 123 est copié dans \Reg{0}.
+ARM utilise le registre \Reg{0} pour retourner le résultat d'une fonction, donc 123 est copié dans \Reg{0}.
 
 \myindex{ARM!\Instructions!MOV}
 \myindex{x86!\Instructions!MOV}
@@ -59,7 +59,7 @@ L'autre instruction est l'instruction de saut (J ou JR) qui retourne le flux d'e
 
 Vous pouvez vous demander pourquoi la position de l'instruction d'affectation de valeur immédiate (LI) et l'instruction de saut (J ou JR) sont échangées. Ceci est dû à une fontionnalité du \ac{RISC} appelée ``branch delay slot''.
 
-La raison de cela est du à une bizarrerie dans l'architecture de certains RISC \ac{ISA}s et n'est pas importante pour nous. Nous gardons juste en tête qu'en MIPS, l'instruction qui suit une instruction de saut ou de branchement est exécutée \IT{avant} l'instruction de saut ou de branchement elle même.
+La raison de cela est du à une bizarrerie dans l'architecture de certains RISC \ac{ISA}s et n'est pas importante pour nous. Nous gardons juste en tête qu'en MIPS, l'instruction qui suit une instruction de saut ou de branchement est exécutée \IT{avant} l'instruction de saut ou de branchement elle-même.
 
 Par conséquent, les instructions de branchement échangent toujours de place avec l'instruction qui doit être exécutée avant.
 
