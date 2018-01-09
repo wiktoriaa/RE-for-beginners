@@ -16,7 +16,7 @@ L'extension \ac{SIMD} (SSE2) offre un moyen facile de travailler avec des nombre
 Le format des nombres reste le même (IEEE 754).
 
 \myindex{x86-64}
-Donc, les compilateurs modernes (incluant ceux générants pour x86-64) utilisent les
+Donc, les compilateurs modernes (incluant ceux générant pour x86-64) utilisent les
 instructions \ac{SIMD} au lieu de celles pour FPU.
 
 On peut dire que c'est une bonne nouvelle, car il est plus facile de travailler avec
@@ -106,7 +106,7 @@ et l'a stocké dans \XMM{1}}
 \begin{figure}[H]
 \centering
 \myincludegraphics{patterns/205_floating_SIMD/simple_olly3.png}
-\caption{\olly: \TT{MULSD} a calculaté le \glslink{product}{produit} et l'a stocké
+\caption{\olly: \TT{MULSD} a calculé le \glslink{product}{produit} et l'a stocké
 dans \XMM{0}}
 \label{fig:FPU_SIMD_simple_olly3}
 \end{figure}
@@ -130,7 +130,7 @@ dans \XMM{0}}
 Nous voyons qu'\olly montre les registres XMM comme des paires de nombres \Tdouble,
 mais seule la partie \IT{basse} est utilisée.
 
-Apparement, \olly les montre dans ce format car les instructions SSE2 (suffixées
+Apparemment, \olly les montre dans ce format car les instructions SSE2 (suffixées
 avec \TT{-SD}) sont exécutées actuellement.
 
 Mais bien sûr, il est possible de changer le format du registre et de voir le contenu
@@ -151,7 +151,7 @@ Il n'y a pas d'instruction \TT{MOVSDX} dans les manuels Intel et AMD (\myref{x86
 elle y est appelée \TT{MOVSD}.
 Donc il y a deux instructions qui partagent le même nom en x86 (à propos de l'autre
 lire: \myref{REP_MOVSx}).
-Apparement, les développeurs de Microsoft voulaient arrêter cette pagaille, donc
+Apparemment, les développeurs de Microsoft voulaient arrêter cette pagaille, donc
 ils l'ont renommée \TT{MOVSDX}.
 Elle charge simplement une valeur dans la moitié inférieure d'un registre XMM.
 
@@ -165,7 +165,7 @@ Peut-être parce que \printf{}---est une fonction avec un nombre variable d'argu
 
 GCC génère une sortie plus claire.
 La valeur pour \printf est passée dans \XMM{0}.
-Á propos, il y a un cas lorsque 1 est écrit dans \EAX pour \printf ---ceci implique
+À propos, il y a un cas lorsque 1 est écrit dans \EAX pour \printf ---ceci implique
 qu'un argument sera passé dans des registres vectoriels, comme le requiert le standard
 \SysVABI.
 
@@ -184,13 +184,13 @@ MSVC \Optimizing génère un code très facile à comprendre.
 Set EFLAGS} (comparer des valeurs double précision en virgule flottante scalaire
 ordrées et mettre les EFLAGS). Pratiquement, c'est ce qu'elle fait.\\
 \\
-MSVC \NonOptimizing génère plus de code redondant, mais il est toujours pas très difficile
-à comprendre:
+MSVC \NonOptimizing génère plus de code redondant, mais il n'est toujours pas très
+difficile à comprendre:
 
 \lstinputlisting[caption=MSVC 2012 x64,style=customasmx86]{patterns/205_floating_SIMD/d_max_MSVC_2012_x64.asm}
 
 \myindex{x86!\Instructions!MAXSD}
-Toutefois, GCC 4.4.6 effectue plus d'optimisation et utilise l'instruction \TT{MAXSD}
+Toutefois, GCC 4.4.6 effectue plus d'optimisations et utilise l'instruction \TT{MAXSD}
 (\q{Return Maximum Scalar Double-Precision Floating-Point Value}) qui choisit la
 valeur maximum!
 
@@ -207,7 +207,7 @@ Presque la même chose, mais les valeurs de $a$ et $b$ sont prises depuis la pil
 et le résultat de la fonction est laissé dans \ST{0}.
 
 Si nous chargeons cet exemple dans \olly, nous pouvons voir comment l'instruction
-\TT{COMISD} compare les valeurs et met/éfface les flags \CF et \PF:
+\TT{COMISD} compare les valeurs et met/efface les flags \CF et \PF:
 
 \begin{figure}[H]
 \centering
@@ -231,7 +231,7 @@ doit être placé en mémoire.
 Il y a toutefois l'instruction \INS{ADDSD} (\IT{Add Scalar Double-Precision Floating-Point
 Values} ajouter des valeurs scalaires xienà virgule flottante double-précision), qui
 peut ajouter une valeur dans la moitié 64-bit basse d'un registre XMM en ignorant
-celle du haut, mais MSVC 2012 n'est probablement pas encore assez bon \footnote{Á
+celle du haut, mais MSVC 2012 n'est probablement pas encore assez bon \footnote{À
 titre d'exercice, vous pouvez retravailler ce code pour éliminer l'usage de la pile
 locale}.
 

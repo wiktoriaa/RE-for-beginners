@@ -29,6 +29,6 @@ loc_1DC
           CMP     R4, #20         ; i<20?
           BLT     loc_1DC         ; oui, i<20, effectuer encore le corps de la boucle
           MOVS    R0, #0          ; valeur §à§ renvoyer
-; §libèrer§ le chunk, §alloué§ pour 20 variables int + une variable §supplémentaire§
+; §libérer§ le chunk, §alloué§ pour 20 variables int + une variable §supplémentaire§
           ADD     SP, SP, #0x54
           POP     {R4,R5,PC}

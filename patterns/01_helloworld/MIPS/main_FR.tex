@@ -14,18 +14,18 @@ de texte).
 Il est possible, toutefois, de charger des données depuis une adresse dans l'interval
 $register-32768...register+32767$ en utilisant une seule instruction (car un offset
 signé de 16 bits peut être encodé dans une seule instruction).
-Nous pouvons alors allouer un registre dans ce but et dédier un block de 64KiB
+Nous pouvons alors allouer un registre dans ce but et dédier un bloc de 64KiB
 pour les données les plus utilisées.
 Ce registre dédié est appelé un \q{pointeur global} et il pointe au milieu du
-block de 64 KiB.
-Ce block contient en général les variables globales et les adresses des fonctions
+bloc de 64 KiB.
+Ce bloc contient en général les variables globales et les adresses des fonctions
 importées, comme \printf, car les développeurs de GCC ont décidé qu'obtenir
 l'adresse d'une fonction devait se faire en une instruction au lieu de deux.
-Dans un fichier ELF ce block de 64KiB se trouve en partie dans une section .sbss
+Dans un fichier ELF ce bloc de 64KiB se trouve en partie dans une section .sbss
 (\q{small \ac{BSS}}) pour les données non initialisées et .sdata (\q{small data})
 pour celles initialisées.
 Cela implique que le programmeur peut choisir quelle donnée il/elle souhaite rendre
-accesible rapidement et doit les stocker dans .sdata/.sbss.
+accessible rapidement et doit les stocker dans .sdata/.sbss.
 Certains programmeurs old-school peuvent se souvenir du modèle de mémoire MS-DOS
 \myref{8086_memory_model} ou des gestionnaires de mémoire MS-DOS comme XMS/EMS
 où toute la mémoire était divisée en bloc de 64KiB.
@@ -42,7 +42,7 @@ Considérons l'exemple suivant, qui illustre le concept de \q{pointeur global}.
 \lstinputlisting[caption=GCC 4.4.5 \Optimizing (\assemblyOutput),numbers=left,style=customasmMIPS]{patterns/01_helloworld/MIPS/hw_O3_FR.s}
 
 Comme on le voit, le registre \$GP est défini dans le prologue de la fonction
-pour pointer au milieu de ce block.
+pour pointer au milieu de ce bloc.
 Le registre \ac{RA} est sauvé sur la pile locale.
 \puts est utilisé ici au lieu de \printf.
 \myindex{MIPS!\Instructions!LW}
@@ -93,8 +93,8 @@ des données entre des registres.
 En fait,  \TT{MOVE DST, SRC} est \TT{ADD DST, SRC, \$ZERO} ($DST=SRC+0$), qui
 fait la même chose.
 Apparemment, les développeurs de MIPS voulaient une table des opcodes compacte.
-Cela ne siginifie pas qu'il y a une addition à chaque instruction \INS{MOVE}.
-Très probablement, le \ac{CPU} optimise ces pseudo instructions et l'\ac{ALU} n'est
+Cela ne signifie pas qu'il y a une addition à chaque instruction \INS{MOVE}.
+Très probablement, le \ac{CPU} optimise ces pseudo-instructions et l'\ac{ALU} n'est
 jamais utilisé.
 
 \myindex{MIPS!\Instructions!J}
@@ -110,7 +110,7 @@ Voici un listing généré par \IDA. Chaque registre a son propre pseudo nom:
 L'instruction à la ligne 15 sauve la valeur de GP sur la pile locale, et cette
 instruction manque mystérieusement dans le listing de sortie de GCC, peut-être
 une erreur de GCC
-\footnote{Apparamment, les fonctions générant les listings ne sont pas si critique
+\footnote{Apparemment, les fonctions générant les listings ne sont pas si critique
 pour les utilisateurs de GCC, donc des erreurs peuvent toujours subsister.}.
 La valeur de GP doit effectivement être sauvée, car chaque fonction utilise sa
 propre fenêtre de 64KiB.
@@ -147,7 +147,7 @@ réelle, mais plutôt un nom pratique pour une paire d'instructions.
 \myindex{MIPS!\Pseudoinstructions!NOP}
 \myindex{MIPS!\Instructions!OR}
 
-Une autre chose est qu'\IDA ne reconnait pas les instructions \ac{NOP}, donc ici
+Une autre chose est qu'\IDA ne reconnaît pas les instructions \ac{NOP}, donc ici
 elles se trouvent aux lignes 22, 26 et 41.
 C'est \TT{OR \$AT, \$ZERO}.
 Essentiellement, cette instruction applique l'opération OR au contenu du registre

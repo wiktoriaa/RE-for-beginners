@@ -1,4 +1,4 @@
-\subsection{Mettre et éffacer des bits spécifiques: exemple avec le \ac{FPU}}
+\subsection{Mettre et effacer des bits spécifiques: exemple avec le \ac{FPU}}
 
 \myindex{IEEE 754}
 
@@ -7,7 +7,7 @@ Voici comment les bits sont organisés dans le type \Tfloat au format IEEE 754:
 \input{float_IEEE754.tex}
 
 Le signe du nombre est dans le \ac{MSB}.
-Est-ce qu'il est possible de changer le signe d'un nombre en virgule flottanre sans
+Est-ce qu'il est possible de changer le signe d'un nombre en virgule flottante sans
 aucune instruction FPU?
 
 \lstinputlisting[style=customc]{patterns/14_bitfields/35_set_reset_FPU/abs.c}
@@ -45,7 +45,7 @@ Maintenant essayons l'optimisation de MSVC 2012 pour x64:
 La valeur en entrée est passée dans \TT{XMM0}, puis elle est copiée sur la pile locale
 et nous voyons des nouvelles instructions: \BTR, \BTS, \BTC.
 
-Ces instructions sont utilisées pour éffacer (\BTR), mettre (\BTS) et inverser (ou
+Ces instructions sont utilisées pour effacer (\BTR), mettre (\BTS) et inverser (ou
 faire le complément: \BTC) de bits spécifiques.
 Le bit d'index 31 est le \ac{MSB}, en comptant depuis 0.
 
@@ -61,7 +61,7 @@ GCC 4.4.5 pour MIPS faire essentiellement la même chose:
 \myindex{MIPS!\Instructions!LUI}
 
 Une seule instruction \LUI est utilisée pour charger 0x80000000 dans un registre,
-car \LUI éfface les 16 bits bas et ils sont à zéro dans la constante, donc un \LUI
+car \LUI efface les 16 bits bas et ils sont à zéro dans la constante, donc un \LUI
 sans \ORI ultérieur est suffisant.
 
 \subsubsection{ARM}
@@ -74,7 +74,7 @@ Jusqu'ici tout va bien.
 \myindex{ARM!\Instructions!BIC}
 \myindex{ARM!\Instructions!EOR}
 
-ARM a l'instruction \BIC, qui éfface explicitement un (des) bit(s) spéficique(s).
+ARM a l'instruction \BIC, qui efface explicitement un (des) bit(s) spécifique(s).
 \EOR est le nom de l'instruction ARM pour \XOR (\q{Exclusive OR / OU exclusif}).
 
 \myparagraph{\OptimizingKeilVI (\ThumbMode)}
@@ -84,7 +84,7 @@ ARM a l'instruction \BIC, qui éfface explicitement un (des) bit(s) spéficique(
 En ARM, le mode Thumb offre des instructions 16-bit et peu de données peuvent y être
 encodées, donc ici une paire d'instructions \INS{MOVS}/\INS{LSLS} est utilisée pour
 former la constante 0x80000000.
-Ca fonctionne comme ceci: $1<<31 = 0x80000000$.
+Ça fonctionne comme ceci: $1<<31 = 0x80000000$.
 
 \myindex{ARM!\Instructions!LSLS}
 \myindex{ARM!\Instructions!LSRS}
@@ -96,8 +96,8 @@ Mais néanmoins, lorsque $input<<1$ est exécuté, le \ac{MSB} (bit de signe) es
 supprimé.
 Puis lorsque la déclaration suivante $result>>1$ est exécutée, tous les bits sont
 à nouveau à leur place, mais le \ac{MSB} vaut zéro, car tous les \q{nouveaux} bits
-apparaissants lors d'une opération de décalage sont toujours zéro.
-C'est ainsi que la paire d'instruction \LSLS/\LSRS éfface le \ac{MSB}.
+apparaissant lors d'une opération de décalage sont toujours zéro.
+C'est ainsi que la paire d'instruction \LSLS/\LSRS efface le \ac{MSB}.
 
 \myparagraph{\Optimizing GCC 4.6.3 (Raspberry Pi, \ARMMode)}
 
@@ -130,7 +130,7 @@ Mais ici nous opérons en base décimale et\\
 haut est mis.
 
 Ajouter 0x80000000 à n'importe quelle valeur n'affecte jamais les 31 bits les plus
-bas, mais affecte seulemetn le \ac{MSB}.
+bas, mais affecte seulement le \ac{MSB}.
 Ajouter 1 à 0 donne 1.
 
 Ajouter 1 à 1 donne 0b10 au format binaire, mais le bit d'indice 32 (en comptant

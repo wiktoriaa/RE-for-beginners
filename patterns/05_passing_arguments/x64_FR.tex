@@ -2,7 +2,7 @@
 
 \myindex{x86-64}
 
-Le scénario est un peu different en x86-64. Les arguments de la fonction (les 4 ou
+Le scénario est un peu différent en x86-64. Les arguments de la fonction (les 4 ou
 6 premiers d'entre eux) sont passés dans des registres i.e. l'\glslink{callee}{appelée}
 les lit depuis des registres au lieu de les lire dans la pile.
 
@@ -15,7 +15,7 @@ les lit depuis des registres au lieu de les lire dans la pile.
 Comme on le voit, la fonction compacte \ttf prend tous ses arguments dans des registres.
 
 La fonction \LEA est utilisée ici pour l'addition,
-apparement le compilateur considère qu'elle plus rapide que \TT{ADD}.
+apparemment le compilateur considère qu'elle plus rapide que \TT{ADD}.
 \myindex{x86!\Instructions!LEA}
 
 \LEA est aussi utilisée dans la fonction \main pour préparer le premier et le troisième
@@ -33,11 +33,11 @@ sur la pile pour une certaine raison.
 \label{shadow_space}
 Ceci est appelé \q{shadow space} % TODO dont know translation, mabe better to keep as is
 \footnote{\href{http://go.yurichev.com/17256}{MSDN}}: 
-chaque Win64 peut (mais ce n'est pas requis) y sauver les 4 regsitres. % TODO clarify Win64
+chaque Win64 peut (mais ce n'est pas requis) y sauver les 4 registres. % TODO clarify Win64
 Ceci est fait pour deux raisons:
 1) c'est trop généreux d'allouer un registre complet (et même 4 registres) pour
 un argument en entrée, donc il sera accèdé par la pile;
-2) le debugger sait toujours oú trouver les arguments de la fonction lors d'un arrêt
+2) le debugger sait toujours où trouver les arguments de la fonction lors d'un arrêt
 \footnote{\href{http://go.yurichev.com/17257}{MSDN}}.
 
 Donc, de grosses fonctions peuvent sauvegarder leurs arguments en entrée dans le \q{shadows space}

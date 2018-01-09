@@ -2,7 +2,7 @@
 
 Retravaillons la fonction qui renvoie le nom d'un mois: \lstref{get_month1}.
 
-Comme vous le voyez, au moins une opération de chargement en mémoire est necéssaire
+Comme vous le voyez, au moins une opération de chargement en mémoire est nécessaire
 pour préparer le pointeur sur la chaîne représentant le nom du mois.
 
 Est-il possible de se passer de cette opération de chargement en mémoire?
@@ -17,7 +17,7 @@ Voici ce que nous obtenons:
 
 Il n'y a pas du tout d'accès à la mémoire.
 
-Tout ce que fait cette fonction, c'est de calculer le point oú le premier caractère
+Tout ce que fait cette fonction, c'est de calculer le point où le premier caractère
 du nom du mois se trouve:
 $pointeur\_sur\_la\_table + mois * 10$.
 
@@ -29,7 +29,7 @@ La largeur du tableau est de 10 octets.
 En effet, la chaîne la plus longue ici---\q{septembre}---fait 9 octets, plus l'indicateur
 de fin de chaîne 0, ça fait 10 octets
 
-Le reste du nom de chaque mois est complèté par des zéros, afin d'occuper le même
+Le reste du nom de chaque mois est complété par des zéros, afin d'occuper le même
 espace (10 octets).
 
 Donc, notre fonction fonctionne même plus vite, car toutes les chaînes débutent à
@@ -46,11 +46,11 @@ GCC 4.9 \Optimizing fait encore plus court:
 
 \LEA est aussi utilisé ici pour la multiplication par 10.
 
-Les compilateurs sans optimisations génèrent la multiplication différement.
+Les compilateurs sans optimisations génèrent la multiplication différemment.
 
 \lstinputlisting[caption=GCC 4.9 x64 \NonOptimizing,style=customasmx86]{patterns/13_arrays/55_month_2D/x64_GCC49_O0_FR.asm}
 
-MSVC \NonOptimizing utilise simplement l'instructions \IMUL:
+MSVC \NonOptimizing utilise simplement l'instruction \IMUL:
 \myindex{x86!\Instructions!IMUL}
 
 \lstinputlisting[caption=MSVC 2013 x64 \NonOptimizing,style=customasmx86]{patterns/13_arrays/55_month_2D/MSVC2013_x64_FR.asm}
@@ -98,7 +98,7 @@ L'instruction \ADD a aussi un suffixe \LSL, qui aide avec les multiplications.
 
 \subsubsection{\Conclusion{}}
 
-C'est une technique vieillote de stocker des chaînes de texte.
+C'est une technique surannée de stocker des chaînes de texte.
 Vous pouvez en trouver beaucoup dans \oracle, par exemple.
 Il est difficile de dire si ça vaut la peine de le faire sur des ordinateurs modernes.
 Néanmoins, c'est un bon exemple de tableaux, donc il a été ajouté à ce livre.

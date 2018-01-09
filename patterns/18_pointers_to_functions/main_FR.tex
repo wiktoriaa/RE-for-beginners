@@ -24,7 +24,7 @@ Des exemples bien connus sont:
 \item beaucoup de fonctions win32, comme \TT{EnumChildWindows()}\footnote{\href{http://go.yurichev.com/17075}{MSDN}}.
 
 \item dans de nombreux endroits du noyau Linux, par exemple les fonctions des drivers
-du sytème de fichier sont appelées via callbacks: \url{http://go.yurichev.com/17076}
+du système de fichier sont appelées via callbacks: \url{http://go.yurichev.com/17076}
 
 \item Les fonctions des plugins GCC sont aussi appelées via callbacks: 
 \url{http://go.yurichev.com/17077}
@@ -62,7 +62,7 @@ avec l'option \TT{\Ox}:
 
 Rien de surprenant jusqu'ici.
 Comme quatrième argument, l'adresse du label \TT{\_comp} est passée, qui est juste
-l'endroit oú se trouve \comp, ou, en d'autres mots, l'adresse de la première instruction
+l'endroit où se trouve \comp, ou, en d'autres mots, l'adresse de la première instruction
 de cette fonction.
 
 Comment est-ce que \qsort l'appelle?
@@ -262,7 +262,7 @@ L'implémentation de \qsort se trouve dans \TT{libc.so.6} et c'est en fait juste
 wrapper\footnote{un concept similaire à une \glslink{thunk function}{fonction thunk}}
 pour \TT{qsort\_r()}.
 
-Ã son tour, elle appelle \TT{quicksort()}, oú notre fonction défini est appelée via
+À son tour, elle appelle \TT{quicksort()}, où notre fonction défini est appelée via
 le pointeur passé:
 
 \begin{lstlisting}[caption=(fihier libc.so.6{,} glibc version---2.10.1),style=customasmx86]
@@ -280,7 +280,7 @@ le pointeur passé:
 
 Évidemment, nous avons le code source C de notre exemple (\myref{qsort_c_src}), donc
 nous pouvons mettre un point d'arrêt ($b$) sur le numéro de ligne (11---la ligne
-oú la première comparaison se produit.
+où la première comparaison se produit.
 Nous devons aussi compiler l'exemple avec les informations de débogage incluses (\TT{-g}),
 donc la table avec les adresses et les numéros de ligne correspondants est présente.
 
@@ -301,7 +301,7 @@ Mais souvent, il n'y a pas de code source du tout, donc nous pouvons désassembl
 la fonction \comp (\TT{disas}), trouver la toute première instruction \CMP et placer
 un point d'arrêt ($b$) à cette adresse.
 
-Á chaque point d'arrêt, nous allons afficher le contenu de tous les registres\\
+À chaque point d'arrêt, nous allons afficher le contenu de tous les registres\\
 (\TT{info registers}).
 Le contenu de la pile est aussi disponible (\TT{bt}),
 

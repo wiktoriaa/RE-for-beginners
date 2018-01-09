@@ -1,4 +1,4 @@
-\subsubsection{Ecrire hors des bornes du tableau}
+\subsubsection{Écrire hors des bornes du tableau}
 
 Ok, nous avons lu quelques valeurs de la pile \IT{illégalement}, mais que se passe-t-il
 si nous essayons d'écrire quelque chose?
@@ -14,7 +14,7 @@ Et ce que nous obtenons:
 \lstinputlisting[caption=MSVC 2008 \NonOptimizing,style=customasmx86]{patterns/13_arrays/2_BO/w_FR.asm}
 
 Le programme compilé plante après le lancement. Pas de miracle. Voyons exactement
-oú il plante.
+où il plante.
 
 \clearpage
 \myindex{\olly}
@@ -76,12 +76,12 @@ C'est la structure de la pile pendant que le contrôle est dans \main:
 L'expression \TT{a[19]=quelquechose} écrit le dernier \Tint dans des bornes du tableau
 (dans les limites jusqu'ici!)
 
-L'expression \TT{a[20]=quelquechose} écrit \IT{quelquechose} à l'endroit oú la valeur
+L'expression \TT{a[20]=quelquechose} écrit \IT{quelquechose} à l'endroit où la valeur
 sauvegardée de \EBP se trouve.
 
-S'il vous plait, regardez l'état du registre lors du plantage. Dans notre cas,
+S'il vous plaît, regardez l'état du registre lors du plantage. Dans notre cas,
 20 a été écrit dans le 20ème élément.
-Á la fin de la fonction, l'épilogue restaure la valeur d'origine de \EBP.
+À la fin de la fonction, l'épilogue restaure la valeur d'origine de \EBP.
 (20 en décimal est \TT{0x14} en hexadécimal).
 Ensuite \RET est exécuté, qui est équivalent à l'instruction \TT{POP EIP}.
 
@@ -93,12 +93,12 @@ une exception est levée.
 
 \myindex{\BufferOverflow}
 
-Bienvenu! Ca s'appelle un \IT{buffer overflow (débordement de tampon)}\footnote{\href{http://go.yurichev.com/17132}{Wikipédia}}.
+Bienvenu! Ça s'appelle un \IT{buffer overflow (débordement de tampon)}\footnote{\href{http://go.yurichev.com/17132}{Wikipédia}}.
 
 Remplacez la tableau de \Tint avec une chaîne (\Tchar array), créez délibérément
 une longue chaîne et passez-là au programme, à la fonction, qui ne teste pas la longueur
 de la chaîne et la copie dans un petit buffer et vous serez capable de faire pointer
-le programme à une adresse oú il devra sauter.
+le programme à une adresse où il devra sauter.
 C'est pas aussi simple dans la réalité, mais c'est comme cela que ça a apparu.
 L'article classique à propos de ça: \AlephOne.
 
@@ -112,7 +112,7 @@ Lancer ce programme sous Linux donnera: \TT{Segmentation fault}.
 
 \myindex{GDB}
 
-Si nous le lançons dans le debogueur GDB, nous obtenons ceci:
+Si nous le lançons dans le débogueur GDB, nous obtenons ceci:
 
 \begin{lstlisting}
 (gdb) r

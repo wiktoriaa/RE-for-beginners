@@ -68,7 +68,7 @@ Donc, \GTT{SP+4} doit être stocké dans le registre \Reg{12}. \\
 \myindex{ARM!\Instructions!STMIA}
 L'instruction suivante \INS{STMIA R12, {R0-R3}} écrit le contenu des registres
 \Reg{0}-\Reg{3} dans la mémoire pointée par \Reg{12}.
-\INS{STMIA} est l'abréviation de \IT{Store Multiple Increment After} (stocker plusieur incrémenter après).
+\INS{STMIA} est l'abréviation de \IT{Store Multiple Increment After} (stocker plusieurs incrémenter après).
 \IT{\q{Increment After}} signifie que \Reg{12} doit être incrémenté de 4 après
 l'écriture de chaque valeur d'un registre.
 
@@ -95,13 +95,13 @@ l'exécution ultérieure de fonctions.
 \myindex{ARM!\Instructions!LDR}
 L'instruction \INS{LDR PC, [SP+4+var\_4],\#4} charge la valeur sauvée de \ac{LR}
 depuis la pile dans le registre \ac{PC}, provoquant ainsi la sortie de la fonction.
-Il n'y a pas de point d'xclamation---effectivement, \ac{PC} est d'abord chargé
+Il n'y a pas de point d'exclamation---effectivement, \ac{PC} est d'abord chargé
 depuis l'adresse stockées dans \ac{SP} ($4+var\_4=4+(-4)=0$, donc cette instruction
 est analogue à INS{LDR PC, [SP],\#4}), et ensuite \ac{SP} est incrémenté de 4.
 Il s'agit de \IT{post-index}\footnote{Lire à ce propos: \myref{ARM_postindex_vs_preindex}.}.
 Pourquoi est-ce qu'\IDA affiche l'instruction comme ça?
-Parqu'il veut illustrer la disposition de la pile et le fait que \GTT{var\_4} est
-alloué pour sauver la valeur de \ac{LR} dans la pile locale.
+Parce qu'il veut illustrer la disposition de la pile et le fait que \GTT{var\_4}
+est alloué pour sauver la valeur de \ac{LR} dans la pile locale.
 Cette instruction est quelque peu similaire à \INS{POP PC} en x86\footnote{Il est
 impossible de définir la valeur de \GTT{IP/EIP/RIP} en utilisant \POP en x86, mais
 de toutes façons, vous avez le droit de faire l'analogie.}.
@@ -189,14 +189,14 @@ aux adresses \GTT{0x2918}, \GTT{0x2920} et \GTT{0x2928}, alors qu'il serait poss
 de le faire en un seul endroit.
 
 Toutefois, le compilateur qui optimise doit avoir ses propres raisons d'ordonner
-les instructions pour avoir une plus grande éfficacité à l'exécution.
+les instructions pour avoir une plus grande efficacité à l'exécution.
 
 D'habitude, le processeur essaye d'exécuter simultanément des instructions situées côte à côte.\\
 Par exemple, des instructions comme \INS{MOVT R0, \#0} et \INS{ADD R0, PC, R0} ne
 peuvent pas être exécutées simultanément puisqu'elles modifient toutes deux le
 registre \Reg{0}.
 D'un autre côté, les instructions \INS{MOVT R0, \#0} et \INS{MOV R2, \#4} peuvent
-être exécutées simlutanément puisque leurs effets n'interfèrent pas l'un avec l'autre
+être exécutées simultanément puisque leurs effets n'interfèrent pas l'un avec l'autre
 lors de leurs exécution.
 Probablement que le compilateur essaye de générer du code arrangé de cette façon
 (lorsque c'est possible).

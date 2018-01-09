@@ -10,7 +10,7 @@ _d_max    PROC
     fnstsw  ax
     test    ah, 65 ; 00000041H
     jne     SHORT $LN5@d_max
-; coper ST(0) dans ST(1) et §dépiler§ le registre,
+; copier ST(0) dans ST(1) et §dépiler§ le registre,
 ; laisser (_a) au sommet
     fstp    ST(1)
 

@@ -38,8 +38,8 @@ En environnement Win64, la convention d'appel de fonctions est légèrement diff
 à la convention fastcall (\myref{fastcall}).
 Les 4 premiers arguments sont stockés dans les registres \RCX, \RDX, \Reg{8} et \Reg{9}. Les 
 arguments suivants~---sur la pile.
-La fonction \gls{caller} doit également allouer 32 octets pour utilisation par la fonction 
-\gls{callee} qui pourra y sauvegarder les registres contenant les 4 premiers arguments.
+La fonction \glslink{caller}{appelante} doit également allouer 32 octets pour utilisation par la fonction
+\glslink{callee}{appelée} qui pourra y sauvegarder les registres contenant les 4 premiers arguments.
 Les fonctions les plus simples peuvent utiliser les arguments directement depuis les registres. 
 En revanche, les fonctions plus complexes peuvent sauvegarder ces registres sur la pile.
 
@@ -59,14 +59,14 @@ Tous les pointeurs sont désormais sur 64 bits.
 
 \myindex{Register allocation}
 
-Dans la mesure où le nombre de registres a doublé, les compilateurs disposent de plus de liberté 
+Dans la mesure où le nombre de registres a doublé, les compilateurs disposent de plus de marge 
 de manoeuvre en matière d'\glslink{register allocator}{allocation des registres}. 
 Pour nous, il en résulte que le code généré contient moins de variables locales.
 
 \myindex{DES}
 
 Par exemple, la fonction qui calcule la première S-box de l'algorithme de chiffrage DES traite 
-en une fois au moyen de la methode DES bitslice des valeurs de 32/64/128/256 bits (en fonction 
+en une fois au moyen de la méthode DES bitslice des valeurs de 32/64/128/256 bits (en fonction 
 du type \GTT{DES\_type} (uint32, uint64, SSE2 or AVX)).
 Pour en savoir plus sur cette technique, voyez ~(\myref{bitslicedes}):
 
@@ -75,13 +75,13 @@ Pour en savoir plus sur cette technique, voyez ~(\myref{bitslicedes}):
 Cette fonction contient de nombreuses variables locales, mais toutes ne se retrouveront pas dans 
 la pile. Compilons ce fichier avec MSVC 2008 et l'option \GTT{/Ox}:
 
-\lstinputlisting[caption=\Optimizing MSVC 2008,style=customasmx86]{patterns/20_x64/19_2_msvc_Ox.asm}
+\lstinputlisting[caption=MSVC 2008 \Optimizing,style=customasmx86]{patterns/20_x64/19_2_msvc_Ox.asm}
 
 Seules 5 variables ont été allouées dans la pile par le compilateur.
 
 Essayons maintenant une compilation avec la version 64 bits de MSVC 2008:
 
-\lstinputlisting[caption=\Optimizing MSVC 2008,style=customasmx86]{patterns/20_x64/19_3_msvc_x64.asm}
+\lstinputlisting[caption=MSVC 2008 \Optimizing,style=customasmx86]{patterns/20_x64/19_3_msvc_x64.asm}
 
 Le compilateur n'a pas eu besoin d'allouer de l'espace sur la pile. \GTT{x36} est synonyme de \GTT{a5}.
 
@@ -112,15 +112,15 @@ sur 48 bits.
 
 \begin{framed}
 \begin{quotation}
-Les pointeurs ont perdu mes faveurs au point que j'en viens à les injurier. Si je cherche vraiment 
-à utiliser au mieux les capacités de mon ordinateur 64 bits, j'en conclus que je ferais mieux de 
-ne pas utiliser de pointeurs. Les registres de mon ordinateur sont sur 64 bits, mais je n'ai que 
-2Go de RAM. Les pointeurs n'ont donc jamais plus de 32 bits significatifs. Et pourtant, chaque 
-fois que j'utilise un pointeur, il me coûte 64 bits ce qui double la taille de ma structure de 
-données. Pire, ils atterrisent dans mon cache et en gaspillent la moitié et cela me coûte car le
+Les pointeurs ont perdu mes faveurs au point que j'en viens à les injurier. Si je cherche vraiment
+à utiliser au mieux les capacités de mon ordinateur 64 bits, j'en conclus que je ferais mieux de
+ne pas utiliser de pointeurs. Les registres de mon ordinateur sont sur 64 bits, mais je n'ai que
+2Go de RAM. Les pointeurs n'ont donc jamais plus de 32 bits significatifs. Et pourtant, chaque
+fois que j'utilise un pointeur, il me coûte 64 bits ce qui double la taille de ma structure de
+données. Pire, ils atterrissent dans mon cache et en gaspillent la moitié et cela me coûte car le
 cache est cher.
 
-Donc, si je cherche à grapiller, j'en viens à utiliser des tableaux au lieu de pointeurs. Je 
+Donc, si je cherche à grappiller, j'en viens à utiliser des tableaux au lieu de pointeurs. Je
 rédige des macros compliquées qui peuvent laisser l'impression à tort que j'utilise des pointeurs.
 \end{quotation}
 \end{framed}
