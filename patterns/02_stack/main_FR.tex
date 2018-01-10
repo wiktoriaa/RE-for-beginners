@@ -22,7 +22,7 @@ ensuite le contenu de l'opérande associé à l'adresse mémoire pointée par \E
 l'écrit dans l'opérande associé (souvent un registre) puis ajoute 4 (ou 8) au \glslink{stack pointer}{pointeur de pile}.
 
 Après une allocation sur la pile, le \glslink{stack pointer}{pointeur de pile} pointe sur le bas de la pile.
-\PUSH décrémente le \gls{stack pointer} et \POP l'incrémente.
+\PUSH décrémente le \glslink{stack pointer}{pointeur de pile} et \POP l'incrémente.
 
 Le bas de la pile représente en réalité le début de la mémoire allouée pour
 le bloc de pile. Cela semble étrange, mais c'est comme ça.
@@ -42,7 +42,8 @@ Par exemple les instructions \ac{STMFD}/\ac{LDMFD}, \ac{STMED}/\ac{LDMED} sont u
 descendantes (qui grandissent vers le bas en commençant avec une adresse haute et évoluent vers une plus basse).
 
 Les instructions \ac{STMFA}/\ac{LDMFA}, \ac{STMEA}/\ac{LDMEA} sont utilisées pour gérer les piles montantes
-(qui grandissent vers les adresses hautes de l'adresse space, en commençant avec une adresse située en bas de l'adresse space)
+(qui grandissent vers les adresses hautes de l'espace d'adressage, en commençant
+avec une adresse située en bas de l'espace d'adressage).
 
 % It might be worth mentioning that STMED and STMEA write first,
 % and then move the pointer,
@@ -61,7 +62,7 @@ La raison pour laquelle la pile grandit vers le bas est probablement historique.
 Dans le passé, les ordinateurs étaient énormes et occupaient des pièces entières,
 il était facile de diviser la mémoire en deux parties, une pour le \gls{heap} et
 une pour la pile.
-Evidemment, on ignorait quelle serait la taille du \gls{heap} et de la pile durant
+Évidemment, on ignorait quelle serait la taille du \gls{heap} et de la pile durant
 l'exécution du programme, donc cette solution était la plus simple possible.
 
 \input{patterns/02_stack/stack_and_heap}
@@ -96,7 +97,7 @@ Les notes de cours finissent par se rencontrer à un moment dans le cahier quand
 \input{patterns/02_stack/05_SEH}
 \input{patterns/02_stack/06_BO_protection}
 
-\subsubsection{Désallocation automatique de données dans la pile}
+\subsubsection{Dé-allocation automatique de données dans la pile}
 
 Peut-être que la raison pour laquelle les variables locales et les enregistrements SEH sont stockés dans la
 pile est qu'ils sont automatiquement libérés quand la fonction se termine en utilisant simplement une

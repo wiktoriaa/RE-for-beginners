@@ -6,7 +6,7 @@ int main()
 {
 	int x, y;
 
-	// §éffacer§ le tableau
+	// effacer le tableau
 	for (x=0; x<3; x++)
 		for (y=0; y<4; y++)
 			a[x][y]=0;

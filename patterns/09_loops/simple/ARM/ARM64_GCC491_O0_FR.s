@@ -10,7 +10,7 @@ printing_function:
 ; charger l'adresse de la chaîne "f(%d)\n"
 	adrp	x0, .LC0
 	add	x0, x0, :lo12:.LC0
-; recharger la valeur §entrée§ depuis le pile locale dans le regsitre W0:
+; recharger la valeur §entrée§ depuis le pile locale dans le registre W0:
 	ldr	w1, [x29,28]
 ; appeler printf()
 	bl	printf

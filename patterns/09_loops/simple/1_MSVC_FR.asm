@@ -6,7 +6,7 @@ _main    PROC
     mov    DWORD PTR _i$[ebp], 2   ; initialiser la boucle
     jmp    SHORT $LN3@main
 $LN2@main:
-    mov    eax, DWORD PTR _i$[ebp] ; §ici se trouve ce que nous fesons après chaque itération§:
+    mov    eax, DWORD PTR _i$[ebp] ; §ici se trouve ce que nous faisons après chaque itération§:
     add    eax, 1                  ; §ajouter 1 à la valeur de (i)§
     mov    DWORD PTR _i$[ebp], eax
 $LN3@main:

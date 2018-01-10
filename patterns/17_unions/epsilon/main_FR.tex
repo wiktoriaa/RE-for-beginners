@@ -1,4 +1,4 @@
-﻿\subsection{Calculde l'epsilon de la machine}
+﻿\subsection{Calcul de l'epsilon de la machine}
 
 L'epsilon de la machine est la plus petite valeur avec laquelle le \ac{FPU} peut
 travailler.
@@ -11,7 +11,7 @@ Voir aussi: \href{http://link.yurichev.com/17367}{l'article de Wikipédia}.%
 % 1.19209e-07
 % 2.22045e-16
 
-Il intéressant de voir comme il est facile de caluler l'epsilon de la machine:
+Il intéressant de voir comme il est facile de calculer l'epsilon de la machine:
 
 \lstinputlisting[style=customc]{patterns/17_unions/epsilon/float.c}
 
@@ -21,7 +21,7 @@ Le nombre flottant en résultant est égal à $starting\_value+machine\_epsilon$
 il suffit de soustraire $starting\_value$ (en utilisant l'arithmétique flottante)
 pour mesurer ce que la différence d'un bit représente dans un nombre flottant simple
 précision(\Tfloat).
-L' \IT{union} permet ici d'accèder au nombre IEEE 754 comme à un entier normal.
+L' \IT{union} permet ici d'accéder au nombre IEEE 754 comme à un entier normal.
 Lui ajouter 1 ajoute en fait 1 à la partie \IT{mantisse} du nombre, toutefois,
 inutile de dire, un débordement est possible, qui ajouterait 1 à la partie exposant.
 
@@ -46,7 +46,7 @@ n'a pas optimisé le code.
 
 ARM64 n'a pas d'instruction qui peut ajouter un nombre a un D-registre FPU, donc
 la valeur en entrée (qui provient du registre x64 \TT{D0}) est d'abord copiée dans
-le\ac{GPR}, incrémentée, copiée dans le registre FPU \TT{D1}, et puis la soustraction
+le \ac{GPR}, incrémentée, copiée dans le registre FPU \TT{D1}, et puis la soustraction
 est faite.
 
 \lstinputlisting[caption=GCC 4.9 ARM64 \Optimizing,style=customasmARM]{patterns/17_unions/epsilon/double_GCC49_ARM64_O3_FR.s}
@@ -64,6 +64,6 @@ simplement des données vers les registres du FPU.
 
 \subsubsection{\Conclusion}
 
-Il est difficile de dire si quelqu'un pourrait avoir besoin de cette estuce dans
+Il est difficile de dire si quelqu'un pourrait avoir besoin de cette astuce dans
 du code réel, mais comme cela a été mentionné plusieurs fois dans ce livre, cet exemple
 est utile pour expliquer le format IEEE 754 et les \IT{union}s en \CCpp.

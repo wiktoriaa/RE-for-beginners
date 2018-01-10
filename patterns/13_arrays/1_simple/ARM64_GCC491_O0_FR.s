@@ -59,7 +59,7 @@ main:
 ; est-ce fini?
 	ldr	w0, [x29,108]
 	cmp	w0, 19
-; sauter au §début§ du corp de la boucle si non:
+; sauter au §début§ du corps de la boucle si non:
 	ble	.L5
 ; renvoyer 0
 	mov	w0, 0

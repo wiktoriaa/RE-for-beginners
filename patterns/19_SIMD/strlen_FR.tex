@@ -25,14 +25,14 @@ Compilons la avec MSVC 2010 avec l'option \Ox:
 \lstinputlisting[caption=MSVC 2010 \Optimizing,style=customasmx86]{patterns/19_SIMD/18_4_msvc_Ox_FR.asm}
 
 Comment est-ce que ça fonctionne?
-Premèrement, nous devons comprendre la but de la fonction.
+Premièrement, nous devons comprendre la but de la fonction.
 Elle calcule la longueur de la chaîne C, mais nous pouvons utiliser différents termes:
 sa tâche est de chercher l'octet zéro, et de calculer sa position relativement au
 début de la chaîne.
 
 Premièrement, nous testons si le pointeur \TT{str} est aligné sur une limite de
 16 octets.
-Si non, nous appelons l'implmentation générique de \strlen.
+Si non, nous appelons l'implémentation générique de \strlen.
 
 Puis, nous chargeons les 16 octets suivants dans le registre \XMM{1} en utilisant
 \MOVDQA.
@@ -51,7 +51,7 @@ Mais ici nous pourrions rencontrer une autre restriction:
 
 Dans la série d'\ac{OS} \gls{Windows NT} (mais pas seulement), la mémoire est allouée
 par pages de 4 KiB (4096 octets).
-Chaque processus win32 a 4 GiB de disponible, mais en fait, seulement une partie
+Chaque processus win32 a 4GiB de disponible, mais en fait, seulement une partie
 de l'espace d'adressage est connecté à de la mémoire réelle.
 Si le processus accède a un bloc mémoire absent, une exception est levée.
 C'est comme cela que fonctionnent les \ac{VM}\footnote{\URLPAGE}.
@@ -64,7 +64,7 @@ inclus.
 
 Après ce bloc, c'est à dire à partir de l'adresse 0x008c2000 il n'y a rien du tout,
 e.g. l'\ac{OS} n'y a pas alloué de mémoire.
-Toutes tentatives d'accèder à la mémoire à partir de cette adresse va déclencher
+Toutes tentatives d'accéder à la mémoire à partir de cette adresse va déclencher
 une exception.
 
 Et maintenant, considérons l'exemple dans lequel le programme possède une chaîne
@@ -85,9 +85,9 @@ contenant 5 caractères presque à la fin d'un bloc, et ce n'est pas un crime.
   \end{tabular}
 \end{center}
 
-Donc, dans des conditions normales, le programme apelle \strlen, en lui passant un
+Donc, dans des conditions normales, le programme appelle \strlen, en lui passant un
 pointeur sur la chaîne \TT{'hello'} se trouvant en mémoire à l'adresse 0x008c1ff8.
-\strlen lit un octet à la fois jusqu'à 0x008c1ffd, oú se trouve un octet à zéro,
+\strlen lit un octet à la fois jusqu'à 0x008c1ffd, où se trouve un octet à zéro,
 et puis s'arrête.
 
 Maintenant, si nous implémentons notre propre \strlen lisant 16 octets à la fois,
@@ -105,7 +105,7 @@ Retournons à notre fonction.
 
 \myindex{x86!\Instructions!PXOR}
 \verb|_mm_setzero_si128()|---est une macro générant \TT{pxor xmm0, xmm0}~---elle
-éfface juste le registre \XMM{0}.
+efface juste le registre \XMM{0}.
 
 \verb|_mm_load_si128()|---est une macro pour \MOVDQA, elle charge 16 octets depuis l'adresse dans le registre \XMM{1}.
 
@@ -151,7 +151,7 @@ ont le bit le plus significatif à 1 ou sont plus grand que \TT{0x7f}?} et renvo
 16 bits dans le registre \EAX.
 Les autres bits du registre \EAX sont mis à zéro.
 
-Á propos, ne pas oublier cette bizarrerie dans notre algorithme.
+À propos, ne pas oublier cette bizarrerie dans notre algorithme.
 Il pourrait y avoir 16 octets dans l'entrée, comme:
 
 \input{patterns/19_SIMD/strlen_hello_and_garbage}
@@ -197,7 +197,7 @@ Maintenant c'est simple. Si un octet à zéro a été trouvé, sa position est a
 
 Presque tout.
 
-Á propos, il faut aussi noter que le compilateur MSVC a généré deux corps de boucle
+À propos, il faut aussi noter que le compilateur MSVC a généré deux corps de boucle
 côte-à-côte, afin d'optimiser.
 
 Et aussi, SSE 4.2 (apparu dans les Intel Core i7) offre encore plus d'instructions

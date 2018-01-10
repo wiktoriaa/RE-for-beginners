@@ -16,7 +16,7 @@ my_memcpy PROC
         STRBCC   r12,[r0,r3]
 ; i++
         ADDCC    r3,r3,#1
-; la §dernière instruction du \IT{bloc conditionel}§.
+; la §dernière instruction du \IT{bloc conditionnel}§.
 ; sauter au §début§ de la boucle si i<taille
 ; ne rien faire autrement (i.e., si i>=taille)
         BCC      |L0.4|

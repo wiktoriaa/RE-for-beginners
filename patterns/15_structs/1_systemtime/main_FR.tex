@@ -3,7 +3,7 @@
 
 \newcommand{\FNSYSTEMTIME}{\footnote{\href{http://go.yurichev.com/17260}{MSDN: SYSTEMTIME structure}}}
 
-Considérons la structure win32 SYSTEMTIME\FNSYSTEMTIME{} qui décrit un instant dans le temps. Voici 
+Considérons la structure win32 SYSTEMTIME\FNSYSTEMTIME{} qui décrit un instant dans le temps. Voici
 comment elle est définie:
 
 \begin{lstlisting}[caption=WinBase.h,style=customc]
@@ -27,25 +27,25 @@ Le résultat de la compilation avec MSVC 2010 donne:
 
 \lstinputlisting[caption=MSVC 2010 /GS-,style=customasmx86]{patterns/15_structs/1_systemtime/systemtime.asm}
 
-16 octets sont réservés sur la pile pour cette structure, ce qui correspond exactement à 
+16 octets sont réservés sur la pile pour cette structure, ce qui correspond exactement à
 \TT{sizeof(WORD)*8}. La structure comprend effectivement 8 variables d'un WORD chacun.
 
 \newcommand{\FNMSDNGST}{\footnote{\href{http://go.yurichev.com/17261}{MSDN: GetSystemTime function}}}
 
 Faites attention au fait que le premier membre de la structure est le champ \TT{wYear}.
-On peut donc considérer que la fonction \TT{GetSystemTime()}\FNSYSTEMTIME reçoit comme argument 
-un pointeur sur la structure SYSTEMTIME, ou bien qu'elle reçoit un pointeur sur le champ \TT{wYear}. 
+On peut donc considérer que la fonction \TT{GetSystemTime()}\FNSYSTEMTIME reçoit comme argument
+un pointeur sur la structure SYSTEMTIME, ou bien qu'elle reçoit un pointeur sur le champ \TT{wYear}.
 Et en fait c'est exactement la même chose!
-\TT{GetSystemTime()} écrit l'année courante dans à l'adresse du WORD qu'il a reçu, avance de 2 
+\TT{GetSystemTime()} écrit l'année courante dans à l'adresse du WORD qu'il a reçu, avance de 2
 octets, écrit le mois courant et ainsi de suite.
 
 \input{patterns/15_structs/1_systemtime/olly_FR.tex}
 
 \subsubsection{Remplacer la structure par un tableau}
 
-Le fait que les champs d'une structure ne sont que des variables situées côte-à-côte peut être 
+Le fait que les champs d'une structure ne sont que des variables situées côte-à-côte peut être
 aisément démontré de la manière suivante.
-Tout en conservant à l'esprit la description de la structure \TT{SYSTEMTIME}, il est possible de 
+Tout en conservant à l'esprit la description de la structure \TT{SYSTEMTIME}, il est possible de
 réécrire cet exemple simple de la manière suivante:
 
 \lstinputlisting[style=customc]{patterns/15_structs/1_systemtime/systemtime2.c}
@@ -62,16 +62,16 @@ Mais, il consent quand même à produire le code suivant:
 
 Qui fonctionne à l'identique du précédent!
 
-Il est extrêmement intéressant de constater que le code assembleur produit est impossible à 
+Il est extrêmement intéressant de constater que le code assembleur produit est impossible à
 distinguer de celui produit par la compilation précédente.
 
-Et ainsi celui qui observe ce code assembleur est incapable de dédicer avec certitude si une 
-structure ou un tableau était déclaré dans le code source en C. 
+Et ainsi celui qui observe ce code assembleur est incapable de dédicer avec certitude si une
+structure ou un tableau était déclaré dans le code source en C.
 
-Cela étant, aucun esprit sain ne s'amuserai à déclarer un tableau ici. Car il faut aussi compter 
-avec la possibilité que la structure soit modifiée par les développeurs, que les champs soient 
+Cela étant, aucun esprit sain ne s'amuserait à déclarer un tableau ici. Car il faut aussi compter
+avec la possibilité que la structure soit modifiée par les développeurs, que les champs soient
 triés dans un autre ordre ...
 
-Nous n'étudierons pas cet exemple avec \olly, car les résultats seraient identiques à ceux que nous 
+Nous n'étudierons pas cet exemple avec \olly, car les résultats seraient identiques à ceux que nous
 avons observé en utilisant la structure.
 

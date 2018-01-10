@@ -20,7 +20,7 @@ Le code est très simple:
 \item
 \myindex{x86!\Instructions!MOVSXD}
 
-La première instruction \INS{MOVSXD} copie une valeur 32-bit depuis \ECX (oú l'argument
+La première instruction \INS{MOVSXD} copie une valeur 32-bit depuis \ECX (où l'argument
 $month$ est passé) dans \RAX avec extension du signe (car l'argument $month$ est
 de type \Tint).
 
@@ -32,7 +32,7 @@ indices négatifs de tableau peuvent être passés par $month$ (les indices nég
 de tableaux sont expliqués plus loin: \myref{negative_array_indices}).
 Et si cela arrive, la valeur entrée négative de type \Tint est étendue correctement
 et l'élément correspondant avant le tableau est sélectionné.
-Ca ne fonctionnera pas correctement sans l'extension du signe.}.
+Ça ne fonctionnera pas correctement sans l'extension du signe.}.
 
 \item
 Ensuite l'adresse du pointeur de la table est chargée dans \RCX.
@@ -87,7 +87,7 @@ L'adresse de la table est chargée en R1.
 Tout le reste est effectué en utilisant juste une instruction \LDR.
 
 Puis la valeur en entrée est décalée de 2 vers la gauche (ce qui est la même chose
-que multiplier par 4), puis ajoutée à R1 (oú se trouve l'adresse de la table) et
+que multiplier par 4), puis ajoutée à R1 (où se trouve l'adresse de la table) et
 enfin un élément de la table est chargé depuis cette adresse.
 
 L'élément 32-bit de la table est chargé dans R1 depuis la table.
@@ -115,7 +115,7 @@ get_month1 PROC
 L'adresse de la table est chargée dans X1 en utilisant la paire \ADRP/\ADD.
 
 Puis l'élément correspondant est choisi dans la table en utilisant seulement un \LDR,
-qui prend W0 (le registre oú l'argument d'entrée $month$ se trouve), le décale de
+qui prend W0 (le registre où l'argument d'entrée $month$ se trouve), le décale de
 3 bits vers la gauche (ce qui est la même chose que de le multiplier par 8), étend
 son signe (c'est ce que le suffixe \q{sxtw} implique) et l'ajoute à X0.
 Enfin la valeur 64-bit est chargée depuis la table dans X0.
@@ -138,7 +138,7 @@ cette adresse et pourrait planter.
 Compilons l'exemple dans MSVC pour win64 et ouvrons le dans \IDA pour voir ce que
 l'éditeur de lien à stocker après la table:
 
-\lstinputlisting[caption=Executable file in IDA,style=customasmx86]{patterns/13_arrays/45_month_1D/MSVC2012_win64_1.lst}
+\lstinputlisting[caption=Fichier exécutable dans IDA,style=customasmx86]{patterns/13_arrays/45_month_1D/MSVC2012_win64_1.lst}
 
 Les noms des mois se trouvent juste après.
 
@@ -210,16 +210,16 @@ dans celles de release.
 Les noyaux de Microsoft \gls{Windows NT} existent en versions \q{checked} et \q{free}.
 \footnote{\href{http://go.yurichev.com/17259}{msdn.microsoft.com/en-us/library/windows/hardware/ff543450(v=vs.85).aspx}}.
 
-Le premier a des tests de validation (d'oú, \q{checked}), le second n'en a pas (d'oú, \q{free/libre} de tests).
+Le premier a des tests de validation (d'où, \q{checked}), le second n'en a pas (d'où, \q{free/libre} de tests).
 
 Bien sûr, le noyau \q{checked} fonctionne plus lentement à cause de ces tests, donc
 il n'est utilisé que pour des sessions de debug.
 
 % FIXME: ARM? MIPS?
 
-\subsubsection{Accèder à un caractère spécifique}
+\subsubsection{Accéder à un caractère spécifique}
 
-Un tableau de pointeurs sur des chaînes peut être accèdé comme ceci\footnote{Lisez
+Un tableau de pointeurs sur des chaînes peut être accédé comme ceci\footnote{Lisez
 l'avertissement dans la NDT ici \myref{array_of_pointers_to_strings}}:
 
 \lstinputlisting[style=customc]{patterns/13_arrays/45_month_1D/month2_FR.c}
@@ -228,16 +228,16 @@ l'avertissement dans la NDT ici \myref{array_of_pointers_to_strings}}:
 Et donc, le 5ème caractère est extrait de cette expression en ajoutant 4 octets à
 cette adresse.
 
-Á propos, la liste d'arguments passée à la fonction \IT{main()} a le même type de
+À propos, la liste d'arguments passée à la fonction \IT{main()} a le même type de
 données:
 
 \lstinputlisting[style=customc]{patterns/13_arrays/45_month_1D/argv_FR.c}
 
-Il est très important de comprendre, que, malgrè la syntaxe similaire, c'est différent
+Il est très important de comprendre, que, malgré la syntaxe similaire, c'est différent
 d'un tableau à deux dimensions, dont nous allons parler plus tard.
 
 Une autre chose importante à noter: les chaînes considérées doivent être encodées
-dans un système oú chaque caractère occupe un seul octet, comme l'\ac{ASCII} ou l'\ac{ASCII}
+dans un système où chaque caractère occupe un seul octet, comme l'\ac{ASCII} ou l'\ac{ASCII}
 étendu.
 UTF-8 ne fonctionnera pas ici.
 

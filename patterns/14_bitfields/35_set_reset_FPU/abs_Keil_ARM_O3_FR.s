@@ -1,5 +1,5 @@
 my_abs PROC
-; §éffacer§ bit:
+; effacer bit:
         BIC      r0,r0,#0x80000000
         BX       lr
         ENDP
