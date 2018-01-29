@@ -1,6 +1,6 @@
 \subsubsection{\NonOptimizingKeilVI (\ARMMode)}
 
-Commençons par compiler notre exemple en Keil:
+Commençons par compiler notre exemple avec Keil:
 
 \begin{lstlisting}
 armcc.exe --arm --c90 -O0 1.c 
@@ -9,7 +9,7 @@ armcc.exe --arm --c90 -O0 1.c
 \myindex{\IntelSyntax}
 Le compilateur \IT{armcc} produit un listing assembleur en syntaxe Intel, mais il dispose de macros
 de haut niveau liées au processeur ARM\footnote{e.g. les instructions \PUSH/\POP manquent en mode
-ARM}, mais il est plus important pour nous de voir les instructions \q{telles quelles} donc
+ARM}. Comme il est plus important pour nous de voir les instructions \q{telles quelles}, nous
 regardons le résultat compilé dans \IDA.
 
 \begin{lstlisting}[caption=\NonOptimizingKeilVI (\ARMMode) \IDA,style=customasmARM]
@@ -38,7 +38,7 @@ Mais ce n'est pas très précis. L'instruction \PUSH est seulement disponible da
 le mode Thumb.  Donc, pour rendre les choses moins confuses, nous faisons cela
 dans \IDA.
 
-Cette instruction décrémente (\glspl{decrement}) d'abord le pointeur de pile \ac{SP}
+Cette instruction \glslink{decrement}{décrémente} d'abord le pointeur de pile \ac{SP}
 pour qu'il pointe sur de l'espace libre pour de nouvelles entrées, ensuite elle
 sauve les valeurs des registres \Reg{4} et \ac{LR} à cette adresse.
 
@@ -85,7 +85,7 @@ C'est pourquoi chaque fonction passe le contrôle à l'adresse se trouvant dans 
 C'est une différence entre un processeur \ac{RISC} \q{pur} comme ARM et un
 processeur \ac{CISC} comme x86, où l'adresse de retour est en général sauvée
 sur la pile.
-En lire plus à ce propos dans la section~(\myref{sec:stack}) suivante.
+Pour aller plus loin, lire la section~(\myref{sec:stack}) suivante.
 
 À propos, une adresse absolue ou un offset de 32-bit ne peuvent être encodés
 dans l'instruction 32-bit \TT{BL} car il n'y a qu'un espace de 24 bits.
@@ -107,15 +107,15 @@ mise dans le registre \Reg{0}.
 \myindex{ARM!\Registers!Link Register}
 \myindex{ARM!\Instructions!LDMFD}
 \myindex{ARM!\Instructions!POP}
-La dernière instruction \INS{LDMFD SP!, {R4,PC}}\footnote{\ac{LDMFD} est
+La dernière instruction est \INS{LDMFD SP!, {R4,PC}}\footnote{\ac{LDMFD} est
 l'instruction inverse de \ac{STMFD}}.
 Elle prend des valeurs sur la pile (ou de toute autre endroit en mémoire)
 afin de les sauver dans \Reg{4} et \ac{PC}, et \glslink{increment}{incrémente}
-le pointeur de pile \gls{stack pointer} \ac{SP}.
+le \glslink{stack pointer}{pointeur de pile} \ac{SP}.
 Cela fonctionne ici comme \POP.\\
-N.B. La toute première instruction \TT{STMFD} a sauvée la paire de registres
+N.B. La toute première instruction \TT{STMFD} a sauvé la paire de registres
 \Reg{4} et \ac{LR} sur la pile, mais \Reg{4} et \ac{PC} sont \IT{restaurés}
- pendant l'exécution de \TT{LDMFD}.
+pendant l'exécution de \TT{LDMFD}.
 
 Comme nous le savons déjà, l'adresse où chaque fonction doit redonner le
 contrôle est usuellement sauvée dans le registre \ac{LR}.

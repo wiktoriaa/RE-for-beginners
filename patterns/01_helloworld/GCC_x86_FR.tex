@@ -1,6 +1,6 @@
 ﻿\subsubsection{GCC}
 
-Maintenant essayons de compiler le même code \CCpp avec le compilateur GCC 4.4.1 sur Linux: \TT{gcc 1.c -o 1}.
+Maintenant compilons le même code \CCpp avec le compilateur GCC 4.4.1 sur Linux: \TT{gcc 1.c -o 1}.
 Ensuite, avec l'aide du désassembleur \IDA, regardons comment la fonction \main a été créée.
 \IDA, comme MSVC, utilise la syntaxe Intel\footnote{GCC peut aussi produire un listing assembleur utilisant la syntaxe Intel en lui passant les options \TT{-S -masm=intel}.}.
 
@@ -26,8 +26,8 @@ main            endp
 \myindex{x86!\Instructions!AND}
 Le résultat est presque le même.
 L'adresse de la chaîne \TT{hello, world} (stockée dans le segment de donnée) est d'abord chargée dans
- le registre \EAX puis sauvée dans la pile. \\
-En plus, le prologue de la fonction a l'instruction \INS{AND ESP, 0FFFFFFF0h}~---cette
+ le registre \EAX puis sauvée sur la pile.\\
+En plus, le prologue de la fonction comprend \INS{AND ESP, 0FFFFFFF0h}~---cette
 instruction aligne le registre \ESP sur une limite de 16-octet.
 Ainsi, toutes les valeurs sur la pile seront alignées de la même manière (Le CPU
 est plus performant si les adresses avec lesquelles il travaille en mémoire sont
@@ -51,8 +51,8 @@ Contrairement à MSVC, lorsque GCC compile sans optimisation, il génère \TT{MO
 
 \myindex{x86!\Instructions!LEAVE}
 La dernière instruction, \LEAVE~---est équivalente à la paire d'instruction \TT{MOV ESP, EBP} et \TT{POP EBP}~---en d'autres mots,
-cette instruction déplace le pointeur de pile (\gls{stack pointer}) (\ESP) et remet le registre \EBP dans son état initial.
-Cela est nécessaire puisque nous avons modifié les valeurs de ces registres (\ESP et \EBP) au début de la fonction (en exécutant \INS{MOV EBP, ESP} / \INS{AND ESP, \ldots}).
+cette instruction déplace le \glslink{stack pointer}{pointeur de pile} (\ESP) et remet le registre \EBP dans son état initial.
+Ceci est nécessaire puisque nous avons modifié les valeurs de ces registres (\ESP et \EBP) au début de la fonction (en exécutant \INS{MOV EBP, ESP} / \INS{AND ESP, \ldots}).
 
 \subsubsection{GCC: \ATTSyntax}
 \label{ATT_syntax}
@@ -72,7 +72,7 @@ Le listing contient beaucoup de macros (qui commencent avec un point). Cela ne n
 
 Pour l'instant, dans un souci de simplification, nous pouvons les ignorer (excepté la macro \IT{.string}
 qui encode une séquence de caractères terminée par un octet nul, comme une chaîne C).
-Ensuite nous verrons cela\footnote{Cette option de GCC peut être utilisée pour éliminer les macros \q{non nécessaire}:
+Ensuite nous verrons cela\footnote{Cette option de GCC peut être utilisée pour éliminer les macros \q{non nécessaires}:
 \IT{-fno-asynchronous-unwind-tables}}:
 
 \lstinputlisting[caption=GCC 4.7.3,style=customasmx86]{patterns/01_helloworld/GCC_refined.s}

@@ -30,7 +30,7 @@ dans la pile: un pointeur 32-bit sur une chaîne et 3 nombres de type \Tint.
 \myindex{x86!\Registers!ESP}
 \myindex{cdecl}
 Lorsque le \glslink{stack pointer}{pointeur de pile} (registre \ESP) est re-modifié
-par l'instruction\\ \INS{ADD ESP, X} après un appel de fonction, souvent, le nombre
+par l'instruction \INS{ADD ESP, X} après un appel de fonction, souvent, le nombre
 d'arguments de la fonction peut-être déduit en divisant simplement X par 4.
 
 Bien sûr, cela est spécifique à la convention d'appel \IT{cdecl}, et seulement
@@ -66,7 +66,7 @@ Voici un exemple réel:
 \myindex{\olly}
 
 Maintenant, essayons de charger cet exemple dans \olly.
-C'est l'un des débuggers en espace-utilisateur win32 les plus populaire.
+C'est l'un des débuggers en espace utilisateur win32 les plus populaire.
 Nous pouvons compiler notre exemple avec l'option \GTT{/MD} de MSVC 2012, qui signifie
 lier avec \GTT{MSVCR*.DLL}, ainsi nous verrons clairement les fonctions importées
 dans le debugger.
@@ -177,7 +177,7 @@ Appuyer sur F8 à nouveau pour exécuter l'instruction \INS{ADD ESP, 10}:
 Oui, bien sûr; il n'y a pas besoin de mettre ces valeurs à zéro ou quelque chose
 comme ça.
 Tout ce qui se trouve au dessus du pointeur de pile (\ac{SP}) est du \IT{bruit}
-ou des \IT{données incorrectes} et n'a pas du tout de signification.
+ou des \IT{déchets} et n'a pas du tout de signification.
 Ça prendrait beaucoup de temps de mettre à zéro les entrées inutilisées de la
 pile, et personne n'a vraiment besoin de le faire.
 
@@ -244,7 +244,7 @@ pas le montrer, mais pourrait.
 
 \begin{lstlisting}
 (gdb) run
-Starting program: /home/dennis/polygon/1 
+Starting program: /home/dennis/polygon/1
 
 Breakpoint 1, __printf (format=0x80484f0 "a=%d; b=%d; c=%d") at printf.c:29
 29	printf.c: No such file or directory.
@@ -260,7 +260,7 @@ de la pile.
 0xbffff13c:	0xb7e29905	0x00000001
 \end{lstlisting}
 
-Le tout premier élément est \ac{RA} (\GTT{0x0804844a}).
+Le tout premier élément est la \ac{RA} (\GTT{0x0804844a}).
 Nous pouvons le vérifier en désassemblant la mémoire à cette adresse:
 
 \begin{lstlisting}[label=NOP_as_XCHG_example,style=customasmx86]
@@ -308,8 +308,8 @@ En effet, le fichier \GTT{1.c} se trouve dans le répertoire courant, et \ac{GDB
 y a trouvé la chaîne.
 Comment est-ce que \ac{GDB} sait quelle ligne est exécutée à un instant donné?
 Cela est du au fait que lorsque le compilateur génère les informations de debug,
-sauve également une table contenant la relation entre le numéro des lignes du code
-source et les adresses des instructions.
+il sauve également une table contenant la relation entre le numéro des lignes du
+code source et les adresses des instructions.
 GDB est un debugger niveau source, après tout.
 
 Examinons les registres.

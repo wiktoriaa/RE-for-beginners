@@ -6,7 +6,7 @@
 \myindex{MIPS!\GlobalPointer}
 
 Un concept MIPS important est le \q{pointeur global}.
-Comme nous le savons déjà, chaque instruction MIPS a une taille de 32bits, donc
+Comme nous le savons déjà, chaque instruction MIPS a une taille de 32-bit, donc
 il est impossible d'avoir une adresse 32-bit dans une instruction: il faut pour
 cela utiliser une paire.
 (comme le fait GCC dans notre exemple pour le chargement de l'adresse de la chaîne
@@ -57,7 +57,7 @@ dans le nom de l'instruction) et \INS{ADDIU} ajoute les 16 bits de poids faible
 de l'adresse.
 
 \INS{ADDIU} suit \INS{JALR} (vous n'avez pas déjà oublié le \IT{slot de
-retard de branchement} ?).
+délai de branchement} ?).
 Le registre \$4 est aussi appelé \$A0, qui est utilisé pour passer le premier
 argument d'une fonction \footnote{La table des registres MIPS est disponible en
 appendice \myref{MIPS_registers_ref}}.
@@ -92,7 +92,7 @@ Un autre fait intéressant est qu'il manque en MIPS une instruction qui transfè
 des données entre des registres.
 En fait,  \TT{MOVE DST, SRC} est \TT{ADD DST, SRC, \$ZERO} ($DST=SRC+0$), qui
 fait la même chose.
-Apparemment, les développeurs de MIPS voulaient une table des opcodes compacte.
+Manifestement, les développeurs de MIPS voulaient une table des opcodes compacte.
 Cela ne signifie pas qu'il y a une addition à chaque instruction \INS{MOVE}.
 Très probablement, le \ac{CPU} optimise ces pseudo-instructions et l'\ac{ALU} n'est
 jamais utilisé.
@@ -128,8 +128,8 @@ Nous voyons ici que le registre FP est utilisé comme un pointeur sur la pile.
 Nous voyons aussi 3 \ac{NOP}s.
 Le second et le troisième suivent une instruction de branchement.
 Peut-être que le compilateur GCC ajoute toujours des \ac{NOP}s (à cause du
-\IT{slot de retard de branchement}) après les instructions de branchement, et
-alors, si l'optimisation est demandée, peut-être qu'il les élimine.
+\IT{slot de retard de branchement}) après les instructions de branchement, et,
+si l'optimisation est demandée, il essaye alors de les éliminer.
 Donc, dans ce cas, ils sont laissés en place.
 
 Voici le listing \IDA:
@@ -138,7 +138,7 @@ Voici le listing \IDA:
 
 \myindex{MIPS!\Pseudoinstructions!LA}
 
-Intéressant, \IDA a reconnu les instructions \INS{LUI}/\INS{ADDIU} et les a concaténées
+Intéressant, \IDA a reconnu les instructions \INS{LUI}/\INS{ADDIU} et les a agrégées
 en une pseudo instruction \INS{LA} (\q{Load Address}) à la ligne 15.
 Nous pouvons voir que cette pseudo instruction a une taille de 8 octets!
 C'est une pseudo instruction (ou \IT{macro}) car ce n'est pas une instruction MIPS
