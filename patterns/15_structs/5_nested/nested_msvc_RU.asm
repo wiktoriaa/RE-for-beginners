@@ -30,6 +30,7 @@ _main    PROC
     mov    ecx, 2
     sub    esp, 24
     mov    eax, esp
+; С этого момента, EAX это синоним ESP:
     mov    BYTE PTR _s$[esp+60], 1
     mov    ebx, DWORD PTR _s$[esp+60]
     mov    DWORD PTR [eax], ebx
