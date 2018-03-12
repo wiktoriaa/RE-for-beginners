@@ -18,14 +18,16 @@ f14:
 	ldrb	w0, [x1,w0,uxtw]
 ; charger l'adresse du label .Lrtx4:
 	adr	x1, .Lrtx4
-; §multiplier l'élément de la table par 4 (en décalant de 2 bits à gauche) et ajouter (ou soustraire) à l'adresse de .Lrtx4§:
+; §multiplier l'élément de la table par 4 (en décalant de 2 bits à gauche) et
+; ajouter (ou soustraire) à l'adresse de .Lrtx4§:
 	add	x0, x1, w0, sxtb #2
 ; §sauter à l'adresse calculée:§
 	br	x0
 ; ce label pointe dans le segment de code (text):
 .Lrtx4:
 	.section	.rodata
-; §tout ce qui se trouve après la déclaration ".section" est alloué dans le segment de données en lecture seule (rodata)§:
+; §tout ce qui se trouve après la déclaration ".section" est alloué dans le segment de données§
+; en lecture seule (rodata):
 .L4:
 	.byte	(.L3 - .Lrtx4) / 4     ; case 1
 	.byte	(.L3 - .Lrtx4) / 4     ; case 2
