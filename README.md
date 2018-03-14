@@ -1,8 +1,6 @@
 "Reverse Engineering for Beginners" free book
 ---------------------------------------------
 
-[![Build Status](https://travis-ci.org/DennisYurichev/RE-for-beginners.svg?branch=master)](https://travis-ci.org/DennisYurichev/RE-for-beginners)
-
 Topics discussed: x86/x64, ARM/ARM64, MIPS, Java/JVM.
 
 Compiled versions can be found here:
