@@ -59,11 +59,11 @@ au début et à la fin de la fonction.
 
 Essayons GCC 4.4.1 avec l'optimisation la plus performante (option \Othree):
 
-\lstinputlisting[caption=\Optimizing GCC 4.4.1,style=customasmx86]{patterns/09_loops/simple/1_GCC_O3.asm}
+\lstinputlisting[caption=GCC 4.4.1 \Optimizing,style=customasmx86]{patterns/09_loops/simple/1_GCC_O3.asm}
 
 \myindex{Loop unwinding}
 
-Hey, GCC a juste déroulé notre boucle.
+Hé, GCC a juste déroulé notre boucle.
 
 Le \glslink{loop unwinding}{déroulement de boucle} est un avantage lorsqu'il n'y a pas
 beaucoup d'itérations et que nous pouvons économiser du temps d'exécution en supprimant
@@ -77,7 +77,7 @@ ont une plus grandes empreintes sur le cache%
 D'autres recommandations sur l'expansion des boucles d'Intel sont ici:
 \InSqBrackets{\IntelOptimization 3.4.1.7}.}.
 
-OK, augmentons la valeur maximale de la variable $i$ à 100 et essayons à nouveau.
+Ok, augmentons la valeur maximale de la variable $i$ à 100 et essayons à nouveau.
 GCC donne:
 
 \lstinputlisting[caption=GCC,style=customasmx86]{patterns/09_loops/simple/2_GCC_FR.asm}
@@ -156,7 +156,7 @@ Encore plus que ça, le \tracer peut collecter les valeurs des registres pour to
 les adresses dans la fonction. C'est appelé \IT{trace} ici. Chaque instruction est
 tracées, toutes les valeurs intéressantes des registres sont enregistrées.
 
-Ensuite, un script \IDA .idc est généré, qui ajoute des commentaires.
+Ensuite, un script \IDA\ .idc est généré, qui ajoute des commentaires.
 Donc, dans \IDA, nous avons appris que l'adresse de la fonction \main est \TT{0x00401020}
 et nous lançons:
 
@@ -164,7 +164,7 @@ et nous lançons:
 tracer.exe -l:loops_2.exe bpf=loops_2.exe!0x00401020,trace:cc
 \end{lstlisting}
 
-\TT{BPF} stands for set breakpoint on function.
+\TT{BPF} signifie mettre un point d'arrêt sur la fonction.
 
 Comme résultat, nous obtenons les scripts \TT{loops\_2.exe.idc} et \TT{loops\_2.exe\_clear.idc}.
 
@@ -174,11 +174,11 @@ Nous chargeons \TT{loops\_2.exe.idc} dans \IDA et voyons:
 \begin{figure}[H]
 \centering
 \myincludegraphics{patterns/09_loops/simple/IDA_tracer_cc.png}
-\caption{\IDA avec .idc-script chargé}
+\caption{\IDA avec le script .idc chargé}
 \label{fig:loops_IDA_tracer}
 \end{figure}
 
-Nous voyons que \ESI peut être de 2 à 9 au début du corps de boucle, mais de 3 à
+Nous voyons que \ESI varie de 2 à 9 au début du corps de boucle, mais de 3 à
 0xA (10) après l'incrément.
 Nous voyons aussi que \main se termine avec 0 dans \EAX.
 
