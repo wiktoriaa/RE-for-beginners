@@ -12,7 +12,7 @@ arg_0  = dword ptr  8
        or      eax, 80000000h  ; positionnement du signe négatif
        mov     edx, eax
        and     eax, 807FFFFFh  ; Nous ne conservons que le signe et le signifiant dans EAX
-       shr     edx, 23         ; Preparation de l'exposant
+       shr     edx, 23         ; Préparation de l'exposant
        add     edx, 2          ; Ajout de 2
        movzx   edx, dl         ; RAZ de tous les octets dans EAX à l'exception des bits 7:0
        shl     edx, 23         ; Décalage du nouvel exposant pour qu'ils soit à sa place
