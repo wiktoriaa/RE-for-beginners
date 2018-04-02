@@ -2,9 +2,9 @@
 \label{FPU_PRNG}
 
 Si nous avons besoin de nombres aléatoires à virgule flottante entre 0 et 1, le plus
-simple est d'utiliser un \ac{PRNG} comme le Mersenne Twister.
+simple est d'utiliser un \ac{PRNG} comme le Twister de Mersenne.
 Il produit une valeur aléatoire non signée sur 32-bit (en d'autres mots, il produit
-un 32-bit aléatoire).
+une valeur 32-bit aléatoire).
 Puis, nous pouvons transformer cette valeur en \Tfloat et le diviser par \GTT{RAND\_MAX}
 (\GTT{0xFFFFFFFF} dans notre cas)---nous obtenons une valeur dans l'intervalle 0..1.
 
@@ -15,14 +15,14 @@ Peut-on se passer de la division?
 \myindex{IEEE 754}
 
 Rappelons-nous en quoi consiste un nombre en virgule flottante: un bit de signe,
-une mantisse et un exposant.
-Nous n'avons qu'à stocker des bits aléatoires dans toute la mantisse pour obtenir
+un significande et un exposant.
+Nous n'avons qu'à stocker des bits aléatoires dans toute le significande pour obtenir
 un nombre réel aléatoire!
 
 L'exposant ne peut pas être zéro (le nombre flottant est dénormalisé dans ce cas),
 donc nous stockons 0b01111111 dans l'exposant---ce qui signifie que l'exposant est
 1.
-Ensuite nous remplissons la mantisse avec des bits aléatoires, mettons le signe à
+Ensuite nous remplissons le significande avec des bits aléatoires, mettons le signe à
 0 (ce qui indique un nombre positif) et voilà.
 Les nombres générés sont entre 1 et 2, donc nous devons soustraire 1.
 
@@ -47,10 +47,10 @@ Donc la forme compilée du code est omise.
 
 \subsubsection{x86}
 
-\lstinputlisting[caption=\Optimizing MSVC 2010,style=customasmx86]{patterns/17_unions/FPU_PRNG/MSVC2010_Ox_Ob0_FR.asm}
+\lstinputlisting[caption=MSVC 2010 \Optimizing,style=customasmx86]{patterns/17_unions/FPU_PRNG/MSVC2010_Ox_Ob0_FR.asm}
 
 Les noms de fonctions sont étranges ici car cet exemple a été compilé en tant que
-C++ et ceci est la correction des noms en C++, nous en parlerons plus loin: \myref{namemangling}.
+C++ et ceci est la modification des noms en C++, nous en parlerons plus loin: \myref{namemangling}.
 Si nous compilons ceci avec MSVC 2012, il utilise des instructions SIMD pour le FPU,
 pour en savoir plus: \myref{FPU_PRNG_SIMD}.
 
@@ -59,7 +59,7 @@ pour en savoir plus: \myref{FPU_PRNG_SIMD}.
 \lstinputlisting[caption=GCC 4.4.5 \Optimizing,style=customasmMIPS]{patterns/17_unions/FPU_PRNG/MIPS_O3_IDA_FR.lst}
 
 Il y a aussi une instruction \INS{LUI} inutile, ajoutée pour quelque étrange raison.
-Nous avons déjà considéré cet artéfact plus tôt: \myref{MIPS_FPU_LUI}.
+Nous avons déjà considéré cet artefact plus tôt: \myref{MIPS_FPU_LUI}.
 
 \subsubsection{ARM (\ARMMode)}
 
